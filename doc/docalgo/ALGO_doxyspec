@@ -1,0 +1,65 @@
+#---------------------------------------------------------------------------
+# Project related configuration options
+#---------------------------------------------------------------------------
+PROJECT_NAME     = "Mobius documentation"
+OUTPUT_DIRECTORY = @DOXYGEN_ALGO_GENERATED@
+CREATE_SUBDIRS	 = NO # We experience problems with HTML otherwise
+OUTPUT_LANGUAGE  = English
+TAB_SIZE         = 5
+LAYOUT_FILE      = @DOXYGEN_STATIC@/SpecLayout.xml
+
+#---------------------------------------------------------------------------
+# Configuration options related to warning and progress messages
+#---------------------------------------------------------------------------
+QUIET    = NO
+WARNINGS = YES
+
+#---------------------------------------------------------------------------
+# Input related options
+#---------------------------------------------------------------------------
+INPUT         = @DOXYGEN_ALGO_INPUT@
+FILE_PATTERNS = *.dox
+IMAGE_PATH    = @DOXYGEN_ALGO_IMGS@
+RECURSIVE     = YES
+TAGFILES      = @DOXYGEN_API_TAG_LOC@
+
+#---------------------------------------------------------------------------
+# HTML related options
+#---------------------------------------------------------------------------
+GENERATE_HTML     = YES
+HTML_OUTPUT       = .
+HTML_HEADER       = @DOXYGEN_STATIC@/header.html
+HTML_FOOTER       = @DOXYGEN_STATIC@/footer.html
+HTML_STYLESHEET   = @DOXYGEN_STATIC@/doxygen.css
+TOC_EXPAND        = NO
+DISABLE_INDEX     = NO
+GENERATE_TREEVIEW = YES
+TREEVIEW_WIDTH    = 300
+
+#---------------------------------------------------------------------------
+# MathJax related option
+#---------------------------------------------------------------------------
+USE_MATHJAX          = @DOXYGEN_USE_MATHJAX@
+MATHJAX_RELPATH      = file:///@DOXYGEN_MATHJAX@
+MATHJAX_EXTENSIONS   = TeX/AMSmath TeX/AMSsymbols
+MATHJAX_CODEFILE     = @DOXYGEN_STATIC@/mathjax-config.js
+
+#---------------------------------------------------------------------------
+# SORT related options
+#---------------------------------------------------------------------------
+SORT_GROUP_NAMES = NO
+
+#---------------------------------------------------------------------------
+# LaTeX related option
+#---------------------------------------------------------------------------
+GENERATE_LATEX = NO
+
+#---------------------------------------------------------------------------
+# RTF related options
+#---------------------------------------------------------------------------
+GENERATE_RTF = NO
+
+#---------------------------------------------------------------------------
+# Search engine
+#---------------------------------------------------------------------------
+SEARCHENGINE = YES

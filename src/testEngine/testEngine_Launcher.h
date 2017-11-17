@@ -1,0 +1,224 @@
+//-----------------------------------------------------------------------------
+// Created on: 11 June 2013
+// Created by: Sergey SLYADNEV
+//-----------------------------------------------------------------------------
+// This file is a part of Mobius library. It has no license protection. You
+// are free to use it the way you like, including incorporating of Mobius
+// sources and libraries into commercial applications.
+// Web: http://Mobius.su
+//-----------------------------------------------------------------------------
+
+#ifndef testEngine_Launcher_HeaderFile
+#define testEngine_Launcher_HeaderFile
+
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
+
+// Core includes
+#include <mobius/core_Ptr.h>
+
+//-----------------------------------------------------------------------------
+// Launcher API
+//-----------------------------------------------------------------------------
+
+namespace mobius {
+
+//! Base class for Test Case Launcher.
+class testEngine_CaseLauncherAPI : public core_OBJECT
+{
+public:
+
+  virtual bool
+    Launch() = 0;
+
+  virtual int
+    CaseID() const = 0;
+
+  virtual std::string
+    CaseDescriptionDir() const = 0;
+
+  virtual std::string
+    CaseDescriptionFn() const = 0;
+
+  virtual int
+    NumberOfExecuted() const = 0;
+
+  virtual int
+    NumberOfFailed() const = 0;
+
+  virtual MobiusTestFunction
+    TestFunction(const int idx) const = 0;
+
+  virtual const std::map<std::string, std::string>&
+    Variables() const = 0;
+
+  virtual bool
+    IsPassed(const int idx) const = 0;
+
+};
+
+//-----------------------------------------------------------------------------
+// Launcher for single Test Case
+//-----------------------------------------------------------------------------
+
+//! Template-based implementation of Launcher mechanism dedicated to certain
+//! Test Case.
+template <typename CaseType>
+class testEngine_CaseLauncher : public testEngine_CaseLauncherAPI
+{
+public:
+
+  //! Default constructor.
+  testEngine_CaseLauncher() : testEngine_CaseLauncherAPI()
+  {}
+
+public:
+
+  //! Launches the Test Case of the given type. Returns true in case of
+  //! success, false -- otherwise.
+  //! \return true/false.
+  virtual bool Launch()
+  {
+    // Collect Test Functions to run
+    MobiusTestFunctions functions;
+    CaseType::Functions(functions);
+
+    // Run functions one by one
+    bool areAllOk = true;
+    for ( int f = 0; f < (int) functions.Size(); ++f )
+    {
+      const MobiusTestFunction& func = functions.Func(f);
+      const bool isOk = (*func)(f + 1);
+
+      m_funcResults.push_back(isOk);
+      if ( !isOk && areAllOk )
+        areAllOk = false;
+    }
+    return areAllOk;
+  }
+
+  //! Returns ID of the managed Test Case.
+  //! \return ID of the managed Test Case.
+  virtual int CaseID() const
+  {
+    return CaseType::ID();
+  }
+
+  //! Returns description directory for the managed Test Case.
+  //! \return description directory for the managed Test Case.
+  virtual std::string CaseDescriptionDir() const
+  {
+    return CaseType::DescriptionDir();
+  }
+
+  //! Returns description filename for the managed Test Case.
+  //! \return description filename for the managed Test Case.
+  virtual std::string CaseDescriptionFn() const
+  {
+    return CaseType::DescriptionFn();
+  }
+
+  //! Returns the total number of executed Test Functions for the managed
+  //! Test Case.
+  //! \return number of executed Test Functions
+  virtual int NumberOfExecuted() const
+  {
+    return (int) m_funcResults.size();
+  }
+
+  //! Returns the total number of failed Test Functions for the managed
+  //! Test Case.
+  //! \return number of failed Test Functions
+  virtual int NumberOfFailed() const
+  {
+    int numFailed = 0;
+    for ( int f = 0; f < (int) m_funcResults.size(); ++f )
+    {
+      if ( !m_funcResults[f] )
+        numFailed++;
+    }
+    return numFailed;
+  }
+
+  //! Returns Test Function referred to by the given 0-based index.
+  //! \param idx [in] index of the Test Function to access.
+  //! \return Test Function.
+  virtual MobiusTestFunction TestFunction(const int idx) const
+  {
+    // Collect Test Functions to run
+    MobiusTestFunctions functions;
+    CaseType::Functions(functions);
+
+    // Access Test Function by index
+    return functions.Func(idx);
+  }
+
+  //! Returns expansion map for local description variables of Test
+  //! Function with the given index.
+  //! \return expansion map.
+  virtual const std::map<std::string, std::string>& Variables() const
+  {
+    return CaseType::ExpansionMap();
+  }
+
+  //! Returns true if Test Function with the given index has passed, false --
+  //! otherwise.
+  //! \param idx [in] index of Test Function.
+  //! \return true/false.
+  virtual bool IsPassed(const int idx) const
+  {
+    return m_funcResults[idx];
+  }
+
+private:
+
+  testEngine_CaseLauncher(const testEngine_CaseLauncher&) {}
+  void operator=(const testEngine_CaseLauncher&) {}
+
+private:
+
+  std::vector<bool> m_funcResults; //!< Execution results.
+
+};
+
+//-----------------------------------------------------------------------------
+// Launcher for entire test suite
+//-----------------------------------------------------------------------------
+
+//! Launcher for entire test suite. The instance of this class should be
+//! populated with the actual Test Case Launchers you want to execute.
+class testEngine_Launcher
+{
+public:
+
+  //! Default constructor.
+  testEngine_Launcher() {}
+
+public:
+
+  mobiusTestEngine_EXPORT testEngine_Launcher&
+    operator<<(const Ptr<testEngine_CaseLauncherAPI>& CaseLauncher);
+
+  mobiusTestEngine_EXPORT bool
+    Launch(std::ostream* out = NULL) const;
+
+protected:
+
+  bool generateReport(std::ostream* out) const;
+  std::string uniqueDirName() const;
+
+private:
+
+  testEngine_Launcher(const testEngine_Launcher&) {}
+  void operator=(const testEngine_Launcher&) {}
+
+private:
+
+  //! Internal collection of Test Case Launchers.
+  std::vector< Ptr<testEngine_CaseLauncherAPI> > m_launchers;
+
+};
+
+};
+
+#endif

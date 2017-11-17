@@ -1,0 +1,176 @@
+//-----------------------------------------------------------------------------
+// Created on: 28 Aug 2012
+// Created by: Sergey SLYADNEV
+//-----------------------------------------------------------------------------
+
+#ifndef core_Ptr_HeaderFile
+#define core_Ptr_HeaderFile
+
+// core includes
+#include <mobius/core_OBJECT.h>
+
+namespace mobius {
+
+//! \ingroup MOBIUS_CORE
+//!
+//! \todo provide description here
+template <class SharedType>
+class core_Ptr
+{
+// Construction & destruction:
+public:
+
+  //! Default constructor.
+  core_Ptr<SharedType>()
+  {
+    m_pRef = NULL;
+  }
+
+  //! Constructor accepting the raw reference to the target object to wrap with
+  //! a smart pointer.
+  //! \param theRef [in] reference to the target object.
+  core_Ptr<SharedType>(SharedType* theRef)
+  {
+    m_pRef = theRef;
+    this->beginScope();
+  }
+
+  //! Constructor accepting the smart reference to the target object to share.
+  //! \param theSmartRef [in] smart reference to the target object.
+  core_Ptr<SharedType>(const core_Ptr<SharedType>& theSmartRef)
+  {
+    m_pRef = NULL;
+    this->operator=(theSmartRef);
+  }
+
+  //! Destructor.
+  virtual ~core_Ptr()
+  {
+    this->endScope();
+  }
+
+public:
+
+  //! Assignment operator accepting raw pointer.
+  //! \param theRef [in] raw pointer.
+  //! \return this instance.
+  core_Ptr<SharedType>& operator=(SharedType* theRef)
+  {
+    this->endScope();
+    m_pRef = theRef;
+    this->beginScope();
+    return *this;
+  }
+
+  //! Assignment operator accepting smart pointer.
+  //! \param theSmartRef [in] smart pointer.
+  //! \return this instance.
+  core_Ptr<SharedType>& operator=(const core_Ptr<SharedType>& theSmartRef)
+  {
+    this->endScope();
+    m_pRef = theSmartRef.m_pRef;
+    this->beginScope();
+    return *this;
+  }
+
+  //! Conversion operator.
+  //! \return raw pointer.
+  operator SharedType*()
+  {
+    return m_pRef;
+  }
+
+  //! Conversion operator.
+  //! \return raw pointer.
+  operator const SharedType*() const
+  {
+    return m_pRef;
+  }
+
+  //! Nullifies smart pointer.
+  //! \return true/false.
+  void Nullify()
+  {
+    this->endScope();
+  }
+
+  //! Checks whether the actually wrapper pointer is null or not.
+  //! \return true/false.
+  bool IsNull() const
+  {
+    return m_pRef == NULL;
+  }
+
+  //! Accessor for the wrapped pointer.
+  //! \return wrapped pointer.
+  SharedType* Access() const
+  {
+    return m_pRef;
+  }
+
+  //! Dereferencing operator.
+  //! \return wrapped pointer.
+  SharedType* operator->() const
+  {
+    return this->Access();
+  }
+
+public:
+
+  //! Casts the passed pointer to the necessary type.
+  //! \param theSmartRef [in] pointer to cast.
+  //! \return casted pointer.
+  static core_Ptr<SharedType> DownCast(const core_Ptr<core_OBJECT>& theSmartRef)
+  {
+    return core_Ptr<SharedType>( theSmartRef.IsNull() ? NULL : dynamic_cast<SharedType*>( theSmartRef.Access() ) );
+  }
+
+  //! Casts the passed pointer to the necessary type.
+  //! \param theSmartRef [in] pointer to cast.
+  //! \return casted pointer.
+  template <class OtherType>
+  static core_Ptr<SharedType> DownCast(const core_Ptr<OtherType>& theSmartRef)
+  {
+    return core_Ptr<SharedType>( theSmartRef.IsNull() ? NULL : dynamic_cast<SharedType*>( theSmartRef.Access() ) );
+  }
+
+private:
+
+  //! Increments reference counter in the handled object.
+  void beginScope()
+  {
+    if ( m_pRef )
+      m_pRef->IncRef();
+  }
+
+  //! Decrements reference counter in the handled object.
+  //! If counter's value goes to 0, the object is deleted.
+  void endScope()
+  {
+    if ( m_pRef )
+    {
+      m_pRef->DecRef();
+      if ( !m_pRef->NbRefs() )
+      {
+        delete m_pRef;
+        m_pRef = NULL;
+      }
+    }
+  }
+
+private:
+
+  SharedType* m_pRef; //!< Actual reference to the wrapped object.
+
+};
+
+//-----------------------------------------------------------------------------
+// Handy shortcuts
+//-----------------------------------------------------------------------------
+
+//! Shortcut for Mobius shared pointer.
+#define Ptr core_Ptr
+
+};
+
+#endif
