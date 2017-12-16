@@ -23,13 +23,16 @@
 
 namespace mobius {
 
-//! Approximation tool for 3D B-spline curves.
+//! Converter between OpenCascade and Mobius for B-curves.
 class cascade_BSplineCurve3D
 {
 public:
 
   mobiusCascade_EXPORT
-    cascade_BSplineCurve3D(const Ptr<bcurve>& theCurve);
+    cascade_BSplineCurve3D(const Ptr<bcurve>& mobiusCurve);
+
+  mobiusCascade_EXPORT
+    cascade_BSplineCurve3D(const Handle(Geom_BSplineCurve)& occtCurve);
 
   mobiusCascade_EXPORT
     ~cascade_BSplineCurve3D();
@@ -37,10 +40,10 @@ public:
 public:
 
   mobiusCascade_EXPORT void
-    ReApproxConvert(const double        theTol3d,
-                    const GeomAbs_Shape theOrder,
-                    const int           theMaxSegments,
-                    const int           theMaxDegree);
+    ReApproxMobius(const double        theTol3d,
+                   const GeomAbs_Shape theOrder,
+                   const int           theMaxSegments,
+                   const int           theMaxDegree);
 
   mobiusCascade_EXPORT void
     DirectConvert();
@@ -48,24 +51,32 @@ public:
 public:
 
   mobiusCascade_EXPORT const Ptr<bcurve>&
-    Source() const;
+    GetMobiusCurve() const;
+
+  mobiusCascade_EXPORT const Handle(Geom_BSplineCurve)&
+    GetOpenCascadeCurve() const;
 
   mobiusCascade_EXPORT bool
     IsDone() const;
 
-  mobiusCascade_EXPORT const Handle(Geom_BSplineCurve)&
-    Result() const;
-
   mobiusCascade_EXPORT double
     MaxError() const;
 
+protected:
+
+  mobiusCascade_EXPORT void
+    convertToOpenCascade();
+
+  mobiusCascade_EXPORT void
+    convertToMobius();
+
 private:
 
-  //! Source Mobius curve.
-  Ptr<bcurve> m_srcCurve;
+  //! Mobius curve.
+  Ptr<bcurve> m_mobiusCurve;
 
-  //! Resulting OCCT curve.
-  Handle(Geom_BSplineCurve) m_resCurve;
+  //! OCCT curve.
+  Handle(Geom_BSplineCurve) m_occtCurve;
 
   //! Maximum achieved approximation error.
   double m_fMaxError;

@@ -64,6 +64,8 @@ set (utils_H_FILES
   utils/core_Journal.h
   utils/core_JournalTicket.h
   utils/core_StringBuffer.h
+  utils/core_TimeStamp.h
+  utils/core_Utils.h
 )
 set (utils_CPP_FILES 
   utils/core_FileDumper.cpp
@@ -71,6 +73,8 @@ set (utils_CPP_FILES
   utils/core_Journal.cpp
   utils/core_JournalTicket.cpp
   utils/core_StringBuffer.cpp
+  utils/core_TimeStamp.cpp
+  utils/core_Utils.cpp
 )
 
 #------------------------------------------------------------------------------

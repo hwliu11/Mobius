@@ -59,10 +59,10 @@ Handle(Geom_BSplineSurface)
     vResolver.Resolve(qr_VKnots[i]);
 
   // Access OCCT collections
-  Handle(TColStd_HArray1OfReal)    occt_UKnots = uResolver.GetKnots();
-  Handle(TColStd_HArray1OfInteger) occt_UMults = uResolver.GetMults();
-  Handle(TColStd_HArray1OfReal)    occt_VKnots = vResolver.GetKnots();
-  Handle(TColStd_HArray1OfInteger) occt_VMults = vResolver.GetMults();
+  Handle(TColStd_HArray1OfReal)    occt_UKnots = uResolver.GetOpenCascadeKnots();
+  Handle(TColStd_HArray1OfInteger) occt_UMults = uResolver.GetOpenCascadeMults();
+  Handle(TColStd_HArray1OfReal)    occt_VKnots = vResolver.GetOpenCascadeKnots();
+  Handle(TColStd_HArray1OfInteger) occt_VMults = vResolver.GetOpenCascadeMults();
 
   // Construct OCCT surface
   Handle(Geom_BSplineSurface)

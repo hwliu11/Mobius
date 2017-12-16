@@ -326,6 +326,6 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
 //! \return generated unique name.
 std::string testEngine_Launcher::uniqueDirName() const
 {
-  Ptr<QrTools_TimeStamp> TS = QrTools_TimeStampTool::Generate();
+  Ptr<core_TimeStamp> TS = core_TimeStampTool::Generate();
   return TS->ToString(false, true);
 }

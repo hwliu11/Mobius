@@ -127,28 +127,42 @@ void cascade_BSplineCurve3D_Eval::Evaluate(int* theDimension,
 //-----------------------------------------------------------------------------
 
 //! Constructor.
-//! \param theCurve [in] 3D curve to approximate.
-mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const Ptr<bcurve>& theCurve)
+//! \param mobiusCurve [in] Mobius 3D curve to convert.
+mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const Ptr<bcurve>& mobiusCurve)
 {
-  m_srcCurve = theCurve;
-  m_fMaxError = 0.0;
-  m_bIsDone = false;
+  m_mobiusCurve = mobiusCurve;
+  m_fMaxError   = 0.0;
+  m_bIsDone     = false;
 }
+
+//-----------------------------------------------------------------------------
+
+//! Constructor.
+//! \param occtCurve [in] OCCT 3D curve to convert.
+mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const Handle(Geom_BSplineCurve)& occtCurve)
+{
+  m_occtCurve = occtCurve;
+  m_fMaxError = 0.0;
+  m_bIsDone   = false;
+}
+
+//-----------------------------------------------------------------------------
 
 //! Destructor.
 mobius::cascade_BSplineCurve3D::~cascade_BSplineCurve3D()
-{
-}
+{}
+
+//-----------------------------------------------------------------------------
 
 //! Converts Mobius B-spline curve to OCCT one via re-approximation.
 //! \param theTol3d [in] tolerance to achieve.
 //! \param theOrder [in] desired order.
 //! \param theMaxSegments [in] maximum number of segments.
 //! \param theMaxDegree [in] maximum degree.
-void mobius::cascade_BSplineCurve3D::ReApproxConvert(const double theTol3d,
-                                                     const GeomAbs_Shape theOrder,
-                                                     const int theMaxSegments,
-                                                     const int theMaxDegree)
+void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double theTol3d,
+                                                    const GeomAbs_Shape theOrder,
+                                                    const int theMaxSegments,
+                                                    const int theMaxDegree)
 {
   m_fMaxError = 0.0;
 
@@ -159,11 +173,11 @@ void mobius::cascade_BSplineCurve3D::ReApproxConvert(const double theTol3d,
   threeDTol->Init(theTol3d);
 
   // Access parametric range
-  double f = m_srcCurve->MinParameter();
-  double l = m_srcCurve->MaxParameter();
+  double f = m_mobiusCurve->MinParameter();
+  double l = m_mobiusCurve->MaxParameter();
 
   // Re-approximate curve using OCCT Advanced Approximation facilities
-  cascade_BSplineCurve3D_Eval Eval(m_srcCurve, f, l);
+  cascade_BSplineCurve3D_Eval Eval(m_mobiusCurve, f, l);
   AdvApprox_ApproxAFunction Approx(num1DSS, num2DSS, num3DSS,
                                    oneDTolNul, twoDTolNul, threeDTol,
                                    f, l,
@@ -181,24 +195,72 @@ void mobius::cascade_BSplineCurve3D::ReApproxConvert(const double theTol3d,
     Handle(TColStd_HArray1OfReal) knots = Approx.Knots();
     Handle(TColStd_HArray1OfInteger) mults = Approx.Multiplicities();
     const int degree = Approx.Degree();
-    m_resCurve = new Geom_BSplineCurve(poles, knots->Array1(), mults->Array1(), degree);
+    m_occtCurve = new Geom_BSplineCurve(poles, knots->Array1(), mults->Array1(), degree);
     m_fMaxError = Approx.MaxError(3, 1);
   }
 }
+
+//-----------------------------------------------------------------------------
 
 //! Converts Mobius B-spline curve to OCCT one by direct supplying of knots,
 //! multiplicities and poles as they are in Mobius.
 void mobius::cascade_BSplineCurve3D::DirectConvert()
 {
-  const std::vector<xyz>& SrcPoles = m_srcCurve->Poles();
-  std::vector<double>     srcU     = m_srcCurve->Knots();
-  const int               srcDeg   = m_srcCurve->Degree();
+  if ( !m_mobiusCurve.IsNull() )
+    this->convertToOpenCascade();
+  else if ( !m_occtCurve.IsNull() )
+    this->convertToMobius();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Accessor for the Mobius curve.
+//! \return Mobius curve.
+const mobius::Ptr<mobius::bcurve>& mobius::cascade_BSplineCurve3D::GetMobiusCurve() const
+{
+  return m_mobiusCurve;
+}
+
+//-----------------------------------------------------------------------------
+
+//! Accessor for the OpenCascade curve.
+//! \return OpenCascade curve.
+const Handle(Geom_BSplineCurve)& mobius::cascade_BSplineCurve3D::GetOpenCascadeCurve() const
+{
+  return m_occtCurve;
+}
+
+//-----------------------------------------------------------------------------
+
+//! Returns true if the result is accessible, false -- otherwise.
+//! \return true/false.
+bool mobius::cascade_BSplineCurve3D::IsDone() const
+{
+  return m_bIsDone;
+}
+
+//-----------------------------------------------------------------------------
+
+//! Returns maximum achieved approximation error.
+//! \return maximum error.
+double mobius::cascade_BSplineCurve3D::MaxError() const
+{
+  return m_fMaxError;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
+{
+  const std::vector<xyz>& srcPoles = m_mobiusCurve->Poles();
+  std::vector<double>     srcU     = m_mobiusCurve->Knots();
+  const int               srcDeg   = m_mobiusCurve->Degree();
 
   // Poles are transferred as is
-  TColgp_Array1OfPnt occtPoles( 1, (int) SrcPoles.size() );
+  TColgp_Array1OfPnt occtPoles( 1, (int) srcPoles.size() );
   for ( int i = occtPoles.Lower(); i <= occtPoles.Upper(); ++i )
   {
-    gp_Pnt P( SrcPoles[i - 1].X(), SrcPoles[i - 1].Y(), SrcPoles[i - 1].Z() );
+    gp_Pnt P( srcPoles[i - 1].X(), srcPoles[i - 1].Y(), srcPoles[i - 1].Z() );
     occtPoles(i) = P;
   }
 
@@ -215,43 +277,53 @@ void mobius::cascade_BSplineCurve3D::DirectConvert()
   }
 
   // Access handles
-  Handle(TColStd_HArray1OfReal) hKnots = MResolver.GetKnots();
-  Handle(TColStd_HArray1OfInteger) hMults = MResolver.GetMults();
+  Handle(TColStd_HArray1OfReal)    hKnots = MResolver.GetOpenCascadeKnots();
+  Handle(TColStd_HArray1OfInteger) hMults = MResolver.GetOpenCascadeMults();
 
   // Access actual knots and multiplicities
   const TColStd_Array1OfReal& occtKnots = hKnots->Array1();
   const TColStd_Array1OfInteger& occtMults = hMults->Array1();
 
   // Build OCCT curve from scratch
-  m_resCurve  = new Geom_BSplineCurve(occtPoles, occtKnots, occtMults, srcDeg);
+  m_occtCurve = new Geom_BSplineCurve(occtPoles, occtKnots, occtMults, srcDeg);
   m_fMaxError = 0.0;
   m_bIsDone   = true;
 }
 
-//! Accessor for the source curve.
-//! \return source curve.
-const mobius::Ptr<mobius::bcurve>& mobius::cascade_BSplineCurve3D::Source() const
-{
-  return m_srcCurve;
-}
+//-----------------------------------------------------------------------------
 
-//! Returns true if the result is accessible, false -- otherwise.
-//! \return true/false.
-bool mobius::cascade_BSplineCurve3D::IsDone() const
+void mobius::cascade_BSplineCurve3D::convertToMobius()
 {
-  return m_bIsDone;
-}
+  const TColgp_Array1OfPnt&      srcPoles = m_occtCurve->Poles();
+  const TColStd_Array1OfReal&    srcKnots = m_occtCurve->Knots();
+  const TColStd_Array1OfInteger& srcMults = m_occtCurve->Multiplicities();
+  const int                      srcDeg   = m_occtCurve->Degree();
 
-//! Accessor for the resulting curve.
-//! \return resulting curve.
-const Handle(Geom_BSplineCurve)& mobius::cascade_BSplineCurve3D::Result() const
-{
-  return m_resCurve;
-}
+  // Poles are transferred as is
+  std::vector<xyz> mobiusPoles;
+  //
+  for ( int i = srcPoles.Lower(); i <= srcPoles.Upper(); ++i )
+  {
+    xyz P( srcPoles(i).X(), srcPoles(i).Y(), srcPoles(i).Z() );
+    mobiusPoles.push_back(P);
+  }
 
-//! Returns maximum achieved approximation error.
-//! \return maximum error.
-double mobius::cascade_BSplineCurve3D::MaxError() const
-{
-  return m_fMaxError;
+  // Fill array of Mobius knots just repeating OCCT knots as many times
+  // as multiplicity value dictates.
+  std::vector<double> mobiusU;
+  //
+  for ( int k = srcKnots.Lower(); k <= srcKnots.Upper(); ++k )
+  {
+    // Get multiplicity.
+    const int mult = srcMults(k);
+
+    // Fill knots.
+    for ( int m = 0; m < mult; ++m )
+      mobiusU.push_back( srcKnots(k) );
+  }
+
+  // Build Mobius curve from scratch
+  m_mobiusCurve = new bcurve(mobiusPoles, mobiusU, srcDeg);
+  m_fMaxError   = 0.0;
+  m_bIsDone     = true;
 }

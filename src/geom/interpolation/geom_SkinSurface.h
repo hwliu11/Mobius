@@ -53,13 +53,15 @@ public:
 
   mobiusGeom_EXPORT
     geom_SkinSurface(const std::vector< Ptr<bcurve> >& curves,
-                     const int                         deg_V);
+                     const int                         deg_V,
+                     const bool                        unifyCurves);
 
 public:
 
   mobiusGeom_EXPORT void
     Init(const std::vector< Ptr<bcurve> >& curves,
-         const int                         deg_V);
+         const int                         deg_V,
+         const bool                        unifyCurves);
 
   mobiusGeom_EXPORT void
     Perform();
@@ -89,6 +91,7 @@ private:
 
   std::vector< Ptr<bcurve> > m_curves;  //!< Curves to interpolate.
   int                        m_iDeg_V;  //!< V-degree of interpolant surface.
+  bool                       m_bUnify;  //!< Indicates whether to unify curves.
   ErrCode                    m_errCode; //!< Error code.
   Ptr<bsurf>                 m_surface; //!< Interpolant surface.
 

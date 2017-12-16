@@ -51,7 +51,8 @@ void mobius::cascade_MultResolver::Resolve(const double u)
 }
 
 //! \return knot array in OCCT form.
-Handle(TColStd_HArray1OfReal) mobius::cascade_MultResolver::GetKnots() const
+Handle(TColStd_HArray1OfReal)
+  mobius::cascade_MultResolver::GetOpenCascadeKnots() const
 {
   Handle(TColStd_HArray1OfReal) res = new TColStd_HArray1OfReal( 0, Knots.Length() - 1 );
   for ( int i = 0; i < Knots.Length(); ++i )
@@ -62,7 +63,8 @@ Handle(TColStd_HArray1OfReal) mobius::cascade_MultResolver::GetKnots() const
 }
 
 //! \return multiplicity array in OCCT form.
-Handle(TColStd_HArray1OfInteger) mobius::cascade_MultResolver::GetMults() const
+Handle(TColStd_HArray1OfInteger)
+  mobius::cascade_MultResolver::GetOpenCascadeMults() const
 {
   Handle(TColStd_HArray1OfInteger) res = new TColStd_HArray1OfInteger( 0, Knots.Length() - 1 );
   for ( int i = 0; i < Knots.Length(); ++i )

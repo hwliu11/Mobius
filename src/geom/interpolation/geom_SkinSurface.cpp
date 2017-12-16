@@ -18,6 +18,7 @@
 #include <mobius/bspl_KnotsAverage.h>
 #include <mobius/bspl_ParamsCentripetal.h>
 #include <mobius/bspl_ParamsChordLength.h>
+#include <mobius/bspl_UnifyKnots.h>
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
@@ -30,22 +31,27 @@ mobius::geom_SkinSurface::geom_SkinSurface()
 
 //! Complete constructor. Initializes the interpolation tool with a set
 //! of curves to skin the surface through.
-//! \param curves [in] curves to skin the surface through.
-//! \param deg_V [in] degree in V curvilinear direction.
+//! \param[in] curves      curves to skin the surface through.
+//! \param[in] deg_V       degree in V curvilinear direction.
+//! \param[in] unifyCurves indicates whether to unify curves before skinning.
 mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< Ptr<bcurve> >& curves,
-                                           const int                         deg_V)
+                                           const int                         deg_V,
+                                           const bool                        unifyCurves)
 {
-  this->Init(curves, deg_V);
+  this->Init(curves, deg_V, unifyCurves);
 }
 
 //! Initializes skinning tool.
-//! \param curves [in] curves to skin the surface through.
-//! \param deg_V [in] degree in V curvilinear direction.
+//! \param[in] curves      curves to skin the surface through.
+//! \param[in] deg_V       degree in V curvilinear direction.
+//! \param[in] unifyCurves indicates whether to unify curves before skinning.
 void mobius::geom_SkinSurface::Init(const std::vector< Ptr<bcurve> >& curves,
-                                    const int deg_V)
+                                    const int                         deg_V,
+                                    const bool                        unifyCurves)
 {
   m_curves  = curves;
   m_iDeg_V  = deg_V;
+  m_bUnify  = unifyCurves;
   m_errCode = ErrCode_NotDone;
 }
 
@@ -69,6 +75,7 @@ void mobius::geom_SkinSurface::Perform()
   }
 
   // Check compatibility of curves
+  bool areCompatible = true;
   int ref_degree = 0;
   std::vector<double> ref_U;
   for ( size_t c = 0; c < m_curves.size(); ++c )
@@ -89,14 +96,70 @@ void mobius::geom_SkinSurface::Perform()
     {
       if ( crv->Degree() != ref_degree )
       {
-        m_errCode = ErrCode_NotCompatibleCurves_Degree;
-        return;
+        areCompatible = false;
+
+        if ( !m_bUnify )
+        {
+          m_errCode = ErrCode_NotCompatibleCurves_Degree;
+          return;
+        }
+        else
+          break;
       }
-      if ( crv->Knots() != ref_U )
+      if ( crv->Knots() != ref_U && !m_bUnify )
       {
-        m_errCode = ErrCode_NotCompatibleCurves_Knots;
-        return;
+        areCompatible = false;
+
+        if ( !m_bUnify )
+        {
+          m_errCode = ErrCode_NotCompatibleCurves_Knots;
+          return;
+        }
+        else
+          break;
       }
+    }
+  }
+
+  if ( !areCompatible && m_bUnify )
+  {
+    // Normalize and collect knot vectors
+    std::vector< std::vector<double> > U_all;
+    for ( size_t c = 0; c < m_curves.size(); ++c )
+    {
+      // Normalize
+      m_curves[c]->ReparameterizeLinear(0.0, 1.0);
+
+      // Get knots
+      std::vector<double> U = m_curves[c]->Knots();
+      U_all.push_back(U);
+
+      // Dump knots
+      std::cout << "Curve " << (c + 1) << ": ";
+      for ( size_t j = 0; j < U.size(); ++j )
+      {
+        std::cout << U[j] << "\t";
+      }
+      std::cout << std::endl;
+    }
+
+    // Compute extension
+    bspl_UnifyKnots Unify;
+    std::vector< std::vector<double> > X = Unify(U_all);
+
+    // Unify knots
+    for ( size_t c = 0; c < m_curves.size(); ++c )
+    {
+      m_curves[c]->RefineKnots(X[c]);
+      const std::vector<double>& U = m_curves[c]->Knots();
+
+      // Dump knots
+      std::cout << "Curve [refined] " << (c + 1) << ": ";
+      for ( size_t j = 0; j < U.size(); ++j )
+      {
+        std::cout << U[j] << "\t";
+      }
+      std::cout << std::endl;
     }
   }
 

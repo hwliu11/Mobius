@@ -52,10 +52,10 @@ public:
     Resolve(const double u);
 
   mobiusCascade_EXPORT Handle(TColStd_HArray1OfReal)
-    GetKnots() const;
+    GetOpenCascadeKnots() const;
 
   mobiusCascade_EXPORT Handle(TColStd_HArray1OfInteger)
-    GetMults() const;
+    GetOpenCascadeMults() const;
 
 };
 
