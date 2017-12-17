@@ -324,7 +324,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
 //!
 //! </pre>
 //! \return generated unique name.
-std::string testEngine_Launcher::uniqueDirName() const
+std::string mobius::testEngine_Launcher::uniqueDirName() const
 {
   Ptr<core_TimeStamp> TS = core_TimeStampTool::Generate();
   return TS->ToString(false, true);

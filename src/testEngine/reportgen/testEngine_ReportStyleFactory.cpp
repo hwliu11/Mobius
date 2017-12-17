@@ -13,7 +13,7 @@
 
 //! CSS style with background color suitable for highlighting of "bad" data.
 //! \return requested style.
-mobius::testEngine_ReportStyle testEngine_ReportStyleFactory::Bad()
+mobius::testEngine_ReportStyle mobius::testEngine_ReportStyleFactory::Bad()
 {
   testEngine_ReportStyle ResStyle;
   ResStyle.SetBgColor( testEngine_ReportStyle::Color(240, 100, 100) );
@@ -22,7 +22,7 @@ mobius::testEngine_ReportStyle testEngine_ReportStyleFactory::Bad()
 
 //! CSS style with background color suitable for highlighting of "good" data.
 //! \return requested style.
-mobius::testEngine_ReportStyle testEngine_ReportStyleFactory::Good()
+mobius::testEngine_ReportStyle mobius::testEngine_ReportStyleFactory::Good()
 {
   testEngine_ReportStyle ResStyle;
   ResStyle.SetBgColor( testEngine_ReportStyle::Color(190, 235, 100) );

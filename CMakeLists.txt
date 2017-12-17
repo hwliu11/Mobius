@@ -171,10 +171,10 @@ set_property(TARGET mobiusGeom       PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusCascade    PROPERTY FOLDER Services)
 ################################################################################
 set_property(TARGET mobiusTestEngine PROPERTY FOLDER Tests)
-#set_property(TARGET test          PROPERTY FOLDER Tests)
+set_property(TARGET mobiusTest       PROPERTY FOLDER Tests)
 ################################################################################
-set_property(TARGET docalgo          PROPERTY FOLDER Documentation)
-set_property(TARGET docapi           PROPERTY FOLDER Documentation)
+#set_property(TARGET docalgo          PROPERTY FOLDER Documentation)
+#set_property(TARGET docapi           PROPERTY FOLDER Documentation)
 ################################################################################
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
