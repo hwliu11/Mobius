@@ -84,6 +84,9 @@ std::string mobius::core_Utils::Env::GetVariable(const char* VarName)
 //! \return string with a trailing slash.
 std::string mobius::core_Utils::Str::Slashed(const std::string& strIN)
 {
+  if ( !strIN.length() )
+    return strIN;
+
   char c = strIN.at(strIN.length() - 1);
   if ( c == *SLASH_STR )
     return strIN;
