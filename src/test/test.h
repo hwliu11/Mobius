@@ -11,16 +11,6 @@
 #ifndef test_HeaderFile
 #define test_HeaderFile
 
-#if defined _WIN32
-  #if defined mobiusTest_EXPORTS
-    #define mobiusTest_EXPORT __declspec(dllexport)
-  #else
-    #define mobiusTest_EXPORT __declspec(dllimport)
-  #endif
-#else
-  #define mobiusTest_EXPORT
-#endif
-
 #define test_NotUsed(x)
 
 #endif

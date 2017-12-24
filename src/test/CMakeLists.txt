@@ -117,11 +117,19 @@ endforeach (FILE)
 
 include_directories(${test_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${testEngine_include_dir})
 
-add_library (mobiusTest SHARED
+add_executable (mobiusTest
   ${H_FILES}      ${CPP_FILES}
   ${bspl_H_FILES} ${bspl_CPP_FILES}
   ${core_H_FILES} ${core_CPP_FILES}
   ${geom_H_FILES} ${geom_CPP_FILES})
+
+# Post-build event: run tests.
+add_custom_command(
+        TARGET mobiusTest
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "Running unit tests."
+        COMMAND $<TARGET_FILE:mobiusTest>
+    )
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 

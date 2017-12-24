@@ -59,14 +59,14 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve3D> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine> );
 
   // Launcher of entire test suite

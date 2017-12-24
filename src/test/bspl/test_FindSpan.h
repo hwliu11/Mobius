@@ -29,8 +29,8 @@ class test_FindSpan
 // Construction & destruction:
 public:
 
-  mobiusTest_EXPORT test_FindSpan();
-  mobiusTest_EXPORT virtual ~test_FindSpan();
+  test_FindSpan();
+  virtual ~test_FindSpan();
 
 public:
 

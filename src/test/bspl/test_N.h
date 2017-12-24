@@ -28,8 +28,8 @@ class test_N
 // Construction & destruction:
 public:
 
-  mobiusTest_EXPORT test_N();
-  mobiusTest_EXPORT virtual ~test_N();
+  test_N();
+  virtual ~test_N();
 
 public:
 
