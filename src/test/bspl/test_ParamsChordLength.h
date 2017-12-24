@@ -8,20 +8,22 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_ParamsChordLength_HeaderFile
-#define QrTest_ParamsChordLength_HeaderFile
+#ifndef test_ParamsChordLength_HeaderFile
+#define test_ParamsChordLength_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for chord length parameterization.
-class QrTest_ParamsChordLength : public QrTestLib_TestCase
+class test_ParamsChordLength : public testEngine_TestCase
 {
 public:
 
@@ -29,14 +31,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_BSpl_Reconstruct_ParamsChordLength;
+    return CaseID_BSpl_ParamsChordLength;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "QrTest_ParamsChordLength";
+    return "test_ChordLength";
   }
 
   //! Returns Test Case description directory.
@@ -48,7 +50,7 @@ public:
 
   //! Returns pointers to the Test Functions to launch.
   //! \param functions [out] output collection of pointers.
-  static void Functions(QrTestFunctions& functions)
+  static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test1
               << &test2
@@ -64,6 +66,8 @@ private:
   static bool test3(const int funcID);
   static bool test4(const int funcID);
   static bool test5(const int funcID);
+
+};
 
 };
 

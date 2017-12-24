@@ -1,4 +1,4 @@
-project (mobiusTestEngine)
+project (mobiusTest)
 
 #------------------------------------------------------------------------------
 # Common
@@ -73,6 +73,11 @@ set (geom_CPP_FILES
 
 #------------------------------------------------------------------------------
 
+list (APPEND MOBIUS_MODULES test)
+set (MOBIUS_MODULES ${MOBIUS_MODULES} PARENT_SCOPE)
+
+#------------------------------------------------------------------------------
+
 # Create include variable
 set (test_include_dir_loc "${CMAKE_BINARY_DIR}/inc")
 #
@@ -86,18 +91,37 @@ foreach (FILE ${CPP_FILES})
   source_group ("Source Files" FILES "${FILE}")
 endforeach (FILE)
 
-foreach (FILE ${reportgen_H_FILES})
-  source_group ("Header Files\\Reporting" FILES "${FILE}")
+foreach (FILE ${bspl_H_FILES})
+  source_group ("Header Files\\BSpl" FILES "${FILE}")
 endforeach (FILE)
 
-foreach (FILE ${reportgen_CPP_FILES})
-  source_group ("Source Files\\Reporting" FILES "${FILE}")
+foreach (FILE ${bspl_CPP_FILES})
+  source_group ("Source Files\\BSpl" FILES "${FILE}")
 endforeach (FILE)
 
-include_directories(${test_include_dir_loc} ${core_include_dir})
+foreach (FILE ${core_H_FILES})
+  source_group ("Header Files\\Core" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${core_CPP_FILES})
+  source_group ("Source Files\\Core" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${geom_H_FILES})
+  source_group ("Header Files\\Geom" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${geom_CPP_FILES})
+  source_group ("Source Files\\Geom" FILES "${FILE}")
+endforeach (FILE)
+
+include_directories(${test_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${testEngine_include_dir})
+
 add_library (mobiusTest SHARED
-  ${H_FILES}           ${CPP_FILES}
-  ${reportgen_H_FILES} ${reportgen_CPP_FILES})
+  ${H_FILES}      ${CPP_FILES}
+  ${bspl_H_FILES} ${bspl_CPP_FILES}
+  ${core_H_FILES} ${core_CPP_FILES}
+  ${geom_H_FILES} ${geom_CPP_FILES})
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 
@@ -105,7 +129,7 @@ set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 # Dependencies
 #------------------------------------------------------------------------------
 
-target_link_libraries(mobiusTest mobiusCore)
+target_link_libraries(mobiusTest mobiusCore mobiusBSpl mobiusGeom mobiusTestEngine)
 
 #------------------------------------------------------------------------------
 # Installation of Mobius as SDK
@@ -125,5 +149,7 @@ install (TARGETS mobiusTest
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusTest.pdb DESTINATION bind CONFIGURATIONS Debug)
 
-install (FILES ${H_FILES}           DESTINATION include/mobius)
-install (FILES ${reportgen_H_FILES} DESTINATION include/mobius)
+install (FILES ${H_FILES}      DESTINATION include/mobius)
+install (FILES ${bspl_H_FILES} DESTINATION include/mobius)
+install (FILES ${core_H_FILES} DESTINATION include/mobius)
+install (FILES ${geom_H_FILES} DESTINATION include/mobius)

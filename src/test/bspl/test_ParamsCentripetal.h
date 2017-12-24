@@ -8,20 +8,22 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_ParamsCentripetal_HeaderFile
-#define QrTest_ParamsCentripetal_HeaderFile
+#ifndef test_ParamsCentripetal_HeaderFile
+#define test_ParamsCentripetal_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for centripetal parameterization.
-class QrTest_ParamsCentripetal : public QrTestLib_TestCase
+class test_ParamsCentripetal : public testEngine_TestCase
 {
 public:
 
@@ -29,14 +31,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_BSpl_Reconstruct_ParamsCentripetal;
+    return CaseID_BSpl_ParamsCentripetal;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "QrTest_ParamsCentripetal";
+    return "test_ParamsCentripetal";
   }
 
   //! Returns Test Case description directory.
@@ -48,7 +50,7 @@ public:
 
   //! Returns pointers to the Test Functions to launch.
   //! \param functions [out] output collection of pointers.
-  static void Functions(QrTestFunctions& functions)
+  static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test1
               << &test2;
@@ -62,9 +64,11 @@ private:
 // Construction is prohibited:
 private:
 
-  QrTest_ParamsCentripetal() {}
-  QrTest_ParamsCentripetal(const QrTest_ParamsCentripetal&) {}
-  void operator=(const QrTest_ParamsCentripetal&) {}
+  test_ParamsCentripetal() {}
+  test_ParamsCentripetal(const test_ParamsCentripetal&) {}
+  void operator=(const test_ParamsCentripetal&) {}
+
+};
 
 };
 

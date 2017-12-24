@@ -9,15 +9,15 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_ParamsCentripetal.h>
+#include <mobius/test_ParamsCentripetal.h>
 
-// QrBSpl includes
-#include <QrBSpl_ParamsCentripetal.h>
+// bspl includes
+#include <mobius/bspl_ParamsCentripetal.h>
 
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_ParamsCentripetal::test1(const int QrTest_NotUsed(funcID))
+bool mobius::test_ParamsCentripetal::test1(const int test_NotUsed(funcID))
 {
   /* ----------------------
    *  Prepare input points
@@ -39,7 +39,7 @@ bool QrTest_ParamsCentripetal::test1(const int QrTest_NotUsed(funcID))
   double t[3] = {0.0, 0.0, 0.0};
 
   // Perform
-  if ( QrBSpl_ParamsCentripetal::Calculate(Q_vec, t) != QrBSpl_ParamsCentripetal::ErrCode_NoError )
+  if ( bspl_ParamsCentripetal::Calculate(Q_vec, t) != bspl_ParamsCentripetal::ErrCode_NoError )
     return false;
 
   /* -----------------------
@@ -70,7 +70,7 @@ bool QrTest_ParamsCentripetal::test1(const int QrTest_NotUsed(funcID))
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_ParamsCentripetal::test2(const int QrTest_NotUsed(funcID))
+bool mobius::test_ParamsCentripetal::test2(const int test_NotUsed(funcID))
 {
   /* ----------------------
    *  Prepare input points
@@ -93,7 +93,7 @@ bool QrTest_ParamsCentripetal::test2(const int QrTest_NotUsed(funcID))
   double t[4] = {0.0, 0.0, 0.0, 0.0};
 
   // Perform
-  if ( QrBSpl_ParamsCentripetal::Calculate<double>(Q_vec, t) != QrBSpl_ParamsCentripetal::ErrCode_NoError )
+  if ( bspl_ParamsCentripetal::Calculate(Q_vec, t) != bspl_ParamsCentripetal::ErrCode_NoError )
     return false;
 
   /* -----------------------

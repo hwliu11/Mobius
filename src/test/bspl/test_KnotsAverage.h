@@ -8,20 +8,22 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_KnotsAverage_HeaderFile
-#define QrTest_KnotsAverage_HeaderFile
+#ifndef test_KnotsAverage_HeaderFile
+#define test_KnotsAverage_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for averaging technique of knots selection.
-class QrTest_KnotsAverage : public QrTestLib_TestCase
+class test_KnotsAverage : public testEngine_TestCase
 {
 public:
 
@@ -29,14 +31,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_BSpl_Reconstruct_KnotsAverage;
+    return CaseID_BSpl_KnotsAverage;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "QrTest_KnotsAverage";
+    return "test_KnotsAverage";
   }
 
   //! Returns Test Case description directory.
@@ -48,7 +50,7 @@ public:
 
   //! Returns pointers to the Test Functions to launch.
   //! \param functions [out] output collection of pointers.
-  static void Functions(QrTestFunctions& functions)
+  static void Functions(MobiusTestFunctions& functions)
   {
     functions << &testCase1_noDerivativeConstraints
               << &testCase1_endDerivativeConstraints;
@@ -62,9 +64,11 @@ private:
 // Construction is prohibited:
 private:
 
-  QrTest_KnotsAverage() {}
-  QrTest_KnotsAverage(const QrTest_KnotsAverage&) {}
-  void operator=(const QrTest_KnotsAverage&) {}
+  test_KnotsAverage() {}
+  test_KnotsAverage(const test_KnotsAverage&) {}
+  void operator=(const test_KnotsAverage&) {}
+
+};
 
 };
 

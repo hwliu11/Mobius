@@ -8,27 +8,29 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_BasisFindSpan_HeaderFile
-#define QrTest_BasisFindSpan_HeaderFile
+#ifndef test_FindSpan_HeaderFile
+#define test_FindSpan_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for B-spline basis algorithm dedicated to searching of
 //! knot intervals.
-class QrTest_BasisFindSpan
+class test_FindSpan
 {
 // Construction & destruction:
 public:
 
-  QrTest_EXPORT QrTest_BasisFindSpan();
-  QrTest_EXPORT virtual ~QrTest_BasisFindSpan();
+  mobiusTest_EXPORT test_FindSpan();
+  mobiusTest_EXPORT virtual ~test_FindSpan();
 
 public:
 
@@ -36,7 +38,7 @@ public:
   //! \return ID of the Test Case.
   virtual inline int ID() const
   {
-    return CaseID_BSpl_Basis_BasisFindSpan;
+    return CaseID_BSpl_FindSpan;
   }
 
   //! Returns Test Case description.
@@ -60,6 +62,8 @@ private:
 
   virtual void beforeAll() {};
   virtual void afterAll() {};
+
+};
 
 };
 

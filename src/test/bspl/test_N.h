@@ -8,26 +8,28 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_BasisN_HeaderFile
-#define QrTest_BasisN_HeaderFile
+#ifndef test_BasisN_HeaderFile
+#define test_BasisN_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for calculation of B-spline functions.
-class QrTest_BasisN
+class test_N
 {
 // Construction & destruction:
 public:
 
-  QrTest_EXPORT QrTest_BasisN();
-  QrTest_EXPORT virtual ~QrTest_BasisN();
+  mobiusTest_EXPORT test_N();
+  mobiusTest_EXPORT virtual ~test_N();
 
 public:
 
@@ -35,7 +37,7 @@ public:
   //! \return ID of the Test Case.
   virtual inline int ID() const
   {
-    return CaseID_BSpl_Basis_BasisN;
+    return CaseID_BSpl_N;
   }
 
   //! Returns Test Case description.
@@ -58,6 +60,8 @@ private:
 
   virtual void beforeAll() {};
   virtual void afterAll() {};
+
+};
 
 };
 

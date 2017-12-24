@@ -118,7 +118,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/geom)
 #add_subdirectory(${CMAKE_SOURCE_DIR}/src/api)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/cascade)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/testEngine)
-#add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 
 #-------------------------------------------------------------------------------
 # Documentation

@@ -9,15 +9,15 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_ParamsChordLength.h>
+#include <mobius/test_ParamsChordLength.h>
 
-// QrBSpl includes
-#include <QrBSpl_ParamsChordLength.h>
+// bspl includes
+#include <mobius/bspl_ParamsChordLength.h>
 
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_ParamsChordLength::test1(const int QrTest_NotUsed(funcID))
+bool mobius::test_ParamsChordLength::test1(const int test_NotUsed(funcID))
 {
   /* ----------------------
    *  Prepare input points
@@ -39,7 +39,7 @@ bool QrTest_ParamsChordLength::test1(const int QrTest_NotUsed(funcID))
   double t[3] = {0.0, 0.0, 0.0};
 
   // Perform
-  if ( QrBSpl_ParamsChordLength::Calculate(Q_vec, t) != QrBSpl_ParamsChordLength::ErrCode_NoError )
+  if ( bspl_ParamsChordLength::Calculate(Q_vec, t) != bspl_ParamsChordLength::ErrCode_NoError )
     return false;
 
   /* -----------------------
@@ -70,7 +70,7 @@ bool QrTest_ParamsChordLength::test1(const int QrTest_NotUsed(funcID))
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_ParamsChordLength::test2(const int QrTest_NotUsed(funcID))
+bool mobius::test_ParamsChordLength::test2(const int test_NotUsed(funcID))
 {
   /* ----------------------
    *  Prepare input points
@@ -93,7 +93,7 @@ bool QrTest_ParamsChordLength::test2(const int QrTest_NotUsed(funcID))
   double t[4] = {0.0, 0.0, 0.0, 0.0};
 
   // Perform
-  if ( QrBSpl_ParamsChordLength::Calculate(Q_vec, t) != QrBSpl_ParamsChordLength::ErrCode_NoError )
+  if ( bspl_ParamsChordLength::Calculate(Q_vec, t) != bspl_ParamsChordLength::ErrCode_NoError )
     return false;
 
   /* -----------------------
@@ -124,7 +124,7 @@ bool QrTest_ParamsChordLength::test2(const int QrTest_NotUsed(funcID))
 //! Test scenario 003.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_ParamsChordLength::test3(const int QrTest_NotUsed(funcID))
+bool mobius::test_ParamsChordLength::test3(const int test_NotUsed(funcID))
 {
   /* ----------------------
    *  Prepare input points
@@ -150,7 +150,7 @@ bool QrTest_ParamsChordLength::test3(const int QrTest_NotUsed(funcID))
   double v[2] = {0.0, 0.0};
 
   // Perform
-  if ( QrBSpl_ParamsChordLength::Calculate<double>(Q_vec, u, v) != QrBSpl_ParamsChordLength::ErrCode_NoError )
+  if ( bspl_ParamsChordLength::Calculate(Q_vec, u, v) != bspl_ParamsChordLength::ErrCode_NoError )
     return false;
 
   /* -----------------------
@@ -189,7 +189,7 @@ bool QrTest_ParamsChordLength::test3(const int QrTest_NotUsed(funcID))
 //! Test scenario 004.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_ParamsChordLength::test4(const int QrTest_NotUsed(funcID))
+bool mobius::test_ParamsChordLength::test4(const int test_NotUsed(funcID))
 {
   /* ----------------------
    *  Prepare input points
@@ -216,7 +216,7 @@ bool QrTest_ParamsChordLength::test4(const int QrTest_NotUsed(funcID))
   double v[2] = {0.0, 0.0};
 
   // Perform
-  if ( QrBSpl_ParamsChordLength::Calculate(Q_vec, u, v) != QrBSpl_ParamsChordLength::ErrCode_NoError )
+  if ( bspl_ParamsChordLength::Calculate(Q_vec, u, v) != bspl_ParamsChordLength::ErrCode_NoError )
     return false;
 
   /* -----------------------
@@ -259,7 +259,7 @@ bool QrTest_ParamsChordLength::test4(const int QrTest_NotUsed(funcID))
 //! Test scenario 005.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_ParamsChordLength::test5(const int QrTest_NotUsed(funcID))
+bool mobius::test_ParamsChordLength::test5(const int test_NotUsed(funcID))
 {
   /* ----------------------
    *  Prepare input points
@@ -286,7 +286,7 @@ bool QrTest_ParamsChordLength::test5(const int QrTest_NotUsed(funcID))
   double v[3] = {0.0, 0.0, 0.0};
 
   // Perform
-  if ( QrBSpl_ParamsChordLength::Calculate(Q_vec, u, v) != QrBSpl_ParamsChordLength::ErrCode_NoError )
+  if ( bspl_ParamsChordLength::Calculate(Q_vec, u, v) != bspl_ParamsChordLength::ErrCode_NoError )
     return false;
 
   /* -----------------------

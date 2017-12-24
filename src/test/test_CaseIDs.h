@@ -8,50 +8,43 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_CaseIDs_HeaderFile
-#define QrTest_CaseIDs_HeaderFile
+#ifndef test_CaseIDs_HeaderFile
+#define test_CaseIDs_HeaderFile
 
-#include <QrTest.h>
+// Tests includes
+#include <mobius/test.h>
 
 //! IDs for Test Cases.
-enum QrTest_CaseID
+enum test_CaseID
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
-
-  CaseID_Core_Quaternion = 1,
-
   //---------------------------------------------------------------------------
   // BSpl library
   //---------------------------------------------------------------------------
 
-  CaseID_BSpl_Basis_BasisFindSpan,
-  CaseID_BSpl_Basis_BasisN,
-  CaseID_BSpl_Basis_BasisEffectiveN,
-  CaseID_BSpl_Basis_BasisEffectiveNDers,
-  CaseID_BSpl_Basis_BasisKnotMultiset,
-  CaseID_BSpl_Basis_BasisUnifyKnots,
-
-  CaseID_BSpl_Reconstruct_ParamsUniform,
-  CaseID_BSpl_Reconstruct_ParamsChordLength,
-  CaseID_BSpl_Reconstruct_ParamsCentripetal,
-  CaseID_BSpl_Reconstruct_KnotsAverage,
-
-  //---------------------------------------------------------------------------
-  // Geom3D library
-  //---------------------------------------------------------------------------
-
-  CaseID_Geom3D_InterpolateCurve,
-  CaseID_Geom3D_Line3D,
-  CaseID_Geom3D_PointOnLine,
-  CaseID_Geom3D_AD_BSplineCurve3D,
+  CaseID_BSpl_EffectiveN,
+  CaseID_BSpl_EffectiveNDers,
+  CaseID_BSpl_FindSpan,
+  CaseID_BSpl_KnotMultiset,
+  CaseID_BSpl_KnotsAverage,
+  CaseID_BSpl_N,
+  CaseID_BSpl_ParamsCentripetal,
+  CaseID_BSpl_ParamsChordLength,
+  CaseID_BSpl_ParamsUniform,
+  CaseID_BSpl_UnifyKnots,
 
   //---------------------------------------------------------------------------
-  // Tools library
+  // Core library
   //---------------------------------------------------------------------------
 
-  CaseID_Tools_ReadXYZ
+  CaseID_Core_Quaternion,
+
+  //---------------------------------------------------------------------------
+  // Geom library
+  //---------------------------------------------------------------------------
+
+  CaseID_Geom_InterpolateCurve3D,
+  CaseID_Geom_Line3D,
+  CaseID_Geom_PointOnLine
 
 };
 

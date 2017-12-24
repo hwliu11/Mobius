@@ -8,20 +8,22 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_InterpolateCurve3D_HeaderFile
-#define QrTest_InterpolateCurve3D_HeaderFile
+#ifndef test_InterpolateCurve3D_HeaderFile
+#define test_InterpolateCurve3D_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for curve interpolation in 3D.
-class QrTest_InterpolateCurve3D : public QrTestLib_TestCase
+class test_InterpolateCurve3D : public testEngine_TestCase
 {
 public:
 
@@ -29,14 +31,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_Geom3D_InterpolateCurve;
+    return CaseID_Geom_InterpolateCurve3D;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "QrTest_InterpolateCurve3D";
+    return "test_InterpolateCurve3D";
   }
 
   //! Returns Test Case description directory.
@@ -48,7 +50,7 @@ public:
 
   //! Returns pointers to the Test Functions to launch.
   //! \param functions [out] output collection of pointers.
-  static void Functions(QrTestFunctions& functions)
+  static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test1;
   }
@@ -56,6 +58,8 @@ public:
 private:
 
   static bool test1(const int funcID);
+
+};
 
 };
 

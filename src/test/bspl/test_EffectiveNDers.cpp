@@ -9,32 +9,32 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_BasisEffectiveNDers.h>
+#include <mobius/test_EffectiveNDers.h>
 
-// QrCore includes
-#include <QrCore_HeapAlloc.h>
+// core includes
+#include <mobius/core_HeapAlloc.h>
 
-// QrBSpl includes
-#include <QrBSpl_BasisEffectiveNDers.h>
-#include <QrBSpl_BasisFindSpan.h>
+// bspl includes
+#include <mobius/bspl_EffectiveNDers.h>
+#include <mobius/bspl_FindSpan.h>
 
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisEffectiveNDers::test1(const int funcID)
+bool mobius::test_EffectiveNDers::test1(const int funcID)
 {
   const std::vector<double> U = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
   const int n = 3;
 
-  QrBSpl_BasisEffectiveNDers<double> Eval;
+  bspl_EffectiveNDers Eval;
 
   double u = 2.5;
-  QrBSpl_BasisFindSpan<double> FindSpan(U, p);
+  bspl_FindSpan FindSpan(U, p);
   const int span_i = FindSpan(u);
 
   // Prepare result matrix
-  QrCore_HeapAlloc2D<double> Alloc;
+  core_HeapAlloc2D<double> Alloc;
   double** dN = Alloc.Allocate(n+1, p+1, false);
 
   // Evaluate
@@ -71,20 +71,20 @@ bool QrTest_BasisEffectiveNDers::test1(const int funcID)
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisEffectiveNDers::test2(const int funcID)
+bool mobius::test_EffectiveNDers::test2(const int funcID)
 {
   const std::vector<double> U = {0, 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 5};
   const int p = 3;
   const int n = 4;
 
-  QrBSpl_BasisEffectiveNDers<double> Eval;
+  bspl_EffectiveNDers Eval;
 
   double u = 3.5;
-  QrBSpl_BasisFindSpan<double> FindSpan(U, p);
+  bspl_FindSpan FindSpan(U, p);
   const int span_i = FindSpan(u);
 
   // Prepare result matrix
-  QrCore_HeapAlloc2D<double> Alloc;
+  core_HeapAlloc2D<double> Alloc;
   double** dN = Alloc.Allocate(n+1, p+1, false);
 
   // Evaluate
@@ -123,20 +123,20 @@ bool QrTest_BasisEffectiveNDers::test2(const int funcID)
 //! Test scenario 003 (validated visually).
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisEffectiveNDers::test3(const int funcID)
+bool mobius::test_EffectiveNDers::test3(const int funcID)
 {
   const std::vector<double> U = {0.0, 0.0, 0.0, 0.0, 2.0, 4.0, 6.0, 8.0, 8.0, 8.0, 8.0};
   const int p = 3;
   const int n = 1;
 
-  QrBSpl_BasisEffectiveNDers<double> Eval;
+  bspl_EffectiveNDers Eval;
 
   double u = 1.5;
-  QrBSpl_BasisFindSpan<double> FindSpan(U, p);
+  bspl_FindSpan FindSpan(U, p);
   const int span_i = FindSpan(u);
 
   // Prepare result matrix
-  QrCore_HeapAlloc2D<double> Alloc;
+  core_HeapAlloc2D<double> Alloc;
   double** dN = Alloc.Allocate(n+1, p+1, false);
 
   // Evaluate

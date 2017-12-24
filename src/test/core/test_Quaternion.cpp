@@ -9,19 +9,22 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_Quaternion.h>
+#include <mobius/test_Quaternion.h>
 
-// QrCore includes
-#include <QrCore_Quaternion.h>
+// core includes
+#include <mobius/core_Quaternion.h>
+
+// Standard includes
+#include <math.h>
 
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::create(const int funcID)
+bool mobius::test_Quaternion::create(const int funcID)
 {
-  QrCore_XYZ<double> axis = QrCore_XYZ<double>::OZ();
+  core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
-  QrCore_Quaternion<double> Q(axis, ang);
+  core_Quaternion Q(axis, ang);
 
   const double q0_ref = 0.965925;
   const double qx_ref = 0.000000;
@@ -58,14 +61,14 @@ bool QrTest_Quaternion::create(const int funcID)
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::add(const int funcID)
+bool mobius::test_Quaternion::add(const int funcID)
 {
-  QrCore_XYZ<double> axis1 = QrCore_XYZ<double>::OZ(), axis2 = QrCore_XYZ<double>::OX();
+  core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
-  QrCore_Quaternion<double> Q1(axis1, ang1), Q2(axis2, ang2);
+  core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
-  QrCore_Quaternion<double> Q = Q1 + Q2;
+  core_Quaternion Q = Q1 + Q2;
 
   const double q0_ref = 1.862220;
   const double qx_ref = 0.087155;
@@ -104,14 +107,14 @@ bool QrTest_Quaternion::add(const int funcID)
 //! Test scenario 003.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::subtract(const int funcID)
+bool mobius::test_Quaternion::subtract(const int funcID)
 {
-  QrCore_XYZ<double> axis1 = QrCore_XYZ<double>::OZ(), axis2 = QrCore_XYZ<double>::OX();
+  core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
-  QrCore_Quaternion<double> Q1(axis1, ang1), Q2(axis2, ang2);
+  core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
-  QrCore_Quaternion<double> Q = Q1 - Q2;
+  core_Quaternion Q = Q1 - Q2;
 
   const double q0_ref = -0.130169;
   const double qx_ref = -0.087155;
@@ -150,14 +153,14 @@ bool QrTest_Quaternion::subtract(const int funcID)
 //! Test scenario 004.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::product_qn(const int funcID)
+bool mobius::test_Quaternion::product_qn(const int funcID)
 {
-  QrCore_XYZ<double> axis1 = QrCore_XYZ<double>::OZ(), axis2 = QrCore_XYZ<double>::OX();
+  core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
-  QrCore_Quaternion<double> Q1(axis1, ang1), Q2(axis2, ang2);
+  core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
-  QrCore_Quaternion<double> Q = Q1 * Q2;
+  core_Quaternion Q = Q1 * Q2;
 
   const double q0_ref = 0.862729;
   const double qx_ref = 0.075479;
@@ -196,11 +199,11 @@ bool QrTest_Quaternion::product_qn(const int funcID)
 //! Test scenario 005.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::product_scalar(const int funcID)
+bool mobius::test_Quaternion::product_scalar(const int funcID)
 {
-  QrCore_XYZ<double> axis(1.0, 1.2, 1.4);
+  core_XYZ axis(1.0, 1.2, 1.4);
   const double ang = 135*M_PI/180, C = 10.0;
-  QrCore_Quaternion<double> Q(axis, ang);
+  core_Quaternion Q(axis, ang);
 
   // Calculate
   Q = Q*C;
@@ -241,11 +244,11 @@ bool QrTest_Quaternion::product_scalar(const int funcID)
 //! Test scenario 006.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::dot_product(const int funcID)
+bool mobius::test_Quaternion::dot_product(const int funcID)
 {
-  QrCore_XYZ<double> axis1 = QrCore_XYZ<double>::OZ(), axis2 = QrCore_XYZ<double>::OX();
+  core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
-  QrCore_Quaternion<double> Q1(axis1, ang1), Q2(axis2, ang2);
+  core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
   const double dot = Q1.Dot(Q2);
@@ -271,14 +274,14 @@ bool QrTest_Quaternion::dot_product(const int funcID)
 //! Test scenario 007.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::cross_product(const int funcID)
+bool mobius::test_Quaternion::cross_product(const int funcID)
 {
-  QrCore_XYZ<double> axis1 = QrCore_XYZ<double>::OZ(), axis2 = QrCore_XYZ<double>::OX();
+  core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
-  QrCore_Quaternion<double> Q1(axis1, ang1), Q2(axis2, ang2);
+  core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
-  QrCore_Quaternion<double> Q = Q1.Cross(Q2);
+  core_Quaternion Q = Q1.Cross(Q2);
 
   const double q0_ref = 0.000000;
   const double qx_ref = 0.000000;
@@ -317,15 +320,15 @@ bool QrTest_Quaternion::cross_product(const int funcID)
 //! Test scenario 008.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::invert(const int funcID)
+bool mobius::test_Quaternion::invert(const int funcID)
 {
-  QrCore_XYZ<double> axis = QrCore_XYZ<double>::OZ();
+  core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
-  QrCore_Quaternion<double> Q(axis, ang);
+  core_Quaternion Q(axis, ang);
 
   // Calculate
-  QrCore_Quaternion<double> P = Q.Inverted();
-  QrCore_Quaternion<double> R = Q * P;
+  core_Quaternion P = Q.Inverted();
+  core_Quaternion R = Q * P;
 
   const double p0_ref =  0.965925;
   const double px_ref =  0.000000;
@@ -383,11 +386,11 @@ bool QrTest_Quaternion::invert(const int funcID)
 //! Test scenario 009.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::conjugate(const int funcID)
+bool mobius::test_Quaternion::conjugate(const int funcID)
 {
-  QrCore_XYZ<double> axis = QrCore_XYZ<double>::OZ();
+  core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
-  QrCore_Quaternion<double> Q(axis, ang);
+  core_Quaternion Q(axis, ang);
 
   // Calculate
   Q.Conjugate();
@@ -427,11 +430,11 @@ bool QrTest_Quaternion::conjugate(const int funcID)
 //! Test scenario 010.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_Quaternion::to_matrix(const int funcID)
+bool mobius::test_Quaternion::to_matrix(const int funcID)
 {
-  QrCore_XYZ<double> axis = QrCore_XYZ<double>::OZ();
+  core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
-  QrCore_Quaternion<double> Q(axis, ang);
+  core_Quaternion Q(axis, ang);
 
   // Calculate
   double mx[3][3], m_ref[3][3];

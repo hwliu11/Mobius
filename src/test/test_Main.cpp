@@ -8,29 +8,27 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-// QrTest includes
-#include <QrTest_ADBSplineCurve3D.h>
-#include <QrTest_BasisEffectiveN.h>
-#include <QrTest_BasisEffectiveNDers.h>
-#include <QrTest_BasisFindSpan.h>
-#include <QrTest_BasisKnotMultiset.h>
-#include <QrTest_BasisN.h>
-#include <QrTest_BasisUnifyKnots.h>
-#include <QrTest_InterpolateCurve3D.h>
-#include <QrTest_KnotsAverage.h>
-#include <QrTest_Line3D.h>
-#include <QrTest_ParamsCentripetal.h>
-#include <QrTest_ParamsChordLength.h>
-#include <QrTest_ParamsUniform.h>
-#include <QrTest_PointOnLine.h>
-#include <QrTest_Quaternion.h>
-#include <QrTest_ReadXYZ.h>
+// Tests includes
+#include <mobius/test_EffectiveN.h>
+#include <mobius/test_EffectiveNDers.h>
+#include <mobius/test_FindSpan.h>
+#include <mobius/test_KnotMultiset.h>
+#include <mobius/test_N.h>
+#include <mobius/test_UnifyKnots.h>
+#include <mobius/test_InterpolateCurve3D.h>
+#include <mobius/test_KnotsAverage.h>
+#include <mobius/test_Line3D.h>
+#include <mobius/test_ParamsCentripetal.h>
+#include <mobius/test_ParamsChordLength.h>
+#include <mobius/test_ParamsUniform.h>
+#include <mobius/test_PointOnLine.h>
+#include <mobius/test_Quaternion.h>
 
-// QrTestLib includes
-#include <QrTestLib_Launcher.h>
+// testEngine includes
+#include <mobius/testEngine_Launcher.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
 
 #define PAUSE \
   system("pause");
@@ -48,30 +46,31 @@
 
 DEFINE_TEST_VARIABLES
 
+using namespace mobius;
+
 int main(int /*argc*/, char* /*argv[]*/)
 {
   // TODO: fix Test Cases
-  //QrTestLib_Launcher<QrTest_BasisFindSpan>      T1;
-  //QrTestLib_Launcher<QrTest_BasisN>             T2;
+  //testEngine_Launcher<test_FindSpan>      T1;
+  //testEngine_Launcher<test_BasisN>             T2;
 
-  std::vector< QrPtr<QrTestLib_CaseLauncherAPI> > CaseLaunchers;
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_ADBSplineCurve3D> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_BasisEffectiveN> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_BasisEffectiveNDers> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_BasisKnotMultiset> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_BasisUnifyKnots> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_Quaternion> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_ParamsUniform> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_ParamsChordLength> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_ParamsCentripetal> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_KnotsAverage> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_Line3D> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_InterpolateCurve3D> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_PointOnLine> );
-  CaseLaunchers.push_back( new QrTestLib_CaseLauncher<QrTest_ReadXYZ> );
+  std::vector< core_Ptr<testEngine_CaseLauncherAPI> > CaseLaunchers;
+  //
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve3D> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine> );
 
   // Launcher of entire test suite
-  QrTestLib_Launcher Launcher;
+  testEngine_Launcher Launcher;
   for ( int c = 0; c < (int) CaseLaunchers.size(); ++c )
     Launcher << CaseLaunchers[c];
 

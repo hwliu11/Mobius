@@ -9,18 +9,18 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_BasisKnotMultiset.h>
+#include <mobius/test_KnotMultiset.h>
 
-// QrCore includes
-#include <QrCore_HeapAlloc.h>
+// core includes
+#include <mobius/core_HeapAlloc.h>
 
-// QrBSpl includes
-#include <QrBSpl_BasisKnotMultiset.h>
+// bspl includes
+#include <mobius/bspl_KnotMultiset.h>
 
 //! Tests conversion of vector to multiset and back.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisKnotMultiset::test_convert(const int QrTest_NotUsed(funcID))
+bool mobius::test_KnotMultiset::test_convert(const int test_NotUsed(funcID))
 {
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int    nU  = sizeof(U)/sizeof(double);
@@ -58,7 +58,7 @@ bool QrTest_BasisKnotMultiset::test_convert(const int QrTest_NotUsed(funcID))
 //! Tests union operation.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisKnotMultiset::test_unite(const int QrTest_NotUsed(funcID))
+bool mobius::test_KnotMultiset::test_unite(const int test_NotUsed(funcID))
 {
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9};
   const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
@@ -101,7 +101,7 @@ bool QrTest_BasisKnotMultiset::test_unite(const int QrTest_NotUsed(funcID))
 //! Tests subtraction.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisKnotMultiset::test_subtract(const int QrTest_NotUsed(funcID))
+bool mobius::test_KnotMultiset::test_subtract(const int test_NotUsed(funcID))
 {
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9, 10, 10};
   const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
@@ -140,7 +140,7 @@ bool QrTest_BasisKnotMultiset::test_subtract(const int QrTest_NotUsed(funcID))
 //! vector, so that it becomes compatible with other ones.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisKnotMultiset::test_find_addendum(const int QrTest_NotUsed(funcID))
+bool mobius::test_KnotMultiset::test_find_addendum(const int test_NotUsed(funcID))
 {
   const double U[] = {0, 0, 0, 1, 2, 3};
   const double V[] = {2, 2, 3, 5, 6};

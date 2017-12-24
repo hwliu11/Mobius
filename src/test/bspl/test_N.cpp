@@ -9,24 +9,24 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_BasisN.h>
+#include <mobius/test_N.h>
 
-// QrBSpl includes
-#include <QrBSpl_BasisN.h>
+// bspl includes
+#include <mobius/bspl_N.h>
 
 //! Constructor.
-QrTest_BasisN::QrTest_BasisN()
+mobius::test_N::test_N()
 {
 }
 
 //! Destructor.
-QrTest_BasisN::~QrTest_BasisN()
+mobius::test_N::~test_N()
 {
 }
 
 //! Entry point.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisN::LaunchFunction()
+bool mobius::test_N::LaunchFunction()
 {
   if ( !this->testCase1() )
     return false;
@@ -39,12 +39,12 @@ bool QrTest_BasisN::LaunchFunction()
 
 //! Test scenario 001.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisN::testCase1() const
+bool mobius::test_N::testCase1() const
 {
   const std::vector<double> U = {0.0, 0.2, 0.5, 1.0};
   const int p = 0;
 
-  QrBSpl_BasisN<double> N;
+  bspl_N N;
 
   double val_0_0 = N(0.0, U, p, 0);
   double val_0_1 = N(0.0, U, p, 1);
@@ -73,12 +73,12 @@ bool QrTest_BasisN::testCase1() const
 
 //! Test scenario 002.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisN::testCase2() const
+bool mobius::test_N::testCase2() const
 {
   const std::vector<double> U = {0.0, 0.0, 0.2, 0.5, 1.0, 1.0};
   const int p = 1;
 
-  QrBSpl_BasisN<double> N;
+  bspl_N N;
 
   double val_0_0 = N(0.0, U, p, 0);
   double val_0_1 = N(0.0, U, p, 1);

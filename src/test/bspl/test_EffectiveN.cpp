@@ -9,24 +9,24 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_BasisEffectiveN.h>
+#include <mobius/test_EffectiveN.h>
 
-// QrBSpl includes
-#include <QrBSpl_BasisEffectiveN.h>
-#include <QrBSpl_BasisFindSpan.h>
+// bspl includes
+#include <mobius/bspl_EffectiveN.h>
+#include <mobius/bspl_FindSpan.h>
 
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisEffectiveN::test1(const int funcID)
+bool mobius::test_EffectiveN::test1(const int funcID)
 {
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
-  QrBSpl_BasisEffectiveN<double> Eval;
+  bspl_EffectiveN Eval;
 
   double u = 2.5;
-  QrBSpl_BasisFindSpan<double> FindSpan(U, p);
+  bspl_FindSpan FindSpan(U, p);
   const int i = FindSpan(u);
 
   double* N = new double[p+1];

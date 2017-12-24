@@ -8,20 +8,22 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_ParamsUniform_HeaderFile
-#define QrTest_ParamsUniform_HeaderFile
+#ifndef test_ParamsUniform_HeaderFile
+#define test_ParamsUniform_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for uniform parameterization.
-class QrTest_ParamsUniform : public QrTestLib_TestCase
+class test_ParamsUniform : public testEngine_TestCase
 {
 public:
 
@@ -29,14 +31,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_BSpl_Reconstruct_ParamsUniform;
+    return CaseID_BSpl_ParamsUniform;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "QrTest_ParamsUniform";
+    return "test_ParamsUniform";
   }
 
   //! Returns Test Case description directory.
@@ -48,7 +50,7 @@ public:
 
   //! Returns pointers to the Test Functions to launch.
   //! \param functions [out] output collection of pointers.
-  static void Functions(QrTestFunctions& functions)
+  static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test1
               << &test2;
@@ -58,6 +60,8 @@ private:
 
   static bool test1(const int funcID);
   static bool test2(const int funcID);
+
+};
 
 };
 

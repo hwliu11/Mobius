@@ -8,19 +8,19 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_HeaderFile
-#define QrTest_HeaderFile
+#ifndef test_HeaderFile
+#define test_HeaderFile
 
 #if defined _WIN32
-  #if defined QrTest_LIB
-    #define QrTest_EXPORT __declspec(dllexport)
+  #if defined mobiusTest_EXPORTS
+    #define mobiusTest_EXPORT __declspec(dllexport)
   #else
-    #define QrTest_EXPORT __declspec(dllimport)
+    #define mobiusTest_EXPORT __declspec(dllimport)
   #endif
 #else
-  #define QrTest_EXPORT
+  #define mobiusTest_EXPORT
 #endif
 
-#define QrTest_NotUsed(x)
+#define test_NotUsed(x)
 
 #endif

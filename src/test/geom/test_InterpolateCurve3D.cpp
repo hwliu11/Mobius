@@ -9,15 +9,15 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_InterpolateCurve3D.h>
+#include <mobius/test_InterpolateCurve3D.h>
 
-// QrGeom3D includes
-#include <QrGeom3D_InterpolateCurve.h>
+// geom includes
+#include <mobius/geom_InterpolateCurve.h>
 
 //! Test scenario 001.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_InterpolateCurve3D::test1(const int QrTest_NotUsed(funcID))
+bool mobius::test_InterpolateCurve3D::test1(const int test_NotUsed(funcID))
 {
   /* ~~~~~~~~~~~~~~~~~~~~~~
    *  Prepare input points
@@ -38,13 +38,13 @@ bool QrTest_InterpolateCurve3D::test1(const int QrTest_NotUsed(funcID))
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
   // Construct interpolation tool
-  QrGeom3D_InterpolateCurve Interp(Q_vec, 3, ParamsSelection_ChordLength, KnotsSelection_Average);
+  geom_InterpolateCurve Interp(Q_vec, 3, ParamsSelection_ChordLength, KnotsSelection_Average);
 
   // Run interpolation
   Interp.Perform();
 
   // Verify
-  if ( Interp.ErrorCode() != QrGeom3D_InterpolateCurve::ErrCode_NoError )
+  if ( Interp.ErrorCode() != geom_InterpolateCurve::ErrCode_NoError )
     return false;
 
   return true;

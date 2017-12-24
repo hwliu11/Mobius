@@ -9,24 +9,24 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_BasisFindSpan.h>
+#include <mobius/test_FindSpan.h>
 
-// QrBSpl includes
-#include <QrBSpl_BasisFindSpan.h>
+// bspl includes
+#include <mobius/bspl_FindSpan.h>
 
 //! Constructor.
-QrTest_BasisFindSpan::QrTest_BasisFindSpan()
+mobius::test_FindSpan::test_FindSpan()
 {
 }
 
 //! Destructor.
-QrTest_BasisFindSpan::~QrTest_BasisFindSpan()
+mobius::test_FindSpan::~test_FindSpan()
 {
 }
 
 //! Entry point.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisFindSpan::LaunchFunction()
+bool mobius::test_FindSpan::LaunchFunction()
 {
   if ( !this->testCase1() )
     return false;
@@ -42,7 +42,7 @@ bool QrTest_BasisFindSpan::LaunchFunction()
 
 //! Test scenario 001.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisFindSpan::testCase1() const
+bool mobius::test_FindSpan::testCase1() const
 {
   const std::vector<double> U = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0};
   const int p = 1;
@@ -59,7 +59,7 @@ bool QrTest_BasisFindSpan::testCase1() const
   const double u11 = 5.0;
   const double u12 = 100.0;
 
-  QrBSpl_BasisFindSpan<double> FindSpan(U, p);
+  bspl_FindSpan FindSpan(U, p);
   int I1  = FindSpan(u1);
   int I2  = FindSpan(u2);
   int I3  = FindSpan(u3);
@@ -79,7 +79,7 @@ bool QrTest_BasisFindSpan::testCase1() const
 
 //! Test scenario 002.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisFindSpan::testCase2() const
+bool mobius::test_FindSpan::testCase2() const
 {
   const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 2.0};
   const int p = 1;
@@ -90,7 +90,7 @@ bool QrTest_BasisFindSpan::testCase2() const
   const double u5 = 2.0;
   const double u6 = 2.5;
 
-  QrBSpl_BasisFindSpan<double> FindSpan(U, p);
+  bspl_FindSpan FindSpan(U, p);
   int I1 = FindSpan(u1);
   int I2 = FindSpan(u2);
   int I3 = FindSpan(u3);
@@ -103,13 +103,13 @@ bool QrTest_BasisFindSpan::testCase2() const
 
 //! Test scenario 003.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisFindSpan::testCase3() const
+bool mobius::test_FindSpan::testCase3() const
 {
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 1;
   const double u = 5.0;
 
-  QrBSpl_BasisFindSpan<double> FindSpan(U, p);
+  bspl_FindSpan FindSpan(U, p);
   int I = FindSpan(u);
 
   return I == 5;

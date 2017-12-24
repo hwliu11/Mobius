@@ -9,15 +9,15 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_KnotsAverage.h>
+#include <mobius/test_KnotsAverage.h>
 
-// QrBSpl includes
-#include <QrBSpl_KnotsAverage.h>
+// bspl includes
+#include <mobius/bspl_KnotsAverage.h>
 
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_KnotsAverage::testCase1_noDerivativeConstraints(const int QrTest_NotUsed(funcID))
+bool mobius::test_KnotsAverage::testCase1_noDerivativeConstraints(const int test_NotUsed(funcID))
 {
   /* --------------------
    *  Prepare input data
@@ -26,7 +26,7 @@ bool QrTest_KnotsAverage::testCase1_noDerivativeConstraints(const int QrTest_Not
   const int n = 5; // Index of the last point
   const int p = 3; // Degree
 
-  const int m = QrBSpl::NumberOfKnots(n, p) - 1;
+  const int m = bspl::NumberOfKnots(n, p) - 1;
   if ( m != 9 )
     return false;
 
@@ -39,9 +39,9 @@ bool QrTest_KnotsAverage::testCase1_noDerivativeConstraints(const int QrTest_Not
   double* U = new double[m + 1];
   memset(U, 0, (m + 1)*sizeof(double));
 
-  if ( QrBSpl_KnotsAverage::Calculate(t, n, p, m,
-                                      QrBSpl_KnotsAverage::Recognize(false, false, false, false),
-                                      U) != QrBSpl_KnotsAverage::ErrCode_NoError )
+  if ( bspl_KnotsAverage::Calculate(t, n, p, m,
+                                      bspl_KnotsAverage::Recognize(false, false, false, false),
+                                      U) != bspl_KnotsAverage::ErrCode_NoError )
   {
     delete [] U;
     return false;
@@ -68,7 +68,7 @@ bool QrTest_KnotsAverage::testCase1_noDerivativeConstraints(const int QrTest_Not
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_KnotsAverage::testCase1_endDerivativeConstraints(const int QrTest_NotUsed(funcID))
+bool mobius::test_KnotsAverage::testCase1_endDerivativeConstraints(const int test_NotUsed(funcID))
 {
   /* --------------------
    *  Prepare input data
@@ -77,7 +77,7 @@ bool QrTest_KnotsAverage::testCase1_endDerivativeConstraints(const int QrTest_No
   const int n = 5; // Index of the last point
   const int p = 3; // Degree
 
-  const int m = (QrBSpl::NumberOfKnots(n, p) - 1) + 2; // Two additional knots for constraints
+  const int m = (bspl::NumberOfKnots(n, p) - 1) + 2; // Two additional knots for constraints
   if ( m != 11 )
     return false;
 
@@ -90,9 +90,9 @@ bool QrTest_KnotsAverage::testCase1_endDerivativeConstraints(const int QrTest_No
   double* U = new double[m + 1];
   memset(U, 0, (m + 1)*sizeof(double));
 
-  if ( QrBSpl_KnotsAverage::Calculate(t, n, p, m,
-                                      QrBSpl_KnotsAverage::Recognize(true, true, false, false),
-                                      U) != QrBSpl_KnotsAverage::ErrCode_NoError )
+  if ( bspl_KnotsAverage::Calculate(t, n, p, m,
+                                      bspl_KnotsAverage::Recognize(true, true, false, false),
+                                      U) != bspl_KnotsAverage::ErrCode_NoError )
   {
     delete [] U;
     return false;

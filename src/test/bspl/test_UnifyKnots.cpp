@@ -9,19 +9,19 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <QrTest_BasisUnifyKnots.h>
+#include <mobius/test_UnifyKnots.h>
 
-// QrCore includes
-#include <QrCore_HeapAlloc.h>
+// core includes
+#include <mobius/core_HeapAlloc.h>
 
-// QrBSpl includes
-#include <QrBSpl_BasisKnotMultiset.h>
-#include <QrBSpl_BasisUnifyKnots.h>
+// bspl includes
+#include <mobius/bspl_KnotMultiset.h>
+#include <mobius/bspl_UnifyKnots.h>
 
 //! Tests unification.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool QrTest_BasisUnifyKnots::test_unify(const int QrTest_NotUsed(funcID))
+bool mobius::test_UnifyKnots::test_unify(const int test_NotUsed(funcID))
 {
   const double U[] = {0, 0, 1, 2, 3};
   const double V[] = {2, 2, 3, 5, 6};
@@ -47,7 +47,7 @@ bool QrTest_BasisUnifyKnots::test_unify(const int QrTest_NotUsed(funcID))
   knot_vectors.push_back(V_vec);
   knot_vectors.push_back(W_vec);
 
-  QrBSpl_BasisUnifyKnots<double> Unify;
+  bspl_UnifyKnots Unify;
   std::vector< std::vector<double> > X = Unify(knot_vectors);
 
   // Referential multiset

@@ -57,7 +57,7 @@ public:
 
   //! Returns size of the collection of function pointers.
   //! \return requested size.
-  inline size_t Size() const
+  size_t Size() const
   {
     return m_testFunctions.size();
   }

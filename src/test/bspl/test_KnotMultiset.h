@@ -8,20 +8,22 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_BasisKnotMultiset_HeaderFile
-#define QrTest_BasisKnotMultiset_HeaderFile
+#ifndef test_KnotMultiset_HeaderFile
+#define test_KnotMultiset_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for multiset operations.
-class QrTest_BasisKnotMultiset : public QrTestLib_TestCase
+class test_KnotMultiset : public testEngine_TestCase
 {
 public:
 
@@ -29,14 +31,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_BSpl_Basis_BasisKnotMultiset;
+    return CaseID_BSpl_KnotMultiset;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "QrTest_BasisKnotMultiset";
+    return "test_KnotMultiset";
   }
 
   //! Returns Test Case description directory.
@@ -48,7 +50,7 @@ public:
 
   //! Returns pointers to the Test Functions to launch.
   //! \param functions [out] output collection of pointers.
-  static void Functions(QrTestFunctions& functions)
+  static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test_convert
               << &test_unite
@@ -62,6 +64,8 @@ private:
   static bool test_unite         (const int funcID);
   static bool test_subtract      (const int funcID);
   static bool test_find_addendum (const int funcID);
+
+};
 
 };
 

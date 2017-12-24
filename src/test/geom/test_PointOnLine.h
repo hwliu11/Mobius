@@ -8,20 +8,22 @@
 // Web: http://quaoar.su
 //-----------------------------------------------------------------------------
 
-#ifndef QrTest_PointOnLine_HeaderFile
-#define QrTest_PointOnLine_HeaderFile
+#ifndef test_PointOnLine_HeaderFile
+#define test_PointOnLine_HeaderFile
 
-// QrTest includes
-#include <QrTest_CaseIDs.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-// QrTestLib includes
-#include <QrTestLib_TestCase.h>
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-// QrCore includes
-#include <QrCore_Types.h>
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
 
 //! Unit test for point-line classifier.
-class QrTest_PointOnLine : public QrTestLib_TestCase
+class test_PointOnLine : public testEngine_TestCase
 {
 public:
 
@@ -29,14 +31,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_Geom3D_PointOnLine;
+    return CaseID_Geom_PointOnLine;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "QrTest_PointOnLine";
+    return "test_PointOnLine";
   }
 
   //! Returns Test Case description directory.
@@ -48,7 +50,7 @@ public:
 
   //! Returns pointers to the Test Functions to launch.
   //! \param functions [out] output collection of pointers.
-  static void Functions(QrTestFunctions& functions)
+  static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test1
               << &test2
@@ -79,6 +81,8 @@ private:
                      const xyz&   P,
                      const double classiPrec,
                      const bool   resultRef);
+
+};
 
 };
 
