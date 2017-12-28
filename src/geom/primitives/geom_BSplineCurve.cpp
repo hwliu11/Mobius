@@ -438,7 +438,11 @@ bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
   for ( size_t i = 0; i < X.size(); ++i )
     pX[i] = X[i];
 
-  std::vector<double> Ubar; Ubar.reserve(m_new + 1);
+  std::vector<double> Ubar;/* Ubar.reserve(m_new + 1);*/
+  //
+  for ( int k = 0; k < m_new + 1; ++k )
+    Ubar.push_back(0.0);
+
   std::vector<xyz> Qw;
 
   // Refine knots

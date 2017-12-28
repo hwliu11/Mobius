@@ -126,7 +126,10 @@ void mobius::geom_SkinSurface::Perform()
         else
           break;
       }
-      if ( crv->Knots() != ref_U && !m_bUnify )
+
+      const std::vector<double>& curr_U = crv->Knots();
+      //
+      if ( curr_U != ref_U )
       {
         areCompatible = false;
 
