@@ -278,6 +278,9 @@ public:
     // for each U-isoline
     for ( int k = 0; k <= n; ++k )
     {
+      // Bind first parameter to 0
+      d_isoU[k] = 0.0;
+
       // Loop over the V direction
       for ( int l = 1; l <= m; ++l )
       {

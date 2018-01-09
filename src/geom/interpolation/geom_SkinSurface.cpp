@@ -43,6 +43,11 @@
 // Core includes
 #include <mobius/core_HeapAlloc.h>
 
+#undef COUT_DEBUG
+#if defined COUT_DEBUG
+  #pragma message("===== warning: COUT_DEBUG is enabled")
+#endif
+
 //! Default constructor.
 mobius::geom_SkinSurface::geom_SkinSurface()
 {
@@ -157,6 +162,7 @@ void mobius::geom_SkinSurface::Perform()
       std::vector<double> U = m_curves[c]->Knots();
       U_all.push_back(U);
 
+#if defined COUT_DEBUG
       // Dump knots
       std::cout << "Curve " << (c + 1) << ": ";
       for ( size_t j = 0; j < U.size(); ++j )
@@ -164,6 +170,7 @@ void mobius::geom_SkinSurface::Perform()
         std::cout << U[j] << "\t";
       }
       std::cout << std::endl;
+#endif
     }
 
     // Compute extension
@@ -176,6 +183,7 @@ void mobius::geom_SkinSurface::Perform()
       m_curves[c]->RefineKnots(X[c]);
       const std::vector<double>& U = m_curves[c]->Knots();
 
+#if defined COUT_DEBUG
       // Dump knots
       std::cout << "Curve [refined] " << (c + 1) << ": ";
       for ( size_t j = 0; j < U.size(); ++j )
@@ -183,6 +191,7 @@ void mobius::geom_SkinSurface::Perform()
         std::cout << U[j] << "\t";
       }
       std::cout << std::endl;
+#endif
     }
   }
 
@@ -266,6 +275,7 @@ void mobius::geom_SkinSurface::Perform()
       m_errCode = ErrCode_CannotInterpolateIsoU;
       return;
     }
+
     IsoU_Curves.push_back(iso_U);
     final_poles.push_back( iso_U->Poles() );
   }
