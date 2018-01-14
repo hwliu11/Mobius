@@ -70,7 +70,30 @@ public:
                           const bspl_ParamsSelection paramsType,
                           const bspl_KnotsSelection  knotsType);
 
+  mobiusGeom_EXPORT
+    geom_InterpolateCurve(const std::vector<xyz>& points,
+                          const int               deg,
+                          double*                 pParams,
+                          const int               n,
+                          double*                 pU,
+                          const int               m);
+
 public:
+
+  mobiusGeom_EXPORT void
+    Init(const std::vector<xyz>&    points,
+         const int                  deg,
+         const bspl_ParamsSelection paramsType,
+         double*                    pU,
+         const int                  m);
+
+  mobiusGeom_EXPORT void
+    Init(const std::vector<xyz>& points,
+         const int               deg,
+         double*                 pParams,
+         const int               n,
+         double*                 pU,
+         const int               m);
 
   mobiusGeom_EXPORT void
     Init(const std::vector<xyz>&    points,
@@ -161,7 +184,11 @@ private:
   xyz                  m_D20;        //!< Derivative D2 at the first point.
   xyz                  m_D2n;        //!< Derivative D2 at the last point.
   bspl_ParamsSelection m_paramsType; //!< Parameterization type.
+  double*              m_pParams;    //!< Parameters externally defined for interpolation.
+  int                  m_iNumParams; //!< Number of parameters.
   bspl_KnotsSelection  m_knotsType;  //!< Knots selection type.
+  double*              m_pU;         //!< Knot vector externally defined for interpolation.
+  int                  m_iNumKnots;  //!< Number of knots.
   Ptr<bcurve>          m_curve;      //!< Interpolant curve.
 
 };

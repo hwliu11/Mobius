@@ -39,7 +39,7 @@ namespace mobius {
 //! context.
 enum bspl_KnotsSelection
 {
-  KnotsSelection_Undefined = 0, //!< Undefined.
+  KnotsSelection_Undefined = 0, //!< Undefined or manual.
   KnotsSelection_Uniform,       //!< Uniform distribution of knots on [0;1] interval.
   KnotsSelection_Average        //!< Averaging technique using p (degree) interpolant parameters.
 };

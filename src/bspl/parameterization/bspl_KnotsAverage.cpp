@@ -52,7 +52,7 @@ mobius::bspl_KnotsAverage::Case
   //       knots when many constraints are specified. Selection of knots
   //       has a great impact on the resulting interpolant's geometry, so
   //       one cannot simply choose "just any" knot vector and expect good
-  //       geometry at the end
+  //       geometry at the end.
 
   if ( !D1_start && !D1_end && !D2_start && !D2_end )
     return Case_PointsOnly;

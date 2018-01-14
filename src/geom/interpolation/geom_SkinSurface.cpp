@@ -181,9 +181,10 @@ void mobius::geom_SkinSurface::Perform()
     for ( size_t c = 0; c < m_curves.size(); ++c )
     {
       m_curves[c]->RefineKnots(X[c]);
-      const std::vector<double>& U = m_curves[c]->Knots();
 
 #if defined COUT_DEBUG
+      const std::vector<double>& U = m_curves[c]->Knots();
+
       // Dump knots
       std::cout << "Curve [refined] " << (c + 1) << ": ";
       for ( size_t j = 0; j < U.size(); ++j )

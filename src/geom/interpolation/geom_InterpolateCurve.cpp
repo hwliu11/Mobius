@@ -53,13 +53,17 @@
   #define dump_filename_Bz "../../test/dumping/N_interp_log_Bz.log"
 #endif
 
+//-----------------------------------------------------------------------------
+
 //! Default constructor.
 mobius::geom_InterpolateCurve::geom_InterpolateCurve()
 {
   m_errCode = ErrCode_NotInitialized;
 }
 
-//! Complete constructor.
+//-----------------------------------------------------------------------------
+
+//! Complete constructor accepting some strategy of automatic knots selection.
 //! \param points     [in] data points to interpolate.
 //! \param deg        [in] degree of B-spline functions to use for blending.
 //! \param paramsType [in] strategy for choosing interpolant parameters in
@@ -73,6 +77,28 @@ mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>&    
 {
   this->Init(points, deg, paramsType, knotsType);
 }
+
+//-----------------------------------------------------------------------------
+
+//! Complete constructor accepting the manually defined paraneters and
+//! knot vector.
+//! \param points  [in] data points to interpolate.
+//! \param deg     [in] degree of B-spline functions to use for blending.
+//! \param pParams [in] manually defined interpolation parameters.
+//! \param n       [in] 0-based index of the last parameter.
+//! \param pU      [in] manually defined knot vector.
+//! \param m       [in] 0-based index of the last knot in the knot vector.
+mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>& points,
+                                                     const int               deg,
+                                                     double*                 pParams,
+                                                     const int               n,
+                                                     double*                 pU,
+                                                     const int               m)
+{
+  this->Init(points, deg, pParams, n, pU, m);
+}
+
+//-----------------------------------------------------------------------------
 
 //! Initializes interpolation tool.
 //! \param points     [in] data points to interpolate.
@@ -89,9 +115,42 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
   m_points     = points;
   m_iDeg       = deg;
   m_paramsType = paramsType;
+  m_pParams    = NULL;
+  m_iNumParams = 0;
   m_knotsType  = knotsType;
   m_errCode    = ErrCode_NotDone;
+  m_pU         = NULL;
+  m_iNumKnots  = 0;
 }
+
+//-----------------------------------------------------------------------------
+
+//! Initializes interpolation tool.
+//! \param points  [in] data points to interpolate.
+//! \param deg     [in] degree of B-spline functions to use for blending.
+//! \param pParams [in] manually defined interpolation parameters.
+//! \param n       [in] 0-based index of the last parameter.
+//! \param pU      [in] manually defined knot vector.
+//! \param m       [in] 0-based index of the last knot in the knot vector.
+void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>& points,
+                                         const int               deg,
+                                         double*                 pParams,
+                                         const int               n,
+                                         double*                 pU,
+                                         const int               m)
+{
+  m_points     = points;
+  m_iDeg       = deg;
+  m_paramsType = ParamsSelection_Undefined;
+  m_pParams    = pParams;
+  m_iNumParams = n + 1;
+  m_knotsType  = KnotsSelection_Undefined;
+  m_pU         = pU;
+  m_iNumKnots  = m + 1;
+  m_errCode    = ErrCode_NotDone;
+}
+
+//-----------------------------------------------------------------------------
 
 //! Initializes interpolation tool.
 //! \param points     [in] data points to interpolate.
@@ -114,9 +173,15 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
   m_Dn         = Dn;
   m_iDeg       = deg;
   m_paramsType = paramsType;
+  m_pParams    = NULL;
+  m_iNumParams = 0;
   m_knotsType  = knotsType;
+  m_pU         = NULL;
+  m_iNumKnots  = 0;
   m_errCode    = ErrCode_NotDone;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Initializes interpolation tool.
 //! \param points     [in] data points to interpolate.
@@ -145,9 +210,15 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
   m_D2n        = D2n;
   m_iDeg       = deg;
   m_paramsType = paramsType;
+  m_pParams    = NULL;
+  m_iNumParams = 0;
   m_knotsType  = knotsType;
+  m_pU         = NULL;
+  m_iNumKnots  = 0;
   m_errCode    = ErrCode_NotDone;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Performs interpolation.
 //! \return true in case of success, false -- otherwise.
@@ -162,13 +233,16 @@ void mobius::geom_InterpolateCurve::Perform()
    *  Choose interpolant parameters
    * ------------------------------- */
 
-  // There are as many parameters as many data points are passed for interpolation
-  const int n     = this->last_index_poles();
-  double*  params = Alloc.Allocate(n + 1, true);
+  int     n      = 0;
+  double* params = NULL;
 
   // Now parameterize
   if ( m_paramsType == ParamsSelection_Uniform )
   {
+    // There are as many parameters as many data points are passed for interpolation
+    n      = this->last_index_poles();
+    params = Alloc.Allocate(n + 1, true);
+
     if ( bspl_ParamsUniform::Calculate(n, params) != bspl_ParamsUniform::ErrCode_NoError )
     {
       m_errCode = ErrCode_CannotSelectParameters;
@@ -177,6 +251,10 @@ void mobius::geom_InterpolateCurve::Perform()
   }
   else if ( m_paramsType == ParamsSelection_ChordLength )
   {
+    // There are as many parameters as many data points are passed for interpolation
+    n      = this->last_index_poles();
+    params = Alloc.Allocate(n + 1, true);
+
     if ( bspl_ParamsChordLength::Calculate(m_points, params) != bspl_ParamsChordLength::ErrCode_NoError )
     {
       m_errCode = ErrCode_CannotSelectParameters;
@@ -185,11 +263,21 @@ void mobius::geom_InterpolateCurve::Perform()
   }
   else if ( m_paramsType == ParamsSelection_Centripetal )
   {
+    // There are as many parameters as many data points are passed for interpolation
+    n      = this->last_index_poles();
+    params = Alloc.Allocate(n + 1, true);
+
     if ( bspl_ParamsCentripetal::Calculate(m_points, params) != bspl_ParamsCentripetal::ErrCode_NoError )
     {
       m_errCode = ErrCode_CannotSelectParameters;
       return;
     }
+  }
+  else if ( m_paramsType == ParamsSelection_Undefined && m_pParams && m_iNumParams )
+  {
+    // Accept the externally defined values
+    n      = m_iNumParams - 1;
+    params = m_pParams;
   }
   else
     throw std::exception("NYI parameterization type");
@@ -200,10 +288,12 @@ void mobius::geom_InterpolateCurve::Perform()
    *  Choose interpolant knots
    * -------------------------- */
 
-  int m = this->last_index_knots();
+  int     m = 0;
   double* U = NULL;
+
   if ( m_knotsType == KnotsSelection_Average )
   {
+    m = this->last_index_knots();
     U = Alloc.Allocate(m + 1, true);
 
     if ( bspl_KnotsAverage::Calculate(params,
@@ -219,6 +309,12 @@ void mobius::geom_InterpolateCurve::Perform()
       m_errCode = ErrCode_CannotSelectKnots;
       return;
     }
+  }
+  else if ( m_knotsType == KnotsSelection_Undefined && m_pU && m_iNumKnots )
+  {
+    // Accept the externally defined values
+    m = m_iNumKnots - 1;
+    U = m_pU;
   }
   else
     throw std::exception("NYI knots selection type");
@@ -241,6 +337,8 @@ void mobius::geom_InterpolateCurve::Perform()
     return;
   }
 }
+
+//-----------------------------------------------------------------------------
 
 //! Interpolation kernel.
 //! \param points           [in]  reper points.
@@ -428,6 +526,8 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
   return true;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns index of the last pole. Notice that this index is zero-based,
 //! so if we have K poles, it will return (K-1).
 //! \return index of the last pole.
@@ -436,6 +536,8 @@ int mobius::geom_InterpolateCurve::last_index_poles() const
   int n = (int) (m_points.size() - 1);
   return n;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Returns index of the last knot. Notice that this index is zero-based,
 //! so if we have K knots, it will return (K-1).
@@ -459,12 +561,16 @@ int mobius::geom_InterpolateCurve::last_index_knots() const
   return m;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns true if start derivative D1 is specified, false -- otherwise.
 //! \return true/false.
 bool mobius::geom_InterpolateCurve::has_start_deriv() const
 {
   return !m_D0.IsOrigin();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Returns true if end derivative D1 is specified, false -- otherwise.
 //! \return true/false.
@@ -473,6 +579,8 @@ bool mobius::geom_InterpolateCurve::has_end_deriv() const
   return !m_Dn.IsOrigin();
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns true if start derivative D2 is specified, false -- otherwise.
 //! \return true/false.
 bool mobius::geom_InterpolateCurve::has_start_deriv2() const
@@ -480,12 +588,16 @@ bool mobius::geom_InterpolateCurve::has_start_deriv2() const
   return !m_D20.IsOrigin();
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns true if end derivative D2 is specified, false -- otherwise.
 //! \return true/false.
 bool mobius::geom_InterpolateCurve::has_end_deriv2() const
 {
   return !m_D2n.IsOrigin();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Returns dimension of the problem: number of unknown variables and
 //! equations in the linear system to solve.
