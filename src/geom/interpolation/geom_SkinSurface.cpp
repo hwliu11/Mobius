@@ -207,9 +207,9 @@ void mobius::geom_SkinSurface::Perform()
     return;
   }
 
-  /* ------------------------------------------------------------
-   *  Choose parameters for u-isos by averaged chord-length rule
-   * ------------------------------------------------------------ */
+  /* -----------------------------------------------------------
+   *  Choose parameters for u-isos by averaged centripetal rule
+   * ----------------------------------------------------------- */
 
   // Prepare rectangular collection of control points
   std::vector< std::vector<xyz> > Q;
@@ -226,7 +226,7 @@ void mobius::geom_SkinSurface::Perform()
 
   // Allocate arrays for reper parameters
   double* params_V = Alloc.Allocate(K + 1, true);
-  if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsChordLength::ErrCode_NoError )
+  if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
   {
     m_errCode = ErrCode_CannotSelectParameters;
     return;
