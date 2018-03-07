@@ -61,28 +61,41 @@ namespace mobius {
 //! Generic tools.
 namespace bspl
 {
-  //! Returns last knot index (0-based).
-  //! \param n [in] index of the last pole (0-based).
-  //! \param p [in] degree of the B-spline basis function to use.
+  //! Returns last knot index (0-based). That's a handy shortcut for
+  //! evaluating "m = n + p + 1".
+  //!
+  //! \param[in] n index of the last pole (0-based).
+  //! \param[in] p degree of the B-spline basis function to use.
   //! \return last knot index.
   mobiusBSpl_EXPORT int
     M(const int n, const int p);
+
+  //! Returns last pole index (0-based). That's a handy shortcut for
+  //! evaluating "n = m - p - 1".
+  //!
+  //! \param[in] m index of the last knot (0-based).
+  //! \param[in] p degree of the B-spline basis function to use.
+  //! \return last pole index.
+  mobiusBSpl_EXPORT int
+    N(const int m, const int p);
 
   //! Returns number of knots for the given indices related to the
   //! B-spline degree and number of control points to be used for
   //! a derived B-object. This is nothing more than a convenience method which
   //! you could prefer to use! instead of explicit well-known "m = n + p + 1"
   //! formulation.
-  //! \param n [in] index of the last pole (0-based).
-  //! \param p [in] degree of the B-spline basis function to use.
+  //!
+  //! \param[in] n index of the last pole (0-based).
+  //! \param[in] p degree of the B-spline basis function to use.
   //! \return number of knots.
   mobiusBSpl_EXPORT int
     NumberOfKnots(const int n, const int p);
 
   //! Checks whether the given number of poles in enough for a B-object
   //! with the passed degree.
-  //! \param n [in] index of the last pole (0-based).
-  //! \param p [in] degree of the B-spline basis function to use.
+  //!
+  //! \param[in] n index of the last pole (0-based).
+  //! \param[in] p degree of the B-spline basis function to use.
   //! \return true/false.
   mobiusBSpl_EXPORT bool
     Check(const int n, const int p);

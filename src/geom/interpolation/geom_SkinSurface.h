@@ -35,6 +35,9 @@
 #include <mobius/geom_BSplineCurve.h>
 #include <mobius/geom_BSplineSurface.h>
 
+// Core includes
+#include <mobius/core_HeapAlloc.h>
+
 // BSpl includes
 #include <mobius/bspl_KnotsSelection.h>
 #include <mobius/bspl_ParamsSelection.h>
@@ -68,9 +71,15 @@ public:
 
 public:
 
+  //! Default ctor.
   mobiusGeom_EXPORT
     geom_SkinSurface();
 
+  //! Complete constructor. Initializes the interpolation tool with a set
+  //! of curves to skin the surface through.
+  //! \param[in] curves      curves to skin the surface through.
+  //! \param[in] deg_V       degree in V curvilinear direction.
+  //! \param[in] unifyCurves indicates whether to unify curves before skinning.
   mobiusGeom_EXPORT
     geom_SkinSurface(const std::vector< Ptr<bcurve> >& curves,
                      const int                         deg_V,
@@ -78,13 +87,30 @@ public:
 
 public:
 
+  //! Initializes skinning tool.
+  //! \param[in] curves      curves to skin the surface through.
+  //! \param[in] deg_V       degree in V curvilinear direction.
+  //! \param[in] unifyCurves indicates whether to unify curves before skinning.
   mobiusGeom_EXPORT void
     Init(const std::vector< Ptr<bcurve> >& curves,
          const int                         deg_V,
          const bool                        unifyCurves);
 
-  mobiusGeom_EXPORT void
+  //! Performs skinning.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT bool
     Perform();
+
+public:
+
+  mobiusGeom_EXPORT bool
+    PrepareSections();
+
+  mobiusGeom_EXPORT bool
+    BuildIsosU();
+
+  mobiusGeom_EXPORT bool
+    BuildSurface();
 
 public:
 
@@ -109,7 +135,9 @@ public:
 
 private:
 
+  core_HeapAlloc<double>     m_alloc;   //!< Heap allocator.
   std::vector< Ptr<bcurve> > m_curves;  //!< Curves to interpolate.
+  double*                    m_pV;      //!< Knot vector in V direction.
   int                        m_iDeg_V;  //!< V-degree of interpolant surface.
   bool                       m_bUnify;  //!< Indicates whether to unify curves.
   ErrCode                    m_errCode; //!< Error code.

@@ -40,25 +40,22 @@
 #include <mobius/bspl_ParamsChordLength.h>
 #include <mobius/bspl_UnifyKnots.h>
 
-// Core includes
-#include <mobius/core_HeapAlloc.h>
+//-----------------------------------------------------------------------------
 
 #undef COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
 
-//! Default constructor.
+//-----------------------------------------------------------------------------
+
 mobius::geom_SkinSurface::geom_SkinSurface()
 {
   m_errCode = ErrCode_NotInitialized;
 }
 
-//! Complete constructor. Initializes the interpolation tool with a set
-//! of curves to skin the surface through.
-//! \param[in] curves      curves to skin the surface through.
-//! \param[in] deg_V       degree in V curvilinear direction.
-//! \param[in] unifyCurves indicates whether to unify curves before skinning.
+//-----------------------------------------------------------------------------
+
 mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< Ptr<bcurve> >& curves,
                                            const int                         deg_V,
                                            const bool                        unifyCurves)
@@ -66,10 +63,8 @@ mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< Ptr<bcurve> >& cur
   this->Init(curves, deg_V, unifyCurves);
 }
 
-//! Initializes skinning tool.
-//! \param[in] curves      curves to skin the surface through.
-//! \param[in] deg_V       degree in V curvilinear direction.
-//! \param[in] unifyCurves indicates whether to unify curves before skinning.
+//-----------------------------------------------------------------------------
+
 void mobius::geom_SkinSurface::Init(const std::vector< Ptr<bcurve> >& curves,
                                     const int                         deg_V,
                                     const bool                        unifyCurves)
@@ -80,26 +75,38 @@ void mobius::geom_SkinSurface::Init(const std::vector< Ptr<bcurve> >& curves,
   m_errCode = ErrCode_NotDone;
 }
 
-//! Performs skinning.
-//! \return true in case of success, false -- otherwise.
-void mobius::geom_SkinSurface::Perform()
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_SkinSurface::Perform()
+{
+  // Prepare sections.
+  if ( !this->PrepareSections() )
+    return false;
+
+  // Build construction curves.
+  if ( !this->BuildIsosU() )
+    return false;
+
+  // Construct interpolant surface.
+  if ( !this->BuildSurface() )
+    return false;
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_SkinSurface::PrepareSections()
 {
   m_errCode = ErrCode_NoError;
-
-  // Heap allocator
-  core_HeapAlloc<double> Alloc;
-
-  /* --------------------
-   *  Preliminary checks
-   * -------------------- */
 
   if ( m_curves.size() < 2 )
   {
     m_errCode = ErrCode_NotEnoughCurves;
-    return;
+    return false;
   }
 
-  // Check compatibility of curves
+  // Check compatibility of curves.
   bool areCompatible = true;
   int ref_degree = 0;
   std::vector<double> ref_U;
@@ -109,7 +116,7 @@ void mobius::geom_SkinSurface::Perform()
     if ( crv.IsNull() )
     {
       m_errCode = ErrCode_NullCurvePassed;
-      return;
+      return false;
     }
 
     if ( c == 0 )
@@ -126,7 +133,7 @@ void mobius::geom_SkinSurface::Perform()
         if ( !m_bUnify )
         {
           m_errCode = ErrCode_NotCompatibleCurves_Degree;
-          return;
+          return false;
         }
         else
           break;
@@ -141,7 +148,7 @@ void mobius::geom_SkinSurface::Perform()
         if ( !m_bUnify )
         {
           m_errCode = ErrCode_NotCompatibleCurves_Knots;
-          return;
+          return false;
         }
         else
           break;
@@ -151,14 +158,14 @@ void mobius::geom_SkinSurface::Perform()
 
   if ( !areCompatible && m_bUnify )
   {
-    // Normalize and collect knot vectors
+    // Normalize and collect knot vectors.
     std::vector< std::vector<double> > U_all;
     for ( size_t c = 0; c < m_curves.size(); ++c )
     {
-      // Normalize
+      // Normalize.
       m_curves[c]->ReparameterizeLinear(0.0, 1.0);
 
-      // Get knots
+      // Get knots.
       std::vector<double> U = m_curves[c]->Knots();
       U_all.push_back(U);
 
@@ -173,7 +180,7 @@ void mobius::geom_SkinSurface::Perform()
 #endif
     }
 
-    // Compute extension
+    // Compute extension.
     bspl_UnifyKnots Unify;
     std::vector< std::vector<double> > X = Unify(U_all);
 
@@ -196,22 +203,29 @@ void mobius::geom_SkinSurface::Perform()
     }
   }
 
-  // Working dimensions
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_SkinSurface::BuildIsosU()
+{
+  // Working dimensions.
   const int n = (int) (m_curves[0]->Poles().size() - 1);
   const int K = (int) (m_curves.size() - 1);
 
-  // Check if the V degree is suitable
+  // Check if the V degree is suitable.
   if ( !bspl::Check(K, m_iDeg_V) )
   {
     m_errCode = ErrCode_BadVDegree;
-    return;
+    return false;
   }
 
   /* -----------------------------------------------------------
    *  Choose parameters for u-isos by averaged centripetal rule
    * ----------------------------------------------------------- */
 
-  // Prepare rectangular collection of control points
+  // Prepare rectangular collection of control points.
   std::vector< std::vector<xyz> > Q;
   for ( int i = 0; i <= n; ++i )
   {
@@ -225,11 +239,11 @@ void mobius::geom_SkinSurface::Perform()
   }
 
   // Allocate arrays for reper parameters
-  double* params_V = Alloc.Allocate(K + 1, true);
+  double* params_V = m_alloc.Allocate(K + 1, true);
   if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
   {
     m_errCode = ErrCode_CannotSelectParameters;
-    return;
+    return false;
   }
 
   /* ---------------------------
@@ -237,32 +251,31 @@ void mobius::geom_SkinSurface::Perform()
    * --------------------------- */
 
   const int m = bspl::M(K, m_iDeg_V);
-  double   *V = Alloc.Allocate(m + 1, true);
+  m_pV = m_alloc.Allocate(m + 1, true);
 
   if ( bspl_KnotsAverage::Calculate(params_V, K, m_iDeg_V, m,
                                     bspl_KnotsAverage::Recognize(false, false, false, false),
-                                    V) != bspl_KnotsAverage::ErrCode_NoError )
+                                    m_pV) != bspl_KnotsAverage::ErrCode_NoError )
   {
     m_errCode = ErrCode_CannotSelectKnots;
-    return;
+    return false;
   }
 
   /* -------------------------------------------------
    *  Interpolate poles of curves in iso-U directions
    * ------------------------------------------------- */
 
-  std::vector< std::vector<xyz> > final_poles;
   IsoU_Curves.clear();
   for ( int i = 0; i <= n; ++i )
   {
-    // Populate reper points (poles of curves) for fixed U values
+    // Populate reper points (poles of curves) for fixed U values.
     std::vector<xyz> iso_U_poles;
     for ( int k = 0; k <= K; ++k )
       iso_U_poles.push_back(Q[i][k]);
 
-    // Interpolate over these poles
+    // Interpolate over these poles.
     Ptr<bcurve> iso_U;
-    if ( !geom_InterpolateCurve::Interp(iso_U_poles, K, m_iDeg_V, params_V, V, m,
+    if ( !geom_InterpolateCurve::Interp(iso_U_poles, K, m_iDeg_V, params_V, m_pV, m,
                                         false,
                                         false,
                                         false,
@@ -274,24 +287,40 @@ void mobius::geom_SkinSurface::Perform()
                                         iso_U) )
     {
       m_errCode = ErrCode_CannotInterpolateIsoU;
-      return;
+      return false;
     }
 
     IsoU_Curves.push_back(iso_U);
-    final_poles.push_back( iso_U->Poles() );
   }
 
-  /* -----------------------
-   *  Construct interpolant
-   * ----------------------- */
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_SkinSurface::BuildSurface()
+{
+  const int n = (int) (m_curves[0]->Poles().size() - 1);
+  const int K = (int) (m_curves.size() - 1);
+  const int m = bspl::M(K, m_iDeg_V);
+
+  // Collect poles.
+  std::vector< std::vector<xyz> > final_poles;
+  //
+  for ( int i = 0; i <= n; ++i )
+  {
+    final_poles.push_back( IsoU_Curves[i]->Poles() );
+  }
 
   std::vector<double> U_knots = m_curves[0]->Knots();
-  double *U = Alloc.Allocate(U_knots.size(), true);
+  double *U = m_alloc.Allocate(U_knots.size(), true);
   for ( size_t i = 0; i < U_knots.size(); ++i )
     U[i] = U_knots[i];
 
   m_surface = new bsurf(final_poles,
-                        U, V,
+                        U, m_pV,
                         (int) U_knots.size(), m + 1,
                         m_curves[0]->Degree(), m_iDeg_V);
+
+  return true;
 }

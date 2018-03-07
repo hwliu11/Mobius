@@ -175,14 +175,14 @@ mobius::cascade_BSplineCurve3D::~cascade_BSplineCurve3D()
 //-----------------------------------------------------------------------------
 
 //! Converts Mobius B-spline curve to OCCT one via re-approximation.
-//! \param theTol3d [in] tolerance to achieve.
-//! \param theOrder [in] desired order.
+//! \param theTol3d       [in] tolerance to achieve.
+//! \param theOrder       [in] desired order.
 //! \param theMaxSegments [in] maximum number of segments.
-//! \param theMaxDegree [in] maximum degree.
-void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double theTol3d,
+//! \param theMaxDegree   [in] maximum degree.
+void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double        theTol3d,
                                                     const GeomAbs_Shape theOrder,
-                                                    const int theMaxSegments,
-                                                    const int theMaxDegree)
+                                                    const int           theMaxSegments,
+                                                    const int           theMaxDegree)
 {
   m_fMaxError = 0.0;
 

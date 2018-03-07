@@ -35,7 +35,14 @@
 
 int mobius::bspl::M(const int n, const int p)
 {
-  return n + p + 1; // Common formula
+  return n + p + 1; // Common formula.
+}
+
+//-----------------------------------------------------------------------------
+
+int mobius::bspl::N(const int m, const int p)
+{
+  return m - p - 1; // Common formula.
 }
 
 //-----------------------------------------------------------------------------
@@ -50,6 +57,7 @@ int mobius::bspl::NumberOfKnots(const int n, const int p)
 bool mobius::bspl::Check(const int n, const int p)
 {
   const int r = NumberOfKnots(n, p);
+  //
   if ( r < 2*(p + 1) )
     return false;
 
