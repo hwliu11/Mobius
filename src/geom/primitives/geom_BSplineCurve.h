@@ -146,6 +146,21 @@ public:
     return m_poles;
   }
 
+  //! Returns the number of poles.
+  //! \return number of poles.
+  int NumOfPoles() const
+  {
+    return (int) m_poles.size();
+  }
+
+  //! Returns pole by its zero-based index.
+  //! \param[in] poleIdx zero-based pole index.
+  //! \return pole.
+  const xyz& GetPole(const size_t poleIdx) const
+  {
+    return m_poles[poleIdx];
+  }
+
   //! Accessor for the knot vector.
   //! \return knot vector.
   const std::vector<double>& Knots() const
@@ -158,6 +173,14 @@ public:
   int NumOfKnots() const
   {
     return (int) m_U.size();
+  }
+
+  //! Returns knot by its zero-based index.
+  //! \param[in] knotIdx zero-based knot index.
+  //! \return knot.
+  double GetKnot(const size_t knotIdx) const
+  {
+    return m_U[knotIdx];
   }
 
   //! Returns the degree of the curve.
