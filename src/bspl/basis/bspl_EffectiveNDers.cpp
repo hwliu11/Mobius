@@ -55,7 +55,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   core_HeapAlloc2D<double> Alloc2D;
 
   // Array to store working matrix
-  double** ndu = Alloc2D.Allocate(p+1, p+1, false);
+  double** ndu = Alloc2D.Allocate(p+1, p+1, true);
 
   //------------------------------------------------------
   // Evaluate basis functions along with knot differences
@@ -65,17 +65,17 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   ndu[0][0] = 1.0;
 
   // Arrays left[] and right[] are used to store knot differences
-  double* left  = Alloc.Allocate(p+1, false);
-  double* right = Alloc.Allocate(p+1, false);
+  double* left  = Alloc.Allocate(p+1, true);
+  double* right = Alloc.Allocate(p+1, true);
 
   // We start from degree equal to 1. This is because basis functions
   // are constant and equal to 1 for degree = 0. We elevate degree re-using
   // previously calculated B-spline values according to the recurrent
   // formulation given in theory
-  for ( int deg = 1; deg <= p; ++deg )
+  for ( int j = 1; j <= p; ++j )
   {
-    left[deg]  = u - U[span_i + 1 - deg];
-    right[deg] = U[span_i + deg] - u;
+    left[j]  = u - U[span_i+1-j];
+    right[j] = U[span_i+j] - u;
 
     // This variable contains value reused on adjacent iterations
     // by the number of evaluated functions
@@ -85,17 +85,17 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
     // even though we have (deg + 1) of such functions, we iterate only deg
     // times as the last function can be simply evaluated thanks to savedTerm
     // variable without additional efforts (see theory)
-    for ( int idx = 0; idx < deg; ++idx )
+    for ( int r = 0; r < j; ++r )
     {
       // Knot differences (lower triangle)
-      ndu[deg][idx] = right[idx+1] + left[deg-idx];
-      double temp   = ndu[idx][deg-1] / ndu[deg][idx];
+      ndu[j][r]   = right[r+1] + left[j-r];
+      double temp = ndu[r][j-1] / ndu[j][r];
 
       // Basis functions (upper triangle)
-      ndu[idx][deg] = savedTerm + right[idx+1]*temp;
-      savedTerm     = left[deg-idx]*temp;
+      ndu[r][j] = savedTerm + right[r+1]*temp;
+      savedTerm = left[j-r]*temp;
     }
-    ndu[deg][deg] = savedTerm;
+    ndu[j][j] = savedTerm;
   }
 
   //----------------------
@@ -103,7 +103,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   //----------------------
 
   // Prepare matrix of coefficients
-  double** a = Alloc2D.Allocate(2, n+1, false); // Two working rows
+  double** a = Alloc2D.Allocate(2, n+1, true); // Two working rows
 
   // Load basis functions into the first row of result matrix
   for ( int j = 0; j <= p; ++j )
@@ -132,6 +132,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
         j1 = 1;
       else
         j1 = -rk;
+      //
       if ( r-1 <= pk )
         j2 = k-1;
       else
