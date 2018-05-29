@@ -37,6 +37,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Represents simple oriented link between two 3D points.
 //!
 //! \todo complete description

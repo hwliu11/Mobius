@@ -37,6 +37,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Spherical surface having the following parameterization:
 //! <pre>
 //!    x = x0 + r cos(theta) cos(phi);

@@ -36,6 +36,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Non-parametric polyline.
 class geom_PolyLine : public geom_Geometry
 {

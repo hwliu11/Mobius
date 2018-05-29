@@ -37,6 +37,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! B-spline surface.
 //!
 //! \todo provide more comments.

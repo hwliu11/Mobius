@@ -36,6 +36,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Parametric spatial circle.
 class geom_Circle : public geom_Curve
 {

@@ -37,6 +37,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Gordon surface.
 //!
 //! \todo this primitive is currently not operational and deserves reconsidering.

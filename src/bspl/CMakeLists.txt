@@ -140,12 +140,19 @@ install (TARGETS mobiusBSpl
          CONFIGURATIONS Release)
 
 install (TARGETS mobiusBSpl
+         RUNTIME DESTINATION bini COMPONENT Runtime
+         CONFIGURATIONS RelWithDebInfo
+         ARCHIVE DESTINATION libi COMPONENT Library
+         CONFIGURATIONS RelWithDebInfo)
+
+install (TARGETS mobiusBSpl
          RUNTIME DESTINATION bind COMPONENT Runtime
          CONFIGURATIONS Debug
          ARCHIVE DESTINATION libd COMPONENT Library
          CONFIGURATIONS Debug)
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusBSpl.pdb DESTINATION bind CONFIGURATIONS Debug)
+install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusBSpl.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 
 install (FILES ${H_FILES}                  DESTINATION include/mobius)
 install (FILES ${basis_H_FILES}            DESTINATION include/mobius)

@@ -39,6 +39,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! B-spline curve in 3D.
 //! Degree, number of knots and number of control points are related
 //! by formula (m = n + p + 1), where m is the index of last knot,

@@ -55,8 +55,6 @@
   #define mobiusCore_EXPORT
 #endif
 
-//const char* SLASH_STR = "\\";
-
 //-----------------------------------------------------------------------------
 // DOXY group definition
 //-----------------------------------------------------------------------------
@@ -75,17 +73,6 @@
 class core
 {
 public:
-
-  //std::string slashed(const std::string& str)
-  //{
-  //  char c = str.at(str.length() - 1);
-  //  if ( c == *SLASH_STR )
-  //    return str;
-
-  //  std::string strOUT(str);
-  //  strOUT.append(SLASH_STR);
-  //  return strOUT;
-  //}
 
   //! Extracts integer number from the passed string.
   //! \param str [in] input string.

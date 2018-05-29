@@ -40,6 +40,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Base class for 3D geometric entities.
 //!
 //! \todo complete description

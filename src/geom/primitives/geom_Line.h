@@ -36,6 +36,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Parametric straight line.
 class geom_Line : public geom_Curve
 {

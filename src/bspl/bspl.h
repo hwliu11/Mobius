@@ -54,6 +54,10 @@
 //! Data structures and algorithms for operating with B-spline functions.
 //-----------------------------------------------------------------------------
 
+#define MOBIUS_BSPL_MAX_DEGREE 25
+
+//-----------------------------------------------------------------------------
+
 namespace mobius {
 
 //! \ingroup MOBIUS_BSPL
@@ -99,6 +103,7 @@ namespace bspl
   //! \return true/false.
   mobiusBSpl_EXPORT bool
     Check(const int n, const int p);
+
 };
 
 };

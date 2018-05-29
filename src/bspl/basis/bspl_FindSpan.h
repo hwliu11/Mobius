@@ -38,17 +38,20 @@ namespace mobius {
 
 //! \ingroup MOBIUS_BSPL
 //!
-//! Algorithm finding knot span index.
+//! \brief A2.1 from "The NURBS Book".
+//!
+//! Algorithm finding span index using binary search.
 //!
 //! Inputs:
 //!   u -- target knot;
-//!   U -- knot vector;
-//!   p -- degree;
+//!   U -- reference to the knot vector;
+//!   p -- degree.
 //!
 //! Outputs:
-//!   index of the knot span;
+//!   index of the knot span.
 //!
-//! \todo complete description
+//! Notice that this tool accepts a reference to the knot vector in order to
+//! avoid copying the knots.
 class bspl_FindSpan
 {
 public:
@@ -62,10 +65,14 @@ public:
   mobiusBSpl_EXPORT int
     operator()(const double u) const;
 
+private:
+
+  void operator=(const bspl_FindSpan&) = delete;
+
 protected:
 
-  std::vector<double> m_U;    //!< Knot vector.
-  int                 m_iDeg; //!< Degree.
+  const std::vector<double>& m_U;    //!< Reference to knot vector.
+  int                        m_iDeg; //!< Degree.
 
 };
 

@@ -39,6 +39,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Geometric primitive for 3D point.
 //!
 //! \todo complete description

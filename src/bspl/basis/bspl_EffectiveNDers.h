@@ -38,6 +38,8 @@ namespace mobius {
 
 //! \ingroup MOBIUS_BSPL
 //!
+//! \brief A2.3 from "The NURBS Book".
+//!
 //! Algorithm calculating those B-spline basis functions and their derivatives
 //! which are non-vanishing in the given span. The target span is referenced by
 //! its zero-based index. In order to use this functionality properly,

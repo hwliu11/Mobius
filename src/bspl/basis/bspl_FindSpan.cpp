@@ -41,13 +41,10 @@
 //! Initializes the tool with all necessary B-spline properties.
 //! \param U [in] knot vector.
 //! \param p [in] degree.
-//! \return span index.
 mobius::bspl_FindSpan::bspl_FindSpan(const std::vector<double>& U,
                                      const int                  p)
-{
-  m_U    = U;
-  m_iDeg = p;
-}
+: m_U(U), m_iDeg(p)
+{}
 
 //-----------------------------------------------------------------------------
 
@@ -61,8 +58,11 @@ int mobius::bspl_FindSpan::operator()(const double u) const
   const int m  = nU - 1;
   const int n  = m - p - 1;
   //
-  if ( u == m_U[n + 1] )
+  if ( u >= m_U[n + 1] )
     return n;
+  //
+  if ( u <= m_U[0] )
+    return p;
 
   int  mid_idx;
   int  min_idx = 0;

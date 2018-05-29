@@ -40,6 +40,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Bezier surface constructed on three rail curves. This surface is
 //! skinned onto a couple of rail curves named r(u) and q(u). One additional
 //! curve c(u) is used as a magnifier for surface points. c(u) is called a

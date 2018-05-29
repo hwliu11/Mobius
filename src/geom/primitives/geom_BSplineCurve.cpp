@@ -44,6 +44,8 @@
 // STD includes
 #include <algorithm>
 
+//-----------------------------------------------------------------------------
+
 //! Auxiliary functions.
 namespace BSplCurveProj
 {
@@ -84,6 +86,8 @@ namespace BSplCurveProj
   }
 };
 
+//-----------------------------------------------------------------------------
+
 //! Constructor.
 //! \param Poles [in] poles for B-spline curve.
 //! \param U     [in] knot vector.
@@ -102,6 +106,8 @@ mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>& Poles,
   this->init(Poles, Uvec, p);
 }
 
+//-----------------------------------------------------------------------------
+
 //! Constructor.
 //! \param Poles [in] poles for B-spline curve.
 //! \param U     [in] knot vector.
@@ -114,9 +120,13 @@ mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>&    Poles,
   this->init(Poles, U, p);
 }
 
+//-----------------------------------------------------------------------------
+
 //! Destructor.
 mobius::geom_BSplineCurve::~geom_BSplineCurve()
 {}
+
+//-----------------------------------------------------------------------------
 
 //! Calculates boundary box for the B-spline curve by its control polygon.
 //! Notice that this peculiarity can look weird as control polygon only
@@ -165,12 +175,16 @@ void mobius::geom_BSplineCurve::Bounds(double& xMin, double& xMax,
   zMax = z_max;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns first knot.
 //! \return first knot.
 double mobius::geom_BSplineCurve::MinParameter() const
 {
   return m_U[0];
 }
+
+//-----------------------------------------------------------------------------
 
 //! Returns last knot.
 //! \return last knot.
@@ -179,22 +193,21 @@ double mobius::geom_BSplineCurve::MaxParameter() const
   return m_U[m_U.size()-1];
 }
 
+//-----------------------------------------------------------------------------
+
 //! Evaluates B-spline curve for the given parameter.
 //! \param u [in]  parameter value to evaluate the curve for.
 //! \param P [out] 3D point corresponding to the given parameter on the curve.
 void mobius::geom_BSplineCurve::Eval(const double u,
                                      xyz&         P) const
 {
-  // Heap allocator
-  core_HeapAlloc<double> Alloc;
-
   // Find span the passed u falls into
   bspl_FindSpan FindSpan(m_U, m_iDeg);
   const int span = FindSpan(u);
 
   // Evaluate effective B-spline basis functions
   bspl_EffectiveN EffectiveN;
-  double* N = Alloc.Allocate(m_iDeg + 1, false);
+  double N[MOBIUS_BSPL_MAX_DEGREE];
   EffectiveN(u, m_U, m_iDeg, span, N);
 
   // Evaluate curve
@@ -207,6 +220,8 @@ void mobius::geom_BSplineCurve::Eval(const double u,
   // Set output parameter
   P = C;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Evaluates derivative of the B-spline curve for the given parameter.
 //! \param u   [in]  parameter value to evaluate curve for.
@@ -221,6 +236,8 @@ void mobius::geom_BSplineCurve::Eval_Dk(const double u,
   //
   this->Eval_Dk(dN, u, k, dkC);
 }
+
+//-----------------------------------------------------------------------------
 
 //! Evaluates derivative of the B-spline curve for the given parameter.
 //! \param dN  [in]  array for results (can be passed for better performance).
@@ -251,12 +268,16 @@ void mobius::geom_BSplineCurve::Eval_Dk(double**     dN,
   d1C = C;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Creates a copy of this B-curve.
 //! \return copy of B-curve.
 mobius::Ptr<mobius::bcurve> mobius::geom_BSplineCurve::Copy() const
 {
   return new bcurve(m_poles, m_U, m_iDeg);
 }
+
+//-----------------------------------------------------------------------------
 
 //! Calculates curvature value at the given parameter.
 //! \param u [in] parameter value to evaluate curvature in.
@@ -271,6 +292,8 @@ double mobius::geom_BSplineCurve::K(const double u) const
   const double k2 = pow(d1C.Modulus(), 3);
   return k1/k2;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Returns continuity of the curve.
 //! \return continuity.
@@ -313,6 +336,8 @@ mobius::core_Smoothness mobius::geom_BSplineCurve::Continuity() const
 
   return Smoothness_CN;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Calculates parameter value for the given point on curve.
 //! \param P     [in]  point to invert.
@@ -359,6 +384,8 @@ bool mobius::geom_BSplineCurve::InvertPoint(const xyz&   P,
   return true;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Inserts knot to the knot vector of the curve.
 //! \param u         [in] knot to insert.
 //! \param num_times [in] how many times to insert. If the passed knot does not
@@ -373,6 +400,8 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
   int dest_span_idx;
   return this->InsertKnot(u, num_times, dest_span_idx);
 }
+
+//-----------------------------------------------------------------------------
 
 //! Inserts knot to the knot vector of the curve.
 //! \param u             [in]  knot to insert.
@@ -416,6 +445,8 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
   return true;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Refines knots of the underlying basis functions using the passed vector
 //! of new knot values. This vector must contain only new values with
 //! repetitions corresponding to multiplicities. E.g. X = [0.2, 0.3, 0.3]
@@ -455,6 +486,8 @@ bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
   this->init(Qw, Ubar, m_iDeg);
   return true;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Splits B-curve by two slices with the given parameter.
 //! \param u      [in]  parameter to split by.
@@ -535,6 +568,8 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
   return true;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Performs linear re-parameterization of B-curve: poles remain untouched,
 //! while knots are moved according to linear law.
 //! \param s_min [in] new min parameter value.
@@ -554,6 +589,8 @@ void mobius::geom_BSplineCurve::ReparameterizeLinear(const double s_min,
                               s_max);
   }
 }
+
+//-----------------------------------------------------------------------------
 
 //! Initializes B-spline curve with complete data.
 //! \param Poles [in] control points.

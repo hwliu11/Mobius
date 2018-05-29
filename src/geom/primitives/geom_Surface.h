@@ -40,6 +40,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Base class for surfaces. Declares the common interface methods.
 //! All surfaces are actually evaluators for points and derivatives.
 //! It is possible to integrate them into any environment designed to query

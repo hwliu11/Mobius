@@ -36,6 +36,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Isoparametric curve for Klein bottle.
 class geom_KleinIsoCurve : public geom_Curve
 {

@@ -150,12 +150,19 @@ install (TARGETS mobiusTest
          CONFIGURATIONS Release)
 
 install (TARGETS mobiusTest
+         RUNTIME DESTINATION bini COMPONENT Runtime
+         CONFIGURATIONS RelWithDebInfo
+         ARCHIVE DESTINATION libi COMPONENT Library
+         CONFIGURATIONS RelWithDebInfo)
+
+install (TARGETS mobiusTest
          RUNTIME DESTINATION bind COMPONENT Runtime
          CONFIGURATIONS Debug
          ARCHIVE DESTINATION libd COMPONENT Library
          CONFIGURATIONS Debug)
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusTest.pdb DESTINATION bind CONFIGURATIONS Debug)
+install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusTest.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 
 install (FILES ${H_FILES}      DESTINATION include/mobius)
 install (FILES ${bspl_H_FILES} DESTINATION include/mobius)

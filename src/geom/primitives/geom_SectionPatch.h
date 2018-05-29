@@ -40,6 +40,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Surface and constraints.
 class geom_SectionPatch : public core_OBJECT
 {

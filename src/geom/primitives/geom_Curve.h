@@ -39,6 +39,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Base class for 3D parametric curves.
 class geom_Curve : public geom_Geometry
 {
