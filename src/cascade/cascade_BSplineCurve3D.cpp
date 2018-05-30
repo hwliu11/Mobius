@@ -222,8 +222,8 @@ void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double        theTol3d
 
 //-----------------------------------------------------------------------------
 
-//! Converts Mobius B-spline curve to OCCT one by direct supplying of knots,
-//! multiplicities and poles as they are in Mobius.
+//! Converts Mobius B-spline curve to OCCT one or vice versa by direct
+//! supplying of knots, multiplicities and poles as they are.
 void mobius::cascade_BSplineCurve3D::DirectConvert()
 {
   if ( !m_mobiusCurve.IsNull() )
@@ -236,7 +236,8 @@ void mobius::cascade_BSplineCurve3D::DirectConvert()
 
 //! Accessor for the Mobius curve.
 //! \return Mobius curve.
-const mobius::Ptr<mobius::bcurve>& mobius::cascade_BSplineCurve3D::GetMobiusCurve() const
+const mobius::Ptr<mobius::bcurve>&
+  mobius::cascade_BSplineCurve3D::GetMobiusCurve() const
 {
   return m_mobiusCurve;
 }
@@ -245,7 +246,8 @@ const mobius::Ptr<mobius::bcurve>& mobius::cascade_BSplineCurve3D::GetMobiusCurv
 
 //! Accessor for the OpenCascade curve.
 //! \return OpenCascade curve.
-const Handle(Geom_BSplineCurve)& mobius::cascade_BSplineCurve3D::GetOpenCascadeCurve() const
+const Handle(Geom_BSplineCurve)&
+  mobius::cascade_BSplineCurve3D::GetOpenCascadeCurve() const
 {
   return m_occtCurve;
 }

@@ -47,8 +47,50 @@ class cascade_BSplineSurface
 {
 public:
 
-  mobiusCascade_EXPORT static Handle(Geom_BSplineSurface)
-    FromMobius(const Ptr<bsurf>& source);
+  mobiusCascade_EXPORT
+    cascade_BSplineSurface(const Ptr<bsurf>& mobiusSurface);
+
+  mobiusCascade_EXPORT
+    cascade_BSplineSurface(const Handle(Geom_BSplineSurface)& occtSurface);
+
+  mobiusCascade_EXPORT
+    ~cascade_BSplineSurface();
+
+public:
+
+  mobiusCascade_EXPORT void
+    DirectConvert();
+
+public:
+
+  mobiusCascade_EXPORT const Ptr<bsurf>&
+    GetMobiusSurface() const;
+
+  mobiusCascade_EXPORT const Handle(Geom_BSplineSurface)&
+    GetOpenCascadeSurface() const;
+
+  mobiusCascade_EXPORT bool
+    IsDone() const;
+
+protected:
+
+  mobiusCascade_EXPORT void
+    convertToOpenCascade();
+
+  mobiusCascade_EXPORT void
+    convertToMobius();
+
+private:
+
+  //! Mobius surface.
+  Ptr<bsurf> m_mobiusSurface;
+
+  //! OCCT surface.
+  Handle(Geom_BSplineSurface) m_occtSurface;
+
+  //! Indicates whether conversion is done or not.
+  bool m_bIsDone;
+
 
 };
 

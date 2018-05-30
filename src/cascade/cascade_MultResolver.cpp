@@ -31,21 +31,28 @@
 // Own include
 #include <mobius/cascade_MultResolver.h>
 
+//-----------------------------------------------------------------------------
+
 //! Default constructor.
 mobius::cascade_MultResolver::cascade_MultResolver()
 {}
+
+//-----------------------------------------------------------------------------
 
 //! Default destructor.
 mobius::cascade_MultResolver::~cascade_MultResolver()
 {}
 
+//-----------------------------------------------------------------------------
+
 //! Resolves for the passed parameter.
-//! \param u [in] knot value to resolve.
+//! \param[in] u knot value to resolve.
 void mobius::cascade_MultResolver::Resolve(const double u)
 {
   bool isFound = false;
   int foundIdx = -1;
   knot_multiset::elem foundStruct;
+  //
   for ( int i = 1; i <= Knots.Length(); ++i )
   {
     const knot_multiset::elem& knotWithMult = Knots.Value(i);

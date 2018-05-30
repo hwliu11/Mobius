@@ -101,7 +101,7 @@ private:
   //! Maximum achieved approximation error.
   double m_fMaxError;
 
-  //! Indicates whether re-approximation succeeded or not.
+  //! Indicates whether conversion is done or not.
   bool m_bIsDone;
 
 };

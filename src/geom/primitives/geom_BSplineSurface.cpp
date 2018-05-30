@@ -186,9 +186,11 @@ void mobius::geom_BSplineSurface::Eval(const double u,
   core_HeapAlloc<double> Alloc;
 
   // Find span the passed u and v fall into
-  bspl_FindSpan FindSpan(m_U, m_iDegU);
-  const int span_u = FindSpan(u);
-  const int span_v = FindSpan(v);
+  bspl_FindSpan FindSpanU(m_U, m_iDegU);
+  bspl_FindSpan FindSpanV(m_V, m_iDegV);
+  //
+  const int span_u = FindSpanU(u);
+  const int span_v = FindSpanV(v);
 
   //---------------------------------------------
   // Evaluate effective B-spline basis functions
