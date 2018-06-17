@@ -7,6 +7,9 @@ project (mobiusCore)
 set (H_FILES
   core.h
 )
+set (CPP_FILES
+  core.cpp
+)
 
 #------------------------------------------------------------------------------
 # Base
@@ -63,18 +66,18 @@ set (utils_H_FILES
   utils/core_HeapAlloc.h
   utils/core_Journal.h
   utils/core_JournalTicket.h
+  utils/core_JSON.h
   utils/core_StringBuffer.h
   utils/core_TimeStamp.h
-  utils/core_Utils.h
 )
 set (utils_CPP_FILES 
   utils/core_FileDumper.cpp
   utils/core_HeapAlloc.cpp
   utils/core_Journal.cpp
   utils/core_JournalTicket.cpp
+  utils/core_JSON.cpp
   utils/core_StringBuffer.cpp
   utils/core_TimeStamp.cpp
-  utils/core_Utils.cpp
 )
 
 #------------------------------------------------------------------------------

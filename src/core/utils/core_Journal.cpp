@@ -165,10 +165,10 @@ bool mobius::core_Journal::Restore(const std::string& filename)
 
     // Split by label delimiter
     std::vector<std::string> chunks;
-    core::split(line, ":", chunks);
+    core::str::split(line, ":", chunks);
 
     // Remove prefix
-    core::join(chunks, line, 1);
+    core::str::join(chunks, line, 1);
 
     // Add line to Journal
     if ( line.length() )

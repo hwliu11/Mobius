@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 23 May 2013
+// Created on: 15 June 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,25 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_HeaderFile
-#define geom_HeaderFile
+#ifndef geom_excBSurfaceCtor_HeaderFile
+#define geom_excBSurfaceCtor_HeaderFile
 
-// geom includes
-#include <mobius/geom_excBCurveCtor.h>
-#include <mobius/geom_excBSurfaceCtor.h>
+// Standard includes
+#include <exception>
 
-#if defined _WIN32
-  #if defined mobiusGeom_EXPORTS
-    #define mobiusGeom_EXPORT __declspec(dllexport)
-  #else
-    #define mobiusGeom_EXPORT __declspec(dllimport)
-  #endif
-#else
-  #define mobiusGeom_EXPORT
-#endif
+namespace mobius {
 
-#define geom_NotUsed(x)
-
-//-----------------------------------------------------------------------------
-// DOXY group definition
-//-----------------------------------------------------------------------------
-//! \defgroup MOBIUS_GEOM Geometry
+//! \ingroup MOBIUS_GEOM
 //!
-//! Geometric structures and algorithms.
-//-----------------------------------------------------------------------------
+//! Exception thrown if B-surface construction is impossible.
+class geom_excBSurfaceCtor : public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return "B-surface construction error";
+  }
+};
+
+};
 
 #endif

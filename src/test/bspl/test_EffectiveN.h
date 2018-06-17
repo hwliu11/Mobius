@@ -73,12 +73,16 @@ public:
   //! \param functions [out] output collection of pointers.
   static void Functions(MobiusTestFunctions& functions)
   {
-    functions << &test1;
+    functions << &evalInDomain
+              << &evalOutDomainLeft
+              << &evalOutDomainRight;
   }
 
 private:
 
-  static bool test1(const int funcID);
+  static bool evalInDomain       (const int funcID);
+  static bool evalOutDomainLeft  (const int funcID);
+  static bool evalOutDomainRight (const int funcID);
 
 };
 

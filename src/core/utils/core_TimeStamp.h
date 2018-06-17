@@ -154,14 +154,14 @@ public:
     std::string res;
     res += buf;
     if ( useInternal )
-      res += ":: [" + core::to_string(Internal) + "]";
+      res += ":: [" + core::str::to_string(Internal) + "]";
 
     if ( isCompatible )
     {
-      core::replace_all(res, ":", "");
-      core::replace_all(res, "[", "");
-      core::replace_all(res, "]", "");
-      core::replace_all(res, " ", "_");
+      core::str::replace_all(res, ":", "");
+      core::str::replace_all(res, "[", "");
+      core::str::replace_all(res, "]", "");
+      core::str::replace_all(res, " ", "_");
     }
 
     return res;

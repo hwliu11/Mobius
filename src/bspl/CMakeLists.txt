@@ -6,6 +6,7 @@ project (mobiusBSpl)
 
 set (H_FILES
   bspl.h
+  bspl_excMaxDegreeViolation.h
 )
 set (CPP_FILES
   bspl.cpp

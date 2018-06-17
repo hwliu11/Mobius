@@ -63,6 +63,9 @@ public:
                       const std::vector<double>& U,
                       const int                  p);
 
+  mobiusGeom_EXPORT
+    geom_BSplineCurve(const std::string& json);
+
   mobiusGeom_EXPORT virtual
     ~geom_BSplineCurve();
 

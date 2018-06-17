@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 23 May 2013
+// Created on: 15 June 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,27 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_HeaderFile
-#define geom_HeaderFile
+#ifndef bspl_excMaxDegreeViolation_HeaderFile
+#define bspl_excMaxDegreeViolation_HeaderFile
 
-// geom includes
-#include <mobius/geom_excBCurveCtor.h>
-#include <mobius/geom_excBSurfaceCtor.h>
+// Standard includes
+#include <exception>
 
-#if defined _WIN32
-  #if defined mobiusGeom_EXPORTS
-    #define mobiusGeom_EXPORT __declspec(dllexport)
-  #else
-    #define mobiusGeom_EXPORT __declspec(dllimport)
-  #endif
-#else
-  #define mobiusGeom_EXPORT
-#endif
+namespace mobius {
 
-#define geom_NotUsed(x)
-
-//-----------------------------------------------------------------------------
-// DOXY group definition
-//-----------------------------------------------------------------------------
-//! \defgroup MOBIUS_GEOM Geometry
+//! \ingroup MOBIUS_BSPL
 //!
-//! Geometric structures and algorithms.
-//-----------------------------------------------------------------------------
+//! Exception thrown whenever max allowed degree of B-spline functions
+//! is exceeded. This may happen, for example, at construction of B-curve
+//! or B-surface.
+class bspl_excMaxDegreeViolation : public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Max B-spline degree is exceeded";
+  }
+};
+
+};
 
 #endif

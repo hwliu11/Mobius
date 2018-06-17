@@ -159,7 +159,7 @@ mobius::testEngine_ReportRenderer::THAT
 mobius::testEngine_ReportRenderer::THAT
   mobius::testEngine_ReportRenderer::AddImportantText(const int num)
 {
-  return this->AddImportantText( core::to_string(num) );
+  return this->AddImportantText( core::str::to_string(num) );
 }
 
 //! Overloaded method for floating-point value.
@@ -168,7 +168,7 @@ mobius::testEngine_ReportRenderer::THAT
 mobius::testEngine_ReportRenderer::THAT
   mobius::testEngine_ReportRenderer::AddImportantText(const double num)
 {
-  return this->AddImportantText( core::to_string(num) );
+  return this->AddImportantText( core::str::to_string(num) );
 }
 
 //! Common method for pushing an arbitrary text to buffer. Note, that this
@@ -212,7 +212,7 @@ mobius::testEngine_ReportRenderer::THAT
 mobius::testEngine_ReportRenderer::THAT
   mobius::testEngine_ReportRenderer::AddText(const int num)
 {
-  return this->AddText( core::to_string(num), false );
+  return this->AddText( core::str::to_string(num), false );
 }
 
 //! Overloaded method for double.
@@ -221,7 +221,7 @@ mobius::testEngine_ReportRenderer::THAT
 mobius::testEngine_ReportRenderer::THAT
   mobius::testEngine_ReportRenderer::AddText(const double num)
 {
-  return this->AddText( core::to_string(num), false );
+  return this->AddText( core::str::to_string(num), false );
 }
 
 //! Renders equality expression in the following format:
@@ -341,7 +341,7 @@ mobius::testEngine_ReportRenderer::THAT
                                               const testEngine_ReportStyle& style)
 {
   std::string csDesc = std::string(".") + dotName + std::string(" {")
-                  + style.MakeDescriptor() + std::string("}");
+                     + style.MakeDescriptor() + std::string("}");
   m_buffer.append(csDesc);
   return this;
 }
@@ -532,7 +532,7 @@ mobius::testEngine_ReportRenderer::THAT
   if ( !style.IsNull() )
     style.ApplyStyles(tag);
 
-  tag.AddAttribute( "colspan", core::to_string(colSpan) );
+  tag.AddAttribute( "colspan", core::str::to_string(colSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -549,7 +549,7 @@ mobius::testEngine_ReportRenderer::THAT
   m_log.NbTableCells++;
   testEngine_ReportTag& tag = m_tagFactory.Td();
   tag.AddAttribute("class", className);
-  tag.AddAttribute( "colspan", core::to_string(colSpan) );
+  tag.AddAttribute( "colspan", core::str::to_string(colSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -568,7 +568,7 @@ mobius::testEngine_ReportRenderer::THAT
   if ( !style.IsNull() )
     style.ApplyStyles(tag);
 
-  tag.AddAttribute( "colspan", core::to_string(colSpan) );
+  tag.AddAttribute( "colspan", core::str::to_string(colSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -585,7 +585,7 @@ mobius::testEngine_ReportRenderer::THAT
   m_log.NbTableCells++;
   testEngine_ReportTag& tag = m_tagFactory.Th();
   tag.AddAttribute("class", className);
-  tag.AddAttribute( "colspan", core::to_string(colSpan) );
+  tag.AddAttribute( "colspan", core::str::to_string(colSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -604,7 +604,7 @@ mobius::testEngine_ReportRenderer::THAT
   if ( !style.IsNull() )
     style.ApplyStyles(tag);
 
-  tag.AddAttribute( "rowspan", core::to_string(rowSpan) );
+  tag.AddAttribute( "rowspan", core::str::to_string(rowSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -621,7 +621,7 @@ mobius::testEngine_ReportRenderer::THAT
   m_log.NbTableCells++;
   testEngine_ReportTag& tag = m_tagFactory.Td();
   tag.AddAttribute("class", className);
-  tag.AddAttribute( "rowspan", core::to_string(rowSpan) );
+  tag.AddAttribute( "rowspan", core::str::to_string(rowSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -640,7 +640,7 @@ mobius::testEngine_ReportRenderer::THAT
   if ( !style.IsNull() )
     style.ApplyStyles(tag);
 
-  tag.AddAttribute( "rowspan", core::to_string(rowSpan) );
+  tag.AddAttribute( "rowspan", core::str::to_string(rowSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -657,7 +657,7 @@ mobius::testEngine_ReportRenderer::THAT
   m_log.NbTableCells++;
   testEngine_ReportTag& tag = m_tagFactory.Th();
   tag.AddAttribute("class", className);
-  tag.AddAttribute( "rowspan", core::to_string(rowSpan) );
+  tag.AddAttribute( "rowspan", core::str::to_string(rowSpan) );
   m_buffer.append( tag.Result() );
   return this;
 }
@@ -820,6 +820,6 @@ mobius::testEngine_ReportRenderer::THAT mobius::testEngine_ReportRenderer::Break
 //! \param str [in/out] string to adjust.
 void mobius::testEngine_ReportRenderer::removeInconsistent(std::string& str)
 {
-  core::replace_all(str, "\n", "");
-  core::replace_all(str, "\r", "");
+  core::str::replace_all(str, "\n", "");
+  core::str::replace_all(str, "\r", "");
 }

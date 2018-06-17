@@ -29,6 +29,8 @@
 //-----------------------------------------------------------------------------
 
 // Tests includes
+#include <mobius/test_BSplineCurve.h>
+#include <mobius/test_BSplineSurface.h>
 #include <mobius/test_EffectiveN.h>
 #include <mobius/test_EffectiveNDers.h>
 #include <mobius/test_FindSpan.h>
@@ -88,6 +90,8 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve3D> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface> );
 
   // Launcher of entire test suite
   testEngine_Launcher Launcher;

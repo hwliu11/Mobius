@@ -60,12 +60,16 @@ set (core_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (geom_H_FILES
+  geom/test_BSplineCurve.h
+  geom/test_BSplineSurface.h
   geom/test_InterpolateCurve3D.h
   geom/test_Line3D.h
   geom/test_PointOnLine.h
 )
 
 set (geom_CPP_FILES
+  geom/test_BSplineCurve.cpp
+  geom/test_BSplineSurface.cpp
   geom/test_InterpolateCurve3D.cpp
   geom/test_Line3D.cpp
   geom/test_PointOnLine.cpp

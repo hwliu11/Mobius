@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 23 May 2013
+// Created on: 17 June 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,62 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_HeaderFile
-#define geom_HeaderFile
+#ifndef core_JSON_HeaderFile
+#define core_JSON_HeaderFile
 
-// geom includes
-#include <mobius/geom_excBCurveCtor.h>
-#include <mobius/geom_excBSurfaceCtor.h>
+// core includes
+#include <mobius/core.h>
 
-#if defined _WIN32
-  #if defined mobiusGeom_EXPORTS
-    #define mobiusGeom_EXPORT __declspec(dllexport)
-  #else
-    #define mobiusGeom_EXPORT __declspec(dllimport)
-  #endif
-#else
-  #define mobiusGeom_EXPORT
-#endif
+// STD includes
+#include <fstream>
 
-#define geom_NotUsed(x)
+namespace mobius {
 
-//-----------------------------------------------------------------------------
-// DOXY group definition
-//-----------------------------------------------------------------------------
-//! \defgroup MOBIUS_GEOM Geometry
+//! \ingroup MOBIUS_CORE
 //!
-//! Geometric structures and algorithms.
-//-----------------------------------------------------------------------------
+//! Utility class to process JSON objects.
+class core_JSON
+{
+public:
+
+  mobiusCore_EXPORT
+    core_JSON(const std::string& json);
+
+  mobiusCore_EXPORT
+    ~core_JSON();
+
+public:
+
+  mobiusCore_EXPORT bool
+    ExtractBlockForKey(const std::string& key,
+                       std::string&       block) const;
+
+public:
+
+  template <typename T>
+    T ExtractNumericBlockForKey(const std::string& key,
+                                T&                 result,
+                                const T            default_value = 0)
+    {
+      std::string block;
+      if ( !this->ExtractBlockForKey(key, block) )
+        return false;
+
+      // Check if the block represents a number.
+      if ( !core::str::is_number(block) )
+        return false;
+
+      // Extract number.
+      result = core::str::to_number<T>(block, default_value);
+      return true;
+    }
+
+protected:
+
+  std::string m_json; //!< JSON string to process.
+
+};
+
+};
 
 #endif

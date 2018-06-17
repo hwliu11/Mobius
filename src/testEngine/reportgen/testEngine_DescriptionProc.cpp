@@ -134,7 +134,7 @@ void mobius::testEngine_DescriptionProc::extractBlocks(const std::string& text,
 
   // Split text by newline characters
   std::vector<std::string> textLines;
-  core::split(text, std::string(1, testEngine_Macro_NL), textLines);
+  core::str::split(text, std::string(1, testEngine_Macro_NL), textLines);
 
   // Iterate over the lines
   int idx_F = 0, idx_L = 0;
@@ -206,11 +206,11 @@ void mobius::testEngine_DescriptionProc::extractIndicesFromTag(const std::string
                                                                int& endIdx)
 {
   // Remove brackets
-  std::string tagBase = core::substr(tag, 1, (int) tag.length() - 2);
+  std::string tagBase = core::str::substr(tag, 1, (int) tag.length() - 2);
 
   // Extract tokens delimited with ":"
   std::vector<std::string> tagTokens;
-  core::split(tagBase, std::string(1, testEngine_Macro_COLON), tagTokens);
+  core::str::split(tagBase, std::string(1, testEngine_Macro_COLON), tagTokens);
   std::string leftToken = tagTokens[0]; // Left part in "XX:TAG" is interesting
 
   // Just simple integer value
@@ -222,7 +222,7 @@ void mobius::testEngine_DescriptionProc::extractIndicesFromTag(const std::string
 
   // Looks like a range of indices, so we split it by minus character
   std::vector<std::string> idxTokens;
-  core::split(leftToken, std::string(1, testEngine_Macro_MINUS), idxTokens);
+  core::str::split(leftToken, std::string(1, testEngine_Macro_MINUS), idxTokens);
   std::string numStrFirst = idxTokens[0];
   std::string numStrLast = idxTokens[1];
 
@@ -245,7 +245,7 @@ std::string mobius::testEngine_DescriptionProc::expandVariables(const std::strin
 
   // Split text by newline characters
   std::vector<std::string> textLines;
-  core::split(text, std::string(1, testEngine_Macro_NL), textLines);
+  core::str::split(text, std::string(1, testEngine_Macro_NL), textLines);
 
   // Iterate over lines
   bool isPreOngoing = false;
@@ -264,7 +264,7 @@ std::string mobius::testEngine_DescriptionProc::expandVariables(const std::strin
     {
       // Split line by words
       std::vector<std::string> lineWords;
-      core::split(lineToken, std::string(1, testEngine_Macro_WHITESPACE), lineWords);
+      core::str::split(lineToken, std::string(1, testEngine_Macro_WHITESPACE), lineWords);
 
       // Iterate over thewords
       for ( int w = 0; w < (int) lineWords.size(); ++w )
@@ -279,12 +279,12 @@ std::string mobius::testEngine_DescriptionProc::expandVariables(const std::strin
 
           // Extract leading and trailing characters
           if ( varStart > 0 )
-            left = core::substr(wordToken, 0, varStart);
+            left = core::str::substr(wordToken, 0, varStart);
           if ( varEnd + 2 < (int) wordToken.size() )
-            right = core::substr(wordToken, varEnd + 2, (int) wordToken.size() - varEnd);
+            right = core::str::substr(wordToken, varEnd + 2, (int) wordToken.size() - varEnd);
 
           // Extract variable name
-          wordToken = core::substr(wordToken, varStart + 2, (int) varEnd - varStart - 2);
+          wordToken = core::str::substr(wordToken, varStart + 2, (int) varEnd - varStart - 2);
 
           // Add namespace (scope) for variable name
           if ( varsScope.length() )
@@ -375,8 +375,8 @@ bool mobius::testEngine_DescriptionProc::isPre(const std::string& token,
 std::string mobius::testEngine_DescriptionProc::varScope(const int caseID,
                                                          const int funcID)
 {
-  std::string vScope = core::to_string(caseID) +
-                    testEngine_Macro_NAMESPACE +
-                    core::to_string(funcID);
+  std::string vScope = core::str::to_string(caseID) +
+                       testEngine_Macro_NAMESPACE +
+                       core::str::to_string(funcID);
   return vScope;
 }

@@ -53,8 +53,8 @@ void mobius::bspl_EffectiveN::operator()(const double               u,
   // organization of calculation scheme. Nevertheless, we prefer to allocate
   // memory for these item as well, just because it is more convenient and
   // more consistent with theory to start indexation from 1
-  double left[MOBIUS_BSPL_MAX_DEGREE]; // (p + 1) elements are actually needed.
-  double right[MOBIUS_BSPL_MAX_DEGREE]; // (p + 1) elements are actually needed.
+  double left[mobiusBSpl_MaxDegree]; // (p + 1) elements are actually needed.
+  double right[mobiusBSpl_MaxDegree]; // (p + 1) elements are actually needed.
   //
   for ( int k = 0; k < p + 1; ++k ) // Notice that we do not use memset() for
   {                                 // nullification as it will corrupt

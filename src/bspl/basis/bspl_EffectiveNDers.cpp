@@ -51,11 +51,19 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
                                              const int                  n,
                                              double**                   ders) const
 {
-  core_HeapAlloc<double> Alloc;
-  core_HeapAlloc2D<double> Alloc2D;
-
-  // Array to store working matrix
-  double** ndu = Alloc2D.Allocate(p+1, p+1, true);
+  // Prepare working arrays:
+  //
+  // - left[] and right[]: to store knot differences.
+  // - ndu[][]:            to store working matrix.
+  double left[mobiusBSpl_MaxDegree], right[mobiusBSpl_MaxDegree];
+  double ndu[mobiusBSpl_MaxDegree][mobiusBSpl_MaxDegree];
+  //
+  for ( int i = 0; i < mobiusBSpl_MaxDegree; ++i )
+  {
+    left[i] = right[i] = 0.0;
+    for ( int j = 0; j < mobiusBSpl_MaxDegree; ++j )
+      ndu[i][j] = 0.0;
+  }
 
   //------------------------------------------------------
   // Evaluate basis functions along with knot differences
@@ -63,10 +71,6 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
 
   // Initial basis function to start iterative evaluation
   ndu[0][0] = 1.0;
-
-  // Arrays left[] and right[] are used to store knot differences
-  double* left  = Alloc.Allocate(p+1, true);
-  double* right = Alloc.Allocate(p+1, true);
 
   // We start from degree equal to 1. This is because basis functions
   // are constant and equal to 1 for degree = 0. We elevate degree re-using
@@ -102,7 +106,9 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   // Evaluate derivatives
   //----------------------
 
-  // Prepare matrix of coefficients
+  core_HeapAlloc2D<double> Alloc2D;
+
+  // Coefficients.
   double** a = Alloc2D.Allocate(2, n+1, true); // Two working rows
 
   // Load basis functions into the first row of result matrix

@@ -33,6 +33,7 @@
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
+#include <mobius/core_JSON.h>
 
 // BSpl includes
 #include <mobius/bspl_EffectiveN.h>
@@ -122,6 +123,73 @@ mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>&    Poles,
 
 //-----------------------------------------------------------------------------
 
+//! Constructs B-curve from JSON.
+//! \param json [in] JSON with curve data.
+mobius::geom_BSplineCurve::geom_BSplineCurve(const std::string& json)
+{
+  core_JSON tool(json);
+
+  // Extract degree.
+  int p = 0;
+  {
+    tool.ExtractNumericBlockForKey<int>("degree", p, 0);
+  }
+
+  // Extract knot vector.
+  std::vector<double> U;
+  {
+    std::string knotsBlock;
+    tool.ExtractBlockForKey("knots", knotsBlock);
+
+    std::vector<std::string> chunks;
+    core::str::split(knotsBlock, ",", chunks);
+
+    for ( size_t k = 0; k < chunks.size(); ++k )
+    {
+      if ( !core::str::is_number(chunks[k]) )
+        throw geom_excBCurveCtor();
+
+      U.push_back( core::str::to_number<double>(chunks[k]) );
+    }
+  }
+
+  // Extract poles.
+  std::vector<xyz> poles;
+  {
+    std::string polesBlock;
+    tool.ExtractBlockForKey("poles", polesBlock);
+
+    std::vector<std::string> chunks;
+    core::str::split(polesBlock, "][", chunks);
+
+    // Extract 3-coordinate tuples.
+    for ( size_t k = 0; k < chunks.size(); ++k )
+    {
+      if ( !core::str::is_number(chunks[k]) )
+        continue;
+
+      // Extract coordinates.
+      const std::string& coordStr = chunks[k];
+      std::vector<std::string> coordChunks;
+      core::str::split(coordStr, ",", coordChunks);
+
+      if ( coordChunks.size() != 3 )
+        throw geom_excBCurveCtor();
+
+      xyz P( core::str::to_number<double>(coordChunks[0], 0),
+             core::str::to_number<double>(coordChunks[1], 0),
+             core::str::to_number<double>(coordChunks[2], 0) );
+      //
+      poles.push_back(P);
+    }
+  }
+
+  // Initialize B-curve.
+  this->init(poles, U, p);
+}
+
+//-----------------------------------------------------------------------------
+
 //! Destructor.
 mobius::geom_BSplineCurve::~geom_BSplineCurve()
 {}
@@ -196,6 +264,8 @@ double mobius::geom_BSplineCurve::MaxParameter() const
 //-----------------------------------------------------------------------------
 
 //! Evaluates B-spline curve for the given parameter.
+//! This algorithm is essentially the algorithm A3.1 from The NURBS Book.
+//!
 //! \param u [in]  parameter value to evaluate the curve for.
 //! \param P [out] 3D point corresponding to the given parameter on the curve.
 void mobius::geom_BSplineCurve::Eval(const double u,
@@ -207,7 +277,7 @@ void mobius::geom_BSplineCurve::Eval(const double u,
 
   // Evaluate effective B-spline basis functions
   bspl_EffectiveN EffectiveN;
-  double N[MOBIUS_BSPL_MAX_DEGREE];
+  double N[mobiusBSpl_MaxDegree];
   EffectiveN(u, m_U, m_iDeg, span, N);
 
   // Evaluate curve
@@ -600,6 +670,15 @@ void mobius::geom_BSplineCurve::init(const std::vector<xyz>&    Poles,
                                      const std::vector<double>& U,
                                      const int                  p)
 {
+  // Check if max degree is not exceeded.
+  if ( p > mobiusBSpl_MaxDegree )
+    throw bspl_excMaxDegreeViolation();
+
+  // Check if B-curve can be constructed.
+  if ( !bspl::Check(int( Poles.size() ) - 1, int( U.size() ) - 1, p) )
+    throw geom_excBCurveCtor();
+
+  // Initialize members.
   m_poles = Poles;
   m_U     = U;
   m_iDeg  = p;

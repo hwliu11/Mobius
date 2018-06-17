@@ -6,6 +6,8 @@ project (mobiusGeom)
 
 set (H_FILES
   geom.h
+  geom_excBCurveCtor.h
+  geom_excBSurfaceCtor.h
 )
 
 #------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 13 October 2013
+// Created on: 15 June 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,40 +28,23 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef core_Utils_HeaderFile
-#define core_Utils_HeaderFile
+#ifndef geom_excBCurveCtor_HeaderFile
+#define geom_excBCurveCtor_HeaderFile
 
-// core includes
-#include <mobius/core.h>
+// Standard includes
+#include <exception>
 
 namespace mobius {
 
-//! Auxiliary functions.
-namespace core_Utils
+//! \ingroup MOBIUS_GEOM
+//!
+//! Exception thrown if B-curve construction is impossible.
+class geom_excBCurveCtor : public std::exception
 {
-  //! Functions for working with environment.
-  namespace Env
+  virtual const char* what() const throw()
   {
-    mobiusCore_EXPORT
-      std::string QrData();
-
-    mobiusCore_EXPORT
-      std::string QrDumping();
-
-    mobiusCore_EXPORT
-      std::string QrDescr();
-
-    mobiusCore_EXPORT
-      std::string GetVariable(const char* VarName);
+    return "B-curve construction error";
   }
-
-  //! Functions for working with strings.
-  namespace Str
-  {
-    mobiusCore_EXPORT
-      std::string Slashed(const std::string& strIN);
-  }
-
 };
 
 };

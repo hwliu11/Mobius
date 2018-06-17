@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 19 July 2017
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2017-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -62,4 +62,12 @@ bool mobius::bspl::Check(const int n, const int p)
     return false;
 
   return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::bspl::Check(const int n, const int m, const int p)
+{
+  const int m_expected = NumberOfKnots(n, p) - 1;
+  return m == m_expected;
 }

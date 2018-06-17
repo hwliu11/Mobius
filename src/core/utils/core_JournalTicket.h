@@ -106,8 +106,8 @@ public:
 
     std::vector<std::string> tokens_1, tokens_2;
     tokens_1.reserve(512); tokens_2.reserve(512);
-    core::split(ticket_1.Msg, " \t", tokens_1);
-    core::split(ticket_2.Msg, " \t", tokens_2);
+    core::str::split(ticket_1.Msg, " \t", tokens_1);
+    core::str::split(ticket_2.Msg, " \t", tokens_2);
 
     do
     {
@@ -115,10 +115,10 @@ public:
       token_2 = ( t2 >= tokens_2.size() || tokens_2.empty() ) ? "" : tokens_2[t2++];
 
       bool areEqual;
-      if ( core::is_number(token_1) && core::is_number(token_2) )
+      if ( core::str::is_number(token_1) && core::str::is_number(token_2) )
       {
-        val1 = core::to_number<double>(token_1, 0.0);
-        val2 = core::to_number<double>(token_2, 0.0);
+        val1 = core::str::to_number<double>(token_1, 0.0);
+        val2 = core::str::to_number<double>(token_2, 0.0);
 
         if ( fabs(val1 - val2) < m_fResolution )
           areEqual = true;
@@ -130,7 +130,7 @@ public:
         }
       }
       else
-        areEqual = core::are_equal(token_1, token_2);
+        areEqual = core::str::are_equal(token_1, token_2);
 
       if ( !areEqual )
         return false;

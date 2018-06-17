@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 23 May 2013
+// Created on: 15 June 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2014-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,67 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_HeaderFile
-#define geom_HeaderFile
+#ifndef test_BSplineCurve_HeaderFile
+#define test_BSplineCurve_HeaderFile
 
-// geom includes
-#include <mobius/geom_excBCurveCtor.h>
-#include <mobius/geom_excBSurfaceCtor.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-#if defined _WIN32
-  #if defined mobiusGeom_EXPORTS
-    #define mobiusGeom_EXPORT __declspec(dllexport)
-  #else
-    #define mobiusGeom_EXPORT __declspec(dllimport)
-  #endif
-#else
-  #define mobiusGeom_EXPORT
-#endif
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
 
-#define geom_NotUsed(x)
+// core includes
+#include <mobius/core.h>
 
-//-----------------------------------------------------------------------------
-// DOXY group definition
-//-----------------------------------------------------------------------------
-//! \defgroup MOBIUS_GEOM Geometry
-//!
-//! Geometric structures and algorithms.
-//-----------------------------------------------------------------------------
+namespace mobius {
+
+//! Unit test for B-spline curves.
+class test_BSplineCurve : public testEngine_TestCase
+{
+public:
+
+  //! Returns Test Case ID.
+  //! \return ID of the Test Case.
+  static int ID()
+  {
+    return CaseID_Geom_BSplineCurve;
+  }
+
+  //! Returns filename for the description.
+  //! \return filename for the description of the Test Case.
+  static std::string DescriptionFn()
+  {
+    return "test_BSplineCurve";
+  }
+
+  //! Returns Test Case description directory.
+  //! \return description directory for the Test Case.
+  static std::string DescriptionDir()
+  {
+    return "Geom3D";
+  }
+
+  //! Returns pointers to the Test Functions to launch.
+  //! \param functions [out] output collection of pointers.
+  static void Functions(MobiusTestFunctions& functions)
+  {
+    functions << &evalInDomain
+              << &evalOutDomainRight
+              << &evalOutDomainLeft
+              << &evalJSON1
+              << &evalJSON2;
+  }
+
+private:
+
+  static bool evalInDomain       (const int funcID);
+  static bool evalOutDomainRight (const int funcID);
+  static bool evalOutDomainLeft  (const int funcID);
+  static bool evalJSON1          (const int funcID);
+  static bool evalJSON2          (const int funcID);
+
+};
+
+};
 
 #endif

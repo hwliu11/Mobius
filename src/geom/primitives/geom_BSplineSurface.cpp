@@ -175,6 +175,8 @@ double mobius::geom_BSplineSurface::MaxParameter_V() const
 }
 
 //! Evaluates B-spline surface for the given pair of (u, v) parameters.
+//! This algorithm is essentially the algorithm A3.5 from The NURBS Book.
+//!
 //! \param u [in]  U parameter value to evaluate surface for.
 //! \param v [in]  V parameter value to evaluate surface for.
 //! \param C [out] 3D point corresponding to the given parameter pair.
@@ -182,9 +184,6 @@ void mobius::geom_BSplineSurface::Eval(const double u,
                                        const double v,
                                        xyz&         C) const
 {
-  // Heap allocator
-  core_HeapAlloc<double> Alloc;
-
   // Find span the passed u and v fall into
   bspl_FindSpan FindSpanU(m_U, m_iDegU);
   bspl_FindSpan FindSpanV(m_V, m_iDegV);
@@ -197,8 +196,10 @@ void mobius::geom_BSplineSurface::Eval(const double u,
   //---------------------------------------------
 
   bspl_EffectiveN EffectiveN;
-  double* N_u = Alloc.Allocate(m_iDegU + 1, true);
-  double* N_v = Alloc.Allocate(m_iDegV + 1, true);
+  //
+  double N_u[mobiusBSpl_MaxDegree];
+  double N_v[mobiusBSpl_MaxDegree];
+  //
   EffectiveN(u, m_U, m_iDegU, span_u, N_u);
   EffectiveN(v, m_V, m_iDegV, span_v, N_v);
 
@@ -325,6 +326,17 @@ void mobius::geom_BSplineSurface::init(const std::vector< std::vector<xyz> >& Po
                                        const int                              p,
                                        const int                              q)
 {
+  // Check degrees.
+  if ( p > mobiusBSpl_MaxDegree || q > mobiusBSpl_MaxDegree )
+    throw bspl_excMaxDegreeViolation();
+
+  // Check if B-surface can be constructed.
+  if ( !bspl::Check(Poles.size() - 1, U.size() - 1, p) )
+    throw geom_excBSurfaceCtor();
+  //
+  if ( !bspl::Check(Poles[0].size() - 1, V.size() - 1, q) )
+    throw geom_excBSurfaceCtor();
+
   m_poles = Poles;
   m_U     = U;
   m_V     = V;

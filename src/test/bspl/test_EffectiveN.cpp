@@ -35,10 +35,12 @@
 #include <mobius/bspl_EffectiveN.h>
 #include <mobius/bspl_FindSpan.h>
 
-//! Test scenario 001.
+//-----------------------------------------------------------------------------
+
+//! Test scenario 001: evaluate B-spline in its domain.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_EffectiveN::test1(const int funcID)
+bool mobius::test_EffectiveN::evalInDomain(const int funcID)
 {
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
@@ -60,6 +62,98 @@ bool mobius::test_EffectiveN::test1(const int funcID)
   SetVarDescr("N", N, p+1, ID(), funcID);
 
   if ( N[0] != 0.125 || N[1] != 0.75 || N[2] != 0.125 )
+  {
+    delete[] N;
+    return false;
+  }
+
+  delete[] N;
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 002: evaluate B-spline out of its domain on the right.
+//! \param funcID [in] ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+bool mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
+{
+  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const int p = 2;
+
+  bspl_EffectiveN Eval;
+
+  double u = 5.1;
+  bspl_FindSpan FindSpan(U, p);
+  const int i = FindSpan(u);
+
+  double* N = new double[p+1];
+  Eval(u, U, p, i, N);
+
+  // Set description variables
+  SetVarDescr("U", U,      ID(), funcID);
+  SetVarDescr("p", p,      ID(), funcID);
+  SetVarDescr("u", u,      ID(), funcID);
+  SetVarDescr("i", i,      ID(), funcID);
+  SetVarDescr("N", N, p+1, ID(), funcID);
+
+  if ( i != 7 )
+  {
+    delete[] N;
+    return false;
+  }
+
+  const double eps = 1e-7;
+  //
+  if ( fabs(N[0] - 0.01) > eps ||
+       fabs(N[1] + 0.22) > eps ||
+       fabs(N[2] - 1.21) > eps )
+  {
+    delete[] N;
+    return false;
+  }
+
+  delete[] N;
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 003: evaluate B-spline out of its domain on the left.
+//! \param funcID [in] ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+bool mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
+{
+  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const int p = 2;
+
+  bspl_EffectiveN Eval;
+
+  double u = -0.1;
+  bspl_FindSpan FindSpan(U, p);
+  const int i = FindSpan(u);
+
+  double* N = new double[p+1];
+  Eval(u, U, p, i, N);
+
+  // Set description variables
+  SetVarDescr("U", U,      ID(), funcID);
+  SetVarDescr("p", p,      ID(), funcID);
+  SetVarDescr("u", u,      ID(), funcID);
+  SetVarDescr("i", i,      ID(), funcID);
+  SetVarDescr("N", N, p+1, ID(), funcID);
+
+  if ( i != 2 )
+  {
+    delete[] N;
+    return false;
+  }
+
+  const double eps = 1e-7;
+  //
+  if ( fabs(N[0] - 1.21)  > eps ||
+       fabs(N[1] + 0.215) > eps ||
+       fabs(N[2] - 0.005) > eps )
   {
     delete[] N;
     return false;

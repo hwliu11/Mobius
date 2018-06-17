@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 11 June 2013
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,9 @@ enum test_CaseID
 
   CaseID_Geom_InterpolateCurve3D,
   CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine
+  CaseID_Geom_PointOnLine,
+  CaseID_Geom_BSplineCurve,
+  CaseID_Geom_BSplineSurface
 
 };
 

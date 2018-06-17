@@ -41,7 +41,6 @@
 
 // QrTools includes
 #include <mobius/core_TimeStamp.h>
-#include <mobius/core_Utils.h>
 
 // STD includes
 #include <fstream>
@@ -190,7 +189,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
     // Get filename for description
     std::string descGroupDir = CaseLauncher->CaseDescriptionDir();
     std::string descFilename = CaseLauncher->CaseDescriptionFn() + testEngine_Macro_DOT + testEngine_Macro_DESCR_EXT;
-    std::string descDir = core_Utils::Str::Slashed( core_Utils::Env::QrDescr() ) + descGroupDir;
+    std::string descDir      = core::str::slashed( core::env::QrDescr() ) + descGroupDir;
 
     // Description processing tool
     std::string title;
@@ -240,9 +239,9 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
     for ( int f = 0; f < nTotal; ++f )
     {
       // Prepare global ID of Test Function
-      std::string GID = core::to_string( CaseLauncher->CaseID() ) +
-                     testEngine_Macro_COLON +
-                     core::to_string(f+1);
+      std::string GID = core::str::to_string( CaseLauncher->CaseID() ) +
+                        testEngine_Macro_COLON +
+                        core::str::to_string(f+1);
 
       // Add table row
       Rdr->StartTableRow()
@@ -298,7 +297,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
 
   // Prepare full name of the temporary directory
   std::string
-    fullDirName = core_Utils::Str::Slashed( core_Utils::Env::QrDumping() ) + dirName;
+    fullDirName = core::str::slashed( core::env::QrDumping() ) + dirName;
 
   // TODO: for Windows only (!!!)
   // Create directory
@@ -311,7 +310,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
 
   // Filename for HTML report
   std::string
-    filename = core_Utils::Str::Slashed(fullDirName) +
+    filename = core::str::slashed(fullDirName) +
                testEngine_Macro_REPORT_FN + testEngine_Macro_DOT + testEngine_Macro_REPORT_EXT;
 
   // Create file for HTML report

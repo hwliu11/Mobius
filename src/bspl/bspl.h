@@ -34,6 +34,9 @@
 // core includes
 #include <mobius/core.h>
 
+// Common bspl includes
+#include <mobius/bspl_excMaxDegreeViolation.h>
+
 #define mobiusBSpl_NotUsed(x) x
 
 #if defined _WIN32
@@ -54,7 +57,7 @@
 //! Data structures and algorithms for operating with B-spline functions.
 //-----------------------------------------------------------------------------
 
-#define MOBIUS_BSPL_MAX_DEGREE 25
+#define mobiusBSpl_MaxDegree 25
 
 //-----------------------------------------------------------------------------
 
@@ -103,6 +106,15 @@ namespace bspl
   //! \return true/false.
   mobiusBSpl_EXPORT bool
     Check(const int n, const int p);
+
+  //! Checks equation "m = n + p + 1".
+  //!
+  //! \param[in] n index of the last pole (0-based).
+  //! \param[in] m index of the last knot (0-based).
+  //! \param[in] p degree of the B-spline basis function to use.
+  //! \return true/false.
+  mobiusBSpl_EXPORT bool
+    Check(const int n, const int m, const int p);
 
 };
 

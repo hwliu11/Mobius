@@ -202,16 +202,16 @@ std::string mobius::testEngine_ReportStyle::MakeDescriptor() const
   if ( m_props.IsBgColor() )
   {
     result += "background-color: ";
-    result += std::string("rgb(") + core::to_string(m_props.pBgColor->R) +
-              std::string(", ")   + core::to_string(m_props.pBgColor->G) +
-              std::string(", ")   + core::to_string(m_props.pBgColor->B) +
+    result += std::string("rgb(") + core::str::to_string(m_props.pBgColor->R) +
+              std::string(", ")   + core::str::to_string(m_props.pBgColor->G) +
+              std::string(", ")   + core::str::to_string(m_props.pBgColor->B) +
               std::string(");");
   }
 
   // Border
   if ( m_props.IsBorder() )
   {
-    result += std::string("border-width: ") + core::to_string(*m_props.pPxBorder) + "px;";
+    result += std::string("border-width: ") + core::str::to_string(*m_props.pPxBorder) + "px;";
     result += std::string("border-style: solid;");
     result += std::string("border-color: rgb(220, 220, 220);");
   }
@@ -220,9 +220,9 @@ std::string mobius::testEngine_ReportStyle::MakeDescriptor() const
   if ( m_props.IsColor() )
   {
     result += "color: ";
-    result += std::string("rgb(") + core::to_string(m_props.pColor->R) +
-              std::string(", ")   + core::to_string(m_props.pColor->G) +
-              std::string(", ")   + core::to_string(m_props.pColor->B) +
+    result += std::string("rgb(") + core::str::to_string(m_props.pColor->R) +
+              std::string(", ")   + core::str::to_string(m_props.pColor->G) +
+              std::string(", ")   + core::str::to_string(m_props.pColor->B) +
               std::string(");");
   }
 
@@ -235,7 +235,7 @@ std::string mobius::testEngine_ReportStyle::MakeDescriptor() const
   // Font size
   if ( m_props.IsFontSize() )
   {
-    result += std::string("font-size: ") + core::to_string(*m_props.pPxFont) + std::string("px;");
+    result += std::string("font-size: ") + core::str::to_string(*m_props.pPxFont) + std::string("px;");
   }
 
   // Font style
@@ -253,7 +253,7 @@ std::string mobius::testEngine_ReportStyle::MakeDescriptor() const
   // Padding
   if ( m_props.IsPadding() )
   {
-    result += std::string("padding: ") + core::to_string(*m_props.pPxPadding) + std::string("px;");
+    result += std::string("padding: ") + core::str::to_string(*m_props.pPxPadding) + std::string("px;");
   }
 
   // Text alignment
@@ -271,7 +271,7 @@ std::string mobius::testEngine_ReportStyle::MakeDescriptor() const
   // Width
   if ( m_props.IsWidth() )
   {
-    result += std::string("width: ") + core::to_string(*m_props.pWidth) + std::string(";");
+    result += std::string("width: ") + core::str::to_string(*m_props.pWidth) + std::string(";");
   }
 
   return result;
@@ -370,15 +370,15 @@ void mobius::testEngine_ReportStyle::nullify(const bool release)
 //! \param other [in] style to copy from.
 void mobius::testEngine_ReportStyle::deepCopy(const testEngine_ReportStyle& other)
 {
-  if ( other.m_props.IsBgColor() )    this->SetBgColor( *other.m_props.pBgColor );
-  if ( other.m_props.IsColor() )      this->SetColor( *other.m_props.pColor );
-  if ( other.m_props.IsFontFamily() ) this->SetFontFamily( *other.m_props.pFontFamily );
-  if ( other.m_props.IsFontStyle() )  this->SetFontStyle( *other.m_props.pFontStyle );
-  if ( other.m_props.IsFontWeight() ) this->SetFontWeight( *other.m_props.pFontWeight );
-  if ( other.m_props.IsBorder() )     this->SetBorder( *other.m_props.pPxBorder );
-  if ( other.m_props.IsFontSize() )   this->SetFontSize( *other.m_props.pPxFont );
-  if ( other.m_props.IsPadding() )    this->SetPadding( *other.m_props.pPxPadding );
-  if ( other.m_props.IsTextAlign() )  this->SetTextAlignment( *other.m_props.pTextAlign );
-  if ( other.m_props.IsVertAlign() )  this->SetVerticalAlignment( *other.m_props.pVertAlign );
-  if ( other.m_props.IsWidth() )      this->SetWidth( *other.m_props.pWidth );
+  if ( other.m_props.IsBgColor() )    this->SetBgColor           ( *other.m_props.pBgColor );
+  if ( other.m_props.IsColor() )      this->SetColor             ( *other.m_props.pColor );
+  if ( other.m_props.IsFontFamily() ) this->SetFontFamily        ( *other.m_props.pFontFamily );
+  if ( other.m_props.IsFontStyle() )  this->SetFontStyle         ( *other.m_props.pFontStyle );
+  if ( other.m_props.IsFontWeight() ) this->SetFontWeight        ( *other.m_props.pFontWeight );
+  if ( other.m_props.IsBorder() )     this->SetBorder            ( *other.m_props.pPxBorder );
+  if ( other.m_props.IsFontSize() )   this->SetFontSize          ( *other.m_props.pPxFont );
+  if ( other.m_props.IsPadding() )    this->SetPadding           ( *other.m_props.pPxPadding );
+  if ( other.m_props.IsTextAlign() )  this->SetTextAlignment     ( *other.m_props.pTextAlign );
+  if ( other.m_props.IsVertAlign() )  this->SetVerticalAlignment ( *other.m_props.pVertAlign );
+  if ( other.m_props.IsWidth() )      this->SetWidth             ( *other.m_props.pWidth );
 }

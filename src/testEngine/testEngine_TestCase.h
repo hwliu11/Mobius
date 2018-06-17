@@ -171,7 +171,7 @@ public:
                           const int          caseID,
                           const int          funcID)
   {
-    SetVarDescr(varName, core::to_string(val), caseID, funcID);
+    SetVarDescr(varName, core::str::to_string(val), caseID, funcID);
   }
 
   //! Overloaded variable setter for Boolean values.
@@ -200,10 +200,10 @@ public:
                           const int          funcID)
   {
     std::string xyzStr = std::string("[")
-                    + core::to_string( XYZ.X() ) + ", "
-                    + core::to_string( XYZ.Y() ) + ", "
-                    + core::to_string( XYZ.Z() )
-                    + std::string("]");
+                       + core::str::to_string( XYZ.X() ) + ", "
+                       + core::str::to_string( XYZ.Y() ) + ", "
+                       + core::str::to_string( XYZ.Z() )
+                       + std::string("]");
 
     SetVarDescr(varName, xyzStr, caseID, funcID);
   }
@@ -226,7 +226,7 @@ public:
     {
       for ( int i = 0; i < n; ++i )
       {
-        arrStr += core::to_string(arr[i]);
+        arrStr += core::str::to_string(arr[i]);
         if ( i != (n - 1) )
           arrStr += ", ";
       }
@@ -253,7 +253,7 @@ public:
     {
       for ( int i = 0; i < vec.size(); ++i )
       {
-        arrStr += core::to_string(vec[i]);
+        arrStr += core::str::to_string(vec[i]);
         if ( i != (vec.size() - 1) )
           arrStr += ", ";
       }
@@ -286,7 +286,7 @@ public:
         mxStr += "[";
         for ( int j = 0; j < nCols; ++j )
         {
-          mxStr += core::to_string(mx[i][j]);
+          mxStr += core::str::to_string(mx[i][j]);
           if ( j != (nCols - 1) )
             mxStr += ", ";
         }
@@ -318,8 +318,8 @@ private:
                                      const int          caseID,
                                      const int          funcID)
   {
-    return core::to_string(caseID) + testEngine_Macro_NAMESPACE +
-           core::to_string(funcID) + testEngine_Macro_NAMESPACE + varName;
+    return core::str::to_string(caseID) + testEngine_Macro_NAMESPACE +
+           core::str::to_string(funcID) + testEngine_Macro_NAMESPACE + varName;
   }
 
 private:

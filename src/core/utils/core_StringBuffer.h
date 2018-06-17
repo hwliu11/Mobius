@@ -82,7 +82,7 @@ public:
   //! \return this instance for subsequent streaming.
   core_StringBuffer& operator<<(const int val)
   {
-    String += core::to_string<int>(val);
+    String += core::str::to_string<int>(val);
     return *this;
   }
 
@@ -92,7 +92,7 @@ public:
   //! \return this instance for subsequent streaming.
   core_StringBuffer& operator<<(const size_t val)
   {
-    String += core::to_string<int>( (int) val );
+    String += core::str::to_string<int>( (int) val );
     return *this;
   }
 
@@ -102,7 +102,7 @@ public:
   //! \return this instance for subsequent streaming.
   core_StringBuffer& operator<<(const double val)
   {
-    String += core::to_string<double>(val);
+    String += core::str::to_string<double>(val);
     return *this;
   }
 
