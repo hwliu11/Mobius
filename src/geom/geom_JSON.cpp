@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 17 June 2018
+// Created on: 18 June 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,71 +28,72 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef core_JSON_HeaderFile
-#define core_JSON_HeaderFile
+// Own include
+#include <mobius/geom_JSON.h>
 
-// Core includes
-#include <mobius/core_XYZ.h>
+//-----------------------------------------------------------------------------
 
-namespace mobius {
+//! Constructor accepting JSON string to process.
+//! \param[in] json string representing JSON to process.
+mobius::geom_JSON::geom_JSON(const std::string& json)
+: core_JSON(json)
+{}
 
-//! \ingroup MOBIUS_CORE
-//!
-//! Utility class to process JSON objects.
-class core_JSON
+//-----------------------------------------------------------------------------
+
+//! Destructor.
+mobius::geom_JSON::~geom_JSON()
 {
-public:
+}
 
-  mobiusCore_EXPORT
-    core_JSON(const std::string& json);
+//-----------------------------------------------------------------------------
 
-  mobiusCore_EXPORT
-    ~core_JSON();
+bool mobius::geom_JSON::ExtractBCurve(core_Ptr<bcurve>& curve) const
+{
+  // Extract degree.
+  int p = 0;
+  if ( !this->ExtractNumericBlockForKey<int>("degree", p, 0) )
+    return false;
 
-public:
+  // Extract knot vector.
+  std::vector<double> U;
+  if ( !this->ExtractVector1d("knots", U) )
+    return false;
 
-  mobiusCore_EXPORT bool
-    ExtractBlockForKey(const std::string& key,
-                       std::string&       block) const;
+  // Extract poles.
+  std::vector<xyz> poles;
+  if ( !this->ExtractVector3d("poles", poles) )
+    return false;
 
-  mobiusCore_EXPORT bool
-    ExtractVector1d(const std::string&   keyword,
-                    std::vector<double>& vector) const;
+  // Construct B-curve.
+  curve = new bcurve(poles, U, p);
+  return true;
+}
 
-  mobiusCore_EXPORT bool
-    ExtractVector3d(const std::string& keyword,
-                    std::vector<xyz>&  vector) const;
+//-----------------------------------------------------------------------------
 
-  mobiusCore_EXPORT bool
-    ExtractGrid3d(const std::string&               keyword,
-                  std::vector< std::vector<xyz> >& vector) const;
+bool mobius::geom_JSON::ExtractBSurface(core_Ptr<bsurf>& surface) const
+{
+  // Extract degrees.
+  int p = 0, q = 0;
+  if ( !this->ExtractNumericBlockForKey<int>("U_degree", p, 0) )
+    return false;
+  if ( !this->ExtractNumericBlockForKey<int>("V_degree", q, 0) )
+    return false;
 
-public:
+  // Extract knot vectors.
+  std::vector<double> U, V;
+  if ( !this->ExtractVector1d("U_knots", U) )
+    return false;
+  if ( !this->ExtractVector1d("V_knots", V) )
+    return false;
 
-  template <typename T>
-    bool ExtractNumericBlockForKey(const std::string& key,
-                                   T&                 result,
-                                   const T            default_value = 0) const
-    {
-      std::string block;
-      if ( !this->ExtractBlockForKey(key, block) )
-        return false;
+  // Extract poles.
+  std::vector< std::vector<xyz> > poles;
+  if ( !this->ExtractGrid3d("poles", poles) )
+    return false;
 
-      // Check if the block represents a number.
-      if ( !core::str::is_number(block) )
-        return false;
-
-      // Extract number.
-      result = core::str::to_number<T>(block, default_value);
-      return true;
-    }
-
-protected:
-
-  std::string m_json; //!< JSON string to process.
-
-};
-
-};
-
-#endif
+  // Costruct B-surface.
+  surface = new bsurf(poles, U, V, p, q);
+  return true;
+}

@@ -73,13 +73,17 @@ public:
   static void Functions(MobiusTestFunctions& functions)
   {
     functions << &evalInDomain
-              << &evalOutDomain;
+              << &evalOutDomain
+              << &evalJSON1
+              << &evalJSON2;
   }
 
 private:
 
   static bool evalInDomain  (const int funcID);
   static bool evalOutDomain (const int funcID);
+  static bool evalJSON1     (const int funcID);
+  static bool evalJSON2     (const int funcID);
 
 };
 

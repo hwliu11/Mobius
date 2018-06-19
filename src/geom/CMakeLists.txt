@@ -8,6 +8,10 @@ set (H_FILES
   geom.h
   geom_excBCurveCtor.h
   geom_excBSurfaceCtor.h
+  geom_JSON.h
+)
+set (CPP_FILES
+  geom_JSON.cpp
 )
 
 #------------------------------------------------------------------------------

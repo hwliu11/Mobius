@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/geom_BSplineCurve.h>
 
+// Geom includes
+#include <mobius/geom_JSON.h>
+
 // Core includes
 #include <mobius/core_HeapAlloc.h>
 #include <mobius/core_JSON.h>
@@ -123,76 +126,24 @@ mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>&    Poles,
 
 //-----------------------------------------------------------------------------
 
-//! Constructs B-curve from JSON.
-//! \param json [in] JSON with curve data.
-mobius::geom_BSplineCurve::geom_BSplineCurve(const std::string& json)
-{
-  core_JSON tool(json);
-
-  // Extract degree.
-  int p = 0;
-  {
-    tool.ExtractNumericBlockForKey<int>("degree", p, 0);
-  }
-
-  // Extract knot vector.
-  std::vector<double> U;
-  {
-    std::string knotsBlock;
-    tool.ExtractBlockForKey("knots", knotsBlock);
-
-    std::vector<std::string> chunks;
-    core::str::split(knotsBlock, ",", chunks);
-
-    for ( size_t k = 0; k < chunks.size(); ++k )
-    {
-      if ( !core::str::is_number(chunks[k]) )
-        throw geom_excBCurveCtor();
-
-      U.push_back( core::str::to_number<double>(chunks[k]) );
-    }
-  }
-
-  // Extract poles.
-  std::vector<xyz> poles;
-  {
-    std::string polesBlock;
-    tool.ExtractBlockForKey("poles", polesBlock);
-
-    std::vector<std::string> chunks;
-    core::str::split(polesBlock, "][", chunks);
-
-    // Extract 3-coordinate tuples.
-    for ( size_t k = 0; k < chunks.size(); ++k )
-    {
-      if ( !core::str::is_number(chunks[k]) )
-        continue;
-
-      // Extract coordinates.
-      const std::string& coordStr = chunks[k];
-      std::vector<std::string> coordChunks;
-      core::str::split(coordStr, ",", coordChunks);
-
-      if ( coordChunks.size() != 3 )
-        throw geom_excBCurveCtor();
-
-      xyz P( core::str::to_number<double>(coordChunks[0], 0),
-             core::str::to_number<double>(coordChunks[1], 0),
-             core::str::to_number<double>(coordChunks[2], 0) );
-      //
-      poles.push_back(P);
-    }
-  }
-
-  // Initialize B-curve.
-  this->init(poles, U, p);
-}
-
-//-----------------------------------------------------------------------------
-
 //! Destructor.
 mobius::geom_BSplineCurve::~geom_BSplineCurve()
 {}
+
+//-----------------------------------------------------------------------------
+
+//! Constructs B-curve from JSON.
+//! \param[in] json JSON string to create a curve from.
+//! \return constructed B-curve or null if JSON is of invalid format.
+mobius::core_Ptr<mobius::geom_BSplineCurve>
+  mobius::geom_BSplineCurve::Instance(const std::string& json)
+{
+  core_Ptr<bcurve> result;
+  if ( !geom_JSON(json).ExtractBCurve(result) )
+    return NULL;
+
+  return result;
+}
 
 //-----------------------------------------------------------------------------
 

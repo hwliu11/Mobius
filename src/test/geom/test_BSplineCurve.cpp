@@ -78,7 +78,7 @@ bool mobius::test_BSplineCurve::evalInDomain(const int funcID)
   curve->Eval(u, P);
 
   // Check.
-  if ( (P - P_ref).Modulus() > eps  )
+  if ( (P - P_ref).Modulus() > eps )
     return false;
 
   return true;
@@ -128,7 +128,7 @@ bool mobius::test_BSplineCurve::evalOutDomainRight(const int funcID)
   curve->Eval(u, P);
 
   // Check.
-  if ( (P - P_ref).Modulus() > eps  )
+  if ( (P - P_ref).Modulus() > eps )
     return false;
 
   return true;
@@ -178,7 +178,7 @@ bool mobius::test_BSplineCurve::evalOutDomainLeft(const int funcID)
   curve->Eval(u, P);
 
   // Check.
-  if ( (P - P_ref).Modulus() > eps  )
+  if ( (P - P_ref).Modulus() > eps )
     return false;
 
   return true;
@@ -220,7 +220,10 @@ bool mobius::test_BSplineCurve::evalJSON1(const int funcID)
   }";
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = new bcurve(json);
+  core_Ptr<bcurve> curve = bcurve::Instance(json);
+  //
+  if ( curve.IsNull() )
+    return false;
 
   /* ==============
    *  Perform test
@@ -236,7 +239,7 @@ bool mobius::test_BSplineCurve::evalJSON1(const int funcID)
   curve->Eval(u, P);
 
   // Check.
-  if ( (P - P_ref).Modulus() > eps  )
+  if ( (P - P_ref).Modulus() > eps )
     return false;
 
   return true;
@@ -278,7 +281,10 @@ bool mobius::test_BSplineCurve::evalJSON2(const int funcID)
   }";
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = new bcurve(json);
+  core_Ptr<bcurve> curve = bcurve::Instance(json);
+  //
+  if ( curve.IsNull() )
+    return false;
 
   /* ==============
    *  Perform test
@@ -294,7 +300,7 @@ bool mobius::test_BSplineCurve::evalJSON2(const int funcID)
   curve->Eval(u, P);
 
   // Check.
-  if ( (P - P_ref).Modulus() > eps  )
+  if ( (P - P_ref).Modulus() > eps )
     return false;
 
   return true;

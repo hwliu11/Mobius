@@ -31,12 +31,18 @@
 // Own include
 #include <mobius/geom_BSplineSurface.h>
 
+// Geom includes
+#include <mobius/geom_JSON.h>
+
 // Core includes
 #include <mobius/core_HeapAlloc.h>
+#include <mobius/core_JSON.h>
 
 // BSpl includes
 #include <mobius/bspl_EffectiveN.h>
 #include <mobius/bspl_FindSpan.h>
+
+//-----------------------------------------------------------------------------
 
 //! Constructor.
 //! \param Poles [in] poles for B-spline surface.
@@ -66,6 +72,8 @@ mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<
   this->init(Poles, Uvec, Vvec, p, q);
 }
 
+//-----------------------------------------------------------------------------
+
 //! Constructor.
 //! \param Poles [in] poles for B-spline surface.
 //! \param U     [in] knot vector in U dimension.
@@ -82,9 +90,28 @@ mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<
   this->init(Poles, U, V, p, q);
 }
 
+//-----------------------------------------------------------------------------
+
 //! Destructor.
 mobius::geom_BSplineSurface::~geom_BSplineSurface()
 {}
+
+//-----------------------------------------------------------------------------
+
+//! Constructs B-surface from JSON.
+//! \param[in] json JSON string to create a surface from.
+//! \return constructed B-surface or null if JSON is of invalid format.
+mobius::core_Ptr<mobius::geom_BSplineSurface>
+  mobius::geom_BSplineSurface::Instance(const std::string& json)
+{
+  core_Ptr<bsurf> result;
+  if ( !geom_JSON(json).ExtractBSurface(result) )
+    return NULL;
+
+  return result;
+}
+
+//-----------------------------------------------------------------------------
 
 //! Dumps the surface data to string stream.
 //! \param stream [in/out] target stream.
@@ -94,6 +121,8 @@ void mobius::geom_BSplineSurface::Dump(std::stringstream& stream) const
          << "\t U degree (p) = " << m_iDegU << "\n"
          << "\t V degree (q) = " << m_iDegV << "\n";
 }
+
+//-----------------------------------------------------------------------------
 
 //! Calculates boundary box for the B-spline surface by its control polygon.
 //! Notice that this peculiarity can look weird as control polygon only
@@ -146,12 +175,16 @@ void mobius::geom_BSplineSurface::Bounds(double& xMin, double& xMax,
   zMax = z_max;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns first knot in U dimension.
 //! \return first knot.
 double mobius::geom_BSplineSurface::MinParameter_U() const
 {
   return m_U[0];
 }
+
+//-----------------------------------------------------------------------------
 
 //! Returns last knot in U dimension.
 //! \return last knot.
@@ -160,6 +193,8 @@ double mobius::geom_BSplineSurface::MaxParameter_U() const
   return m_U[m_U.size()-1];
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns first knot in V dimension.
 //! \return first knot.
 double mobius::geom_BSplineSurface::MinParameter_V() const
@@ -167,12 +202,16 @@ double mobius::geom_BSplineSurface::MinParameter_V() const
   return m_V[0];
 }
 
+//-----------------------------------------------------------------------------
+
 //! Returns last knot in V dimension.
 //! \return last knot.
 double mobius::geom_BSplineSurface::MaxParameter_V() const
 {
   return m_V[m_V.size()-1];
 }
+
+//-----------------------------------------------------------------------------
 
 //! Evaluates B-spline surface for the given pair of (u, v) parameters.
 //! This algorithm is essentially the algorithm A3.5 from The NURBS Book.
@@ -226,6 +265,8 @@ void mobius::geom_BSplineSurface::Eval(const double u,
   C = Res;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Extracts isoparametric curve corresponding to the passed {u} level.
 //! \param u [in] parameter value to extract isoparametric curve for.
 //! \return isoline.
@@ -269,6 +310,8 @@ mobius::Ptr<mobius::bcurve>
   Ptr<bcurve> Iso = new bcurve(Q, m_V, m_iDegV);
   return Iso;
 }
+
+//-----------------------------------------------------------------------------
 
 //! Extracts isoparametric curve corresponding to the passed {v} level.
 //! \param v [in] parameter value to extract isoparametric curve for.
@@ -314,6 +357,8 @@ mobius::Ptr<mobius::bcurve>
   return Iso;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Initializes B-spline surface with complete data.
 //! \param Poles [in] control points.
 //! \param U     [in] knot vector in U dimension.
@@ -331,10 +376,10 @@ void mobius::geom_BSplineSurface::init(const std::vector< std::vector<xyz> >& Po
     throw bspl_excMaxDegreeViolation();
 
   // Check if B-surface can be constructed.
-  if ( !bspl::Check(Poles.size() - 1, U.size() - 1, p) )
+  if ( !bspl::Check( int( Poles.size() ) - 1, int( U.size() ) - 1, p ) )
     throw geom_excBSurfaceCtor();
   //
-  if ( !bspl::Check(Poles[0].size() - 1, V.size() - 1, q) )
+  if ( !bspl::Check( int( Poles[0].size() ) - 1, int( V.size() ) - 1, q ) )
     throw geom_excBSurfaceCtor();
 
   m_poles = Poles;

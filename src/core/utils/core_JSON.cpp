@@ -150,3 +150,97 @@ bool mobius::core_JSON::ExtractBlockForKey(const std::string& key,
 
   return true;
 }
+
+//-----------------------------------------------------------------------------
+
+bool mobius::core_JSON::ExtractVector1d(const std::string&   keyword,
+                                        std::vector<double>& vector) const
+{
+  std::string block;
+  this->ExtractBlockForKey(keyword, block);
+
+  std::vector<std::string> chunks;
+  core::str::split(block, ",", chunks);
+
+  for ( size_t k = 0; k < chunks.size(); ++k )
+  {
+    if ( !core::str::is_number(chunks[k]) )
+      return false;
+
+    vector.push_back( core::str::to_number<double>(chunks[k]) );
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::core_JSON::ExtractVector3d(const std::string& keyword,
+                                        std::vector<xyz>&  vector) const
+{
+  std::string block;
+  this->ExtractBlockForKey(keyword, block);
+
+  std::vector<std::string> chunks;
+  core::str::split(block, "][", chunks);
+
+  // Extract 3-coordinate tuples.
+  for ( size_t k = 0; k < chunks.size(); ++k )
+  {
+    if ( !core::str::is_number(chunks[k]) )
+      continue;
+
+    // Extract coordinates.
+    const std::string& coordStr = chunks[k];
+    std::vector<std::string> coordChunks;
+    core::str::split(coordStr, ",", coordChunks);
+
+    if ( coordChunks.size() != 3 )
+      return false;
+
+    xyz P( core::str::to_number<double>(coordChunks[0], 0),
+           core::str::to_number<double>(coordChunks[1], 0),
+           core::str::to_number<double>(coordChunks[2], 0) );
+    //
+    vector.push_back(P);
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::core_JSON::ExtractGrid3d(const std::string&               keyword,
+                                      std::vector< std::vector<xyz> >& vector) const
+{
+  std::string block;
+  this->ExtractBlockForKey(keyword, block);
+
+  std::vector<std::string> rowChunks;
+  core::str::split(block, ":", rowChunks);
+
+  for ( size_t k = 0; k < rowChunks.size(); ++k )
+  {
+    std::vector<std::string> tupleChunks;
+    core::str::split(rowChunks[k], "][", tupleChunks);
+
+    if ( tupleChunks.size() < 3 )
+      continue;
+
+    std::vector<xyz> row;
+    for ( size_t j = 0; j < tupleChunks.size(); ++j )
+    {
+      std::vector<std::string> coordChunks;
+      core::str::split(tupleChunks[j], ",", coordChunks);
+
+      if ( coordChunks.size() != 3 )
+        continue;
+
+      xyz P( core::str::to_number<double>(coordChunks[0], 0),
+             core::str::to_number<double>(coordChunks[1], 0),
+             core::str::to_number<double>(coordChunks[2], 0) );
+      //
+      row.push_back(P);
+    }
+    //
+    vector.push_back(row);
+  }
+
+  return true;
+}

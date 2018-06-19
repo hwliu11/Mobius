@@ -63,11 +63,13 @@ public:
                       const std::vector<double>& U,
                       const int                  p);
 
-  mobiusGeom_EXPORT
-    geom_BSplineCurve(const std::string& json);
-
   mobiusGeom_EXPORT virtual
     ~geom_BSplineCurve();
+
+public:
+
+  mobiusGeom_EXPORT static core_Ptr<geom_BSplineCurve>
+    Instance(const std::string& json);
 
 public:
 

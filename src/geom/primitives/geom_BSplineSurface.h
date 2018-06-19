@@ -68,6 +68,11 @@ public:
 
 public:
 
+  mobiusGeom_EXPORT static core_Ptr<geom_BSplineSurface>
+    Instance(const std::string& json);
+
+public:
+
   mobiusGeom_EXPORT virtual void
     Dump(std::stringstream& stream) const;
 

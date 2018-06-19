@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 17 June 2018
+// Created on: 19 June 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,68 +28,38 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef core_JSON_HeaderFile
-#define core_JSON_HeaderFile
+#ifndef geom_JSON_HeaderFile
+#define geom_JSON_HeaderFile
+
+// Geom includes
+#include <mobius/geom_BSplineCurve.h>
+#include <mobius/geom_BSplineSurface.h>
 
 // Core includes
-#include <mobius/core_XYZ.h>
+#include <mobius/core_JSON.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_CORE
+//! \ingroup MOBIUS_GEOM
 //!
-//! Utility class to process JSON objects.
-class core_JSON
+//! Utility class to process JSON objects representing geometric primitives.
+class geom_JSON : public core_JSON
 {
 public:
 
-  mobiusCore_EXPORT
-    core_JSON(const std::string& json);
+  mobiusGeom_EXPORT
+    geom_JSON(const std::string& json);
 
-  mobiusCore_EXPORT
-    ~core_JSON();
-
-public:
-
-  mobiusCore_EXPORT bool
-    ExtractBlockForKey(const std::string& key,
-                       std::string&       block) const;
-
-  mobiusCore_EXPORT bool
-    ExtractVector1d(const std::string&   keyword,
-                    std::vector<double>& vector) const;
-
-  mobiusCore_EXPORT bool
-    ExtractVector3d(const std::string& keyword,
-                    std::vector<xyz>&  vector) const;
-
-  mobiusCore_EXPORT bool
-    ExtractGrid3d(const std::string&               keyword,
-                  std::vector< std::vector<xyz> >& vector) const;
+  mobiusGeom_EXPORT
+    ~geom_JSON();
 
 public:
 
-  template <typename T>
-    bool ExtractNumericBlockForKey(const std::string& key,
-                                   T&                 result,
-                                   const T            default_value = 0) const
-    {
-      std::string block;
-      if ( !this->ExtractBlockForKey(key, block) )
-        return false;
+  mobiusGeom_EXPORT bool
+    ExtractBCurve(core_Ptr<bcurve>& curve) const;
 
-      // Check if the block represents a number.
-      if ( !core::str::is_number(block) )
-        return false;
-
-      // Extract number.
-      result = core::str::to_number<T>(block, default_value);
-      return true;
-    }
-
-protected:
-
-  std::string m_json; //!< JSON string to process.
+  mobiusGeom_EXPORT bool
+    ExtractBSurface(core_Ptr<bsurf>& surface) const;
 
 };
 
