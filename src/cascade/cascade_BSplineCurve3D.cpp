@@ -278,7 +278,7 @@ void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
   std::vector<double>     srcU     = m_mobiusCurve->Knots();
   const int               srcDeg   = m_mobiusCurve->Degree();
 
-  // Poles are transferred as is
+  // Poles are transferred as-is.
   TColgp_Array1OfPnt occtPoles( 1, (int) srcPoles.size() );
   for ( int i = occtPoles.Lower(); i <= occtPoles.Upper(); ++i )
   {
@@ -291,7 +291,7 @@ void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
   // array with multiplicities. E.g. U = (0, 0, 1, 2, 2) is represented by
   // two arrays in OCCT: (0, 1, 2) and (2, 1, 2). Mobius is more straightforward
   // concerning this. MultResolver tool performs necessary conversion from
-  // Mobius to OCCT style
+  // Mobius to OCCT style.
   cascade_MultResolver MResolver;
   for ( int i = 0; i < (int) srcU.size(); ++i )
   {
@@ -302,11 +302,11 @@ void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
   Handle(TColStd_HArray1OfReal)    hKnots = MResolver.GetOpenCascadeKnots();
   Handle(TColStd_HArray1OfInteger) hMults = MResolver.GetOpenCascadeMults();
 
-  // Access actual knots and multiplicities
-  const TColStd_Array1OfReal& occtKnots = hKnots->Array1();
+  // Access actual knots and multiplicities.
+  const TColStd_Array1OfReal&    occtKnots = hKnots->Array1();
   const TColStd_Array1OfInteger& occtMults = hMults->Array1();
 
-  // Build OCCT curve from scratch
+  // Build OCCT curve from scratch.
   m_occtCurve = new Geom_BSplineCurve(occtPoles, occtKnots, occtMults, srcDeg);
   m_fMaxError = 0.0;
   m_bIsDone   = true;

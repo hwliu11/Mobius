@@ -32,6 +32,7 @@
 #define core_HeaderFile
 
 // STD includes
+#include <iomanip>
 #include <iostream>
 #include <math.h>
 #include <sstream>
@@ -180,17 +181,18 @@ namespace core
     static std::string to_string(T value)
     {
       std::ostringstream os;
+      os << std::setprecision( std::numeric_limits<double>::max_digits10 );
       os << value;
       return os.str();
     }
 
     //! Converts the passed string to number.
-    //! \param str [in] string to convert.
+    //! \param str           [in] string to convert.
     //! \param default_value [in] default value to use.
     //! \return string.
     template <typename T>
     static T to_number(const std::string& str,
-                       const T default_value = 0)
+                       const T            default_value = 0)
     {
       std::istringstream is(str);
       T result;

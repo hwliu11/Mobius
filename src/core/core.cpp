@@ -245,7 +245,7 @@ bool mobius::core::str::getKeyValue(const std::string& source,
   if ( chunks.size() != 2 )
     return false;
 
-  const int pos = chunks[0].find(key, 0); // Locate the substring to replace.
+  const size_t pos = chunks[0].find(key, 0); // Locate the substring to replace.
   if ( pos == std::string::npos )
     return false; // Key not found.
 

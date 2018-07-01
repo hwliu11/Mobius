@@ -169,6 +169,8 @@ bool mobius::core_JSON::ExtractVector1d(const std::string&   keyword,
 
     vector.push_back( core::str::to_number<double>(chunks[k]) );
   }
+
+  return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -202,6 +204,8 @@ bool mobius::core_JSON::ExtractVector3d(const std::string& keyword,
     //
     vector.push_back(P);
   }
+
+  return true;
 }
 
 //-----------------------------------------------------------------------------

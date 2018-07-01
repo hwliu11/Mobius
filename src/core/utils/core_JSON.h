@@ -70,22 +70,22 @@ public:
 public:
 
   template <typename T>
-    bool ExtractNumericBlockForKey(const std::string& key,
-                                   T&                 result,
-                                   const T            default_value = 0) const
-    {
-      std::string block;
-      if ( !this->ExtractBlockForKey(key, block) )
-        return false;
+  bool ExtractNumericBlockForKey(const std::string& key,
+                                  T&                 result,
+                                  const T            default_value = 0) const
+  {
+    std::string block;
+    if ( !this->ExtractBlockForKey(key, block) )
+      return false;
 
-      // Check if the block represents a number.
-      if ( !core::str::is_number(block) )
-        return false;
+    // Check if the block represents a number.
+    if ( !core::str::is_number(block) )
+      return false;
 
-      // Extract number.
-      result = core::str::to_number<T>(block, default_value);
-      return true;
-    }
+    // Extract number.
+    result = core::str::to_number<T>(block, default_value);
+    return true;
+  }
 
 protected:
 
