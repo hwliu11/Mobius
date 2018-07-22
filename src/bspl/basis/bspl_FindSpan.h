@@ -40,7 +40,11 @@ namespace mobius {
 //!
 //! \brief A2.1 from "The NURBS Book".
 //!
-//! Algorithm finding span index using binary search.
+//! Algorithm finding span index using binary search. This function works
+//! properly for clamped knot vectors only. If the passed value falls outside
+//! the min and max knot values, this function returns index of the closest
+//! non-degenerated span.
+//! 
 //!
 //! Inputs:
 //!   u -- target knot;
@@ -64,6 +68,10 @@ public:
 
   mobiusBSpl_EXPORT int
     operator()(const double u) const;
+
+  mobiusBSpl_EXPORT int
+    operator()(const double u,
+               int&         firstNonZeroIndex) const;
 
 private:
 

@@ -34,37 +34,14 @@
 // bspl includes
 #include <mobius/bspl_FindSpan.h>
 
-//! Constructor.
-mobius::test_FindSpan::test_FindSpan()
-{
-}
-
-//! Destructor.
-mobius::test_FindSpan::~test_FindSpan()
-{
-}
-
-//! Entry point.
-//! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::LaunchFunction()
-{
-  if ( !this->testCase1() )
-    return false;
-
-  if ( !this->testCase2() )
-    return false;
-
-  if ( !this->testCase3() )
-    return false;
-
-  return true;
-}
+//-----------------------------------------------------------------------------
 
 //! Test scenario 001.
+//! \param[in] funcID ID of the test function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::testCase1() const
+bool mobius::test_FindSpan::eval01(const int funcID)
 {
-  const std::vector<double> U = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0};
+  const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 5.0};
   const int p = 1;
   const double u1  = 0.0;
   const double u2  = 0.5;
@@ -93,13 +70,16 @@ bool mobius::test_FindSpan::testCase1() const
   int I11 = FindSpan(u11);
   int I12 = FindSpan(u12);
 
-  return I1 == 0 && I2 == 0 && I3 == 1 && I4 == 1 && I5 == 1 && I6 == 2 &&
-         I7 == 2 && I8 == 3 && I9 == 3 && I10 == 4 && I11 == 5 && I12 == 5;
+  return I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 2 && I6 == 3 &&
+         I7 == 3 && I8 == 4 && I9 == 4 && I10 == 5 && I11 == 5 && I12 == 5;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Test scenario 002.
+//! \param[in] funcID ID of the test function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::testCase2() const
+bool mobius::test_FindSpan::eval02(const int funcID)
 {
   const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 2.0};
   const int p = 1;
@@ -118,19 +98,22 @@ bool mobius::test_FindSpan::testCase2() const
   int I5 = FindSpan(u5);
   int I6 = FindSpan(u6);
 
-  return I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 4 && I6 == 4;
+  return I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 2 && I6 == 2;
 }
 
+//-----------------------------------------------------------------------------
+
 //! Test scenario 003.
+//! \param[in] funcID ID of the test function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::testCase3() const
+bool mobius::test_FindSpan::eval03(const int funcID)
 {
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
-  const int p = 1;
+  const int p = 2;
   const double u = 5.0;
 
   bspl_FindSpan FindSpan(U, p);
   int I = FindSpan(u);
 
-  return I == 5;
+  return I == 7;
 }

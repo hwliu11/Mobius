@@ -78,6 +78,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
   std::vector< core_Ptr<testEngine_CaseLauncherAPI> > CaseLaunchers;
   //
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset> );

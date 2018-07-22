@@ -39,8 +39,8 @@
 //-----------------------------------------------------------------------------
 
 //! Initializes the tool with all necessary B-spline properties.
-//! \param U [in] knot vector.
-//! \param p [in] degree.
+//! \param[in] U knot vector.
+//! \param[in] p degree of the corresponding basis splines.
 mobius::bspl_FindSpan::bspl_FindSpan(const std::vector<double>& U,
                                      const int                  p)
 : m_U(U), m_iDeg(p)
@@ -49,20 +49,39 @@ mobius::bspl_FindSpan::bspl_FindSpan(const std::vector<double>& U,
 //-----------------------------------------------------------------------------
 
 //! Finds the target span index by binary search.
-//! \param u [in] target parameter.
+//! \param[in] u target parameter.
 //! \return span index.
 int mobius::bspl_FindSpan::operator()(const double u) const
+{
+  int firstNonZeroIndex = 0; // Unused.
+  return this->operator()(u, firstNonZeroIndex);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Finds the target span index by binary search.
+//! \param[in]  u                 parameter in question.
+//! \param[out] firstNonZeroIndex index of the first non-zero basis spline.
+//! \return span index.
+int mobius::bspl_FindSpan::operator()(const double u,
+                                      int&         firstNonZeroIndex) const
 {
   const int nU = (int) m_U.size();
   const int p  = m_iDeg;
   const int m  = nU - 1;
   const int n  = m - p - 1;
   //
-  if ( u >= m_U[n + 1] )
-    return n;
-  //
   if ( u <= m_U[0] )
+  {
+    firstNonZeroIndex = 0;
     return p;
+  }
+  //
+  if ( u >= m_U[n + 1] )
+  {
+    firstNonZeroIndex = n - p;
+    return n;
+  }
 
   int  mid_idx;
   int  min_idx = 0;
@@ -96,5 +115,6 @@ int mobius::bspl_FindSpan::operator()(const double u) const
   }
   while ( !isFound );
 
+  firstNonZeroIndex = mid_idx;
   return mid_idx;
 }

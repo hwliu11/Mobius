@@ -44,44 +44,45 @@ namespace mobius {
 
 //! Unit test for B-spline basis algorithm dedicated to searching of
 //! knot intervals.
-class test_FindSpan
+class test_FindSpan : public testEngine_TestCase
 {
-// Construction & destruction:
-public:
-
-  test_FindSpan();
-  virtual ~test_FindSpan();
-
 public:
 
   //! Returns Test Case ID.
   //! \return ID of the Test Case.
-  virtual inline int ID() const
+  static int ID()
   {
     return CaseID_BSpl_FindSpan;
   }
 
-  //! Returns Test Case description.
-  //! \return description of the Test Case.
-  virtual std::string Description() const
+  //! Returns filename for the description.
+  //! \return filename for the description of the Test Case.
+  static std::string DescriptionFn()
   {
-    return "Test suite for the algorithm finding knot spans";
+    return "test_FindSpan";
   }
 
-public:
+  //! Returns Test Case description directory.
+  //! \return description directory for the Test Case.
+  static std::string DescriptionDir()
+  {
+    return "BSpl";
+  }
 
-  bool LaunchFunction();
+  //! Returns pointers to the Test Functions to launch.
+  //! \param[out] functions output collection of pointers.
+  static void Functions(MobiusTestFunctions& functions)
+  {
+    functions << &eval01
+              << &eval02
+              << &eval03;
+  }
 
 private:
 
-  bool testCase1() const;
-  bool testCase2() const;
-  bool testCase3() const;
-
-private:
-
-  virtual void beforeAll() {};
-  virtual void afterAll() {};
+  static bool eval01 (const int funcID);
+  static bool eval02 (const int funcID);
+  static bool eval03 (const int funcID);
 
 };
 
