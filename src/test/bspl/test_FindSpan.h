@@ -75,7 +75,8 @@ public:
   {
     functions << &eval01
               << &eval02
-              << &eval03;
+              << &eval03
+              << &eval04;
   }
 
 private:
@@ -83,6 +84,7 @@ private:
   static bool eval01 (const int funcID);
   static bool eval02 (const int funcID);
   static bool eval03 (const int funcID);
+  static bool eval04 (const int funcID);
 
 };
 

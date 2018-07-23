@@ -117,3 +117,160 @@ bool mobius::test_FindSpan::eval03(const int funcID)
 
   return I == 7;
 }
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 004. This function checks not only span indices but also
+//! the indices of the first non-vanishing spline functions returned.
+//! \param[in] funcID ID of the test function.
+//! \return true in case of success, false -- otherwise.
+bool mobius::test_FindSpan::eval04(const int funcID)
+{
+  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const int p = 2;
+
+  // Test 1.
+  {
+    const double u = 0.0;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 2 || basisIndex != 0 )
+      return false;
+  }
+
+  // Test 2.
+  {
+    const double u = 0.1;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 2 || basisIndex != 0 )
+      return false;
+  }
+
+  // Test 3.
+  {
+    const double u = 0.9;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 2 || basisIndex != 0 )
+      return false;
+  }
+
+  // Test 4.
+  {
+    const double u = 1.0;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 3 || basisIndex != 1 )
+      return false;
+  }
+
+  // Test 5.
+  {
+    const double u = 1.5;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 3 || basisIndex != 1 )
+      return false;
+  }
+
+  // Test 6.
+  {
+    const double u = 2;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 4 || basisIndex != 2 )
+      return false;
+  }
+
+  // Test 7.
+  {
+    const double u = 3;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 5 || basisIndex != 3 )
+      return false;
+  }
+
+  // Test 8.
+  {
+    const double u = 4;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 7 || basisIndex != 5 )
+      return false;
+  }
+
+  // Test 9.
+  {
+    const double u = 4.3;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 7 || basisIndex != 5 )
+      return false;
+  }
+
+  // Test 10.
+  {
+    const double u = 5;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 7 || basisIndex != 5 )
+      return false;
+  }
+
+  // Test 11.
+  {
+    const double u = 5.1;
+
+    bspl_FindSpan FindSpan(U, p);
+    //
+    int basisIndex = 0;
+    int I          = FindSpan(u, basisIndex);
+
+    if ( I != 7 || basisIndex != 5 )
+      return false;
+  }
+
+  return true;
+}

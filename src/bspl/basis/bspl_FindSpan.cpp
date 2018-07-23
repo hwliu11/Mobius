@@ -115,6 +115,6 @@ int mobius::bspl_FindSpan::operator()(const double u,
   }
   while ( !isFound );
 
-  firstNonZeroIndex = mid_idx;
+  firstNonZeroIndex = mid_idx - p;
   return mid_idx;
 }
