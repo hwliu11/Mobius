@@ -80,9 +80,9 @@ public:
 
 private:
 
-  static bool test1(const int funcID);
-  static bool test2(const int funcID);
-  static bool test3(const int funcID);
+  static outcome test1(const int funcID);
+  static outcome test2(const int funcID);
+  static outcome test3(const int funcID);
 
 };
 

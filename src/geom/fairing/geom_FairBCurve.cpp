@@ -45,7 +45,7 @@
 
 //-----------------------------------------------------------------------------
 
-#define COUT_DEBUG
+#undef COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
@@ -79,6 +79,10 @@ bool mobius::geom_FairBCurve::Perform()
   const int                  n   = m - p - 1;
   const int                  dim = n + 1 - NUM_CONSTRAINED_POLES_LEADING - NUM_CONSTRAINED_POLES_TRAILING;
 
+  // Prepare reusable memory block.
+  core_HeapAlloc2D<double> Alloc;
+  Alloc.Allocate(3, p + 1, true);
+
   // Initialize matrix from the passed row pointer.
   Eigen::MatrixXd eigen_A_mx(dim, dim);
   for ( int r = 0; r < dim; ++r )
@@ -86,7 +90,12 @@ bool mobius::geom_FairBCurve::Perform()
     for ( int c = 0; c < dim; ++c )
     {
       ptr<geom_FairingAijFunc>
-        N2 = new geom_FairingAijFunc(U, p, r + NUM_CONSTRAINED_POLES_LEADING, c + NUM_CONSTRAINED_POLES_LEADING, m_fLambda);
+        N2 = new geom_FairingAijFunc(U,
+                                     p,
+                                     r + NUM_CONSTRAINED_POLES_LEADING,
+                                     c + NUM_CONSTRAINED_POLES_LEADING,
+                                     m_fLambda,
+                                     &Alloc);
 
       // Compute integral.
       const double val = core_Integral::ComputeRect(N2.Access(),
@@ -107,13 +116,31 @@ bool mobius::geom_FairBCurve::Perform()
   for ( int r = 0; r < dim; ++r )
   {
     ptr<geom_FairingBjFunc>
-      rhs_x = new geom_FairingBjFunc(m_inputCurve, 0, U, p, r + NUM_CONSTRAINED_POLES_LEADING, m_fLambda);
+      rhs_x = new geom_FairingBjFunc(m_inputCurve,
+                                     0,
+                                     U,
+                                     p,
+                                     r + NUM_CONSTRAINED_POLES_LEADING,
+                                     m_fLambda,
+                                     &Alloc);
     //
     ptr<geom_FairingBjFunc>
-      rhs_y = new geom_FairingBjFunc(m_inputCurve, 1, U, p, r + NUM_CONSTRAINED_POLES_LEADING, m_fLambda);
+      rhs_y = new geom_FairingBjFunc(m_inputCurve,
+                                     1,
+                                     U,
+                                     p,
+                                     r + NUM_CONSTRAINED_POLES_LEADING,
+                                     m_fLambda,
+                                     &Alloc);
     //
     ptr<geom_FairingBjFunc>
-      rhs_z = new geom_FairingBjFunc(m_inputCurve, 2, U, p, r + NUM_CONSTRAINED_POLES_LEADING, m_fLambda);
+      rhs_z = new geom_FairingBjFunc(m_inputCurve,
+                                     2,
+                                     U,
+                                     p,
+                                     r + NUM_CONSTRAINED_POLES_LEADING,
+                                     m_fLambda,
+                                     &Alloc);
 
     // Compute integrals.
     const double

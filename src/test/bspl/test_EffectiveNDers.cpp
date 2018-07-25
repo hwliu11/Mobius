@@ -41,8 +41,10 @@
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_EffectiveNDers::test1(const int funcID)
+mobius::outcome mobius::test_EffectiveNDers::test1(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
   const int n = 3;
@@ -85,14 +87,16 @@ bool mobius::test_EffectiveNDers::test1(const int funcID)
         break;
       }
 
-  return isSuccess;
+  return isSuccess ? res.success() : res.failure();
 }
 
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_EffectiveNDers::test2(const int funcID)
+mobius::outcome mobius::test_EffectiveNDers::test2(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0, 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 5};
   const int p = 3;
   const int n = 4;
@@ -137,14 +141,16 @@ bool mobius::test_EffectiveNDers::test2(const int funcID)
         break;
       }
 
-  return isSuccess;
+  return isSuccess ? res.success() : res.failure();
 }
 
 //! Test scenario 003 (validated visually).
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_EffectiveNDers::test3(const int funcID)
+mobius::outcome mobius::test_EffectiveNDers::test3(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 0.0, 0.0, 2.0, 4.0, 6.0, 8.0, 8.0, 8.0, 8.0};
   const int p = 3;
   const int n = 1;
@@ -186,5 +192,5 @@ bool mobius::test_EffectiveNDers::test3(const int funcID)
         break;
       }
 
-  return isSuccess;
+  return isSuccess ? res.success() : res.failure();
 }

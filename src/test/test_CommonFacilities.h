@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 06 March 2015
+// Created on: 25 July 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,56 +28,35 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_BasisUnifyKnots_HeaderFile
-#define test_BasisUnifyKnots_HeaderFile
+#ifndef test_CommonFacilities_h
+#define test_CommonFacilities_h
 
-// Tests includes
-#include <mobius/test_CaseIDs.h>
-
-// testEngine includes
-#include <mobius/testEngine_TestCase.h>
-
-// core includes
-#include <mobius/core.h>
+// Test includes
+#include <mobius/test_ProgressNotifier.h>
 
 namespace mobius {
 
-//! Unit test for knots unification procedure.
-class test_UnifyKnots : public testEngine_TestCase
+//! Common tools and objects for unit tests.
+class test_CommonFacilities : public core_OBJECT
 {
 public:
 
-  //! Returns Test Case ID.
-  //! \return ID of the Test Case.
-  static int ID()
-  {
-    return CaseID_BSpl_UnifyKnots;
-  }
+  core_ProgressEntry ProgressNotifier; //!< Progress notifier.
 
-  //! Returns filename for the description.
-  //! \return filename for the description of the Test Case.
-  static std::string DescriptionFn()
-  {
-    return "test_UnifyKnots";
-  }
+public:
 
-  //! Returns Test Case description directory.
-  //! \return description directory for the Test Case.
-  static std::string DescriptionDir()
-  {
-    return "BSpl";
-  }
-
-  //! Returns pointers to the Test Functions to launch.
-  //! \param functions [out] output collection of pointers.
-  static void Functions(MobiusTestFunctions& functions)
-  {
-    functions << &test_unify;
-  }
+  //! \return single instance of facilities.
+  static ptr<test_CommonFacilities> Instance();
 
 private:
 
-  static outcome test_unify(const int funcID);
+  test_CommonFacilities() //!< ctor.
+  //
+  : core_OBJECT()
+  {
+    // Initialize progress notifier.
+    this->ProgressNotifier = core_ProgressEntry( new test_ProgressNotifier(std::cout) );
+  }
 
 };
 

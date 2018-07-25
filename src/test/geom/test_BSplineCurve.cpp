@@ -39,8 +39,11 @@
 //! Test scenario 001: evaluate B-curve in its domain.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineCurve::evalInDomain(const int funcID)
+mobius::outcome
+  mobius::test_BSplineCurve::evalInDomain(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -79,9 +82,9 @@ bool mobius::test_BSplineCurve::evalInDomain(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
@@ -89,8 +92,11 @@ bool mobius::test_BSplineCurve::evalInDomain(const int funcID)
 //! Test scenario 002: evaluate B-curve out of its domain on the right.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineCurve::evalOutDomainRight(const int funcID)
+mobius::outcome
+  mobius::test_BSplineCurve::evalOutDomainRight(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -129,9 +135,9 @@ bool mobius::test_BSplineCurve::evalOutDomainRight(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
@@ -139,8 +145,11 @@ bool mobius::test_BSplineCurve::evalOutDomainRight(const int funcID)
 //! Test scenario 003: evaluate B-curve out of its domain on the left.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineCurve::evalOutDomainLeft(const int funcID)
+mobius::outcome
+  mobius::test_BSplineCurve::evalOutDomainLeft(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -179,9 +188,9 @@ bool mobius::test_BSplineCurve::evalOutDomainLeft(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
@@ -190,8 +199,11 @@ bool mobius::test_BSplineCurve::evalOutDomainLeft(const int funcID)
 //! evaluated within its domain.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineCurve::evalJSON1(const int funcID)
+mobius::outcome
+  mobius::test_BSplineCurve::evalJSON1(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -223,7 +235,7 @@ bool mobius::test_BSplineCurve::evalJSON1(const int funcID)
   core_Ptr<bcurve> curve = bcurve::Instance(json);
   //
   if ( curve.IsNull() )
-    return false;
+    return res.failure();
 
   /* ==============
    *  Perform test
@@ -240,9 +252,9 @@ bool mobius::test_BSplineCurve::evalJSON1(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
@@ -251,8 +263,11 @@ bool mobius::test_BSplineCurve::evalJSON1(const int funcID)
 //! evaluated within its domain.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineCurve::evalJSON2(const int funcID)
+mobius::outcome
+  mobius::test_BSplineCurve::evalJSON2(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -284,7 +299,7 @@ bool mobius::test_BSplineCurve::evalJSON2(const int funcID)
   core_Ptr<bcurve> curve = bcurve::Instance(json);
   //
   if ( curve.IsNull() )
-    return false;
+    return res.failure();
 
   /* ==============
    *  Perform test
@@ -301,7 +316,7 @@ bool mobius::test_BSplineCurve::evalJSON2(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }

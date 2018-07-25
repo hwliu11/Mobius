@@ -5,6 +5,7 @@ project (mobiusTestEngine)
 #------------------------------------------------------------------------------
 
 set (H_FILES
+  outcome.h
   testEngine.h
   testEngine_Launcher.h
   testEngine_Macro.h

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 15 January 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2014-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -37,11 +37,16 @@
 // Standard includes
 #include <math.h>
 
+//-----------------------------------------------------------------------------
+
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::create(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::create(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
@@ -67,22 +72,27 @@ bool mobius::test_Quaternion::create(const int funcID)
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qx_ref - Q.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qy_ref - Q.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qz_ref - Q.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::add(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::add(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
@@ -113,22 +123,27 @@ bool mobius::test_Quaternion::add(const int funcID)
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qx_ref - Q.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qy_ref - Q.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qz_ref - Q.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 003.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::subtract(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::subtract(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
@@ -159,22 +174,27 @@ bool mobius::test_Quaternion::subtract(const int funcID)
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qx_ref - Q.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qy_ref - Q.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qz_ref - Q.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 004.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::product_qn(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::product_qn(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
@@ -205,22 +225,27 @@ bool mobius::test_Quaternion::product_qn(const int funcID)
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qx_ref - Q.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qy_ref - Q.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qz_ref - Q.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 005.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::product_scalar(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::product_scalar(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis(1.0, 1.2, 1.4);
   const double ang = 135*M_PI/180, C = 10.0;
   core_Quaternion Q(axis, ang);
@@ -250,22 +275,27 @@ bool mobius::test_Quaternion::product_scalar(const int funcID)
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qx_ref - Q.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qy_ref - Q.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qz_ref - Q.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 006.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::dot_product(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::dot_product(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
@@ -286,16 +316,21 @@ bool mobius::test_Quaternion::dot_product(const int funcID)
 
   // Verification
   if ( fabs(dot - dot_ref) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 007.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::cross_product(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::cross_product(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
@@ -326,22 +361,27 @@ bool mobius::test_Quaternion::cross_product(const int funcID)
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qx_ref - Q.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qy_ref - Q.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qz_ref - Q.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 008.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::invert(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::invert(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
@@ -384,30 +424,35 @@ bool mobius::test_Quaternion::invert(const int funcID)
 
   // Verification
   if ( fabs(p0_ref - P.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(px_ref - P.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(py_ref - P.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(pz_ref - P.Qz()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(r0_ref - R.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(rx_ref - R.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(ry_ref - R.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(rz_ref - R.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 009.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::conjugate(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::conjugate(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
@@ -436,22 +481,27 @@ bool mobius::test_Quaternion::conjugate(const int funcID)
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qx_ref - Q.Qx()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qy_ref - Q.Qy()) > tol )
-    return false;
+    return res.failure();
   if ( fabs(qz_ref - Q.Qz()) > tol )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 010.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Quaternion::to_matrix(const int funcID)
+mobius::outcome
+  mobius::test_Quaternion::to_matrix(const int funcID)
 {
+  outcome res;
+
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
@@ -480,7 +530,7 @@ bool mobius::test_Quaternion::to_matrix(const int funcID)
   for ( int r = 0; r < 3; ++r )
     for ( int c = 0; c < 3; ++c )
       if ( fabs(m_ref[r][c] - mx[r][c]) > tol )
-        return false;
+        return res.failure();
 
-  return true;
+  return res.success();
 }

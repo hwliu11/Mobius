@@ -48,10 +48,10 @@ mobius::test_N::~test_N()
 //! \return true in case of success, false -- otherwise.
 bool mobius::test_N::LaunchFunction()
 {
-  if ( !this->testCase1() )
+  if ( !this->testCase1().ok )
     return false;
 
-  if ( !this->testCase2() )
+  if ( !this->testCase2().ok )
     return false;
 
   return true;
@@ -59,8 +59,10 @@ bool mobius::test_N::LaunchFunction()
 
 //! Test scenario 001.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_N::testCase1() const
+mobius::outcome mobius::test_N::testCase1() const
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.2, 0.5, 1.0};
   const int p = 0;
 
@@ -88,13 +90,15 @@ bool mobius::test_N::testCase1() const
   std::cout << val_2_0 << " " << val_2_1 << " " << val_2_2 << std::endl;
   std::cout << val_3_0 << " " << val_3_1 << " " << val_3_2 << std::endl;
 
-  return true;
+  return res.success();
 }
 
 //! Test scenario 002.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_N::testCase2() const
+mobius::outcome mobius::test_N::testCase2() const
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 0.2, 0.5, 1.0, 1.0};
   const int p = 1;
 
@@ -126,5 +130,5 @@ bool mobius::test_N::testCase2() const
   std::cout << val_2_0 << " " << val_2_1 << " " << val_2_2 << " " << val_2_3 << std::endl;
   std::cout << val_3_0 << " " << val_3_1 << " " << val_3_2 << " " << val_3_3 << std::endl;
 
-  return false;
+  return res.success();
 }

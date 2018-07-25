@@ -35,6 +35,9 @@
 #include <mobius/geom_BSplineCurve.h>
 #include <mobius/geom_FairingCoeffFunc.h>
 
+// Core includes
+#include <mobius/core_HeapAlloc.h>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
@@ -51,13 +54,15 @@ public:
   //! \param[in] p      B-spline degree.
   //! \param[in] i      0-based index of the B-spline function.
   //! \param[in] lambda fairing coefficent.
+  //! \param[in] alloc  memory block.
   mobiusGeom_EXPORT
     geom_FairingBjFunc(const ptr<bcurve>&         curve,
                        const int                  coord,
                        const std::vector<double>& U,
                        const int                  p,
                        const int                  i,
-                       const double               lambda);
+                       const double               lambda,
+                       core_HeapAlloc2D<double>*  alloc);
 
 public:
 
@@ -78,6 +83,7 @@ protected:
   const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
   int                        m_iDegree; //!< Degree of the spline function.
   int                        m_iIndex;  //!< 0-based index of the spline function.
+  core_HeapAlloc2D<double>*  m_alloc;   //!< Pre-allocated memory block.
 
 };
 

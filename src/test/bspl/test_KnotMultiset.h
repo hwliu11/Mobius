@@ -80,10 +80,10 @@ public:
 
 private:
 
-  static bool test_convert       (const int funcID);
-  static bool test_unite         (const int funcID);
-  static bool test_subtract      (const int funcID);
-  static bool test_find_addendum (const int funcID);
+  static outcome test_convert       (const int funcID);
+  static outcome test_unite         (const int funcID);
+  static outcome test_subtract      (const int funcID);
+  static outcome test_find_addendum (const int funcID);
 
 };
 

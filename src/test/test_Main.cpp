@@ -33,6 +33,7 @@
 #include <mobius/test_BSplineSurface.h>
 #include <mobius/test_EffectiveN.h>
 #include <mobius/test_EffectiveNDers.h>
+#include <mobius/test_FairCurve.h>
 #include <mobius/test_FindSpan.h>
 #include <mobius/test_KnotMultiset.h>
 #include <mobius/test_N.h>
@@ -93,6 +94,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve> );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve> );
 
   // Launcher of entire test suite
   testEngine_Launcher Launcher;

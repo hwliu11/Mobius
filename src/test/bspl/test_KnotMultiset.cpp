@@ -37,11 +37,16 @@
 // bspl includes
 #include <mobius/bspl_KnotMultiset.h>
 
+//-----------------------------------------------------------------------------
+
 //! Tests conversion of vector to multiset and back.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_KnotMultiset::test_convert(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_KnotMultiset::test_convert(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int    nU  = sizeof(U)/sizeof(double);
 
@@ -66,20 +71,25 @@ bool mobius::test_KnotMultiset::test_convert(const int test_NotUsed(funcID))
 
   // Compare multisets
   if ( ref_mset != mset )
-    return false;
+    return res.failure();
 
   // Compare vectors
   if ( U_back != U_vec )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Tests union operation.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_KnotMultiset::test_unite(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_KnotMultiset::test_unite(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9};
   const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
   const int    nU  = sizeof(U)/sizeof(double);
@@ -113,16 +123,21 @@ bool mobius::test_KnotMultiset::test_unite(const int test_NotUsed(funcID))
 
   // Compare multisets
   if ( ref_mset != UV_mset )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Tests subtraction.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_KnotMultiset::test_subtract(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_KnotMultiset::test_subtract(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9, 10, 10};
   const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
   const int    nU  = sizeof(U)/sizeof(double);
@@ -151,17 +166,22 @@ bool mobius::test_KnotMultiset::test_subtract(const int test_NotUsed(funcID))
 
   // Compare multisets
   if ( ref_mset != UV_mset )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Tests complex case consisting in finding addendum to a given knot
 //! vector, so that it becomes compatible with other ones.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_KnotMultiset::test_find_addendum(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_KnotMultiset::test_find_addendum(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   const double U[] = {0, 0, 0, 1, 2, 3};
   const double V[] = {2, 2, 3, 5, 6};
   const double W[] = {0, 4, 8};
@@ -199,7 +219,7 @@ bool mobius::test_KnotMultiset::test_find_addendum(const int test_NotUsed(funcID
 
   // Compare multisets
   if ( ref_mset != UV_mset )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }

@@ -37,7 +37,8 @@
 //! Test scenario 001.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test1(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test1(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -51,7 +52,8 @@ bool mobius::test_PointOnLine::test1(const int funcID)
 //! Test scenario 002.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test2(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test2(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -65,7 +67,8 @@ bool mobius::test_PointOnLine::test2(const int funcID)
 //! Test scenario 003.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test3(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test3(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -79,7 +82,8 @@ bool mobius::test_PointOnLine::test3(const int funcID)
 //! Test scenario 004.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test4(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test4(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -93,7 +97,8 @@ bool mobius::test_PointOnLine::test4(const int funcID)
 //! Test scenario 005.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test5(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test5(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -107,7 +112,8 @@ bool mobius::test_PointOnLine::test5(const int funcID)
 //! Test scenario 006.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test6(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test6(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -121,7 +127,8 @@ bool mobius::test_PointOnLine::test6(const int funcID)
 //! Test scenario 007.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test7(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test7(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -135,7 +142,8 @@ bool mobius::test_PointOnLine::test7(const int funcID)
 //! Test scenario 008.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::test8(const int funcID)
+mobius::outcome
+  mobius::test_PointOnLine::test8(const int funcID)
 {
   // Line & point properties
   xyz O(0, 0, 0);
@@ -158,13 +166,16 @@ bool mobius::test_PointOnLine::test8(const int funcID)
 //! \param classiPrec [in] classification precision.
 //! \param resultRef  [in] expected result.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_PointOnLine::doTest(const int    funcID,
-                                      const xyz&   LineOri,
-                                      const xyz&   LineDir,
-                                      const xyz&   P,
-                                      const double classiPrec,
-                                      const bool   resultRef)
+mobius::outcome
+  mobius::test_PointOnLine::doTest(const int    funcID,
+                                   const xyz&   LineOri,
+                                   const xyz&   LineDir,
+                                   const xyz&   P,
+                                   const double classiPrec,
+                                   const bool   resultRef)
 {
+  outcome res;
+
   // Construct line
   core_Ptr<geom_Line> L = new geom_Line(LineOri, LineDir);
 
@@ -186,7 +197,7 @@ bool mobius::test_PointOnLine::doTest(const int    funcID,
    * ==================== */
 
   if ( result != resultRef )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }

@@ -34,6 +34,9 @@
 // asiAlgo includes
 #include <mobius/geom_FairingCoeffFunc.h>
 
+// Core includes
+#include <mobius/core_HeapAlloc.h>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
@@ -49,12 +52,14 @@ public:
   //! \param[in] i      0-based index 1.
   //! \param[in] j      0-based index 2.
   //! \param[in] lambda fairing coefficent.
+  //! \param[in] alloc  memory block.
   mobiusGeom_EXPORT
     geom_FairingAijFunc(const std::vector<double>& U,
                         const int                  p,
                         const int                  i,
                         const int                  j,
-                        const double               lambda);
+                        const double               lambda,
+                        core_HeapAlloc2D<double>*  alloc);
 
 public:
 
@@ -74,6 +79,7 @@ protected:
   int                        m_iDegree; //!< Degree of the spline function.
   int                        m_iIndex1; //!< 0-based index 1.
   int                        m_iIndex2; //!< 0-based index 2.
+  core_HeapAlloc2D<double>*  m_alloc;   //!< Allocator with reserved memory block.
 
 };
 

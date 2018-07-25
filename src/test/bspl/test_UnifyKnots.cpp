@@ -41,8 +41,11 @@
 //! Tests unification.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_UnifyKnots::test_unify(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_UnifyKnots::test_unify(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   const double U[] = {0, 0, 1, 2, 3};
   const double V[] = {2, 2, 3, 5, 6};
   const double W[] = {0, 4, 8};
@@ -101,12 +104,12 @@ bool mobius::test_UnifyKnots::test_unify(const int test_NotUsed(funcID))
   //----------------------
 
   if ( X.size() != refs.size() )
-    return false;
+    return res.failure();
 
   for ( size_t i = 0; i < refs.size(); ++i )
   {
     if ( refs[i] != X[i] )
-      return false;
+      return res.failure();
   }
 
   //----------------------------------------------
@@ -136,7 +139,7 @@ bool mobius::test_UnifyKnots::test_unify(const int test_NotUsed(funcID))
 
   // Verify
   if ( U_final != ref_unified || V_final != ref_unified || W_final != ref_unified )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }

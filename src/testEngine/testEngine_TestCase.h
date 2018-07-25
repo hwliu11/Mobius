@@ -53,7 +53,7 @@ namespace mobius {
 //! Pointer to Test Function.
 //! Please note that {funcID} should be normally passed by Test Case. The
 //! convention is to have {funcID} as 1-based integer number.
-typedef bool (*MobiusTestFunction)(const int funcID);
+typedef outcome (*MobiusTestFunction)(const int funcID);
 
 //! Collection of pointers to Test Functions
 class MobiusTestFunctions

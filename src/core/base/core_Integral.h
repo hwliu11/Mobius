@@ -49,10 +49,10 @@ namespace core_Integral
   //! \param[in] n number of bins.
   //! \return integral value.
   mobiusCore_EXPORT double
-    ComputeRect(const ptr<core_UnivariateFunc>& F,
-                const double                    a,
-                const double                    b,
-                const int                       n);
+    ComputeRect(core_UnivariateFunc* F,
+                const double         a,
+                const double         b,
+                const int            n);
 
 };
 

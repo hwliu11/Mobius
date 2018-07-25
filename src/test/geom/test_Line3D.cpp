@@ -37,8 +37,11 @@
 //! Test scenario 001.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_Line3D::test1(const int funcID)
+mobius::outcome
+  mobius::test_Line3D::test1(const int funcID)
 {
+  outcome res;
+
   // Line properties
   core_XYZ O(1, 1, 1);
   core_XYZ Dir(1, 2, 3);
@@ -73,17 +76,17 @@ bool mobius::test_Line3D::test1(const int funcID)
   const double prec = 1.0e-6;
 
   if ( xMin != -DBL_MAX )
-    return false;
+    return res.failure();
   if ( yMin != -DBL_MAX )
-    return false;
+    return res.failure();
   if ( zMin != -DBL_MAX )
-    return false;
+    return res.failure();
   if ( xMax != DBL_MAX )
-    return false;
+    return res.failure();
   if ( yMax != DBL_MAX )
-    return false;
+    return res.failure();
   if ( zMax != DBL_MAX )
-    return false;
+    return res.failure();
 
   /* ===========================
    *  Verify evaluation results
@@ -94,8 +97,8 @@ bool mobius::test_Line3D::test1(const int funcID)
   {
     const double dist = (P[pt_idx] - P_ref[pt_idx]).Modulus();
     if ( dist > prec )
-      return false;
+      return res.failure();
   }
 
-  return true;
+  return res.success();
 }

@@ -36,7 +36,9 @@
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
+#include <mobius/core_Integral.h>
 #include <mobius/core_JSON.h>
+#include <mobius/core_UnivariateFunc.h>
 
 // BSpl includes
 #include <mobius/bspl_EffectiveN.h>
@@ -47,6 +49,54 @@
 
 // STD includes
 #include <algorithm>
+
+//-----------------------------------------------------------------------------
+
+namespace mobius {
+
+//! \ingroup MOBIUS_GEOM
+//!
+//! Univariate function representing the squared second derivative of
+//! a parametric curve.
+class geom_CuuSquared : public core_UnivariateFunc
+{
+public:
+
+  //! ctor.
+  //! \param[in] curve parametric curve in question.
+  geom_CuuSquared(const ptr<geom_BSplineCurve>& curve) : core_UnivariateFunc()
+  {
+    m_curve = curve;
+  }
+
+public:
+
+  //! Evaluates the second derivative squared.
+  //! \param[in] u parameter value.
+  //! \return evaluated function.
+  virtual double Eval(const double u) const
+  {
+    xyz D2;
+    m_curve->Eval_Dk(u, 2, D2);
+
+    return D2.Dot(D2);
+  }
+
+public:
+
+  //! \return curve in question.
+  const ptr<geom_BSplineCurve>& GetCurve() const
+  {
+    return m_curve;
+  }
+
+protected:
+
+  ptr<geom_BSplineCurve> m_curve; //!< Curve.
+
+};
+
+};
 
 //-----------------------------------------------------------------------------
 
@@ -609,6 +659,22 @@ void mobius::geom_BSplineCurve::ReparameterizeLinear(const double s_min,
                               s_min,
                               s_max);
   }
+}
+
+//-----------------------------------------------------------------------------
+
+double mobius::geom_BSplineCurve::ComputeStrainEnergy() const
+{
+  const int NUM_INTEGRATION_BINS = 500;
+
+  geom_CuuSquared Cuu2Func(this);
+
+  const double
+    result = core_Integral::ComputeRect( &Cuu2Func,
+                                         this->MinParameter(),
+                                         this->MaxParameter(),
+                                         NUM_INTEGRATION_BINS );
+  return result;
 }
 
 //-----------------------------------------------------------------------------

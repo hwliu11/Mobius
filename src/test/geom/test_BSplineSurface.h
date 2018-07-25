@@ -80,10 +80,10 @@ public:
 
 private:
 
-  static bool evalInDomain  (const int funcID);
-  static bool evalOutDomain (const int funcID);
-  static bool evalJSON1     (const int funcID);
-  static bool evalJSON2     (const int funcID);
+  static outcome evalInDomain  (const int funcID);
+  static outcome evalOutDomain (const int funcID);
+  static outcome evalJSON1     (const int funcID);
+  static outcome evalJSON2     (const int funcID);
 
 };
 

@@ -43,4 +43,6 @@
 
 #define testEngine_NotUsed(x)
 
+#include <mobius/outcome.h>
+
 #endif

@@ -81,11 +81,11 @@ public:
 
 private:
 
-  static bool test1(const int funcID);
-  static bool test2(const int funcID);
-  static bool test3(const int funcID);
-  static bool test4(const int funcID);
-  static bool test5(const int funcID);
+  static outcome test1(const int funcID);
+  static outcome test2(const int funcID);
+  static outcome test3(const int funcID);
+  static outcome test4(const int funcID);
+  static outcome test5(const int funcID);
 
 };
 

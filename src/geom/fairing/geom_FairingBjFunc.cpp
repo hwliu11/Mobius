@@ -35,10 +35,7 @@
 #include <mobius/bspl_EffectiveNDers.h>
 #include <mobius/bspl_FindSpan.h>
 
-// Core includes
-#include <mobius/core_HeapAlloc.h>
-
-#define COUT_DEBUG
+#undef COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
@@ -50,13 +47,15 @@ mobius::geom_FairingBjFunc::geom_FairingBjFunc(const ptr<bcurve>&         curve,
                                                const std::vector<double>& U,
                                                const int                  p,
                                                const int                  i,
-                                               const double               lambda)
+                                               const double               lambda,
+                                               core_HeapAlloc2D<double>*  alloc)
 : geom_FairingCoeffFunc (lambda),
   m_U                   (U),
   m_curve               (curve),
   m_iCoord              (coord),
   m_iDegree             (p),
-  m_iIndex              (i)
+  m_iIndex              (i),
+  m_alloc               (alloc)
 {}
 
 //-----------------------------------------------------------------------------
@@ -80,8 +79,7 @@ double mobius::geom_FairingBjFunc::Eval(const double u) const
   bspl_EffectiveNDers Eval;
 
   // Prepare matrix.
-  core_HeapAlloc2D<double> Alloc;
-  double** dN = Alloc.Allocate(3, order, true);
+  double** dN = m_alloc->Access(0).Ptr;
 
   // Evaluate.
   Eval(u, m_U, m_iDegree, I, 2, dN);

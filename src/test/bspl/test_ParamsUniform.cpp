@@ -37,8 +37,11 @@
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_ParamsUniform::test1(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_ParamsUniform::test1(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   // Index of the last parameter
   const int n = 2;
 
@@ -50,7 +53,7 @@ bool mobius::test_ParamsUniform::test1(const int test_NotUsed(funcID))
   if ( bspl_ParamsUniform::Calculate(n, t) != bspl_ParamsUniform::ErrCode_NoError )
   {
     delete[] t;
-    return false;
+    return res.failure();
   }
 
   /* -----------------------
@@ -75,18 +78,21 @@ bool mobius::test_ParamsUniform::test1(const int test_NotUsed(funcID))
     if ( fabs(t_ref[k] - t[k]) > tol )
     {
       delete[] t;
-      return false;
+      return res.failure();
     }
 
   delete[] t;
-  return true;
+  return res.success();
 }
 
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_ParamsUniform::test2(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_ParamsUniform::test2(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   // Index of the last parameter
   const int n = 3;
 
@@ -98,7 +104,7 @@ bool mobius::test_ParamsUniform::test2(const int test_NotUsed(funcID))
   if ( bspl_ParamsUniform::Calculate(n, t) != bspl_ParamsUniform::ErrCode_NoError )
   {
     delete[] t;
-    return false;
+    return res.failure();
   }
 
   /* -----------------------
@@ -123,9 +129,9 @@ bool mobius::test_ParamsUniform::test2(const int test_NotUsed(funcID))
     if ( fabs(t_ref[k] - t[k]) > tol )
     {
       delete[] t;
-      return false;
+      return res.failure();
     }
 
   delete[] t;
-  return true;
+  return res.success();
 }

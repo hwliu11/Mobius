@@ -77,7 +77,7 @@ public:
 
 private:
 
-  static bool test1(const int funcID);
+  static outcome test1(const int funcID);
 
 };
 

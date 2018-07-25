@@ -86,16 +86,16 @@ public:
 
 private:
 
-  static bool create        (const int funcID);
-  static bool add           (const int funcID);
-  static bool subtract      (const int funcID);
-  static bool product_qn    (const int funcID);
-  static bool product_scalar(const int funcID);
-  static bool dot_product   (const int funcID);
-  static bool cross_product (const int funcID);
-  static bool invert        (const int funcID);
-  static bool conjugate     (const int funcID);
-  static bool to_matrix     (const int funcID);
+  static outcome create        (const int funcID);
+  static outcome add           (const int funcID);
+  static outcome subtract      (const int funcID);
+  static outcome product_qn    (const int funcID);
+  static outcome product_scalar(const int funcID);
+  static outcome dot_product   (const int funcID);
+  static outcome cross_product (const int funcID);
+  static outcome invert        (const int funcID);
+  static outcome conjugate     (const int funcID);
+  static outcome to_matrix     (const int funcID);
 
 };
 

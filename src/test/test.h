@@ -31,6 +31,6 @@
 #ifndef test_HeaderFile
 #define test_HeaderFile
 
-#define test_NotUsed(x)
+#define test_NotUsed(x) x
 
 #endif

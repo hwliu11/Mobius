@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 06 March 2015
+// Created on: 28 June 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,22 +28,19 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_BasisUnifyKnots_HeaderFile
-#define test_BasisUnifyKnots_HeaderFile
+#ifndef test_FairCurve_HeaderFile
+#define test_FairCurve_HeaderFile
 
-// Tests includes
+// Test includes
 #include <mobius/test_CaseIDs.h>
 
-// testEngine includes
+// TestEngine includes
 #include <mobius/testEngine_TestCase.h>
-
-// core includes
-#include <mobius/core.h>
 
 namespace mobius {
 
-//! Unit test for knots unification procedure.
-class test_UnifyKnots : public testEngine_TestCase
+//! Test functions for curve fairing.
+class test_FairCurve : public testEngine_TestCase
 {
 public:
 
@@ -51,33 +48,45 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_BSpl_UnifyKnots;
+    return CaseID_Geom_FairCurve;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "test_UnifyKnots";
+    return "test_FairCurve";
   }
 
   //! Returns Test Case description directory.
   //! \return description directory for the Test Case.
   static std::string DescriptionDir()
   {
-    return "BSpl";
+    return "editing";
   }
 
   //! Returns pointers to the Test Functions to launch.
-  //! \param functions [out] output collection of pointers.
+  //! \param[out] functions output collection of pointers.
   static void Functions(MobiusTestFunctions& functions)
   {
-    functions << &test_unify;
+    functions << &test001
+              << &test002
+              << &test003
+    ; // Put semicolon here for convenient adding new functions above ;)
   }
 
 private:
 
-  static outcome test_unify(const int funcID);
+  static outcome runtest(const int          funcID,
+                         const std::string& json,
+                         double             lambdas[4],
+                         double             refStrains[4]);
+
+private:
+
+  static outcome test001(const int funcID);
+  static outcome test002(const int funcID);
+  static outcome test003(const int funcID);
 
 };
 

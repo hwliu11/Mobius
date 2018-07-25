@@ -39,8 +39,10 @@
 //! Test scenario 001.
 //! \param[in] funcID ID of the test function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::eval01(const int funcID)
+mobius::outcome mobius::test_FindSpan::eval01(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 5.0};
   const int p = 1;
   const double u1  = 0.0;
@@ -70,8 +72,11 @@ bool mobius::test_FindSpan::eval01(const int funcID)
   int I11 = FindSpan(u11);
   int I12 = FindSpan(u12);
 
-  return I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 2 && I6 == 3 &&
-         I7 == 3 && I8 == 4 && I9 == 4 && I10 == 5 && I11 == 5 && I12 == 5;
+  if ( I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 2 && I6 == 3 &&
+       I7 == 3 && I8 == 4 && I9 == 4 && I10 == 5 && I11 == 5 && I12 == 5 )
+    return res.success();
+
+  return res.failure();
 }
 
 //-----------------------------------------------------------------------------
@@ -79,8 +84,10 @@ bool mobius::test_FindSpan::eval01(const int funcID)
 //! Test scenario 002.
 //! \param[in] funcID ID of the test function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::eval02(const int funcID)
+mobius::outcome mobius::test_FindSpan::eval02(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 2.0};
   const int p = 1;
   const double u1 = 0.0;
@@ -98,7 +105,10 @@ bool mobius::test_FindSpan::eval02(const int funcID)
   int I5 = FindSpan(u5);
   int I6 = FindSpan(u6);
 
-  return I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 2 && I6 == 2;
+  if ( I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 2 && I6 == 2 )
+    return res.success();
+
+  return res.failure();
 }
 
 //-----------------------------------------------------------------------------
@@ -106,8 +116,10 @@ bool mobius::test_FindSpan::eval02(const int funcID)
 //! Test scenario 003.
 //! \param[in] funcID ID of the test function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::eval03(const int funcID)
+mobius::outcome mobius::test_FindSpan::eval03(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
   const double u = 5.0;
@@ -115,7 +127,10 @@ bool mobius::test_FindSpan::eval03(const int funcID)
   bspl_FindSpan FindSpan(U, p);
   int I = FindSpan(u);
 
-  return I == 7;
+  if ( I == 7 )
+    return res.success();
+
+  return res.failure();
 }
 
 //-----------------------------------------------------------------------------
@@ -124,8 +139,10 @@ bool mobius::test_FindSpan::eval03(const int funcID)
 //! the indices of the first non-vanishing spline functions returned.
 //! \param[in] funcID ID of the test function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_FindSpan::eval04(const int funcID)
+mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
@@ -139,7 +156,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 2 || basisIndex != 0 )
-      return false;
+      return res.failure();
   }
 
   // Test 2.
@@ -152,7 +169,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 2 || basisIndex != 0 )
-      return false;
+      return res.failure();
   }
 
   // Test 3.
@@ -165,7 +182,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 2 || basisIndex != 0 )
-      return false;
+      return res.failure();
   }
 
   // Test 4.
@@ -178,7 +195,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 3 || basisIndex != 1 )
-      return false;
+      return res.failure();
   }
 
   // Test 5.
@@ -191,7 +208,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 3 || basisIndex != 1 )
-      return false;
+      return res.failure();
   }
 
   // Test 6.
@@ -204,7 +221,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 4 || basisIndex != 2 )
-      return false;
+      return res.failure();
   }
 
   // Test 7.
@@ -217,7 +234,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 5 || basisIndex != 3 )
-      return false;
+      return res.failure();
   }
 
   // Test 8.
@@ -230,7 +247,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 7 || basisIndex != 5 )
-      return false;
+      return res.failure();
   }
 
   // Test 9.
@@ -243,7 +260,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 7 || basisIndex != 5 )
-      return false;
+      return res.failure();
   }
 
   // Test 10.
@@ -256,7 +273,7 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 7 || basisIndex != 5 )
-      return false;
+      return res.failure();
   }
 
   // Test 11.
@@ -269,8 +286,8 @@ bool mobius::test_FindSpan::eval04(const int funcID)
     int I          = FindSpan(u, basisIndex);
 
     if ( I != 7 || basisIndex != 5 )
-      return false;
+      return res.failure();
   }
 
-  return true;
+  return res.success();
 }

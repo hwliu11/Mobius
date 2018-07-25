@@ -39,8 +39,11 @@
 //! Test scenario 001: evaluate B-surface in its domain.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineSurface::evalInDomain(const int funcID)
+mobius::outcome
+  mobius::test_BSplineSurface::evalInDomain(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -78,9 +81,9 @@ bool mobius::test_BSplineSurface::evalInDomain(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
@@ -88,8 +91,11 @@ bool mobius::test_BSplineSurface::evalInDomain(const int funcID)
 //! Test scenario 002: evaluate B-surface out of its domain.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineSurface::evalOutDomain(const int funcID)
+mobius::outcome
+  mobius::test_BSplineSurface::evalOutDomain(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -127,21 +133,24 @@ bool mobius::test_BSplineSurface::evalOutDomain(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
 
-//! Eevaluates B-surface specified as JSON object.
+//! Evaluates B-surface specified as JSON object.
 //!
 //! The surface is C0-continuous. It is evaluated in the middle point.
 //!
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineSurface::evalJSON1(const int funcID)
+mobius::outcome
+  mobius::test_BSplineSurface::evalJSON1(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -185,7 +194,7 @@ bool mobius::test_BSplineSurface::evalJSON1(const int funcID)
   core_Ptr<bsurf> surf = bsurf::Instance(json);
   //
   if ( surf.IsNull() )
-    return false;
+    return res.failure();
 
   /* ==============
    *  Perform test
@@ -203,22 +212,25 @@ bool mobius::test_BSplineSurface::evalJSON1(const int funcID)
 
   // Check.
   if ( (P - P_ref).Modulus() > eps )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
 
-//! Eevaluates B-surface specified as JSON object.
+//! Evaluates B-surface specified as JSON object.
 //!
 //! The surface has irregular parameterization near the max value of its curvilinear
 //! coordinate V = V_max = 5.1866714434994.
 //!
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_BSplineSurface::evalJSON2(const int funcID)
+mobius::outcome
+  mobius::test_BSplineSurface::evalJSON2(const int funcID)
 {
+  outcome res;
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -268,7 +280,7 @@ bool mobius::test_BSplineSurface::evalJSON2(const int funcID)
   core_Ptr<bsurf> surf = bsurf::Instance(json);
   //
   if ( surf.IsNull() )
-    return false;
+    return res.failure();
 
   /* ==============
    *  Perform test
@@ -289,7 +301,7 @@ bool mobius::test_BSplineSurface::evalJSON2(const int funcID)
 
     // Check.
     if ( (P - P_ref).Modulus() > eps )
-      return false;
+      return res.failure();
   }
 
   // Test 2.
@@ -305,7 +317,7 @@ bool mobius::test_BSplineSurface::evalJSON2(const int funcID)
 
     // Check.
     if ( (P - P_ref).Modulus() > eps )
-      return false;
+      return res.failure();
   }
 
   // Test 3.
@@ -321,7 +333,7 @@ bool mobius::test_BSplineSurface::evalJSON2(const int funcID)
 
     // Check.
     if ( (P - P_ref).Modulus() > eps )
-      return false;
+      return res.failure();
   }
 
   // Test 4.
@@ -337,8 +349,8 @@ bool mobius::test_BSplineSurface::evalJSON2(const int funcID)
 
     // Check.
     if ( (P - P_ref).Modulus() > eps )
-      return false;
+      return res.failure();
   }
 
-  return true;
+  return res.success();
 }

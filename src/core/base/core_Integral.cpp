@@ -31,10 +31,10 @@
 // Own include
 #include <mobius/core_Integral.h>
 
-double mobius::core_Integral::ComputeRect(const ptr<core_UnivariateFunc>& F,
-                                          const double                    a,
-                                          const double                    b,
-                                          const int                       n)
+double mobius::core_Integral::ComputeRect(core_UnivariateFunc* F,
+                                          const double         a,
+                                          const double         b,
+                                          const int            n)
 {
   double step = (b - a) / n;  // width of each small rectangle.
   double area = 0.0; // signed area.

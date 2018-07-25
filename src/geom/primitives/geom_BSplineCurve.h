@@ -137,6 +137,14 @@ public:
     ReparameterizeLinear(const double s_min,
                          const double s_max);
 
+  //! Calculates approximate strain energy of the B-curve. The strain
+  //! energy is calculated as an integral of squared second derivative
+  //! (instead of squared curvature).
+  //!
+  //! \return calculated strain energy.
+  mobiusGeom_EXPORT double
+    ComputeStrainEnergy() const;
+
 public:
 
   //! Accessor for the collection of poles.

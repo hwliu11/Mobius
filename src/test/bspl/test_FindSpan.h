@@ -81,10 +81,10 @@ public:
 
 private:
 
-  static bool eval01 (const int funcID);
-  static bool eval02 (const int funcID);
-  static bool eval03 (const int funcID);
-  static bool eval04 (const int funcID);
+  static outcome eval01 (const int funcID);
+  static outcome eval02 (const int funcID);
+  static outcome eval03 (const int funcID);
+  static outcome eval04 (const int funcID);
 
 };
 

@@ -66,7 +66,8 @@ enum test_CaseID
   CaseID_Geom_Line3D,
   CaseID_Geom_PointOnLine,
   CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface
+  CaseID_Geom_BSplineSurface,
+  CaseID_Geom_FairCurve
 
 };
 

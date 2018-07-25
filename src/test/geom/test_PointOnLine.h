@@ -84,23 +84,23 @@ public:
 
 private:
 
-  static bool test1(const int funcID);
-  static bool test2(const int funcID);
-  static bool test3(const int funcID);
-  static bool test4(const int funcID);
-  static bool test5(const int funcID);
-  static bool test6(const int funcID);
-  static bool test7(const int funcID);
-  static bool test8(const int funcID);
+  static outcome test1(const int funcID);
+  static outcome test2(const int funcID);
+  static outcome test3(const int funcID);
+  static outcome test4(const int funcID);
+  static outcome test5(const int funcID);
+  static outcome test6(const int funcID);
+  static outcome test7(const int funcID);
+  static outcome test8(const int funcID);
 
 private:
 
-  static bool doTest(const int    funcID,
-                     const xyz&   LineOri,
-                     const xyz&   LineDir,
-                     const xyz&   P,
-                     const double classiPrec,
-                     const bool   resultRef);
+  static outcome doTest(const int    funcID,
+                        const xyz&   LineOri,
+                        const xyz&   LineDir,
+                        const xyz&   P,
+                        const double classiPrec,
+                        const bool   resultRef);
 
 };
 

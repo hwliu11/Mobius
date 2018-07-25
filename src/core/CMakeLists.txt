@@ -72,17 +72,21 @@ set (primitives_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (utils_H_FILES 
+  utils/core_Chronometer.h
   utils/core_FileDumper.h
   utils/core_HeapAlloc.h
   utils/core_JSON.h
   utils/core_StringBuffer.h
+  utils/core_Timer.h
   utils/core_TimeStamp.h
 )
 set (utils_CPP_FILES 
+  utils/core_Chronometer.cpp
   utils/core_FileDumper.cpp
   utils/core_HeapAlloc.cpp
   utils/core_JSON.cpp
   utils/core_StringBuffer.cpp
+  utils/core_Timer.cpp
   utils/core_TimeStamp.cpp
 )
 

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 05 September 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2014-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without

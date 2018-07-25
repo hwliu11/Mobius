@@ -37,8 +37,11 @@
 //! Test scenario 001.
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_InterpolateCurve3D::test1(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_InterpolateCurve3D::test1(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   /* ~~~~~~~~~~~~~~~~~~~~~~
    *  Prepare input points
    * ~~~~~~~~~~~~~~~~~~~~~~ */
@@ -65,7 +68,7 @@ bool mobius::test_InterpolateCurve3D::test1(const int test_NotUsed(funcID))
 
   // Verify
   if ( Interp.ErrorCode() != geom_InterpolateCurve::ErrCode_NoError )
-    return false;
+    return res.failure();
 
-  return true;
+  return res.success();
 }

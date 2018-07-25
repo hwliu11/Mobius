@@ -191,6 +191,14 @@ public:
     return ptr;
   }
 
+  //! Accessor for the raw array by its internal index in the allocator.
+  //! \param arr_idx [in] 0-based index of array in the allocator.
+  //! \return pointer to the target array.
+  const THeapPtr& Access(const size_t arr_idx) const
+  {
+    return m_ptrVector.at(arr_idx);
+  }
+
 public:
 
   //! Default constructor.

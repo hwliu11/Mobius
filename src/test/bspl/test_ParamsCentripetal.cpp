@@ -34,11 +34,16 @@
 // bspl includes
 #include <mobius/bspl_ParamsCentripetal.h>
 
+//-----------------------------------------------------------------------------
+
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_ParamsCentripetal::test1(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_ParamsCentripetal::test1(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   /* ----------------------
    *  Prepare input points
    * ---------------------- */
@@ -60,7 +65,7 @@ bool mobius::test_ParamsCentripetal::test1(const int test_NotUsed(funcID))
 
   // Perform
   if ( bspl_ParamsCentripetal::Calculate(Q_vec, t) != bspl_ParamsCentripetal::ErrCode_NoError )
-    return false;
+    return res.failure();
 
   /* -----------------------
    *  Description variables
@@ -82,16 +87,21 @@ bool mobius::test_ParamsCentripetal::test1(const int test_NotUsed(funcID))
   // Compare with tolerance
   for ( int k = 0; k < 3; ++k )
     if ( fabs(t_ref[k] - t[k]) > tol )
-      return false;
+      return res.failure();
 
-  return true;
+  return res.success();
 }
+
+//-----------------------------------------------------------------------------
 
 //! Test scenario 002.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_ParamsCentripetal::test2(const int test_NotUsed(funcID))
+mobius::outcome
+  mobius::test_ParamsCentripetal::test2(const int test_NotUsed(funcID))
 {
+  outcome res;
+
   /* ----------------------
    *  Prepare input points
    * ---------------------- */
@@ -114,7 +124,7 @@ bool mobius::test_ParamsCentripetal::test2(const int test_NotUsed(funcID))
 
   // Perform
   if ( bspl_ParamsCentripetal::Calculate(Q_vec, t) != bspl_ParamsCentripetal::ErrCode_NoError )
-    return false;
+    return res.failure();
 
   /* -----------------------
    *  Description variables
@@ -137,7 +147,7 @@ bool mobius::test_ParamsCentripetal::test2(const int test_NotUsed(funcID))
   // Compare with tolerance
   for ( int k = 0; k < 4; ++k )
     if ( fabs(t_ref[k] - t[k]) > tol )
-      return false;
+      return res.failure();
 
-  return true;
+  return res.success();
 }

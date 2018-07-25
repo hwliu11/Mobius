@@ -51,12 +51,27 @@ public:
     m_pRef = NULL;
   }
 
+  //! Constructor accepting integer.
+  core_Ptr<SharedType>(int)
+  {
+    m_pRef = NULL;
+  }
+
   //! Constructor accepting the raw reference to the target object to wrap with
   //! a smart pointer.
   //! \param theRef [in] reference to the target object.
   core_Ptr<SharedType>(SharedType* theRef)
   {
     m_pRef = theRef;
+    this->beginScope();
+  }
+
+  //! Constructor accepting the raw const reference to the target object
+  //! to wrap with a smart pointer.
+  //! \param theRef [in] reference to the target object.
+  core_Ptr<SharedType>(const SharedType* theRef)
+  {
+    m_pRef = const_cast<SharedType*>(theRef);
     this->beginScope();
   }
 

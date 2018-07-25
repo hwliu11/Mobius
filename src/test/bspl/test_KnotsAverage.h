@@ -78,8 +78,8 @@ public:
 
 private:
 
-  static bool testCase1_noDerivativeConstraints(const int funcID);
-  static bool testCase1_endDerivativeConstraints(const int funcID);
+  static outcome testCase1_noDerivativeConstraints(const int funcID);
+  static outcome testCase1_endDerivativeConstraints(const int funcID);
 
 // Construction is prohibited:
 private:

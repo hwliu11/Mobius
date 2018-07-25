@@ -73,8 +73,8 @@ public:
 
 private:
 
-  bool testCase1() const;
-  bool testCase2() const;
+  outcome testCase1() const;
+  outcome testCase2() const;
 
 private:
 

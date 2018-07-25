@@ -40,8 +40,10 @@
 //! Test scenario 001: evaluate B-spline in its domain.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_EffectiveN::evalInDomain(const int funcID)
+mobius::outcome mobius::test_EffectiveN::evalInDomain(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
@@ -64,11 +66,11 @@ bool mobius::test_EffectiveN::evalInDomain(const int funcID)
   if ( N[0] != 0.125 || N[1] != 0.75 || N[2] != 0.125 )
   {
     delete[] N;
-    return false;
+    return res.failure();
   }
 
   delete[] N;
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
@@ -76,8 +78,10 @@ bool mobius::test_EffectiveN::evalInDomain(const int funcID)
 //! Test scenario 002: evaluate B-spline out of its domain on the right.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
+mobius::outcome mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
@@ -100,7 +104,7 @@ bool mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
   if ( i != 7 )
   {
     delete[] N;
-    return false;
+    return res.failure();
   }
 
   const double eps = 1e-7;
@@ -110,11 +114,11 @@ bool mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
        fabs(N[2] - 1.21) > eps )
   {
     delete[] N;
-    return false;
+    return res.failure();
   }
 
   delete[] N;
-  return true;
+  return res.success();
 }
 
 //-----------------------------------------------------------------------------
@@ -122,8 +126,10 @@ bool mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
 //! Test scenario 003: evaluate B-spline out of its domain on the left.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-bool mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
+mobius::outcome mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
 {
+  outcome res;
+
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
@@ -146,7 +152,7 @@ bool mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
   if ( i != 2 )
   {
     delete[] N;
-    return false;
+    return res.failure();
   }
 
   const double eps = 1e-7;
@@ -156,9 +162,9 @@ bool mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
        fabs(N[2] - 0.005) > eps )
   {
     delete[] N;
-    return false;
+    return res.failure();
   }
 
   delete[] N;
-  return true;
+  return res.success();
 }
