@@ -49,7 +49,7 @@
 //! \param CaseLauncher [in] Test Case Launcher to add.
 //! \return this for subsequent streaming.
 mobius::testEngine_Launcher&
-  mobius::testEngine_Launcher::operator<<(const Ptr<testEngine_CaseLauncherAPI>& CaseLauncher)
+  mobius::testEngine_Launcher::operator<<(const ptr<testEngine_CaseLauncherAPI>& CaseLauncher)
 {
   m_launchers.push_back(CaseLauncher);
   return *this;
@@ -68,7 +68,7 @@ bool mobius::testEngine_Launcher::Launch(std::ostream* out) const
   int numTotal = 0, numFailed = 0;
   for ( int l = 0; l < (int) m_launchers.size(); ++l )
   {
-    const Ptr<testEngine_CaseLauncherAPI>& CaseLauncher = m_launchers.at(l);
+    const ptr<testEngine_CaseLauncherAPI>& CaseLauncher = m_launchers.at(l);
     const bool nextOk = CaseLauncher->Launch();
 
     // Put message to output stream
@@ -123,7 +123,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
    *  Render header information
    * =========================== */
 
-  Ptr<testEngine_ReportRenderer> Rdr = new testEngine_ReportRenderer;
+  ptr<testEngine_ReportRenderer> Rdr = new testEngine_ReportRenderer;
 
   // Global style for HTML body
   testEngine_ReportStyle BodyStyle;
@@ -184,7 +184,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
   // Iterate over Test Cases
   for ( int l = 0; l < (int) m_launchers.size(); ++l )
   {
-    const Ptr<testEngine_CaseLauncherAPI>& CaseLauncher = m_launchers.at(l);
+    const ptr<testEngine_CaseLauncherAPI>& CaseLauncher = m_launchers.at(l);
 
     // Get filename for description
     std::string descGroupDir = CaseLauncher->CaseDescriptionDir();
@@ -345,6 +345,6 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
 //! \return generated unique name.
 std::string mobius::testEngine_Launcher::uniqueDirName() const
 {
-  Ptr<core_TimeStamp> TS = core_TimeStampTool::Generate();
+  ptr<core_TimeStamp> TS = core_TimeStampTool::Generate();
   return TS->ToString(false, true);
 }

@@ -81,7 +81,7 @@ public:
   //! \param[in] deg_V       degree in V curvilinear direction.
   //! \param[in] unifyCurves indicates whether to unify curves before skinning.
   mobiusGeom_EXPORT
-    geom_SkinSurface(const std::vector< Ptr<bcurve> >& curves,
+    geom_SkinSurface(const std::vector< ptr<bcurve> >& curves,
                      const int                         deg_V,
                      const bool                        unifyCurves);
 
@@ -92,7 +92,7 @@ public:
   //! \param[in] deg_V       degree in V curvilinear direction.
   //! \param[in] unifyCurves indicates whether to unify curves before skinning.
   mobiusGeom_EXPORT void
-    Init(const std::vector< Ptr<bcurve> >& curves,
+    Init(const std::vector< ptr<bcurve> >& curves,
          const int                         deg_V,
          const bool                        unifyCurves);
 
@@ -123,7 +123,7 @@ public:
 
   //! Accessor for the resulting surface.
   //! \return interpolant surface.
-  const Ptr<bsurf>& Result() const
+  const ptr<bsurf>& Result() const
   {
     return m_surface;
   }
@@ -131,17 +131,17 @@ public:
 // For maintenance:
 public:
 
-  std::vector< Ptr<bcurve> > IsoU_Curves;
+  std::vector< ptr<bcurve> > IsoU_Curves;
 
 private:
 
   core_HeapAlloc<double>     m_alloc;   //!< Heap allocator.
-  std::vector< Ptr<bcurve> > m_curves;  //!< Curves to interpolate.
+  std::vector< ptr<bcurve> > m_curves;  //!< Curves to interpolate.
   double*                    m_pV;      //!< Knot vector in V direction.
   int                        m_iDeg_V;  //!< V-degree of interpolant surface.
   bool                       m_bUnify;  //!< Indicates whether to unify curves.
   ErrCode                    m_errCode; //!< Error code.
-  Ptr<bsurf>                 m_surface; //!< Interpolant surface.
+  ptr<bsurf>                 m_surface; //!< Interpolant surface.
 
 };
 

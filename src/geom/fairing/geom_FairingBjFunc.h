@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 13 October 2013
+// Created on: 03 March 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,77 +28,58 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionCloud_HeaderFile
-#define geom_SectionCloud_HeaderFile
+#ifndef geom_FairingBjFunc_HeaderFile
+#define geom_FairingBjFunc_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_SectionLine.h>
-
-// Core includes
-#include <mobius/core_XYZ.h>
-
-// STL includes
-#include <vector>
+// Geom includes
+#include <mobius/geom_BSplineCurve.h>
+#include <mobius/geom_FairingCoeffFunc.h>
 
 namespace mobius {
 
-//! Represents point cloud arranged as ordered sections of points.
-class geom_SectionCloud : public geom_PointCloud
+//! \ingroup MOBIUS_GEOM
+//!
+//! Univariate function to interface fairing rhs coefficients B_j.
+class geom_FairingBjFunc : public geom_FairingCoeffFunc
 {
-// Construction & destruction:
 public:
 
+  //! ctor.
+  //! \param[in] curve  B-spline curve in question (the one to fair).
+  //! \param[in] coord  index of coordinate to use (0 for X, 1 for Y, and 2 for Z).
+  //! \param[in] U      knot vector.
+  //! \param[in] p      B-spline degree.
+  //! \param[in] i      0-based index of the B-spline function.
+  //! \param[in] lambda fairing coefficent.
   mobiusGeom_EXPORT
-    geom_SectionCloud();
-
-  mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< ptr<geom_SectionLine> >& sections);
-
-  mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< std::vector<xyz> >& sections);
-
-  mobiusGeom_EXPORT virtual
-    ~geom_SectionCloud();
-
-public:
-
-  mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    geom_FairingBjFunc(const ptr<bcurve>&         curve,
+                       const int                  coord,
+                       const std::vector<double>& U,
+                       const int                  p,
+                       const int                  i,
+                       const double               lambda);
 
 public:
 
-  mobiusGeom_EXPORT void
-    AddSection(const ptr<geom_SectionLine>& section);
-
-  mobiusGeom_EXPORT size_t
-    NumberOfSections() const;
-
-  mobiusGeom_EXPORT const ptr<geom_SectionLine>&
-    SectionByIndex(const size_t idx) const;
-
-  mobiusGeom_EXPORT ptr<geom_SectionLine>
-    SectionByID(const int ID) const;
-
-  mobiusGeom_EXPORT const std::vector< ptr<geom_SectionLine> >&
-    Sections() const;
-
-  mobiusGeom_EXPORT std::vector< std::vector<xyz> >
-    Points() const;
-
-  mobiusGeom_EXPORT ptr<pcloud>
-    ToPositionCloud() const;
+  //! Evaluates function.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT virtual double
+    Eval(const double u) const;
 
 private:
 
-  //! Actual collection of points distributed by sections.
-  std::vector< ptr<geom_SectionLine> > m_cloud;
+  geom_FairingBjFunc() = delete;
+  void operator=(const geom_FairingBjFunc&) = delete;
+
+protected:
+
+  ptr<bcurve>                m_curve;   //!< Curve in question.
+  int                        m_iCoord;  //!< Coordinate in question.
+  const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
+  int                        m_iDegree; //!< Degree of the spline function.
+  int                        m_iIndex;  //!< 0-based index of the spline function.
 
 };
-
-//! Handy shortcut.
-typedef geom_SectionCloud scloud;
 
 };
 

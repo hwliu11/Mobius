@@ -60,20 +60,20 @@ public:
 public:
 
   mobiusGeom_EXPORT void
-    AddLink(const Ptr<geom_Link>& link);
+    AddLink(const ptr<geom_Link>& link);
 
   mobiusGeom_EXPORT int
     NumLinks() const;
 
-  mobiusGeom_EXPORT const std::vector< Ptr<geom_Link> >&
+  mobiusGeom_EXPORT const std::vector< ptr<geom_Link> >&
     Links() const;
 
-  mobiusGeom_EXPORT const Ptr<geom_Link>&
+  mobiusGeom_EXPORT const ptr<geom_Link>&
     Link(const size_t idx) const;
 
 private:
 
-  std::vector< Ptr<geom_Link> > m_links; //!< Links.
+  std::vector< ptr<geom_Link> > m_links; //!< Links.
 
 };
 

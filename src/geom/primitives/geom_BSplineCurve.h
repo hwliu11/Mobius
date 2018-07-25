@@ -35,7 +35,7 @@
 #include <mobius/geom_Curve.h>
 
 // Core includes
-#include <mobius/core_Smoothness.h>
+#include <mobius/core_Continuity.h>
 
 namespace mobius {
 
@@ -104,12 +104,12 @@ public:
   mobiusGeom_EXPORT virtual double
     K(const double u) const;
 
-  mobiusGeom_EXPORT virtual core_Smoothness
+  mobiusGeom_EXPORT virtual core_Continuity
     Continuity() const;
 
 public:
 
-  mobiusGeom_EXPORT Ptr<geom_BSplineCurve>
+  mobiusGeom_EXPORT ptr<geom_BSplineCurve>
     Copy() const;
 
   mobiusGeom_EXPORT bool
@@ -131,7 +131,7 @@ public:
 
   mobiusGeom_EXPORT bool
     Split(const double                           u,
-          std::vector< Ptr<geom_BSplineCurve> >& slices) const;
+          std::vector< ptr<geom_BSplineCurve> >& slices) const;
 
   mobiusGeom_EXPORT void
     ReparameterizeLinear(const double s_min,
@@ -166,6 +166,16 @@ public:
   const xyz& GetPole(const size_t poleIdx) const
   {
     return m_poles[poleIdx];
+  }
+
+  //! Returns pole by its zero-based index.
+  //! \param[in] poleIdx zero-based pole index.
+  //! \param[in] xyz     pole coordinates to set.
+  //! \return pole.
+  void SetPole(const size_t poleIdx,
+               const xyz&   xyz)
+  {
+    m_poles[poleIdx] = xyz;
   }
 
   //! Accessor for the knot vector.

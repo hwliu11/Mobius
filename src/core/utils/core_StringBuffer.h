@@ -40,7 +40,7 @@ namespace mobius {
 //!
 //! Convenient class for wrapping standard string with streaming
 //! functionality.
-class core_StringBuffer : public OBJECT
+class core_StringBuffer : public core_OBJECT
 {
 public:
 

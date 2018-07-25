@@ -113,7 +113,7 @@ public:
     operator+=(const geom_Point& PP);
 
   mobiusGeom_EXPORT geom_Point&
-    operator+=(const Ptr<geom_Point>& hPP);
+    operator+=(const ptr<geom_Point>& hPP);
 
   mobiusGeom_EXPORT geom_Point
     operator-(const geom_Point& PP) const;
@@ -122,7 +122,7 @@ public:
     operator-=(const geom_Point& PP);
 
   mobiusGeom_EXPORT geom_Point&
-    operator-=(const Ptr<geom_Point>& hPP);
+    operator-=(const ptr<geom_Point>& hPP);
 
 private:
 

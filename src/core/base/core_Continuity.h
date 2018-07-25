@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 17 August 2013
+// Created on: 03 March 2015
 //-----------------------------------------------------------------------------
 // Copyright (c) 2017, Sergey Slyadnev
 // All rights reserved.
@@ -28,5 +28,26 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-// Own include
-#include <mobius/bspl_ScalarLaw.h>
+#ifndef core_Continuity_HeaderFile
+#define core_Continuity_HeaderFile
+
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
+
+//! \ingroup MOBIUS_CORE
+//!
+//! Order of continuity.
+enum core_Continuity
+{
+  Continuity_C0 = 0, //!< C0.
+  Continuity_C1,     //!< C1.
+  Continuity_C2,     //!< C2.
+  Continuity_C3,     //!< C3.
+  Continuity_CN      //!< CN.
+};
+
+};
+
+#endif

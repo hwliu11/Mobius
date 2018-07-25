@@ -43,7 +43,7 @@ public:
 
   mobiusGeom_EXPORT bool
     operator()(const xyz&            P,
-               const Ptr<geom_Line>& Line,
+               const ptr<geom_Line>& Line,
                const double          prec = 1.0e-6);
 
 };

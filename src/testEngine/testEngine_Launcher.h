@@ -217,7 +217,7 @@ public:
 public:
 
   mobiusTestEngine_EXPORT testEngine_Launcher&
-    operator<<(const Ptr<testEngine_CaseLauncherAPI>& CaseLauncher);
+    operator<<(const ptr<testEngine_CaseLauncherAPI>& CaseLauncher);
 
   mobiusTestEngine_EXPORT bool
     Launch(std::ostream* out = NULL) const;
@@ -235,7 +235,7 @@ private:
 private:
 
   //! Internal collection of Test Case Launchers.
-  std::vector< Ptr<testEngine_CaseLauncherAPI> > m_launchers;
+  std::vector< ptr<testEngine_CaseLauncherAPI> > m_launchers;
 
 };
 

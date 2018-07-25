@@ -81,10 +81,10 @@ public:
 
 public:
 
-  mobiusGeom_EXPORT Ptr<geom_KleinIsoCurve>
+  mobiusGeom_EXPORT ptr<geom_KleinIsoCurve>
     Iso_U(const double u) const;
 
-  mobiusGeom_EXPORT Ptr<geom_KleinIsoCurve>
+  mobiusGeom_EXPORT ptr<geom_KleinIsoCurve>
     Iso_V(const double v) const;
 
 public:

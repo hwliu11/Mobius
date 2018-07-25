@@ -104,10 +104,10 @@ public:
 
 public:
 
-  mobiusGeom_EXPORT Ptr<geom_BSplineCurve>
+  mobiusGeom_EXPORT ptr<geom_BSplineCurve>
     Iso_U(const double u) const;
 
-  mobiusGeom_EXPORT Ptr<geom_BSplineCurve>
+  mobiusGeom_EXPORT ptr<geom_BSplineCurve>
     Iso_V(const double v) const;
 
   /*mobiusGeom_EXPORT core_XYZ

@@ -104,10 +104,10 @@ void mobius::geom_KleinBottle::Eval(const double u,
 //! Extracts isoparametric curve corresponding to the passed {u} level.
 //! \param u [in] parameter value to extract isoparametric curve for.
 //! \return iso-line.
-mobius::Ptr<mobius::geom_KleinIsoCurve>
+mobius::ptr<mobius::geom_KleinIsoCurve>
   mobius::geom_KleinBottle::Iso_U(const double u) const
 {
-  Ptr<geom_KleinIsoCurve>
+  ptr<geom_KleinIsoCurve>
     Iso = new geom_KleinIsoCurve(m_fR, geom_KleinIsoCurve::Iso_U, u);
   return Iso;
 }
@@ -115,10 +115,10 @@ mobius::Ptr<mobius::geom_KleinIsoCurve>
 //! Extracts isoparametric curve corresponding to the passed {v} level.
 //! \param v [in] parameter value to extract isoparametric curve for.
 //! \return iso-line.
-mobius::Ptr<mobius::geom_KleinIsoCurve>
+mobius::ptr<mobius::geom_KleinIsoCurve>
   mobius::geom_KleinBottle::Iso_V(const double v) const
 {
-  Ptr<geom_KleinIsoCurve>
+  ptr<geom_KleinIsoCurve>
     Iso = new geom_KleinIsoCurve(m_fR, geom_KleinIsoCurve::Iso_V, v);
   return Iso;
 }

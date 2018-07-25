@@ -65,7 +65,7 @@ public:
   //! \param theCurve [in] source curve to evaluate.
   //! \param theFirstU [in] first value of the parametric range.
   //! \param theLastU [in] second value of the parametric range.
-  cascade_BSplineCurve3D_Eval(const Ptr<bcurve>& theCurve,
+  cascade_BSplineCurve3D_Eval(const ptr<bcurve>& theCurve,
                               const double theFirstU,
                               const double theLastU)
   {
@@ -84,7 +84,7 @@ public:
 private:
 
   //! Curve to evaluate.
-  Ptr<bcurve> m_curve;
+  ptr<bcurve> m_curve;
 
   //! Parametric range.
   Standard_Real m_range[2];
@@ -148,7 +148,7 @@ void cascade_BSplineCurve3D_Eval::Evaluate(int* theDimension,
 
 //! Constructor.
 //! \param mobiusCurve [in] Mobius 3D curve to convert.
-mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const Ptr<bcurve>& mobiusCurve)
+mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const ptr<bcurve>& mobiusCurve)
 {
   m_mobiusCurve = mobiusCurve;
   m_fMaxError   = 0.0;
@@ -236,7 +236,7 @@ void mobius::cascade_BSplineCurve3D::DirectConvert()
 
 //! Accessor for the Mobius curve.
 //! \return Mobius curve.
-const mobius::Ptr<mobius::bcurve>&
+const mobius::ptr<mobius::bcurve>&
   mobius::cascade_BSplineCurve3D::GetMobiusCurve() const
 {
   return m_mobiusCurve;

@@ -54,7 +54,7 @@ public:
   geom_SectionLine(const int id,
                    const std::vector<xyz>& pts) : core_OBJECT(), ID(id), Pts( new pcloud(pts) ) {}
   geom_SectionLine(const int id,
-                   const Ptr<pcloud>& pts) : core_OBJECT(), ID(id), Pts(pts) {}
+                   const ptr<pcloud>& pts) : core_OBJECT(), ID(id), Pts(pts) {}
 
 public:
 
@@ -62,11 +62,11 @@ public:
   // Members:
 
   int         ID;    //!< ID of the section.
-  Ptr<pcloud> Pts;   //!< Original points.
-  Ptr<bcurve> Curve; //!< Reconstructed curve.
+  ptr<pcloud> Pts;   //!< Original points.
+  ptr<bcurve> Curve; //!< Reconstructed curve.
 
   //! Optional ordered slices.
-  std::vector< Ptr<geom_SectionLine> > Slices;
+  std::vector< ptr<geom_SectionLine> > Slices;
 
 public:
 
@@ -117,10 +117,10 @@ public:
 public:
 
   mobiusGeom_EXPORT static void
-    Split(const Ptr<geom_SectionLine>& source,
+    Split(const ptr<geom_SectionLine>& source,
           const size_t                 idx,
-          Ptr<geom_SectionLine>&       slice_before,
-          Ptr<geom_SectionLine>&       slice_after,
+          ptr<geom_SectionLine>&       slice_before,
+          ptr<geom_SectionLine>&       slice_after,
           bool&                        splitting_done);
 
 protected:
@@ -129,7 +129,7 @@ protected:
     find_index(const xyz& pnt) const;
 
   mobiusGeom_EXPORT static int
-    find_index(const Ptr<geom_SectionLine>& source,
+    find_index(const ptr<geom_SectionLine>& source,
                const xyz&                   pnt);
 
 };

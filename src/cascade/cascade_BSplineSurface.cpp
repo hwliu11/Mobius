@@ -46,7 +46,7 @@
 
 //! Constructor.
 //! \param[in] mobiusSurface Mobius surface to convert.
-mobius::cascade_BSplineSurface::cascade_BSplineSurface(const Ptr<bsurf>& mobiusSurface)
+mobius::cascade_BSplineSurface::cascade_BSplineSurface(const ptr<bsurf>& mobiusSurface)
 {
   m_mobiusSurface = mobiusSurface;
   m_bIsDone       = false;
@@ -86,7 +86,7 @@ void mobius::cascade_BSplineSurface::DirectConvert()
 
 //! Accessor for the Mobius surface.
 //! \return Mobius surface.
-const mobius::Ptr<mobius::bsurf>&
+const mobius::ptr<mobius::bsurf>&
   mobius::cascade_BSplineSurface::GetMobiusSurface() const
 {
   return m_mobiusSurface;

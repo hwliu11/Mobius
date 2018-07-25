@@ -50,32 +50,32 @@ public:
   geom_SectionPatch() : core_OBJECT(), ID(-1) {}
 
   int                                ID;   //!< ID of the patch.
-  std::map< int, Ptr<vector_field> > D1;   //!< D1 by sections.
-  std::map< int, Ptr<vector_field> > D2;   //!< D2 by sections.
-  Ptr<geom_Surface>                  Surf; //!< Reconstructed surface.
+  std::map< int, ptr<vector_field> > D1;   //!< D1 by sections.
+  std::map< int, ptr<vector_field> > D2;   //!< D2 by sections.
+  ptr<geom_Surface>                  Surf; //!< Reconstructed surface.
 
-  void Add_D1(const int sct_ID, Ptr<vector_field> D1_vectors)
+  void Add_D1(const int sct_ID, ptr<vector_field> D1_vectors)
   {
-    D1.insert( std::pair< int, Ptr<vector_field> >(sct_ID, D1_vectors) );
+    D1.insert( std::pair< int, ptr<vector_field> >(sct_ID, D1_vectors) );
   }
 
-  void Add_D2(const int sct_ID, Ptr<vector_field> D2_vectors)
+  void Add_D2(const int sct_ID, ptr<vector_field> D2_vectors)
   {
-    D2.insert( std::pair< int, Ptr<vector_field> >(sct_ID, D2_vectors) );
+    D2.insert( std::pair< int, ptr<vector_field> >(sct_ID, D2_vectors) );
   }
 
-  Ptr<vector_field> D1_sct(const int sct_ID)
+  ptr<vector_field> D1_sct(const int sct_ID)
   {
-    std::map< int, Ptr<vector_field> >::iterator it = D1.find(sct_ID);
+    std::map< int, ptr<vector_field> >::iterator it = D1.find(sct_ID);
     if ( it == D1.end() )
       return NULL;
 
     return it->second;
   }
 
-  Ptr<vector_field> D2_sct(const int sct_ID)
+  ptr<vector_field> D2_sct(const int sct_ID)
   {
-    std::map< int, Ptr<vector_field> >::iterator it = D2.find(sct_ID);
+    std::map< int, ptr<vector_field> >::iterator it = D2.find(sct_ID);
     if ( it == D2.end() )
       return NULL;
 

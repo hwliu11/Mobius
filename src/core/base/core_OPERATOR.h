@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 13 October 2013
+// Created on: July 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2017, Sergey Slyadnev
 // All rights reserved.
@@ -28,77 +28,41 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionCloud_HeaderFile
-#define geom_SectionCloud_HeaderFile
-
-// Geometry includes
-#include <mobius/geom_SectionLine.h>
+#ifndef core_OPERATOR_HeaderFile
+#define core_OPERATOR_HeaderFile
 
 // Core includes
-#include <mobius/core_XYZ.h>
-
-// STL includes
-#include <vector>
+#include <mobius/core_IPlotter.h>
+#include <mobius/core_IProgressNotifier.h>
 
 namespace mobius {
 
-//! Represents point cloud arranged as ordered sections of points.
-class geom_SectionCloud : public geom_PointCloud
+//! \ingroup MOBIUS_CORE
+//!
+//! Interface for operators (algorithms).
+class core_OPERATOR : public core_OBJECT
 {
-// Construction & destruction:
 public:
 
-  mobiusGeom_EXPORT
-    geom_SectionCloud();
+  core_ProgressEntry& GetProgress() const { return m_progress; }
+  core_PlotterEntry&  GetPlotter()  const { return m_plotter; }
 
-  mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< ptr<geom_SectionLine> >& sections);
+protected:
 
-  mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< std::vector<xyz> >& sections);
+  mobiusCore_EXPORT
+    core_OPERATOR(core_ProgressEntry progress,
+                  core_PlotterEntry  plotter);
 
-  mobiusGeom_EXPORT virtual
-    ~geom_SectionCloud();
+protected:
 
-public:
-
-  mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
-
-public:
-
-  mobiusGeom_EXPORT void
-    AddSection(const ptr<geom_SectionLine>& section);
-
-  mobiusGeom_EXPORT size_t
-    NumberOfSections() const;
-
-  mobiusGeom_EXPORT const ptr<geom_SectionLine>&
-    SectionByIndex(const size_t idx) const;
-
-  mobiusGeom_EXPORT ptr<geom_SectionLine>
-    SectionByID(const int ID) const;
-
-  mobiusGeom_EXPORT const std::vector< ptr<geom_SectionLine> >&
-    Sections() const;
-
-  mobiusGeom_EXPORT std::vector< std::vector<xyz> >
-    Points() const;
-
-  mobiusGeom_EXPORT ptr<pcloud>
-    ToPositionCloud() const;
+  mutable core_ProgressEntry m_progress; //!< Progress Notifier.
+  mutable core_PlotterEntry  m_plotter;  //!< Imperative Plotter.
 
 private:
 
-  //! Actual collection of points distributed by sections.
-  std::vector< ptr<geom_SectionLine> > m_cloud;
+  core_OPERATOR() : core_OBJECT() {}
 
 };
-
-//! Handy shortcut.
-typedef geom_SectionCloud scloud;
 
 };
 

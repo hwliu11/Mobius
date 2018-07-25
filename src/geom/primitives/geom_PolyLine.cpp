@@ -63,7 +63,7 @@ void mobius::geom_PolyLine::Bounds(double& xMin, double& xMax,
 
 //! Adds the passed link to collection.
 //! \param link [in] link to add.
-void mobius::geom_PolyLine::AddLink(const Ptr<geom_Link>& link)
+void mobius::geom_PolyLine::AddLink(const ptr<geom_Link>& link)
 {
   m_links.push_back(link);
 }
@@ -75,7 +75,7 @@ int mobius::geom_PolyLine::NumLinks() const
 }
 
 //! \return all links.
-const std::vector< mobius::Ptr<mobius::geom_Link> >&
+const std::vector< mobius::ptr<mobius::geom_Link> >&
   mobius::geom_PolyLine::Links() const
 {
   return m_links;
@@ -84,7 +84,7 @@ const std::vector< mobius::Ptr<mobius::geom_Link> >&
 //! Returns a link with the given 0-based index.
 //! \param idx [in] index of the link to access.
 //! \return link.
-const mobius::Ptr<mobius::geom_Link>&
+const mobius::ptr<mobius::geom_Link>&
   mobius::geom_PolyLine::Link(const size_t idx) const
 {
   return m_links[idx];

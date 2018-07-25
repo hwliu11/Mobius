@@ -55,10 +55,10 @@ class geom_BezierOnRailsSurface : public geom_Surface
 public:
 
   mobiusGeom_EXPORT
-    geom_BezierOnRailsSurface(const Ptr<curve>&          r,
-                              const Ptr<curve>&          c,
-                              const Ptr<curve>&          q,
-                              const Ptr<bspl_ScalarLaw>& w);
+    geom_BezierOnRailsSurface(const ptr<curve>&          r,
+                              const ptr<curve>&          c,
+                              const ptr<curve>&          q,
+                              const ptr<bspl_ScalarLaw>& w);
 
   mobiusGeom_EXPORT virtual
     ~geom_BezierOnRailsSurface();
@@ -103,10 +103,10 @@ protected:
 
 private:
 
-  Ptr<curve>          m_r; //!< First rail curve.
-  Ptr<curve>          m_c; //!< Middle curve.
-  Ptr<curve>          m_q; //!< Second rail curve.
-  Ptr<bspl_ScalarLaw> m_w; //!< Weight law.
+  ptr<curve>          m_r; //!< First rail curve.
+  ptr<curve>          m_c; //!< Middle curve.
+  ptr<curve>          m_q; //!< Second rail curve.
+  ptr<bspl_ScalarLaw> m_w; //!< Weight law.
 
 };
 

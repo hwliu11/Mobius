@@ -60,6 +60,22 @@ set (interpolation_CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# Fairing
+#------------------------------------------------------------------------------
+
+set (fairing_H_FILES
+  fairing/geom_FairBCurve.h
+  fairing/geom_FairingAijFunc.h
+  fairing/geom_FairingBjFunc.h
+  fairing/geom_FairingCoeffFunc.h
+)
+set (fairing_CPP_FILES
+  fairing/geom_FairBCurve.cpp
+  fairing/geom_FairingAijFunc.cpp
+  fairing/geom_FairingBjFunc.cpp
+)
+
+#------------------------------------------------------------------------------
 # Primitives
 #------------------------------------------------------------------------------
 
@@ -127,6 +143,14 @@ foreach (FILE ${classifiers_CPP_FILES})
   source_group ("Source Files\\Classifiers" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${fairing_H_FILES})
+  source_group ("Header Files\\Fairing" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${fairing_CPP_FILES})
+  source_group ("Source Files\\Fairing" FILES "${FILE}")
+endforeach (FILE)
+
 foreach (FILE ${clouds_H_FILES})
   source_group ("Header Files\\Points" FILES "${FILE}")
 endforeach (FILE)
@@ -151,10 +175,12 @@ foreach (FILE ${primitives_CPP_FILES})
   source_group ("Source Files\\Primitives" FILES "${FILE}")
 endforeach (FILE)
 
-include_directories(${geom_include_dir_loc} ${core_include_dir})
+include_directories(${geom_include_dir_loc} ${core_include_dir} ${3RDPARTY_EIGEN_DIR})
+
 add_library (mobiusGeom SHARED
   ${H_FILES}               ${CPP_FILES}
   ${classifiers_H_FILES}   ${classifiers_CPP_FILES}
+  ${fairing_H_FILES}       ${fairing_CPP_FILES}
   ${clouds_H_FILES}        ${clouds_CPP_FILES}
   ${interpolation_H_FILES} ${interpolation_CPP_FILES}
   ${primitives_H_FILES}    ${primitives_CPP_FILES})

@@ -35,14 +35,14 @@
 #include <mobius/bspl.h>
 
 // core includes
-#include <mobius/core_OBJECT.h>
+#include <mobius/core_UnivariateFunc.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_BSPL
 //!
 //! This class represents abstract 1-dimensional scalar law.
-class bspl_ScalarLaw : public OBJECT
+class bspl_ScalarLaw : public core_UnivariateFunc
 {
 public:
 

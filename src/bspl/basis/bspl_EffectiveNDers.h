@@ -67,7 +67,7 @@ public:
                const std::vector<double>& U,
                const int                  p,
                const int                  i,
-               const int                  n,
+               const int                  order,
                double**                   ders) const;
 
 };

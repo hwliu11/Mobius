@@ -40,7 +40,7 @@
 //! \param U      [in]  knot vector.
 //! \param p      [in]  desired degree of basis functions to evaluate.
 //! \param span_i [in]  span index the parameter u falls to.
-//! \param n      [in]  maximal order to derivatives to calculate.
+//! \param order  [in]  maximal order order derivatives to calculate.
 //! \param ders   [out] evaluated functions. Note that the invoker code
 //!                     must allocate memory for this array. Its dimension is
 //!                     (p + 1)*(k + 1).
@@ -48,7 +48,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
                                              const std::vector<double>& U,
                                              const int                  p,
                                              const int                  span_i,
-                                             const int                  n,
+                                             const int                  order,
                                              double**                   ders) const
 {
   // Prepare working arrays:
@@ -109,7 +109,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   core_HeapAlloc2D<double> Alloc2D;
 
   // Coefficients.
-  double** a = Alloc2D.Allocate(2, n+1, true); // Two working rows
+  double** a = Alloc2D.Allocate(2, order+1, true); // Two working rows
 
   // Load basis functions into the first row of result matrix
   for ( int j = 0; j <= p; ++j )
@@ -122,7 +122,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
     a[0][0] = 1.0;
 
     // Loop to compute (k)-th derivative
-    for ( int k = 1; k <= n; ++k )
+    for ( int k = 1; k <= order; ++k )
     {
       double d = 0.0; // Derivative being evaluated
       int   rk = r-k, pk = p-k;
@@ -163,7 +163,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
 
   // Multiply through by the correct factors
   int r = p;
-  for ( int k = 1; k <= n; ++k )
+  for ( int k = 1; k <= order; ++k )
   {
     for ( int j = 0; j <= p; ++j )
       ders[k][j] *= r;

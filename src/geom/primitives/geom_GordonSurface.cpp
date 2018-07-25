@@ -35,8 +35,8 @@
 //! \param U_curves [in] iso U curves.
 //! \param V_curves [in] iso V curves.
 //! \param grid     [in] two-dimensional grid of joints.
-mobius::geom_GordonSurface::geom_GordonSurface(const std::vector< Ptr<curve> >& U_curves,
-                                               const std::vector< Ptr<curve> >& V_curves,
+mobius::geom_GordonSurface::geom_GordonSurface(const std::vector< ptr<curve> >& U_curves,
+                                               const std::vector< ptr<curve> >& V_curves,
                                                const TGrid&                     grid)
 {
   m_UCurves = U_curves;
@@ -142,7 +142,7 @@ void mobius::geom_GordonSurface::Eval(const double u,
   xyz SN;
   for ( int i = 0; i <= n; ++i )
   {
-    const Ptr<curve>& cu = m_UCurves[i];
+    const ptr<curve>& cu = m_UCurves[i];
     xyz cu_P;
     cu->Eval(u, cu_P);
 
@@ -152,7 +152,7 @@ void mobius::geom_GordonSurface::Eval(const double u,
   xyz SM;
   for ( int j = 0; j <= m; ++j )
   {
-    const Ptr<curve>& bv = m_VCurves[j];
+    const ptr<curve>& bv = m_VCurves[j];
     xyz bv_P;
     bv->Eval(v, bv_P);
 

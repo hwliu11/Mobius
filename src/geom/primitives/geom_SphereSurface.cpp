@@ -131,7 +131,7 @@ void mobius::geom_SphereSurface::Eval(const double u,
 //! Returns isoparametric curve for a fixed {u}.
 //! \param u [in] fixed parameter.
 //! \return isoparametric curve.
-mobius::Ptr<mobius::geom_Circle>
+mobius::ptr<mobius::geom_Circle>
   mobius::geom_SphereSurface::Iso_U(const double u) const
 {
   const double r             = m_fRadius; // Radius is the same
@@ -154,7 +154,7 @@ mobius::Ptr<mobius::geom_Circle>
 //! Returns isoparametric curve for a fixed {v}.
 //! \param v [in] fixed parameter.
 //! \return isoparametric curve.
-mobius::Ptr<mobius::geom_Circle>
+mobius::ptr<mobius::geom_Circle>
   mobius::geom_SphereSurface::Iso_V(const double v) const
 {
   const double r  = m_fRadius*cos(v); // Radius is the same

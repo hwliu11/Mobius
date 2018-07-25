@@ -84,8 +84,8 @@ public:
     geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                             const int                              deg_U,
                             const int                              deg_V,
-                            const Ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                            const Ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                            const ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                            const ptr<geom_VectorField>&           derivs_isoV_end_D1,
                             const bspl_ParamsSelection             paramsType,
                             const bspl_KnotsSelection              knotsType);
 
@@ -93,10 +93,10 @@ public:
     geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                             const int                              deg_U,
                             const int                              deg_V,
-                            const Ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                            const Ptr<geom_VectorField>&           derivs_isoV_end_D1,
-                            const Ptr<geom_VectorField>&           derivs_isoV_start_D2,
-                            const Ptr<geom_VectorField>&           derivs_isoV_end_D2,
+                            const ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                            const ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                            const ptr<geom_VectorField>&           derivs_isoV_start_D2,
+                            const ptr<geom_VectorField>&           derivs_isoV_end_D2,
                             const bspl_ParamsSelection             paramsType,
                             const bspl_KnotsSelection              knotsType);
 
@@ -113,8 +113,8 @@ public:
     Init(const std::vector< std::vector<xyz> >& points,
          const int                              deg_U,
          const int                              deg_V,
-         const Ptr<geom_VectorField>&           derivs_isoV_start_D1,
-         const Ptr<geom_VectorField>&           derivs_isoV_end_D1,
+         const ptr<geom_VectorField>&           derivs_isoV_start_D1,
+         const ptr<geom_VectorField>&           derivs_isoV_end_D1,
          const bspl_ParamsSelection             paramsType,
          const bspl_KnotsSelection              knotsType);
 
@@ -122,10 +122,10 @@ public:
     Init(const std::vector< std::vector<xyz> >& points,
          const int                              deg_U,
          const int                              deg_V,
-         const Ptr<geom_VectorField>&           derivs_isoV_start_D1,
-         const Ptr<geom_VectorField>&           derivs_isoV_end_D1,
-         const Ptr<geom_VectorField>&           derivs_isoV_start_D2,
-         const Ptr<geom_VectorField>&           derivs_isoV_end_D2,
+         const ptr<geom_VectorField>&           derivs_isoV_start_D1,
+         const ptr<geom_VectorField>&           derivs_isoV_end_D1,
+         const ptr<geom_VectorField>&           derivs_isoV_start_D2,
+         const ptr<geom_VectorField>&           derivs_isoV_end_D2,
          const bspl_ParamsSelection             paramsType,
          const bspl_KnotsSelection              knotsType);
 
@@ -143,7 +143,7 @@ public:
 
   //! Accessor for the resulting surface.
   //! \return interpolant surface.
-  const Ptr<bsurf>& Result() const
+  const ptr<bsurf>& Result() const
   {
     return m_surface;
   }
@@ -156,22 +156,22 @@ private:
   std::vector< std::vector<xyz> > m_points;     //!< Points to interpolate.
   bspl_ParamsSelection            m_paramsType; //!< Parameterization type.
   bspl_KnotsSelection             m_knotsType;  //!< Knots selection type.
-  Ptr<bsurf>                      m_surface;    //!< Interpolant surface.
+  ptr<bsurf>                      m_surface;    //!< Interpolant surface.
 
 // Derivative constraints:
 private:
 
-  Ptr<geom_VectorField> m_derivs_isoV_start_D1; //!< Leading derivative D1 constraints on V iso.
-  Ptr<geom_VectorField> m_derivs_isoV_end_D1;   //!< Trailing derivative D1 constraints on V iso.
+  ptr<geom_VectorField> m_derivs_isoV_start_D1; //!< Leading derivative D1 constraints on V iso.
+  ptr<geom_VectorField> m_derivs_isoV_end_D1;   //!< Trailing derivative D1 constraints on V iso.
 
-  Ptr<geom_VectorField> m_derivs_isoV_start_D2; //!< Leading derivative D2 constraints on V iso.
-  Ptr<geom_VectorField> m_derivs_isoV_end_D2;   //!< Trailing derivative D2 constraints on V iso.
+  ptr<geom_VectorField> m_derivs_isoV_start_D2; //!< Leading derivative D2 constraints on V iso.
+  ptr<geom_VectorField> m_derivs_isoV_end_D2;   //!< Trailing derivative D2 constraints on V iso.
 
 // For maintenance:
 public:
 
-  std::vector< Ptr<bcurve> > IsoV_Curves;
-  std::vector< Ptr<bcurve> > ReperU_Curves;
+  std::vector< ptr<bcurve> > IsoV_Curves;
+  std::vector< ptr<bcurve> > ReperU_Curves;
 
 };
 

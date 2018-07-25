@@ -56,7 +56,7 @@ mobius::geom_SkinSurface::geom_SkinSurface()
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< Ptr<bcurve> >& curves,
+mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< ptr<bcurve> >& curves,
                                            const int                         deg_V,
                                            const bool                        unifyCurves)
 {
@@ -65,7 +65,7 @@ mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< Ptr<bcurve> >& cur
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_SkinSurface::Init(const std::vector< Ptr<bcurve> >& curves,
+void mobius::geom_SkinSurface::Init(const std::vector< ptr<bcurve> >& curves,
                                     const int                         deg_V,
                                     const bool                        unifyCurves)
 {
@@ -112,7 +112,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
   std::vector<double> ref_U;
   for ( size_t c = 0; c < m_curves.size(); ++c )
   {
-    const Ptr<bcurve>& crv = m_curves[c];
+    const ptr<bcurve>& crv = m_curves[c];
     if ( crv.IsNull() )
     {
       m_errCode = ErrCode_NullCurvePassed;
@@ -232,7 +232,7 @@ bool mobius::geom_SkinSurface::BuildIsosU()
     std::vector<xyz> poles;
     for ( int c = 0; c < (int) m_curves.size(); ++c )
     {
-      const Ptr<bcurve>& crv = m_curves[c];
+      const ptr<bcurve>& crv = m_curves[c];
       poles.push_back( crv->Poles()[i] );
     }
     Q.push_back(poles);
@@ -274,7 +274,7 @@ bool mobius::geom_SkinSurface::BuildIsosU()
       iso_U_poles.push_back(Q[i][k]);
 
     // Interpolate over these poles.
-    Ptr<bcurve> iso_U;
+    ptr<bcurve> iso_U;
     if ( !geom_InterpolateCurve::Interp(iso_U_poles, K, m_iDeg_V, params_V, m_pV, m,
                                         false,
                                         false,

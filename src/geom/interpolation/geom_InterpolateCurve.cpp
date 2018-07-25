@@ -371,7 +371,7 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
                                            const xyz&              Dn,
                                            const xyz&              D20,
                                            const xyz&              D2n,
-                                           Ptr<bcurve>&            crv)
+                                           ptr<bcurve>&            crv)
 {
   if ( has_start_deriv2 && !has_start_deriv || has_end_deriv2 && !has_end_deriv )
     throw std::exception("Cannot handle D2 without D1"); // TODO: this limitation can be easily escaped

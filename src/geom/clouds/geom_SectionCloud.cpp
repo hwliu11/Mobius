@@ -37,7 +37,7 @@ mobius::geom_SectionCloud::geom_SectionCloud() : geom_PointCloud()
 
 //! Constructs cloud wrapper under the given set of sections.
 //! \param sections [in] points distributed by sections.
-mobius::geom_SectionCloud::geom_SectionCloud(const std::vector< Ptr<geom_SectionLine> >& sections)
+mobius::geom_SectionCloud::geom_SectionCloud(const std::vector< ptr<geom_SectionLine> >& sections)
 : geom_PointCloud()
 {
   m_cloud = sections;
@@ -76,7 +76,7 @@ void mobius::geom_SectionCloud::Bounds(double& xMin, double& xMax,
   for ( int s = 0; s < (int) m_cloud.size(); ++s )
   {
     // Access section
-    const Ptr<geom_SectionLine>& S = m_cloud.at(s);
+    const ptr<geom_SectionLine>& S = m_cloud.at(s);
 
     // Iterate over the section points
     for ( size_t p = 0; p < S->Pts->NumberOfPoints(); ++p )
@@ -110,7 +110,7 @@ void mobius::geom_SectionCloud::Bounds(double& xMin, double& xMax,
 
 //! Adds new section to the cloud.
 //! \param section [in] point section to add.
-void mobius::geom_SectionCloud::AddSection(const Ptr<geom_SectionLine>& section)
+void mobius::geom_SectionCloud::AddSection(const ptr<geom_SectionLine>& section)
 {
   m_cloud.push_back(section);
 }
@@ -125,7 +125,7 @@ size_t mobius::geom_SectionCloud::NumberOfSections() const
 //! Returns section with the given index in the internal collection.
 //! \param idx [in] index of section to access.
 //! \return requested section of cloud.
-const mobius::Ptr<mobius::geom_SectionLine>&
+const mobius::ptr<mobius::geom_SectionLine>&
   mobius::geom_SectionCloud::SectionByIndex(const size_t idx) const
 {
   return m_cloud.at(idx);
@@ -135,7 +135,7 @@ const mobius::Ptr<mobius::geom_SectionLine>&
 //! will be returned.
 //! \param ID [in] ID of section to access.
 //! \return requested section of cloud.
-mobius::Ptr<mobius::geom_SectionLine>
+mobius::ptr<mobius::geom_SectionLine>
   mobius::geom_SectionCloud::SectionByID(const int ID) const
 {
   for ( size_t s = 0; s < m_cloud.size(); ++s )
@@ -148,7 +148,7 @@ mobius::Ptr<mobius::geom_SectionLine>
 
 //! Accessor for points.
 //! \return double vector of points.
-const std::vector< mobius::Ptr<mobius::geom_SectionLine> >&
+const std::vector< mobius::ptr<mobius::geom_SectionLine> >&
   mobius::geom_SectionCloud::Sections() const
 {
   return m_cloud;
@@ -161,7 +161,7 @@ std::vector< std::vector<mobius::xyz> > mobius::geom_SectionCloud::Points() cons
   std::vector< std::vector<xyz> > pts;
   for ( size_t s = 0; s < m_cloud.size(); ++s )
   {
-    const Ptr<sline>& sct_line = m_cloud[s];
+    const ptr<sline>& sct_line = m_cloud[s];
     pts.push_back( sct_line->Pts->Points() );
   }
   return pts;
@@ -169,12 +169,12 @@ std::vector< std::vector<mobius::xyz> > mobius::geom_SectionCloud::Points() cons
 
 //! Converts section cloud to position cloud.
 //! \return position cloud.
-mobius::Ptr<mobius::pcloud> mobius::geom_SectionCloud::ToPositionCloud() const
+mobius::ptr<mobius::pcloud> mobius::geom_SectionCloud::ToPositionCloud() const
 {
   std::vector<xyz> pts;
   for ( size_t s = 0; s < m_cloud.size(); ++s )
   {
-    const Ptr<sline>& sct_line = m_cloud[s];
+    const ptr<sline>& sct_line = m_cloud[s];
     const std::vector<xyz>& section_pts = sct_line->Pts->Points();
     for ( size_t p = 0; p < section_pts.size(); ++p )
       pts.push_back(section_pts[p]);

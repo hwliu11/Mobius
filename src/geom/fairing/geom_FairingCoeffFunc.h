@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 13 October 2013
+// Created on: 03 March 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,77 +28,51 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionCloud_HeaderFile
-#define geom_SectionCloud_HeaderFile
+#ifndef geom_FairingCoeffFunc_HeaderFile
+#define geom_FairingCoeffFunc_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_SectionLine.h>
+// Geom includes
+#include <mobius/geom.h>
 
 // Core includes
-#include <mobius/core_XYZ.h>
-
-// STL includes
-#include <vector>
+#include <mobius/core_UnivariateFunc.h>
 
 namespace mobius {
 
-//! Represents point cloud arranged as ordered sections of points.
-class geom_SectionCloud : public geom_PointCloud
+//! \ingroup MOBIUS_GEOM
+//!
+//! Base class for fairing coefficients.
+class geom_FairingCoeffFunc : public core_UnivariateFunc
 {
-// Construction & destruction:
 public:
 
-  mobiusGeom_EXPORT
-    geom_SectionCloud();
-
-  mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< ptr<geom_SectionLine> >& sections);
-
-  mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< std::vector<xyz> >& sections);
-
-  mobiusGeom_EXPORT virtual
-    ~geom_SectionCloud();
+  //! ctor.
+  //! \param[in] lambda fairing coefficient.
+  geom_FairingCoeffFunc(const double lambda) : core_UnivariateFunc()
+  {
+    m_fLambda = lambda;
+  }
 
 public:
 
-  mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+  //! \return fairing coefficient.
+  double GetLambda() const
+  {
+    return m_fLambda;
+  }
 
-public:
+  //! Sets fairing coefficient.
+  //! \param[in] lambda fairing coefficient.
+  double SetLambda(const double lambda)
+  {
+    m_fLambda = lambda;
+  }
 
-  mobiusGeom_EXPORT void
-    AddSection(const ptr<geom_SectionLine>& section);
+protected:
 
-  mobiusGeom_EXPORT size_t
-    NumberOfSections() const;
-
-  mobiusGeom_EXPORT const ptr<geom_SectionLine>&
-    SectionByIndex(const size_t idx) const;
-
-  mobiusGeom_EXPORT ptr<geom_SectionLine>
-    SectionByID(const int ID) const;
-
-  mobiusGeom_EXPORT const std::vector< ptr<geom_SectionLine> >&
-    Sections() const;
-
-  mobiusGeom_EXPORT std::vector< std::vector<xyz> >
-    Points() const;
-
-  mobiusGeom_EXPORT ptr<pcloud>
-    ToPositionCloud() const;
-
-private:
-
-  //! Actual collection of points distributed by sections.
-  std::vector< ptr<geom_SectionLine> > m_cloud;
+  double m_fLambda; //!< Fairing coefficient.
 
 };
-
-//! Handy shortcut.
-typedef geom_SectionCloud scloud;
 
 };
 

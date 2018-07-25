@@ -49,7 +49,7 @@ class cascade_BSplineCurve3D
 public:
 
   mobiusCascade_EXPORT
-    cascade_BSplineCurve3D(const Ptr<bcurve>& mobiusCurve);
+    cascade_BSplineCurve3D(const ptr<bcurve>& mobiusCurve);
 
   mobiusCascade_EXPORT
     cascade_BSplineCurve3D(const Handle(Geom_BSplineCurve)& occtCurve);
@@ -70,7 +70,7 @@ public:
 
 public:
 
-  mobiusCascade_EXPORT const Ptr<bcurve>&
+  mobiusCascade_EXPORT const ptr<bcurve>&
     GetMobiusCurve() const;
 
   mobiusCascade_EXPORT const Handle(Geom_BSplineCurve)&
@@ -93,7 +93,7 @@ protected:
 private:
 
   //! Mobius curve.
-  Ptr<bcurve> m_mobiusCurve;
+  ptr<bcurve> m_mobiusCurve;
 
   //! OCCT curve.
   Handle(Geom_BSplineCurve) m_occtCurve;

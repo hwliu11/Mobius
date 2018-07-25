@@ -39,10 +39,10 @@
 //! \param c [in] middle weighted curve.
 //! \param q [in] second rail curve.
 //! \param w [in] weight law.
-mobius::geom_BezierOnRailsSurface::geom_BezierOnRailsSurface(const Ptr<curve>&          r,
-                                                             const Ptr<curve>&          c,
-                                                             const Ptr<curve>&          q,
-                                                             const Ptr<bspl_ScalarLaw>& w)
+mobius::geom_BezierOnRailsSurface::geom_BezierOnRailsSurface(const ptr<curve>&          r,
+                                                             const ptr<curve>&          c,
+                                                             const ptr<curve>&          q,
+                                                             const ptr<bspl_ScalarLaw>& w)
 : geom_Surface(),
   m_r(r),
   m_c(c),

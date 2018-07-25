@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 15 September 2014
+// Created on: 05 March 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,54 +28,63 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-// Own include
-#include <mobius/core_JournalTicket.h>
+#ifndef geom_FairBCurve_HeaderFile
+#define geom_FairBCurve_HeaderFile
 
-//-----------------------------------------------------------------------------
-// Journal Ticket
-//-----------------------------------------------------------------------------
+// Geom includes
+#include <mobius/geom_BSplineCurve.h>
 
-//! Default constructor.
-mobius::core_JournalTicket::core_JournalTicket()
+// Core includes
+#include <mobius/core_OPERATOR.h>
+
+namespace mobius {
+
+//! \ingroup MOBIUS_GEOM
+//!
+//! Fairing algorithm for B-spline curves.
+class geom_FairBCurve : public core_OPERATOR
 {
-  this->init("");
-}
+public:
 
-//! Constructor.
-//! \param msg [in] message.
-mobius::core_JournalTicket::core_JournalTicket(const char* msg)
-{
-  this->init(msg);
-}
+  //! ctor.
+  //! \param[in] curve    B-spline curve in question (the one to fair).
+  //! \param[in] lambda   fairing coefficient.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
+  mobiusGeom_EXPORT
+    geom_FairBCurve(const ptr<bcurve>& curve,
+                    const double       lambda,
+                    core_ProgressEntry progress,
+                    core_PlotterEntry  plotter);
 
-//! Constructor.
-//! \param msg [in] message.
-mobius::core_JournalTicket::core_JournalTicket(const std::string& msg)
-{
-  this->init( msg.c_str() );
-}
+public:
 
-//! Constructor.
-//! \param buff [in] message buffer.
-mobius::core_JournalTicket::core_JournalTicket(const core_StringBuffer& buff)
-{
-  this->init( buff.String.c_str() );
-}
+  //! Performs fairing.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT bool
+    Perform();
 
-//! Destructor.
-mobius::core_JournalTicket::~core_JournalTicket()
-{}
+public:
 
-//! Converts the ticket to string.
-//! \return string representation of a ticket.
-std::string mobius::core_JournalTicket::ToString() const
-{
-  return this->Msg;
-}
+  //! \return resulting curve.
+  const ptr<bcurve>& GetResult() const
+  {
+    return m_resultCurve;
+  }
 
-//! Initializes the ticket with message.
-//! \param msg [in] message to set.
-void mobius::core_JournalTicket::init(const char* msg)
-{
-  this->Msg = msg;
-}
+protected:
+
+  //! Curve to fair.
+  ptr<bcurve> m_inputCurve;
+
+  //! Result of fairing.
+  ptr<bcurve> m_resultCurve;
+
+  //! Fairing coefficient.
+  double m_fLambda;
+
+};
+
+};
+
+#endif

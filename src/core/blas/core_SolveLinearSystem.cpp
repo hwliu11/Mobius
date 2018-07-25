@@ -32,7 +32,9 @@
 #include <mobius/core_SolveLinearSystem.h>
 
 // Eigen includes
+#pragma warning(disable : 4702 4701)
 #include <Eigen/Dense>
+#pragma warning(default : 4702 4701)
 
 #undef COUT_DEBUG
 #if defined COUT_DEBUG

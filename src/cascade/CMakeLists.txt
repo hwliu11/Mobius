@@ -53,6 +53,7 @@ foreach (FILE ${CPP_FILES})
 endforeach (FILE)
 
 include_directories(${cascade_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${3RDPARTY_OCCT_INCLUDE_DIR})
+
 add_library ( mobiusCascade SHARED ${H_FILES} ${CPP_FILES} )
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 03 March 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,24 +28,53 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef core_Smoothness_HeaderFile
-#define core_Smoothness_HeaderFile
+#ifndef geom_FairingAijFunc_HeaderFile
+#define geom_FairingAijFunc_HeaderFile
 
-// core includes
-#include <mobius/core.h>
+// asiAlgo includes
+#include <mobius/geom_FairingCoeffFunc.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_CORE
+//! \ingroup MOBIUS_GEOM
 //!
-//! Order of smoothness.
-enum core_Smoothness
+//! Univariate function to interface fairing coefficients A_{i,j}.
+class geom_FairingAijFunc : public geom_FairingCoeffFunc
 {
-  Smoothness_C0 = 0, //!< C0.
-  Smoothness_C1,     //!< C1.
-  Smoothness_C2,     //!< C2.
-  Smoothness_C3,     //!< C3.
-  Smoothness_CN      //!< CN.
+public:
+
+  //! ctor.
+  //! \param[in] U      knot vector.
+  //! \param[in] p      B-spline degree.
+  //! \param[in] i      0-based index 1.
+  //! \param[in] j      0-based index 2.
+  //! \param[in] lambda fairing coefficent.
+  mobiusGeom_EXPORT
+    geom_FairingAijFunc(const std::vector<double>& U,
+                        const int                  p,
+                        const int                  i,
+                        const int                  j,
+                        const double               lambda);
+
+public:
+
+  //! Evaluates function.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT virtual double
+    Eval(const double u) const;
+
+private:
+
+  geom_FairingAijFunc() = delete;
+  void operator=(const geom_FairingAijFunc&) = delete;
+
+protected:
+
+  const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
+  int                        m_iDegree; //!< Degree of the spline function.
+  int                        m_iIndex1; //!< 0-based index 1.
+  int                        m_iIndex2; //!< 0-based index 2.
+
 };
 
 };

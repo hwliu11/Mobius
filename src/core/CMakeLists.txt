@@ -6,6 +6,7 @@ project (mobiusCore)
 
 set (H_FILES
   core.h
+  core_excMsgInit.h
 )
 set (CPP_FILES
   core.cpp
@@ -16,13 +17,22 @@ set (CPP_FILES
 #------------------------------------------------------------------------------
 
 set (base_H_FILES
+  base/core_Continuity.h
+  base/core_ILogger.h
+  base/core_Integral.h
+  base/core_IPlotter.h
+  base/core_IProgressNotifier.h
   base/core_OBJECT.h
+  base/core_OPERATOR.h
   base/core_Precision.h
   base/core_Ptr.h
-  base/core_Smoothness.h
+  base/core_UnivariateFunc.h
+  base/core_Vars.h
 )
-set (base_CPP_FILES 
+set (base_CPP_FILES
+  base/core_Integral.cpp
   base/core_OBJECT.cpp
+  base/core_OPERATOR.cpp
   base/core_Precision.cpp
   base/core_Ptr.cpp
 )
@@ -64,8 +74,6 @@ set (primitives_CPP_FILES
 set (utils_H_FILES 
   utils/core_FileDumper.h
   utils/core_HeapAlloc.h
-  utils/core_Journal.h
-  utils/core_JournalTicket.h
   utils/core_JSON.h
   utils/core_StringBuffer.h
   utils/core_TimeStamp.h
@@ -73,8 +81,6 @@ set (utils_H_FILES
 set (utils_CPP_FILES 
   utils/core_FileDumper.cpp
   utils/core_HeapAlloc.cpp
-  utils/core_Journal.cpp
-  utils/core_JournalTicket.cpp
   utils/core_JSON.cpp
   utils/core_StringBuffer.cpp
   utils/core_TimeStamp.cpp
@@ -135,6 +141,7 @@ endforeach (FILE)
 message (STATUS "EIGEN dir (3RDPARTY_EIGEN_DIR): ${3RDPARTY_EIGEN_DIR}")
 
 include_directories(${core_include_dir_loc} ${3RDPARTY_EIGEN_DIR})
+
 add_library (mobiusCore SHARED
   ${H_FILES}            ${CPP_FILES} 
   ${base_H_FILES}       ${base_CPP_FILES}

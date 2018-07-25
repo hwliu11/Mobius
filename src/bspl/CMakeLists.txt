@@ -48,7 +48,6 @@ set (laws_H_FILES
   laws/bspl_ConstLaw.h
 )
 set (laws_CPP_FILES 
-  laws/bspl_ScalarLaw.cpp
   laws/bspl_ConstLaw.cpp
 )
 
@@ -116,6 +115,7 @@ foreach (FILE ${parameterization_CPP_FILES})
 endforeach (FILE)
 
 include_directories(${bspl_include_dir_loc} ${core_include_dir})
+
 add_library (mobiusBSpl SHARED
   ${H_FILES}                  ${CPP_FILES} 
   ${basis_H_FILES}            ${basis_CPP_FILES}

@@ -293,7 +293,7 @@ void mobius::geom_BSplineCurve::Eval_Dk(double**     dN,
 
 //! Creates a copy of this B-curve.
 //! \return copy of B-curve.
-mobius::Ptr<mobius::bcurve> mobius::geom_BSplineCurve::Copy() const
+mobius::ptr<mobius::bcurve> mobius::geom_BSplineCurve::Copy() const
 {
   return new bcurve(m_poles, m_U, m_iDeg);
 }
@@ -318,7 +318,7 @@ double mobius::geom_BSplineCurve::K(const double u) const
 
 //! Returns continuity of the curve.
 //! \return continuity.
-mobius::core_Smoothness mobius::geom_BSplineCurve::Continuity() const
+mobius::core_Continuity mobius::geom_BSplineCurve::Continuity() const
 {
   std::vector<int> mults;
   int mult = 1;
@@ -346,16 +346,16 @@ mobius::core_Smoothness mobius::geom_BSplineCurve::Continuity() const
     const int cont     = m_iDeg - max_mult;
 
     if ( cont <= 0 )
-      return Smoothness_C0;
+      return Continuity_C0;
     if ( cont == 1 )
-      return Smoothness_C1;
+      return Continuity_C1;
     if ( cont == 2 )
-      return Smoothness_C2;
+      return Continuity_C2;
     if ( cont == 3 )
-      return Smoothness_C3;
+      return Continuity_C3;
   }
 
-  return Smoothness_CN;
+  return Continuity_CN;
 }
 
 //-----------------------------------------------------------------------------
@@ -515,11 +515,11 @@ bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
 //! \param slices [out] resulting curve slices.
 //! \return true in case of success, false -- otherwise.
 bool mobius::geom_BSplineCurve::Split(const double                u,
-                                      std::vector< Ptr<bcurve> >& slices) const
+                                      std::vector< ptr<bcurve> >& slices) const
 {
   // Create a copy of this curve as knot insertion modifies the object
   // (not real geometry)
-  Ptr<bcurve> source = this->Copy();
+  ptr<bcurve> source = this->Copy();
 
   // Resolve multiplicity
   int s = 0;
@@ -578,10 +578,10 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
    *  Create b-curves and finish
    * ============================ */
 
-  Ptr<bcurve>
+  ptr<bcurve>
     slice_before = new bcurve(poles_before, U_before, m_iDeg);
 
-  Ptr<bcurve>
+  ptr<bcurve>
     slice_after = new bcurve(poles_after, U_after, m_iDeg);
 
   slices.push_back(slice_before);

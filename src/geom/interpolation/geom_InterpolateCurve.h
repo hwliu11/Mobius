@@ -139,7 +139,7 @@ public:
            const xyz&              Dn,
            const xyz&              D20,
            const xyz&              D2n,
-           Ptr<bcurve>&          crv);
+           ptr<bcurve>&          crv);
 
 public:
 
@@ -152,7 +152,7 @@ public:
 
   //! Accessor for the resulting curve.
   //! \return interpolant curve.
-  const Ptr<bcurve>& Result() const
+  const ptr<bcurve>& Result() const
   {
     return m_curve;
   }
@@ -189,7 +189,7 @@ private:
   bspl_KnotsSelection  m_knotsType;  //!< Knots selection type.
   double*              m_pU;         //!< Knot vector externally defined for interpolation.
   int                  m_iNumKnots;  //!< Number of knots.
-  Ptr<bcurve>          m_curve;      //!< Interpolant curve.
+  ptr<bcurve>          m_curve;      //!< Interpolant curve.
 
 };
 

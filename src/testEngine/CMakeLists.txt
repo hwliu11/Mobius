@@ -67,6 +67,7 @@ foreach (FILE ${reportgen_CPP_FILES})
 endforeach (FILE)
 
 include_directories(${testEngine_include_dir_loc} ${core_include_dir})
+
 add_library (mobiusTestEngine SHARED
   ${H_FILES}           ${CPP_FILES}
   ${reportgen_H_FILES} ${reportgen_CPP_FILES})

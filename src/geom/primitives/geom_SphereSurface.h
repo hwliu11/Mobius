@@ -90,10 +90,10 @@ public:
 
 public:
 
-  mobiusGeom_EXPORT Ptr<geom_Circle>
+  mobiusGeom_EXPORT ptr<geom_Circle>
     Iso_U(const double u) const;
 
-  mobiusGeom_EXPORT Ptr<geom_Circle>
+  mobiusGeom_EXPORT ptr<geom_Circle>
     Iso_V(const double v) const;
 
 public:

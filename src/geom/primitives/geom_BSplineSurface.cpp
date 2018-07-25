@@ -270,7 +270,7 @@ void mobius::geom_BSplineSurface::Eval(const double u,
 //! Extracts isoparametric curve corresponding to the passed {u} level.
 //! \param u [in] parameter value to extract isoparametric curve for.
 //! \return isoline.
-mobius::Ptr<mobius::bcurve>
+mobius::ptr<mobius::bcurve>
   mobius::geom_BSplineSurface::Iso_U(const double u) const
 {
   // Heap allocator
@@ -307,7 +307,7 @@ mobius::Ptr<mobius::bcurve>
   // Create B-spline curve
   //-----------------------
 
-  Ptr<bcurve> Iso = new bcurve(Q, m_V, m_iDegV);
+  ptr<bcurve> Iso = new bcurve(Q, m_V, m_iDegV);
   return Iso;
 }
 
@@ -316,7 +316,7 @@ mobius::Ptr<mobius::bcurve>
 //! Extracts isoparametric curve corresponding to the passed {v} level.
 //! \param v [in] parameter value to extract isoparametric curve for.
 //! \return isoline.
-mobius::Ptr<mobius::bcurve>
+mobius::ptr<mobius::bcurve>
   mobius::geom_BSplineSurface::Iso_V(const double v) const
 {
   // Heap allocator
@@ -353,7 +353,7 @@ mobius::Ptr<mobius::bcurve>
   // Create B-spline curve
   //-----------------------
 
-  Ptr<bcurve> Iso = new bcurve(Q, m_U, m_iDegU);
+  ptr<bcurve> Iso = new bcurve(Q, m_U, m_iDegU);
   return Iso;
 }
 

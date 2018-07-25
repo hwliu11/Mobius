@@ -34,7 +34,7 @@
 //! Constructs degenerated vector field (all vectors are nulls) under the
 //! given position point cloud.
 //! \param cloud [in] points.
-mobius::geom_VectorField::geom_VectorField(const Ptr<pcloud>& cloud)
+mobius::geom_VectorField::geom_VectorField(const ptr<pcloud>& cloud)
 : core_OBJECT(),
   m_cloud(cloud)
 {}
@@ -51,9 +51,9 @@ void mobius::geom_VectorField::Clear()
 
 //! Prepares a copy of this vector field.
 //! \return copy.
-mobius::Ptr<mobius::geom_VectorField> mobius::geom_VectorField::Copy() const
+mobius::ptr<mobius::geom_VectorField> mobius::geom_VectorField::Copy() const
 {
-  Ptr<geom_VectorField> res = new geom_VectorField(m_cloud);
+  ptr<geom_VectorField> res = new geom_VectorField(m_cloud);
   res->m_cloud = new pcloud( m_cloud->Points() );
   res->m_vectors = m_vectors;
   return res;
@@ -61,14 +61,14 @@ mobius::Ptr<mobius::geom_VectorField> mobius::geom_VectorField::Copy() const
 
 //! Returns the associated point cloud.
 //! \return point cloud.
-const mobius::Ptr<mobius::pcloud>& mobius::geom_VectorField::Cloud() const
+const mobius::ptr<mobius::pcloud>& mobius::geom_VectorField::Cloud() const
 {
   return m_cloud;
 }
 
 //! Returns the associated point cloud for modification.
 //! \return point cloud.
-mobius::Ptr<mobius::pcloud>& mobius::geom_VectorField::ChangeCloud()
+mobius::ptr<mobius::pcloud>& mobius::geom_VectorField::ChangeCloud()
 {
   return m_cloud;
 }

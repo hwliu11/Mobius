@@ -37,7 +37,7 @@
 //! \param prec [in] precision (tolerance around line).
 //! \return true if the point belongs to the line, false -- otherwise.
 bool mobius::geom_PointOnLine::operator()(const xyz&            P,
-                                          const Ptr<geom_Line>& Line,
+                                          const ptr<geom_Line>& Line,
                                           const double          prec)
 {
   // Line properties

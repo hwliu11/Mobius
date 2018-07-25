@@ -65,8 +65,8 @@ public:
 public:
 
   mobiusGeom_EXPORT
-    geom_GordonSurface(const std::vector< Ptr<curve> >& U_curves,
-                       const std::vector< Ptr<curve> >& V_curves,
+    geom_GordonSurface(const std::vector< ptr<curve> >& U_curves,
+                       const std::vector< ptr<curve> >& V_curves,
                        const TGrid&                     grid);
 
   mobiusGeom_EXPORT virtual
@@ -143,10 +143,10 @@ private:
 private:
 
   //! Iso U curves.
-  std::vector< Ptr<curve> > m_UCurves;
+  std::vector< ptr<curve> > m_UCurves;
 
   //! Iso V curves.
-  std::vector< Ptr<curve> > m_VCurves;
+  std::vector< ptr<curve> > m_VCurves;
 
   //! Grid of parameters.
   TGrid m_grid;
