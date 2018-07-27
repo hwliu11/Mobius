@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 26 July 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,47 +28,68 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef test_Integral_HeaderFile
+#define test_Integral_HeaderFile
 
 // Tests includes
-#include <mobius/test.h>
+#include <mobius/test_CaseIDs.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
+
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
+
+//! Unit tests for numerical integration.
+class test_Integral : public testEngine_TestCase
 {
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
+  //! Returns Test Case ID.
+  //! \return ID of the Test Case.
+  static int ID()
+  {
+    return CaseID_Core_Integral;
+  }
 
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+  //! Returns filename for the description.
+  //! \return filename for the description of the Test Case.
+  static std::string DescriptionFn()
+  {
+    return "test_Integral";
+  }
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  //! Returns Test Case description directory.
+  //! \return description directory for the Test Case.
+  static std::string DescriptionDir()
+  {
+    return "Core";
+  }
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  //! Returns pointers to the Test Functions to launch.
+  //! \param functions [out] output collection of pointers.
+  static void Functions(MobiusTestFunctions& functions)
+  {
+    functions << &test01
+              << &test02
+              << &test03
+              << &test04
+              << &test05
+              << &test06;
+  }
 
-  CaseID_Geom_InterpolateCurve3D,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve
+private:
+
+  static outcome test01 (const int funcID);
+  static outcome test02 (const int funcID);
+  static outcome test03 (const int funcID);
+  static outcome test04 (const int funcID);
+  static outcome test05 (const int funcID);
+  static outcome test06 (const int funcID);
+
+};
 
 };
 

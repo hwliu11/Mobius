@@ -42,7 +42,7 @@
 mobius::outcome
   mobius::test_ParamsChordLength::test1(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ----------------------
    *  Prepare input points
@@ -100,7 +100,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_ParamsChordLength::test2(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ----------------------
    *  Prepare input points
@@ -159,7 +159,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_ParamsChordLength::test3(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ----------------------
    *  Prepare input points
@@ -229,7 +229,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_ParamsChordLength::test4(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ----------------------
    *  Prepare input points
@@ -304,7 +304,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_ParamsChordLength::test5(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ----------------------
    *  Prepare input points

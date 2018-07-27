@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME     = "Mobius documentation"
+PROJECT_NAME     = "Mobius"
 OUTPUT_DIRECTORY = @DOXYGEN_ALGO_GENERATED@
 CREATE_SUBDIRS	 = NO # We experience problems with HTML otherwise
 OUTPUT_LANGUAGE  = English
@@ -18,7 +18,7 @@ WARNINGS = YES
 # Input related options
 #---------------------------------------------------------------------------
 INPUT         = @DOXYGEN_ALGO_INPUT@
-FILE_PATTERNS = *.dox
+FILE_PATTERNS = *.dox *.md
 IMAGE_PATH    = @DOXYGEN_ALGO_IMGS@
 RECURSIVE     = YES
 TAGFILES      = @DOXYGEN_API_TAG_LOC@

@@ -51,6 +51,8 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
                                              const int                  order,
                                              double**                   ders) const
 {
+  ptr<alloc2d> localAlloc;
+
   // Prepare working arrays:
   //
   // - left[] and right[]: to store knot differences.
@@ -58,12 +60,15 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   double left[mobiusBSpl_MaxDegree], right[mobiusBSpl_MaxDegree];
   double ndu[mobiusBSpl_MaxDegree][mobiusBSpl_MaxDegree];
   //
-  for ( int i = 0; i < mobiusBSpl_MaxDegree; ++i )
+  memset(left,  0, sizeof(double)*mobiusBSpl_MaxDegree);
+  memset(right, 0, sizeof(double)*mobiusBSpl_MaxDegree);
+  memset(ndu,   0, sizeof(double)*mobiusBSpl_MaxDegree*mobiusBSpl_MaxDegree);
+  /*for ( int i = 0; i < mobiusBSpl_MaxDegree; ++i )
   {
     left[i] = right[i] = 0.0;
     for ( int j = 0; j < mobiusBSpl_MaxDegree; ++j )
       ndu[i][j] = 0.0;
-  }
+  }*/
 
   //------------------------------------------------------
   // Evaluate basis functions along with knot differences
@@ -106,10 +111,15 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   // Evaluate derivatives
   //----------------------
 
-  core_HeapAlloc2D<double> Alloc2D;
-
   // Coefficients.
-  double** a = Alloc2D.Allocate(2, order+1, true); // Two working rows
+  double** a;
+  if ( m_pAlloc.IsNull() )
+  {
+    localAlloc = new alloc2d;
+    a = localAlloc->Allocate(2, order+1, true); // Two working rows
+  }
+  else
+    a = m_pAlloc->Access(m_iMemBlock).Ptr;
 
   // Load basis functions into the first row of result matrix
   for ( int j = 0; j <= p; ++j )

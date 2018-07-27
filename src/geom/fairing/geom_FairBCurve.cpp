@@ -37,6 +37,7 @@
 
 // Core includes
 #include <mobius/core_Integral.h>
+#include <mobius/core_Timer.h>
 
 // Eigen includes
 #pragma warning(disable : 4701 4702)
@@ -54,7 +55,6 @@
 
 #define NUM_CONSTRAINED_POLES_LEADING  1
 #define NUM_CONSTRAINED_POLES_TRAILING 1
-#define NUM_INTEGRATION_BINS           500
 
 //-----------------------------------------------------------------------------
 
@@ -73,15 +73,19 @@ mobius::geom_FairBCurve::geom_FairBCurve(const ptr<bcurve>& curve,
 bool mobius::geom_FairBCurve::Perform()
 {
   // Prepare flat sequence of knots and other working vars.
-  const std::vector<double>& U   = m_inputCurve->Knots();
-  const int                  p   = m_inputCurve->Degree();
-  const int                  m   = int( U.size() ) - 1;
-  const int                  n   = m - p - 1;
-  const int                  dim = n + 1 - NUM_CONSTRAINED_POLES_LEADING - NUM_CONSTRAINED_POLES_TRAILING;
+  const std::vector<double>& U        = m_inputCurve->Knots();
+  const int                  p        = m_inputCurve->Degree();
+  const int                  m        = int( U.size() ) - 1;
+  const int                  n        = m - p - 1;
+  const int                  dim      = n + 1 - NUM_CONSTRAINED_POLES_LEADING - NUM_CONSTRAINED_POLES_TRAILING;
+  const int                  nGaussPt = 2*p - 1;
+  int                        nAijEval = 0;
 
-  // Prepare reusable memory block.
-  core_HeapAlloc2D<double> Alloc;
-  Alloc.Allocate(3, p + 1, true);
+  // Prepare reusable memory blocks for running sub-routines efficiently.
+  ptr<alloc2d> sharedAlloc = new alloc2d;
+  sharedAlloc->Allocate(3,     p + 1, true); // memBlock_EffectiveNDersResult
+  sharedAlloc->Allocate(2,     3,     true); // memBlock_EffectiveNDersInternal
+  sharedAlloc->Allocate(p + 1, p + 1, true); // memBlock_BSplineCurveEvalDk
 
   // Initialize matrix from the passed row pointer.
   Eigen::MatrixXd eigen_A_mx(dim, dim);
@@ -89,19 +93,25 @@ bool mobius::geom_FairBCurve::Perform()
   {
     for ( int c = 0; c < dim; ++c )
     {
-      ptr<geom_FairingAijFunc>
-        N2 = new geom_FairingAijFunc(U,
-                                     p,
-                                     r + NUM_CONSTRAINED_POLES_LEADING,
-                                     c + NUM_CONSTRAINED_POLES_LEADING,
-                                     m_fLambda,
-                                     &Alloc);
+      geom_FairingAijFunc N2(U,
+                             p,
+                             r + NUM_CONSTRAINED_POLES_LEADING,
+                             c + NUM_CONSTRAINED_POLES_LEADING,
+                             m_fLambda,
+                             sharedAlloc);
 
       // Compute integral.
-      const double val = core_Integral::ComputeRect(N2.Access(),
-                                                    U[0],
-                                                    U[U.size() - 1],
-                                                    NUM_INTEGRATION_BINS);
+      double val = 0;
+      for ( size_t k = 0; k < U.size() - 1; ++k )
+      {
+        if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
+
+        // nGaussPt-points integration in each knot span.
+        const double
+          gaussVal = core_Integral::gauss::Compute(&N2, U[k], U[k+1], nGaussPt, nAijEval);
+        //
+        val += gaussVal;
+      }
 
       eigen_A_mx(r, c) = val;
     }
@@ -115,51 +125,66 @@ bool mobius::geom_FairBCurve::Perform()
   Eigen::MatrixXd eigen_B_mx(dim, 3);
   for ( int r = 0; r < dim; ++r )
   {
-    ptr<geom_FairingBjFunc>
-      rhs_x = new geom_FairingBjFunc(m_inputCurve,
-                                     0,
-                                     U,
-                                     p,
-                                     r + NUM_CONSTRAINED_POLES_LEADING,
-                                     m_fLambda,
-                                     &Alloc);
+    geom_FairingBjFunc rhs_x(m_inputCurve,
+                             0,
+                             U,
+                             p,
+                             r + NUM_CONSTRAINED_POLES_LEADING,
+                             m_fLambda,
+                             sharedAlloc);
     //
-    ptr<geom_FairingBjFunc>
-      rhs_y = new geom_FairingBjFunc(m_inputCurve,
-                                     1,
-                                     U,
-                                     p,
-                                     r + NUM_CONSTRAINED_POLES_LEADING,
-                                     m_fLambda,
-                                     &Alloc);
+    geom_FairingBjFunc rhs_y(m_inputCurve,
+                             1,
+                             U,
+                             p,
+                             r + NUM_CONSTRAINED_POLES_LEADING,
+                             m_fLambda,
+                             sharedAlloc);
     //
-    ptr<geom_FairingBjFunc>
-      rhs_z = new geom_FairingBjFunc(m_inputCurve,
-                                     2,
-                                     U,
-                                     p,
-                                     r + NUM_CONSTRAINED_POLES_LEADING,
-                                     m_fLambda,
-                                     &Alloc);
+    geom_FairingBjFunc rhs_z(m_inputCurve,
+                             2,
+                             U,
+                             p,
+                             r + NUM_CONSTRAINED_POLES_LEADING,
+                             m_fLambda,
+                             sharedAlloc);
 
     // Compute integrals.
-    const double
-      val_x = core_Integral::ComputeRect(rhs_x.Access(),
-                                         U[0],
-                                         U[U.size() - 1],
-                                         NUM_INTEGRATION_BINS);
+    double val_x = 0;
+    for ( size_t k = 0; k < U.size() - 1; ++k )
+    {
+      if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
+
+      // nGaussPt-points integration in each knot span.
+      const double
+        gaussVal = core_Integral::gauss::Compute(&rhs_x, U[k], U[k+1], nGaussPt);
+      //
+      val_x += gaussVal;
+    }
     //
-    const double
-      val_y = core_Integral::ComputeRect(rhs_y.Access(),
-                                         U[0],
-                                         U[U.size() - 1],
-                                         NUM_INTEGRATION_BINS);
+    double val_y = 0;
+    for ( size_t k = 0; k < U.size() - 1; ++k )
+    {
+      if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
+
+      // nGaussPt-points integration in each knot span.
+      const double
+        gaussVal = core_Integral::gauss::Compute(&rhs_y, U[k], U[k+1], nGaussPt);
+      //
+      val_y += gaussVal;
+    }
     //
-    const double
-      val_z = core_Integral::ComputeRect(rhs_z.Access(),
-                                         U[0],
-                                         U[U.size() - 1],
-                                         NUM_INTEGRATION_BINS);
+    double val_z = 0;
+    for ( size_t k = 0; k < U.size() - 1; ++k )
+    {
+      if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
+
+      // nGaussPt-points integration in each knot span.
+      const double
+        gaussVal = core_Integral::gauss::Compute(&rhs_z, U[k], U[k+1], nGaussPt);
+      //
+      val_z += gaussVal;
+    }
 
     eigen_B_mx(r, 0) = -val_x;
     eigen_B_mx(r, 1) = -val_y;
@@ -185,7 +210,9 @@ bool mobius::geom_FairBCurve::Perform()
   const std::vector<xyz>& poles = m_resultCurve->Poles();
   int                     r     = 0;
   //
-  for ( size_t p = 0 + NUM_CONSTRAINED_POLES_LEADING; p <= poles.size() - 1 - NUM_CONSTRAINED_POLES_TRAILING; ++p, ++r )
+  for ( size_t p = 0 + NUM_CONSTRAINED_POLES_LEADING;
+        p <= poles.size() - 1 - NUM_CONSTRAINED_POLES_TRAILING;
+        ++p, ++r )
   {
     const xyz& P = poles[p];
     xyz        D = xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
@@ -197,7 +224,7 @@ bool mobius::geom_FairBCurve::Perform()
   std::cout << "Num poles: " << m_resultCurve->Poles().size() << std::endl;
 #endif
 
-  m_plotter.REDRAW_CURVE("faired", m_resultCurve.Access(), Color_Green);
+  m_plotter.REDRAW_CURVE("faired", m_resultCurve.Access(), MobiusColor_Green);
 
   return true;
 }

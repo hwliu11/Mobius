@@ -36,6 +36,7 @@
 
 // Core includes
 #include <mobius/core_Continuity.h>
+#include <mobius/core_HeapAlloc.h>
 
 namespace mobius {
 
@@ -93,13 +94,18 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval_Dk(const double u,
             const int    k,
-            xyz&         dkC) const;
+            xyz&         dkC,
+            ptr<alloc2d> alloc            = NULL,
+            const int    memBlockResult   = -1,
+            const int    memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT virtual void
     Eval_Dk(double**     dN,
             const double u,
             const int    k,
-            xyz&         dkC) const;
+            xyz&         dkC,
+            ptr<alloc2d> alloc            = NULL,
+            const int    memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT virtual double
     K(const double u) const;

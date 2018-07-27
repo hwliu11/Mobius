@@ -68,6 +68,7 @@ set (fairing_H_FILES
   fairing/geom_FairingAijFunc.h
   fairing/geom_FairingBjFunc.h
   fairing/geom_FairingCoeffFunc.h
+  fairing/geom_FairingMemBlocks.h
 )
 set (fairing_CPP_FILES
   fairing/geom_FairBCurve.cpp
@@ -220,6 +221,7 @@ install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMP
 
 install (FILES ${H_FILES}               DESTINATION include/mobius)
 install (FILES ${classifiers_H_FILES}   DESTINATION include/mobius)
+install (FILES ${fairing_H_FILES}       DESTINATION include/mobius)
 install (FILES ${clouds_H_FILES}        DESTINATION include/mobius)
 install (FILES ${interpolation_H_FILES} DESTINATION include/mobius)
 install (FILES ${primitives_H_FILES}    DESTINATION include/mobius)

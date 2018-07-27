@@ -61,7 +61,7 @@ bool mobius::test_N::LaunchFunction()
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_N::testCase1() const
 {
-  outcome res;
+  outcome res;//( DescriptionFn() );
 
   const std::vector<double> U = {0.0, 0.2, 0.5, 1.0};
   const int p = 0;
@@ -97,7 +97,7 @@ mobius::outcome mobius::test_N::testCase1() const
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_N::testCase2() const
 {
-  outcome res;
+  outcome res;//( DescriptionFn() );
 
   const std::vector<double> U = {0.0, 0.0, 0.2, 0.5, 1.0, 1.0};
   const int p = 1;

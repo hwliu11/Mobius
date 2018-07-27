@@ -32,7 +32,7 @@
 #define core_HeapAlloc_HeaderFile
 
 // core includes
-#include <mobius/core.h>
+#include <mobius/core_Ptr.h>
 
 // STD includes
 #include <vector>
@@ -54,7 +54,7 @@ namespace mobius {
 //! allocator stores raw pointers to the acquired memory in its internal
 //! collection. When allocator is destructed, all acquired memory is released.
 template <typename ElemType>
-class core_HeapAlloc
+class core_HeapAlloc : public core_OBJECT
 {
 public:
 
@@ -111,7 +111,7 @@ public:
 public:
 
   //! Default constructor.
-  core_HeapAlloc()
+  core_HeapAlloc() : core_OBJECT()
   {}
 
   //! Deallocates all consumed memory.
@@ -133,6 +133,8 @@ private:
 
 };
 
+typedef core_HeapAlloc<double> alloc1d;
+
 //-----------------------------------------------------------------------------
 // Allocator for 2-dimensional arrays
 //-----------------------------------------------------------------------------
@@ -141,16 +143,16 @@ private:
 //! allocator stores raw pointers to the acquired memory in its internal
 //! collection. When allocator is destructed, all acquired memory is released.
 template <typename ElemType>
-class core_HeapAlloc2D
+class core_HeapAlloc2D : public core_OBJECT
 {
 public:
 
   //! Raw pointer with size.
-  struct THeapPtr
+  struct THeapBlock
   {
-    THeapPtr() : Ptr(NULL), NumRows(0), NumCols(0) {} //!< Default constructor.
+    THeapBlock() : Ptr(NULL), NumRows(0), NumCols(0) {} //!< Default ctor.
 
-    ElemType** Ptr;     //!< Pointer to the allocated memory.
+    ElemType** Ptr;     //!< Pointer to the allocated heap memory.
     int        NumRows; //!< Number of rows.
     int        NumCols; //!< Number of columns.
   };
@@ -169,64 +171,68 @@ public:
                       const bool doNullify = false)
   {
     // Allocate
-    ElemType** ptr = new ElemType*[numRows];
+    ElemType** rawPtr = new ElemType*[numRows];
     for ( int i = 0; i < numRows; ++i )
     {
-      ptr[i] = new ElemType[numCols];
+      rawPtr[i] = new ElemType[numCols];
 
       // Nullify
       if ( doNullify )
-        memset(ptr[i], 0, numCols*sizeof(ElemType));
+        memset(rawPtr[i], 0, numCols*sizeof(ElemType));
     }
 
-    THeapPtr HeapPtr;
-    HeapPtr.Ptr     = reinterpret_cast<ElemType**>(ptr);
-    HeapPtr.NumRows = numRows;
-    HeapPtr.NumCols = numCols;
+    THeapBlock HeapBlock;
+    HeapBlock.Ptr     = rawPtr;
+    HeapBlock.NumRows = numRows;
+    HeapBlock.NumCols = numCols;
 
-    // Store pointer in the internal collection for deallocation
-    m_ptrVector.push_back(HeapPtr);
+    // Store pointer
+    m_blocks.push_back(HeapBlock);
 
     // Return
-    return ptr;
+    return rawPtr;
   }
 
   //! Accessor for the raw array by its internal index in the allocator.
   //! \param arr_idx [in] 0-based index of array in the allocator.
   //! \return pointer to the target array.
-  const THeapPtr& Access(const size_t arr_idx) const
+  const THeapBlock& Access(const size_t arr_idx) const
   {
-    return m_ptrVector.at(arr_idx);
+    return m_blocks[arr_idx];
   }
 
 public:
 
   //! Default constructor.
-  core_HeapAlloc2D()
+  core_HeapAlloc2D() : core_OBJECT()
   {}
 
   //! Deallocates all consumed memory.
   ~core_HeapAlloc2D()
   {
-    for ( int i = 0; i < (int) m_ptrVector.size(); ++i )
+    for ( size_t k = 0; k < m_blocks.size(); ++k )
     {
-      THeapPtr& HeapPtr = m_ptrVector.at(i);
-      for ( int i = 0; i < HeapPtr.NumRows; ++i )
+      THeapBlock& HeapBlock = m_blocks[k];
+      for ( int j = 0; j < HeapBlock.NumRows; ++j )
       {
-        delete[] HeapPtr.Ptr[i];
-        HeapPtr.Ptr[i] = NULL;
+        delete[] HeapBlock.Ptr[j];
+        HeapBlock.Ptr[j] = NULL;
       }
-      HeapPtr.NumRows = 0;
-      HeapPtr.NumCols = 0;
+      HeapBlock.NumRows = 0;
+      HeapBlock.NumCols = 0;
+      delete[] HeapBlock.Ptr;
+      HeapBlock.Ptr = NULL;
     }
   }
 
 private:
 
   //! Pointers to allocated memory in order of allocation.
-  std::vector<THeapPtr> m_ptrVector;
+  std::vector<THeapBlock> m_blocks;
 
 };
+
+typedef core_HeapAlloc2D<double> alloc2d;
 
 };
 

@@ -40,7 +40,7 @@
 mobius::outcome
   mobius::test_InterpolateCurve3D::test1(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ~~~~~~~~~~~~~~~~~~~~~~
    *  Prepare input points

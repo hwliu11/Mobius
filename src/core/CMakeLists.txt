@@ -6,6 +6,7 @@ project (mobiusCore)
 
 set (H_FILES
   core.h
+  core_excMaxGaussPtsExceeded.h
   core_excMsgInit.h
 )
 set (CPP_FILES
@@ -76,6 +77,7 @@ set (utils_H_FILES
   utils/core_FileDumper.h
   utils/core_HeapAlloc.h
   utils/core_JSON.h
+  utils/core_MemChecker.h
   utils/core_StringBuffer.h
   utils/core_Timer.h
   utils/core_TimeStamp.h

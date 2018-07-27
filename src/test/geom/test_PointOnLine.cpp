@@ -174,7 +174,7 @@ mobius::outcome
                                    const double classiPrec,
                                    const bool   resultRef)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   // Construct line
   core_Ptr<geom_Line> L = new geom_Line(LineOri, LineDir);

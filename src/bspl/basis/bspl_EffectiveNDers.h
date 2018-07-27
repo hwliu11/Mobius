@@ -34,6 +34,9 @@
 // bspl includes
 #include <mobius/bspl.h>
 
+// core includes
+#include <mobius/core_HeapAlloc.h>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_BSPL
@@ -62,6 +65,15 @@ class bspl_EffectiveNDers
 {
 public:
 
+  bspl_EffectiveNDers(ptr<alloc2d> alloc    = NULL,
+                      const int    memBlock = -1)
+  {
+    m_pAlloc    = alloc;
+    m_iMemBlock = memBlock;
+  }
+
+public:
+
   mobiusBSpl_EXPORT void
     operator()(const double               u,
                const std::vector<double>& U,
@@ -69,6 +81,11 @@ public:
                const int                  i,
                const int                  order,
                double**                   ders) const;
+
+protected:
+
+  ptr<alloc2d> m_pAlloc;
+  int          m_iMemBlock;
 
 };
 

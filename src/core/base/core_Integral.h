@@ -42,10 +42,30 @@ namespace mobius {
 //! Utilities for numerical integration.
 namespace core_Integral
 {
-  //! Integrates the passed function by midpoint (rectangle) rule.
+  //! Integrates the passed function by midpoint (rectangle) rule. This
+  //! function is the worst one in terms of efficiency, though it is very
+  //! simple and clear. We use rectangle rule mostly to validate other
+  //! quadrature methods like Gauss-Legendre.
+  //!
+  //! \param[in]  F        univariate function in question.
+  //! \param[in]  a        lower bound.
+  //! \param[in]  b        upper bound.
+  //! \param[in]  n        number of bins.
+  //! \param[out] numEvals number of function evaluations.
+  //! \return integral value.
+  mobiusCore_EXPORT double
+    ComputeRect(core_UnivariateFunc* F,
+                const double         a,
+                const double         b,
+                const int            n,
+                int&                 numEvals);
+
+  //! Integrates the passed function by midpoint (rectangle) rule without
+  //! returning the number of function evaluation requests.
+  //!
   //! \param[in] F univariate function in question.
   //! \param[in] a lower bound.
-  //! \param[in] a upper bound.
+  //! \param[in] b upper bound.
   //! \param[in] n number of bins.
   //! \return integral value.
   mobiusCore_EXPORT double
@@ -53,6 +73,62 @@ namespace core_Integral
                 const double         a,
                 const double         b,
                 const int            n);
+
+  //! Gaussian quadratures.
+  namespace gauss {
+
+    //! \return Max allowed number of Gauss-Legendre points.
+    mobiusCore_EXPORT int
+      GetPointsMax();
+
+    //! Returns Gauss-Legendre points for the given order of integration <n>.
+    //! \param[in]  n      order of integration.
+    //! \param[out] points Gauss-Legendre points.
+    mobiusCore_EXPORT void
+      GetPoints(const int n, std::vector<double>& points);
+
+    //! Returns Gauss-Legendre weights for the given order of integration <n>.
+    //! \param[in]  n       order of integration.
+    //! \param[out] weights Gauss-Legendre weights.
+    mobiusCore_EXPORT void
+      GetWeights(const int n, std::vector<double>& weights);
+
+    //! Returns the integral of the function <F> between <a> and <b>, by
+    //! <n>-point Gauss-Legendre integration: the function is evaluated
+    //! exactly <n> times at interior points in the range of integration.
+    //!
+    //! For more details see
+    //!
+    //! [Press, William H.; Teukolsky, Saul A.; Vetterling, William T.; Flannery, Brian P. (2007).
+    //!  Numerical Recipes: The Art of Scientific Computing (3rd ed.).
+    //!  New York: Cambridge University Press. ISBN 978-0-521-88068-8.]
+    //!
+    //! \param[in]  F        univariate function in question.
+    //! \param[in]  a        lower bound.
+    //! \param[in]  b        upper bound.
+    //! \param[in]  n        number of integration points.
+    //! \param[out] numEvals number of function evaluations.
+    mobiusCore_EXPORT double
+      Compute(core_UnivariateFunc* F,
+              const double         a,
+              const double         b,
+              const int            n,
+              int&                 numEvals);
+
+    //! Returns the integral of the function <F> without returning the number
+    //! of evaluation requests.
+    //!
+    //! \param[in] F univariate function in question.
+    //! \param[in] a lower bound.
+    //! \param[in] b upper bound.
+    //! \param[in] n number of integration points.
+    mobiusCore_EXPORT double
+      Compute(core_UnivariateFunc* F,
+              const double         a,
+              const double         b,
+              const int            n);
+
+  };
 
 };
 

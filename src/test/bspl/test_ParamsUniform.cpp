@@ -40,7 +40,7 @@
 mobius::outcome
   mobius::test_ParamsUniform::test1(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   // Index of the last parameter
   const int n = 2;
@@ -91,7 +91,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_ParamsUniform::test2(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   // Index of the last parameter
   const int n = 3;

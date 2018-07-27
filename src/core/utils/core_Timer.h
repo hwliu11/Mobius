@@ -33,6 +33,7 @@
 
 // Core includes
 #include <mobius/core_Chronometer.h>
+#include <mobius/core_MemChecker.h>
 
 namespace mobius {
 
@@ -50,9 +51,11 @@ public:
   mobiusCore_EXPORT
     core_Timer(bool theThisThreadOnly = false);
 
+public:
+
   //! Stops and reinitializes the timer with specified elapsed time.
   mobiusCore_EXPORT void
-    Reset (const double theTimeElapsedSec);
+    Reset(const double theTimeElapsedSec);
 
   //! Stops and reinitializes the timer with zero elapsed time.
   mobiusCore_EXPORT virtual void
@@ -100,4 +103,80 @@ private:
 
 };
 
-#endif // _OSD_Timer_HeaderFile
+//-----------------------------------------------------------------------------
+//                           MEASURING PERFORMANCE
+//-----------------------------------------------------------------------------
+
+//! Example:
+//!
+//! #ifdef MOBIUS_TIMER_NEW
+//!   MOBIUS_TIMER_NEW
+//!   MOBIUS_TIMER_RESET
+//!   MOBIUS_TIMER_GO
+//! #endif
+//!
+//! ... YOUR ALGO GOES HERE ...
+//!
+//! #ifdef MOBIUS_TIMER_NEW
+//!   MOBIUS_TIMER_FINISH
+//!   MOBIUS_TIMER_COUT_RESULT
+//! #endif
+
+#define MOBIUS_TIMER_NEW \
+  core_Timer __aux_debug_Timer; \
+  double __aux_debug_Seconds, __aux_debug_CPUTime; \
+  int __aux_debug_Minutes, __aux_debug_Hours; \
+  int __aux_debug_memcheck_before, __aux_debug_memcheck_after;
+
+#define MOBIUS_TIMER_RESET \
+  __aux_debug_Seconds = __aux_debug_CPUTime = 0.0; \
+  __aux_debug_Minutes = __aux_debug_Hours = 0; \
+  __aux_debug_Timer.Reset();
+
+#define MOBIUS_TIMER_GO \
+  MOBIUS_MEMCHECK_COUNT_MIB(__aux_debug_memcheck_before) \
+  __aux_debug_Timer.Start();
+
+#define MOBIUS_TIMER_FINISH \
+  MOBIUS_MEMCHECK_COUNT_MIB(__aux_debug_memcheck_after) \
+  __aux_debug_Timer.Stop(); \
+  __aux_debug_Timer.Show(__aux_debug_Seconds, __aux_debug_Minutes, __aux_debug_Hours, __aux_debug_CPUTime);
+
+#define MOBIUS_TIMER_COUT_RESULT \
+  { \
+    TIMER_COUT_RESULT_MSG(""); \
+  }
+
+#define MOBIUS_TIMER_COUT_RESULT_MSG(Msg) \
+  { \
+    std::cout << "\n=============================================" << std::endl; \
+    std::string ascii_msg(Msg); \
+    if ( !ascii_msg.empty() ) \
+    { \
+      std::cout << Msg                                             << std::endl; \
+      std::cout << "---------------------------------------------" << std::endl; \
+    } \
+    std::cout << "Seconds:  " << __aux_debug_Seconds               << std::endl; \
+    std::cout << "Minutes:  " << __aux_debug_Minutes               << std::endl; \
+    std::cout << "Hours:    " << __aux_debug_Hours                 << std::endl; \
+    std::cout << "CPU time: " << __aux_debug_CPUTime               << std::endl; \
+    std::cout << "=============================================\n" << std::endl; \
+  }
+
+#define MOBIUS_TIMER_COUT_RESULT_NOTIFIER(Notifier, Msg) \
+  { \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "============================================="); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "%1" << Msg); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "---------------------------------------------"); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "\tElapsed time (seconds):  %1"     << __aux_debug_Seconds); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "\tElapsed time (minutes):  %1"     << __aux_debug_Minutes); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "\tElapsed time (hours):    %1"     << __aux_debug_Hours); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "\tElapsed time (CPU time): %1"     << __aux_debug_CPUTime); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "\tMemory before:           %1 MiB" << __aux_debug_memcheck_before); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "\tMemory after [delta]:    %1 MiB [%2]" \
+                                                << __aux_debug_memcheck_after \
+                                                << (__aux_debug_memcheck_after - __aux_debug_memcheck_before) ); \
+    Notifier->SendLogMessage(MobiusInfo(Normal) << "... Finished."); \
+  }
+
+#endif // core_Timer_HeaderFile

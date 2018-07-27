@@ -295,38 +295,56 @@ void mobius::geom_BSplineCurve::Eval(const double u,
 //-----------------------------------------------------------------------------
 
 //! Evaluates derivative of the B-spline curve for the given parameter.
-//! \param u   [in]  parameter value to evaluate curve for.
-//! \param k   [in]  the desired order of derivative.
-//! \param dkC [out] derivative vector.
+//! \param u                [in]  parameter value to evaluate curve for.
+//! \param k                [in]  the desired order of derivative.
+//! \param dkC              [out] derivative vector.
+//! \param alloc            [in]  optional allocator.
+//! \param memBlockResult   [in]  index of the memory block for the result.
+//! \param memBlockInternal [in]  index of the memory block for internal calculations.
 void mobius::geom_BSplineCurve::Eval_Dk(const double u,
                                         const int    k,
-                                        xyz&         dkC) const
+                                        xyz&         dkC,
+                                        ptr<alloc2d> alloc,
+                                        const int    memBlockResult,
+                                        const int    memBlockInternal) const
 {
-  core_HeapAlloc2D<double> Alloc;
-  double** dN = Alloc.Allocate(m_iDeg + 1, m_iDeg + 1, true);
-  //
-  this->Eval_Dk(dN, u, k, dkC);
+  ptr<alloc2d> localAlloc;
+
+  double** dN;
+  if ( alloc.IsNull() )
+  {
+    localAlloc = new alloc2d;
+    dN = localAlloc->Allocate(m_iDeg + 1, m_iDeg + 1, true);
+  }
+  else
+    dN = alloc->Access(memBlockResult).Ptr;
+
+  this->Eval_Dk(dN, u, k, dkC, alloc, memBlockInternal);
 }
 
 //-----------------------------------------------------------------------------
 
 //! Evaluates derivative of the B-spline curve for the given parameter.
-//! \param dN  [in]  array for results (can be passed for better performance).
-//! \param u   [in]  parameter value to evaluate curve for.
-//! \param k   [in]  desired order of derivative.
-//! \param d1C [out] derivative vector.
+//! \param dN               [in]  array for results (can be passed for better performance).
+//! \param u                [in]  parameter value to evaluate curve for.
+//! \param k                [in]  desired order of derivative.
+//! \param d1C              [out] derivative vector.
+//! \param alloc            [in]  optional allocator.
+//! \param memBlockInternal [in]  index of the memory block for internal calculations.
 void mobius::geom_BSplineCurve::Eval_Dk(double**     dN,
                                         const double u,
                                         const int    k,
-                                        xyz&         d1C) const
+                                        xyz&         d1C,
+                                        ptr<alloc2d> alloc,
+                                        const int    memBlockInternal) const
 {
   // Find span the passed u falls into
   bspl_FindSpan FindSpan(m_U, m_iDeg);
   const int span = FindSpan(u);
 
   // Evaluate derivatives of B-spline basis functions
-  bspl_EffectiveNDers NDers;
-  NDers(u, m_U, m_iDeg, span, m_iDeg, dN);
+  bspl_EffectiveNDers NDers(alloc, memBlockInternal);
+  NDers(u, m_U, m_iDeg, span, k, dN);
 
   // Evaluate curve
   xyz C;
@@ -665,15 +683,22 @@ void mobius::geom_BSplineCurve::ReparameterizeLinear(const double s_min,
 
 double mobius::geom_BSplineCurve::ComputeStrainEnergy() const
 {
-  const int NUM_INTEGRATION_BINS = 500;
+  const int NUM_GAUSS_PT = 2*m_iDeg - 1; // (2n-1) for max accuracy on polynomial functions.
 
   geom_CuuSquared Cuu2Func(this);
 
-  const double
-    result = core_Integral::ComputeRect( &Cuu2Func,
-                                         this->MinParameter(),
-                                         this->MaxParameter(),
-                                         NUM_INTEGRATION_BINS );
+  double result = 0;
+  for ( size_t k = 0; k < m_U.size() - 1; ++k )
+  {
+    if ( m_U[k] == m_U[k+1] ) continue; // Skip multiple knots.
+
+    // 6-points integration in each knot span.
+    const double
+      gaussVal = core_Integral::gauss::Compute(&Cuu2Func, m_U[k], m_U[k+1], NUM_GAUSS_PT);
+    //
+    result += gaussVal;
+  }
+
   return result;
 }
 

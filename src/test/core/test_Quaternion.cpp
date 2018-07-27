@@ -45,7 +45,7 @@
 mobius::outcome
   mobius::test_Quaternion::create(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
@@ -91,7 +91,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::add(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
@@ -142,7 +142,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::subtract(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
@@ -193,7 +193,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::product_qn(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
@@ -244,7 +244,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::product_scalar(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis(1.0, 1.2, 1.4);
   const double ang = 135*M_PI/180, C = 10.0;
@@ -294,7 +294,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::dot_product(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
@@ -329,7 +329,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::cross_product(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
   const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
@@ -380,7 +380,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::invert(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
@@ -451,7 +451,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::conjugate(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;
@@ -500,7 +500,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_Quaternion::to_matrix(const int funcID)
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
   const double ang = 30*M_PI/180;

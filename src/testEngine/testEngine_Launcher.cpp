@@ -79,7 +79,7 @@ bool mobius::testEngine_Launcher::Launch(std::ostream* out) const
                                        << CaseLauncher->NumberOfFailed() << ")\n";
     }
 
-    numTotal += CaseLauncher->NumberOfExecuted();
+    numTotal  += CaseLauncher->NumberOfExecuted();
     numFailed += CaseLauncher->NumberOfFailed();
 
     if ( !nextOk && isOk )

@@ -64,12 +64,12 @@ struct core_Color
 
 //-----------------------------------------------------------------------------
 
-#define Color_Red       core_Color(255, 000, 000)
-#define Color_Green     core_Color(000, 255, 000)
-#define Color_Blue      core_Color(000, 000, 255)
-#define Color_Yellow    core_Color(255, 255, 000)
-#define Color_White     core_Color(255, 255, 255)
-#define Color_Black     core_Color(000, 000, 000)
+#define MobiusColor_Red       core_Color(255, 000, 000)
+#define MobiusColor_Green     core_Color(000, 255, 000)
+#define MobiusColor_Blue      core_Color(000, 000, 255)
+#define MobiusColor_Yellow    core_Color(255, 255, 000)
+#define MobiusColor_White     core_Color(255, 255, 255)
+#define MobiusColor_Black     core_Color(000, 000, 000)
 
 //-----------------------------------------------------------------------------
 

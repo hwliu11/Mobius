@@ -45,7 +45,7 @@
 mobius::outcome
   mobius::test_KnotMultiset::test_convert(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int    nU  = sizeof(U)/sizeof(double);
@@ -88,7 +88,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_KnotMultiset::test_unite(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9};
   const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
@@ -136,7 +136,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_KnotMultiset::test_subtract(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9, 10, 10};
   const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
@@ -180,7 +180,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_KnotMultiset::test_find_addendum(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   const double U[] = {0, 0, 0, 1, 2, 3};
   const double V[] = {2, 2, 3, 5, 6};

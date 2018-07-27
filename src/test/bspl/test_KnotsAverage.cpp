@@ -42,7 +42,7 @@
 mobius::outcome
   mobius::test_KnotsAverage::testCase1_noDerivativeConstraints(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* --------------------
    *  Prepare input data
@@ -98,7 +98,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_KnotsAverage::testCase1_endDerivativeConstraints(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* --------------------
    *  Prepare input data

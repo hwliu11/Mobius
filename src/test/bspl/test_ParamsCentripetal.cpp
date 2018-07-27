@@ -42,7 +42,7 @@
 mobius::outcome
   mobius::test_ParamsCentripetal::test1(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ----------------------
    *  Prepare input points
@@ -100,7 +100,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_ParamsCentripetal::test2(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   /* ----------------------
    *  Prepare input points

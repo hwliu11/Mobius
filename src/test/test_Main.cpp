@@ -28,6 +28,9 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
+// Common facilities
+#include <mobius/test_CommonFacilities.h>
+
 // Tests includes
 #include <mobius/test_BSplineCurve.h>
 #include <mobius/test_BSplineSurface.h>
@@ -35,6 +38,7 @@
 #include <mobius/test_EffectiveNDers.h>
 #include <mobius/test_FairCurve.h>
 #include <mobius/test_FindSpan.h>
+#include <mobius/test_Integral.h>
 #include <mobius/test_KnotMultiset.h>
 #include <mobius/test_N.h>
 #include <mobius/test_UnifyKnots.h>
@@ -73,28 +77,31 @@ using namespace mobius;
 
 int main(int /*argc*/, char* /*argv[]*/)
 {
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
   // TODO: fix Test Cases
   //testEngine_Launcher<test_FindSpan>      T1;
   //testEngine_Launcher<test_BasisN>             T2;
 
   std::vector< core_Ptr<testEngine_CaseLauncherAPI> > CaseLaunchers;
   //
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve3D> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface> );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan>           (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers>     (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal>  (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength>  (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform>      (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots>         (cf->ProgressNotifier) );
+  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve3D> (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D>             (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine>        (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );
 
   // Launcher of entire test suite
   testEngine_Launcher Launcher;

@@ -1,7 +1,10 @@
 project(docalgo)
 
 set (DOX_FILES
-  000_intro.dox
+  000_!_intro.md
+  000_01_getting_started.md
+  001_!_architecture.md
+  001_01_memory_management.md
 )
 
 foreach (doxfile ${DOX_FILES})

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 27 July 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,47 +28,24 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef core_excMaxGaussPtsExceeded_HeaderFile
+#define core_excMaxGaussPtsExceeded_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// Standard includes
+#include <exception>
 
-//! IDs for Test Cases.
-enum test_CaseID
+namespace mobius {
+
+//! \ingroup MOBIUS_GEOM
+//!
+//! Exception thrown if max number of Gauss integration points is exceeded.
+class core_excMaxGaussPtsExceeded : public std::exception
 {
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
-
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
-
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
-
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
-
-  CaseID_Geom_InterpolateCurve3D,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve
+  virtual const char* what() const throw()
+  {
+    return "Max number of Gauss points exceeded";
+  }
+};
 
 };
 

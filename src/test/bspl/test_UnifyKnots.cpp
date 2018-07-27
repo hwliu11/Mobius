@@ -44,7 +44,7 @@
 mobius::outcome
   mobius::test_UnifyKnots::test_unify(const int test_NotUsed(funcID))
 {
-  outcome res;
+  outcome res( DescriptionFn() );
 
   const double U[] = {0, 0, 1, 2, 3};
   const double V[] = {2, 2, 3, 5, 6};

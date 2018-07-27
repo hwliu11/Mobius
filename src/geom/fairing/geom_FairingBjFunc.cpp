@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/geom_FairingBjFunc.h>
 
+// Geom includes
+#include <mobius/geom_FairingMemBlocks.h>
+
 // BSpl includes
 #include <mobius/bspl_EffectiveNDers.h>
 #include <mobius/bspl_FindSpan.h>
@@ -48,7 +51,7 @@ mobius::geom_FairingBjFunc::geom_FairingBjFunc(const ptr<bcurve>&         curve,
                                                const int                  p,
                                                const int                  i,
                                                const double               lambda,
-                                               core_HeapAlloc2D<double>*  alloc)
+                                               ptr<alloc2d>               alloc)
 : geom_FairingCoeffFunc (lambda),
   m_U                   (U),
   m_curve               (curve),
@@ -62,6 +65,8 @@ mobius::geom_FairingBjFunc::geom_FairingBjFunc(const ptr<bcurve>&         curve,
 
 double mobius::geom_FairingBjFunc::Eval(const double u) const
 {
+  ptr<alloc2d> localAlloc;
+
   /* ==================================================================
    *  Calculate 2-nd derivative of basis spline at the given parameter
    * ================================================================== */
@@ -76,12 +81,18 @@ double mobius::geom_FairingBjFunc::Eval(const double u) const
   int basisIndex = 0;
   int I          = FindSpan(u, basisIndex);
 
-  bspl_EffectiveNDers Eval;
-
   // Prepare matrix.
-  double** dN = m_alloc->Access(0).Ptr;
+  double** dN;
+  if ( m_alloc.IsNull() )
+  {
+    localAlloc = new alloc2d;
+    dN = localAlloc->Allocate(3, order, true);
+  }
+  else
+    dN = m_alloc->Access(memBlock_EffectiveNDersResult).Ptr;
 
   // Evaluate.
+  bspl_EffectiveNDers Eval/*(m_alloc, memBlock_EffectiveNDersInternal)*/;
   Eval(u, m_U, m_iDegree, I, 2, dN);
 
 #if defined COUT_DEBUG
@@ -105,7 +116,7 @@ double mobius::geom_FairingBjFunc::Eval(const double u) const
    * ==================================================== */
 
   xyz d2C;
-  m_curve->Eval_Dk(u, 2, d2C);
+  m_curve->Eval_Dk(u, 2, d2C, m_alloc, memBlock_BSplineCurveEvalDk, memBlock_EffectiveNDersInternal);
 
   // Get projection of the second derivative.
   d2C_proj = d2C.Coord(m_iCoord);

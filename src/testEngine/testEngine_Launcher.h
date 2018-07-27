@@ -35,6 +35,7 @@
 #include <mobius/testEngine_TestCase.h>
 
 // Core includes
+#include <mobius/core_IProgressNotifier.h>
 #include <mobius/core_Ptr.h>
 
 //-----------------------------------------------------------------------------
@@ -88,8 +89,11 @@ class testEngine_CaseLauncher : public testEngine_CaseLauncherAPI
 {
 public:
 
-  //! Default constructor.
-  testEngine_CaseLauncher() : testEngine_CaseLauncherAPI()
+  //! Constructor.
+  //! \param[in] progress progress entry.
+  testEngine_CaseLauncher(core_ProgressEntry progress)
+  : testEngine_CaseLauncherAPI (),
+    m_progress                 (progress)
   {}
 
 public:
@@ -99,18 +103,36 @@ public:
   //! \return true/false.
   virtual bool Launch()
   {
-    // Collect Test Functions to run
+    // Collect Test Functions to run.
     MobiusTestFunctions functions;
     CaseType::Functions(functions);
 
-    // Run functions one by one
+    // Run functions one by one.
     bool areAllOk = true;
     for ( int f = 0; f < (int) functions.Size(); ++f )
     {
       const MobiusTestFunction& func = functions.Func(f);
-      const bool isOk = ( (*func)(f + 1) ).ok;
 
+      // Run test function.
+      outcome res = ( (*func)(f + 1) );
+      //
+      const bool isOk = res.ok;
+
+      // Dump summary.
+      m_progress.SendLogMessage(MobiusNotice(Normal) << "Function %1: "
+                                                     << res.name);
+      m_progress.SendLogMessage(MobiusNotice(Normal) << "\t\tIs ok: %1: "
+                                                     << isOk);
+      m_progress.SendLogMessage(MobiusNotice(Normal) << "\t\tElapsed time: %1 [sec]: "
+                                                     << res.elapsedTimeSec);
+      m_progress.SendLogMessage(MobiusNotice(Normal) << "\t\tMemory footprint: %1 [MiB]: "
+                                                     << (res.memAfter - res.memBefore));
+      //
+      std::cout << "..." << std::endl;
+
+      // Store the result.
       m_funcResults.push_back(isOk);
+      //
       if ( !isOk && areAllOk )
         areAllOk = false;
     }
@@ -197,7 +219,8 @@ private:
 
 private:
 
-  std::vector<bool> m_funcResults; //!< Execution results.
+  std::vector<bool>  m_funcResults; //!< Execution results.
+  core_ProgressEntry m_progress;    //!< Progress entry.
 
 };
 

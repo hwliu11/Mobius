@@ -42,16 +42,16 @@ namespace mobius {
 
 //-----------------------------------------------------------------------------
 
-#define LogInfo(PriorityShort) \
+#define MobiusInfo(PriorityShort) \
   core_MsgStream(MsgSeverity_Information, MsgPriority_##PriorityShort)
 
-#define LogNotice(PriorityShort) \
+#define MobiusNotice(PriorityShort) \
   core_MsgStream(MsgSeverity_Notice, MsgPriority_##PriorityShort)
 
-#define LogWarn(PriorityShort) \
+#define MobiusWarn(PriorityShort) \
   core_MsgStream(MsgSeverity_Warning, MsgPriority_##PriorityShort)
 
-#define LogErr(PriorityShort) \
+#define MobiusErr(PriorityShort) \
   core_MsgStream(MsgSeverity_Error, MsgPriority_##PriorityShort)
 
 //-----------------------------------------------------------------------------

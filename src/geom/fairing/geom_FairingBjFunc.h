@@ -62,7 +62,7 @@ public:
                        const int                  p,
                        const int                  i,
                        const double               lambda,
-                       core_HeapAlloc2D<double>*  alloc);
+                       ptr<alloc2d>               alloc);
 
 public:
 
@@ -83,7 +83,7 @@ protected:
   const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
   int                        m_iDegree; //!< Degree of the spline function.
   int                        m_iIndex;  //!< 0-based index of the spline function.
-  core_HeapAlloc2D<double>*  m_alloc;   //!< Pre-allocated memory block.
+  ptr<alloc2d>               m_alloc;   //!< Pre-allocated memory block.
 
 };
 
