@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 26 July 2018
+// Created on: 19 August 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,76 +28,23 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_Integral_HeaderFile
-#define test_Integral_HeaderFile
-
-// Tests includes
-#include <mobius/test_CaseIDs.h>
-
-// testEngine includes
-#include <mobius/testEngine_TestCase.h>
+#ifndef core_TwovariateFunc_HeaderFile
+#define core_TwovariateFunc_HeaderFile
 
 // core includes
-#include <mobius/core.h>
+#include <mobius/core_OBJECT.h>
 
 namespace mobius {
 
-//! Unit tests for numerical integration.
-class test_Integral : public testEngine_TestCase
+//! \ingroup MOBIUS_CORE
+//!
+//! Abstract multivariate scalar function.
+class core_TwovariateFunc : public core_OBJECT
 {
 public:
 
-  //! Returns Test Case ID.
-  //! \return ID of the Test Case.
-  static int ID()
-  {
-    return CaseID_Core_Integral;
-  }
-
-  //! Returns filename for the description.
-  //! \return filename for the description of the Test Case.
-  static std::string DescriptionFn()
-  {
-    return "test_Integral";
-  }
-
-  //! Returns Test Case description directory.
-  //! \return description directory for the Test Case.
-  static std::string DescriptionDir()
-  {
-    return "Core";
-  }
-
-  //! Returns pointers to the Test Functions to launch.
-  //! \param functions [out] output collection of pointers.
-  static void Functions(MobiusTestFunctions& functions)
-  {
-    functions << &test01
-              << &test02
-              << &test03
-              << &test04
-              << &test05
-              << &test06
-              << &test07
-              << &test08
-              << &test09
-              << &test10
-              << &test11;
-  }
-
-private:
-
-  static outcome test01 (const int funcID);
-  static outcome test02 (const int funcID);
-  static outcome test03 (const int funcID);
-  static outcome test04 (const int funcID);
-  static outcome test05 (const int funcID);
-  static outcome test06 (const int funcID);
-  static outcome test07 (const int funcID);
-  static outcome test08 (const int funcID);
-  static outcome test09 (const int funcID);
-  static outcome test10 (const int funcID);
-  static outcome test11 (const int funcID);
+  virtual double
+    Eval(const double x, const double y) const = 0;
 
 };
 

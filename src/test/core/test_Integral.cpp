@@ -38,9 +38,14 @@
 #include <mobius/core_Integral.h>
 #include <mobius/core_UnivariateFunc.h>
 
+// Standard includes
+#include <math.h>
+
 //-----------------------------------------------------------------------------
 
 namespace mobius {
+
+/*****************************************************************************/
 
 //! Test integrand as a B-spline function N_{i,p} defined on a knot vector U.
 class test_Integral_N : public core_UnivariateFunc
@@ -80,6 +85,8 @@ private:
   const std::vector<double>& m_U;       //!< Knots.
 
 };
+
+/*****************************************************************************/
 
 //! Test integrand as a product of two B-spline functions N_{i,p}*N_{j,p}
 //! defined on a knot vector U.
@@ -127,6 +134,140 @@ private:
 
 };
 
+/*****************************************************************************/
+
+//! Test integrand as multivariate const.
+class test_Integral_MultiConst : public core_TwovariateFunc
+{
+public:
+
+  //! Complete ctor.
+  test_Integral_MultiConst(const double val)
+  //
+  : core_TwovariateFunc (),
+    m_fVal              (val)
+  {}
+
+public:
+
+  virtual double Eval(const double, const double) const
+  {
+    return m_fVal;
+  }
+
+private:
+
+  test_Integral_MultiConst(const test_Integral_MultiConst&) = delete;
+  void operator=(const test_Integral_MultiConst&) = delete;
+
+private:
+
+  double m_fVal; //!< Const value of the function.
+
+};
+
+/*****************************************************************************/
+
+//! Test integrand as multivariate function {x y^2}.
+class test_Integral_XYSquared : public core_TwovariateFunc
+{
+public:
+
+  //! Complete ctor.
+  test_Integral_XYSquared() : core_TwovariateFunc()
+  {}
+
+public:
+
+  virtual double Eval(const double x, const double y) const
+  {
+    return x*y*y;
+  }
+
+private:
+
+  test_Integral_XYSquared(const test_Integral_XYSquared&) = delete;
+  void operator=(const test_Integral_XYSquared&) = delete;
+
+};
+
+/*****************************************************************************/
+
+//! Test integrand as multivariate function {1 + 8xy}.
+class test_Integral_Custom1 : public core_TwovariateFunc
+{
+public:
+
+  //! Complete ctor.
+  test_Integral_Custom1() : core_TwovariateFunc()
+  {}
+
+public:
+
+  virtual double Eval(const double x, const double y) const
+  {
+    return 1 + 8*x*y;
+  }
+
+private:
+
+  test_Integral_Custom1(const test_Integral_Custom1&) = delete;
+  void operator=(const test_Integral_Custom1&) = delete;
+
+};
+
+/*****************************************************************************/
+
+//! Test integrand as multivariate function {y sin(x)}.
+class test_Integral_Custom2 : public core_TwovariateFunc
+{
+public:
+
+  //! Complete ctor.
+  test_Integral_Custom2() : core_TwovariateFunc()
+  {}
+
+public:
+
+  virtual double Eval(const double x, const double y) const
+  {
+    return y * sin(x);
+  }
+
+private:
+
+  test_Integral_Custom2(const test_Integral_Custom2&) = delete;
+  void operator=(const test_Integral_Custom2&) = delete;
+
+};
+
+/*****************************************************************************/
+
+//! Test integrand as multivariate function {4 - x - y}.
+class test_Integral_Custom3 : public core_TwovariateFunc
+{
+public:
+
+  //! Complete ctor.
+  test_Integral_Custom3() : core_TwovariateFunc()
+  {}
+
+public:
+
+  virtual double Eval(const double x, const double y) const
+  {
+    return 4 - x - y;
+  }
+
+private:
+
+  test_Integral_Custom3(const test_Integral_Custom3&) = delete;
+  void operator=(const test_Integral_Custom2&) = delete;
+
+};
+
+/*****************************************************************************/
+
 };
 
 //-----------------------------------------------------------------------------
@@ -141,6 +282,12 @@ mobius::outcome mobius::test_Integral::test01(const int funcID)
   const std::vector<double> U         = {0, 0, 0.2, 0.5, 1, 1};
   const int                 p         = 1;
   const int                 nRectBins = 1000;
+  const int                 nGaussPts = 6;
+  const double              refRect   = 0.1;
+  const double              refGauss1 = 0.0988027;
+  const double              refGauss2 = 0.1;
+  const double              prec      = 1.0e-6;
+  const double              toler     = 1.0e-3;
 
   test_Integral_N F(0, p, U);
 
@@ -152,34 +299,30 @@ mobius::outcome mobius::test_Integral::test01(const int funcID)
   std::cout << "rectVal = " << rectVal << std::endl;
 
   // Evaluate using Gaussian integration.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
-  {
-    const int nGaussPts = n;
-
-    const double
-      gaussVal = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
-
-    std::cout << "gaussVal [" << nGaussPts << "] = " << gaussVal << std::endl;
-  }
+  const double
+    gauss1Val = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
+  std::cout << "coarse gaussVal [" << nGaussPts << "] = " << gauss1Val << std::endl;
 
   // Evaluate using Gaussian integration in knot intervals.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
+  double precGaussVal = 0;
+  for ( size_t k = 0; k < U.size() - 1; ++k )
   {
-    const int nGaussPts = n;
-
-    double val = 0;
-    for ( size_t k = 0; k < U.size() - 1; ++k )
-    {
-      const double
-        gaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
-      //
-      val += gaussVal;
-    }
-
-    std::cout << "interval gaussVal [" << nGaussPts << "] = " << val << std::endl;
+    const double
+      intervGaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
+    //
+    precGaussVal += intervGaussVal;
   }
+  std::cout << "interval gaussVal [" << nGaussPts << "] = " << precGaussVal << std::endl;
 
-  // TODO: NYI
+  // Verify.
+  if ( abs(refGauss1 - gauss1Val) > prec )
+    return res.failure();
+  //
+  if ( abs(refGauss2 - precGaussVal) > prec )
+    return res.failure();
+  //
+  if ( abs(precGaussVal - refRect) > toler )
+    return res.failure();
 
   return res.success();
 }
@@ -196,6 +339,12 @@ mobius::outcome mobius::test_Integral::test02(const int funcID)
   const std::vector<double> U         = {0, 0, 0, 0.2, 0.5, 1, 1, 1};
   const int                 p         = 2;
   const int                 nRectBins = 1000;
+  const int                 nGaussPts = 6;
+  const double              refRect   = 0.0666663;
+  const double              refGauss1 = 0.0634036;
+  const double              refGauss2 = 0.0666667;
+  const double              prec      = 1.0e-6;
+  const double              toler     = 1.0e-3;
 
   test_Integral_N F(0, p, U);
 
@@ -207,34 +356,30 @@ mobius::outcome mobius::test_Integral::test02(const int funcID)
   std::cout << "rectVal = " << rectVal << std::endl;
 
   // Evaluate using Gaussian integration.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
-  {
-    const int nGaussPts = n;
-
-    const double
-      gaussVal = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
-
-    std::cout << "gaussVal [" << nGaussPts << "] = " << gaussVal << std::endl;
-  }
+  const double
+    gauss1Val = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
+  std::cout << "coarse gaussVal [" << nGaussPts << "] = " << gauss1Val << std::endl;
 
   // Evaluate using Gaussian integration in knot intervals.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
+  double precGaussVal = 0;
+  for ( size_t k = 0; k < U.size() - 1; ++k )
   {
-    const int nGaussPts = n;
-
-    double val = 0;
-    for ( size_t k = 0; k < U.size() - 1; ++k )
-    {
-      const double
-        gaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
-      //
-      val += gaussVal;
-    }
-
-    std::cout << "interval gaussVal [" << nGaussPts << "] = " << val << std::endl;
+    const double
+      intervGaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
+    //
+    precGaussVal += intervGaussVal;
   }
+  std::cout << "interval gaussVal [" << nGaussPts << "] = " << precGaussVal << std::endl;
 
-  // TODO: NYI
+  // Verify.
+  if ( abs(refGauss1 - gauss1Val) > prec )
+    return res.failure();
+  //
+  if ( abs(refGauss2 - precGaussVal) > prec )
+    return res.failure();
+  //
+  if ( abs(precGaussVal - refRect) > toler )
+    return res.failure();
 
   return res.success();
 }
@@ -251,6 +396,12 @@ mobius::outcome mobius::test_Integral::test03(const int funcID)
   const std::vector<double> U         = {0, 0, 0, 0, 0.2, 0.5, 1, 1, 1, 1};
   const int                 p         = 3;
   const int                 nRectBins = 1000;
+  const int                 nGaussPts = 6;
+  const double              refRect   = 0.125001;
+  const double              refGauss1 = 0.124902;
+  const double              refGauss2 = 0.125;
+  const double              prec      = 1.0e-6;
+  const double              toler     = 1.0e-3;
 
   test_Integral_N F(1, p, U);
 
@@ -262,34 +413,30 @@ mobius::outcome mobius::test_Integral::test03(const int funcID)
   std::cout << "rectVal = " << rectVal << std::endl;
 
   // Evaluate using Gaussian integration.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
-  {
-    const int nGaussPts = n;
-
-    const double
-      gaussVal = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
-
-    std::cout << "gaussVal [" << nGaussPts << "] = " << gaussVal << std::endl;
-  }
+  const double
+    gauss1Val = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
+  std::cout << "coarse gaussVal [" << nGaussPts << "] = " << gauss1Val << std::endl;
 
   // Evaluate using Gaussian integration in knot intervals.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
+  double precGaussVal = 0;
+  for ( size_t k = 0; k < U.size() - 1; ++k )
   {
-    const int nGaussPts = n;
-
-    double val = 0;
-    for ( size_t k = 0; k < U.size() - 1; ++k )
-    {
-      const double
-        gaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
-      //
-      val += gaussVal;
-    }
-
-    std::cout << "interval gaussVal [" << nGaussPts << "] = " << val << std::endl;
+    const double
+      intervGaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
+    //
+    precGaussVal += intervGaussVal;
   }
+  std::cout << "interval gaussVal [" << nGaussPts << "] = " << precGaussVal << std::endl;
 
-  // TODO: NYI
+  // Verify.
+  if ( abs(refGauss1 - gauss1Val) > prec )
+    return res.failure();
+  //
+  if ( abs(refGauss2 - precGaussVal) > prec )
+    return res.failure();
+  //
+  if ( abs(precGaussVal - refRect) > toler )
+    return res.failure();
 
   return res.success();
 }
@@ -306,6 +453,12 @@ mobius::outcome mobius::test_Integral::test04(const int funcID)
   const std::vector<double> U         = {0, 0, 0, 0, 0, 0.2, 0.5, 1, 1, 1, 1, 1};
   const int                 p         = 4;
   const int                 nRectBins = 1000;
+  const int                 nGaussPts = 6;
+  const double              refRect   = 0.2;
+  const double              refGauss1 = 0.199795;
+  const double              refGauss2 = 0.2;
+  const double              prec      = 1.0e-6;
+  const double              toler     = 1.0e-3;
 
   test_Integral_N F(3, p, U);
 
@@ -317,34 +470,30 @@ mobius::outcome mobius::test_Integral::test04(const int funcID)
   std::cout << "rectVal = " << rectVal << std::endl;
 
   // Evaluate using Gaussian integration.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
-  {
-    const int nGaussPts = n;
-
-    const double
-      gaussVal = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
-
-    std::cout << "gaussVal [" << nGaussPts << "] = " << gaussVal << std::endl;
-  }
+  const double
+    gauss1Val = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
+  std::cout << "coarse gaussVal [" << nGaussPts << "] = " << gauss1Val << std::endl;
 
   // Evaluate using Gaussian integration in knot intervals.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
+  double precGaussVal = 0;
+  for ( size_t k = 0; k < U.size() - 1; ++k )
   {
-    const int nGaussPts = n;
-
-    double val = 0;
-    for ( size_t k = 0; k < U.size() - 1; ++k )
-    {
-      const double
-        gaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
-      //
-      val += gaussVal;
-    }
-
-    std::cout << "interval gaussVal [" << nGaussPts << "] = " << val << std::endl;
+    const double
+      intervGaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
+    //
+    precGaussVal += intervGaussVal;
   }
+  std::cout << "interval gaussVal [" << nGaussPts << "] = " << precGaussVal << std::endl;
 
-  // TODO: NYI
+  // Verify.
+  if ( abs(refGauss1 - gauss1Val) > prec )
+    return res.failure();
+  //
+  if ( abs(refGauss2 - precGaussVal) > prec )
+    return res.failure();
+  //
+  if ( abs(precGaussVal - refRect) > toler )
+    return res.failure();
 
   return res.success();
 }
@@ -361,6 +510,12 @@ mobius::outcome mobius::test_Integral::test05(const int funcID)
   const std::vector<double> U         = {0, 0, 0, 0, 0, 0, 0.3, 0.4, 0.5, 0.8, 1, 1, 1, 1, 1, 1};
   const int                 p         = 5;
   const int                 nRectBins = 1000;
+  const int                 nGaussPts = 6;
+  const double              refRect   = 0.166667;
+  const double              refGauss1 = 0.164276;
+  const double              refGauss2 = 0.166667;
+  const double              prec      = 1.0e-6;
+  const double              toler     = 1.0e-3;
 
   test_Integral_N F(5, p, U);
 
@@ -372,34 +527,30 @@ mobius::outcome mobius::test_Integral::test05(const int funcID)
   std::cout << "rectVal = " << rectVal << std::endl;
 
   // Evaluate using Gaussian integration.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
-  {
-    const int nGaussPts = n;
-
-    const double
-      gaussVal = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
-
-    std::cout << "gaussVal [" << nGaussPts << "] = " << gaussVal << std::endl;
-  }
+  const double
+    gauss1Val = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
+  std::cout << "coarse gaussVal [" << nGaussPts << "] = " << gauss1Val << std::endl;
 
   // Evaluate using Gaussian integration in knot intervals.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
+  double precGaussVal = 0;
+  for ( size_t k = 0; k < U.size() - 1; ++k )
   {
-    const int nGaussPts = n;
-
-    double val = 0;
-    for ( size_t k = 0; k < U.size() - 1; ++k )
-    {
-      const double
-        gaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
-      //
-      val += gaussVal;
-    }
-
-    std::cout << "interval gaussVal [" << nGaussPts << "] = " << val << std::endl;
+    const double
+      intervGaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
+    //
+    precGaussVal += intervGaussVal;
   }
+  std::cout << "interval gaussVal [" << nGaussPts << "] = " << precGaussVal << std::endl;
 
-  // TODO: NYI
+  // Verify.
+  if ( abs(refGauss1 - gauss1Val) > prec )
+    return res.failure();
+  //
+  if ( abs(refGauss2 - precGaussVal) > prec )
+    return res.failure();
+  //
+  if ( abs(precGaussVal - refRect) > toler )
+    return res.failure();
 
   return res.success();
 }
@@ -416,6 +567,12 @@ mobius::outcome mobius::test_Integral::test06(const int funcID)
   const std::vector<double> U         = {0, 0, 0, 0, 0, 0, 0.3, 0.4, 0.5, 0.8, 1, 1, 1, 1, 1, 1};
   const int                 p         = 5;
   const int                 nRectBins = 1000;
+  const int                 nGaussPts = 6;
+  const double              refRect   = 0.0242081;
+  const double              refGauss1 = 0.0243687;
+  const double              refGauss2 = 0.0242081;
+  const double              prec      = 1.0e-6;
+  const double              toler     = 1.0e-3;
 
   test_Integral_NN F(3, 2, p, U);
 
@@ -427,34 +584,181 @@ mobius::outcome mobius::test_Integral::test06(const int funcID)
   std::cout << "rectVal = " << rectVal << std::endl;
 
   // Evaluate using Gaussian integration.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
-  {
-    const int nGaussPts = n;
-
-    const double
-      gaussVal = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
-
-    std::cout << "gaussVal [" << nGaussPts << "] = " << gaussVal << std::endl;
-  }
+  const double
+    gauss1Val = core_Integral::gauss::Compute(&F, U[0], U[U.size() - 1], nGaussPts);
+  std::cout << "coarse gaussVal [" << nGaussPts << "] = " << gauss1Val << std::endl;
 
   // Evaluate using Gaussian integration in knot intervals.
-  for ( int n = 1; n <= core_Integral::gauss::GetPointsMax(); ++n )
+  double precGaussVal = 0;
+  for ( size_t k = 0; k < U.size() - 1; ++k )
   {
-    const int nGaussPts = n;
-
-    double val = 0;
-    for ( size_t k = 0; k < U.size() - 1; ++k )
-    {
-      const double
-        gaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
-      //
-      val += gaussVal;
-    }
-
-    std::cout << "interval gaussVal [" << nGaussPts << "] = " << val << std::endl;
+    const double
+      intervGaussVal = core_Integral::gauss::Compute(&F, U[k], U[k+1], nGaussPts);
+    //
+    precGaussVal += intervGaussVal;
   }
+  std::cout << "interval gaussVal [" << nGaussPts << "] = " << precGaussVal << std::endl;
 
-  // TODO: NYI
+  // Verify.
+  if ( abs(refGauss1 - gauss1Val) > prec )
+    return res.failure();
+  //
+  if ( abs(refGauss2 - precGaussVal) > prec )
+    return res.failure();
+  //
+  if ( abs(precGaussVal - refRect) > toler )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 007. Numerically evaluates double integral with known
+//! reference value which can be calculated analytically.
+//!
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_Integral::test07(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  const double           fVal   = 15.0;
+  const std::vector<int> order  = {3, 3};
+  const double           refVal = fVal*4;
+  const double           prec   = 1e-6;
+
+  test_Integral_MultiConst F(fVal);
+
+  // Evaluate.
+  const double
+    gaussVal = core_Integral::gauss::Compute(&F, 0, 2, 0, 2, order[0], order[1]);
+
+  std::cout << "***" << std::endl;
+  std::cout << "gaussVal = " << gaussVal << std::endl;
+
+  if ( abs(gaussVal - refVal) > prec )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 008. Numerically evaluates double integral with known
+//! reference value which can be calculated analytically.
+//!
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_Integral::test08(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  const std::vector<int> order  = {8, 8};
+  const double           refVal = 2./3.;
+  const double           prec   = 1e-6;
+
+  test_Integral_XYSquared F;
+
+  // Evaluate.
+  const double
+    gaussVal = core_Integral::gauss::Compute(&F, 0, 2, 0, 1, order[0], order[1]);
+
+  std::cout << "***" << std::endl;
+  std::cout << "gaussVal = " << gaussVal << std::endl;
+
+  if ( abs(gaussVal - refVal) > prec )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 009. Numerically evaluates double integral with known
+//! reference value which can be calculated analytically.
+//!
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_Integral::test09(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  const std::vector<int> order  = {6, 6};
+  const double           refVal = 57.0;
+  const double           prec   = 1e-6;
+
+  test_Integral_Custom1 F;
+
+  // Evaluate.
+  const double
+    gaussVal = core_Integral::gauss::Compute(&F, 0, 3, 1, 2, order[0], order[1]);
+
+  std::cout << "***" << std::endl;
+  std::cout << "gaussVal = " << gaussVal << std::endl;
+
+  if ( abs(gaussVal - refVal) > prec )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 010. Numerically evaluates double integral with known
+//! reference value which can be calculated analytically.
+//!
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_Integral::test10(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  const std::vector<int> order  = {6, 6};
+  const double           refVal = 1./2.;
+  const double           prec   = 1e-6;
+
+  test_Integral_Custom2 F;
+
+  // Evaluate.
+  const double
+    gaussVal = core_Integral::gauss::Compute(&F, 0, M_PI/2, 0, 1, order[0], order[1]);
+
+  std::cout << "***" << std::endl;
+  std::cout << "gaussVal = " << gaussVal << std::endl;
+
+  if ( abs(gaussVal - refVal) > prec )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 011. Numerically evaluates double integral with known
+//! reference value which can be calculated analytically.
+//!
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_Integral::test11(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  const std::vector<int> order  = {6, 6};
+  const double           refVal = 5.;
+  const double           prec   = 1e-6;
+
+  test_Integral_Custom3 F;
+
+  // Evaluate.
+  const double
+    gaussVal = core_Integral::gauss::Compute(&F, 0, 1, 0, 2, order[0], order[1]);
+
+  std::cout << "***" << std::endl;
+  std::cout << "gaussVal = " << gaussVal << std::endl;
+
+  if ( abs(gaussVal - refVal) > prec )
+    return res.failure();
 
   return res.success();
 }

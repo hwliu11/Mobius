@@ -37,10 +37,63 @@
 // Core includes
 #include <mobius/core_HeapAlloc.h>
 #include <mobius/core_JSON.h>
+#include <mobius/core_TwovariateFunc.h>
 
 // BSpl includes
 #include <mobius/bspl_EffectiveN.h>
+#include <mobius/bspl_EffectiveNDers.h>
 #include <mobius/bspl_FindSpan.h>
+
+//-----------------------------------------------------------------------------
+
+namespace mobius {
+
+//! \ingroup MOBIUS_GEOM
+//!
+//! Twovariate function representing the squared second derivatives of
+//! a parametric surface.
+class geom_ThinPlateEnergies : public core_TwovariateFunc
+{
+public:
+
+  //! ctor.
+  //! \param[in] surface parametric surface in question.
+  geom_ThinPlateEnergies(const ptr<geom_BSplineSurface>& surface) : core_TwovariateFunc()
+  {
+    m_surface = surface;
+  }
+
+public:
+
+  //! Evaluates the sum of second derivatives squared.
+  //! \param[in] u U parameter value.
+  //! \param[in] v V parameter value.
+  //! \return evaluated function.
+  virtual double Eval(const double u, const double v) const
+  {
+   /* xyz D2;
+    m_surface->Eval_Dk(u, 2, D2);
+
+    return D2.Dot(D2);*/
+    // TODO: NYI
+    return DBL_MAX;
+  }
+
+public:
+
+  //! \return surface in question.
+  const ptr<geom_BSplineSurface>& GetSurface() const
+  {
+    return m_surface;
+  }
+
+protected:
+
+  ptr<geom_BSplineSurface> m_surface; //!< Surface.
+
+};
+
+};
 
 //-----------------------------------------------------------------------------
 
@@ -218,12 +271,12 @@ double mobius::geom_BSplineSurface::MaxParameter_V() const
 //!
 //! \param u [in]  U parameter value to evaluate surface for.
 //! \param v [in]  V parameter value to evaluate surface for.
-//! \param C [out] 3D point corresponding to the given parameter pair.
+//! \param S [out] 3D point corresponding to the given parameter pair.
 void mobius::geom_BSplineSurface::Eval(const double u,
                                        const double v,
-                                       xyz&         C) const
+                                       xyz&         S) const
 {
-  // Find span the passed u and v fall into
+  // Find spans the passed u and v fall into
   bspl_FindSpan FindSpanU(m_U, m_iDegU);
   bspl_FindSpan FindSpanV(m_V, m_iDegV);
   //
@@ -242,12 +295,12 @@ void mobius::geom_BSplineSurface::Eval(const double u,
   EffectiveN(u, m_U, m_iDegU, span_u, N_u);
   EffectiveN(v, m_V, m_iDegV, span_v, N_v);
 
-  const int u_first_idx = span_u - m_iDegU;
-  const int v_first_idx = span_v - m_iDegV;
-
   //---------------------------
   // Evaluate B-spline surface
   //---------------------------
+
+  const int u_first_idx = span_u - m_iDegU;
+  const int v_first_idx = span_v - m_iDegV;
 
   xyz Res;
   for ( int i = 0; i <= m_iDegU; ++i )
@@ -261,8 +314,128 @@ void mobius::geom_BSplineSurface::Eval(const double u,
     Res += temp*N_u[i];
   }
 
-  // Set output parameter
-  C = Res;
+  // Set output argument
+  S = Res;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::geom_BSplineSurface::Eval_D1(const double u,
+                                          const double v,
+                                          xyz&         S,
+                                          xyz&         dU,
+                                          xyz&         dV) const
+{
+  // Find spans the passed u and v fall into
+  bspl_FindSpan FindSpanU(m_U, m_iDegU);
+  bspl_FindSpan FindSpanV(m_V, m_iDegV);
+  //
+  const int span_u = FindSpanU(u);
+  const int span_v = FindSpanV(v);
+
+  ptr<alloc2d> localAlloc = new alloc2d;
+  //
+  double** dNu = localAlloc->Allocate(m_iDegU + 1, m_iDegU + 1, true);
+  double** dNv = localAlloc->Allocate(m_iDegV + 1, m_iDegV + 1, true);
+
+  // Evaluate derivatives of B-spline basis functions
+  bspl_EffectiveNDers NDers(NULL, -1);
+  NDers(u, m_U, m_iDegU, span_u, 1, dNu);
+  NDers(v, m_V, m_iDegV, span_v, 1, dNv);
+
+  //---------------------------
+  // Evaluate B-spline surface
+  //---------------------------
+
+  const int u_first_idx = span_u - m_iDegU;
+  const int v_first_idx = span_v - m_iDegV;
+
+  xyz res_S, res_dU, res_dV;
+  for ( int i = 0; i <= m_iDegU; ++i )
+  {
+    xyz temp_S, temp_dU, temp_dV;
+    for ( int j = 0; j <= m_iDegV; ++j )
+    {
+      const xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
+      temp_S  += P_ij * dNv[0][j]; // Primal (0 index)
+      temp_dU += P_ij * dNv[0][j]; // Primal (0 index)
+      temp_dV += P_ij * dNv[1][j];
+    }
+    res_S  += temp_S  * dNu[0][i]; // Primal (0 index)
+    res_dU += temp_dU * dNu[1][i];
+    res_dV += temp_dV * dNu[0][i]; // Primal (0 index)
+  }
+
+  // Set output arguments
+  S  = res_S;
+  dU = res_dU;
+  dV = res_dV;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::geom_BSplineSurface::Eval_D2(const double u,
+                                          const double v,
+                                          xyz&         S,
+                                          xyz&         dU,
+                                          xyz&         dV,
+                                          xyz&         d2U,
+                                          xyz&         d2V,
+                                          xyz&         d2UV) const
+{
+  // Find spans the passed u and v fall into
+  bspl_FindSpan FindSpanU(m_U, m_iDegU);
+  bspl_FindSpan FindSpanV(m_V, m_iDegV);
+  //
+  const int span_u = FindSpanU(u);
+  const int span_v = FindSpanV(v);
+
+  ptr<alloc2d> localAlloc = new alloc2d;
+  //
+  double** dNu = localAlloc->Allocate(m_iDegU + 1, m_iDegU + 1, true);
+  double** dNv = localAlloc->Allocate(m_iDegV + 1, m_iDegV + 1, true);
+
+  // Evaluate derivatives of B-spline basis functions
+  bspl_EffectiveNDers NDers(NULL, -1);
+  NDers(u, m_U, m_iDegU, span_u, 2, dNu);
+  NDers(v, m_V, m_iDegV, span_v, 2, dNv);
+
+  //---------------------------
+  // Evaluate B-spline surface
+  //---------------------------
+
+  const int u_first_idx = span_u - m_iDegU;
+  const int v_first_idx = span_v - m_iDegV;
+
+  xyz res_S, res_dU, res_dV, res_d2U, res_d2V, res_d2UV;
+  for ( int i = 0; i <= m_iDegU; ++i )
+  {
+    xyz temp_S, temp_dU, temp_dV, temp_d2U, temp_d2V, temp_d2UV;
+    for ( int j = 0; j <= m_iDegV; ++j )
+    {
+      const xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
+      temp_S    += P_ij * dNv[0][j]; // Primal (0 index)
+      temp_dU   += P_ij * dNv[0][j]; // Primal (0 index)
+      temp_dV   += P_ij * dNv[1][j];
+      temp_d2U  += P_ij * dNv[0][j]; // Primal (0 index)
+      temp_d2V  += P_ij * dNv[2][j];
+      temp_d2UV += P_ij * dNv[1][j];
+    }
+    res_S    += temp_S    * dNu[0][i]; // Primal (0 index)
+    res_dU   += temp_dU   * dNu[1][i];
+    res_dV   += temp_dV   * dNu[0][i]; // Primal (0 index)
+    res_d2U  += temp_d2U  * dNu[2][i];
+    res_d2V  += temp_d2V  * dNu[0][i]; // Primal (0 index)
+    res_d2UV += temp_d2UV * dNu[1][i];
+  }
+
+  // Set output arguments
+  S    = res_S;
+  dU   = res_dU;
+  dV   = res_dV;
+  d2U  = res_d2U;
+  d2V  = res_d2V;
+  d2UV = res_d2UV;
 }
 
 //-----------------------------------------------------------------------------
@@ -355,6 +528,14 @@ mobius::ptr<mobius::bcurve>
 
   ptr<bcurve> Iso = new bcurve(Q, m_U, m_iDegU);
   return Iso;
+}
+
+//-----------------------------------------------------------------------------
+
+double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
+{
+  // TODO: NYI
+  return DBL_MAX;
 }
 
 //-----------------------------------------------------------------------------

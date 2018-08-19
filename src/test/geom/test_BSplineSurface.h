@@ -75,15 +75,23 @@ public:
     functions << &evalInDomain
               << &evalOutDomain
               << &evalJSON1
-              << &evalJSON2;
+              << &evalJSON2
+              << &evalD1InDomain
+              << &evalD1OutDomain
+              << &evalD2InDomain
+              << &evalD2OutDomain;
   }
 
 private:
 
-  static outcome evalInDomain  (const int funcID);
-  static outcome evalOutDomain (const int funcID);
-  static outcome evalJSON1     (const int funcID);
-  static outcome evalJSON2     (const int funcID);
+  static outcome evalInDomain    (const int funcID);
+  static outcome evalOutDomain   (const int funcID);
+  static outcome evalJSON1       (const int funcID);
+  static outcome evalJSON2       (const int funcID);
+  static outcome evalD1InDomain  (const int funcID);
+  static outcome evalD1OutDomain (const int funcID);
+  static outcome evalD2InDomain  (const int funcID);
+  static outcome evalD2OutDomain (const int funcID);
 
 };
 

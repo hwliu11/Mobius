@@ -33,6 +33,7 @@
 
 // Core includes
 #include <mobius/core_Ptr.h>
+#include <mobius/core_TwovariateFunc.h>
 #include <mobius/core_UnivariateFunc.h>
 
 namespace mobius {
@@ -108,6 +109,7 @@ namespace core_Integral
     //! \param[in]  b        upper bound.
     //! \param[in]  n        number of integration points.
     //! \param[out] numEvals number of function evaluations.
+    //! \return computed integral value.
     mobiusCore_EXPORT double
       Compute(core_UnivariateFunc* F,
               const double         a,
@@ -122,11 +124,32 @@ namespace core_Integral
     //! \param[in] a lower bound.
     //! \param[in] b upper bound.
     //! \param[in] n number of integration points.
+    //! \return computed integral value.
     mobiusCore_EXPORT double
       Compute(core_UnivariateFunc* F,
               const double         a,
               const double         b,
               const int            n);
+
+    //! Returns the integral of the passed two-variate function <F> defined
+    //! in a simple rectangular domain.
+    //!
+    //! \param[in] F      function to integrate.
+    //! \param[in] x0     left bound of X variable.
+    //! \param[in] x1     right bound of X variable.
+    //! \param[in] y0     left bound of Y variable.
+    //! \param[in] y1     right bound of Z variable.
+    //! \param[in] orderX order for Gauss integration along X variable.
+    //! \param[in] orderY order for Gauss integration along Y variable.
+    //! \return computed integral value.
+    mobiusCore_EXPORT double
+      Compute(core_TwovariateFunc* F,
+              const double         x0,
+              const double         x1,
+              const double         y0,
+              const double         y1,
+              const int            orderX,
+              const int            orderY);
 
   };
 

@@ -2097,3 +2097,81 @@ double mobius::core_Integral::gauss::Compute(core_UnivariateFunc* F,
   int numEvals = 0;
   return Compute(F, a, b, n, numEvals);
 }
+
+//-----------------------------------------------------------------------------
+
+namespace mobius
+{
+  namespace core_Integral
+  {
+    namespace gauss
+    {
+      class Fy : public core_UnivariateFunc
+      {
+      public:
+
+        Fy(core_TwovariateFunc* F,
+           const double         x) : m_pF(F), m_fX(x) {}
+
+      public:
+
+        virtual double Eval(const double y) const
+        {
+          return m_pF->Eval(m_fX, y);
+        }
+
+      protected:
+
+        core_TwovariateFunc* m_pF;
+        double               m_fX;
+
+      };
+
+      class IntegrandGx : public core_UnivariateFunc
+      {
+      public:
+
+        IntegrandGx(core_TwovariateFunc* F,
+                    const double         y0,
+                    const double         y1,
+                    const int            order)
+        {
+          m_pF     = F;
+          m_fY0    = y0;
+          m_fY1    = y1;
+          m_iOrder = order;
+        }
+
+      public:
+
+        virtual double Eval(const double x) const
+        {
+          Fy func(m_pF, x);
+          return Compute(&func, m_fY0, m_fY1, m_iOrder);
+        }
+
+      protected:
+
+        core_TwovariateFunc* m_pF;
+        double               m_fY0;
+        double               m_fY1;
+        int                  m_iOrder;
+      };
+    }
+  };
+};
+
+//-----------------------------------------------------------------------------
+
+double mobius::core_Integral::gauss::Compute(core_TwovariateFunc* F,
+                                             const double         x0,
+                                             const double         x1,
+                                             const double         y0,
+                                             const double         y1,
+                                             const int            orderX,
+                                             const int            orderY)
+{
+  IntegrandGx func(F, y0, y1, orderY);
+  double val = Compute(&func, x0, x1, orderX);
+  return val;
+}

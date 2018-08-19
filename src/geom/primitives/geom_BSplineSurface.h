@@ -100,7 +100,24 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          const double v,
-         xyz&         C) const;
+         xyz&         S) const;
+
+  mobiusGeom_EXPORT virtual void
+    Eval_D1(const double u,
+            const double v,
+            xyz&         S,
+            xyz&         dU,
+            xyz&         dV) const;
+
+  mobiusGeom_EXPORT virtual void
+    Eval_D2(const double u,
+            const double v,
+            xyz&         S,
+            xyz&         dU,
+            xyz&         dV,
+            xyz&         d2U,
+            xyz&         d2V,
+            xyz&         d2UV) const;
 
 public:
 
@@ -113,6 +130,16 @@ public:
   /*mobiusGeom_EXPORT core_XYZ
     NormUnit(const double u,
              const double v) const;*/
+
+  //! When a flat thin elastic plate is deformed to the shape of a free-form
+  //! surface, its bending energy (under some simplifying assumptions) is
+  //! proportional to the area integral of sum of squared second derivatives.
+  //! This sum represents "thin-plate" energies of the coordinates of surface
+  //! mapping.
+  //!
+  //! \return calculated bending energy.
+  mobiusGeom_EXPORT double
+    ComputeBendingEnergy() const;
 
 public:
 

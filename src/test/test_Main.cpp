@@ -94,7 +94,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength>  (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform>      (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots>         (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral> );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral>           (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion>         (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve3D> (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D>             (cf->ProgressNotifier) );
