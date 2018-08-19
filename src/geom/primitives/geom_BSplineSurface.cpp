@@ -36,6 +36,7 @@
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
+#include <mobius/core_Integral.h>
 #include <mobius/core_JSON.h>
 #include <mobius/core_TwovariateFunc.h>
 
@@ -71,12 +72,11 @@ public:
   //! \return evaluated function.
   virtual double Eval(const double u, const double v) const
   {
-   /* xyz D2;
-    m_surface->Eval_Dk(u, 2, D2);
+    xyz P, dU, dV, d2U, d2V, d2UV;
+    m_surface->Eval_D2(u, v, P, dU, dV, d2U, d2V, d2UV);
 
-    return D2.Dot(D2);*/
-    // TODO: NYI
-    return DBL_MAX;
+    const double E = d2U.Dot(d2U) + 2*d2UV.Dot(d2UV) + d2V.Dot(d2V);
+    return E;
   }
 
 public:
@@ -335,8 +335,8 @@ void mobius::geom_BSplineSurface::Eval_D1(const double u,
 
   ptr<alloc2d> localAlloc = new alloc2d;
   //
-  double** dNu = localAlloc->Allocate(m_iDegU + 1, m_iDegU + 1, true);
-  double** dNv = localAlloc->Allocate(m_iDegV + 1, m_iDegV + 1, true);
+  double** dNu = localAlloc->Allocate(2, m_iDegU + 1, true);
+  double** dNv = localAlloc->Allocate(2, m_iDegV + 1, true);
 
   // Evaluate derivatives of B-spline basis functions
   bspl_EffectiveNDers NDers(NULL, -1);
@@ -392,8 +392,8 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
 
   ptr<alloc2d> localAlloc = new alloc2d;
   //
-  double** dNu = localAlloc->Allocate(m_iDegU + 1, m_iDegU + 1, true);
-  double** dNv = localAlloc->Allocate(m_iDegV + 1, m_iDegV + 1, true);
+  double** dNu = localAlloc->Allocate(3, m_iDegU + 1, true);
+  double** dNv = localAlloc->Allocate(3, m_iDegV + 1, true);
 
   // Evaluate derivatives of B-spline basis functions
   bspl_EffectiveNDers NDers(NULL, -1);
@@ -534,8 +534,34 @@ mobius::ptr<mobius::bcurve>
 
 double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
 {
-  // TODO: NYI
-  return DBL_MAX;
+  geom_ThinPlateEnergies func(this);
+
+  // (2n-1) for max accuracy on polynomial functions.
+  const int NUM_GAUSS_PT_U = 2*m_iDegU - 1;
+  const int NUM_GAUSS_PT_V = 2*m_iDegV - 1;
+
+  // Integrate in each span individually for better accuracy.
+  double result = 0;
+  for ( size_t i = 0; i < m_U.size() - 1; ++i )
+  {
+    if ( m_U[i] == m_U[i+1] ) continue; // Skip multiple knots.
+
+    for ( size_t j = 0; j < m_V.size() - 1; ++j )
+    {
+      if ( m_V[j] == m_V[j+1] ) continue; // Skip multiple knots.
+
+      // 6-points integration in each knot span.
+      const double
+        gaussVal = core_Integral::gauss::Compute(&func,
+                                                 m_U[i], m_U[i+1],
+                                                 m_V[j], m_V[j+1],
+                                                 NUM_GAUSS_PT_U, NUM_GAUSS_PT_V);
+      //
+      result += gaussVal;
+    }
+  }
+
+  return result;
 }
 
 //-----------------------------------------------------------------------------

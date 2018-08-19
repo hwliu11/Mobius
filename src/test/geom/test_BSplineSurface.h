@@ -79,7 +79,13 @@ public:
               << &evalD1InDomain
               << &evalD1OutDomain
               << &evalD2InDomain
-              << &evalD2OutDomain;
+              << &evalD2OutDomain
+              << &computeEnergy01
+              << &computeEnergy02
+              << &computeEnergy03
+              << &computeEnergy04
+              << &computeEnergy05
+              << &computeEnergy06;
   }
 
 private:
@@ -92,6 +98,12 @@ private:
   static outcome evalD1OutDomain (const int funcID);
   static outcome evalD2InDomain  (const int funcID);
   static outcome evalD2OutDomain (const int funcID);
+  static outcome computeEnergy01 (const int funcID);
+  static outcome computeEnergy02 (const int funcID);
+  static outcome computeEnergy03 (const int funcID);
+  static outcome computeEnergy04 (const int funcID);
+  static outcome computeEnergy05 (const int funcID);
+  static outcome computeEnergy06 (const int funcID);
 
 };
 
