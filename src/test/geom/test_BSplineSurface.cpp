@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/test_BSplineSurface.h>
 
+// Test includes
+#include <mobius/test_CommonFacilities.h>
+
 // geom includes
 #include <mobius/geom_BSplineSurface.h>
 
@@ -791,6 +794,9 @@ mobius::outcome
 {
   outcome res( DescriptionFn() );
 
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
   /* ======================
    *  Prepare input points
    * ====================== */
@@ -857,7 +863,8 @@ mobius::outcome
     const double energy_ref = 104333.863;
     const double energy = surf->ComputeBendingEnergy();
     //
-    std::cout << "Bending energy: " << energy << std::endl;
+    cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
+                                                            << energy );
 
     // Check.
     if ( abs(energy - energy_ref) > eps )
@@ -877,6 +884,9 @@ mobius::outcome
   mobius::test_BSplineSurface::computeEnergy02(const int funcID)
 {
   outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Prepare input points
@@ -938,7 +948,8 @@ mobius::outcome
     const double energy_ref = 20747.437;
     const double energy = surf->ComputeBendingEnergy();
     //
-    std::cout << "Bending energy: " << energy << std::endl;
+    cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
+                                                            << energy );
 
     // Check.
     if ( abs(energy - energy_ref) > eps )
@@ -958,6 +969,9 @@ mobius::outcome
   mobius::test_BSplineSurface::computeEnergy03(const int funcID)
 {
   outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Prepare input points
@@ -1014,7 +1028,8 @@ mobius::outcome
     const double energy_ref = 0.0;
     const double energy = surf->ComputeBendingEnergy();
     //
-    std::cout << "Bending energy: " << energy << std::endl;
+    cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
+                                                            << energy );
 
     // Check.
     if ( abs(energy - energy_ref) > eps )
@@ -1034,6 +1049,9 @@ mobius::outcome
   mobius::test_BSplineSurface::computeEnergy04(const int funcID)
 {
   outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Prepare input points
@@ -1100,7 +1118,8 @@ mobius::outcome
     const double energy_ref = 953253.754;
     const double energy = surf->ComputeBendingEnergy();
     //
-    std::cout << "Bending energy: " << energy << std::endl;
+    cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
+                                                            << energy );
 
     // Check.
     if ( abs(energy - energy_ref) > eps )
@@ -1120,6 +1139,9 @@ mobius::outcome
   mobius::test_BSplineSurface::computeEnergy05(const int funcID)
 {
   outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Prepare input points
@@ -1186,7 +1208,8 @@ mobius::outcome
     const double energy_ref = 116945.191;
     const double energy = surf->ComputeBendingEnergy();
     //
-    std::cout << "Bending energy: " << energy << std::endl;
+    cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
+                                                            << energy );
 
     // Check.
     if ( abs(energy - energy_ref) > eps )
@@ -1206,6 +1229,9 @@ mobius::outcome
   mobius::test_BSplineSurface::computeEnergy06(const int funcID)
 {
   outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Prepare input points
@@ -1272,7 +1298,8 @@ mobius::outcome
     const double energy_ref = 95566.646;
     const double energy = surf->ComputeBendingEnergy();
     //
-    std::cout << "Bending energy: " << energy << std::endl;
+    cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
+                                                            << energy );
 
     // Check.
     if ( abs(energy - energy_ref) > eps )
