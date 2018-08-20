@@ -177,17 +177,17 @@ public:
   //! Returns pole by its zero-based index.
   //! \param[in] poleIdx zero-based pole index.
   //! \return pole.
-  const xyz& GetPole(const size_t poleIdx) const
+  const xyz& GetPole(const int poleIdx) const
   {
     return m_poles[poleIdx];
   }
 
-  //! Returns pole by its zero-based index.
+  //! Sets new coordinates for a pole.
   //! \param[in] poleIdx zero-based pole index.
   //! \param[in] xyz     pole coordinates to set.
   //! \return pole.
-  void SetPole(const size_t poleIdx,
-               const xyz&   xyz)
+  void SetPole(const int  poleIdx,
+               const xyz& xyz)
   {
     m_poles[poleIdx] = xyz;
   }
@@ -209,7 +209,7 @@ public:
   //! Returns knot by its zero-based index.
   //! \param[in] knotIdx zero-based knot index.
   //! \return knot.
-  double GetKnot(const size_t knotIdx) const
+  double GetKnot(const int knotIdx) const
   {
     return m_U[knotIdx];
   }

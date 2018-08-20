@@ -52,7 +52,7 @@
 //-----------------------------------------------------------------------------
 // DOXY group definition
 //-----------------------------------------------------------------------------
-//! \defgroup MOBIUS_BSPL B-spline library
+//! \defgroup MOBIUS_BSPL BSpl
 //!
 //! Data structures and algorithms for operating with B-spline functions.
 //-----------------------------------------------------------------------------
@@ -115,6 +115,22 @@ namespace bspl
   //! \return true/false.
   mobiusBSpl_EXPORT bool
     Check(const int n, const int m, const int p);
+
+  //! Converts the passed two indices i and j to one serial index.
+  //! \param[in] i       0-based row index.
+  //! \param[in] j       0-based column index.
+  //! \param[in] numCols number of columns.
+  //! \return 0-based serial index.
+  mobiusBSpl_EXPORT int
+    SerialIndexFromPair(const int i, const int j, const int numRows);
+
+  //! Converts the passed serial index to a pair of indices (i,j).
+  //! \param[in]  k       0-based serial index.
+  //! \param[in]  numCols number of columns.
+  //! \param[out] i       0-based row index.
+  //! \param[out] j       0-based column index.
+  mobiusBSpl_EXPORT void
+    PairIndicesFromSerial(const int k, const int numCols, int& i, int& j);
 
 };
 

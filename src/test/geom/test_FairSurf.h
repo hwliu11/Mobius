@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 26 July 2018
+// Created on: 20 August 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,27 +28,57 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairingMemBlocks_HeaderFile
-#define geom_FairingMemBlocks_HeaderFile
+#ifndef test_FairSurf_HeaderFile
+#define test_FairSurf_HeaderFile
 
-// Geom includes
-#include <mobius/geom.h>
+// Test includes
+#include <mobius/test_CaseIDs.h>
+
+// TestEngine includes
+#include <mobius/testEngine_TestCase.h>
 
 namespace mobius {
 
-enum geom_FairingMemBlockCurve
+//! Test functions for surface fairing.
+class test_FairSurf : public testEngine_TestCase
 {
-  memBlockCurve_EffectiveNDersResult = 0,
-  memBlockCurve_EffectiveNDersInternal,
-  memBlockCurve_BSplineCurveEvalDk
-};
+public:
 
-enum geom_FairingMemBlockSurf
-{
-  memBlockSurf_EffectiveNDersUResult = 0,
-  memBlockSurf_EffectiveNDersVResult,
-  memBlockSurf_EffectiveNDersUInternal,
-  memBlockSurf_EffectiveNDersVInternal
+  //! Returns Test Case ID.
+  //! \return ID of the Test Case.
+  static int ID()
+  {
+    return CaseID_Geom_FairSurf;
+  }
+
+  //! Returns filename for the description.
+  //! \return filename for the description of the Test Case.
+  static std::string DescriptionFn()
+  {
+    return "test_FairSurf";
+  }
+
+  //! Returns Test Case description directory.
+  //! \return description directory for the Test Case.
+  static std::string DescriptionDir()
+  {
+    return "editing";
+  }
+
+  //! Returns pointers to the Test Functions to launch.
+  //! \param[out] functions output collection of pointers.
+  static void Functions(MobiusTestFunctions& functions)
+  {
+    functions << &testIndices
+              << &testFairing01
+    ; // Put semicolon here for convenient adding new functions above ;)
+  }
+
+private:
+
+  static outcome testIndices   (const int funcID);
+  static outcome testFairing01 (const int funcID);
+
 };
 
 };

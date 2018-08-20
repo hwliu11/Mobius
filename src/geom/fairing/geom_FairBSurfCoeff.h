@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2018
+// Created on: 20 August 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,62 +28,49 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairingBjFunc_HeaderFile
-#define geom_FairingBjFunc_HeaderFile
+#ifndef geom_FairBSurfCoeff_HeaderFile
+#define geom_FairBSurfCoeff_HeaderFile
 
 // Geom includes
-#include <mobius/geom_BSplineCurve.h>
-#include <mobius/geom_FairingCoeffFunc.h>
+#include <mobius/geom.h>
 
 // Core includes
-#include <mobius/core_HeapAlloc.h>
+#include <mobius/core_TwovariateFunc.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Univariate function to interface fairing rhs coefficients B_j.
-class geom_FairingBjFunc : public geom_FairingCoeffFunc
+//! Base class for surface fairing coefficients.
+class geom_FairBSurfCoeff : public core_TwovariateFunc
 {
 public:
 
   //! ctor.
-  //! \param[in] curve  B-spline curve in question (the one to fair).
-  //! \param[in] coord  index of coordinate to use (0 for X, 1 for Y, and 2 for Z).
-  //! \param[in] U      knot vector.
-  //! \param[in] p      B-spline degree.
-  //! \param[in] i      0-based index of the B-spline function.
-  //! \param[in] lambda fairing coefficent.
-  //! \param[in] alloc  memory block.
-  mobiusGeom_EXPORT
-    geom_FairingBjFunc(const ptr<bcurve>&         curve,
-                       const int                  coord,
-                       const std::vector<double>& U,
-                       const int                  p,
-                       const int                  i,
-                       const double               lambda,
-                       ptr<alloc2d>               alloc);
+  //! \param[in] lambda fairing coefficient.
+  geom_FairBSurfCoeff(const double lambda) : core_TwovariateFunc()
+  {
+    m_fLambda = lambda;
+  }
 
 public:
 
-  //! Evaluates function.
-  //! \return true in case of success, false -- otherwise.
-  mobiusGeom_EXPORT virtual double
-    Eval(const double u) const;
+  //! \return fairing coefficient.
+  double GetLambda() const
+  {
+    return m_fLambda;
+  }
 
-private:
-
-  geom_FairingBjFunc() = delete;
-  void operator=(const geom_FairingBjFunc&) = delete;
+  //! Sets fairing coefficient.
+  //! \param[in] lambda fairing coefficient.
+  double SetLambda(const double lambda)
+  {
+    m_fLambda = lambda;
+  }
 
 protected:
 
-  ptr<bcurve>                m_curve;   //!< Curve in question.
-  int                        m_iCoord;  //!< Coordinate in question.
-  const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
-  int                        m_iDegree; //!< Degree of the spline function.
-  int                        m_iIndex;  //!< 0-based index of the spline function.
-  ptr<alloc2d>               m_alloc;   //!< Pre-allocated memory block.
+  double m_fLambda; //!< Fairing coefficient.
 
 };
 

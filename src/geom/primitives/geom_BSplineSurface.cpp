@@ -440,6 +440,15 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
 
 //-----------------------------------------------------------------------------
 
+//! Creates a copy of this B-curve.
+//! \return copy of B-curve.
+mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const
+{
+  return new bsurf(m_poles, m_U, m_V, m_iDegU, m_iDegV);
+}
+
+//-----------------------------------------------------------------------------
+
 //! Extracts isoparametric curve corresponding to the passed {u} level.
 //! \param u [in] parameter value to extract isoparametric curve for.
 //! \return isoline.

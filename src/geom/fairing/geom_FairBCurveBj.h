@@ -28,11 +28,12 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairingAijFunc_HeaderFile
-#define geom_FairingAijFunc_HeaderFile
+#ifndef geom_FairBCurveBj_HeaderFile
+#define geom_FairBCurveBj_HeaderFile
 
-// asiAlgo includes
-#include <mobius/geom_FairingCoeffFunc.h>
+// Geometry includes
+#include <mobius/geom_BSplineCurve.h>
+#include <mobius/geom_FairBCurveCoeff.h>
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
@@ -41,45 +42,42 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Univariate function to interface fairing coefficients A_{i,j}.
-class geom_FairingAijFunc : public geom_FairingCoeffFunc
+//! Univariate function to interface fairing rhs coefficients B_j.
+class geom_FairBCurveBj : public geom_FairBCurveCoeff
 {
 public:
 
   //! ctor.
-  //! \param[in] U      knot vector.
-  //! \param[in] p      B-spline degree.
-  //! \param[in] i      0-based index 1.
-  //! \param[in] j      0-based index 2.
+  //! \param[in] curve  B-spline curve in question (the one to fair).
+  //! \param[in] coord  index of coordinate to use (0 for X, 1 for Y, and 2 for Z).
+  //! \param[in] j      0-based index of the B-spline function.
   //! \param[in] lambda fairing coefficent.
-  //! \param[in] alloc  memory block.
+  //! \param[in] alloc  shared memory allocator.
   mobiusGeom_EXPORT
-    geom_FairingAijFunc(const std::vector<double>& U,
-                        const int                  p,
-                        const int                  i,
-                        const int                  j,
-                        const double               lambda,
-                        ptr<alloc2d>               alloc);
+    geom_FairBCurveBj(const ptr<bcurve>&         curve,
+                      const int                  coord,
+                      const int                  j,
+                      const double               lambda,
+                      ptr<alloc2d>               alloc);
 
 public:
 
   //! Evaluates function.
-  //! \return true in case of success, false -- otherwise.
+  //! \return value.
   mobiusGeom_EXPORT virtual double
     Eval(const double u) const;
 
 private:
 
-  geom_FairingAijFunc() = delete;
-  void operator=(const geom_FairingAijFunc&) = delete;
+  geom_FairBCurveBj() = delete;
+  void operator=(const geom_FairBCurveBj&) = delete;
 
 protected:
 
-  const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
-  int                        m_iDegree; //!< Degree of the spline function.
-  int                        m_iIndex1; //!< 0-based index 1.
-  int                        m_iIndex2; //!< 0-based index 2.
-   ptr<alloc2d>              m_alloc;   //!< Allocator with reserved memory block.
+  ptr<bcurve>  m_curve;  //!< Curve in question.
+  int          m_iCoord; //!< Coordinate in question.
+  int          m_iIndex; //!< 0-based index of the spline function.
+  ptr<alloc2d> m_alloc;  //!< Shared memory allocator.
 
 };
 

@@ -28,49 +28,58 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairingCoeffFunc_HeaderFile
-#define geom_FairingCoeffFunc_HeaderFile
+#ifndef geom_FairBCurveAij_HeaderFile
+#define geom_FairBCurveAij_HeaderFile
 
-// Geom includes
-#include <mobius/geom.h>
+// Geometry includes
+#include <mobius/geom_FairBCurveCoeff.h>
 
 // Core includes
-#include <mobius/core_UnivariateFunc.h>
+#include <mobius/core_HeapAlloc.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Base class for fairing coefficients.
-class geom_FairingCoeffFunc : public core_UnivariateFunc
+//! Univariate function to interface fairing coefficients A_{i,j}.
+class geom_FairBCurveAij : public geom_FairBCurveCoeff
 {
 public:
 
   //! ctor.
-  //! \param[in] lambda fairing coefficient.
-  geom_FairingCoeffFunc(const double lambda) : core_UnivariateFunc()
-  {
-    m_fLambda = lambda;
-  }
+  //! \param[in] U      knot vector.
+  //! \param[in] p      B-spline degree.
+  //! \param[in] i      0-based index 1.
+  //! \param[in] j      0-based index 2.
+  //! \param[in] lambda fairing coefficent.
+  //! \param[in] alloc  shared memory allocator.
+  mobiusGeom_EXPORT
+    geom_FairBCurveAij(const std::vector<double>& U,
+                       const int                  p,
+                       const int                  i,
+                       const int                  j,
+                       const double               lambda,
+                       ptr<alloc2d>               alloc);
 
 public:
 
-  //! \return fairing coefficient.
-  double GetLambda() const
-  {
-    return m_fLambda;
-  }
+  //! Evaluates function.
+  //! \return value.
+  mobiusGeom_EXPORT virtual double
+    Eval(const double u) const;
 
-  //! Sets fairing coefficient.
-  //! \param[in] lambda fairing coefficient.
-  double SetLambda(const double lambda)
-  {
-    m_fLambda = lambda;
-  }
+private:
+
+  geom_FairBCurveAij() = delete;
+  void operator=(const geom_FairBCurveAij&) = delete;
 
 protected:
 
-  double m_fLambda; //!< Fairing coefficient.
+  const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
+  int                        m_iDegree; //!< Degree of the spline function.
+  int                        m_iIndex1; //!< 0-based index 1.
+  int                        m_iIndex2; //!< 0-based index 2.
+  ptr<alloc2d>               m_alloc;   //!< Allocator with reserved memory blocks.
 
 };
 

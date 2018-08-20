@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 26 July 2018
+// Created on: 03 March 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018-present, Sergey Slyadnev
+// Copyright (c) 2018, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,27 +28,50 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairingMemBlocks_HeaderFile
-#define geom_FairingMemBlocks_HeaderFile
+#ifndef geom_FairBCurveCoeff_HeaderFile
+#define geom_FairBCurveCoeff_HeaderFile
 
 // Geom includes
 #include <mobius/geom.h>
 
+// Core includes
+#include <mobius/core_UnivariateFunc.h>
+
 namespace mobius {
 
-enum geom_FairingMemBlockCurve
+//! \ingroup MOBIUS_GEOM
+//!
+//! Base class for curve fairing coefficients.
+class geom_FairBCurveCoeff : public core_UnivariateFunc
 {
-  memBlockCurve_EffectiveNDersResult = 0,
-  memBlockCurve_EffectiveNDersInternal,
-  memBlockCurve_BSplineCurveEvalDk
-};
+public:
 
-enum geom_FairingMemBlockSurf
-{
-  memBlockSurf_EffectiveNDersUResult = 0,
-  memBlockSurf_EffectiveNDersVResult,
-  memBlockSurf_EffectiveNDersUInternal,
-  memBlockSurf_EffectiveNDersVInternal
+  //! ctor.
+  //! \param[in] lambda fairing coefficient.
+  geom_FairBCurveCoeff(const double lambda) : core_UnivariateFunc()
+  {
+    m_fLambda = lambda;
+  }
+
+public:
+
+  //! \return fairing coefficient.
+  double GetLambda() const
+  {
+    return m_fLambda;
+  }
+
+  //! Sets fairing coefficient.
+  //! \param[in] lambda fairing coefficient.
+  double SetLambda(const double lambda)
+  {
+    m_fLambda = lambda;
+  }
+
+protected:
+
+  double m_fLambda; //!< Fairing coefficient.
+
 };
 
 };

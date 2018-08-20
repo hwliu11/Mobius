@@ -2,9 +2,14 @@ project(docalgo)
 
 set (DOX_FILES
   000_!_intro.md
-  000_01_getting_started.md
+  000_01_getting-started.md
   001_!_architecture.md
-  001_01_memory_management.md
+  001_01_memory-management.md
+  002_!_primitives.md
+  002_01_bsurf.md
+  003_!_operators.md
+  003_01_surface-fairing.md
+  999_references.md
 )
 
 foreach (doxfile ${DOX_FILES})

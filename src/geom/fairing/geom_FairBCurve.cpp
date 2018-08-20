@@ -32,8 +32,8 @@
 #include <mobius/geom_FairBCurve.h>
 
 // Geom includes
-#include <mobius/geom_FairingAijFunc.h>
-#include <mobius/geom_FairingBjFunc.h>
+#include <mobius/geom_FairBCurveAij.h>
+#include <mobius/geom_FairBCurveBj.h>
 
 // Core includes
 #include <mobius/core_Integral.h>
@@ -87,18 +87,18 @@ bool mobius::geom_FairBCurve::Perform()
   sharedAlloc->Allocate(2,     3,     true); // memBlock_EffectiveNDersInternal
   sharedAlloc->Allocate(p + 1, p + 1, true); // memBlock_BSplineCurveEvalDk
 
-  // Initialize matrix from the passed row pointer.
+  // Initialize matrix of left-hand-side coefficients.
   Eigen::MatrixXd eigen_A_mx(dim, dim);
   for ( int r = 0; r < dim; ++r )
   {
     for ( int c = 0; c < dim; ++c )
     {
-      geom_FairingAijFunc N2(U,
-                             p,
-                             r + NUM_CONSTRAINED_POLES_LEADING,
-                             c + NUM_CONSTRAINED_POLES_LEADING,
-                             m_fLambda,
-                             sharedAlloc);
+      geom_FairBCurveAij N2(U,
+                            p,
+                            r + NUM_CONSTRAINED_POLES_LEADING,
+                            c + NUM_CONSTRAINED_POLES_LEADING,
+                            m_fLambda,
+                            sharedAlloc);
 
       // Compute integral.
       double val = 0;
@@ -121,33 +121,27 @@ bool mobius::geom_FairBCurve::Perform()
   std::cout << "Here is the matrix A:\n" << eigen_A_mx << std::endl;
 #endif
 
-  // Initialize vector of right hand side.
+  // Initialize vector of right-hand-side coefficients.
   Eigen::MatrixXd eigen_B_mx(dim, 3);
   for ( int r = 0; r < dim; ++r )
   {
-    geom_FairingBjFunc rhs_x(m_inputCurve,
-                             0,
-                             U,
-                             p,
-                             r + NUM_CONSTRAINED_POLES_LEADING,
-                             m_fLambda,
-                             sharedAlloc);
+    geom_FairBCurveBj rhs_x(m_inputCurve,
+                            0,
+                            r + NUM_CONSTRAINED_POLES_LEADING,
+                            m_fLambda,
+                            sharedAlloc);
     //
-    geom_FairingBjFunc rhs_y(m_inputCurve,
-                             1,
-                             U,
-                             p,
-                             r + NUM_CONSTRAINED_POLES_LEADING,
-                             m_fLambda,
-                             sharedAlloc);
+    geom_FairBCurveBj rhs_y(m_inputCurve,
+                            1,
+                            r + NUM_CONSTRAINED_POLES_LEADING,
+                            m_fLambda,
+                            sharedAlloc);
     //
-    geom_FairingBjFunc rhs_z(m_inputCurve,
-                             2,
-                             U,
-                             p,
-                             r + NUM_CONSTRAINED_POLES_LEADING,
-                             m_fLambda,
-                             sharedAlloc);
+    geom_FairBCurveBj rhs_z(m_inputCurve,
+                            2,
+                            r + NUM_CONSTRAINED_POLES_LEADING,
+                            m_fLambda,
+                            sharedAlloc);
 
     // Compute integrals.
     double val_x = 0;

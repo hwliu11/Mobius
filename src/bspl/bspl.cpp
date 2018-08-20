@@ -71,3 +71,23 @@ bool mobius::bspl::Check(const int n, const int m, const int p)
   const int m_expected = NumberOfKnots(n, p) - 1;
   return m == m_expected;
 }
+
+//-----------------------------------------------------------------------------
+
+int mobius::bspl::SerialIndexFromPair(const int i,
+                                      const int j,
+                                      const int numCols)
+{
+  return numCols*i + j;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::bspl::PairIndicesFromSerial(const int k,
+                                         const int numCols,
+                                         int&      i,
+                                         int&      j)
+{
+  i = k / numCols;
+  j = k % numCols;
+}

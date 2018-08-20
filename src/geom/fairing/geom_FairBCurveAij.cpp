@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/geom_FairingBjFunc.h>
+#include <mobius/geom_FairBCurveAij.h>
 
 // Geom includes
 #include <mobius/geom_FairingMemBlocks.h>
@@ -45,35 +45,31 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairingBjFunc::geom_FairingBjFunc(const ptr<bcurve>&         curve,
-                                               const int                  coord,
-                                               const std::vector<double>& U,
+mobius::geom_FairBCurveAij::geom_FairBCurveAij(const std::vector<double>& U,
                                                const int                  p,
                                                const int                  i,
+                                               const int                  j,
                                                const double               lambda,
                                                ptr<alloc2d>               alloc)
-: geom_FairingCoeffFunc (lambda),
-  m_U                   (U),
-  m_curve               (curve),
-  m_iCoord              (coord),
-  m_iDegree             (p),
-  m_iIndex              (i),
-  m_alloc               (alloc)
+: geom_FairBCurveCoeff (lambda),
+  m_U                  (U),
+  m_iDegree            (p),
+  m_iIndex1            (i),
+  m_iIndex2            (j),
+  m_alloc              (alloc)
 {}
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_FairingBjFunc::Eval(const double u) const
+double mobius::geom_FairBCurveAij::Eval(const double u) const
 {
   ptr<alloc2d> localAlloc;
 
-  /* ==================================================================
-   *  Calculate 2-nd derivative of basis spline at the given parameter
-   * ================================================================== */
-
-  const int order    = m_iDegree + 1;
-  double    d2N      = 0.0;
-  double    d2C_proj = 0.0;
+  const int order = m_iDegree + 1;
+  double    Ni    = 0.0;
+  double    Nj    = 0.0;
+  double    d2Ni  = 0.0;
+  double    d2Nj  = 0.0;
 
   // Find span and index of the first non-vanishing spline.
   bspl_FindSpan FindSpan(m_U, m_iDegree);
@@ -89,16 +85,17 @@ double mobius::geom_FairingBjFunc::Eval(const double u) const
     dN = localAlloc->Allocate(3, order, true);
   }
   else
-    dN = m_alloc->Access(memBlock_EffectiveNDersResult).Ptr;
+    dN = m_alloc->Access(memBlockCurve_EffectiveNDersResult).Ptr;
 
   // Evaluate.
-  bspl_EffectiveNDers Eval/*(m_alloc, memBlock_EffectiveNDersInternal)*/;
+  bspl_EffectiveNDers Eval(m_alloc, memBlockCurve_EffectiveNDersInternal);
   Eval(u, m_U, m_iDegree, I, 2, dN);
 
 #if defined COUT_DEBUG
   // Dump.
   std::cout << "---" << std::endl;
   std::cout << "\tFirst Non-Zero Index for " << u << " is " << basisIndex << std::endl;
+  //
   for ( int kk = 0; kk < order; ++kk )
   {
     std::cout << "\t" << dN[2][kk];
@@ -108,19 +105,18 @@ double mobius::geom_FairingBjFunc::Eval(const double u) const
 
   // For indices in a band of width (p + 1), we can query what
   // Mobius returns. Otherwise, the derivative vanishes.
-  if ( (m_iIndex >= basisIndex) && (m_iIndex < basisIndex + order) )
-    d2N = dN[2][m_iIndex - basisIndex];
+  if ( (m_iIndex1 >= basisIndex) && (m_iIndex1 < basisIndex + order) )
+    Ni = dN[0][m_iIndex1 - basisIndex];
+  //
+  if ( (m_iIndex2 >= basisIndex) && (m_iIndex2 < basisIndex + order) )
+    Nj = dN[0][m_iIndex2 - basisIndex];
 
-  /* ====================================================
-   *  Calculate 2-nd derivative of the curve in question
-   * ==================================================== */
+  // Derivatives.
+  if ( (m_iIndex1 >= basisIndex) && (m_iIndex1 < basisIndex + order) )
+    d2Ni = dN[2][m_iIndex1 - basisIndex];
+  //
+  if ( (m_iIndex2 >= basisIndex) && (m_iIndex2 < basisIndex + order) )
+    d2Nj = dN[2][m_iIndex2 - basisIndex];
 
-  xyz d2C;
-  m_curve->Eval_Dk(u, 2, d2C, m_alloc, memBlock_BSplineCurveEvalDk, memBlock_EffectiveNDersInternal);
-
-  // Get projection of the second derivative.
-  d2C_proj = d2C.Coord(m_iCoord);
-
-  // Calculate the result.
-  return this->GetLambda()*d2N*d2C_proj;
+  return Ni*Nj + this->GetLambda()*d2Ni*d2Nj;
 }

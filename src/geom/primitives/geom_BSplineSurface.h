@@ -121,6 +121,9 @@ public:
 
 public:
 
+  mobiusGeom_EXPORT ptr<geom_BSplineSurface>
+    Copy() const;
+
   mobiusGeom_EXPORT ptr<geom_BSplineCurve>
     Iso_U(const double u) const;
 
@@ -151,6 +154,18 @@ public:
   const std::vector< std::vector<xyz> >& Poles() const
   {
     return m_poles;
+  }
+
+  //! Sets new coordinates for a pole.
+  //! \param[in] i   zero-based row index.
+  //! \param[in] j   zero-based column index.
+  //! \param[in] xyz pole coordinates to set.
+  //! \return pole.
+  void SetPole(const int  i,
+               const int  j,
+               const xyz& xyz)
+  {
+    m_poles[i][j] = xyz;
   }
 
   //! Accessor for the knot vector in U dimension.

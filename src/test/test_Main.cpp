@@ -37,6 +37,7 @@
 #include <mobius/test_EffectiveN.h>
 #include <mobius/test_EffectiveNDers.h>
 #include <mobius/test_FairCurve.h>
+#include <mobius/test_FairSurf.h>
 #include <mobius/test_FindSpan.h>
 #include <mobius/test_Integral.h>
 #include <mobius/test_KnotMultiset.h>
@@ -85,7 +86,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
   std::vector< core_Ptr<testEngine_CaseLauncherAPI> > CaseLaunchers;
   //
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan>           (cf->ProgressNotifier) );
+  /*CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan>           (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN>         (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers>     (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset>       (cf->ProgressNotifier) );
@@ -101,7 +102,8 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine>        (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve>       (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );*/
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairSurf>           (cf->ProgressNotifier) );
 
   // Launcher of entire test suite
   testEngine_Launcher Launcher;

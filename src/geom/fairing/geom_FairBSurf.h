@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 05 March 2018
+// Created on: 20 August 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,11 +28,14 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairBCurve_HeaderFile
-#define geom_FairBCurve_HeaderFile
+#ifndef geom_FairBSurf_HeaderFile
+#define geom_FairBSurf_HeaderFile
 
-// Geom includes
-#include <mobius/geom_BSplineCurve.h>
+// Geometry includes
+#include <mobius/geom_BSplineSurface.h>
+
+// BSpl includes
+#include <mobius/bspl.h>
 
 // Core includes
 #include <mobius/core_OPERATOR.h>
@@ -41,24 +44,24 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Fairing algorithm for B-spline curves. See
+//! Fairing algorithm for B-spline surfaces. See
 //!
 //! [M. Kallay, Constrained optimization in surface design, in: Modeling in
 //!  Computer Graphics, Springer Berlin Heidelberg, 1993, pp. 85-93.]
-class geom_FairBCurve : public core_OPERATOR
+class geom_FairBSurf : public core_OPERATOR
 {
 public:
 
   //! ctor.
-  //! \param[in] curve    B-spline curve to fair.
+  //! \param[in] surface  B-spline surface to fair.
   //! \param[in] lambda   fairing coefficient.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_FairBCurve(const ptr<bcurve>& curve,
-                    const double       lambda,
-                    core_ProgressEntry progress,
-                    core_PlotterEntry  plotter);
+    geom_FairBSurf(const ptr<bsurf>&  surface,
+                   const double       lambda,
+                   core_ProgressEntry progress,
+                   core_PlotterEntry  plotter);
 
 public:
 
@@ -69,22 +72,46 @@ public:
 
 public:
 
-  //! \return resulting curve.
-  const ptr<bcurve>& GetResult() const
+  //! \return resulting surface.
+  const ptr<bsurf>& GetResult() const
   {
-    return m_resultCurve;
+    return m_resultSurf;
+  }
+
+  //! Converts (i,j) indices to serial index.
+  //! \param[in] i 0-based index of row.
+  //! \param[in] j 0-based index of column.
+  //! \return 0-based serial index of (i,j)-th element.
+  int GetK(const int i, const int j) const
+  {
+    return bspl::SerialIndexFromPair(i, j, m_iNumPolesV);
+  }
+
+  //! Converts serial index of an element to its grid indices (i,j).
+  //! \param[in]  k 0-based serial index of element.
+  //! \param[out] i 0-based index of the corresponding row.
+  //! \param[out] j 0-based index of the corresponding column.
+  void GetIJ(const int k, int& i, int& j) const
+  {
+    bspl::PairIndicesFromSerial(k, m_iNumPolesV, i, j);
   }
 
 protected:
 
-  //! Curve to fair.
-  ptr<bcurve> m_inputCurve;
+  //! Surface to fair.
+  ptr<bsurf> m_inputSurf;
 
   //! Result of fairing.
-  ptr<bcurve> m_resultCurve;
+  ptr<bsurf> m_resultSurf;
 
   //! Fairing coefficient.
   double m_fLambda;
+
+  //! Number of poles in U direction.
+  int m_iNumPolesU;
+
+  //! Number of poles in V direction (used to compute serial indices of poles).
+  int m_iNumPolesV;
 
 };
 
