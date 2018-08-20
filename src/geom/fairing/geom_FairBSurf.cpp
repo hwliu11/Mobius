@@ -63,8 +63,8 @@ namespace mobius {
                   const int                  q)
   {
     // (2n-1) for max accuracy on polynomial functions.
-    const int NUM_GAUSS_PT_U = 2*p - 1;
-    const int NUM_GAUSS_PT_V = 2*q - 1;
+    const int NUM_GAUSS_PT_U = 30;//2*p - 1;
+    const int NUM_GAUSS_PT_V = 30;//2*q - 1;
 
     // Integrate in each span individually for better accuracy.
     double result = 0;
