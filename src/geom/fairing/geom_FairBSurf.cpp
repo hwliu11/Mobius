@@ -171,9 +171,9 @@ bool mobius::geom_FairBSurf::Perform()
     std::cout << "A " << r << " done" << std::endl;
   }
 
-//#if defined COUT_DEBUG
+#if defined COUT_DEBUG
   std::cout << "Here is the matrix A:\n" << eigen_A_mx << std::endl;
-//#endif
+#endif
 
   std::cout << "Computing matrix b..." << std::endl;
 
