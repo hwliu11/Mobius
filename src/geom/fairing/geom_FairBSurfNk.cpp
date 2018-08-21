@@ -52,8 +52,6 @@ void mobius::geom_FairBSurfNk::Eval_D2(const double u,
                                        double&      d2N_dUV,
                                        double&      d2N_dV2)
 {
-  ptr<alloc2d> localAlloc;
-
   t_cell askedCell(uv(u, v), 1e-4);
 
   // Return cached values.
@@ -68,6 +66,8 @@ void mobius::geom_FairBSurfNk::Eval_D2(const double u,
 
     return;
   }
+
+  ptr<alloc2d> localAlloc;
 
   const int orderU = m_Ni.p + 1;
   const int orderV = m_Nj.q + 1;

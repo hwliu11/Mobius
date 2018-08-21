@@ -69,8 +69,8 @@ public:
   //! \param[out] functions output collection of pointers.
   static void Functions(MobiusTestFunctions& functions)
   {
-    functions //<< &testIndices
-              //<< &testFairing01
+    functions << &testIndices
+              << &testFairing01
               << &testFairing02
     ; // Put semicolon here for convenient adding new functions above ;)
   }

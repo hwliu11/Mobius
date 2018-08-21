@@ -118,9 +118,7 @@ bool mobius::geom_FairBSurf::Perform()
   const int nPoles  = m_iNumPolesU*m_iNumPolesV;
   const int dim     = nPoles - nPinned;
 
-#if defined COUT_DEBUG
   std::cout << "Dimension: " << dim << std::endl;
-#endif
 
   // Prepare working variables.
   const std::vector<double>& U = m_inputSurf->Knots_U();
@@ -153,8 +151,9 @@ bool mobius::geom_FairBSurf::Perform()
     if ( this->IsPinned(k) )
       continue;
 
-    int c = 0;
-    for ( int l = 0; l < nPoles; ++l )
+    // Fill upper triangle and populate the matrix symmetrically.
+    int c = r;
+    for ( int l = k; l < nPoles; ++l )
     {
       if ( this->IsPinned(l) )
         continue;
@@ -163,15 +162,18 @@ bool mobius::geom_FairBSurf::Perform()
 
       // Compute integral.
       const double val = Integral(&A_kl_func, U, V, p, q);
-      eigen_A_mx(r, c++) = val;
+      eigen_A_mx(r, c) = eigen_A_mx(c, r) = val;
+      c++;
     }
     rkMap[r] = k;
     r++;
+
+    std::cout << "A " << r << " done" << std::endl;
   }
 
-#if defined COUT_DEBUG
+//#if defined COUT_DEBUG
   std::cout << "Here is the matrix A:\n" << eigen_A_mx << std::endl;
-#endif
+//#endif
 
   std::cout << "Computing matrix b..." << std::endl;
 
