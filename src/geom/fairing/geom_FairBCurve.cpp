@@ -83,9 +83,9 @@ bool mobius::geom_FairBCurve::Perform()
 
   // Prepare reusable memory blocks for running sub-routines efficiently.
   ptr<alloc2d> sharedAlloc = new alloc2d;
-  sharedAlloc->Allocate(3,     p + 1, true); // memBlock_EffectiveNDersResult
-  sharedAlloc->Allocate(2,     3,     true); // memBlock_EffectiveNDersInternal
-  sharedAlloc->Allocate(p + 1, p + 1, true); // memBlock_BSplineCurveEvalDk
+  sharedAlloc->Allocate(3,     p + 1, true); // memBlockCurve_EffectiveNDersResult
+  sharedAlloc->Allocate(2,     3,     true); // memBlockCurve_EffectiveNDersInternal
+  sharedAlloc->Allocate(p + 1, p + 1, true); // memBlockCurve_BSplineCurveEvalDk
 
   // Initialize matrix of left-hand-side coefficients.
   Eigen::MatrixXd eigen_A_mx(dim, dim);
@@ -106,7 +106,7 @@ bool mobius::geom_FairBCurve::Perform()
       {
         if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
-        // nGaussPt-points integration in each knot span.
+        // Gauss integration in each knot span.
         const double
           gaussVal = core_Integral::gauss::Compute(&N2, U[k], U[k+1], nGaussPt, nAijEval);
         //
@@ -149,7 +149,7 @@ bool mobius::geom_FairBCurve::Perform()
     {
       if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
-      // nGaussPt-points integration in each knot span.
+      // Gauss integration in each knot span.
       const double
         gaussVal = core_Integral::gauss::Compute(&rhs_x, U[k], U[k+1], nGaussPt);
       //
@@ -161,7 +161,7 @@ bool mobius::geom_FairBCurve::Perform()
     {
       if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
-      // nGaussPt-points integration in each knot span.
+      // Gauss integration in each knot span.
       const double
         gaussVal = core_Integral::gauss::Compute(&rhs_y, U[k], U[k+1], nGaussPt);
       //
@@ -173,7 +173,7 @@ bool mobius::geom_FairBCurve::Perform()
     {
       if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
-      // nGaussPt-points integration in each knot span.
+      // Gauss integration in each knot span.
       const double
         gaussVal = core_Integral::gauss::Compute(&rhs_z, U[k], U[k+1], nGaussPt);
       //

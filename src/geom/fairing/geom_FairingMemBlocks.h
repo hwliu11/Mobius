@@ -48,7 +48,10 @@ enum geom_FairingMemBlockSurf
   memBlockSurf_EffectiveNDersUResult = 0,
   memBlockSurf_EffectiveNDersVResult,
   memBlockSurf_EffectiveNDersUInternal,
-  memBlockSurf_EffectiveNDersVInternal
+  memBlockSurf_EffectiveNDersVInternal,
+  memBlockSurf_BSplineSurfEvalD2U,
+  memBlockSurf_BSplineSurfEvalD2V,
+  memBlockSurf_BSplineSurfEvalInternal
 };
 
 };

@@ -381,8 +381,27 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
                                           xyz&         dV,
                                           xyz&         d2U,
                                           xyz&         d2V,
-                                          xyz&         d2UV) const
+                                          xyz&         d2UV,
+                                          ptr<alloc2d> alloc,
+                                          const int    memBlockResultU,
+                                          const int    memBlockResultV,
+                                          const int    memBlockInternal) const
 {
+  ptr<alloc2d> localAlloc;
+
+  double** dNu, **dNv;
+  if ( alloc.IsNull() )
+  {
+    localAlloc = new alloc2d;
+    dNu = localAlloc->Allocate(3, m_iDegU + 1, true);
+    dNv = localAlloc->Allocate(3, m_iDegV + 1, true);
+  }
+  else
+  {
+    dNu = alloc->Access(memBlockResultU).Ptr;
+    dNv = alloc->Access(memBlockResultV).Ptr;
+  }
+
   // Find spans the passed u and v fall into
   bspl_FindSpan FindSpanU(m_U, m_iDegU);
   bspl_FindSpan FindSpanV(m_V, m_iDegV);
@@ -390,13 +409,8 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
   const int span_u = FindSpanU(u);
   const int span_v = FindSpanV(v);
 
-  ptr<alloc2d> localAlloc = new alloc2d;
-  //
-  double** dNu = localAlloc->Allocate(3, m_iDegU + 1, true);
-  double** dNv = localAlloc->Allocate(3, m_iDegV + 1, true);
-
   // Evaluate derivatives of B-spline basis functions
-  bspl_EffectiveNDers NDers(NULL, -1);
+  bspl_EffectiveNDers NDers(alloc, memBlockInternal);
   NDers(u, m_U, m_iDegU, span_u, 2, dNu);
   NDers(v, m_V, m_iDegV, span_v, 2, dNv);
 

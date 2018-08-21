@@ -29,7 +29,10 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/geom_FairBSurfNN.h>
+#include <mobius/geom_FairBSurfNk.h>
+
+// Geometry includes
+#include <mobius/geom_FairingMemBlocks.h>
 
 // BSpl includes
 #include <mobius/bspl_EffectiveNDers.h>
@@ -40,15 +43,32 @@
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_FairBSurfNN::Eval_D2(const double u,
+void mobius::geom_FairBSurfNk::Eval_D2(const double u,
                                        const double v,
                                        double&      N,
                                        double&      dN_dU,
                                        double&      dN_dV,
                                        double&      d2N_dU2,
                                        double&      d2N_dUV,
-                                       double&      d2N_dV2) const
+                                       double&      d2N_dV2)
 {
+  ptr<alloc2d> localAlloc;
+
+  t_cell askedCell(uv(u, v), 1e-4);
+
+  // Return cached values.
+  if ( m_cells.find(askedCell) != m_cells.end() )
+  {
+    N       = m_cells[askedCell].N;
+    dN_dU   = m_cells[askedCell].dN_dU;
+    dN_dV   = m_cells[askedCell].dN_dV;
+    d2N_dU2 = m_cells[askedCell].d2N_dU2;
+    d2N_dUV = m_cells[askedCell].d2N_dUV;
+    d2N_dV2 = m_cells[askedCell].d2N_dV2;
+
+    return;
+  }
+
   const int orderU = m_Ni.p + 1;
   const int orderV = m_Nj.q + 1;
   double    Ni     = 0.0;
@@ -66,17 +86,24 @@ void mobius::geom_FairBSurfNN::Eval_D2(const double u,
   int Iu          = FindSpanU(u, basisIndexU);
   int Iv          = FindSpanV(v, basisIndexV);
 
-  // Prepare matrix.
-  ptr<alloc2d> localAlloc = new alloc2d;
-  //
+  // Prepare matrices.
   double** dNi, **dNj;
   //
-  dNi = localAlloc->Allocate(3, orderU, true);
-  dNj = localAlloc->Allocate(3, orderV, true);
+  if ( m_alloc.IsNull() )
+  {
+    localAlloc = new alloc2d;
+    dNi = localAlloc->Allocate(3, orderU, true);
+    dNj = localAlloc->Allocate(3, orderV, true);
+  }
+  else
+  {
+    dNi = m_alloc->Access(memBlockSurf_EffectiveNDersUResult).Ptr;
+    dNj = m_alloc->Access(memBlockSurf_EffectiveNDersVResult).Ptr;
+  }
 
   // Evaluate both functions: one for u and another for v.
-  bspl_EffectiveNDers EvalNu(NULL, -1),
-                      EvalNv(NULL, -1);
+  bspl_EffectiveNDers EvalNu(m_alloc, memBlockSurf_EffectiveNDersUInternal),
+                      EvalNv(m_alloc, memBlockSurf_EffectiveNDersVInternal);
   //
   EvalNu(u, m_Ni.U, m_Ni.p, Iu, 2, dNi);
   EvalNv(v, m_Nj.V, m_Nj.q, Iv, 2, dNj);
@@ -104,4 +131,15 @@ void mobius::geom_FairBSurfNN::Eval_D2(const double u,
   d2N_dU2 = d2Ni*Nj;
   d2N_dUV = d1Ni*d1Nj;
   d2N_dV2 = Ni*d2Nj;
+
+  // Cache.
+  t_values cache;
+  cache.N       = N;
+  cache.dN_dU   = dN_dU;
+  cache.dN_dV   = dN_dV;
+  cache.d2N_dU2 = d2N_dU2;
+  cache.d2N_dUV = d2N_dUV;
+  cache.d2N_dV2 = d2N_dV2;
+  //
+  m_cells[askedCell] = cache;
 }

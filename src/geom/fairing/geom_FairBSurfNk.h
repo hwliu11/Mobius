@@ -28,14 +28,21 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairBSurfNN_HeaderFile
-#define geom_FairBSurfNN_HeaderFile
+#ifndef geom_FairBSurfNk_HeaderFile
+#define geom_FairBSurfNk_HeaderFile
 
 // Geom includes
-#include <mobius/geom.h>
+#include <mobius/geom_BSplineSurface.h>
+
+// BSpl includes
+#include <mobius/bspl.h>
 
 // Core includes
-#include <mobius/core_OBJECT.h>
+#include <mobius/core_HeapAlloc.h>
+#include <mobius/core_UV.h>
+
+// Standard includes
+#include <unordered_map>
 
 namespace mobius {
 
@@ -48,35 +55,29 @@ namespace mobius {
 //!
 //! To use functions \f$N_k(u,v)\f$, all control points of the surface \f$\textbf{s}(u,v)\f$
 //! have to be renumbered.
-class geom_FairBSurfNN : public core_OBJECT
+class geom_FairBSurfNk : public core_OBJECT
 {
 public:
 
   //! \brief Ctor accepting all properties of the involved i-th and j-th
   //!        basis functions.
-  //! \param[in] U knot vector of the i-th function.
-  //! \param[in] V knot vector of the j-th function.
-  //! \param[in] p degree of the i-th function.
-  //! \param[in] q degree of the j-th function.
-  //! \param[in] i zero-based index of the i-th function.
-  //! \param[in] j zero-based index of the j-th function.
-  geom_FairBSurfNN(const std::vector<double>& U,
-                   const std::vector<double>& V,
-                   const int                  p,
-                   const int                  q,
-                   const int                  i,
-                   const int                  j)
-  : core_OBJECT()
+  //! \param[in] surface B-spline surface to take basis functions from.
+  //! \param[in] k       0-based serial index.
+  //! \param[in] alloc   shared allocator.
+  geom_FairBSurfNk(const ptr<bsurf>& surface,
+                   const int         k,
+                   ptr<alloc2d>      alloc)
+  : core_OBJECT (),
+    m_alloc     (alloc)
   {
-    // Initialize Ni.
-    m_Ni.U = U;
-    m_Ni.p = p;
-    m_Ni.i = i;
-
-    // Initialize Nj.
-    m_Nj.V = V;
-    m_Nj.q = q;
-    m_Nj.j = j;
+    // Initialize Ni and Nj from surface.
+    m_Ni.U = surface->Knots_U();
+    m_Ni.p = surface->Degree_U();
+    //
+    m_Nj.V = surface->Knots_V();
+    m_Nj.q = surface->Degree_V();
+    //
+    bspl::PairIndicesFromSerial(k, int( surface->Poles()[0].size() ), m_Ni.i, m_Nj.j);
   }
 
 public:
@@ -98,9 +99,62 @@ public:
             double&      dN_dV,
             double&      d2N_dU2,
             double&      d2N_dUV,
-            double&      d2N_dV2) const;
+            double&      d2N_dV2);
 
 protected:
+
+  struct t_cell
+  {
+    uv  coords;
+    int indices[2];
+
+    t_cell() {}
+
+    t_cell(const uv& p, const double cellSize)
+    {
+      for ( int k = 0; k < 2; ++k )
+      {
+        double val = p.Coord(k) / cellSize;
+
+        // If the value of index is greater than INT_MAX, it is decreased
+        // correspondingly for the value of INT_MAX. If the value of index is
+        // less than INT_MIN, it is increased correspondingly for the absolute
+        // value of INT_MIN.
+        indices[k] = long((val > INT_MAX - 1) ? fmod(val, (double) INT_MAX)  : (val < INT_MIN + 1) ? fmod(val, (double) INT_MIN) : val);
+      }
+    }
+
+    bool operator==(const t_cell& cell) const
+    {
+      return (this->indices[0] == cell.indices[0]) && (this->indices[1] == cell.indices[1]);
+    }
+
+    struct hasher
+    {
+      size_t operator()(const t_cell& cell) const
+      {
+        return cell.indices[0] ^ cell.indices[1];
+      }
+    };
+  };
+
+  struct t_values
+  {
+    double N;
+    double dN_dU;
+    double dN_dV;
+    double d2N_dU2;
+    double d2N_dUV;
+    double d2N_dV2;
+
+    t_values() : N(0.), dN_dU(0.), dN_dV(0.), d2N_dU2(0.), d2N_dUV(0.), d2N_dV2(0.) {}
+  };
+
+protected:
+
+  std::unordered_map<t_cell, t_values, t_cell::hasher> m_cells;
+
+  ptr<alloc2d> m_alloc; //!< Shared memory allocator.
 
   //! First basis function \f$N_i^p(u)\f$.
   struct

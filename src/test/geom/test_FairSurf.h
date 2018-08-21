@@ -69,8 +69,9 @@ public:
   //! \param[out] functions output collection of pointers.
   static void Functions(MobiusTestFunctions& functions)
   {
-    functions << &testIndices
-              << &testFairing01
+    functions //<< &testIndices
+              //<< &testFairing01
+              << &testFairing02
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -78,6 +79,7 @@ private:
 
   static outcome testIndices   (const int funcID);
   static outcome testFairing01 (const int funcID);
+  static outcome testFairing02 (const int funcID);
 
 };
 

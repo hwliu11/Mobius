@@ -33,7 +33,7 @@
 
 // Geometry includes
 #include <mobius/geom_FairBSurfCoeff.h>
-#include <mobius/geom_FairBSurfNN.h>
+#include <mobius/geom_FairBSurfNk.h>
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
@@ -48,25 +48,15 @@ class geom_FairBSurfAkl : public geom_FairBSurfCoeff
 public:
 
   //! ctor.
-  //! \param[in] U       knot vector in U parametric direction.
-  //! \param[in] V       knot vector in V parametric direction.
-  //! \param[in] p       B-spline degree in U parametric direction.
-  //! \param[in] q       B-spline degree in V parametric direction.
-  //! \param[in] k       0-based index 1.
-  //! \param[in] l       0-based index 2.
-  //! \param[in] numCols number of poles in V direction (used to convert indices).
-  //! \param[in] lambda  fairing coefficent.
-  //! \param[in] alloc   shared memory allocator.
+  //! \param[in] k      0-based index 1.
+  //! \param[in] l      0-based index 2.
+  //! \param[in] lambda fairing coefficent.
+  //! \param[in] Nk     evaluators for functions \f$N_k(u,v)\f$ and \f$N_l(u,v)\f$.
   mobiusGeom_EXPORT
-    geom_FairBSurfAkl(const std::vector<double>& U,
-                      const std::vector<double>& V,
-                      const int                  p,
-                      const int                  q,
-                      const int                  k,
-                      const int                  l,
-                      const int                  numCols,
-                      const double               lambda,
-                      ptr<alloc2d>               alloc);
+    geom_FairBSurfAkl(const int                                   k,
+                      const int                                   l,
+                      const double                                lambda,
+                      const std::vector< ptr<geom_FairBSurfNk> >& Nk);
 
 public:
 
@@ -82,10 +72,9 @@ private:
 
 protected:
 
-  int                   m_iNumCols; //!< Number of poles in V direction of surface.
-  ptr<geom_FairBSurfNN> m_Nk;       //!< B-spline product function \f$N_k(u,v)\f$.
-  ptr<geom_FairBSurfNN> m_Nl;       //!< B-spline product function \f$N_l(u,v)\f$.
-  ptr<alloc2d>          m_alloc;    //!< Allocator with reserved memory blocks.
+  int                                         m_iK;
+  int                                         m_iL;
+  const std::vector< ptr<geom_FairBSurfNk> >& m_Nk;
 
 };
 

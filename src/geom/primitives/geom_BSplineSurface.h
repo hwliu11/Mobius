@@ -117,7 +117,11 @@ public:
             xyz&         dV,
             xyz&         d2U,
             xyz&         d2V,
-            xyz&         d2UV) const;
+            xyz&         d2UV,
+            ptr<alloc2d> alloc            = NULL,
+            const int    memBlockResultU  = -1,
+            const int    memBlockResultV  = -1,
+            const int    memBlockInternal = -1) const;
 
 public:
 

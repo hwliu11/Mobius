@@ -34,7 +34,7 @@
 // Geom includes
 #include <mobius/geom_BSplineSurface.h>
 #include <mobius/geom_FairBSurfCoeff.h>
-#include <mobius/geom_FairBSurfNN.h>
+#include <mobius/geom_FairBSurfNk.h>
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
@@ -52,16 +52,16 @@ public:
   //! \param[in] surface B-spline surface in question (the one to fair).
   //! \param[in] coord   index of coordinate to use (0 for X, 1 for Y, and 2 for Z).
   //! \param[in] l       0-based index.
-  //! \param[in] numCols number of poles in V direction (used to convert indices).
+  //! \param[in] Nk      evaluators for functions \f$N_l(u,v)\f$.
   //! \param[in] lambda  fairing coefficent.
   //! \param[in] alloc   shared memory allocator.
   mobiusGeom_EXPORT
-    geom_FairBSurfBl(const ptr<bsurf>& surface,
-                     const int         coord,
-                     const int         l,
-                     const int         numCols,
-                     const double      lambda,
-                     ptr<alloc2d>      alloc);
+    geom_FairBSurfBl(const ptr<bsurf>&                           surface,
+                     const int                                   coord,
+                     const int                                   l,
+                     const std::vector< ptr<geom_FairBSurfNk> >& Nk,
+                     const double                                lambda,
+                     ptr<alloc2d>                                alloc);
 
 public:
 
@@ -77,10 +77,11 @@ private:
 
 protected:
 
-  ptr<geom_FairBSurfNN> m_Nl;      //!< B-spline product function \f$N_l(u,v)\f$.
-  ptr<bsurf>            m_surface; //!< Surface in question.
-  int                   m_iCoord;  //!< Coordinate in question.
-  ptr<alloc2d>          m_alloc;   //!< Shared memory allocator.
+  int                                         m_iL;      //!< Index of basis function.
+  const std::vector< ptr<geom_FairBSurfNk> >& m_Nk;      //!< Evaluators of basis functions.
+  ptr<bsurf>                                  m_surface; //!< Surface in question.
+  int                                         m_iCoord;  //!< Coordinate in question.
+  ptr<alloc2d>                                m_alloc;   //!< Shared memory allocator.
 
 };
 

@@ -72,7 +72,7 @@ set (fairing_H_FILES
   fairing/geom_FairBSurfAkl.h
   fairing/geom_FairBSurfBl.h
   fairing/geom_FairBSurfCoeff.h
-  fairing/geom_FairBSurfNN.h
+  fairing/geom_FairBSurfNk.h
   fairing/geom_FairingMemBlocks.h
 )
 set (fairing_CPP_FILES
@@ -82,7 +82,7 @@ set (fairing_CPP_FILES
   fairing/geom_FairBSurf.cpp
   fairing/geom_FairBSurfAkl.cpp
   fairing/geom_FairBSurfBl.cpp
-  fairing/geom_FairBSurfNN.cpp
+  fairing/geom_FairBSurfNk.cpp
 )
 
 #------------------------------------------------------------------------------

@@ -33,12 +33,16 @@
 
 // Geometry includes
 #include <mobius/geom_BSplineSurface.h>
+#include <mobius/geom_FairBSurfNk.h>
 
 // BSpl includes
 #include <mobius/bspl.h>
 
 // Core includes
 #include <mobius/core_OPERATOR.h>
+
+// Standard includes
+#include <set>
 
 namespace mobius {
 
@@ -96,6 +100,41 @@ public:
     bspl::PairIndicesFromSerial(k, m_iNumPolesV, i, j);
   }
 
+  //! Checks whether the pole with the passed serial index is pinned or not.
+  //! \param[in] k 0-based serial index to check.
+  //! \return true/false.
+  bool IsPinned(const int k)
+  {
+    return m_pinnedPoles.find(k) != m_pinnedPoles.end();
+  }
+
+  //! Checks whether the pole with the passed (i,j) indices is pinned or not.
+  //! \param[in] i 0-based index of row.
+  //! \param[in] j 0-based index of column.
+  //! \return true/false.
+  bool IsPinned(const int i, const int j)
+  {
+    return this->IsPinned( this->GetK(i, j) );
+  }
+
+  //! Add index of pinned pole.
+  //! \param[in] i 0-based index of row.
+  //! \param[in] j 0-based index of column.
+  void AddPinnedPole(const int i, const int j)
+  {
+    m_pinnedPoles.insert( this->GetK(i, j) );
+  }
+
+  //! \return number of pinned poles.
+  int GetNumPinnedPoles()
+  {
+    return int( m_pinnedPoles.size() );
+  }
+
+private:
+
+  void prepareNk(ptr<alloc2d> alloc);
+
 protected:
 
   //! Surface to fair.
@@ -112,6 +151,12 @@ protected:
 
   //! Number of poles in V direction (used to compute serial indices of poles).
   int m_iNumPolesV;
+
+  //! Serial indices of control points to pin.
+  std::set<int> m_pinnedPoles;
+
+  //! Evaluators of \f$N_k(u,v)\f$ functions.
+  std::vector< ptr<geom_FairBSurfNk> > m_Nk;
 
 };
 

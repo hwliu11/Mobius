@@ -45,28 +45,19 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBSurfBl::geom_FairBSurfBl(const ptr<bsurf>& surface,
-                                           const int         coord,
-                                           const int         l,
-                                           const int         numCols,
-                                           const double      lambda,
-                                           ptr<alloc2d>      alloc)
+mobius::geom_FairBSurfBl::geom_FairBSurfBl(const ptr<bsurf>&                           surface,
+                                           const int                                   coord,
+                                           const int                                   l,
+                                           const std::vector< ptr<geom_FairBSurfNk> >& Nk,
+                                           const double                                lambda,
+                                           ptr<alloc2d>                                alloc)
 : geom_FairBSurfCoeff (lambda),
   m_surface           (surface),
   m_iCoord            (coord),
+  m_iL                (l),
+  m_Nk                (Nk),
   m_alloc             (alloc)
-{
-  // Prepare evaluator for N_l(u,v).
-  int l_i, l_j;
-  bspl::PairIndicesFromSerial(l, numCols, l_i, l_j);
-  //
-  m_Nl = new geom_FairBSurfNN(surface->Knots_U(),
-                              surface->Knots_V(),
-                              surface->Degree_U(),
-                              surface->Degree_V(),
-                              l_i,
-                              l_j);
-}
+{}
 
 //-----------------------------------------------------------------------------
 
@@ -74,11 +65,15 @@ double mobius::geom_FairBSurfBl::Eval(const double u, const double v) const
 {
   // Evaluate B-surface.
   xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dUV, d2S_dV2;
-  m_surface->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dUV, d2S_dV2);
+  m_surface->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV,
+                     m_alloc,
+                     memBlockSurf_BSplineSurfEvalD2U,
+                     memBlockSurf_BSplineSurfEvalD2V,
+                     memBlockSurf_BSplineSurfEvalInternal);
 
   // Evaluate function N_l(u,v).
   double Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2;
-  m_Nl->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
+  m_Nk[m_iL]->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
 
   // Calculate result.
   const xyz res =  d2S_dU2 * d2Nl_dU2 * m_fLambda

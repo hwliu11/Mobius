@@ -45,29 +45,15 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBSurfAkl::geom_FairBSurfAkl(const std::vector<double>& U,
-                                             const std::vector<double>& V,
-                                             const int                  p,
-                                             const int                  q,
-                                             const int                  k,
-                                             const int                  l,
-                                             const int                  numCols,
-                                             const double               lambda,
-                                             ptr<alloc2d>               alloc)
+mobius::geom_FairBSurfAkl::geom_FairBSurfAkl(const int                                   k,
+                                             const int                                   l,
+                                             const double                                lambda,
+                                             const std::vector< ptr<geom_FairBSurfNk> >& Nk)
 : geom_FairBSurfCoeff (lambda),
-  m_alloc             (alloc),
-  m_iNumCols          (numCols)
-{
-  // Prepare evaluator for N_k(u,v).
-  int k_i, k_j;
-  bspl::PairIndicesFromSerial(k, m_iNumCols, k_i, k_j);
-  m_Nk = new geom_FairBSurfNN(U, V, p, q, k_i, k_j);
-
-  // Prepare evaluator for N_l(u,v).
-  int l_i, l_j;
-  bspl::PairIndicesFromSerial(l, m_iNumCols, l_i, l_j);
-  m_Nl = new geom_FairBSurfNN(U, V, p, q, l_i, l_j);
-}
+  m_iK                (k),
+  m_iL                (l),
+  m_Nk                (Nk)
+{}
 
 //-----------------------------------------------------------------------------
 
@@ -75,11 +61,11 @@ double mobius::geom_FairBSurfAkl::Eval(const double u, const double v) const
 {
   // Evaluate function N_k(u,v).
   double Nk, dNk_dU, dNk_dV, d2Nk_dU2, d2Nk_dUV, d2Nk_dV2;
-  m_Nk->Eval_D2(u, v, Nk, dNk_dU, dNk_dV, d2Nk_dU2, d2Nk_dUV, d2Nk_dV2);
+  m_Nk[m_iK]->Eval_D2(u, v, Nk, dNk_dU, dNk_dV, d2Nk_dU2, d2Nk_dUV, d2Nk_dV2);
 
   // Evaluate function N_l(u,v).
   double Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2;
-  m_Nl->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
+  m_Nk[m_iL]->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
 
   // Calculate result.
   const double res =     m_fLambda * d2Nk_dU2 * d2Nl_dU2

@@ -39,6 +39,9 @@
 #include <mobius/core_Integral.h>
 #include <mobius/core_Timer.h>
 
+// Standard includes
+#include <map>
+
 // Eigen includes
 #pragma warning(disable : 4701 4702)
 #include <Eigen/Dense>
@@ -46,7 +49,7 @@
 
 //-----------------------------------------------------------------------------
 
-#define COUT_DEBUG
+#undef COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
@@ -63,8 +66,8 @@ namespace mobius {
                   const int                  q)
   {
     // (2n-1) for max accuracy on polynomial functions.
-    const int NUM_GAUSS_PT_U = 30;//2*p - 1;
-    const int NUM_GAUSS_PT_V = 30;//2*q - 1;
+    const int NUM_GAUSS_PT_U = 3;
+    const int NUM_GAUSS_PT_V = 3;
 
     // Integrate in each span individually for better accuracy.
     double result = 0;
@@ -76,7 +79,7 @@ namespace mobius {
       {
         if ( V[j] == V[j+1] ) continue; // Skip multiple knots.
 
-        // 6-points integration in each knot span.
+        // Gauss integration in each knot span.
         const double
           gaussVal = core_Integral::gauss::Compute(pCoeff,
                                                    U[i], U[i+1],
@@ -111,7 +114,13 @@ bool mobius::geom_FairBSurf::Perform()
 {
   // Dimension of the fairing problem is equal to the number of control
   // points which are not constrained.
-  const int dim = m_iNumPolesU * m_iNumPolesV;
+  const int nPinned = this->GetNumPinnedPoles();
+  const int nPoles  = m_iNumPolesU*m_iNumPolesV;
+  const int dim     = nPoles - nPinned;
+
+#if defined COUT_DEBUG
+  std::cout << "Dimension: " << dim << std::endl;
+#endif
 
   // Prepare working variables.
   const std::vector<double>& U = m_inputSurf->Knots_U();
@@ -119,34 +128,66 @@ bool mobius::geom_FairBSurf::Perform()
   const int                  p = m_inputSurf->Degree_U();
   const int                  q = m_inputSurf->Degree_V();
 
+  // Prepare reusable memory blocks for running sub-routines efficiently.
+  ptr<alloc2d> sharedAlloc = new alloc2d;
+  sharedAlloc->Allocate(3, p + 1, true); // memBlockSurf_EffectiveNDersUResult
+  sharedAlloc->Allocate(3, q + 1, true); // memBlockSurf_EffectiveNDersVResult
+  sharedAlloc->Allocate(2, 3,     true); // memBlockSurf_EffectiveNDersUInternal
+  sharedAlloc->Allocate(2, 3,     true); // memBlockSurf_EffectiveNDersVInternal
+  sharedAlloc->Allocate(3, p + 1, true); // memBlockSurf_BSplineSurfEvalD2U
+  sharedAlloc->Allocate(3, q + 1, true); // memBlockSurf_BSplineSurfEvalD2V
+  sharedAlloc->Allocate(2, 3,     true); // memBlockSurf_BSplineSurfEvalInternal
+
+  // Prepare N_k(u,v) evaluators.
+  this->prepareNk(sharedAlloc);
+
+  std::cout << "Computing matrix A..." << std::endl;
+
+  std::map<int, int> rkMap;
+
   // Initialize matrix of left-hand-side coefficients.
+  int r = 0;
   Eigen::MatrixXd eigen_A_mx(dim, dim);
-  for ( int r = 0; r < dim; ++r )
+  for ( int k = 0; k < nPoles; ++k )
   {
-    for ( int c = 0; c < dim; ++c )
+    if ( this->IsPinned(k) )
+      continue;
+
+    int c = 0;
+    for ( int l = 0; l < nPoles; ++l )
     {
-      geom_FairBSurfAkl A_kl_func(U, V, p, q, r, c, m_iNumPolesV, m_fLambda, NULL);
+      if ( this->IsPinned(l) )
+        continue;
+
+      geom_FairBSurfAkl A_kl_func(k, l, m_fLambda, m_Nk);
 
       // Compute integral.
       const double val = Integral(&A_kl_func, U, V, p, q);
-      //
-      eigen_A_mx(r, c) = val;
+      eigen_A_mx(r, c++) = val;
     }
+    rkMap[r] = k;
+    r++;
   }
 
 #if defined COUT_DEBUG
   std::cout << "Here is the matrix A:\n" << eigen_A_mx << std::endl;
 #endif
 
+  std::cout << "Computing matrix b..." << std::endl;
+
   // Initialize vector of right hand side.
   Eigen::MatrixXd eigen_B_mx(dim, 3);
-  for ( int r = 0; r < dim; ++r )
+  r = 0;
+  for ( int k = 0; k < nPoles; ++k )
   {
-    geom_FairBSurfBl rhs_x(m_inputSurf, 0, r, m_iNumPolesV, m_fLambda, NULL);
+    if ( this->IsPinned(k) )
+      continue;
+
+    geom_FairBSurfBl rhs_x(m_inputSurf, 0, k, m_Nk, m_fLambda, sharedAlloc);
     //
-    geom_FairBSurfBl rhs_y(m_inputSurf, 1, r, m_iNumPolesV, m_fLambda, NULL);
+    geom_FairBSurfBl rhs_y(m_inputSurf, 1, k, m_Nk, m_fLambda, sharedAlloc);
     //
-    geom_FairBSurfBl rhs_z(m_inputSurf, 2, r, m_iNumPolesV, m_fLambda, NULL);
+    geom_FairBSurfBl rhs_z(m_inputSurf, 2, k, m_Nk, m_fLambda, sharedAlloc);
 
     // Compute integrals.
     const double val_x = Integral(&rhs_x, U, V, p, q);
@@ -156,11 +197,15 @@ bool mobius::geom_FairBSurf::Perform()
     eigen_B_mx(r, 0) = -val_x;
     eigen_B_mx(r, 1) = -val_y;
     eigen_B_mx(r, 2) = -val_z;
+    //
+    r++;
   }
 
 #if defined COUT_DEBUG
   std::cout << "Here is the matrix B:\n" << eigen_B_mx << std::endl;
 #endif
+
+  std::cout << "Solving linear system..." << std::endl;
 
   // Solve.
   Eigen::ColPivHouseholderQR<Eigen::MatrixXd> QR(eigen_A_mx);
@@ -170,19 +215,22 @@ bool mobius::geom_FairBSurf::Perform()
   std::cout << "Here is the matrix X (solution):\n" << eigen_X_mx << std::endl;
 #endif
 
+  std::cout << "Constructing result..." << std::endl;
+
   // Prepare a copy of the surface to serve as a result.
   m_resultSurf = m_inputSurf->Copy();
 
   // Apply perturbations to poles.
   const std::vector< std::vector<xyz> >& poles = m_resultSurf->Poles();
   //
-  for ( int k = 0; k < dim; ++k )
+  for ( int r = 0; r < dim; ++r )
   {
+    int k = rkMap[r];
     int i, j;
     this->GetIJ(k, i, j);
 
     const xyz& P = poles[i][j];
-    xyz        D = xyz( eigen_X_mx(k, 0), eigen_X_mx(k, 1), eigen_X_mx(k, 2) );
+    xyz        D = xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
     //
     m_resultSurf->SetPole(i, j, P + D);
   }
@@ -190,4 +238,20 @@ bool mobius::geom_FairBSurf::Perform()
   m_plotter.REDRAW_SURFACE("faired", m_resultSurf.Access(), MobiusColor_Green);
 
   return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::geom_FairBSurf::prepareNk(ptr<alloc2d> alloc)
+{
+  const int nPoles = m_iNumPolesU*m_iNumPolesV;
+
+  for ( int k = 0; k < nPoles; ++k )
+  {
+    // Prepare evaluator for N_k(u,v).
+    ptr<geom_FairBSurfNk>
+      Nk = new geom_FairBSurfNk(m_inputSurf, k, alloc);
+    //
+    m_Nk.push_back(Nk);
+  }
 }
