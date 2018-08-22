@@ -57,12 +57,14 @@ void mobius::geom_FairBSurfNk::Eval_D2(const double u,
   // Return cached values.
   if ( m_cells.find(askedCell) != m_cells.end() )
   {
-    N       = m_cells[askedCell].N;
-    dN_dU   = m_cells[askedCell].dN_dU;
-    dN_dV   = m_cells[askedCell].dN_dV;
-    d2N_dU2 = m_cells[askedCell].d2N_dU2;
-    d2N_dUV = m_cells[askedCell].d2N_dUV;
-    d2N_dV2 = m_cells[askedCell].d2N_dV2;
+    const t_values& cache = m_cells[askedCell];
+    //
+    N       = cache.N;
+    dN_dU   = cache.dN_dU;
+    dN_dV   = cache.dN_dV;
+    d2N_dU2 = cache.d2N_dU2;
+    d2N_dUV = cache.d2N_dUV;
+    d2N_dV2 = cache.d2N_dV2;
 
     return;
   }

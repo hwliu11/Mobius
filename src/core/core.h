@@ -66,6 +66,10 @@
 //! Core tools and data types.
 //-----------------------------------------------------------------------------
 
+#define MOBIUS_TEST_DATA    "MOBIUS_TEST_DATA"
+#define MOBIUS_TEST_DUMPING "MOBIUS_TEST_DUMPING"
+#define MOBIUS_TEST_DESCR   "MOBIUS_TEST_DESCR"
+
 //-----------------------------------------------------------------------------
 // Global auxiliary functions
 //-----------------------------------------------------------------------------
@@ -81,13 +85,13 @@ namespace core
   namespace env
   {
     mobiusCore_EXPORT
-      std::string QrData();
+      std::string MobiusTestData();
 
     mobiusCore_EXPORT
-      std::string QrDumping();
+      std::string MobiusTestDumping();
 
     mobiusCore_EXPORT
-      std::string QrDescr();
+      std::string MobiusTestDescr();
 
     mobiusCore_EXPORT
       std::string GetVariable(const char* VarName);

@@ -7,8 +7,10 @@ project (Mobius CXX)
 set (INSTALL_DIR "" CACHE PATH "Where to install" )
 set (CMAKE_INSTALL_PREFIX "${INSTALL_DIR}" CACHE INTERNAL "" FORCE )
 
-# Path to data files for testing
-set (TEST_DATA_DIR "" CACHE PATH "Directory with data for unit-testing" )
+# Directories for embedded unit tests.
+set (MOBIUS_TEST_DUMPING "${CMAKE_BINARY_DIR}" CACHE PATH "Dumping directory for tests.")
+set (MOBIUS_TEST_DATA    "${CMAKE_SOURCE_DIR}/data" CACHE PATH "Directory which contains test data.")
+set (MOBIUS_TEST_DESCR   "${CMAKE_SOURCE_DIR}/src/test" CACHE PATH "Directory which contains descriptions of tests.")
 
 # Build configurations
 set (CMAKE_CONFIGURATION_TYPES Release Debug RelWithDebInfo CACHE INTERNAL "" FORCE)

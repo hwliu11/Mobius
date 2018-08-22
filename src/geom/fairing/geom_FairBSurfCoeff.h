@@ -68,6 +68,11 @@ public:
     m_fLambda = lambda;
   }
 
+public:
+
+  virtual void GetSupportSpans(int& ifirst, int& ilast,
+                               int& jfirst, int& jlast) const = 0;
+
 protected:
 
   double m_fLambda; //!< Fairing coefficient.

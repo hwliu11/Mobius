@@ -189,7 +189,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
     // Get filename for description
     std::string descGroupDir = CaseLauncher->CaseDescriptionDir();
     std::string descFilename = CaseLauncher->CaseDescriptionFn() + testEngine_Macro_DOT + testEngine_Macro_DESCR_EXT;
-    std::string descDir      = core::str::slashed( core::env::QrDescr() ) + descGroupDir;
+    std::string descDir      = core::str::slashed( core::env::MobiusTestDescr() ) + descGroupDir;
 
     // Description processing tool
     std::string title;
@@ -297,7 +297,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
 
   // Prepare full name of the temporary directory
   std::string
-    fullDirName = core::str::slashed( core::env::QrDumping() ) + dirName;
+    fullDirName = core::str::slashed( core::env::MobiusTestDumping() ) + dirName;
 
   // TODO: for Windows only (!!!)
   // Create directory

@@ -65,6 +65,27 @@ public:
   mobiusGeom_EXPORT virtual double
     Eval(const double u, const double v) const;
 
+public:
+
+  //! Returns the indices of knot spans whether the function \f$N_k(u,v)\f$
+  //! is not zero. See for example P2.1 at p. 55 in "The NURBS Book".
+  virtual void GetSupportSpans(int& ifirst, int& ilast,
+                               int& jfirst, int& jlast) const
+  {
+    int Nk_supportArea[4];
+    m_Nk[m_iK]->GetSupportSpans(Nk_supportArea[0], Nk_supportArea[1],
+                                Nk_supportArea[2], Nk_supportArea[3]);
+
+    int Nl_supportArea[4];
+    m_Nk[m_iL]->GetSupportSpans(Nl_supportArea[0], Nl_supportArea[1],
+                                Nl_supportArea[2], Nl_supportArea[3]);
+
+    ifirst = max(Nk_supportArea[0], Nl_supportArea[0]);
+    ilast  = min(Nk_supportArea[1], Nl_supportArea[1]);
+    jfirst = max(Nk_supportArea[2], Nl_supportArea[2]);
+    jlast  = min(Nk_supportArea[3], Nl_supportArea[3]);
+  }
+
 private:
 
   geom_FairBSurfAkl() = delete;
@@ -72,9 +93,9 @@ private:
 
 protected:
 
-  int                                         m_iK;
-  int                                         m_iL;
-  const std::vector< ptr<geom_FairBSurfNk> >& m_Nk;
+  int                                         m_iK; //!< K index.
+  int                                         m_iL; //!< L index.
+  const std::vector< ptr<geom_FairBSurfNk> >& m_Nk; //!< Pre-computed basis functions.
 
 };
 

@@ -72,6 +72,8 @@ public:
     functions << &testIndices
               << &testFairing01
               << &testFairing02
+              << &testFairing03
+              << &testFairing04
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -80,6 +82,8 @@ private:
   static outcome testIndices   (const int funcID);
   static outcome testFairing01 (const int funcID);
   static outcome testFairing02 (const int funcID);
+  static outcome testFairing03 (const int funcID);
+  static outcome testFairing04 (const int funcID);
 
 };
 

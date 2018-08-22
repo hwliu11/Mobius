@@ -34,42 +34,39 @@
 // OS dependent
 #include <windows.h>
 
-#define BUFSIZE         1000
-#define QR_DATA         "QR_DATA"
-#define QR_TEST_DUMPING "QR_TEST_DUMPING"
-#define QR_TEST_DESCR   "QR_TEST_DESCR"
+#define BUFSIZE 1000
 
 //-----------------------------------------------------------------------------
 
-//! Returns value of QR_DATA environment variable. This variable is used to
+//! Returns value of MOBIUS_TEST_DATA environment variable. This variable is used to
 //! refer to the directory containing all data files playing as inputs for
 //! unit tests.
-//! \return value of QR_DATA variable.
-std::string mobius::core::env::QrData()
+//! \return value of MOBIUS_TEST_DATA variable.
+std::string mobius::core::env::MobiusTestData()
 {
-  return GetVariable(QR_DATA);
+  return GetVariable(MOBIUS_TEST_DATA);
 }
 
 //-----------------------------------------------------------------------------
 
-//! Returns value of QR_TEST_DUMPING environment variable. This variable is
+//! Returns value of MOBIUS_TEST_DUMPING environment variable. This variable is
 //! used to refer to the directory containing all temporary files utilized by
 //! unit tests.
-//! \return value of QR_TEST_DUMPING variable.
-std::string mobius::core::env::QrDumping()
+//! \return value of MOBIUS_TEST_DUMPING variable.
+std::string mobius::core::env::MobiusTestDumping()
 {
-  return GetVariable(QR_TEST_DUMPING);
+  return GetVariable(MOBIUS_TEST_DUMPING);
 }
 
 //-----------------------------------------------------------------------------
 
-//! Returns value of QR_TEST_DESCR environment variable. This variable is used
+//! Returns value of MOBIUS_TEST_DESCR environment variable. This variable is used
 //! to refer to the directory containing all temporary files utilized by unit
 //! tests.
-//! \return value of QR_DUMPING variable.
-std::string mobius::core::env::QrDescr()
+//! \return value of MOBIUS_TEST_DESCR variable.
+std::string mobius::core::env::MobiusTestDescr()
 {
-  return GetVariable(QR_TEST_DESCR);
+  return GetVariable(MOBIUS_TEST_DESCR);
 }
 
 //-----------------------------------------------------------------------------

@@ -37,6 +37,15 @@
 // Geom includes
 #include <mobius/geom_FairBSurf.h>
 
+// Standard includes
+#include <fstream>
+
+//-----------------------------------------------------------------------------
+
+// Filenames are specified relatively to MOBIUS_TEST_DATA environment variable.
+#define filename_bsurf_001 "bsurf/bsurf_001.json"
+#define filename_bsurf_002 "bsurf/bsurf_002.json"
+
 //-----------------------------------------------------------------------------
 
 //! Test scenario 001. This test function checks that mapping of indices is
@@ -337,6 +346,141 @@ mobius::outcome
 
   // Verify.
   const double refEnergy = 0.06209;
+  //
+  if ( abs(resEnergy - refEnergy) > 1e-4 )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 004.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_FairSurf::testFairing03(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filename_bsurf_001;
+
+  // Read file.
+  std::ifstream FILE(filename);
+  std::stringstream buffer;
+  buffer << FILE.rdbuf();
+
+  // JSON definition.
+  std::string json = buffer.str();
+
+  // Construct B-surface.
+  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  //
+  if ( surf.IsNull() )
+    return res.failure();
+
+  cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial bending energy: %1"
+                                                          << surf->ComputeBendingEnergy() );
+
+  // Perform fairing.
+  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+  //
+  if ( !F.Perform() )
+    return res.failure();
+
+  // Get the result.
+  const core_Ptr<bsurf>& result = F.GetResult();
+
+  // Compute bending energy after fairing.
+  const double resEnergy = result->ComputeBendingEnergy();
+  //
+  cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Resulting bending energy: %1"
+                                                          << resEnergy );
+
+  // Verify.
+  const double refEnergy = 0.0049;
+  //
+  if ( abs(resEnergy - refEnergy) > 1e-4 )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 005.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_FairSurf::testFairing04(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filename_bsurf_002;
+
+  // Read file.
+  std::ifstream FILE(filename);
+  std::stringstream buffer;
+  buffer << FILE.rdbuf();
+
+  // JSON definition.
+  std::string json = buffer.str();
+
+  // Construct B-surface.
+  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  //
+  if ( surf.IsNull() )
+    return res.failure();
+
+  cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial bending energy: %1"
+                                                          << surf->ComputeBendingEnergy() );
+
+  // Prepare fairing tool.
+  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+
+  // Constraint borders.
+  const int nPolesU = int( surf->Poles().size() );
+  const int nPolesV = int( surf->Poles()[0].size() );
+  //
+  for ( int i = 0; i < nPolesU; ++i )
+  {
+    F.AddPinnedPole( i, 0 );
+    F.AddPinnedPole( i, nPolesV - 1 );
+  }
+  //
+  for ( int j = 0; j < nPolesV; ++j )
+  {
+    F.AddPinnedPole( 0, j );
+    F.AddPinnedPole( nPolesU - 1, j );
+  }
+
+  // Perform fairing.
+  if ( !F.Perform() )
+    return res.failure();
+
+  // Get the result.
+  const core_Ptr<bsurf>& result = F.GetResult();
+
+  // Compute bending energy after fairing.
+  const double resEnergy = result->ComputeBendingEnergy();
+  //
+  cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Resulting bending energy: %1"
+                                                          << resEnergy );
+
+  // Verify.
+  const double refEnergy = 454261.01196; // Energy of constrained surface is far from zero.
   //
   if ( abs(resEnergy - refEnergy) > 1e-4 )
     return res.failure();

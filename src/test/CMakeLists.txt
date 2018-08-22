@@ -137,15 +137,21 @@ add_executable (mobiusTest
   ${core_H_FILES} ${core_CPP_FILES}
   ${geom_H_FILES} ${geom_CPP_FILES})
 
+set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
+
+configure_file(${CMAKE_SOURCE_DIR}/cmake/templates/exePROTOTYPE.vcxproj.user.in
+               ${mobiusTest_BINARY_DIR}/mobiusTest.vcxproj.user @ONLY)
+
+configure_file(${CMAKE_SOURCE_DIR}/cmake/templates/setenv.bat
+               ${mobiusTest_BINARY_DIR}/setenv.bat @ONLY)
+
 # Post-build event: run tests.
 add_custom_command(
         TARGET mobiusTest
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E echo "Running unit tests."
-        COMMAND $<TARGET_FILE:mobiusTest>
+        COMMAND call ${mobiusTest_BINARY_DIR}/setenv.bat && $<TARGET_FILE:mobiusTest>
     )
-
-set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 
 #------------------------------------------------------------------------------
 # Dependencies

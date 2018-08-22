@@ -70,6 +70,16 @@ public:
   mobiusGeom_EXPORT virtual double
     Eval(const double u, const double v) const;
 
+public:
+
+  //! Returns the indices of knot spans whether the function \f$N_k(u,v)\f$
+  //! is not zero. See for example P2.1 at p. 55 in "The NURBS Book".
+  virtual void GetSupportSpans(int& ifirst, int& ilast,
+                               int& jfirst, int& jlast) const
+  {
+    m_Nk[m_iL]->GetSupportSpans(ifirst, ilast, jfirst, jlast);
+  }
+
 private:
 
   geom_FairBSurfBl() = delete;

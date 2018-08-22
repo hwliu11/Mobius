@@ -1,8 +1,11 @@
 Surface fairing {#surf-fairing}
 ===============================
 
-Fairing algorithm is implemented by paper \ref kallay93 "[Kallay, 1993]".
-The fairing operator performs renumbering of control points to deduce serial
+Fairing algorithm is implemented in accordance with paper \ref kallay93 "[Kallay, 1993]".
+
+# Technical details
+
+The fairing operator starts with renumbering control points to deduce serial
 indices from the grid nodes. The following figure illustrates the
 correspondence between the new indices \f$k\f$ and the initial indices \f$(i,j)\f$.
 

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|@X_COMPILER_BITNESS@'">
+    <LocalDebuggerEnvironment>
+MOBIUS_TEST_DUMPING=@MOBIUS_TEST_DUMPING@
+MOBIUS_TEST_DATA=@MOBIUS_TEST_DATA@
+MOBIUS_TEST_DESCR=@MOBIUS_TEST_DESCR@
+    </LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>@CMAKE_BINARY_DIR@</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|@X_COMPILER_BITNESS@'">
+    <LocalDebuggerEnvironment>
+MOBIUS_TEST_DUMPING=@MOBIUS_TEST_DUMPING@
+MOBIUS_TEST_DATA=@MOBIUS_TEST_DATA@
+MOBIUS_TEST_DESCR=@MOBIUS_TEST_DESCR@
+    </LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>@CMAKE_BINARY_DIR@</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|@X_COMPILER_BITNESS@'">
+    <LocalDebuggerEnvironment>
+MOBIUS_TEST_DUMPING=@MOBIUS_TEST_DUMPING@
+MOBIUS_TEST_DATA=@MOBIUS_TEST_DATA@
+MOBIUS_TEST_DESCR=@MOBIUS_TEST_DESCR@
+    </LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>@CMAKE_BINARY_DIR@</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
+</Project>

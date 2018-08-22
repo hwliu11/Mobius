@@ -2005,7 +2005,8 @@ int mobius::core_Integral::gauss::GetPointsMax()
 void mobius::core_Integral::gauss::GetPoints(const int            n,
                                              std::vector<double>& points)
 {
-  points.resize(n);
+  if ( points.size() != n )
+    points.resize(n);
 
   int Som = 0;
   for ( int i = 1; i < n; ++i )
@@ -2027,7 +2028,8 @@ void mobius::core_Integral::gauss::GetPoints(const int            n,
 void mobius::core_Integral::gauss::GetWeights(const int            n,
                                               std::vector<double>& weights)
 {
-  weights.resize(n);
+  if ( weights.size() != n )
+    weights.resize(n);
 
   int Som = 0;
   for ( int i = 1; i < n; ++i )

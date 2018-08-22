@@ -204,8 +204,8 @@ bool mobius::geom_FairBCurve::Perform()
   const std::vector<xyz>& poles = m_resultCurve->Poles();
   int                     r     = 0;
   //
-  for ( size_t p = 0 + NUM_CONSTRAINED_POLES_LEADING;
-        p <= poles.size() - 1 - NUM_CONSTRAINED_POLES_TRAILING;
+  for ( int p = 0 + NUM_CONSTRAINED_POLES_LEADING;
+        p <= int( poles.size() ) - 1 - NUM_CONSTRAINED_POLES_TRAILING;
         ++p, ++r )
   {
     const xyz& P = poles[p];

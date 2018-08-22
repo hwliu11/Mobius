@@ -101,6 +101,18 @@ public:
             double&      d2N_dUV,
             double&      d2N_dV2);
 
+public:
+
+  //! Returns the indices of knot spans whether the function \f$N_k(u,v)\f$
+  //! is not zero. See for example P2.1 at p. 55 in "The NURBS Book".
+  void GetSupportSpans(int& ifirst, int& ilast, int& jfirst, int& jlast)
+  {
+    ifirst = m_Ni.i;
+    ilast  = m_Ni.i + m_Ni.p + 1;
+    jfirst = m_Nj.j;
+    jlast  = m_Nj.j + m_Nj.q + 1;
+  }
+
 protected:
 
   struct t_cell
@@ -108,8 +120,9 @@ protected:
     uv  coords;
     int indices[2];
 
-    t_cell() {}
+    t_cell() { indices[0] = indices[1] = 0; } //!< Default ctor.
 
+    //! Complete ctor.
     t_cell(const uv& p, const double cellSize)
     {
       for ( int k = 0; k < 2; ++k )
@@ -152,6 +165,10 @@ protected:
 
 protected:
 
+  //! Cached values of \f$N_k(u,v)\f$ for certain pairs of \f$(u,v)\f$
+  //! parameters. Such caching technique is effective because the functions
+  //! \f$N_k(u,v)\f$ are evaluated always in the same predefined points used
+  //! by Gauss integration scheme.
   std::unordered_map<t_cell, t_values, t_cell::hasher> m_cells;
 
   ptr<alloc2d> m_alloc; //!< Shared memory allocator.

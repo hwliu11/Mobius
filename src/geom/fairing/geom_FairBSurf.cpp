@@ -62,20 +62,22 @@ namespace mobius {
   double Integral(geom_FairBSurfCoeff*       pCoeff,
                   const std::vector<double>& U,
                   const std::vector<double>& V,
-                  const int                  p,
-                  const int                  q)
+                  const int                  NUM_GAUSS_PT_U = 3,
+                  const int                  NUM_GAUSS_PT_V = 3)
   {
-    // (2n-1) for max accuracy on polynomial functions.
-    const int NUM_GAUSS_PT_U = 3;
-    const int NUM_GAUSS_PT_V = 3;
+    // According to the local support property of B-spline basis functions
+    // (see for example P2.1 at p. 55 in "The NURBS Book"), not all spans
+    // are effective.
+    int iFirst, iLast, jFirst, jLast;
+    pCoeff->GetSupportSpans(iFirst, iLast, jFirst, jLast);
 
     // Integrate in each span individually for better accuracy.
     double result = 0;
-    for ( size_t i = 0; i < U.size() - 1; ++i )
+    for ( size_t i = iFirst; i < iLast; ++i )
     {
       if ( U[i] == U[i+1] ) continue; // Skip multiple knots.
 
-      for ( size_t j = 0; j < V.size() - 1; ++j )
+      for ( size_t j = jFirst; j < jLast; ++j )
       {
         if ( V[j] == V[j+1] ) continue; // Skip multiple knots.
 
@@ -136,11 +138,14 @@ bool mobius::geom_FairBSurf::Perform()
   sharedAlloc->Allocate(3, q + 1, true); // memBlockSurf_BSplineSurfEvalD2V
   sharedAlloc->Allocate(2, 3,     true); // memBlockSurf_BSplineSurfEvalInternal
 
-  // Prepare N_k(u,v) evaluators.
+  // Prepare N_k(u,v) evaluators which will be shared in all integration
+  // requests to take advantage of caching.
   this->prepareNk(sharedAlloc);
 
   std::cout << "Computing matrix A..." << std::endl;
 
+  // Mapping between row indices of the linear system and serial indices of
+  // the perturbed control points.
   std::map<int, int> rkMap;
 
   // Initialize matrix of left-hand-side coefficients.
@@ -161,7 +166,7 @@ bool mobius::geom_FairBSurf::Perform()
       geom_FairBSurfAkl A_kl_func(k, l, m_fLambda, m_Nk);
 
       // Compute integral.
-      const double val = Integral(&A_kl_func, U, V, p, q);
+      const double val = Integral(&A_kl_func, U, V);
       eigen_A_mx(r, c) = eigen_A_mx(c, r) = val;
       c++;
     }
@@ -192,9 +197,9 @@ bool mobius::geom_FairBSurf::Perform()
     geom_FairBSurfBl rhs_z(m_inputSurf, 2, k, m_Nk, m_fLambda, sharedAlloc);
 
     // Compute integrals.
-    const double val_x = Integral(&rhs_x, U, V, p, q);
-    const double val_y = Integral(&rhs_y, U, V, p, q);
-    const double val_z = Integral(&rhs_z, U, V, p, q);
+    const double val_x = Integral(&rhs_x, U, V);
+    const double val_y = Integral(&rhs_y, U, V);
+    const double val_z = Integral(&rhs_z, U, V);
     //
     eigen_B_mx(r, 0) = -val_x;
     eigen_B_mx(r, 1) = -val_y;
