@@ -74,7 +74,7 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Dump(std::stringstream& stream) const;
+    Dump(std::ostream* out) const;
 
 public:
 

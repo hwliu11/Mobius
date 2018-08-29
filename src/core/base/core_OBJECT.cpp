@@ -87,7 +87,7 @@ int mobius::core_OBJECT::NbRefs() const
 
 //! Dumps this object to the passed string stream.
 //! \param stream [in/out] target stream.
-void mobius::core_OBJECT::Dump(std::stringstream& stream) const
+void mobius::core_OBJECT::Dump(std::ostream* out) const
 {
-  stream << "core_OBJECT";
+  *out << "core_OBJECT";
 }

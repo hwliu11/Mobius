@@ -62,13 +62,18 @@ namespace mobius {
   double Integral(geom_FairBSurfCoeff*       pCoeff,
                   const std::vector<double>& U,
                   const std::vector<double>& V,
-                  const int                  NUM_GAUSS_PT_U = 3,
-                  const int                  NUM_GAUSS_PT_V = 3)
+                  const int                  p,
+                  const int                  q)
   {
+    const int NUM_GAUSS_PT_U = max(p, 3);
+    const int NUM_GAUSS_PT_V = max(q, 3);
+
     // According to the local support property of B-spline basis functions
     // (see for example P2.1 at p. 55 in "The NURBS Book"), not all spans
     // are effective.
-    int iFirst, iLast, jFirst, jLast;
+    int iFirst = 0, iLast = int( U.size() - 1 ), // Global range.
+        jFirst = 0, jLast = int( V.size() - 1 ); // Global range.
+    //
     pCoeff->GetSupportSpans(iFirst, iLast, jFirst, jLast);
 
     // Integrate in each span individually for better accuracy.
@@ -166,7 +171,7 @@ bool mobius::geom_FairBSurf::Perform()
       geom_FairBSurfAkl A_kl_func(k, l, m_fLambda, m_Nk);
 
       // Compute integral.
-      const double val = Integral(&A_kl_func, U, V);
+      const double val = Integral(&A_kl_func, U, V, p, q);
       eigen_A_mx(r, c) = eigen_A_mx(c, r) = val;
       c++;
     }
@@ -197,9 +202,9 @@ bool mobius::geom_FairBSurf::Perform()
     geom_FairBSurfBl rhs_z(m_inputSurf, 2, k, m_Nk, m_fLambda, sharedAlloc);
 
     // Compute integrals.
-    const double val_x = Integral(&rhs_x, U, V);
-    const double val_y = Integral(&rhs_y, U, V);
-    const double val_z = Integral(&rhs_z, U, V);
+    const double val_x = Integral(&rhs_x, U, V, p, q);
+    const double val_y = Integral(&rhs_y, U, V, p, q);
+    const double val_z = Integral(&rhs_z, U, V, p, q);
     //
     eigen_B_mx(r, 0) = -val_x;
     eigen_B_mx(r, 1) = -val_y;

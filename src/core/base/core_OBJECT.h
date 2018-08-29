@@ -77,7 +77,7 @@ public:
 public:
 
   mobiusCore_EXPORT virtual void
-    Dump(std::stringstream& stream) const;
+    Dump(std::ostream* out) const;
 
 private:
 

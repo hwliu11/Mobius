@@ -132,7 +132,7 @@ public:
 
   //! Dumps this timestamp to the passed output stream.
   //! \param out [in/out] stream to dump the timestamp to.
-  void Dump(std::ostream* out)
+  void Dump(std::ostream* out) const
   {
     *out << this->ToString().c_str();
   }

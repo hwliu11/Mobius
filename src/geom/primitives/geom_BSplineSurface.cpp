@@ -168,11 +168,11 @@ mobius::core_Ptr<mobius::geom_BSplineSurface>
 
 //! Dumps the surface data to string stream.
 //! \param stream [in/out] target stream.
-void mobius::geom_BSplineSurface::Dump(std::stringstream& stream) const
+void mobius::geom_BSplineSurface::Dump(std::ostream* out) const
 {
-  stream << "B-surface with the following properties:\n"
-         << "\t U degree (p) = " << m_iDegU << "\n"
-         << "\t V degree (q) = " << m_iDegV << "\n";
+  *out << "B-surface with the following properties:\n"
+       << "\t U degree (p) = " << m_iDegU << "\n"
+       << "\t V degree (q) = " << m_iDegV << "\n";
 }
 
 //-----------------------------------------------------------------------------

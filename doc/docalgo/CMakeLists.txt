@@ -7,8 +7,10 @@ set (DOX_FILES
   001_01_memory-management.md
   002_!_primitives.md
   002_01_bsurf.md
-  003_!_operators.md
-  003_01_surface-fairing.md
+  003_!_core-algos.md
+  003_01_bspl.md
+  004_!_operators.md
+  004_01_surface-fairing.md
   999_references.md
 )
 

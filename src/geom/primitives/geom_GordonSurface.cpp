@@ -50,9 +50,9 @@ mobius::geom_GordonSurface::~geom_GordonSurface()
 
 //! Dumps the surface data to string stream.
 //! \param stream [in/out] target stream.
-void mobius::geom_GordonSurface::Dump(std::stringstream& stream) const
+void mobius::geom_GordonSurface::Dump(std::ostream* out) const
 {
-  stream << "Gordon surface\n";
+  *out << "Gordon surface\n";
 }
 
 //! Calculates boundary box for the Gordon surface.
