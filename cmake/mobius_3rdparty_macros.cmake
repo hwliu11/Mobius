@@ -203,3 +203,19 @@ macro (MOBIUS_THIRDPARTY_PRODUCT
   endif()
 
 endmacro()
+
+#-------------------------------------------------------------------------------
+# Name:    MOBIUS_UNSET_3RDPARTY
+# Purpose: unsets variables for a certain 3-rd party
+#-------------------------------------------------------------------------------
+macro (MOBIUS_UNSET_3RDPARTY VARNAME)
+  message (STATUS "... Unsetting 3RDPARTY_${VARNAME}_DIR")
+  message (STATUS "... Unsetting 3RDPARTY_${VARNAME}_INCLUDE_DIR")
+  message (STATUS "... Unsetting 3RDPARTY_${VARNAME}_LIBRARY_DIR")
+  message (STATUS "... Unsetting 3RDPARTY_${VARNAME}_DLL_DIR")
+
+  MOBIUS_UNSET ("3RDPARTY_${VARNAME}_DIR")
+  MOBIUS_UNSET ("3RDPARTY_${VARNAME}_INCLUDE_DIR")
+  MOBIUS_UNSET ("3RDPARTY_${VARNAME}_LIBRARY_DIR")
+  MOBIUS_UNSET ("3RDPARTY_${VARNAME}_DLL_DIR")
+endmacro()

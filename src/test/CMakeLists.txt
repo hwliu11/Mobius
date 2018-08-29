@@ -131,6 +131,10 @@ endforeach (FILE)
 
 include_directories(${test_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${testEngine_include_dir})
 
+if (USE_ADOLC)
+  include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
+endif()
+
 add_executable (mobiusTest
   ${H_FILES}      ${CPP_FILES}
   ${bspl_H_FILES} ${bspl_CPP_FILES}

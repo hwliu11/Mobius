@@ -187,6 +187,10 @@ endforeach (FILE)
 
 include_directories(${geom_include_dir_loc} ${core_include_dir} ${3RDPARTY_EIGEN_DIR})
 
+if (USE_ADOLC)
+  include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
+endif()
+
 add_library (mobiusGeom SHARED
   ${H_FILES}               ${CPP_FILES}
   ${classifiers_H_FILES}   ${classifiers_CPP_FILES}

@@ -27,8 +27,11 @@ MOBIUS_RETRIEVE_VERSION(${CMAKE_SOURCE_DIR}/src/core/core.h VERSION_MAJOR VERSIO
 set (3RDPARTY_DIR "" CACHE PATH "The root directory for all 3-rd parties")
 
 if (NOT DEFINED ${3RDPARTY_DIR} AND ${3RDPARTY_DIR} STREQUAL "")
-    message (FATAL_ERROR "... root 3rdparty directory was not found")
+  message (FATAL_ERROR "... root 3rdparty directory was not found")
 endif()
+
+# ADOLC is optional
+set (USE_ADOLC OFF CACHE BOOL "ADOL-C for algorithmic differentiation.")
 
 # Eigen
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_Eigen.cmake)
@@ -47,6 +50,9 @@ include (${CMAKE_SOURCE_DIR}/cmake/mobius_Mathjax.cmake)
 
 # Graphviz for documentation
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_Graphviz.cmake)
+
+# adolc
+include (${CMAKE_SOURCE_DIR}/cmake/mobius_adolc.cmake)
 
 set (3RDPARTY_DLL_PATH "${3RDPARTY_tcl_DLL_DIR};\
 ${3RDPARTY_tk_DLL_DIR};\

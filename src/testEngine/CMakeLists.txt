@@ -69,6 +69,10 @@ endforeach (FILE)
 
 include_directories(${testEngine_include_dir_loc} ${core_include_dir})
 
+if (USE_ADOLC)
+  include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
+endif()
+
 add_library (mobiusTestEngine SHARED
   ${H_FILES}           ${CPP_FILES}
   ${reportgen_H_FILES} ${reportgen_CPP_FILES})

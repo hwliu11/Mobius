@@ -39,6 +39,16 @@
 #include <string>
 #include <vector>
 
+// ADOL-C
+#if defined USE_ADOLC
+  #pragma warning(push, 0)
+    #include <adolc/adtl.h>
+  #pragma warning(pop)
+  using namespace adtl;
+#else
+  #define adouble double
+#endif
+
 #define _USE_MATH_DEFINES
 
 #define fmin(a, b) (((a) < (b)) ? (a) : (b))

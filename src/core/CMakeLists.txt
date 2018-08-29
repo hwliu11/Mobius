@@ -149,6 +149,10 @@ message (STATUS "EIGEN dir (3RDPARTY_EIGEN_DIR): ${3RDPARTY_EIGEN_DIR}")
 
 include_directories(${core_include_dir_loc} ${3RDPARTY_EIGEN_DIR})
 
+if (USE_ADOLC)
+  include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
+endif()
+
 add_library (mobiusCore SHARED
   ${H_FILES}            ${CPP_FILES} 
   ${base_H_FILES}       ${base_CPP_FILES}
