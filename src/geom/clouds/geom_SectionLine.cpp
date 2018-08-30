@@ -142,7 +142,7 @@ void mobius::geom_SectionLine::Split(const std::vector<size_t>& indices,
 //! \param t              [in] parameter.
 //! \param num_pts        [in] number of points in the section to generate.
 //! \param splitting_done [out] true in case of success, false -- otherwise.
-void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
+void mobius::geom_SectionLine::SplitAndDiscrete(const adouble t,
                                                 const int    num_pts,
                                                 bool&        splitting_done)
 {
@@ -174,12 +174,12 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
 
   // Populate slice before
   {
-    const double uMin = 0.0;
-    const double uMax = t;
-    const double step = (uMax - uMin) / (num_pts - 1);
+    const adouble uMin = 0.0;
+    const adouble uMax = t;
+    const adouble step = (uMax - uMin) / (num_pts - 1);
     for ( int pnt_idx = 0; pnt_idx < num_pts; ++pnt_idx )
     {
-      double u = uMin + pnt_idx*step;
+      adouble u = uMin + pnt_idx*step;
 
       if ( fabs(u - uMax) < 1.0e-10 )
         u = uMax; // Just to compensate round off errors
@@ -192,12 +192,12 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
 
   // Populate slice after
   {
-    const double uMin = t;
-    const double uMax = 1.0;
-    const double step = (uMax - uMin) / (num_pts - 1);
+    const adouble uMin = t;
+    const adouble uMax = 1.0;
+    const adouble step = (uMax - uMin) / (num_pts - 1);
     for ( int pnt_idx = 0; pnt_idx < num_pts; ++pnt_idx )
     {
-      double u = uMin + pnt_idx*step;
+      adouble u = uMin + pnt_idx*step;
 
       if ( fabs(u - uMax) < 1.0e-10 )
         u = uMax; // Just to compensate round off errors
@@ -287,12 +287,12 @@ void mobius::geom_SectionLine::InterpolateAndDiscrete(const int num_pts,
 
   this->Pts = new pcloud;
 
-  const double uMin = this->Curve->MinParameter();
-  const double uMax = this->Curve->MaxParameter();
-  const double step = (uMax - uMin) / (num_pts - 1);
+  const adouble uMin = this->Curve->MinParameter();
+  const adouble uMax = this->Curve->MaxParameter();
+  const adouble step = (uMax - uMin) / (num_pts - 1);
   for ( int pnt_idx = 0; pnt_idx < num_pts; ++pnt_idx )
   {
-    double u = uMin + pnt_idx*step;
+    adouble u = uMin + pnt_idx*step;
 
     if ( fabs(u - uMax) < 1.0e-10 )
       u = uMax; // Just to compensate round off errors
@@ -312,12 +312,12 @@ void mobius::geom_SectionLine::Discrete(const int num_pts)
   if ( this->Curve.IsNull() )
     return;
 
-  const double uMin = this->Curve->MinParameter();
-  const double uMax = this->Curve->MaxParameter();
-  const double step = (uMax - uMin) / (num_pts - 1);
+  const adouble uMin = this->Curve->MinParameter();
+  const adouble uMax = this->Curve->MaxParameter();
+  const adouble step = (uMax - uMin) / (num_pts - 1);
   for ( int pnt_idx = 0; pnt_idx < num_pts; ++pnt_idx )
   {
-    double u = uMin + pnt_idx*step;
+    adouble u = uMin + pnt_idx*step;
 
     if ( fabs(u - uMax) < 1.0e-10 )
       u = uMax; // Just to compensate round off errors
@@ -424,7 +424,7 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
 //! \return 0-based index or -1 if the point was not found.
 int mobius::geom_SectionLine::find_index(const xyz& pnt) const
 {
-  const double prec = core_Precision::Resolution3D();
+  const adouble prec = core_Precision::Resolution3D();
   for ( size_t p = 0; p < this->Pts->NumberOfPoints(); ++p )
   {
     const xyz& sct_pt = this->Pts->Point(p);
@@ -441,7 +441,7 @@ int mobius::geom_SectionLine::find_index(const xyz& pnt) const
 int mobius::geom_SectionLine::find_index(const ptr<geom_SectionLine>& source,
                                          const xyz&                         pnt)
 {
-  const double prec = core_Precision::Resolution3D();
+  const adouble prec = core_Precision::Resolution3D();
   for ( size_t p = 0; p < source->Pts->NumberOfPoints(); ++p )
   {
     const xyz& sct_pt = source->Pts->Point(p);

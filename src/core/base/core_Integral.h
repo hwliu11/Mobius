@@ -54,10 +54,10 @@ namespace core_Integral
   //! \param[in]  n        number of bins.
   //! \param[out] numEvals number of function evaluations.
   //! \return integral value.
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     ComputeRect(core_UnivariateFunc* F,
-                const double         a,
-                const double         b,
+                const adouble         a,
+                const adouble         b,
                 const int            n,
                 int&                 numEvals);
 
@@ -69,10 +69,10 @@ namespace core_Integral
   //! \param[in] b upper bound.
   //! \param[in] n number of bins.
   //! \return integral value.
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     ComputeRect(core_UnivariateFunc* F,
-                const double         a,
-                const double         b,
+                const adouble         a,
+                const adouble         b,
                 const int            n);
 
   //! Gaussian quadratures.
@@ -86,13 +86,13 @@ namespace core_Integral
     //! \param[in]  n      order of integration.
     //! \param[out] points Gauss-Legendre points.
     mobiusCore_EXPORT void
-      GetPoints(const int n, std::vector<double>& points);
+      GetPoints(const int n, std::vector<adouble>& points);
 
     //! Returns Gauss-Legendre weights for the given order of integration <n>.
     //! \param[in]  n       order of integration.
     //! \param[out] weights Gauss-Legendre weights.
     mobiusCore_EXPORT void
-      GetWeights(const int n, std::vector<double>& weights);
+      GetWeights(const int n, std::vector<adouble>& weights);
 
     //! Returns the integral of the function <F> between <a> and <b>, by
     //! <n>-point Gauss-Legendre integration: the function is evaluated
@@ -110,10 +110,10 @@ namespace core_Integral
     //! \param[in]  n        number of integration points.
     //! \param[out] numEvals number of function evaluations.
     //! \return computed integral value.
-    mobiusCore_EXPORT double
+    mobiusCore_EXPORT adouble
       Compute(core_UnivariateFunc* F,
-              const double         a,
-              const double         b,
+              const adouble         a,
+              const adouble         b,
               const int            n,
               int&                 numEvals);
 
@@ -125,10 +125,10 @@ namespace core_Integral
     //! \param[in] b upper bound.
     //! \param[in] n number of integration points.
     //! \return computed integral value.
-    mobiusCore_EXPORT double
+    mobiusCore_EXPORT adouble
       Compute(core_UnivariateFunc* F,
-              const double         a,
-              const double         b,
+              const adouble         a,
+              const adouble         b,
               const int            n);
 
     //! Returns the integral of the passed two-variate function <F> defined
@@ -142,12 +142,12 @@ namespace core_Integral
     //! \param[in] orderX order for Gauss integration along X variable.
     //! \param[in] orderY order for Gauss integration along Y variable.
     //! \return computed integral value.
-    mobiusCore_EXPORT double
+    mobiusCore_EXPORT adouble
       Compute(core_TwovariateFunc* F,
-              const double         x0,
-              const double         x1,
-              const double         y0,
-              const double         y1,
+              const adouble         x0,
+              const adouble         x1,
+              const adouble         y0,
+              const adouble         y1,
               const int            orderX,
               const int            orderY);
 

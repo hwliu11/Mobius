@@ -55,14 +55,14 @@ public:
 
 public:
 
-  virtual double
+  virtual adouble
     MinParameter() const = 0;
 
-  virtual double
+  virtual adouble
     MaxParameter() const = 0;
 
   virtual void
-    Eval(const double u,
+    Eval(const adouble u,
          xyz&         P) const = 0;
 
 };

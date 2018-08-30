@@ -62,9 +62,9 @@ void mobius::geom_GordonSurface::Dump(std::ostream* out) const
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
-                                        double& yMin, double& yMax,
-                                        double& zMin, double& zMax) const
+void mobius::geom_GordonSurface::Bounds(adouble& xMin, adouble& xMax,
+                                        adouble& yMin, adouble& yMax,
+                                        adouble& zMin, adouble& zMax) const
 {
   xMin = yMin = zMin =  DBL_MAX;
   xMax = yMax = zMax = -DBL_MAX;
@@ -72,7 +72,7 @@ void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
   // U isos
   for ( size_t i = 0; i < m_UCurves.size(); ++i )
   {
-    double xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
+    adouble xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
     m_UCurves[i]->Bounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
 
     xMin = min(xMin, xMin_crv);
@@ -86,7 +86,7 @@ void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
   // V isos
   for ( size_t i = 0; i < m_VCurves.size(); ++i )
   {
-    double xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
+    adouble xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
     m_VCurves[i]->Bounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
 
     xMin = min(xMin, xMin_crv);
@@ -100,28 +100,28 @@ void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
 
 //! Returns first parameter in U dimension.
 //! \return first parameter.
-double mobius::geom_GordonSurface::MinParameter_U() const
+adouble mobius::geom_GordonSurface::MinParameter_U() const
 {
   return 0.0;//m_pU[0];
 }
 
 //! Returns last parameter in U dimension.
 //! \return last parameter.
-double mobius::geom_GordonSurface::MaxParameter_U() const
+adouble mobius::geom_GordonSurface::MaxParameter_U() const
 {
   return 0.0;//m_pU[m_iU-1];
 }
 
 //! Returns first parameter in V dimension.
 //! \return first parameter.
-double mobius::geom_GordonSurface::MinParameter_V() const
+adouble mobius::geom_GordonSurface::MinParameter_V() const
 {
   return 0.0;//m_pV[0];
 }
 
 //! Returns last parameter in V dimension.
 //! \return last parameter.
-double mobius::geom_GordonSurface::MaxParameter_V() const
+adouble mobius::geom_GordonSurface::MaxParameter_V() const
 {
   return 0.0;//m_pV[m_iV-1];
 }
@@ -130,14 +130,14 @@ double mobius::geom_GordonSurface::MaxParameter_V() const
 //! \param u [in] U parameter value to evaluate surface for.
 //! \param v [in] V parameter value to evaluate surface for.
 //! \param C [out] 3D point corresponding to the given parameter pair.
-void mobius::geom_GordonSurface::Eval(const double u,
-                                      const double v,
+void mobius::geom_GordonSurface::Eval(const adouble u,
+                                      const adouble v,
                                       xyz&         C) const
 {
   /*const int n = this->get_n();
   const int m = this->get_m();
-  std::vector<double> u_knots = this->u_knots();
-  std::vector<double> v_knots = this->v_knots();
+  std::vector<adouble> u_knots = this->u_knots();
+  std::vector<adouble> v_knots = this->v_knots();
 
   xyz SN;
   for ( int i = 0; i <= n; ++i )
@@ -174,93 +174,93 @@ void mobius::geom_GordonSurface::Eval(const double u,
   C = SN + SM - SSMN;*/
 }
 
-//std::vector<double> mobius::geom_GordonSurface::u_knots() const
+//std::vector<adouble> mobius::geom_GordonSurface::u_knots() const
 //{
-//  std::vector<double> aResult;
+//  std::vector<adouble> aResult;
 //  const TGridPointList& aGridLine = m_Pts(1);
 //  for ( int i = 1; i <= aGridLine.Length(); ++i )
 //  {
-//    double u = aGridLine(i).U;
+//    adouble u = aGridLine(i).U;
 //    aResult.Append(u);
 //  }
 //  return aResult;
 //}
 //
-//std::vector<double> mobius::geom_GordonSurface::v_knots() const
+//std::vector<adouble> mobius::geom_GordonSurface::v_knots() const
 //{
-//  std::vector<double> aResult;
+//  std::vector<adouble> aResult;
 //  for ( int i = 1; i <= m_Pts.Length(); ++i )
 //  {
 //    const TGridPointList& aGridLine = m_Pts(i);
-//    double v = aGridLine(1).V;
+//    adouble v = aGridLine(1).V;
 //    aResult.Append(v);
 //  }
 //  return aResult;
 //}
 
-double mobius::geom_GordonSurface::L_ks(const int k,
+adouble mobius::geom_GordonSurface::L_ks(const int k,
                                         const int s,
-                                        const double t,
-                                        const std::vector<double>& t_knots) const
+                                        const adouble t,
+                                        const std::vector<adouble>& t_knots) const
 {
-  double A = A_ks(k, s, t, t_knots);
-  double B = B_ks(k, s, t, t_knots);
-  const double L = A / B;
+  adouble A = A_ks(k, s, t, t_knots);
+  adouble B = B_ks(k, s, t, t_knots);
+  const adouble L = A / B;
   return L;
 }
 
-double mobius::geom_GordonSurface::DL_ks(const int k,
+adouble mobius::geom_GordonSurface::DL_ks(const int k,
                                          const int s,
-                                         const double t,
-                                         const std::vector<double>& t_knots) const
+                                         const adouble t,
+                                         const std::vector<adouble>& t_knots) const
 {
-  double DA = DA_ks(k, s, t, t_knots);
-  double B = B_ks(k, s, t, t_knots);
-  const double DL = DA / B;
+  adouble DA = DA_ks(k, s, t, t_knots);
+  adouble B = B_ks(k, s, t, t_knots);
+  const adouble DL = DA / B;
   return DL;
 }
 
-double mobius::geom_GordonSurface::A_ks(const int k,
+adouble mobius::geom_GordonSurface::A_ks(const int k,
                                         const int s,
-                                        const double t,
-                                        const std::vector<double>& t_knots) const
+                                        const adouble t,
+                                        const std::vector<adouble>& t_knots) const
 {
-  double A = 1.0;
+  adouble A = 1.0;
   for ( int j = 0; j <= s; ++j )
   {
     if ( j == k )
       continue;
 
-    const double t_knot_j = t_knots[j];
+    const adouble t_knot_j = t_knots[j];
     A *= (t - t_knot_j);
   }
   return A;
 }
 
-double mobius::geom_GordonSurface::B_ks(const int k,
+adouble mobius::geom_GordonSurface::B_ks(const int k,
                                         const int s,
-                                        const double t,
-                                        const std::vector<double>& t_knots) const
+                                        const adouble t,
+                                        const std::vector<adouble>& t_knots) const
 {
-  double B = 1.0;
-  const double t_knot_k = t_knots[k];
+  adouble B = 1.0;
+  const adouble t_knot_k = t_knots[k];
   for ( int j = 0; j <= s; ++j )
   {
     if ( j == k )
       continue;
 
-    const double t_knot_j = t_knots[j];
+    const adouble t_knot_j = t_knots[j];
     B *= (t_knot_k - t_knot_j);
   }
   return B;
 }
 
-double mobius::geom_GordonSurface::DA_ks(const int k,
+adouble mobius::geom_GordonSurface::DA_ks(const int k,
                                          const int s,
-                                         const double t,
-                                         const std::vector<double>& t_knots) const
+                                         const adouble t,
+                                         const std::vector<adouble>& t_knots) const
 {
-  /*double D = 1.0;
+  /*adouble D = 1.0;
   for ( int i = 0; i <= s; ++i )
   {
     if ( i == k )
@@ -272,7 +272,7 @@ double mobius::geom_GordonSurface::DA_ks(const int k,
       if ( j == k || j == i )
         continue;
 
-      const double t_knot_j = t_knots[j];
+      const adouble t_knot_j = t_knots[j];
       DD *= (t - t_knot_j);
     }
 

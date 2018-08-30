@@ -56,7 +56,7 @@ bool mobius::geom_JSON::ExtractBCurve(core_Ptr<bcurve>& curve) const
     return false;
 
   // Extract knot vector.
-  std::vector<double> U;
+  std::vector<adouble> U;
   if ( !this->ExtractVector1d("knots", U) )
     return false;
 
@@ -82,7 +82,7 @@ bool mobius::geom_JSON::ExtractBSurface(core_Ptr<bsurf>& surface) const
     return false;
 
   // Extract knot vectors.
-  std::vector<double> U, V;
+  std::vector<adouble> U, V;
   if ( !this->ExtractVector1d("U_knots", U) )
     return false;
   if ( !this->ExtractVector1d("V_knots", V) )

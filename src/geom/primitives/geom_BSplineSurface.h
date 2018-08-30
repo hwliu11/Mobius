@@ -49,8 +49,8 @@ public:
 
   mobiusGeom_EXPORT
     geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                        const double*                          U,
-                        const double*                          V,
+                        const adouble*                          U,
+                        const adouble*                          V,
                         const int                              nU,
                         const int                              nV,
                         const int                              p,
@@ -58,8 +58,8 @@ public:
 
   mobiusGeom_EXPORT
     geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                        const std::vector<double>&             U,
-                        const std::vector<double>&             V,
+                        const std::vector<adouble>&             U,
+                        const std::vector<adouble>&             V,
                         const int                              p,
                         const int                              q);
 
@@ -79,39 +79,39 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter_U() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter_U() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter_V() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter_V() const;
 
   mobiusGeom_EXPORT virtual void
-    Eval(const double u,
-         const double v,
+    Eval(const adouble u,
+         const adouble v,
          xyz&         S) const;
 
   mobiusGeom_EXPORT virtual void
-    Eval_D1(const double u,
-            const double v,
+    Eval_D1(const adouble u,
+            const adouble v,
             xyz&         S,
             xyz&         dU,
             xyz&         dV) const;
 
   mobiusGeom_EXPORT virtual void
-    Eval_D2(const double u,
-            const double v,
+    Eval_D2(const adouble u,
+            const adouble v,
             xyz&         S,
             xyz&         dU,
             xyz&         dV,
@@ -129,14 +129,14 @@ public:
     Copy() const;
 
   mobiusGeom_EXPORT ptr<geom_BSplineCurve>
-    Iso_U(const double u) const;
+    Iso_U(const adouble u) const;
 
   mobiusGeom_EXPORT ptr<geom_BSplineCurve>
-    Iso_V(const double v) const;
+    Iso_V(const adouble v) const;
 
   /*mobiusGeom_EXPORT core_XYZ
-    NormUnit(const double u,
-             const double v) const;*/
+    NormUnit(const adouble u,
+             const adouble v) const;*/
 
   //! When a flat thin elastic plate is deformed to the shape of a free-form
   //! surface, its bending energy (under some simplifying assumptions) is
@@ -145,7 +145,7 @@ public:
   //! mapping.
   //!
   //! \return calculated bending energy.
-  mobiusGeom_EXPORT double
+  mobiusGeom_EXPORT adouble
     ComputeBendingEnergy() const;
 
 public:
@@ -174,14 +174,14 @@ public:
 
   //! Accessor for the knot vector in U dimension.
   //! \return knot vector.
-  const std::vector<double>& Knots_U() const
+  const std::vector<adouble>& Knots_U() const
   {
     return m_U;
   }
 
   //! Accessor for the knot vector in V dimension.
   //! \return knot vector.
-  const std::vector<double>& Knots_V() const
+  const std::vector<adouble>& Knots_V() const
   {
     return m_V;
   }
@@ -217,8 +217,8 @@ public:
 private:
 
   void init(const std::vector< std::vector<xyz> >& Poles,
-            const std::vector<double>&             U,
-            const std::vector<double>&             V,
+            const std::vector<adouble>&             U,
+            const std::vector<adouble>&             V,
             const int                              p,
             const int                              q);
 
@@ -228,10 +228,10 @@ private:
   std::vector< std::vector<xyz> > m_poles;
 
   //! Knot vector in U dimension.
-  std::vector<double> m_U;
+  std::vector<adouble> m_U;
 
   //! Knot vector in V dimension.
-  std::vector<double> m_V;
+  std::vector<adouble> m_V;
 
   //! Degree in U dimension.
   int m_iDegU;

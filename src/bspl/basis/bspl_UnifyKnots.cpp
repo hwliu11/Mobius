@@ -37,10 +37,10 @@
 //! Unifies the passed knot vectors.
 //! \param knot_vectors [in] knot vectors to unify.
 //! \return addendums to unification.
-std::vector< std::vector<double> >
-  mobius::bspl_UnifyKnots::operator()(std::vector< std::vector<double> >& knot_vectors) const
+std::vector< std::vector<adouble> >
+  mobius::bspl_UnifyKnots::operator()(std::vector< std::vector<adouble> >& knot_vectors) const
 {
-  std::vector< std::vector<double> > X;
+  std::vector< std::vector<adouble> > X;
 
   for ( size_t i = 0; i < knot_vectors.size(); ++i )
   {

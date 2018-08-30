@@ -60,15 +60,15 @@ public:
                      const int                                   coord,
                      const int                                   l,
                      const std::vector< ptr<geom_FairBSurfNk> >& Nk,
-                     const double                                lambda,
+                     const adouble                                lambda,
                      ptr<alloc2d>                                alloc);
 
 public:
 
   //! Evaluates function.
   //! \return value.
-  mobiusGeom_EXPORT virtual double
-    Eval(const double u, const double v) const;
+  mobiusGeom_EXPORT virtual adouble
+    Eval(const adouble u, const adouble v) const;
 
 public:
 

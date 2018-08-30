@@ -54,20 +54,20 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter() const;
 
   mobiusGeom_EXPORT virtual void
-    Eval(const double u,
+    Eval(const adouble u,
          core_XYZ&    P) const;
 
 public:

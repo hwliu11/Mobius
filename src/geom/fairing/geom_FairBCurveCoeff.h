@@ -48,7 +48,7 @@ public:
 
   //! ctor.
   //! \param[in] lambda fairing coefficient.
-  geom_FairBCurveCoeff(const double lambda) : core_UnivariateFunc()
+  geom_FairBCurveCoeff(const adouble lambda) : core_UnivariateFunc()
   {
     m_fLambda = lambda;
   }
@@ -56,21 +56,21 @@ public:
 public:
 
   //! \return fairing coefficient.
-  double GetLambda() const
+  adouble GetLambda() const
   {
     return m_fLambda;
   }
 
   //! Sets fairing coefficient.
   //! \param[in] lambda fairing coefficient.
-  double SetLambda(const double lambda)
+  adouble SetLambda(const adouble lambda)
   {
     m_fLambda = lambda;
   }
 
 protected:
 
-  double m_fLambda; //!< Fairing coefficient.
+  adouble m_fLambda; //!< Fairing coefficient.
 
 };
 

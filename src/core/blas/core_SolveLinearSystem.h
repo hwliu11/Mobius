@@ -50,9 +50,9 @@ public:
 public:
 
   mobiusCore_EXPORT void
-    operator()(const double* A,
-               const double* b,
-               double*       x,
+    operator()(const adouble* A,
+               const adouble* b,
+               adouble*       x,
                const int     dim);
 
 };

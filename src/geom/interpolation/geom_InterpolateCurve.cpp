@@ -90,9 +90,9 @@ mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>&    
 //! \param m       [in] 0-based index of the last knot in the knot vector.
 mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>& points,
                                                      const int               deg,
-                                                     double*                 pParams,
+                                                     adouble*                 pParams,
                                                      const int               n,
-                                                     double*                 pU,
+                                                     adouble*                 pU,
                                                      const int               m)
 {
   this->Init(points, deg, pParams, n, pU, m);
@@ -134,9 +134,9 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
 //! \param m       [in] 0-based index of the last knot in the knot vector.
 void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>& points,
                                          const int               deg,
-                                         double*                 pParams,
+                                         adouble*                 pParams,
                                          const int               n,
-                                         double*                 pU,
+                                         adouble*                 pU,
                                          const int               m)
 {
   m_points     = points;
@@ -227,14 +227,14 @@ void mobius::geom_InterpolateCurve::Perform()
   m_errCode = ErrCode_NoError;
 
   // Heap allocator
-  core_HeapAlloc<double> Alloc;
+  core_HeapAlloc<adouble> Alloc;
 
   /* -------------------------------
    *  Choose interpolant parameters
    * ------------------------------- */
 
   int     n      = 0;
-  double* params = NULL;
+  adouble* params = NULL;
 
   // Now parameterize
   if ( m_paramsType == ParamsSelection_Uniform )
@@ -289,7 +289,7 @@ void mobius::geom_InterpolateCurve::Perform()
    * -------------------------- */
 
   int     m = 0;
-  double* U = NULL;
+  adouble* U = NULL;
 
   if ( m_knotsType == KnotsSelection_Average )
   {
@@ -360,8 +360,8 @@ void mobius::geom_InterpolateCurve::Perform()
 bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
                                            const int               n,
                                            const int               p,
-                                           const double*           params,
-                                           const double*           pU,
+                                           const adouble*           params,
+                                           const adouble*           pU,
                                            const int               m,
                                            const bool              has_start_deriv,
                                            const bool              has_end_deriv,
@@ -376,7 +376,7 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
   if ( has_start_deriv2 && !has_start_deriv || has_end_deriv2 && !has_end_deriv )
     throw std::exception("Cannot handle D2 without D1"); // TODO: this limitation can be easily escaped
 
-  std::vector<double> U;
+  std::vector<adouble> U;
   for ( int i = 0; i <= m; ++i )
     U.push_back(pU[i]);
 
@@ -386,10 +386,10 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
 
   // TODO: use optimized evaluation algorithm for B-splines
 
-  core_HeapAlloc<double> Alloc;
+  core_HeapAlloc<adouble> Alloc;
 
   const int dim = dimension(n, has_start_deriv, has_end_deriv, has_start_deriv2, has_end_deriv2); // Dimension of the problem in 3D
-  double* N_values = Alloc.Allocate(dim*dim, true);
+  adouble* N_values = Alloc.Allocate(dim*dim, true);
 
   bspl_N Eval;
   for ( int k = 0, kparams = 0; k < dim; ++k ) // Loop over the selected parameters
@@ -401,7 +401,7 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
     }
     else if ( (k == 2) && has_start_deriv2 )
     {
-      double coeff = p*(p - 1)/U[p+1];
+      adouble coeff = p*(p - 1)/U[p+1];
 
       N_values[dim*k + 0] =  coeff/U[p+1];                            // P_0
       N_values[dim*k + 1] = -coeff*(U[p+1] + U[p+2])/(U[p+1]*U[p+2]); // P_1
@@ -414,7 +414,7 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
     }
     else if ( (k == dim - 3) && has_end_deriv2 )
     {
-      double coeff = p*(p - 1)/(1 - U[m-p-1]);
+      adouble coeff = p*(p - 1)/(1 - U[m-p-1]);
 
       N_values[dim*k + dim - 3] =  coeff/(1-U[m-p-2]);                                          // P_{n-2}
       N_values[dim*k + dim - 2] = -coeff*(2-U[m-p-1]-U[m-p-2])/((1 - U[m-p-1])*(1 - U[m-p-2])); // P_{n-1}
@@ -422,10 +422,10 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
     }
     else
     {
-      const double u_k = params[kparams];
+      const adouble u_k = params[kparams];
       for ( int i = 0; i < dim; ++i ) // Loop over the indices of the unknown control points
       {
-        const double N = Eval(u_k, U, p, i);
+        const adouble N = Eval(u_k, U, p, i);
         N_values[dim*k + i] = N;
       }
       kparams++;
@@ -442,14 +442,14 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
    * ----------------------------------------- */
 
   // Right-hand side
-  double* b = Alloc.Allocate(dim, true);
+  adouble* b = Alloc.Allocate(dim, true);
 
   // Solution components
-  double** pXYZ = new double*[3];
+  adouble** pXYZ = new adouble*[3];
   for ( int c = 0; c < 3; ++c )
   {
-    pXYZ[c] = new double[dim];
-    memset(pXYZ[c], 0, dim*sizeof(double));
+    pXYZ[c] = new adouble[dim];
+    memset(pXYZ[c], 0, dim*sizeof(adouble));
   }
 
   // Solver for linear system

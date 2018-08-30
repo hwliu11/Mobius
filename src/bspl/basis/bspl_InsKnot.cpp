@@ -49,14 +49,14 @@
 //! \return true in case of success, false -- otherwise.
 bool mobius::bspl_InsKnot::operator()(const int                  np,
                                       const int                  p,
-                                      const std::vector<double>& UP,
+                                      const std::vector<adouble>& UP,
                                       const std::vector<xyz>&    Pw,
-                                      const double               u,
+                                      const adouble               u,
                                       const int                  k,
                                       const int                  s,
                                       const int                  r,
                                       int&                       nq,
-                                      std::vector<double>&       UQ,
+                                      std::vector<adouble>&       UQ,
                                       std::vector<xyz>&          Qw) const
 {
   if ( r + s > p )
@@ -87,7 +87,7 @@ bool mobius::bspl_InsKnot::operator()(const int                  np,
     L = k - p + j;
     for ( int i = 0; i <= p - j - s; ++i )
     {
-      const double alpha = (u - UP[L + i]) / (UP[i + k +1] - UP[L + i]);
+      const adouble alpha = (u - UP[L + i]) / (UP[i + k +1] - UP[L + i]);
       Rw[i] = Rw[i + 1]*alpha + Rw[i]*(1.0 - alpha);
     }
     Qw[L]             = Rw[0];

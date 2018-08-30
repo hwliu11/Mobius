@@ -47,7 +47,7 @@ class bspl_NDiscrete
 public:
 
   mobiusBSpl_EXPORT
-    bspl_NDiscrete(const std::vector<double>& U,
+    bspl_NDiscrete(const std::vector<adouble>& U,
                    const int                  deg);
 
 public:
@@ -69,13 +69,13 @@ public:
 
   mobiusBSpl_EXPORT void
     Perform(const int      idx,
-            const double   delta,
+            const adouble   delta,
             const Strategy strategy = Strategy_UniformAbscissa);
 
-  mobiusBSpl_EXPORT const std::vector<double>&
+  mobiusBSpl_EXPORT const std::vector<adouble>&
     Abscissa() const;
 
-  mobiusBSpl_EXPORT const std::vector<double>&
+  mobiusBSpl_EXPORT const std::vector<adouble>&
     Values() const;
 
   mobiusBSpl_EXPORT bool
@@ -85,25 +85,25 @@ private:
 
   void
     performUniformAbscissa(const int    idx,
-                           const double delta);
+                           const adouble delta);
 
   void
     performUniformChord(const int    idx,
-                        const double delta);
+                        const adouble delta);
 
 private:
 
   //! Knot vector.
-  std::vector<double> m_U;
+  std::vector<adouble> m_U;
 
   //! Degree of B-spline basis functions.
   int m_iDegree;
 
   //! Abscissa.
-  std::vector<double> m_abscissa;
+  std::vector<adouble> m_abscissa;
 
   //! Function values.
-  std::vector<double> m_values;
+  std::vector<adouble> m_values;
 
   //! Indicates whether the algorithm has completed its calculations or not.
   bool m_bIsDone;

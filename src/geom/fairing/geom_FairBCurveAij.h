@@ -54,19 +54,19 @@ public:
   //! \param[in] lambda fairing coefficent.
   //! \param[in] alloc  shared memory allocator.
   mobiusGeom_EXPORT
-    geom_FairBCurveAij(const std::vector<double>& U,
+    geom_FairBCurveAij(const std::vector<adouble>& U,
                        const int                  p,
                        const int                  i,
                        const int                  j,
-                       const double               lambda,
+                       const adouble               lambda,
                        ptr<alloc2d>               alloc);
 
 public:
 
   //! Evaluates function.
   //! \return value.
-  mobiusGeom_EXPORT virtual double
-    Eval(const double u) const;
+  mobiusGeom_EXPORT virtual adouble
+    Eval(const adouble u) const;
 
 private:
 
@@ -75,7 +75,7 @@ private:
 
 protected:
 
-  const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
+  const std::vector<adouble>& m_U;       //!< Knot vector ("flat" knots).
   int                        m_iDegree; //!< Degree of the spline function.
   int                        m_iIndex1; //!< 0-based index 1.
   int                        m_iIndex2; //!< 0-based index 2.

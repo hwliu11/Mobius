@@ -72,9 +72,9 @@ mobius::core_Quaternion::core_Quaternion(const core_XYZ& axis,
 mobius::core_Quaternion::core_Quaternion(const core_XYZ& Qn_im)
 {
   q0 = 0.0;
-  qx = Qn_im.X();
-  qy = Qn_im.Y();
-  qz = Qn_im.Z();
+  qx = Qn_im.X().getValue();
+  qy = Qn_im.Y().getValue();
+  qz = Qn_im.Z().getValue();
 }
 
 //! Creates new quaternion as a copy of the passed one.
@@ -100,9 +100,9 @@ void mobius::core_Quaternion::SetRotation(const core_XYZ& axis,
   core_XYZ     A  = axis.Normalized();
 
   q0 = cs;
-  qx = sn*A.X();
-  qy = sn*A.Y();
-  qz = sn*A.Z();
+  qx = sn*A.X().getValue();
+  qy = sn*A.Y().getValue();
+  qz = sn*A.Z().getValue();
 }
 
 //! Converts this quaternion to 3x3 matrix of rotation:

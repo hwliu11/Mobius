@@ -56,7 +56,7 @@ public:
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
     geom_FairBCurve(const ptr<bcurve>& curve,
-                    const double       lambda,
+                    const adouble       lambda,
                     core_ProgressEntry progress,
                     core_PlotterEntry  plotter);
 
@@ -84,7 +84,7 @@ protected:
   ptr<bcurve> m_resultCurve;
 
   //! Fairing coefficient.
-  double m_fLambda;
+  adouble m_fLambda;
 
 };
 

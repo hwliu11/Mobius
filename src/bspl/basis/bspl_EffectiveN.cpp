@@ -38,11 +38,11 @@
 //! \param i [in]  span index the parameter u falls to.
 //! \param N [out] evaluated functions. Note that the invoker code
 //!                must allocate memory for this array. Its dimension is (p + 1).
-void mobius::bspl_EffectiveN::operator()(const double               u,
-                                         const std::vector<double>& U,
+void mobius::bspl_EffectiveN::operator()(const adouble               u,
+                                         const std::vector<adouble>& U,
                                          const int                  p,
                                          const int                  i,
-                                         double*                    N) const
+                                         adouble*                    N) const
 {
   // Initial basis function to start iterative evaluation
   N[0] = 1.0;
@@ -53,8 +53,8 @@ void mobius::bspl_EffectiveN::operator()(const double               u,
   // organization of calculation scheme. Nevertheless, we prefer to allocate
   // memory for these item as well, just because it is more convenient and
   // more consistent with theory to start indexation from 1
-  double left[mobiusBSpl_MaxDegree]; // (p + 1) elements are actually needed.
-  double right[mobiusBSpl_MaxDegree]; // (p + 1) elements are actually needed.
+  adouble left[mobiusBSpl_MaxDegree]; // (p + 1) elements are actually needed.
+  adouble right[mobiusBSpl_MaxDegree]; // (p + 1) elements are actually needed.
   //
   for ( int k = 0; k < p + 1; ++k ) // Notice that we do not use memset() for
   {                                 // nullification as it will corrupt
@@ -73,7 +73,7 @@ void mobius::bspl_EffectiveN::operator()(const double               u,
 
     // This variable contains value reused on adjacent iterations
     // by the number of evaluated functions
-    double savedTerm = 0.0;
+    adouble savedTerm = 0.0;
 
     // Now we iterate over the number of evaluated functions. Notice that
     // even though we have (deg + 1) of such functions, we iterate only deg
@@ -81,7 +81,7 @@ void mobius::bspl_EffectiveN::operator()(const double               u,
     // variable without additional efforts (see theory)
     for ( int idx = 0; idx < deg; ++idx )
     {
-      double rightCoeff = N[idx] / (right[idx+1] + left[deg-idx]);
+      adouble rightCoeff = N[idx] / (right[idx+1] + left[deg-idx]);
       //
       N[idx]    = savedTerm + right[idx+1]*rightCoeff;
       savedTerm = left[deg-idx]*rightCoeff;

@@ -50,9 +50,9 @@ class geom_Geometry : public core_OBJECT
 public:
 
   virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const = 0;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const = 0;
 
 public:
 

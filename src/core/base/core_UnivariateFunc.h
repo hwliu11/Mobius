@@ -43,8 +43,8 @@ class core_UnivariateFunc : public core_OBJECT
 {
 public:
 
-  virtual double
-    Eval(const double x) const = 0;
+  virtual adouble
+    Eval(const adouble x) const = 0;
 
 };
 

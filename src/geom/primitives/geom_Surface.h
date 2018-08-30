@@ -60,21 +60,21 @@ public:
 // Interface methods:
 public:
 
-  virtual double
+  virtual adouble
     MinParameter_U() const = 0;
 
-  virtual double
+  virtual adouble
     MaxParameter_U() const = 0;
 
-  virtual double
+  virtual adouble
     MinParameter_V() const = 0;
 
-  virtual double
+  virtual adouble
     MaxParameter_V() const = 0;
 
   virtual void
-    Eval(const double u,
-         const double v,
+    Eval(const adouble u,
+         const adouble v,
          xyz&         S) const = 0;
 
 };

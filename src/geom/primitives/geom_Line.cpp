@@ -53,9 +53,9 @@ mobius::geom_Line::~geom_Line()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_Line::Bounds(double& xMin, double& xMax,
-                               double& yMin, double& yMax,
-                               double& zMin, double& zMax) const
+void mobius::geom_Line::Bounds(adouble& xMin, adouble& xMax,
+                               adouble& yMin, adouble& yMax,
+                               adouble& zMin, adouble& zMax) const
 {
   // Even though it is possible to reduce infinite space to something more
   // representative for line, we do not do it as we do not have any
@@ -70,14 +70,14 @@ void mobius::geom_Line::Bounds(double& xMin, double& xMax,
 
 //! Returns minimal parameter value.
 //! \return minimal parameter value.
-double mobius::geom_Line::MinParameter() const
+adouble mobius::geom_Line::MinParameter() const
 {
   return -DBL_MAX;
 }
 
 //! Returns maximal parameter value.
 //! \return maximal parameter value.
-double mobius::geom_Line::MaxParameter() const
+adouble mobius::geom_Line::MaxParameter() const
 {
   return DBL_MAX;
 }
@@ -85,7 +85,7 @@ double mobius::geom_Line::MaxParameter() const
 //! Evaluates line for the given parameter.
 //! \param u [in]  parameter value to evaluate curve for.
 //! \param P [out] 3D point corresponding to the given parameter on curve.
-void mobius::geom_Line::Eval(const double u,
+void mobius::geom_Line::Eval(const adouble u,
                              xyz&         P) const
 {
   P = m_origin + m_dir*u;

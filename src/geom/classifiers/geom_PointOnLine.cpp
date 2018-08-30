@@ -38,7 +38,7 @@
 //! \return true if the point belongs to the line, false -- otherwise.
 bool mobius::geom_PointOnLine::operator()(const xyz&            P,
                                           const ptr<geom_Line>& Line,
-                                          const double          prec)
+                                          const adouble          prec)
 {
   // Line properties
   const xyz& Dir = Line->Dir();
@@ -46,15 +46,15 @@ bool mobius::geom_PointOnLine::operator()(const xyz&            P,
 
   // Vector from line's origin to P
   xyz Ori_P = P - Ori;
-  const double Ori_P_mod = Ori_P.Modulus();
+  const adouble Ori_P_mod = Ori_P.Modulus();
   if ( Ori_P_mod < prec)
     return true;
 
   // Calculate angle between directions
-  const double alpha = Dir.Angle(Ori_P);
+  const adouble alpha = Dir.Angle(Ori_P);
 
   // Calculate distance from P to line
-  const double h = Ori_P_mod*sin(alpha);
+  const adouble h = Ori_P_mod*sin(alpha);
 
   // Classify
   if ( h < prec )

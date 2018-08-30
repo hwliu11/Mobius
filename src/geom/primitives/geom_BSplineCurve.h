@@ -55,13 +55,13 @@ public:
 
   mobiusGeom_EXPORT
     geom_BSplineCurve(const std::vector<xyz>& Poles,
-                      const double*           U,
+                      const adouble*           U,
                       const int               nU,
                       const int               p);
 
   mobiusGeom_EXPORT
     geom_BSplineCurve(const std::vector<xyz>&    Poles,
-                      const std::vector<double>& U,
+                      const std::vector<adouble>& U,
                       const int                  p);
 
   mobiusGeom_EXPORT virtual
@@ -75,24 +75,24 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter() const;
 
   mobiusGeom_EXPORT virtual void
-    Eval(const double u,
+    Eval(const adouble u,
          xyz&         P) const;
 
   mobiusGeom_EXPORT virtual void
-    Eval_Dk(const double u,
+    Eval_Dk(const adouble u,
             const int    k,
             xyz&         dkC,
             ptr<alloc2d> alloc            = NULL,
@@ -100,15 +100,15 @@ public:
             const int    memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT virtual void
-    Eval_Dk(double**     dN,
-            const double u,
+    Eval_Dk(adouble**     dN,
+            const adouble u,
             const int    k,
             xyz&         dkC,
             ptr<alloc2d> alloc            = NULL,
             const int    memBlockInternal = -1) const;
 
-  mobiusGeom_EXPORT virtual double
-    K(const double u) const;
+  mobiusGeom_EXPORT virtual adouble
+    K(const adouble u) const;
 
   mobiusGeom_EXPORT virtual core_Continuity
     Continuity() const;
@@ -120,35 +120,35 @@ public:
 
   mobiusGeom_EXPORT bool
     InvertPoint(const xyz&   P,
-                double&      param,
-                const double prec = 1.0e-6) const;
+                adouble&      param,
+                const adouble prec = 1.0e-6) const;
 
   mobiusGeom_EXPORT bool
-    InsertKnot(const double u,
+    InsertKnot(const adouble u,
                const int    num_times = 1);
 
   mobiusGeom_EXPORT bool
-    InsertKnot(const double u,
+    InsertKnot(const adouble u,
                const int    num_times,
                int&         dest_span_idx);
 
   mobiusGeom_EXPORT bool
-    RefineKnots(const std::vector<double>& X);
+    RefineKnots(const std::vector<adouble>& X);
 
   mobiusGeom_EXPORT bool
-    Split(const double                           u,
+    Split(const adouble                           u,
           std::vector< ptr<geom_BSplineCurve> >& slices) const;
 
   mobiusGeom_EXPORT void
-    ReparameterizeLinear(const double s_min,
-                         const double s_max);
+    ReparameterizeLinear(const adouble s_min,
+                         const adouble s_max);
 
   //! Calculates approximate strain energy of the B-curve. The strain
   //! energy is calculated as an integral of squared second derivative
   //! (instead of squared curvature).
   //!
   //! \return calculated strain energy.
-  mobiusGeom_EXPORT double
+  mobiusGeom_EXPORT adouble
     ComputeStrainEnergy() const;
 
 public:
@@ -194,7 +194,7 @@ public:
 
   //! Accessor for the knot vector.
   //! \return knot vector.
-  const std::vector<double>& Knots() const
+  const std::vector<adouble>& Knots() const
   {
     return m_U;
   }
@@ -209,7 +209,7 @@ public:
   //! Returns knot by its zero-based index.
   //! \param[in] knotIdx zero-based knot index.
   //! \return knot.
-  double GetKnot(const int knotIdx) const
+  adouble GetKnot(const int knotIdx) const
   {
     return m_U[knotIdx];
   }
@@ -224,7 +224,7 @@ public:
 private:
 
   void init(const std::vector<xyz>&    Poles,
-            const std::vector<double>& U,
+            const std::vector<adouble>& U,
             const int                  p);
 
 private:
@@ -233,7 +233,7 @@ private:
   std::vector<xyz> m_poles;
 
   //! Knot vector.
-  std::vector<double> m_U;
+  std::vector<adouble> m_U;
 
   //! Degree.
   int m_iDeg;

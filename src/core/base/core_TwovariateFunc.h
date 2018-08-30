@@ -43,8 +43,8 @@ class core_TwovariateFunc : public core_OBJECT
 {
 public:
 
-  virtual double
-    Eval(const double x, const double y) const = 0;
+  virtual adouble
+    Eval(const adouble x, const adouble y) const = 0;
 
 };
 

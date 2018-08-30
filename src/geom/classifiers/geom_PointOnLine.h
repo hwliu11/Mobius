@@ -44,7 +44,7 @@ public:
   mobiusGeom_EXPORT bool
     operator()(const xyz&            P,
                const ptr<geom_Line>& Line,
-               const double          prec = 1.0e-6);
+               const adouble          prec = 1.0e-6);
 
 };
 

@@ -59,7 +59,7 @@
 //-----------------------------------------------------------------------------
 
 mobius::geom_FairBCurve::geom_FairBCurve(const ptr<bcurve>& curve,
-                                         const double       lambda,
+                                         const adouble       lambda,
                                          core_ProgressEntry progress,
                                          core_PlotterEntry  plotter)
 : core_OPERATOR(progress, plotter)
@@ -73,7 +73,7 @@ mobius::geom_FairBCurve::geom_FairBCurve(const ptr<bcurve>& curve,
 bool mobius::geom_FairBCurve::Perform()
 {
   // Prepare flat sequence of knots and other working vars.
-  const std::vector<double>& U        = m_inputCurve->Knots();
+  const std::vector<adouble>& U        = m_inputCurve->Knots();
   const int                  p        = m_inputCurve->Degree();
   const int                  m        = int( U.size() ) - 1;
   const int                  n        = m - p - 1;
@@ -101,19 +101,19 @@ bool mobius::geom_FairBCurve::Perform()
                             sharedAlloc);
 
       // Compute integral.
-      double val = 0;
+      adouble val = 0;
       for ( size_t k = 0; k < U.size() - 1; ++k )
       {
         if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
         // Gauss integration in each knot span.
-        const double
+        const adouble
           gaussVal = core_Integral::gauss::Compute(&N2, U[k], U[k+1], nGaussPt, nAijEval);
         //
         val += gaussVal;
       }
 
-      eigen_A_mx(r, c) = val;
+      eigen_A_mx(r, c) = val.getValue();
     }
   }
 
@@ -144,45 +144,45 @@ bool mobius::geom_FairBCurve::Perform()
                             sharedAlloc);
 
     // Compute integrals.
-    double val_x = 0;
+    adouble val_x = 0;
     for ( size_t k = 0; k < U.size() - 1; ++k )
     {
       if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
       // Gauss integration in each knot span.
-      const double
+      const adouble
         gaussVal = core_Integral::gauss::Compute(&rhs_x, U[k], U[k+1], nGaussPt);
       //
       val_x += gaussVal;
     }
     //
-    double val_y = 0;
+    adouble val_y = 0;
     for ( size_t k = 0; k < U.size() - 1; ++k )
     {
       if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
       // Gauss integration in each knot span.
-      const double
+      const adouble
         gaussVal = core_Integral::gauss::Compute(&rhs_y, U[k], U[k+1], nGaussPt);
       //
       val_y += gaussVal;
     }
     //
-    double val_z = 0;
+    adouble val_z = 0;
     for ( size_t k = 0; k < U.size() - 1; ++k )
     {
       if ( U[k] == U[k+1] ) continue; // Skip multiple knots.
 
       // Gauss integration in each knot span.
-      const double
+      const adouble
         gaussVal = core_Integral::gauss::Compute(&rhs_z, U[k], U[k+1], nGaussPt);
       //
       val_z += gaussVal;
     }
 
-    eigen_B_mx(r, 0) = -val_x;
-    eigen_B_mx(r, 1) = -val_y;
-    eigen_B_mx(r, 2) = -val_z;
+    eigen_B_mx(r, 0) = -val_x.getValue();
+    eigen_B_mx(r, 1) = -val_y.getValue();
+    eigen_B_mx(r, 2) = -val_z.getValue();
   }
 
 #if defined COUT_DEBUG

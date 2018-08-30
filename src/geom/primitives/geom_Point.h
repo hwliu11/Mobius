@@ -53,9 +53,9 @@ public:
     geom_Point();
 
   mobiusGeom_EXPORT
-    geom_Point(const double x,
-               const double y,
-               const double z);
+    geom_Point(const adouble x,
+               const adouble y,
+               const adouble z);
 
   mobiusGeom_EXPORT
     geom_Point(const geom_Point& PP);
@@ -66,29 +66,29 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
   //! Returns X co-ordinate of the 3D point.
   //! \return X co-ordinate.
-  double X() const
+  adouble X() const
   {
     return m_XYZ.X();
   }
 
   //! Returns Y co-ordinate of the 3D point.
   //! \return Y co-ordinate.
-  double Y() const
+  adouble Y() const
   {
     return m_XYZ.Y();
   }
 
   //! Returns Z co-ordinate of the 3D point.
   //! \return Z co-ordinate.
-  double Z() const
+  adouble Z() const
   {
     return m_XYZ.Z();
   }
@@ -96,7 +96,7 @@ public:
 public:
 
   mobiusGeom_EXPORT geom_Point
-    Multiplied(const double coeff) const;
+    Multiplied(const adouble coeff) const;
 
 public:
 
@@ -104,7 +104,7 @@ public:
     operator=(const geom_Point& PP);
 
   mobiusGeom_EXPORT geom_Point
-    operator*(const double coeff) const;
+    operator*(const adouble coeff) const;
 
   mobiusGeom_EXPORT geom_Point
     operator+(const geom_Point& PP) const;

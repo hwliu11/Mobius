@@ -79,9 +79,9 @@ public:
   //! \param x [in] first coordinate.
   //! \param y [in] second coordinate.
   //! \param z [in] third coordinate.
-  core_XYZ(const double x,
-           const double y,
-           const double z)
+  core_XYZ(const adouble x,
+           const adouble y,
+           const adouble z)
   {
     m_fX = x;
     m_fY = y;
@@ -104,42 +104,42 @@ public:
 
   //! Returns X coordinate of the 3D point.
   //! \return X coordinate.
-  double X() const
+  adouble X() const
   {
     return m_fX;
   }
 
   //! Sets X coordinate.
   //! \param x [in] value to set.
-  void SetX(const double x)
+  void SetX(const adouble x)
   {
     m_fX = x;
   }
 
   //! Returns Y coordinate of the 3D point.
   //! \return Y coordinate.
-  double Y() const
+  adouble Y() const
   {
     return m_fY;
   }
 
   //! Sets Y coordinate.
   //! \param y [in] value to set.
-  void SetY(const double y)
+  void SetY(const adouble y)
   {
     m_fY = y;
   }
 
   //! Returns Z coordinate of the 3D point.
   //! \return Z coordinate.
-  double Z() const
+  adouble Z() const
   {
     return m_fZ;
   }
 
   //! Sets Z coordinate.
   //! \param z [in] value to set.
-  void SetZ(const double z)
+  void SetZ(const adouble z)
   {
     m_fZ = z;
   }
@@ -147,7 +147,7 @@ public:
   //! Returns coordinate by its 0-based index.
   //! \param idx [in] 0 for X, 1 for Y, 2 for Z.
   //! \return requested coordinate.
-  double Coord(const int idx) const
+  adouble Coord(const int idx) const
   {
     if ( idx == 0 )
       return this->X();
@@ -165,10 +165,10 @@ public:
   //! passed value.
   //! \param idx [in] 0 for X, 1 for Y, 2 for Z.
   //! \param val [in] value to set.
-  double SetCoord(const int        idx,
-                  const double val)
+  adouble SetCoord(const int        idx,
+                  const adouble val)
   {
-    double* coord = NULL;
+    adouble* coord = NULL;
 
     if ( idx == 0 )
       coord = &m_fX;
@@ -186,7 +186,7 @@ public:
   //! Returns true if this vector is zero.
   //! \param tol3D [in] three-dimensional tolerance for comparison.
   //! \return true/false.
-  bool IsOrigin(const double tol3D = 0) const
+  bool IsOrigin(const adouble tol3D = 0) const
   {
     return ( fabs(m_fX) <= tol3D ) &&
            ( fabs(m_fY) <= tol3D ) &&
@@ -195,14 +195,14 @@ public:
 
 public:
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Modulus() const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     SquaredModulus() const;
 
   mobiusCore_EXPORT core_XYZ
-    Multiplied(const double coeff) const;
+    Multiplied(const adouble coeff) const;
 
   mobiusCore_EXPORT void
     Normalize();
@@ -210,13 +210,13 @@ public:
   mobiusCore_EXPORT core_XYZ
     Normalized() const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Dot(const core_XYZ& XYZ) const;
 
   mobiusCore_EXPORT core_XYZ
     Cross(const core_XYZ& XYZ) const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Angle(const core_XYZ& XYZ) const;
 
 public:
@@ -225,16 +225,16 @@ public:
     operator=(const core_XYZ& XYZ);
 
   mobiusCore_EXPORT core_XYZ
-    operator*(const double coeff) const;
+    operator*(const adouble coeff) const;
 
   mobiusCore_EXPORT core_XYZ
-    operator*=(const double coeff);
+    operator*=(const adouble coeff);
 
   mobiusCore_EXPORT core_XYZ
-    operator/(const double coeff) const;
+    operator/(const adouble coeff) const;
 
   mobiusCore_EXPORT core_XYZ
-    operator/=(const double coeff);
+    operator/=(const adouble coeff);
 
   mobiusCore_EXPORT core_XYZ
     operator+(const core_XYZ& XYZ) const;
@@ -253,9 +253,9 @@ public:
 
 private:
 
-  double m_fX; //!< X coordinate.
-  double m_fY; //!< Y coordinate.
-  double m_fZ; //!< Z coordinate.
+  adouble m_fX; //!< X coordinate.
+  adouble m_fY; //!< Y coordinate.
+  adouble m_fZ; //!< Z coordinate.
 
 };
 

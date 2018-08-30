@@ -53,19 +53,19 @@ mobius::geom_PositionCloud::~geom_PositionCloud()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_PositionCloud::Bounds(double& xMin, double& xMax,
-                                        double& yMin, double& yMax,
-                                        double& zMin, double& zMax) const
+void mobius::geom_PositionCloud::Bounds(adouble& xMin, adouble& xMax,
+                                        adouble& yMin, adouble& yMax,
+                                        adouble& zMin, adouble& zMax) const
 {
-  double x_min = DBL_MAX, x_max = -DBL_MAX;
-  double y_min = DBL_MAX, y_max = -DBL_MAX;
-  double z_min = DBL_MAX, z_max = -DBL_MAX;
+  adouble x_min = DBL_MAX, x_max = -DBL_MAX;
+  adouble y_min = DBL_MAX, y_max = -DBL_MAX;
+  adouble z_min = DBL_MAX, z_max = -DBL_MAX;
 
   // Iterate over the points to calculate bounds
   for ( int p = 0; p < (int) m_cloud.size(); ++p )
   {
     const xyz&   P = m_cloud.at(p);
-    const double x = P.X(),
+    const adouble x = P.X(),
                  y = P.Y(),
                  z = P.Z();
 

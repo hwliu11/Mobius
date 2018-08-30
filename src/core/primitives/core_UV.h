@@ -56,7 +56,7 @@ public:
     core_UV();
 
   mobiusCore_EXPORT
-    core_UV(const double u, const double v);
+    core_UV(const adouble u, const adouble v);
 
   mobiusCore_EXPORT
     core_UV(const core_UV& UV);
@@ -68,28 +68,28 @@ public:
 
   //! Returns U coordinate of the 2D point.
   //! \return U coordinate.
-  double U() const
+  adouble U() const
   {
     return m_fU;
   }
 
   //! Sets U coordinate.
   //! \param u [in] value to set.
-  void SetU(const double u)
+  void SetU(const adouble u)
   {
     m_fU = u;
   }
 
   //! Returns V coordinate of the 2D point.
   //! \return V coordinate.
-  double V() const
+  adouble V() const
   {
     return m_fV;
   }
 
   //! Sets V coordinate.
   //! \param v [in] value to set.
-  void SetV(const double v)
+  void SetV(const adouble v)
   {
     m_fV = v;
   }
@@ -97,7 +97,7 @@ public:
   //! Returns coordinate by its 0-based index.
   //! \param idx [in] 0 for U, 1 for V.
   //! \return requested coordinate.
-  double Coord(const int idx) const
+  adouble Coord(const int idx) const
   {
     if ( idx == 0 )
       return this->U();
@@ -112,10 +112,10 @@ public:
   //! passed value.
   //! \param idx [in] 0 for U, 1 for V.
   //! \param val [in] value to set.
-  double SetCoord(const int        idx,
-                      const double val)
+  adouble SetCoord(const int        idx,
+                      const adouble val)
   {
-    double* coord = NULL;
+    adouble* coord = NULL;
 
     if ( idx == 0 )
       coord = &m_fU;
@@ -130,13 +130,13 @@ public:
 
 public:
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Modulus() const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     SquaredModulus() const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Dot(const core_UV& UV) const;
 
 public:
@@ -145,16 +145,16 @@ public:
     operator=(const core_UV& UV);
 
   mobiusCore_EXPORT core_UV
-    operator*(const double coeff) const;
+    operator*(const adouble coeff) const;
 
   mobiusCore_EXPORT core_UV
-    operator*=(const double coeff);
+    operator*=(const adouble coeff);
 
   mobiusCore_EXPORT core_UV
-    operator/(const double coeff) const;
+    operator/(const adouble coeff) const;
 
   mobiusCore_EXPORT core_UV
-    operator/=(const double coeff);
+    operator/=(const adouble coeff);
 
   mobiusCore_EXPORT core_UV
     operator+(const core_UV& UV) const;
@@ -173,8 +173,8 @@ public:
 
 private:
 
-  double m_fU; //!< U coordinate.
-  double m_fV; //!< V coordinate.
+  adouble m_fU; //!< U coordinate.
+  adouble m_fV; //!< V coordinate.
 
 };
 

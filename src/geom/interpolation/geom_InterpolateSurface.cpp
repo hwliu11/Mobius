@@ -226,7 +226,7 @@ void mobius::geom_InterpolateSurface::Perform()
   m_errCode = ErrCode_NoError;
 
   // Heap allocator
-  core_HeapAlloc<double> Alloc;
+  core_HeapAlloc<adouble> Alloc;
 
   /* ---------------------------------------
    *  Choose reper (interpolant) parameters
@@ -301,8 +301,8 @@ void mobius::geom_InterpolateSurface::Perform()
     throw std::exception("Poor collection of data points for the given degree(s)");
 
   // Allocate arrays for reper parameters
-  double* params_U = Alloc.Allocate(n + 1, true);
-  double* params_V = Alloc.Allocate(m + 1, true);
+  adouble* params_U = Alloc.Allocate(n + 1, true);
+  adouble* params_V = Alloc.Allocate(m + 1, true);
 
   if ( m_paramsType == ParamsSelection_Uniform )
   {
@@ -338,7 +338,7 @@ void mobius::geom_InterpolateSurface::Perform()
    *  Choose interpolant knots
    * -------------------------- */
 
-  double *U = NULL, *V = NULL;
+  adouble *U = NULL, *V = NULL;
 
   const int r = bspl::M(n, m_iDeg_U)
               + (hasDerivs_isoV_start_D1 ? 1 : 0) + (hasDerivs_isoV_end_D1 ? 1 : 0)

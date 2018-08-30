@@ -109,7 +109,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
   // Check compatibility of curves.
   bool areCompatible = true;
   int ref_degree = 0;
-  std::vector<double> ref_U;
+  std::vector<adouble> ref_U;
   for ( size_t c = 0; c < m_curves.size(); ++c )
   {
     const ptr<bcurve>& crv = m_curves[c];
@@ -139,7 +139,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
           break;
       }
 
-      const std::vector<double>& curr_U = crv->Knots();
+      const std::vector<adouble>& curr_U = crv->Knots();
       //
       if ( curr_U != ref_U )
       {
@@ -159,14 +159,14 @@ bool mobius::geom_SkinSurface::PrepareSections()
   if ( !areCompatible && m_bUnify )
   {
     // Normalize and collect knot vectors.
-    std::vector< std::vector<double> > U_all;
+    std::vector< std::vector<adouble> > U_all;
     for ( size_t c = 0; c < m_curves.size(); ++c )
     {
       // Normalize.
       m_curves[c]->ReparameterizeLinear(0.0, 1.0);
 
       // Get knots.
-      std::vector<double> U = m_curves[c]->Knots();
+      std::vector<adouble> U = m_curves[c]->Knots();
       U_all.push_back(U);
 
 #if defined COUT_DEBUG
@@ -182,7 +182,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
 
     // Compute extension.
     bspl_UnifyKnots Unify;
-    std::vector< std::vector<double> > X = Unify(U_all);
+    std::vector< std::vector<adouble> > X = Unify(U_all);
 
     // Unify knots
     for ( size_t c = 0; c < m_curves.size(); ++c )
@@ -190,7 +190,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
       m_curves[c]->RefineKnots(X[c]);
 
 #if defined COUT_DEBUG
-      const std::vector<double>& U = m_curves[c]->Knots();
+      const std::vector<adouble>& U = m_curves[c]->Knots();
 
       // Dump knots
       std::cout << "Curve [refined] " << (c + 1) << ": ";
@@ -239,7 +239,7 @@ bool mobius::geom_SkinSurface::BuildIsosU()
   }
 
   // Allocate arrays for reper parameters
-  double* params_V = m_alloc.Allocate(K + 1, true);
+  adouble* params_V = m_alloc.Allocate(K + 1, true);
   if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
   {
     m_errCode = ErrCode_CannotSelectParameters;
@@ -312,8 +312,8 @@ bool mobius::geom_SkinSurface::BuildSurface()
     final_poles.push_back( IsoU_Curves[i]->Poles() );
   }
 
-  std::vector<double> U_knots = m_curves[0]->Knots();
-  double *U = m_alloc.Allocate(U_knots.size(), true);
+  std::vector<adouble> U_knots = m_curves[0]->Knots();
+  adouble *U = m_alloc.Allocate(U_knots.size(), true);
   for ( size_t i = 0; i < U_knots.size(); ++i )
     U[i] = U_knots[i];
 

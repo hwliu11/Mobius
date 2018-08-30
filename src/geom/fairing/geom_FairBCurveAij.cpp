@@ -45,11 +45,11 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBCurveAij::geom_FairBCurveAij(const std::vector<double>& U,
+mobius::geom_FairBCurveAij::geom_FairBCurveAij(const std::vector<adouble>& U,
                                                const int                  p,
                                                const int                  i,
                                                const int                  j,
-                                               const double               lambda,
+                                               const adouble               lambda,
                                                ptr<alloc2d>               alloc)
 : geom_FairBCurveCoeff (lambda),
   m_U                  (U),
@@ -61,15 +61,15 @@ mobius::geom_FairBCurveAij::geom_FairBCurveAij(const std::vector<double>& U,
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_FairBCurveAij::Eval(const double u) const
+adouble mobius::geom_FairBCurveAij::Eval(const adouble u) const
 {
   ptr<alloc2d> localAlloc;
 
   const int order = m_iDegree + 1;
-  double    Ni    = 0.0;
-  double    Nj    = 0.0;
-  double    d2Ni  = 0.0;
-  double    d2Nj  = 0.0;
+  adouble    Ni    = 0.0;
+  adouble    Nj    = 0.0;
+  adouble    d2Ni  = 0.0;
+  adouble    d2Nj  = 0.0;
 
   // Find span and index of the first non-vanishing spline.
   bspl_FindSpan FindSpan(m_U, m_iDegree);
@@ -78,7 +78,7 @@ double mobius::geom_FairBCurveAij::Eval(const double u) const
   int I          = FindSpan(u, basisIndex);
 
   // Prepare matrix.
-  double** dN;
+  adouble** dN;
   if ( m_alloc.IsNull() )
   {
     localAlloc = new alloc2d;

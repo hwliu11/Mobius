@@ -46,9 +46,9 @@ mobius::geom_PolyLine::~geom_PolyLine()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_PolyLine::Bounds(double& xMin, double& xMax,
-                                   double& yMin, double& yMax,
-                                   double& zMin, double& zMax) const
+void mobius::geom_PolyLine::Bounds(adouble& xMin, adouble& xMax,
+                                   adouble& yMin, adouble& yMax,
+                                   adouble& zMin, adouble& zMax) const
 {
   // Even though it is possible to reduce infinite space to something more
   // representative for polyline, we do not do it as we do not have any

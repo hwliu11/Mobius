@@ -55,15 +55,15 @@ public:
   mobiusGeom_EXPORT
     geom_FairBSurfAkl(const int                                   k,
                       const int                                   l,
-                      const double                                lambda,
+                      const adouble                                lambda,
                       const std::vector< ptr<geom_FairBSurfNk> >& Nk);
 
 public:
 
   //! Evaluates function.
   //! \return value.
-  mobiusGeom_EXPORT virtual double
-    Eval(const double u, const double v) const;
+  mobiusGeom_EXPORT virtual adouble
+    Eval(const adouble u, const adouble v) const;
 
 public:
 

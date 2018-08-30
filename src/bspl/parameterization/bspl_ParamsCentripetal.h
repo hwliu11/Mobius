@@ -76,7 +76,7 @@ public:
   //! \param t [out] calculated parameter values.
   //! \return error code.
   static ErrCode Calculate(const std::vector<xyz>& Q,
-                           double*                 t)
+                           adouble*                 t)
   {
     const int len = (int) Q.size();
     if ( len == 1 )
@@ -86,7 +86,7 @@ public:
     t[0] = 0.0;
 
     // Calculate d (by Lee's formula)
-    double d = 0.0;
+    adouble d = 0.0;
     for ( int idx = 1; idx < len; ++idx )
     {
       xyz QQ =  Q.at(idx) - Q.at(idx-1);
@@ -115,8 +115,8 @@ public:
   //! \param v [out] calculated parameter values in V direction.
   //! \return error code.
   static ErrCode Calculate(const std::vector< std::vector<xyz> >& Q,
-                           double*                                u,
-                           double*                                v)
+                           adouble*                                u,
+                           adouble*                                v)
   {
     const int n = (int) Q.size() - 1;
     if ( n <= 0 )
@@ -126,16 +126,16 @@ public:
     if ( m <= 0 )
       return ErrCode_InvalidGridDimensions;
 
-    core_HeapAlloc<double> alloc;
-    core_HeapAlloc2D<double> alloc2d;
+    core_HeapAlloc<adouble> alloc;
+    core_HeapAlloc2D<adouble> alloc2d;
 
     //-----------------------------------
     // Calculate lengths of each isoline
     //-----------------------------------
 
     // Arrays for polyline lengths
-    double* d_isoU = alloc.Allocate(n + 1, false);
-    double* d_isoV = alloc.Allocate(m + 1, false);
+    adouble* d_isoU = alloc.Allocate(n + 1, false);
+    adouble* d_isoV = alloc.Allocate(m + 1, false);
 
     // Loop over the V direction to calculate the sum of square roots
     // for each V-isoline
@@ -166,8 +166,8 @@ public:
     //----------------------------------------------------
 
     // Parameters per single isolines
-    double** param_isoU = alloc2d.Allocate(n + 1, m + 1, false);
-    double** param_isoV = alloc2d.Allocate(n + 1, m + 1, false);
+    adouble** param_isoU = alloc2d.Allocate(n + 1, m + 1, false);
+    adouble** param_isoV = alloc2d.Allocate(n + 1, m + 1, false);
 
     // Calculate reper V parameters. Now loop over the V direction (columns)
     for ( int j = 0; j <= m; ++j )
@@ -213,7 +213,7 @@ public:
     // Intermediate parameters
     for ( int i = 1; i < n; ++i )
     {
-      double sum_overV = 0.0;
+      adouble sum_overV = 0.0;
       for ( int j = 0; j <= m; ++j )
         sum_overV += param_isoV[i][j];
 
@@ -233,7 +233,7 @@ public:
     // Intermediate parameters
     for ( int j = 1; j < m; ++j )
     {
-      double sum_overU = 0.0;
+      adouble sum_overU = 0.0;
       for ( int i = 0; i <= n; ++i )
         sum_overU += param_isoU[i][j];
 
@@ -254,7 +254,7 @@ public:
   //! \param v [out] calculated parameter values in V direction.
   //! \return error code.
   static ErrCode Calculate_V(const std::vector< std::vector<xyz> >& Q,
-                             double*                                v)
+                             adouble*                                v)
   {
     const int n = (int) Q.size() - 1;
     if ( n <= 0 )
@@ -264,15 +264,15 @@ public:
     if ( m <= 0 )
       return ErrCode_InvalidGridDimensions;
 
-    core_HeapAlloc<double> alloc;
-    core_HeapAlloc2D<double> alloc2d;
+    core_HeapAlloc<adouble> alloc;
+    core_HeapAlloc2D<adouble> alloc2d;
 
     //-----------------------------------
     // Calculate lengths of each isoline
     //-----------------------------------
 
     // Arrays for polyline lengths
-    double* d_isoU = alloc.Allocate(n + 1, false);
+    adouble* d_isoU = alloc.Allocate(n + 1, false);
 
     // Loop over the U direction to calculate the sum of chord lengths
     // for each U-isoline
@@ -294,7 +294,7 @@ public:
     //----------------------------------------------------
 
     // Parameters per single isolines
-    double** param_isoU = alloc2d.Allocate(n + 1, m + 1, false);
+    adouble** param_isoU = alloc2d.Allocate(n + 1, m + 1, false);
 
     // Calculate reper V parameters. Now loop over the U direction (rows)
     for ( int i = 0; i <= n; ++i )
@@ -323,7 +323,7 @@ public:
     // Intermediate parameters
     for ( int j = 1; j < m; ++j )
     {
-      double sum_overU = 0.0;
+      adouble sum_overU = 0.0;
       for ( int i = 0; i <= n; ++i )
         sum_overU += param_isoU[i][j];
 

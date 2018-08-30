@@ -45,8 +45,8 @@ class bspl_UnifyKnots
 {
 public:
 
-  mobiusBSpl_EXPORT std::vector< std::vector<double> >
-    operator()(std::vector< std::vector<double> >& knot_vectors) const;
+  mobiusBSpl_EXPORT std::vector< std::vector<adouble> >
+    operator()(std::vector< std::vector<adouble> >& knot_vectors) const;
 
 };
 

@@ -48,7 +48,7 @@ mobius::bspl_KnotMultiset::bspl_KnotMultiset(const bspl_KnotMultiset& U_mset)
 //! Constructor. Creates multiset under the given raw knot vector.
 //! \param U [in] original knot vector with multiplicities as repetitions of
 //!               the corresponding values.
-mobius::bspl_KnotMultiset::bspl_KnotMultiset(const std::vector<double>& U)
+mobius::bspl_KnotMultiset::bspl_KnotMultiset(const std::vector<adouble>& U)
 {
   if ( !U.size() )
     return;
@@ -214,9 +214,9 @@ mobius::bspl_KnotMultiset
 
 //! Converts multiset to ordinary vector.
 //! \return ordinary vector.
-std::vector<double> mobius::bspl_KnotMultiset::Convert() const
+std::vector<adouble> mobius::bspl_KnotMultiset::Convert() const
 {
-  std::vector<double> result;
+  std::vector<adouble> result;
   for ( size_t i = 0; i < m_mset.size(); ++i )
   {
     for ( int j = 0; j < m_mset[i].m; ++j )
@@ -230,7 +230,7 @@ std::vector<double> mobius::bspl_KnotMultiset::Convert() const
 //! \param u     [in] value to search for.
 //! \param found [in] found element (if any).
 //! \return index of the element or -1 if nothing was found.
-int mobius::bspl_KnotMultiset::find(const double u,
+int mobius::bspl_KnotMultiset::find(const adouble u,
                                     elem&        found) const
 {
   int res_idx = -1;

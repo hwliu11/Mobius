@@ -40,9 +40,9 @@ mobius::geom_Point::geom_Point() : geom_Geometry()
 //! \param x [in] x coordinate.
 //! \param y [in] y coordinate.
 //! \param z [in] z coordinate.
-mobius::geom_Point::geom_Point(const double x,
-                               const double y,
-                               const double z)
+mobius::geom_Point::geom_Point(const adouble x,
+                               const adouble y,
+                               const adouble z)
 : geom_Geometry()
 {
   m_XYZ.SetX(x);
@@ -69,9 +69,9 @@ mobius::geom_Point::~geom_Point()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_Point::Bounds(double& xMin, double& xMax,
-                                double& yMin, double& yMax,
-                                double& zMin, double& zMax) const
+void mobius::geom_Point::Bounds(adouble& xMin, adouble& xMax,
+                                adouble& yMin, adouble& yMax,
+                                adouble& zMin, adouble& zMax) const
 {
   // Bounding box is degenerated
   xMin = xMax = m_XYZ.X();
@@ -83,7 +83,7 @@ void mobius::geom_Point::Bounds(double& xMin, double& xMax,
 //! \param coeff [in] scalar value to multiply point by.
 //! \return resulting point.
 mobius::geom_Point
-  mobius::geom_Point::Multiplied(const double coeff) const
+  mobius::geom_Point::Multiplied(const adouble coeff) const
 {
   return this->operator*(coeff);
 }
@@ -102,7 +102,7 @@ mobius::geom_Point&
 //! \param coeff [in] scalar value to multiply point by.
 //! \return resulting point.
 mobius::geom_Point
-  mobius::geom_Point::operator*(const double coeff) const
+  mobius::geom_Point::operator*(const adouble coeff) const
 {
   geom_Point P(*this);
   P.m_XYZ *= coeff;

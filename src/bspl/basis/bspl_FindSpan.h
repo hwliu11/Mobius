@@ -61,16 +61,16 @@ class bspl_FindSpan
 public:
 
   mobiusBSpl_EXPORT
-    bspl_FindSpan(const std::vector<double>& U,
+    bspl_FindSpan(const std::vector<adouble>& U,
                   const int                  p);
 
 public:
 
   mobiusBSpl_EXPORT int
-    operator()(const double u) const;
+    operator()(const adouble u) const;
 
   mobiusBSpl_EXPORT int
-    operator()(const double u,
+    operator()(const adouble u,
                int&         firstNonZeroIndex) const;
 
 private:
@@ -79,7 +79,7 @@ private:
 
 protected:
 
-  const std::vector<double>& m_U;    //!< Reference to knot vector.
+  const std::vector<adouble>& m_U;    //!< Reference to knot vector.
   int                        m_iDeg; //!< Degree.
 
 };

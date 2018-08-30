@@ -50,8 +50,8 @@ public:
   //! given parameter.
   //! \param u [in] parameter value to query the scalar law function.
   //! \return resulting value.
-  virtual double
-    Eval(const double u) const = 0;
+  virtual adouble
+    Eval(const adouble u) const = 0;
 
 };
 

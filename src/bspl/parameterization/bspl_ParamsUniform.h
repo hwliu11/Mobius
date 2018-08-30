@@ -67,7 +67,7 @@ public:
   //! \param t [out] calculated parameter values.
   //! \return error code.
   static ErrCode Calculate(const int n,
-                           double*   t)
+                           adouble*   t)
   {
     if ( n < 2 )
       return ErrCode_CannotProceedWithSolePoint; // Cannot proceed with a sole point
@@ -78,7 +78,7 @@ public:
     // Calculate next parameter
     for ( int k = 1; k < n; ++k )
     {
-      t[k] = (double) k / n;
+      t[k] = (adouble) k / n;
     }
 
     // Last parameter

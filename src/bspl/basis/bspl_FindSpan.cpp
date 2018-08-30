@@ -41,7 +41,7 @@
 //! Initializes the tool with all necessary B-spline properties.
 //! \param[in] U knot vector.
 //! \param[in] p degree of the corresponding basis splines.
-mobius::bspl_FindSpan::bspl_FindSpan(const std::vector<double>& U,
+mobius::bspl_FindSpan::bspl_FindSpan(const std::vector<adouble>& U,
                                      const int                  p)
 : m_U(U), m_iDeg(p)
 {}
@@ -51,7 +51,7 @@ mobius::bspl_FindSpan::bspl_FindSpan(const std::vector<double>& U,
 //! Finds the target span index by binary search.
 //! \param[in] u target parameter.
 //! \return span index.
-int mobius::bspl_FindSpan::operator()(const double u) const
+int mobius::bspl_FindSpan::operator()(const adouble u) const
 {
   int firstNonZeroIndex = 0; // Unused.
   return this->operator()(u, firstNonZeroIndex);
@@ -63,7 +63,7 @@ int mobius::bspl_FindSpan::operator()(const double u) const
 //! \param[in]  u                 parameter in question.
 //! \param[out] firstNonZeroIndex index of the first non-zero basis spline.
 //! \return span index.
-int mobius::bspl_FindSpan::operator()(const double u,
+int mobius::bspl_FindSpan::operator()(const adouble u,
                                       int&         firstNonZeroIndex) const
 {
   const int nU = (int) m_U.size();
@@ -102,7 +102,7 @@ int mobius::bspl_FindSpan::operator()(const double u,
       break;
     }
 
-    const double mid_u = m_U[mid_idx];
+    const adouble mid_u = m_U[mid_idx];
 
 #if defined COUT_DEBUG
     std::cout << "\tmid_u = " << mid_u << std::endl;

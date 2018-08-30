@@ -41,9 +41,9 @@
 //! \param r     [in] radius of the hole.
 //! \param type  [in] type of iso (U or V).
 //! \param param [in] parameter value to freeze.
-mobius::geom_KleinIsoCurve::geom_KleinIsoCurve(const double  r,
+mobius::geom_KleinIsoCurve::geom_KleinIsoCurve(const adouble  r,
                                                const IsoType type,
-                                               const double  param)
+                                               const adouble  param)
 : geom_Curve(), m_fR(r), m_type(type), m_fParam(param)
 {
 }
@@ -59,9 +59,9 @@ mobius::geom_KleinIsoCurve::~geom_KleinIsoCurve()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_KleinIsoCurve::Bounds(double& xMin, double& xMax,
-                                        double& yMin, double& yMax,
-                                        double& zMin, double& zMax) const
+void mobius::geom_KleinIsoCurve::Bounds(adouble& xMin, adouble& xMax,
+                                        adouble& yMin, adouble& yMax,
+                                        adouble& zMin, adouble& zMax) const
 {
   xMin = -m_fR; xMax = m_fR;
   yMin = -m_fR; yMax = m_fR;
@@ -69,13 +69,13 @@ void mobius::geom_KleinIsoCurve::Bounds(double& xMin, double& xMax,
 }
 
 //! \return min parameter.
-double mobius::geom_KleinIsoCurve::MinParameter() const
+adouble mobius::geom_KleinIsoCurve::MinParameter() const
 {
   return 0.0;
 }
 
 //! \return max parameter.
-double mobius::geom_KleinIsoCurve::MaxParameter() const
+adouble mobius::geom_KleinIsoCurve::MaxParameter() const
 {
   return 2*M_PI;
 }
@@ -83,14 +83,14 @@ double mobius::geom_KleinIsoCurve::MaxParameter() const
 //! Evaluates Klein iso-curve.
 //! \param p [in] parameter value to evaluate curve for.
 //! \param C [out] 3D point evaluated for the given parameter.
-void mobius::geom_KleinIsoCurve::Eval(const double p,
+void mobius::geom_KleinIsoCurve::Eval(const adouble p,
                                       xyz&         C) const
 {
-  double u = ( (m_type == Iso_U) ? m_fParam : p );
-  double v = ( (m_type == Iso_V) ? m_fParam : p );
+  adouble u = ( (m_type == Iso_U) ? m_fParam : p );
+  adouble v = ( (m_type == Iso_V) ? m_fParam : p );
 
   // Evaluate surface with fixed parameter
-  double x, y, z;
+  adouble x, y, z;
   geom_KleinBottle::Eval(m_fR, u, v, x, y, z);
 
   // Set output parameter

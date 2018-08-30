@@ -41,7 +41,7 @@ mobius::core_UV::core_UV()
 //! Complete constructor.
 //! \param u [in] first coordinate.
 //! \param v [in] second coordinate.
-mobius::core_UV::core_UV(const double u, const double v)
+mobius::core_UV::core_UV(const adouble u, const adouble v)
 {
   m_fU = u;
   m_fV = v;
@@ -64,14 +64,14 @@ mobius::core_UV::~core_UV()
 
 //! Returns modulus of the point's radius vector.
 //! \return modulus.
-inline double mobius::core_UV::Modulus() const
+inline adouble mobius::core_UV::Modulus() const
 {
   return sqrt( this->SquaredModulus() );
 }
 
 //! Returns squared modulus of the point's radius vector.
 //! \return modulus.
-inline double mobius::core_UV::SquaredModulus() const
+inline adouble mobius::core_UV::SquaredModulus() const
 {
   return m_fU*m_fU + m_fV*m_fV;
 }
@@ -79,7 +79,7 @@ inline double mobius::core_UV::SquaredModulus() const
 //! Calculates dot product between this and another vector.
 //! \param UV [in] another vector.
 //! \return dot product.
-inline double mobius::core_UV::Dot(const core_UV& UV) const
+inline adouble mobius::core_UV::Dot(const core_UV& UV) const
 {
   return m_fU*UV.m_fU + m_fV*UV.m_fV;
 }
@@ -97,7 +97,7 @@ inline mobius::core_UV& mobius::core_UV::operator=(const core_UV& UV)
 //! Multiplies copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return resulting point.
-inline mobius::core_UV mobius::core_UV::operator*(const double coeff) const
+inline mobius::core_UV mobius::core_UV::operator*(const adouble coeff) const
 {
   core_UV UV_Copy(*this);
   UV_Copy *= coeff;
@@ -107,7 +107,7 @@ inline mobius::core_UV mobius::core_UV::operator*(const double coeff) const
 //! Multiplies this point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return this point multiplied by the passed scalar.
-inline mobius::core_UV mobius::core_UV::operator*=(const double coeff)
+inline mobius::core_UV mobius::core_UV::operator*=(const adouble coeff)
 {
   this->m_fU *= coeff;
   this->m_fV *= coeff;
@@ -117,7 +117,7 @@ inline mobius::core_UV mobius::core_UV::operator*=(const double coeff)
 //! Divides copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to divide point by.
 //! \return resulting point.
-inline mobius::core_UV mobius::core_UV::operator/(const double coeff) const
+inline mobius::core_UV mobius::core_UV::operator/(const adouble coeff) const
 {
   core_UV UV_Copy(*this);
   UV_Copy /= coeff;
@@ -127,7 +127,7 @@ inline mobius::core_UV mobius::core_UV::operator/(const double coeff) const
 //! Divides this point by the passed scalar value.
 //! \param coeff [in] scalar value to divide point by.
 //! \return this point multiplied by the passed scalar.
-inline mobius::core_UV mobius::core_UV::operator/=(const double coeff)
+inline mobius::core_UV mobius::core_UV::operator/=(const adouble coeff)
 {
   this->m_fU /= coeff;
   this->m_fV /= coeff;

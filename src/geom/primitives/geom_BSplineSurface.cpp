@@ -70,12 +70,12 @@ public:
   //! \param[in] u U parameter value.
   //! \param[in] v V parameter value.
   //! \return evaluated function.
-  virtual double Eval(const double u, const double v) const
+  virtual adouble Eval(const adouble u, const adouble v) const
   {
     xyz P, dU, dV, d2U, d2V, d2UV;
     m_surface->Eval_D2(u, v, P, dU, dV, d2U, d2V, d2UV);
 
-    const double E = d2U.Dot(d2U) + 2*d2UV.Dot(d2UV) + d2V.Dot(d2V);
+    const double E = d2U.Dot(d2U).getValue() + 2*d2UV.Dot(d2UV).getValue() + d2V.Dot(d2V).getValue();
     return E;
   }
 
@@ -106,19 +106,19 @@ protected:
 //! \param p     [in] degree in U dimension.
 //! \param q     [in] degree in V dimension.
 mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                                                 const double*                          U,
-                                                 const double*                          V,
+                                                 const adouble*                          U,
+                                                 const adouble*                          V,
                                                  const int                              nU,
                                                  const int                              nV,
                                                  const int                              p,
                                                  const int                              q)
 : geom_Surface()
 {
-  std::vector<double> Uvec;
+  std::vector<adouble> Uvec;
   for ( size_t i = 0; i < nU; ++i )
     Uvec.push_back(U[i]);
 
-  std::vector<double> Vvec;
+  std::vector<adouble> Vvec;
   for ( size_t i = 0; i < nV; ++i )
     Vvec.push_back(V[i]);
 
@@ -134,8 +134,8 @@ mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<
 //! \param p     [in] degree in U dimension.
 //! \param q     [in] degree in V dimension.
 mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                                                 const std::vector<double>&             U,
-                                                 const std::vector<double>&             V,
+                                                 const std::vector<adouble>&             U,
+                                                 const std::vector<adouble>&             V,
                                                  const int                              p,
                                                  const int                              q)
 : geom_Surface()
@@ -186,13 +186,13 @@ void mobius::geom_BSplineSurface::Dump(std::ostream* out) const
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_BSplineSurface::Bounds(double& xMin, double& xMax,
-                                         double& yMin, double& yMax,
-                                         double& zMin, double& zMax) const
+void mobius::geom_BSplineSurface::Bounds(adouble& xMin, adouble& xMax,
+                                         adouble& yMin, adouble& yMax,
+                                         adouble& zMin, adouble& zMax) const
 {
-  double x_min = DBL_MAX, x_max = -DBL_MAX;
-  double y_min = DBL_MAX, y_max = -DBL_MAX;
-  double z_min = DBL_MAX, z_max = -DBL_MAX;
+  adouble x_min = DBL_MAX, x_max = -DBL_MAX;
+  adouble y_min = DBL_MAX, y_max = -DBL_MAX;
+  adouble z_min = DBL_MAX, z_max = -DBL_MAX;
 
   // B-spline surface is fully contained in its control grid, so we can take
   // it as a rough solution
@@ -202,7 +202,7 @@ void mobius::geom_BSplineSurface::Bounds(double& xMin, double& xMax,
     for ( int j = 0; j < (int) uLine.size(); ++j )
     {
       const xyz& P = uLine.at(j);
-      const double x = P.X(), y = P.Y(), z = P.Z();
+      const adouble x = P.X(), y = P.Y(), z = P.Z();
 
       if ( x > x_max )
         x_max = x;
@@ -232,7 +232,7 @@ void mobius::geom_BSplineSurface::Bounds(double& xMin, double& xMax,
 
 //! Returns first knot in U dimension.
 //! \return first knot.
-double mobius::geom_BSplineSurface::MinParameter_U() const
+adouble mobius::geom_BSplineSurface::MinParameter_U() const
 {
   return m_U[0];
 }
@@ -241,7 +241,7 @@ double mobius::geom_BSplineSurface::MinParameter_U() const
 
 //! Returns last knot in U dimension.
 //! \return last knot.
-double mobius::geom_BSplineSurface::MaxParameter_U() const
+adouble mobius::geom_BSplineSurface::MaxParameter_U() const
 {
   return m_U[m_U.size()-1];
 }
@@ -250,7 +250,7 @@ double mobius::geom_BSplineSurface::MaxParameter_U() const
 
 //! Returns first knot in V dimension.
 //! \return first knot.
-double mobius::geom_BSplineSurface::MinParameter_V() const
+adouble mobius::geom_BSplineSurface::MinParameter_V() const
 {
   return m_V[0];
 }
@@ -259,7 +259,7 @@ double mobius::geom_BSplineSurface::MinParameter_V() const
 
 //! Returns last knot in V dimension.
 //! \return last knot.
-double mobius::geom_BSplineSurface::MaxParameter_V() const
+adouble mobius::geom_BSplineSurface::MaxParameter_V() const
 {
   return m_V[m_V.size()-1];
 }
@@ -272,8 +272,8 @@ double mobius::geom_BSplineSurface::MaxParameter_V() const
 //! \param u [in]  U parameter value to evaluate surface for.
 //! \param v [in]  V parameter value to evaluate surface for.
 //! \param S [out] 3D point corresponding to the given parameter pair.
-void mobius::geom_BSplineSurface::Eval(const double u,
-                                       const double v,
+void mobius::geom_BSplineSurface::Eval(const adouble u,
+                                       const adouble v,
                                        xyz&         S) const
 {
   // Find spans the passed u and v fall into
@@ -289,8 +289,8 @@ void mobius::geom_BSplineSurface::Eval(const double u,
 
   bspl_EffectiveN EffectiveN;
   //
-  double N_u[mobiusBSpl_MaxDegree];
-  double N_v[mobiusBSpl_MaxDegree];
+  adouble N_u[mobiusBSpl_MaxDegree];
+  adouble N_v[mobiusBSpl_MaxDegree];
   //
   EffectiveN(u, m_U, m_iDegU, span_u, N_u);
   EffectiveN(v, m_V, m_iDegV, span_v, N_v);
@@ -320,8 +320,8 @@ void mobius::geom_BSplineSurface::Eval(const double u,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_BSplineSurface::Eval_D1(const double u,
-                                          const double v,
+void mobius::geom_BSplineSurface::Eval_D1(const adouble u,
+                                          const adouble v,
                                           xyz&         S,
                                           xyz&         dU,
                                           xyz&         dV) const
@@ -335,8 +335,8 @@ void mobius::geom_BSplineSurface::Eval_D1(const double u,
 
   ptr<alloc2d> localAlloc = new alloc2d;
   //
-  double** dNu = localAlloc->Allocate(2, m_iDegU + 1, true);
-  double** dNv = localAlloc->Allocate(2, m_iDegV + 1, true);
+  adouble** dNu = localAlloc->Allocate(2, m_iDegU + 1, true);
+  adouble** dNv = localAlloc->Allocate(2, m_iDegV + 1, true);
 
   // Evaluate derivatives of B-spline basis functions
   bspl_EffectiveNDers NDers(NULL, -1);
@@ -374,8 +374,8 @@ void mobius::geom_BSplineSurface::Eval_D1(const double u,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_BSplineSurface::Eval_D2(const double u,
-                                          const double v,
+void mobius::geom_BSplineSurface::Eval_D2(const adouble u,
+                                          const adouble v,
                                           xyz&         S,
                                           xyz&         dU,
                                           xyz&         dV,
@@ -389,7 +389,7 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
 {
   ptr<alloc2d> localAlloc;
 
-  double** dNu, **dNv;
+  adouble** dNu, **dNv;
   if ( alloc.IsNull() )
   {
     localAlloc = new alloc2d;
@@ -467,10 +467,10 @@ mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const
 //! \param u [in] parameter value to extract isoparametric curve for.
 //! \return isoline.
 mobius::ptr<mobius::bcurve>
-  mobius::geom_BSplineSurface::Iso_U(const double u) const
+  mobius::geom_BSplineSurface::Iso_U(const adouble u) const
 {
   // Heap allocator
-  core_HeapAlloc<double> Alloc;
+  core_HeapAlloc<adouble> Alloc;
 
   // Find span the passed u falls into
   bspl_FindSpan FindSpan(m_U, m_iDegU);
@@ -482,7 +482,7 @@ mobius::ptr<mobius::bcurve>
 
   // Evaluate effective B-spline basis functions
   bspl_EffectiveN EffectiveN;
-  double* N_u = Alloc.Allocate(m_iDegU + 1, true);
+  adouble* N_u = Alloc.Allocate(m_iDegU + 1, true);
   EffectiveN(u, m_U, m_iDegU, span_u, N_u);
   const int u_first_idx = span_u - m_iDegU;
 
@@ -513,10 +513,10 @@ mobius::ptr<mobius::bcurve>
 //! \param v [in] parameter value to extract isoparametric curve for.
 //! \return isoline.
 mobius::ptr<mobius::bcurve>
-  mobius::geom_BSplineSurface::Iso_V(const double v) const
+  mobius::geom_BSplineSurface::Iso_V(const adouble v) const
 {
   // Heap allocator
-  core_HeapAlloc<double> Alloc;
+  core_HeapAlloc<adouble> Alloc;
 
   // Find span the passed u falls into
   bspl_FindSpan FindSpan(m_V, m_iDegV);
@@ -528,7 +528,7 @@ mobius::ptr<mobius::bcurve>
 
   // Evaluate effective B-spline basis functions
   bspl_EffectiveN EffectiveN;
-  double* N_v = Alloc.Allocate(m_iDegV + 1, true);
+  adouble* N_v = Alloc.Allocate(m_iDegV + 1, true);
   EffectiveN(v, m_V, m_iDegV, span_v, N_v);
   const int v_first_idx = span_v - m_iDegV;
 
@@ -555,7 +555,7 @@ mobius::ptr<mobius::bcurve>
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
+adouble mobius::geom_BSplineSurface::ComputeBendingEnergy() const
 {
   geom_ThinPlateEnergies func(this);
 
@@ -564,7 +564,7 @@ double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
   const int NUM_GAUSS_PT_V = 2*m_iDegV - 1;
 
   // Integrate in each span individually for better accuracy.
-  double result = 0;
+  adouble result = 0;
   for ( size_t i = 0; i < m_U.size() - 1; ++i )
   {
     if ( m_U[i] == m_U[i+1] ) continue; // Skip multiple knots.
@@ -574,10 +574,10 @@ double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
       if ( m_V[j] == m_V[j+1] ) continue; // Skip multiple knots.
 
       // 6-points integration in each knot span.
-      const double
+      const adouble
         gaussVal = core_Integral::gauss::Compute(&func,
-                                                 m_U[i], m_U[i+1],
-                                                 m_V[j], m_V[j+1],
+                                                 m_U[i].getValue(), m_U[i+1].getValue(),
+                                                 m_V[j].getValue(), m_V[j+1].getValue(),
                                                  NUM_GAUSS_PT_U, NUM_GAUSS_PT_V);
       //
       result += gaussVal;
@@ -596,8 +596,8 @@ double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
 //! \param p     [in] degree of the B-spline basis functions in U dimension.
 //! \param q     [in] degree of the B-spline basis functions in V dimension.
 void mobius::geom_BSplineSurface::init(const std::vector< std::vector<xyz> >& Poles,
-                                       const std::vector<double>&             U,
-                                       const std::vector<double>&             V,
+                                       const std::vector<adouble>&             U,
+                                       const std::vector<adouble>&             V,
                                        const int                              p,
                                        const int                              q)
 {

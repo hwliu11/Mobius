@@ -45,7 +45,7 @@ class geom_Circle : public geom_Curve
 public:
 
   mobiusGeom_EXPORT
-    geom_Circle( const double                  radius,
+    geom_Circle( const adouble                  radius,
                  const core_IsoTransformChain& tChain = core_IsoTransformChain() );
 
   mobiusGeom_EXPORT virtual
@@ -54,27 +54,27 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter() const;
 
   mobiusGeom_EXPORT virtual void
-    Eval(const double u,
+    Eval(const adouble u,
          xyz&         P) const;
 
 public:
 
   //! Accessor for the radius.
   //! \return radius of the circle.
-  double Radius() const
+  adouble Radius() const
   {
     return m_fRadius;
   }
@@ -89,7 +89,7 @@ public:
 private:
 
   //! Radius of the circle.
-  double m_fRadius;
+  adouble m_fRadius;
 
 };
 

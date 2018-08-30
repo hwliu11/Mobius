@@ -49,7 +49,7 @@ public:
   //! Handy structure to associate knot value with its multiplicity.
   struct elem
   {
-    double u; //!< Parameter value.
+    adouble u; //!< Parameter value.
     int    m; //!< Multiplicity.
 
     //! Default constructor.
@@ -58,7 +58,7 @@ public:
     //! Complete constructor.
     //! \param _knot [in] knot value.
     //! \param _mult [in] multiplicity.
-    elem(const double _knot,
+    elem(const adouble _knot,
          const int    _mult) : u(_knot), m(_mult) {}
   };
 
@@ -72,7 +72,7 @@ public:
     bspl_KnotMultiset(const bspl_KnotMultiset& U_mset);
 
   mobiusBSpl_EXPORT
-    bspl_KnotMultiset(const std::vector<double>& U);
+    bspl_KnotMultiset(const std::vector<adouble>& U);
 
 public:
 
@@ -103,7 +103,7 @@ public:
   mobiusBSpl_EXPORT bspl_KnotMultiset
     operator^(const bspl_KnotMultiset& V) const;
 
-  mobiusBSpl_EXPORT std::vector<double>
+  mobiusBSpl_EXPORT std::vector<adouble>
     Convert() const;
 
 public:
@@ -124,11 +124,11 @@ public:
   //! Adds new knot to the end of multiset. No sorting is done.
   //! \param u [in] knot value.
   //! \param m [in] multiplicity.
-  void AddKnot(const double u, const int m) { m_mset.push_back( elem(u, m) ); }
+  void AddKnot(const adouble u, const int m) { m_mset.push_back( elem(u, m) ); }
 
 private:
 
-  int find(const double u,
+  int find(const adouble u,
            elem&        found) const;
 
 private:

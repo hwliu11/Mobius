@@ -37,7 +37,7 @@
 //! Constructor.
 //! \param U   [in] knot vector.
 //! \param deg [in] degree of B-spline basis function being discretized.
-mobius::bspl_NDiscrete::bspl_NDiscrete(const std::vector<double>& U,
+mobius::bspl_NDiscrete::bspl_NDiscrete(const std::vector<adouble>& U,
                                        const int                  deg)
 {
   m_U       = U;
@@ -50,7 +50,7 @@ mobius::bspl_NDiscrete::bspl_NDiscrete(const std::vector<double>& U,
 //! \param delta    [in] discretization delta.
 //! \param strategy [in] discretization strategy.
 void mobius::bspl_NDiscrete::Perform(const int      idx,
-                                     const double   delta,
+                                     const adouble   delta,
                                      const Strategy strategy)
 {
   m_bIsDone = false;
@@ -69,14 +69,14 @@ void mobius::bspl_NDiscrete::Perform(const int      idx,
 
 //! Returns discretized abscissa.
 //! \return abscissa values.
-const std::vector<double>& mobius::bspl_NDiscrete::Abscissa() const
+const std::vector<adouble>& mobius::bspl_NDiscrete::Abscissa() const
 {
   return m_abscissa;
 }
 
 //! Returns discretized function values.
 //! \return function values.
-const std::vector<double>& mobius::bspl_NDiscrete::Values() const
+const std::vector<adouble>& mobius::bspl_NDiscrete::Values() const
 {
   return m_values;
 }
@@ -93,12 +93,12 @@ bool mobius::bspl_NDiscrete::IsDone() const
 //! \param idx   [in] index of the basis B-spline function to discretize.
 //! \param delta [in] discretization delta.
 void mobius::bspl_NDiscrete::performUniformAbscissa(const int    idx,
-                                                    const double delta)
+                                                    const adouble delta)
 {
-  const double uMin = m_U[0];
-  const double uMax = m_U[m_U.size() - 1];
+  const adouble uMin = m_U[0];
+  const adouble uMax = m_U[m_U.size() - 1];
 
-  double uNext = uMin;
+  adouble uNext = uMin;
   bspl_N N;
   do
   {
@@ -106,7 +106,7 @@ void mobius::bspl_NDiscrete::performUniformAbscissa(const int    idx,
       uNext = uMax; // Just to slip to the end point (no matter how, but
                     // it should not be missed)
 
-    const double val = N(uNext, m_U, m_iDegree, idx);
+    const adouble val = N(uNext, m_U, m_iDegree, idx);
     m_values.push_back(val);
     m_abscissa.push_back(uNext);
     uNext += delta;
@@ -123,7 +123,7 @@ void mobius::bspl_NDiscrete::performUniformAbscissa(const int    idx,
 //! \param idx   [in] index of the basis B-spline function to discretize.
 //! \param delta [in] discretization delta.
 void mobius::bspl_NDiscrete::performUniformChord(const int /*idx*/,
-                                                 const double /*delta*/)
+                                                 const adouble /*delta*/)
 {
   // TODO: NYI
 }

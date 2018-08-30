@@ -49,11 +49,11 @@
 //! \return true in case of success, false -- otherwise.
 bool mobius::bspl_RefineKnots::operator()(const int                  n,
                                           const int                  p,
-                                          const std::vector<double>& U,
+                                          const std::vector<adouble>& U,
                                           const std::vector<xyz>&    Pw,
-                                          const double*              X,
+                                          const adouble*              X,
                                           const int                  r,
-                                          std::vector<double>&       Ubar,
+                                          std::vector<adouble>&       Ubar,
                                           std::vector<xyz>&          Qw) const
 {
   const int m  = n + p + 1;
@@ -88,7 +88,7 @@ bool mobius::bspl_RefineKnots::operator()(const int                  n,
     for ( int l = 1; l <= p; ++l )
     {
       const int ind   = k - p + l;
-      double    alpha = Ubar[k + l] - X[j];
+      adouble    alpha = Ubar[k + l] - X[j];
 
       if ( fabs(alpha) == 0.0 )
         Qw[ind - 1] = Qw[ind];

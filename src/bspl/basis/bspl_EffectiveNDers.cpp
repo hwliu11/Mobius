@@ -44,12 +44,12 @@
 //! \param ders   [out] evaluated functions. Note that the invoker code
 //!                     must allocate memory for this array. Its dimension is
 //!                     (p + 1)*(k + 1).
-void mobius::bspl_EffectiveNDers::operator()(const double               u,
-                                             const std::vector<double>& U,
+void mobius::bspl_EffectiveNDers::operator()(const adouble               u,
+                                             const std::vector<adouble>& U,
                                              const int                  p,
                                              const int                  span_i,
                                              const int                  order,
-                                             double**                   ders) const
+                                             adouble**                   ders) const
 {
   ptr<alloc2d> localAlloc;
 
@@ -57,12 +57,12 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   //
   // - left[] and right[]: to store knot differences.
   // - ndu[][]:            to store working matrix.
-  double left[mobiusBSpl_MaxDegree], right[mobiusBSpl_MaxDegree];
-  double ndu[mobiusBSpl_MaxDegree][mobiusBSpl_MaxDegree];
+  adouble left[mobiusBSpl_MaxDegree], right[mobiusBSpl_MaxDegree];
+  adouble ndu[mobiusBSpl_MaxDegree][mobiusBSpl_MaxDegree];
   //
-  memset(left,  0, sizeof(double)*mobiusBSpl_MaxDegree);
-  memset(right, 0, sizeof(double)*mobiusBSpl_MaxDegree);
-  memset(ndu,   0, sizeof(double)*mobiusBSpl_MaxDegree*mobiusBSpl_MaxDegree);
+  memset(left,  0, sizeof(adouble)*mobiusBSpl_MaxDegree);
+  memset(right, 0, sizeof(adouble)*mobiusBSpl_MaxDegree);
+  memset(ndu,   0, sizeof(adouble)*mobiusBSpl_MaxDegree*mobiusBSpl_MaxDegree);
   /*for ( int i = 0; i < mobiusBSpl_MaxDegree; ++i )
   {
     left[i] = right[i] = 0.0;
@@ -88,7 +88,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
 
     // This variable contains value reused on adjacent iterations
     // by the number of evaluated functions
-    double savedTerm = 0.0;
+    adouble savedTerm = 0.0;
 
     // Now we iterate over the number of evaluated functions. Notice that
     // even though we have (deg + 1) of such functions, we iterate only deg
@@ -98,7 +98,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
     {
       // Knot differences (lower triangle)
       ndu[j][r]   = right[r+1] + left[j-r];
-      double temp = ndu[r][j-1] / ndu[j][r];
+      adouble temp = ndu[r][j-1] / ndu[j][r];
 
       // Basis functions (upper triangle)
       ndu[r][j] = savedTerm + right[r+1]*temp;
@@ -112,7 +112,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   //----------------------
 
   // Coefficients.
-  double** a;
+  adouble** a;
   if ( m_pAlloc.IsNull() )
   {
     localAlloc = new alloc2d;
@@ -134,7 +134,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
     // Loop to compute (k)-th derivative
     for ( int k = 1; k <= order; ++k )
     {
-      double d = 0.0; // Derivative being evaluated
+      adouble d = 0.0; // Derivative being evaluated
       int   rk = r-k, pk = p-k;
 
       if ( r >= k )

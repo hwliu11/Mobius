@@ -54,9 +54,9 @@ public:
 public:
 
   mobiusGeom_EXPORT
-    geom_KleinIsoCurve(const double  r,
+    geom_KleinIsoCurve(const adouble  r,
                        const IsoType type,
-                       const double  param);
+                       const adouble  param);
 
   mobiusGeom_EXPORT virtual
     ~geom_KleinIsoCurve();
@@ -64,32 +64,32 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter() const;
 
   mobiusGeom_EXPORT virtual void
-    Eval(const double p,
+    Eval(const adouble p,
          xyz&         C) const;
 
 private:
 
   //! Radius of hole.
-  double m_fR;
+  adouble m_fR;
 
   //! Type of iso.
   IsoType m_type;
 
   //! Fixed parameter value.
-  double m_fParam;
+  adouble m_fParam;
 
 };
 

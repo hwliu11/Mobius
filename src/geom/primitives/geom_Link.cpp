@@ -52,17 +52,17 @@ mobius::geom_Link::~geom_Link()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_Link::Bounds(double& xMin, double& xMax,
-                               double& yMin, double& yMax,
-                               double& zMin, double& zMax) const
+void mobius::geom_Link::Bounds(adouble& xMin, adouble& xMax,
+                               adouble& yMin, adouble& yMax,
+                               adouble& zMin, adouble& zMax) const
 {
-  double x_min = DBL_MAX, x_max = -DBL_MAX;
-  double y_min = DBL_MAX, y_max = -DBL_MAX;
-  double z_min = DBL_MAX, z_max = -DBL_MAX;
+  adouble x_min = DBL_MAX, x_max = -DBL_MAX;
+  adouble y_min = DBL_MAX, y_max = -DBL_MAX;
+  adouble z_min = DBL_MAX, z_max = -DBL_MAX;
 
-  const double x[] = { m_p1.X(), m_p2.X() };
-  const double y[] = { m_p1.Y(), m_p2.Y() };
-  const double z[] = { m_p1.Z(), m_p2.Z() };
+  const adouble x[] = { m_p1.X(), m_p2.X() };
+  const adouble y[] = { m_p1.Y(), m_p2.Y() };
+  const adouble z[] = { m_p1.Z(), m_p2.Z() };
 
   for ( int c = 0; c < 2; ++c )
   {

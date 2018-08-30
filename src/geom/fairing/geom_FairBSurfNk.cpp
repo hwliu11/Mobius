@@ -43,14 +43,14 @@
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_FairBSurfNk::Eval_D2(const double u,
-                                       const double v,
-                                       double&      N,
-                                       double&      dN_dU,
-                                       double&      dN_dV,
-                                       double&      d2N_dU2,
-                                       double&      d2N_dUV,
-                                       double&      d2N_dV2)
+void mobius::geom_FairBSurfNk::Eval_D2(const adouble u,
+                                       const adouble v,
+                                       adouble&      N,
+                                       adouble&      dN_dU,
+                                       adouble&      dN_dV,
+                                       adouble&      d2N_dU2,
+                                       adouble&      d2N_dUV,
+                                       adouble&      d2N_dV2)
 {
   t_cell askedCell(uv(u, v), 1e-4);
 
@@ -73,12 +73,12 @@ void mobius::geom_FairBSurfNk::Eval_D2(const double u,
 
   const int orderU = m_Ni.p + 1;
   const int orderV = m_Nj.q + 1;
-  double    Ni     = 0.0;
-  double    Nj     = 0.0;
-  double    d1Ni   = 0.0;
-  double    d1Nj   = 0.0;
-  double    d2Ni   = 0.0;
-  double    d2Nj   = 0.0;
+  adouble    Ni     = 0.0;
+  adouble    Nj     = 0.0;
+  adouble    d1Ni   = 0.0;
+  adouble    d1Nj   = 0.0;
+  adouble    d2Ni   = 0.0;
+  adouble    d2Nj   = 0.0;
 
   // Find span and index of the first non-vanishing spline.
   bspl_FindSpan FindSpanU(m_Ni.U, m_Ni.p),
@@ -89,7 +89,7 @@ void mobius::geom_FairBSurfNk::Eval_D2(const double u,
   int Iv          = FindSpanV(v, basisIndexV);
 
   // Prepare matrices.
-  double** dNi, **dNj;
+  adouble** dNi, **dNj;
   //
   if ( m_alloc.IsNull() )
   {

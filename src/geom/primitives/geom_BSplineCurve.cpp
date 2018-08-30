@@ -74,7 +74,7 @@ public:
   //! Evaluates the second derivative squared.
   //! \param[in] u parameter value.
   //! \return evaluated function.
-  virtual double Eval(const double u) const
+  virtual adouble Eval(const adouble u) const
   {
     xyz D2;
     m_curve->Eval_Dk(u, 2, D2);
@@ -103,8 +103,8 @@ protected:
 //! Auxiliary functions.
 namespace BSplCurveProj
 {
-  double F(const mobius::bcurve* crv,
-           const double          u,
+  adouble F(const mobius::bcurve* crv,
+           const adouble          u,
            const mobius::xyz&    P)
   {
     mobius::xyz C, d1C;
@@ -113,8 +113,8 @@ namespace BSplCurveProj
     return (C - P).Dot(d1C);
   }
 
-  double dF(const mobius::bcurve* crv,
-            const double          u,
+  adouble dF(const mobius::bcurve* crv,
+            const adouble          u,
             const mobius::xyz&    P)
   {
     mobius::xyz C, d1C, d2C;
@@ -124,11 +124,11 @@ namespace BSplCurveProj
     return d1C.SquaredModulus() + (C - P).Dot(d2C);
   }
 
-  double g(const double u,
-           const double u0, const double u1,
-           const double s0, const double s1)
+  adouble g(const adouble u,
+           const adouble u0, const adouble u1,
+           const adouble s0, const adouble s1)
   {
-    double param = u*(s1 - s0)/(u1 - u0) + (s0*u1 - s1*u0)/(u1 - u0);
+    adouble param = u*(s1 - s0)/(u1 - u0) + (s0*u1 - s1*u0)/(u1 - u0);
 
     // Round-off errors may break the bounds
     if ( param > s1 )
@@ -148,12 +148,12 @@ namespace BSplCurveProj
 //! \param nU    [in] number of knots.
 //! \param p     [in] degree.
 mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>& Poles,
-                                             const double*           U,
+                                             const adouble*           U,
                                              const int               nU,
                                              const int               p)
 : geom_Curve()
 {
-  std::vector<double> Uvec;
+  std::vector<adouble> Uvec;
   for ( int i = 0; i < nU; ++i )
     Uvec.push_back(U[i]);
 
@@ -167,7 +167,7 @@ mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>& Poles,
 //! \param U     [in] knot vector.
 //! \param p     [in] degree.
 mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>&    Poles,
-                                             const std::vector<double>& U,
+                                             const std::vector<adouble>& U,
                                              const int                  p)
 : geom_Curve()
 {
@@ -206,20 +206,20 @@ mobius::core_Ptr<mobius::geom_BSplineCurve>
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_BSplineCurve::Bounds(double& xMin, double& xMax,
-                                       double& yMin, double& yMax,
-                                       double& zMin, double& zMax) const
+void mobius::geom_BSplineCurve::Bounds(adouble& xMin, adouble& xMax,
+                                       adouble& yMin, adouble& yMax,
+                                       adouble& zMin, adouble& zMax) const
 {
-  double x_min = DBL_MAX, x_max = -DBL_MAX;
-  double y_min = DBL_MAX, y_max = -DBL_MAX;
-  double z_min = DBL_MAX, z_max = -DBL_MAX;
+  adouble x_min = DBL_MAX, x_max = -DBL_MAX;
+  adouble y_min = DBL_MAX, y_max = -DBL_MAX;
+  adouble z_min = DBL_MAX, z_max = -DBL_MAX;
 
   // B-spline curve is fully contained in its control polygon, so we can take
   // it as a rough solution
   for ( int p = 0; p < (int) m_poles.size(); ++p )
   {
     const xyz& P = m_poles.at(p);
-    const double x = P.X(), y = P.Y(), z = P.Z();
+    const adouble x = P.X(), y = P.Y(), z = P.Z();
 
     if ( x > x_max )
       x_max = x;
@@ -248,7 +248,7 @@ void mobius::geom_BSplineCurve::Bounds(double& xMin, double& xMax,
 
 //! Returns first knot.
 //! \return first knot.
-double mobius::geom_BSplineCurve::MinParameter() const
+adouble mobius::geom_BSplineCurve::MinParameter() const
 {
   return m_U[0];
 }
@@ -257,7 +257,7 @@ double mobius::geom_BSplineCurve::MinParameter() const
 
 //! Returns last knot.
 //! \return last knot.
-double mobius::geom_BSplineCurve::MaxParameter() const
+adouble mobius::geom_BSplineCurve::MaxParameter() const
 {
   return m_U[m_U.size()-1];
 }
@@ -269,7 +269,7 @@ double mobius::geom_BSplineCurve::MaxParameter() const
 //!
 //! \param u [in]  parameter value to evaluate the curve for.
 //! \param P [out] 3D point corresponding to the given parameter on the curve.
-void mobius::geom_BSplineCurve::Eval(const double u,
+void mobius::geom_BSplineCurve::Eval(const adouble u,
                                      xyz&         P) const
 {
   // Find span the passed u falls into
@@ -278,7 +278,7 @@ void mobius::geom_BSplineCurve::Eval(const double u,
 
   // Evaluate effective B-spline basis functions
   bspl_EffectiveN EffectiveN;
-  double N[mobiusBSpl_MaxDegree];
+  adouble N[mobiusBSpl_MaxDegree];
   EffectiveN(u, m_U, m_iDeg, span, N);
 
   // Evaluate curve
@@ -301,7 +301,7 @@ void mobius::geom_BSplineCurve::Eval(const double u,
 //! \param alloc            [in]  optional allocator.
 //! \param memBlockResult   [in]  index of the memory block for the result.
 //! \param memBlockInternal [in]  index of the memory block for internal calculations.
-void mobius::geom_BSplineCurve::Eval_Dk(const double u,
+void mobius::geom_BSplineCurve::Eval_Dk(const adouble u,
                                         const int    k,
                                         xyz&         dkC,
                                         ptr<alloc2d> alloc,
@@ -310,7 +310,7 @@ void mobius::geom_BSplineCurve::Eval_Dk(const double u,
 {
   ptr<alloc2d> localAlloc;
 
-  double** dN;
+  adouble** dN;
   if ( alloc.IsNull() )
   {
     localAlloc = new alloc2d;
@@ -331,8 +331,8 @@ void mobius::geom_BSplineCurve::Eval_Dk(const double u,
 //! \param d1C              [out] derivative vector.
 //! \param alloc            [in]  optional allocator.
 //! \param memBlockInternal [in]  index of the memory block for internal calculations.
-void mobius::geom_BSplineCurve::Eval_Dk(double**     dN,
-                                        const double u,
+void mobius::geom_BSplineCurve::Eval_Dk(adouble**     dN,
+                                        const adouble u,
                                         const int    k,
                                         xyz&         d1C,
                                         ptr<alloc2d> alloc,
@@ -371,14 +371,14 @@ mobius::ptr<mobius::bcurve> mobius::geom_BSplineCurve::Copy() const
 //! Calculates curvature value at the given parameter.
 //! \param u [in] parameter value to evaluate curvature in.
 //! \return curvature value.
-double mobius::geom_BSplineCurve::K(const double u) const
+adouble mobius::geom_BSplineCurve::K(const adouble u) const
 {
   xyz d1C, d2C;
   this->Eval_Dk(u, 1, d1C);
   this->Eval_Dk(u, 2, d2C);
 
-  const double k1 = d1C.Cross(d2C).Modulus();
-  const double k2 = pow(d1C.Modulus(), 3);
+  const adouble k1 = d1C.Cross(d2C).Modulus();
+  const adouble k2 = pow(d1C.Modulus(), 3);
   return k1/k2;
 }
 
@@ -434,14 +434,14 @@ mobius::core_Continuity mobius::geom_BSplineCurve::Continuity() const
 //! \param param [out] parameter on curve.
 //! \return true in case of success, false -- otherwise.
 bool mobius::geom_BSplineCurve::InvertPoint(const xyz&   P,
-                                            double&      param,
-                                            const double prec) const
+                                            adouble&      param,
+                                            const adouble prec) const
 {
   // Working variables
   const int max_iter = 100;
   int       iter     = 0;
   bool      stop     = false;
-  double    u        = ( this->MinParameter() + this->MaxParameter() )*0.5;
+  adouble    u        = ( this->MinParameter() + this->MaxParameter() )*0.5;
 
   // Newton iterations
   do
@@ -452,7 +452,7 @@ bool mobius::geom_BSplineCurve::InvertPoint(const xyz&   P,
     if ( u > this->MaxParameter() )
       u = this->MinParameter(); // Try another extremity
 
-    const double f = BSplCurveProj::F(this, u, P);
+    const adouble f = BSplCurveProj::F(this, u, P);
     if ( fabs(f) < prec )
     {
       stop = true;
@@ -460,7 +460,7 @@ bool mobius::geom_BSplineCurve::InvertPoint(const xyz&   P,
     }
 
     // Continue iterations
-    const double df = BSplCurveProj::dF(this, u, P);
+    const adouble df = BSplCurveProj::dF(this, u, P);
     u = u - f / df; // Classic and simplest formulation of Newton iterations
     iter++;
   }
@@ -483,7 +483,7 @@ bool mobius::geom_BSplineCurve::InvertPoint(const xyz&   P,
 //!                       multiplicity is its original multiplicity plus
 //!                       num_times value.
 //! \return true in case of success, false -- otherwise.
-bool mobius::geom_BSplineCurve::InsertKnot(const double u,
+bool mobius::geom_BSplineCurve::InsertKnot(const adouble u,
                                            const int    num_times)
 {
   int dest_span_idx;
@@ -501,7 +501,7 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
 //!                            num_times value.
 //! \param dest_span_idx [out] span where the knot falls.
 //! \return true in case of success, false -- otherwise.
-bool mobius::geom_BSplineCurve::InsertKnot(const double u,
+bool mobius::geom_BSplineCurve::InsertKnot(const adouble u,
                                            const int    num_times,
                                            int&         dest_span_idx)
 {
@@ -521,7 +521,7 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
   int       nq = 0;
   int       mq = np + m_iDeg + 1 + num_times;
   //
-  std::vector<double> UQ; UQ.reserve(mq + 1);
+  std::vector<adouble> UQ; UQ.reserve(mq + 1);
   std::vector<xyz> Qw;
 
   // Insert knot
@@ -543,7 +543,7 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
 //! multiplicity 2.
 //! \param X [in] refinement vector.
 //! \return true in case of success, false -- otherwise.
-bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
+bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<adouble>& X)
 {
   if ( !X.size() )
     return true;
@@ -553,12 +553,12 @@ bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
   const int r     = (int) (X.size() - 1);
   const int m_new = n + m_iDeg + 1 + r + 1;
   //
-  double *pX = new double[X.size()];
+  adouble *pX = new adouble[X.size()];
   //
   for ( size_t i = 0; i < X.size(); ++i )
     pX[i] = X[i];
 
-  std::vector<double> Ubar;/* Ubar.reserve(m_new + 1);*/
+  std::vector<adouble> Ubar;/* Ubar.reserve(m_new + 1);*/
   //
   for ( int k = 0; k < m_new + 1; ++k )
     Ubar.push_back(0.0);
@@ -582,7 +582,7 @@ bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
 //! \param u      [in]  parameter to split by.
 //! \param slices [out] resulting curve slices.
 //! \return true in case of success, false -- otherwise.
-bool mobius::geom_BSplineCurve::Split(const double                u,
+bool mobius::geom_BSplineCurve::Split(const adouble                u,
                                       std::vector< ptr<bcurve> >& slices) const
 {
   // Create a copy of this curve as knot insertion modifies the object
@@ -613,7 +613,7 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
   const size_t nU_before = k + m_iDeg + 2;
 
   // Knots
-  std::vector<double> U_before; U_before.reserve(nU_before);
+  std::vector<adouble> U_before; U_before.reserve(nU_before);
   //
   for ( size_t i = 0; i < nU_before - 1; ++i )
   {
@@ -630,12 +630,12 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
   for ( size_t i = k; i < source->Poles().size(); ++i )
     poles_after.push_back( source->Poles()[i] );
 
-  std::vector<double> source_knots = source->Knots();
+  std::vector<adouble> source_knots = source->Knots();
   const int           source_m     = (int) (source_knots.size() - 1);
   const size_t        nU_after     = source_m - k + 1;
 
   // Knots
-  std::vector<double> U_after; U_after.reserve(nU_after);
+  std::vector<adouble> U_after; U_after.reserve(nU_after);
   for ( int i = k + 1, j = 1; i <= source_m; ++i, ++j )
   {
     U_after[j] = source_knots[i];
@@ -663,11 +663,11 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
 //! while knots are moved according to linear law.
 //! \param s_min [in] new min parameter value.
 //! \param s_max [in] new max parameter value.
-void mobius::geom_BSplineCurve::ReparameterizeLinear(const double s_min,
-                                                     const double s_max)
+void mobius::geom_BSplineCurve::ReparameterizeLinear(const adouble s_min,
+                                                     const adouble s_max)
 {
-  const double u_min = this->MinParameter();
-  const double u_max = this->MaxParameter();
+  const adouble u_min = this->MinParameter();
+  const adouble u_max = this->MaxParameter();
 
   for ( size_t i = 0; i < m_U.size(); ++i )
   {
@@ -681,19 +681,19 @@ void mobius::geom_BSplineCurve::ReparameterizeLinear(const double s_min,
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_BSplineCurve::ComputeStrainEnergy() const
+adouble mobius::geom_BSplineCurve::ComputeStrainEnergy() const
 {
   const int NUM_GAUSS_PT = 2*m_iDeg - 1; // (2n-1) for max accuracy on polynomial functions.
 
   geom_CuuSquared Cuu2Func(this);
 
-  double result = 0;
+  adouble result = 0;
   for ( size_t k = 0; k < m_U.size() - 1; ++k )
   {
     if ( m_U[k] == m_U[k+1] ) continue; // Skip multiple knots.
 
     // 6-points integration in each knot span.
-    const double
+    const adouble
       gaussVal = core_Integral::gauss::Compute(&Cuu2Func, m_U[k], m_U[k+1], NUM_GAUSS_PT);
     //
     result += gaussVal;
@@ -709,7 +709,7 @@ double mobius::geom_BSplineCurve::ComputeStrainEnergy() const
 //! \param U     [in] knot vector.
 //! \param p     [in] degree of the B-spline basis functions.
 void mobius::geom_BSplineCurve::init(const std::vector<xyz>&    Poles,
-                                     const std::vector<double>& U,
+                                     const std::vector<adouble>& U,
                                      const int                  p)
 {
   // Check if max degree is not exceeded.

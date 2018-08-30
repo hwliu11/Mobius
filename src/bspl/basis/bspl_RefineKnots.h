@@ -49,11 +49,11 @@ public:
   mobiusBSpl_EXPORT bool
     operator()(const int                  n,
                const int                  p,
-               const std::vector<double>& U,
+               const std::vector<adouble>& U,
                const std::vector<xyz>&    Pw,
-               const double*              X,
+               const adouble*              X,
                const int                  r,
-               std::vector<double>&       Ubar,
+               std::vector<adouble>&       Ubar,
                std::vector<xyz>&          Qw) const;
 
 };

@@ -33,7 +33,7 @@
 
 //! Creates law for the given constant value.
 //! \param level [in] value to use.
-mobius::bspl_ConstLaw::bspl_ConstLaw(const double level)
+mobius::bspl_ConstLaw::bspl_ConstLaw(const adouble level)
 : bspl_ScalarLaw(),
   m_fLevel(level)
 {}
@@ -41,7 +41,7 @@ mobius::bspl_ConstLaw::bspl_ConstLaw(const double level)
 //! Evaluates law.
 //! \param u [in] parameter to evaluate law for.
 //! \return evaluated function.
-double mobius::bspl_ConstLaw::Eval(const double u) const
+adouble mobius::bspl_ConstLaw::Eval(const adouble u) const
 {
   mobiusBSpl_NotUsed(u);
 

@@ -133,7 +133,7 @@ private:
 
 };
 
-typedef core_HeapAlloc<double> alloc1d;
+typedef core_HeapAlloc<adouble> alloc1d;
 
 //-----------------------------------------------------------------------------
 // Allocator for 2-dimensional arrays
@@ -232,7 +232,7 @@ private:
 
 };
 
-typedef core_HeapAlloc2D<double> alloc2d;
+typedef core_HeapAlloc2D<adouble> alloc2d;
 
 };
 

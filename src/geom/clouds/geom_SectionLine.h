@@ -91,7 +91,7 @@ public:
           bool&                      splitting_done);
 
   mobiusGeom_EXPORT void
-    SplitAndDiscrete(const double t,
+    SplitAndDiscrete(const adouble t,
                      const int    num_pts,
                      bool&        splitting_done);
 

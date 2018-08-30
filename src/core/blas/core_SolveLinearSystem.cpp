@@ -54,21 +54,21 @@ mobius::core_SolveLinearSystem::~core_SolveLinearSystem()
 //! \param b   [in]  right-hand side.
 //! \param x   [out] solution vector.
 //! \param dim [in]  dimension.
-void mobius::core_SolveLinearSystem::operator()(const double* A,
-                                                const double* b,
-                                                double*       x,
+void mobius::core_SolveLinearSystem::operator()(const adouble* A,
+                                                const adouble* b,
+                                                adouble*       x,
                                                 const int     dim)
 {
   // Initialize matrix from the passed row pointer
   Eigen::MatrixXd eigen_A(dim, dim);
   for ( int r = 0; r < dim; ++r )
     for ( int c = 0; c < dim; ++c )
-      eigen_A(r, c) = A[r*dim + c];
+      eigen_A(r, c) = A[r*dim + c].getValue();
 
   // Initialize vector of right hand side
   Eigen::VectorXd eigen_b(dim);
   for ( int r = 0; r < dim; ++r )
-    eigen_b(r) = b[r];
+    eigen_b(r) = b[r].getValue();
 
   // Solve
   Eigen::VectorXd eigen_x = eigen_A.colPivHouseholderQr().solve(eigen_b);

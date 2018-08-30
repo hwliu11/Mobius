@@ -86,12 +86,12 @@ public:
   //! \param averaging_case [in]  averaging context.
   //! \param U              [out] output knots.
   //! \return error code.
-  static ErrCode Calculate(const double* t,
+  static ErrCode Calculate(const adouble* t,
                            const int     n,
                            const int     p,
                            const int     m,
                            const Case    averaging_case,
-                           double*       U)
+                           adouble*       U)
   {
     // TODO: test this algo
     // TODO: provide consistency checks via error codes
@@ -118,7 +118,7 @@ public:
     // Do averaging
     for ( int j = j_start; j <= j_end; ++j )
     {
-      double avgSum = 0.0;
+      adouble avgSum = 0.0;
       const int i_start = j;
       const int i_end   = j + p - 1;
       //

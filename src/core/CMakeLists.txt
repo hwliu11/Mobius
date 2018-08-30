@@ -95,6 +95,14 @@ set (utils_CPP_FILES
 
 #------------------------------------------------------------------------------
 
+if (USE_ADOLC)
+set (ADOLC_LIB_FILES
+  adolc
+)
+endif()
+
+#------------------------------------------------------------------------------
+
 list (APPEND MOBIUS_MODULES core)
 set (MOBIUS_MODULES ${MOBIUS_MODULES} PARENT_SCOPE)
 
@@ -159,6 +167,24 @@ add_library (mobiusCore SHARED
   ${blas_H_FILES}       ${blas_CPP_FILES}
   ${primitives_H_FILES} ${primitives_CPP_FILES}
   ${utils_H_FILES}      ${utils_CPP_FILES})
+
+if (USE_ADOLC)
+  foreach (LIB_FILE ${ADOLC_LIB_FILES})
+    if (WIN32)
+      set (LIB_FILENAME "${LIB_FILE}${CMAKE_STATIC_LIBRARY_SUFFIX}")
+      set (LIB_FILENAME_DEBUG "${LIB_FILE}d${CMAKE_STATIC_LIBRARY_SUFFIX}")
+    else()
+      set (LIB_FILENAME "lib${LIB_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+      set (LIB_FILENAME_DEBUG "lib${LIB_FILE}d${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    endif()
+  if (3RDPARTY_adolc_LIBRARY_DIR_DEBUG AND EXISTS "${3RDPARTY_adolc_LIBRARY_DIR_DEBUG}/${LIB_FILENAME_DEBUG}")
+    target_link_libraries (mobiusCore debug ${3RDPARTY_adolc_LIBRARY_DIR_DEBUG}/${LIB_FILENAME_DEBUG})
+    target_link_libraries (mobiusCore optimized ${3RDPARTY_adolc_LIBRARY_DIR}/${LIB_FILENAME})
+  else()
+    target_link_libraries (mobiusCore ${3RDPARTY_adolc_LIBRARY_DIR}/${LIB_FILENAME})
+  endif()
+  endforeach()  
+endif()
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 

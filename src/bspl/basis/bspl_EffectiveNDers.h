@@ -75,12 +75,12 @@ public:
 public:
 
   mobiusBSpl_EXPORT void
-    operator()(const double               u,
-               const std::vector<double>& U,
+    operator()(const adouble               u,
+               const std::vector<adouble>& U,
                const int                  p,
                const int                  i,
                const int                  order,
-               double**                   ders) const;
+               adouble**                   ders) const;
 
 protected:
 

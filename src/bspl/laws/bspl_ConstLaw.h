@@ -44,16 +44,16 @@ class bspl_ConstLaw : public bspl_ScalarLaw
 public:
 
   mobiusBSpl_EXPORT
-    bspl_ConstLaw(const double level);
+    bspl_ConstLaw(const adouble level);
 
 public:
 
-  mobiusBSpl_EXPORT virtual double
-    Eval(const double u) const;
+  mobiusBSpl_EXPORT virtual adouble
+    Eval(const adouble u) const;
 
 protected:
 
-  double m_fLevel; //!< Function value.
+  adouble m_fLevel; //!< Function value.
 
 };
 

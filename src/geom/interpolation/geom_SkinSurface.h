@@ -135,9 +135,9 @@ public:
 
 private:
 
-  core_HeapAlloc<double>     m_alloc;   //!< Heap allocator.
+  core_HeapAlloc<adouble>     m_alloc;   //!< Heap allocator.
   std::vector< ptr<bcurve> > m_curves;  //!< Curves to interpolate.
-  double*                    m_pV;      //!< Knot vector in V direction.
+  adouble*                    m_pV;      //!< Knot vector in V direction.
   int                        m_iDeg_V;  //!< V-degree of interpolant surface.
   bool                       m_bUnify;  //!< Indicates whether to unify curves.
   ErrCode                    m_errCode; //!< Error code.

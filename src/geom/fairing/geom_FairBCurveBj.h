@@ -57,15 +57,15 @@ public:
     geom_FairBCurveBj(const ptr<bcurve>&         curve,
                       const int                  coord,
                       const int                  j,
-                      const double               lambda,
+                      const adouble               lambda,
                       ptr<alloc2d>               alloc);
 
 public:
 
   //! Evaluates function.
   //! \return value.
-  mobiusGeom_EXPORT virtual double
-    Eval(const double u) const;
+  mobiusGeom_EXPORT virtual adouble
+    Eval(const adouble u) const;
 
 private:
 

@@ -63,7 +63,7 @@ public:
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
     geom_FairBSurf(const ptr<bsurf>&  surface,
-                   const double       lambda,
+                   const adouble       lambda,
                    core_ProgressEntry progress,
                    core_PlotterEntry  plotter);
 
@@ -144,7 +144,7 @@ protected:
   ptr<bsurf> m_resultSurf;
 
   //! Fairing coefficient.
-  double m_fLambda;
+  adouble m_fLambda;
 
   //! Number of poles in U direction.
   int m_iNumPolesU;

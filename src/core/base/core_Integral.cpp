@@ -36,7 +36,7 @@
 
 //-----------------------------------------------------------------------------
 
-static const double Point[] = {
+static const adouble Point[] = {
 0.0e+00,
 0.0e+00,                                      // N = 1
 0.577350269189625764509148780501958e+00,      // N = 2
@@ -1000,7 +1000,7 @@ static const double Point[] = {
 0.510589067079743493668875006189008e-01,
 0.0e+00};
 
-static const double Weight[] = {
+static const adouble Weight[] = {
 0.0e+00,
 0.200000000000000000000000000000000e+01,      // N = 1
 0.100000000000000000000000000000000e+01,      // N = 2
@@ -1966,17 +1966,17 @@ static const double Weight[] = {
 
 //-----------------------------------------------------------------------------
 
-double mobius::core_Integral::ComputeRect(core_UnivariateFunc* F,
-                                          const double         a,
-                                          const double         b,
+adouble mobius::core_Integral::ComputeRect(core_UnivariateFunc* F,
+                                          const adouble         a,
+                                          const adouble         b,
                                           const int            n,
                                           int&                 numEvals)
 {
-  double step = (b - a) / n;  // width of each small rectangle.
-  double area = 0.0; // signed area.
+  adouble step = (b - a) / n;  // width of each small rectangle.
+  adouble area = 0.0; // signed area.
   for ( int i = 0; i < n; ++i )
   {
-    double val = F->Eval(a + (i + 0.5) * step); numEvals++;
+    adouble val = F->Eval(a + (i + 0.5) * step); numEvals++;
     area += val*step; // sum up each small rectangle.
   }
   return area;
@@ -1984,9 +1984,9 @@ double mobius::core_Integral::ComputeRect(core_UnivariateFunc* F,
 
 //-----------------------------------------------------------------------------
 
-double mobius::core_Integral::ComputeRect(core_UnivariateFunc* F,
-                                          const double         a,
-                                          const double         b,
+adouble mobius::core_Integral::ComputeRect(core_UnivariateFunc* F,
+                                          const adouble         a,
+                                          const adouble         b,
                                           const int            n)
 {
   int numEvals = 0;
@@ -2003,7 +2003,7 @@ int mobius::core_Integral::gauss::GetPointsMax()
 //-----------------------------------------------------------------------------
 
 void mobius::core_Integral::gauss::GetPoints(const int            n,
-                                             std::vector<double>& points)
+                                             std::vector<adouble>& points)
 {
   if ( points.size() != n )
     points.resize(n);
@@ -2026,7 +2026,7 @@ void mobius::core_Integral::gauss::GetPoints(const int            n,
 //-----------------------------------------------------------------------------
 
 void mobius::core_Integral::gauss::GetWeights(const int            n,
-                                              std::vector<double>& weights)
+                                              std::vector<adouble>& weights)
 {
   if ( weights.size() != n )
     weights.resize(n);
@@ -2048,24 +2048,24 @@ void mobius::core_Integral::gauss::GetWeights(const int            n,
 
 //-----------------------------------------------------------------------------
 
-double mobius::core_Integral::gauss::Compute(core_UnivariateFunc* F,
-                                             const double         a,
-                                             const double         b,
+adouble mobius::core_Integral::gauss::Compute(core_UnivariateFunc* F,
+                                             const adouble         a,
+                                             const adouble         b,
                                              const int            n,
                                              int&                 numEvals)
 {
   if ( n < 0 || n > GetPointsMax() )
     throw core_excMaxGaussPtsExceeded();
 
-  std::vector<double> x, w;
+  std::vector<adouble> x, w;
   //
   GetPoints  (n, x);
   GetWeights (n, w);
 
   // Change of range from [-1, 1] to the passed custom [a, b].
-  double xm  = 0.5*(b + a);
-  double xr  = 0.5*(b - a);
-  double val = 0.;
+  adouble xm  = 0.5*(b + a);
+  adouble xr  = 0.5*(b - a);
+  adouble val = 0.;
 
   int ind = n/2, ind1 = (n+1)/2;
   if ( ind1 > ind )
@@ -2076,9 +2076,9 @@ double mobius::core_Integral::gauss::Compute(core_UnivariateFunc* F,
 
   for ( int j = 1; j <= ind; ++j )
   {
-    double dx = xr*x[j-1];
-    double f1 = F->Eval(xm-dx); numEvals++;
-    double f2 = F->Eval(xm+dx); numEvals++;
+    adouble dx = xr*x[j-1];
+    adouble f1 = F->Eval(xm-dx); numEvals++;
+    adouble f2 = F->Eval(xm+dx); numEvals++;
 
     val += w[j-1]*(f1 + f2);
   }
@@ -2089,9 +2089,9 @@ double mobius::core_Integral::gauss::Compute(core_UnivariateFunc* F,
 
 //-----------------------------------------------------------------------------
 
-double mobius::core_Integral::gauss::Compute(core_UnivariateFunc* F,
-                                             const double         a,
-                                             const double         b,
+adouble mobius::core_Integral::gauss::Compute(core_UnivariateFunc* F,
+                                             const adouble         a,
+                                             const adouble         b,
                                              const int            n)
 {
   int numEvals = 0;
@@ -2111,11 +2111,11 @@ namespace mobius
       public:
 
         Fy(core_TwovariateFunc* F,
-           const double         x) : m_pF(F), m_fX(x) {}
+           const adouble         x) : m_pF(F), m_fX(x) {}
 
       public:
 
-        virtual double Eval(const double y) const
+        virtual adouble Eval(const adouble y) const
         {
           return m_pF->Eval(m_fX, y);
         }
@@ -2123,7 +2123,7 @@ namespace mobius
       protected:
 
         core_TwovariateFunc* m_pF;
-        double               m_fX;
+        adouble               m_fX;
 
       };
 
@@ -2132,8 +2132,8 @@ namespace mobius
       public:
 
         IntegrandGx(core_TwovariateFunc* F,
-                    const double         y0,
-                    const double         y1,
+                    const adouble         y0,
+                    const adouble         y1,
                     const int            order)
         {
           m_pF     = F;
@@ -2144,7 +2144,7 @@ namespace mobius
 
       public:
 
-        virtual double Eval(const double x) const
+        virtual adouble Eval(const adouble x) const
         {
           Fy func(m_pF, x);
           return Compute(&func, m_fY0, m_fY1, m_iOrder);
@@ -2153,8 +2153,8 @@ namespace mobius
       protected:
 
         core_TwovariateFunc* m_pF;
-        double               m_fY0;
-        double               m_fY1;
+        adouble               m_fY0;
+        adouble               m_fY1;
         int                  m_iOrder;
       };
     }
@@ -2163,15 +2163,15 @@ namespace mobius
 
 //-----------------------------------------------------------------------------
 
-double mobius::core_Integral::gauss::Compute(core_TwovariateFunc* F,
-                                             const double         x0,
-                                             const double         x1,
-                                             const double         y0,
-                                             const double         y1,
+adouble mobius::core_Integral::gauss::Compute(core_TwovariateFunc* F,
+                                             const adouble         x0,
+                                             const adouble         x1,
+                                             const adouble         y0,
+                                             const adouble         y1,
                                              const int            orderX,
                                              const int            orderY)
 {
   IntegrandGx func(F, y0, y1, orderY);
-  double val = Compute(&func, x0, x1, orderX);
+  adouble val = Compute(&func, x0, x1, orderX);
   return val;
 }

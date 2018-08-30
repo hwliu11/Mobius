@@ -67,7 +67,7 @@ namespace mobius {
 //! blending of a couple of 0-degree basis functions N_i,0 and N_i+1,0
 //! defined on two adjacent intervals. While the basis 0-degree function
 //! was not-null on a single [u_i, u_i+1) interval only, its successive
-//! 1-degree function is non-vanishing on a double interval, i.e:
+//! 1-degree function is non-vanishing on a adouble interval, i.e:
 //!
 //! <pre>
 //!           u - u_i                   u_{i+2} - u
@@ -173,11 +173,11 @@ class bspl_EffectiveN
 public:
 
   mobiusBSpl_EXPORT void
-    operator()(const double               u,
-               const std::vector<double>& U,
+    operator()(const adouble               u,
+               const std::vector<adouble>& U,
                const int                  p,
                const int                  i,
-               double*                    N) const;
+               adouble*                    N) const;
 
 };
 

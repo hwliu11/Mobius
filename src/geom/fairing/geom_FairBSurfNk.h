@@ -92,14 +92,14 @@ public:
   //! \param[out] d2N_dUV second-order derivative by U and V.
   //! \param[out] d2N_dV2 second-order derivative by V.
   mobiusGeom_EXPORT virtual void
-    Eval_D2(const double u,
-            const double v,
-            double&      N,
-            double&      dN_dU,
-            double&      dN_dV,
-            double&      d2N_dU2,
-            double&      d2N_dUV,
-            double&      d2N_dV2);
+    Eval_D2(const adouble u,
+            const adouble v,
+            adouble&      N,
+            adouble&      dN_dU,
+            adouble&      dN_dV,
+            adouble&      d2N_dU2,
+            adouble&      d2N_dUV,
+            adouble&      d2N_dV2);
 
 public:
 
@@ -123,11 +123,11 @@ protected:
     t_cell() { indices[0] = indices[1] = 0; } //!< Default ctor.
 
     //! Complete ctor.
-    t_cell(const uv& p, const double cellSize)
+    t_cell(const uv& p, const adouble cellSize)
     {
       for ( int k = 0; k < 2; ++k )
       {
-        double val = p.Coord(k) / cellSize;
+        double val = (p.Coord(k) / cellSize).getValue();
 
         // If the value of index is greater than INT_MAX, it is decreased
         // correspondingly for the value of INT_MAX. If the value of index is
@@ -153,12 +153,12 @@ protected:
 
   struct t_values
   {
-    double N;
-    double dN_dU;
-    double dN_dV;
-    double d2N_dU2;
-    double d2N_dUV;
-    double d2N_dV2;
+    adouble N;
+    adouble dN_dU;
+    adouble dN_dV;
+    adouble d2N_dU2;
+    adouble d2N_dUV;
+    adouble d2N_dV2;
 
     t_values() : N(0.), dN_dU(0.), dN_dV(0.), d2N_dU2(0.), d2N_dUV(0.), d2N_dV2(0.) {}
   };
@@ -176,7 +176,7 @@ protected:
   //! First basis function \f$N_i^p(u)\f$.
   struct
   {
-    std::vector<double> U; //!< Knot vector.
+    std::vector<adouble> U; //!< Knot vector.
     int                 p; //!< Degree.
     int                 i; //!< 0-based index.
   } m_Ni;
@@ -184,7 +184,7 @@ protected:
   //! Second basis function \f$N_j^q(v)\f$.
   struct
   {
-    std::vector<double> V; //!< Knot vector.
+    std::vector<adouble> V; //!< Knot vector.
     int                 q; //!< Degree.
     int                 j; //!< 0-based index.
   } m_Nj;

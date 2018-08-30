@@ -57,7 +57,7 @@ public:
 
   mobiusCore_EXPORT bool
     ExtractVector1d(const std::string&   keyword,
-                    std::vector<double>& vector) const;
+                    std::vector<adouble>& vector) const;
 
   mobiusCore_EXPORT bool
     ExtractVector3d(const std::string& keyword,

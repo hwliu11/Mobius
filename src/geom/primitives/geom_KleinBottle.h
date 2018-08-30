@@ -48,7 +48,7 @@ class geom_KleinBottle : public geom_Surface
 public:
 
   mobiusGeom_EXPORT
-    geom_KleinBottle(const double r);
+    geom_KleinBottle(const adouble r);
 
   mobiusGeom_EXPORT virtual
     ~geom_KleinBottle();
@@ -56,51 +56,51 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter_U() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter_U() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter_V() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter_V() const;
 
   mobiusGeom_EXPORT virtual void
-    Eval(const double u,
-         const double v,
+    Eval(const adouble u,
+         const adouble v,
          xyz&         C) const;
 
 public:
 
   mobiusGeom_EXPORT ptr<geom_KleinIsoCurve>
-    Iso_U(const double u) const;
+    Iso_U(const adouble u) const;
 
   mobiusGeom_EXPORT ptr<geom_KleinIsoCurve>
-    Iso_V(const double v) const;
+    Iso_V(const adouble v) const;
 
 public:
 
   mobiusGeom_EXPORT static void
-    Eval(const double r,
-         const double u,
-         const double v,
-         double&      x,
-         double&      y,
-         double&      z);
+    Eval(const adouble r,
+         const adouble u,
+         const adouble v,
+         adouble&      x,
+         adouble&      y,
+         adouble&      z);
 
 private:
 
   //! Radius of hole.
-  double m_fR;
+  adouble m_fR;
 
 };
 

@@ -48,13 +48,13 @@ public:
 
   struct TGridPoint
   {
-    double U;
-    double V;
+    adouble U;
+    adouble V;
     xyz    P;
 
     TGridPoint() : U(0.0), V(0.0) {}
-    TGridPoint(const double _U,
-               const double _V,
+    TGridPoint(const adouble _U,
+               const adouble _V,
                const xyz&   _P) : U(_U), V(_V), P(_P) {}
   };
 
@@ -80,27 +80,27 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    Bounds(adouble& xMin, adouble& xMax,
+           adouble& yMin, adouble& yMax,
+           adouble& zMin, adouble& zMax) const;
 
 public:
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter_U() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter_U() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MinParameter_V() const;
 
-  mobiusGeom_EXPORT virtual double
+  mobiusGeom_EXPORT virtual adouble
     MaxParameter_V() const;
 
   mobiusGeom_EXPORT virtual void
-    Eval(const double u,
-         const double v,
+    Eval(const adouble u,
+         const adouble v,
          core_XYZ&    C) const;
 
 private:
@@ -111,34 +111,34 @@ private:
 
 private:
 
-  //std::vector<double> u_knots() const;
+  //std::vector<adouble> u_knots() const;
 
-  //std::vector<double> v_knots() const;
+  //std::vector<adouble> v_knots() const;
 
-  double L_ks(const int                  k,
+  adouble L_ks(const int                  k,
               const int                  s,
-              const double               t,
-              const std::vector<double>& t_knots) const;
+              const adouble               t,
+              const std::vector<adouble>& t_knots) const;
 
-  double DL_ks(const int                  k,
+  adouble DL_ks(const int                  k,
                const int                  s,
-               const double               t,
-               const std::vector<double>& t_knots) const;
+               const adouble               t,
+               const std::vector<adouble>& t_knots) const;
 
-  double A_ks(const int k,
+  adouble A_ks(const int k,
               const int s,
-              const double t,
-              const std::vector<double>& t_knots) const;
+              const adouble t,
+              const std::vector<adouble>& t_knots) const;
 
-  double B_ks(const int                  k,
+  adouble B_ks(const int                  k,
               const int                  s,
-              const double               t,
-              const std::vector<double>& t_knots) const;
+              const adouble               t,
+              const std::vector<adouble>& t_knots) const;
 
-  double DA_ks(const int                  k,
+  adouble DA_ks(const int                  k,
                const int                  s,
-               const double               t,
-               const std::vector<double>& t_knots) const;
+               const adouble               t,
+               const std::vector<adouble>& t_knots) const;
 
 private:
 

@@ -69,14 +69,14 @@ mobius::core_XYZ mobius::core_XYZ::OZ()
 
 //! Returns modulus of the point's radius vector.
 //! \return modulus.
-inline double mobius::core_XYZ::Modulus() const
+inline adouble mobius::core_XYZ::Modulus() const
 {
   return sqrt( this->SquaredModulus() );
 }
 
 //! Returns squared modulus of the point's radius vector.
 //! \return squared modulus.
-inline double mobius::core_XYZ::SquaredModulus() const
+inline adouble mobius::core_XYZ::SquaredModulus() const
 {
   return m_fX*m_fX + m_fY*m_fY + m_fZ*m_fZ;
 }
@@ -84,7 +84,7 @@ inline double mobius::core_XYZ::SquaredModulus() const
 //! Multiplies copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return resulting point.
-inline mobius::core_XYZ mobius::core_XYZ::Multiplied(const double coeff) const
+inline mobius::core_XYZ mobius::core_XYZ::Multiplied(const adouble coeff) const
 {
   return this->operator*(coeff);
 }
@@ -92,7 +92,7 @@ inline mobius::core_XYZ mobius::core_XYZ::Multiplied(const double coeff) const
 //! Normalizes point so that it gets unit length.
 inline void mobius::core_XYZ::Normalize()
 {
-  const double modulus = this->Modulus();
+  const adouble modulus = this->Modulus();
   m_fX /= modulus;
   m_fY /= modulus;
   m_fZ /= modulus;
@@ -110,7 +110,7 @@ inline mobius::core_XYZ mobius::core_XYZ::Normalized() const
 //! Calculates dot product between this and another vector.
 //! \param XYZ [in] another vector.
 //! \return dot product.
-inline double mobius::core_XYZ::Dot(const core_XYZ& XYZ) const
+inline adouble mobius::core_XYZ::Dot(const core_XYZ& XYZ) const
 {
   return m_fX*XYZ.m_fX + m_fY*XYZ.m_fY + m_fZ*XYZ.m_fZ;
 }
@@ -120,9 +120,9 @@ inline double mobius::core_XYZ::Dot(const core_XYZ& XYZ) const
 //! \return cross product.
 inline mobius::core_XYZ mobius::core_XYZ::Cross(const core_XYZ& XYZ) const
 {
-  const double x = m_fY*XYZ.m_fZ - m_fZ*XYZ.m_fY;
-  const double y = m_fZ*XYZ.m_fX - m_fX*XYZ.m_fZ;
-  const double z = m_fX*XYZ.m_fY - m_fY*XYZ.m_fX;
+  const adouble x = m_fY*XYZ.m_fZ - m_fZ*XYZ.m_fY;
+  const adouble y = m_fZ*XYZ.m_fX - m_fX*XYZ.m_fZ;
+  const adouble z = m_fX*XYZ.m_fY - m_fY*XYZ.m_fX;
 
   return core_XYZ(x, y, z);
 }
@@ -130,12 +130,12 @@ inline mobius::core_XYZ mobius::core_XYZ::Cross(const core_XYZ& XYZ) const
 //! Calculates angle between two points.
 //! \param XYZ [in] another vector.
 //! \return angle in radians.
-inline double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
+inline adouble mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
 {
   core_XYZ V1 = this->Normalized();
   core_XYZ V2 = XYZ.Normalized();
 
-  double cos_alpha = V1.Dot(V2);
+  adouble cos_alpha = V1.Dot(V2);
 
   // Compensate rounding errors
   if ( cos_alpha > 1 )
@@ -145,7 +145,7 @@ inline double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
   if ( cos_alpha < -1 )
     cos_alpha = -1.0;
 
-  const double alpha = acos(cos_alpha);
+  const adouble alpha = acos(cos_alpha);
   return alpha;
 }
 
@@ -163,7 +163,7 @@ inline mobius::core_XYZ& mobius::core_XYZ::operator=(const core_XYZ& XYZ)
 //! Multiplies copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return resulting point.
-inline mobius::core_XYZ mobius::core_XYZ::operator*(const double coeff) const
+inline mobius::core_XYZ mobius::core_XYZ::operator*(const adouble coeff) const
 {
   core_XYZ XYZ_Copy(*this);
   XYZ_Copy *= coeff;
@@ -173,7 +173,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator*(const double coeff) const
 //! Multiplies this point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return this point multiplied by the passed scalar.
-inline mobius::core_XYZ mobius::core_XYZ::operator*=(const double coeff)
+inline mobius::core_XYZ mobius::core_XYZ::operator*=(const adouble coeff)
 {
   this->m_fX *= coeff;
   this->m_fY *= coeff;
@@ -184,7 +184,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator*=(const double coeff)
 //! Divides copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to divide point by.
 //! \return resulting point.
-inline mobius::core_XYZ mobius::core_XYZ::operator/(const double coeff) const
+inline mobius::core_XYZ mobius::core_XYZ::operator/(const adouble coeff) const
 {
   core_XYZ XYZ_Copy(*this);
   XYZ_Copy /= coeff;
@@ -194,7 +194,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator/(const double coeff) const
 //! Divides this point by the passed scalar value.
 //! \param coeff [in] scalar value to divide point by.
 //! \return this point multiplied by the passed scalar.
-inline mobius::core_XYZ mobius::core_XYZ::operator/=(const double coeff)
+inline mobius::core_XYZ mobius::core_XYZ::operator/=(const adouble coeff)
 {
   this->m_fX /= coeff;
   this->m_fY /= coeff;

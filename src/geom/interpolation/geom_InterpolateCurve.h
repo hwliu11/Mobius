@@ -73,9 +73,9 @@ public:
   mobiusGeom_EXPORT
     geom_InterpolateCurve(const std::vector<xyz>& points,
                           const int               deg,
-                          double*                 pParams,
+                          adouble*                 pParams,
                           const int               n,
-                          double*                 pU,
+                          adouble*                 pU,
                           const int               m);
 
 public:
@@ -84,15 +84,15 @@ public:
     Init(const std::vector<xyz>&    points,
          const int                  deg,
          const bspl_ParamsSelection paramsType,
-         double*                    pU,
+         adouble*                    pU,
          const int                  m);
 
   mobiusGeom_EXPORT void
     Init(const std::vector<xyz>& points,
          const int               deg,
-         double*                 pParams,
+         adouble*                 pParams,
          const int               n,
-         double*                 pU,
+         adouble*                 pU,
          const int               m);
 
   mobiusGeom_EXPORT void
@@ -128,8 +128,8 @@ public:
     Interp(const std::vector<xyz>& points,
            const int               n,
            const int               p,
-           const double*           params,
-           const double*           U,
+           const adouble*           params,
+           const adouble*           U,
            const int               m,
            const bool              has_start_deriv,
            const bool              has_end_deriv,
@@ -184,10 +184,10 @@ private:
   xyz                  m_D20;        //!< Derivative D2 at the first point.
   xyz                  m_D2n;        //!< Derivative D2 at the last point.
   bspl_ParamsSelection m_paramsType; //!< Parameterization type.
-  double*              m_pParams;    //!< Parameters externally defined for interpolation.
+  adouble*              m_pParams;    //!< Parameters externally defined for interpolation.
   int                  m_iNumParams; //!< Number of parameters.
   bspl_KnotsSelection  m_knotsType;  //!< Knots selection type.
-  double*              m_pU;         //!< Knot vector externally defined for interpolation.
+  adouble*              m_pU;         //!< Knot vector externally defined for interpolation.
   int                  m_iNumKnots;  //!< Number of knots.
   ptr<bcurve>          m_curve;      //!< Interpolant curve.
 
