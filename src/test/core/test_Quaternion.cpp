@@ -48,13 +48,13 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
-  const double ang = 30*M_PI/180;
+  const adouble ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
 
-  const double q0_ref = 0.965925;
-  const double qx_ref = 0.000000;
-  const double qy_ref = 0.000000;
-  const double qz_ref = 0.258819;
+  const adouble q0_ref = 0.965925;
+  const adouble qx_ref = 0.000000;
+  const adouble qy_ref = 0.000000;
+  const adouble qz_ref = 0.258819;
 
   SetVarDescr("qnAxis", axis, ID(), funcID);
   SetVarDescr("qnAngle", ang*180/M_PI, ID(), funcID);
@@ -68,7 +68,7 @@ mobius::outcome
   SetVarDescr("qz_ref", qz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
@@ -94,16 +94,16 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
-  const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
+  const adouble ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
   core_Quaternion Q = Q1 + Q2;
 
-  const double q0_ref = 1.862220;
-  const double qx_ref = 0.087155;
-  const double qy_ref = 0.000000;
-  const double qz_ref = 0.500000;
+  const adouble q0_ref = 1.862220;
+  const adouble qx_ref = 0.087155;
+  const adouble qy_ref = 0.000000;
+  const adouble qz_ref = 0.500000;
 
   SetVarDescr("qn1Axis", axis1, ID(), funcID);
   SetVarDescr("qn1Angle", ang1*180/M_PI, ID(), funcID);
@@ -119,7 +119,7 @@ mobius::outcome
   SetVarDescr("qz_ref", qz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
@@ -145,16 +145,16 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
-  const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
+  const adouble ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
   core_Quaternion Q = Q1 - Q2;
 
-  const double q0_ref = -0.130169;
-  const double qx_ref = -0.087155;
-  const double qy_ref =  0.000000;
-  const double qz_ref =  0.500000;
+  const adouble q0_ref = -0.130169;
+  const adouble qx_ref = -0.087155;
+  const adouble qy_ref =  0.000000;
+  const adouble qz_ref =  0.500000;
 
   SetVarDescr("qn1Axis", axis1, ID(), funcID);
   SetVarDescr("qn1Angle", ang1*180/M_PI, ID(), funcID);
@@ -170,7 +170,7 @@ mobius::outcome
   SetVarDescr("qz_ref", qz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
@@ -196,16 +196,16 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
-  const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
+  const adouble ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
   core_Quaternion Q = Q1 * Q2;
 
-  const double q0_ref = 0.862729;
-  const double qx_ref = 0.075479;
-  const double qy_ref = 0.043577;
-  const double qz_ref = 0.498097;
+  const adouble q0_ref = 0.862729;
+  const adouble qx_ref = 0.075479;
+  const adouble qy_ref = 0.043577;
+  const adouble qz_ref = 0.498097;
 
   SetVarDescr("qn1Axis", axis1, ID(), funcID);
   SetVarDescr("qn1Angle", ang1*180/M_PI, ID(), funcID);
@@ -221,7 +221,7 @@ mobius::outcome
   SetVarDescr("qz_ref", qz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
@@ -247,16 +247,16 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis(1.0, 1.2, 1.4);
-  const double ang = 135*M_PI/180, C = 10.0;
+  const adouble ang = 135*M_PI/180, C = 10.0;
   core_Quaternion Q(axis, ang);
 
   // Calculate
   Q = Q*C;
 
-  const double q0_ref = 3.826834;
-  const double qx_ref = 4.404422;
-  const double qy_ref = 5.285307;
-  const double qz_ref = 6.166191;
+  const adouble q0_ref = 3.826834;
+  const adouble qx_ref = 4.404422;
+  const adouble qy_ref = 5.285307;
+  const adouble qz_ref = 6.166191;
 
   SetVarDescr("qnAxis", axis, ID(), funcID);
   SetVarDescr("qnAngle", ang*180/M_PI, ID(), funcID);
@@ -271,7 +271,7 @@ mobius::outcome
   SetVarDescr("qz_ref", qz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
@@ -297,12 +297,12 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
-  const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
+  const adouble ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
-  const double dot = Q1.Dot(Q2);
-  const double dot_ref = 0.862729;
+  const adouble dot = Q1.Dot(Q2);
+  const adouble dot_ref = 0.862729;
 
   SetVarDescr("qn1Axis", axis1, ID(), funcID);
   SetVarDescr("qn1Angle", ang1*180/M_PI, ID(), funcID);
@@ -312,7 +312,7 @@ mobius::outcome
   SetVarDescr("dot", dot_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(dot - dot_ref) > tol )
@@ -332,16 +332,16 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis1 = core_XYZ::OZ(), axis2 = core_XYZ::OX();
-  const double ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
+  const adouble ang1 = 60*M_PI/180, ang2 = 10*M_PI/180;
   core_Quaternion Q1(axis1, ang1), Q2(axis2, ang2);
 
   // Calculate
   core_Quaternion Q = Q1.Cross(Q2);
 
-  const double q0_ref = 0.000000;
-  const double qx_ref = 0.000000;
-  const double qy_ref = 0.043577;
-  const double qz_ref = 0.000000;
+  const adouble q0_ref = 0.000000;
+  const adouble qx_ref = 0.000000;
+  const adouble qy_ref = 0.043577;
+  const adouble qz_ref = 0.000000;
 
   SetVarDescr("qn1Axis", axis1, ID(), funcID);
   SetVarDescr("qn1Angle", ang1*180/M_PI, ID(), funcID);
@@ -357,7 +357,7 @@ mobius::outcome
   SetVarDescr("qz_ref", qz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
@@ -383,22 +383,22 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
-  const double ang = 30*M_PI/180;
+  const adouble ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
 
   // Calculate
   core_Quaternion P = Q.Inverted();
   core_Quaternion R = Q * P;
 
-  const double p0_ref =  0.965925;
-  const double px_ref =  0.000000;
-  const double py_ref =  0.000000;
-  const double pz_ref = -0.258819;
+  const adouble p0_ref =  0.965925;
+  const adouble px_ref =  0.000000;
+  const adouble py_ref =  0.000000;
+  const adouble pz_ref = -0.258819;
 
-  const double r0_ref = 1.000000;
-  const double rx_ref = 0.000000;
-  const double ry_ref = 0.000000;
-  const double rz_ref = 0.000000;
+  const adouble r0_ref = 1.000000;
+  const adouble rx_ref = 0.000000;
+  const adouble ry_ref = 0.000000;
+  const adouble rz_ref = 0.000000;
 
   SetVarDescr("qnAxis", axis, ID(), funcID);
   SetVarDescr("qnAngle", ang*180/M_PI, ID(), funcID);
@@ -420,7 +420,7 @@ mobius::outcome
   SetVarDescr("rz_ref", rz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(p0_ref - P.Q0()) > tol )
@@ -454,16 +454,16 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
-  const double ang = 30*M_PI/180;
+  const adouble ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
 
   // Calculate
   Q.Conjugate();
 
-  const double q0_ref =  0.965925;
-  const double qx_ref =  0.000000;
-  const double qy_ref =  0.000000;
-  const double qz_ref = -0.258819;
+  const adouble q0_ref =  0.965925;
+  const adouble qx_ref =  0.000000;
+  const adouble qy_ref =  0.000000;
+  const adouble qz_ref = -0.258819;
 
   SetVarDescr("qnAxis", axis, ID(), funcID);
   SetVarDescr("qnAngle", ang*180/M_PI, ID(), funcID);
@@ -477,7 +477,7 @@ mobius::outcome
   SetVarDescr("qz_ref", qz_ref, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   if ( fabs(q0_ref - Q.Q0()) > tol )
@@ -503,11 +503,11 @@ mobius::outcome
   outcome res( DescriptionFn() );
 
   core_XYZ axis = core_XYZ::OZ();
-  const double ang = 30*M_PI/180;
+  const adouble ang = 30*M_PI/180;
   core_Quaternion Q(axis, ang);
 
   // Calculate
-  double mx[3][3], m_ref[3][3];
+  adouble mx[3][3], m_ref[3][3];
   Q.Matrix3x3(mx);
 
   m_ref[0][0] =  0.866025;
@@ -524,7 +524,7 @@ mobius::outcome
   SetVarDescr("qnAngle", ang*180/M_PI, ID(), funcID);
 
   // Comparison tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Verification
   for ( int r = 0; r < 3; ++r )

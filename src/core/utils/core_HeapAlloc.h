@@ -79,9 +79,9 @@ public:
                      const bool   doNullify = false)
   {
     // Allocate
-    ElemType* ptr = new ElemType[numElems];
+    ElemType* rawPtr = new ElemType[numElems];
     THeapPtr HeapPtr;
-    HeapPtr.Ptr = ptr;
+    HeapPtr.Ptr = rawPtr;
     HeapPtr.Num = numElems;
 
     // Nullify
@@ -90,14 +90,22 @@ public:
 #if defined COUT_DEBUG
       std::cout << "*** core_HeapAlloc::Allocate> sizeof(ElemType) = " << numElems*sizeof(ElemType) << std::endl;
 #endif
-      memset( ptr, 0, numElems*sizeof(ElemType) );
+
+#if defined USE_ADOLC
+      for ( int k = 0; k < numElems; ++k )
+      {
+        rawPtr[k] = 0.0;
+      }
+#else
+      memset( rawPtr, 0, numElems*sizeof(ElemType) );
+#endif
     }
 
     // Store pointer in the internal collection for deallocation
     m_ptrVector.push_back(HeapPtr);
 
     // Return
-    return ptr;
+    return rawPtr;
   }
 
   //! Accessor for the raw array by its internal index in the allocator.
@@ -178,7 +186,16 @@ public:
 
       // Nullify
       if ( doNullify )
+      {
+#if defined USE_ADOLC
+        for ( int k = 0; k < numCols; ++k )
+        {
+          rawPtr[i][k] = 0.0;
+        }
+#else
         memset(rawPtr[i], 0, numCols*sizeof(ElemType));
+#endif
+      }
     }
 
     THeapBlock HeapBlock;

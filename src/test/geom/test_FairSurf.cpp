@@ -240,10 +240,10 @@ mobius::outcome
     return res.failure();
 
   // Compute initial bending energy.
-  const double initEnergy = surf->ComputeBendingEnergy();
+  const adouble initEnergy = surf->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial bending energy: %1."
-                                                          << surf->ComputeBendingEnergy() );
+                                                          << surf->ComputeBendingEnergy().getValue() );
 
   // Perform fairing.
   geom_FairBSurf F(surf, 1.0, NULL, NULL);
@@ -257,26 +257,26 @@ mobius::outcome
   const core_Ptr<bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
-  const double resEnergy = result->ComputeBendingEnergy();
+  const adouble resEnergy = result->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Resulting bending energy: %1"
-                                                          << resEnergy );
+                                                          << resEnergy.getValue() );
 
   // Resulting energy should always be smaller.
   if ( resEnergy > initEnergy )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Energy is not decreasing (%1 -> %2)."
-                                                           << initEnergy << resEnergy );
+                                                           << initEnergy.getValue() << resEnergy.getValue() );
     return res.failure();
   }
 
   // Verify.
-  const double refEnergy = 0.44307026;
+  const adouble refEnergy = 0.44307026;
   //
-  if ( abs(resEnergy - refEnergy) > 1e-4 )
+  if ( abs(resEnergy.getValue() - refEnergy.getValue()) > 1e-4 )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Final energy (%1) is too different from expected (%2)."
-                                                           << resEnergy << refEnergy );
+                                                           << resEnergy.getValue() << refEnergy.getValue() );
     return res.failure();
   }
 
@@ -343,10 +343,10 @@ mobius::outcome
     return res.failure();
 
   // Compute initial bending energy.
-  const double initEnergy = surf->ComputeBendingEnergy();
+  const adouble initEnergy = surf->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial bending energy: %1."
-                                                          << surf->ComputeBendingEnergy() );
+                                                          << surf->ComputeBendingEnergy().getValue() );
 
   // Perform fairing.
   geom_FairBSurf F(surf, 1.0, NULL, NULL);
@@ -358,26 +358,26 @@ mobius::outcome
   const core_Ptr<bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
-  const double resEnergy = result->ComputeBendingEnergy();
+  const adouble resEnergy = result->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Resulting bending energy: %1"
-                                                          << resEnergy );
+                                                          << resEnergy.getValue() );
 
   // Resulting energy should always be smaller.
   if ( resEnergy > initEnergy )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Energy is not decreasing (%1 -> %2)."
-                                                           << initEnergy << resEnergy );
+                                                           << initEnergy.getValue() << resEnergy.getValue() );
     return res.failure();
   }
 
   // Verify.
-  const double refEnergy = 0.06209;
+  const adouble refEnergy = 0.06209;
   //
-  if ( abs(resEnergy - refEnergy) > 1e-4 )
+  if ( abs(resEnergy.getValue() - refEnergy.getValue()) > 1e-4 )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Final energy (%1) is too different from expected (%2)."
-                                                           << resEnergy << refEnergy );
+                                                           << resEnergy.getValue() << refEnergy.getValue() );
     return res.failure();
   }
 
@@ -417,10 +417,10 @@ mobius::outcome
     return res.failure();
 
   // Compute initial bending energy.
-  const double initEnergy = surf->ComputeBendingEnergy();
+  const adouble initEnergy = surf->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial bending energy: %1."
-                                                          << surf->ComputeBendingEnergy() );
+                                                          << surf->ComputeBendingEnergy().getValue() );
 
   // Perform fairing.
   geom_FairBSurf F(surf, 1.0, NULL, NULL);
@@ -432,26 +432,26 @@ mobius::outcome
   const core_Ptr<bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
-  const double resEnergy = result->ComputeBendingEnergy();
+  const adouble resEnergy = result->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Resulting bending energy: %1"
-                                                          << resEnergy );
+                                                          << resEnergy.getValue() );
 
   // Resulting energy should always be smaller.
   if ( resEnergy > initEnergy )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Energy is not decreasing (%1 -> %2)."
-                                                           << initEnergy << resEnergy );
+                                                           << initEnergy.getValue() << resEnergy.getValue() );
     return res.failure();
   }
 
   // Verify.
-  const double refEnergy = 0.0049;
+  const adouble refEnergy = 0.0049;
   //
-  if ( abs(resEnergy - refEnergy) > 1e-4 )
+  if ( abs(resEnergy.getValue() - refEnergy.getValue()) > 1e-4 )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Final energy (%1) is too different from expected (%2)."
-                                                           << resEnergy << refEnergy );
+                                                           << resEnergy.getValue() << refEnergy.getValue() );
     return res.failure();
   }
 
@@ -491,10 +491,10 @@ mobius::outcome
     return res.failure();
 
   // Compute initial bending energy.
-  const double initEnergy = surf->ComputeBendingEnergy();
+  const adouble initEnergy = surf->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial bending energy: %1."
-                                                          << surf->ComputeBendingEnergy() );
+                                                          << surf->ComputeBendingEnergy().getValue() );
 
   // Prepare fairing tool.
   geom_FairBSurf F(surf, 1.0, NULL, NULL);
@@ -523,26 +523,26 @@ mobius::outcome
   const core_Ptr<bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
-  const double resEnergy = result->ComputeBendingEnergy();
+  const adouble resEnergy = result->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Resulting bending energy: %1"
-                                                          << resEnergy );
+                                                          << resEnergy.getValue() );
 
   // Resulting energy should always be smaller.
   if ( resEnergy > initEnergy )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Energy is not decreasing (%1 -> %2)."
-                                                           << initEnergy << resEnergy );
+                                                           << initEnergy.getValue() << resEnergy.getValue() );
     return res.failure();
   }
 
   // Verify.
-  const double refEnergy = 453068.70181; // Energy of constrained surface is far from zero.
+  const adouble refEnergy = 453068.70181; // Energy of constrained surface is far from zero.
   //
-  if ( abs(resEnergy - refEnergy) > 1e-4 )
+  if ( abs(resEnergy.getValue() - refEnergy.getValue()) > 1e-4 )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Final energy (%1) is too different from expected (%2)."
-                                                           << resEnergy << refEnergy );
+                                                           << resEnergy.getValue() << refEnergy.getValue() );
     return res.failure();
   }
 
@@ -582,10 +582,10 @@ mobius::outcome
     return res.failure();
 
   // Compute initial bending energy.
-  const double initEnergy = surf->ComputeBendingEnergy();
+  const adouble initEnergy = surf->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial bending energy: %1."
-                                                          << surf->ComputeBendingEnergy() );
+                                                          << surf->ComputeBendingEnergy().getValue() );
 
   // Prepare fairing tool.
   geom_FairBSurf F(surf, 1.0, NULL, NULL);
@@ -598,26 +598,26 @@ mobius::outcome
   const core_Ptr<bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
-  const double resEnergy = result->ComputeBendingEnergy();
+  const adouble resEnergy = result->ComputeBendingEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Resulting bending energy: %1"
-                                                          << resEnergy );
+                                                          << resEnergy.getValue() );
 
   // Resulting energy should always be smaller.
   if ( resEnergy > initEnergy )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Energy is not decreasing (%1 -> %2)."
-                                                           << initEnergy << resEnergy );
+                                                           << initEnergy.getValue() << resEnergy.getValue() );
     return res.failure();
   }
 
   // Verify.
-  const double refEnergy = 0.8874; // Energy of constrained surface is far from zero.
+  const adouble refEnergy = 0.8874; // Energy of constrained surface is far from zero.
   //
-  if ( abs(resEnergy - refEnergy) > 1e-4 )
+  if ( abs(resEnergy.getValue() - refEnergy.getValue()) > 1e-4 )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Final energy (%1) is too different from expected (%2)."
-                                                           << resEnergy << refEnergy );
+                                                           << resEnergy.getValue() << refEnergy.getValue() );
     return res.failure();
   }
 

@@ -46,10 +46,10 @@ mobius::core_Quaternion::core_Quaternion()
 //! \param px [in] 2-nd component.
 //! \param py [in] 3-rd component.
 //! \param pz [in] 4-th component.
-mobius::core_Quaternion::core_Quaternion(const double p0,
-                                         const double px,
-                                         const double py,
-                                         const double pz)
+mobius::core_Quaternion::core_Quaternion(const adouble p0,
+                                         const adouble px,
+                                         const adouble py,
+                                         const adouble pz)
 {
   q0 = p0;
   qx = px;
@@ -62,7 +62,7 @@ mobius::core_Quaternion::core_Quaternion(const double p0,
 //! \param axis  [in] axis of rotation.
 //! \param angle [in] angle of rotation (in radians).
 mobius::core_Quaternion::core_Quaternion(const core_XYZ& axis,
-                                         const double    angle)
+                                         const adouble    angle)
 {
   this->SetRotation(axis, angle);
 }
@@ -92,11 +92,11 @@ mobius::core_Quaternion::~core_Quaternion()
 //! \param axis  [in] axis of rotation.
 //! \param angle [in] rotation angle.
 void mobius::core_Quaternion::SetRotation(const core_XYZ& axis,
-                                          const double    angle)
+                                          const adouble    angle)
 {
-  const double a2 = (double) ( angle/2.0 );
-  const double cs = (double) ( cos(a2) );
-  const double sn = (double) ( sin(a2) );
+  const adouble a2 = (adouble) ( angle/2.0 );
+  const adouble cs = (adouble) ( cos(a2) );
+  const adouble sn = (adouble) ( sin(a2) );
   core_XYZ     A  = axis.Normalized();
 
   q0 = cs;
@@ -114,7 +114,7 @@ void mobius::core_Quaternion::SetRotation(const core_XYZ& axis,
 //! </pre>
 //!
 //! \param mx [out] output matrix.
-void mobius::core_Quaternion::Matrix3x3(double (&mx)[3][3]) const
+void mobius::core_Quaternion::Matrix3x3(adouble (&mx)[3][3]) const
 {
   mx[0][0] =  q0*q0 + qx*qx - qy*qy - qz*qz;
   mx[0][1] = -2*q0*qz + 2*qx*qy;
@@ -131,28 +131,28 @@ void mobius::core_Quaternion::Matrix3x3(double (&mx)[3][3]) const
 
 //! Returns q0 component of the quaternion.
 //! \return requested component.
-double mobius::core_Quaternion::Q0() const
+adouble mobius::core_Quaternion::Q0() const
 {
   return q0;
 }
 
 //! Returns qx component of the quaternion.
 //! \return requested component.
-double mobius::core_Quaternion::Qx() const
+adouble mobius::core_Quaternion::Qx() const
 {
   return qx;
 }
 
 //! Returns qy component of the quaternion.
 //! \return requested component.
-double mobius::core_Quaternion::Qy() const
+adouble mobius::core_Quaternion::Qy() const
 {
   return qy;
 }
 
 //! Returns qz component of the quaternion.
 //! \return requested component.
-double mobius::core_Quaternion::Qz() const
+adouble mobius::core_Quaternion::Qz() const
 {
   return qz;
 }
@@ -239,7 +239,7 @@ mobius::core_Quaternion
 //! \param k [in] scalar to multiply the quaternion by.
 //! \return multiplication result.
 mobius::core_Quaternion
-  mobius::core_Quaternion::operator*(const double k) const
+  mobius::core_Quaternion::operator*(const adouble k) const
 {
   core_Quaternion Q;
   Q.q0 = q0*k;
@@ -257,7 +257,7 @@ mobius::core_Quaternion
 //!
 //! \param Qn [in] quaternion to multiply.
 //! \return dot product.
-double mobius::core_Quaternion::Dot(const core_Quaternion& Qn) const
+adouble mobius::core_Quaternion::Dot(const core_Quaternion& Qn) const
 {
   return q0*Qn.q0 + qx*Qn.qx + qy*Qn.qy + qz*Qn.qz;
 }
@@ -294,7 +294,7 @@ mobius::core_Quaternion&
 void mobius::core_Quaternion::Invert()
 {
   core_Quaternion Q(*this), QQ = this->Conjugated();
-  this->operator=( QQ*( (double) ( 1.0 / Q.Dot(Q) ) ) );
+  this->operator=( QQ*( (adouble) ( 1.0 / Q.Dot(Q) ) ) );
 }
 
 //! Returns inverted copy of this quaternion.

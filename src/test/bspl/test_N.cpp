@@ -63,26 +63,26 @@ mobius::outcome mobius::test_N::testCase1() const
 {
   outcome res;//( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.2, 0.5, 1.0};
+  const std::vector<adouble> U = {0.0, 0.2, 0.5, 1.0};
   const int p = 0;
 
   bspl_N N;
 
-  double val_0_0 = N(0.0, U, p, 0);
-  double val_0_1 = N(0.0, U, p, 1);
-  double val_0_2 = N(0.0, U, p, 2);
+  adouble val_0_0 = N(0.0, U, p, 0);
+  adouble val_0_1 = N(0.0, U, p, 1);
+  adouble val_0_2 = N(0.0, U, p, 2);
 
-  double val_1_0 = N(0.1, U, p, 0);
-  double val_1_1 = N(0.1, U, p, 1);
-  double val_1_2 = N(0.1, U, p, 2);
+  adouble val_1_0 = N(0.1, U, p, 0);
+  adouble val_1_1 = N(0.1, U, p, 1);
+  adouble val_1_2 = N(0.1, U, p, 2);
 
-  double val_2_0 = N(0.3, U, p, 0);
-  double val_2_1 = N(0.3, U, p, 1);
-  double val_2_2 = N(0.3, U, p, 2);
+  adouble val_2_0 = N(0.3, U, p, 0);
+  adouble val_2_1 = N(0.3, U, p, 1);
+  adouble val_2_2 = N(0.3, U, p, 2);
 
-  double val_3_0 = N(0.6, U, p, 0);
-  double val_3_1 = N(0.6, U, p, 1);
-  double val_3_2 = N(0.6, U, p, 2);
+  adouble val_3_0 = N(0.6, U, p, 0);
+  adouble val_3_1 = N(0.6, U, p, 1);
+  adouble val_3_2 = N(0.6, U, p, 2);
 
   // TODO: remove this stuff
   std::cout << val_0_0 << " " << val_0_1 << " " << val_0_2 << std::endl;
@@ -99,30 +99,30 @@ mobius::outcome mobius::test_N::testCase2() const
 {
   outcome res;//( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 0.2, 0.5, 1.0, 1.0};
+  const std::vector<adouble> U = {0.0, 0.0, 0.2, 0.5, 1.0, 1.0};
   const int p = 1;
 
   bspl_N N;
 
-  double val_0_0 = N(0.0, U, p, 0);
-  double val_0_1 = N(0.0, U, p, 1);
-  double val_0_2 = N(0.0, U, p, 2);
-  double val_0_3 = N(0.0, U, p, 3);
+  adouble val_0_0 = N(0.0, U, p, 0);
+  adouble val_0_1 = N(0.0, U, p, 1);
+  adouble val_0_2 = N(0.0, U, p, 2);
+  adouble val_0_3 = N(0.0, U, p, 3);
 
-  double val_1_0 = N(0.1, U, p, 0);
-  double val_1_1 = N(0.1, U, p, 1);
-  double val_1_2 = N(0.1, U, p, 2);
-  double val_1_3 = N(0.1, U, p, 3);
+  adouble val_1_0 = N(0.1, U, p, 0);
+  adouble val_1_1 = N(0.1, U, p, 1);
+  adouble val_1_2 = N(0.1, U, p, 2);
+  adouble val_1_3 = N(0.1, U, p, 3);
 
-  double val_2_0 = N(0.3, U, p, 0);
-  double val_2_1 = N(0.3, U, p, 1);
-  double val_2_2 = N(0.3, U, p, 2);
-  double val_2_3 = N(0.3, U, p, 3);
+  adouble val_2_0 = N(0.3, U, p, 0);
+  adouble val_2_1 = N(0.3, U, p, 1);
+  adouble val_2_2 = N(0.3, U, p, 2);
+  adouble val_2_3 = N(0.3, U, p, 3);
 
-  double val_3_0 = N(0.6, U, p, 0);
-  double val_3_1 = N(0.6, U, p, 1);
-  double val_3_2 = N(0.6, U, p, 2);
-  double val_3_3 = N(0.6, U, p, 3);
+  adouble val_3_0 = N(0.6, U, p, 0);
+  adouble val_3_1 = N(0.6, U, p, 1);
+  adouble val_3_2 = N(0.6, U, p, 2);
+  adouble val_3_3 = N(0.6, U, p, 3);
 
   // TODO: remove this stuff
   std::cout << val_0_0 << " " << val_0_1 << " " << val_0_2 << " " << val_0_3 << std::endl;

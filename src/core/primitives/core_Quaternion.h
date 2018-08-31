@@ -377,14 +377,14 @@ public:
     core_Quaternion();
 
   mobiusCore_EXPORT
-    core_Quaternion(const double p0,
-                    const double px,
-                    const double py,
-                    const double pz);
+    core_Quaternion(const adouble p0,
+                    const adouble px,
+                    const adouble py,
+                    const adouble pz);
 
   mobiusCore_EXPORT
     core_Quaternion(const core_XYZ& axis,
-                    const double    angle);
+                    const adouble    angle);
 
   mobiusCore_EXPORT
     core_Quaternion(const core_XYZ& Qn_im);
@@ -399,21 +399,21 @@ public:
 
   mobiusCore_EXPORT void
     SetRotation(const core_XYZ& axis,
-                const double    angle);
+                const adouble    angle);
 
   mobiusCore_EXPORT void
-    Matrix3x3(double (&mx)[3][3]) const;
+    Matrix3x3(adouble (&mx)[3][3]) const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Q0() const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Qx() const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Qy() const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Qz() const;
 
   mobiusCore_EXPORT bool
@@ -434,9 +434,9 @@ public:
     operator*(const core_XYZ& Qn_im) const;
 
   mobiusCore_EXPORT core_Quaternion
-    operator*(const double k) const;
+    operator*(const adouble k) const;
 
-  mobiusCore_EXPORT double
+  mobiusCore_EXPORT adouble
     Dot(const core_Quaternion& Qn) const;
 
   mobiusCore_EXPORT core_Quaternion
@@ -459,7 +459,7 @@ public:
 
 private:
 
-  double q0, qx, qy, qz; //!< Quaternion components.
+  adouble q0, qx, qy, qz; //!< Quaternion components.
 
 };
 

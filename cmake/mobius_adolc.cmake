@@ -19,8 +19,6 @@ endif()
 message (STATUS "... adolc Include dirs: ${3RDPARTY_adolc_INCLUDE_DIR}")
 message (STATUS "... adolc Library dirs: ${3RDPARTY_adolc_LIBRARY_DIR}")
 
-add_definitions (-DDTK_SHARED)
-
 string (REPLACE lib libd 3RDPARTY_adolc_LIBRARY_DIR_DEBUG ${3RDPARTY_adolc_LIBRARY_DIR})
 if (3RDPARTY_adolc_LIBRARY_DIR_DEBUG AND EXISTS "${3RDPARTY_adolc_LIBRARY_DIR_DEBUG}")
   if (WIN32)

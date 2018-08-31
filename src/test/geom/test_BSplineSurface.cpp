@@ -58,8 +58,8 @@ mobius::outcome
           { xyz(2.0, 0.0, 0.0), xyz(2.0, 1.0, 0.0) } };
 
   // Knot vectors.
-  const std::vector<double> U = {0, 0, 0.5, 1, 1};
-  const std::vector<double> V = {0, 0, 1, 1};
+  const std::vector<adouble> U = {0, 0, 0.5, 1, 1};
+  const std::vector<adouble> V = {0, 0, 1, 1};
 
   // Degrees.
   const int p = 1;
@@ -72,9 +72,9 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
-  const double u   = 0.5;
-  const double v   = 0.5;
+  const adouble eps = 1e-7;
+  const adouble u   = 0.5;
+  const adouble v   = 0.5;
   //
   const xyz P_ref(1, 0.5, 0);
 
@@ -110,8 +110,8 @@ mobius::outcome
           { xyz(2.0, 0.0, 0.0), xyz(2.0, 1.0, 0.0) } };
 
   // Knot vectors.
-  const std::vector<double> U = {0, 0, 0.5, 1, 1};
-  const std::vector<double> V = {0, 0, 1, 1};
+  const std::vector<adouble> U = {0, 0, 0.5, 1, 1};
+  const std::vector<adouble> V = {0, 0, 1, 1};
 
   // Degrees.
   const int p = 1;
@@ -124,9 +124,9 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
-  const double u   = 1.5;
-  const double v   = 1.5;
+  const adouble eps = 1e-7;
+  const adouble u   = 1.5;
+  const adouble v   = 1.5;
   //
   const xyz P_ref(3, 1.5, 0);
 
@@ -203,9 +203,9 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
-  const double u   = 0.5;
-  const double v   = 0.5;
+  const adouble eps = 1e-7;
+  const adouble u   = 0.5;
+  const adouble v   = 0.5;
   //
   const xyz P_ref(0, 0, 10);
 
@@ -289,12 +289,12 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
+  const adouble eps = 1e-7;
 
   // Test 1.
   {
-    const double u = 0.5;
-    const double v = 3;
+    const adouble u = 0.5;
+    const adouble v = 3;
     //
     const xyz P_ref(2966.1562033533373, -975.99025344537256, 868.77888598126765);
 
@@ -309,8 +309,8 @@ mobius::outcome
 
   // Test 2.
   {
-    const double u = 0.5;
-    const double v = 5;
+    const adouble u = 0.5;
+    const adouble v = 5;
     //
     const xyz P_ref(4936.6672840131978, -1017.8903156478241, 740.14824482133531);
 
@@ -325,8 +325,8 @@ mobius::outcome
 
   // Test 3.
   {
-    const double u = 0.95031615985331297; // U_max.
-    const double v = 5.2866714434994; // V_max.
+    const adouble u = 0.95031615985331297; // U_max.
+    const adouble v = 5.2866714434994; // V_max.
     //
     const xyz P_ref(5229.8220700325737, -1058.8898967817131, 716.93503449971013);
 
@@ -341,8 +341,8 @@ mobius::outcome
 
   // Test 4.
   {
-    const double u = 0.96; // > U_max.
-    const double v = 5.29; // > V_max.
+    const adouble u = 0.96; // > U_max.
+    const adouble v = 5.29; // > V_max.
     //
     const xyz P_ref(5228.8089992117957, -1055.7995537824584, 716.37072890072977);
 
@@ -430,12 +430,12 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
+  const adouble eps = 1e-7;
 
   // Test.
   {
-    const double u = 0.5;
-    const double v = 0.5;
+    const adouble u = 0.5;
+    const adouble v = 0.5;
     //
     const xyz P_ref  (102.01056087867869, 186.81000791347395, 633.12859242907416);
     const xyz dU_ref (35.950281444623457, 63.027026776358525, -29.57316833575419);
@@ -525,12 +525,12 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
+  const adouble eps = 1e-7;
 
   // Test.
   {
-    const double u = 1.1; // Out of range
-    const double v = 1.1; // Out of range
+    const adouble u = 1.1; // Out of range
+    const adouble v = 1.1; // Out of range
     //
     const xyz P_ref  (281.32712540796518, 25.457981859438284, -4.6248038997486107);
     const xyz dU_ref (-41.09642504354224, -0.19347502194278832, -99.247529960069542);
@@ -626,12 +626,12 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
+  const adouble eps = 1e-7;
 
   // Test.
   {
-    const double u = 0.5;
-    const double v = 0.5;
+    const adouble u = 0.5;
+    const adouble v = 0.5;
     //
     const xyz P_ref    (-22.706047383292336, 333.52296737858524, 691.82936585037669);
     const xyz dU_ref   (17.546897305703443, -56.897917238716673, 19.295889729809545);
@@ -737,12 +737,12 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
+  const adouble eps = 1e-7;
 
   // Test.
   {
-    const double u = 1.1;
-    const double v = 1.1;
+    const adouble u = 1.1;
+    const adouble v = 1.1;
     //
     const xyz P_ref    (104.53943984031076, 1292.5685875750669, 355.45132840944336);
     const xyz dU_ref   (12.080309354083056, -26.340178053556883, 53.835544419115649);
@@ -856,18 +856,18 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-2;
+  const adouble eps = 1e-2;
 
   // Test.
   {
-    const double energy_ref = 104333.863;
-    const double energy = surf->ComputeBendingEnergy();
+    const adouble energy_ref = 104333.863;
+    const adouble energy = surf->ComputeBendingEnergy();
     //
     cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
-                                                            << energy );
+                                                            << energy.getValue() );
 
     // Check.
-    if ( abs(energy - energy_ref) > eps )
+    if ( abs(energy.getValue() - energy_ref.getValue()) > eps )
       return res.failure();
   }
 
@@ -941,18 +941,18 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-2;
+  const adouble eps = 1e-2;
 
   // Test.
   {
-    const double energy_ref = 20747.437;
-    const double energy = surf->ComputeBendingEnergy();
+    const adouble energy_ref = 20747.437;
+    const adouble energy = surf->ComputeBendingEnergy();
     //
     cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
-                                                            << energy );
+                                                            << energy.getValue() );
 
     // Check.
-    if ( abs(energy - energy_ref) > eps )
+    if ( abs(energy.getValue() - energy_ref.getValue()) > eps )
       return res.failure();
   }
 
@@ -1021,18 +1021,18 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-2;
+  const adouble eps = 1e-2;
 
   // Test.
   {
-    const double energy_ref = 0.0;
-    const double energy = surf->ComputeBendingEnergy();
+    const adouble energy_ref = 0.0;
+    const adouble energy = surf->ComputeBendingEnergy();
     //
     cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
-                                                            << energy );
+                                                            << energy.getValue() );
 
     // Check.
-    if ( abs(energy - energy_ref) > eps )
+    if ( abs(energy.getValue() - energy_ref.getValue()) > eps )
       return res.failure();
   }
 
@@ -1111,18 +1111,18 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-2;
+  const adouble eps = 1e-2;
 
   // Test.
   {
-    const double energy_ref = 953253.754;
-    const double energy = surf->ComputeBendingEnergy();
+    const adouble energy_ref = 953253.754;
+    const adouble energy = surf->ComputeBendingEnergy();
     //
     cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
-                                                            << energy );
+                                                            << energy.getValue() );
 
     // Check.
-    if ( abs(energy - energy_ref) > eps )
+    if ( abs(energy.getValue() - energy_ref.getValue()) > eps )
       return res.failure();
   }
 
@@ -1201,18 +1201,18 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-2;
+  const adouble eps = 1e-2;
 
   // Test.
   {
-    const double energy_ref = 116945.191;
-    const double energy = surf->ComputeBendingEnergy();
+    const adouble energy_ref = 116945.191;
+    const adouble energy = surf->ComputeBendingEnergy();
     //
     cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
-                                                            << energy );
+                                                            << energy.getValue() );
 
     // Check.
-    if ( abs(energy - energy_ref) > eps )
+    if ( abs(energy.getValue() - energy_ref.getValue()) > eps )
       return res.failure();
   }
 
@@ -1291,20 +1291,91 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-2;
+  const adouble eps = 1e-2;
 
   // Test.
   {
-    const double energy_ref = 95566.646;
-    const double energy = surf->ComputeBendingEnergy();
+    const adouble energy_ref = 95566.646;
+    const adouble energy = surf->ComputeBendingEnergy();
     //
     cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Bending energy is %1."
-                                                            << energy );
+                                                            << energy.getValue() );
 
     // Check.
-    if ( abs(energy - energy_ref) > eps )
+    if ( abs(energy.getValue() - energy_ref.getValue()) > eps )
       return res.failure();
   }
 
   return res.success();
 }
+
+#if defined USE_ADOLC
+
+//-----------------------------------------------------------------------------
+
+//! Computes exact derivatives with ADOL-C.
+//!
+//! \param[in] funcID function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_BSplineSurface::computeDeriv01(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  /* ======================
+   *  Prepare input points
+   * ====================== */
+
+  // JSON definition.
+  std::string json =
+  "{\
+    entity: surface,\
+    type: b-surface,\
+    continuity: C2,\
+    domain: {\
+        U_min: 0,\
+        U_max: 1,\
+        V_min: 0,\
+        V_max: 1\
+    },\
+    flags: {\
+        is_U_rational: 0,\
+        is_V_rational: 0,\
+        is_U_periodic: 0,\
+        is_V_periodic: 0,\
+        is_U_closed: 0,\
+        is_V_closed: 0\
+    },\
+    properties: {\
+        U_degree: 3,\
+        V_degree: 3,\
+        U_knots: [0, 0, 0, 0, 0.51507066945465851, 0.64279998255329296, 0.7479866354308301, 1, 1, 1, 1],\
+        V_knots: [0, 0, 0, 0, 0.19874760490017954, 0.36769199242180289, 0.60342534438656004, 1, 1, 1, 1],\
+        num_poles_in_U_axis: 7,\
+        num_poles_in_V_axis: 7,\
+        poles: {\
+            u0: [[83.967113457866944, 1389.9202156241026, 331.05829617564888], [87.840101662732181, 1386.5001332781151, 328.48223260556205], [87.601212803300214, 1378.980460273247, 324.86326472920661], [90.357347137565313, 1366.6056710129296, 318.17203841591845], [93.316664399916803, 1350.0404276683739, 309.38552646183825], [94.231562444029066, 1336.7478461707253, 302.67589048039451], [92.070395682684264, 1328.0825249060183, 298.94609345156039]],\
+            u1: [[87.72961992030227, 1385.6583638046641, 339.996587770676], [86.074121582961567, 1381.4351192057668, 338.31945691933356], [94.698586131996578, 1375.2030880966586, 333.25930648499593], [88.173646790599079, 1361.4799717696342, 328.07718410611261], [93.311063834292028, 1345.2311563505173, 318.93651280964838], [82.816154968319381, 1330.2809916873623, 314.08211309725897], [87.66790980359788, 1322.6344870311436, 309.21201399314737]],\
+            u2: [[88.073744209179651, 1379.6772304066974, 351.91905132432476], [91.286721255866595, 1376.1612635822498, 349.45030566489885], [94.456374471973092, 1369.1367735377937, 345.27710834952273], [93.365926796073239, 1356.2031641646452, 339.21133683256272], [94.491315307464106, 1339.3714930489434, 330.72302196108768], [96.554476577531901, 1326.2457278530787, 323.82667821148971], [92.442069422006341, 1317.2969361269757, 320.41415315556969]],\
+            u3: [[91.342099279797026, 1373.1047835416032, 365.38418399048356], [92.057069583677048, 1369.2259136499226, 363.32161459206571], [96.839262400600035, 1362.4356886125001, 358.88621810221838], [98.990280822905319, 1349.9729898935195, 352.29338372454248], [97.409840975609711, 1332.7482239978979, 344.24503693914977], [97.515811181504802, 1319.3381238448235, 337.6669327422789], [98.16173291311209, 1311.0806081342957, 333.48070271474512]],\
+            u4: [[93.898698406330794, 1368.8993456298194, 374.05856654750312], [95.706747785264227, 1365.1792750489162, 371.81826233192908], [96.755804640556107, 1357.8467110066842, 367.98987429435948], [102.88108442900014, 1345.9613812815783, 360.75082443843434], [98.589473940105322, 1328.3427444949084, 353.14331439511159], [100.8959159857196, 1315.2523224140771, 346.20741315590095], [100.06034455821795, 1306.7795797378596, 342.26207413228985]],\
+            u5: [[95.680178299802051, 1365.7850972621407, 380.46812373633583], [96.845981375710807, 1361.9717230286492, 378.33224886337916], [99.723002616755281, 1354.9047202721549, 374.20663354986425], [104.90837997464688, 1342.8828442883407, 367.12041196634084], [99.992316374247224, 1325.1734887915748, 359.61443809009938], [101.95367679903985, 1312.0329342685486, 352.73464717280723], [101.86614631944096, 1303.6688647795415, 348.66767658187564]],\
+            u6: [[96.881429701213023, 1363.5898415460244, 384.97939920790446], [97.98175333291401, 1359.7669546516026, 382.85417130213483], [101.40350099463984, 1352.7790881462165, 378.63998339310274], [101.99606563577518, 1340.0899818488922, 372.30055382772974], [103.95038866349559, 1323.3787358999214, 363.67745408289721], [102.62017642991673, 1309.759991389139, 357.33287336032095], [102.71308394722897, 1301.4221354012407, 353.23656352475399]]\
+        }\
+    }\
+  }";
+
+  // Construct B-surface.
+  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  //
+  if ( surf.IsNull() )
+    return res.failure();
+
+  // TODO: NYI
+
+  return res.success();
+}
+
+#endif

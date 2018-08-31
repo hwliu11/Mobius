@@ -56,7 +56,7 @@ void mobius::cascade_MultResolver::Resolve(const double u)
   for ( int i = 1; i <= Knots.Length(); ++i )
   {
     const knot_multiset::elem& knotWithMult = Knots.Value(i);
-    if ( Abs(knotWithMult.u - u) < RealEpsilon() )
+    if ( Abs(knotWithMult.u.getValue() - u) < RealEpsilon() )
     {
       isFound = true;
       foundIdx = i;
@@ -84,7 +84,7 @@ Handle(TColStd_HArray1OfReal)
   Handle(TColStd_HArray1OfReal) res = new TColStd_HArray1OfReal( 0, Knots.Length() - 1 );
   for ( int i = 0; i < Knots.Length(); ++i )
   {
-    res->SetValue( i, Knots(i + 1).u );
+    res->SetValue( i, Knots(i + 1).u.getValue() );
   }
   return res;
 }

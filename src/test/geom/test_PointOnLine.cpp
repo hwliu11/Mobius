@@ -171,7 +171,7 @@ mobius::outcome
                                    const xyz&   LineOri,
                                    const xyz&   LineDir,
                                    const xyz&   P,
-                                   const double classiPrec,
+                                   const adouble classiPrec,
                                    const bool   resultRef)
 {
   outcome res( DescriptionFn() );

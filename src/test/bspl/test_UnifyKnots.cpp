@@ -46,50 +46,50 @@ mobius::outcome
 {
   outcome res( DescriptionFn() );
 
-  const double U[] = {0, 0, 1, 2, 3};
-  const double V[] = {2, 2, 3, 5, 6};
-  const double W[] = {0, 4, 8};
-  const int    nU  = sizeof(U)/sizeof(double);
-  const int    nV  = sizeof(V)/sizeof(double);
-  const int    nW  = sizeof(W)/sizeof(double);
+  const adouble U[] = {0, 0, 1, 2, 3};
+  const adouble V[] = {2, 2, 3, 5, 6};
+  const adouble W[] = {0, 4, 8};
+  const int    nU  = sizeof(U)/sizeof(adouble);
+  const int    nV  = sizeof(V)/sizeof(adouble);
+  const int    nW  = sizeof(W)/sizeof(adouble);
 
-  std::vector<double> U_vec;
+  std::vector<adouble> U_vec;
   for ( size_t i = 0; i < nU; ++i )
     U_vec.push_back(U[i]);
 
-  std::vector<double> V_vec;
+  std::vector<adouble> V_vec;
   for ( size_t i = 0; i < nV; ++i )
     V_vec.push_back(V[i]);
 
-  std::vector<double> W_vec;
+  std::vector<adouble> W_vec;
   for ( size_t i = 0; i < nW; ++i )
     W_vec.push_back(W[i]);
 
-  std::vector< std::vector<double> > knot_vectors;
+  std::vector< std::vector<adouble> > knot_vectors;
   knot_vectors.push_back(U_vec);
   knot_vectors.push_back(V_vec);
   knot_vectors.push_back(W_vec);
 
   bspl_UnifyKnots Unify;
-  std::vector< std::vector<double> > X = Unify(knot_vectors);
+  std::vector< std::vector<adouble> > X = Unify(knot_vectors);
 
   // Referential multiset
-  std::vector< std::vector<double> > refs;
-  std::vector<double> ref0;
+  std::vector< std::vector<adouble> > refs;
+  std::vector<adouble> ref0;
   ref0.push_back(2);
   ref0.push_back(4);
   ref0.push_back(5);
   ref0.push_back(6);
   ref0.push_back(8);
   refs.push_back(ref0);
-  std::vector<double> ref1;
+  std::vector<adouble> ref1;
   ref1.push_back(0);
   ref1.push_back(0);
   ref1.push_back(1);
   ref1.push_back(4);
   ref1.push_back(8);
   refs.push_back(ref1);
-  std::vector<double> ref2;
+  std::vector<adouble> ref2;
   ref2.push_back(0);
   ref2.push_back(1);
   ref2.push_back(2);
@@ -120,12 +120,12 @@ mobius::outcome
   knot_multiset U_o(U_vec), V_o(V_vec), W_o(W_vec), U_x(X[0]), V_x(X[1]), W_x(X[2]);
 
   // Apply extensions
-  std::vector<double> U_final = (U_o ^ U_x).Convert();
-  std::vector<double> V_final = (V_o ^ V_x).Convert();
-  std::vector<double> W_final = (W_o ^ W_x).Convert();
+  std::vector<adouble> U_final = (U_o ^ U_x).Convert();
+  std::vector<adouble> V_final = (V_o ^ V_x).Convert();
+  std::vector<adouble> W_final = (W_o ^ W_x).Convert();
 
   // Now we should obtain just the same knot vectors. Let's check it
-  std::vector<double> ref_unified;
+  std::vector<adouble> ref_unified;
   ref_unified.push_back(0);
   ref_unified.push_back(0);
   ref_unified.push_back(1);

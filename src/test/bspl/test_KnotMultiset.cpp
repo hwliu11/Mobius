@@ -47,10 +47,10 @@ mobius::outcome
 {
   outcome res( DescriptionFn() );
 
-  const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
-  const int    nU  = sizeof(U)/sizeof(double);
+  const adouble U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const int    nU  = sizeof(U)/sizeof(adouble);
 
-  std::vector<double> U_vec;
+  std::vector<adouble> U_vec;
   for ( size_t i = 0; i < nU; ++i )
     U_vec.push_back(U[i]);
 
@@ -58,7 +58,7 @@ mobius::outcome
   knot_multiset mset(U_vec);
 
   // Convert back to vector
-  std::vector<double> U_back = mset.Convert();
+  std::vector<adouble> U_back = mset.Convert();
 
   // Referential multiset
   knot_multiset ref_mset;
@@ -90,16 +90,16 @@ mobius::outcome
 {
   outcome res( DescriptionFn() );
 
-  const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9};
-  const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
-  const int    nU  = sizeof(U)/sizeof(double);
-  const int    nV  = sizeof(V)/sizeof(double);
+  const adouble U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9};
+  const adouble V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
+  const int    nU  = sizeof(U)/sizeof(adouble);
+  const int    nV  = sizeof(V)/sizeof(adouble);
 
-  std::vector<double> U_vec;
+  std::vector<adouble> U_vec;
   for ( size_t i = 0; i < nU; ++i )
     U_vec.push_back(U[i]);
 
-  std::vector<double> V_vec;
+  std::vector<adouble> V_vec;
   for ( size_t i = 0; i < nV; ++i )
     V_vec.push_back(V[i]);
 
@@ -138,16 +138,16 @@ mobius::outcome
 {
   outcome res( DescriptionFn() );
 
-  const double U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9, 10, 10};
-  const double V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
-  const int    nU  = sizeof(U)/sizeof(double);
-  const int    nV  = sizeof(V)/sizeof(double);
+  const adouble U[] = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 9, 10, 10};
+  const adouble V[] = {0, 0, 1, 1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 8};
+  const int    nU  = sizeof(U)/sizeof(adouble);
+  const int    nV  = sizeof(V)/sizeof(adouble);
 
-  std::vector<double> U_vec;
+  std::vector<adouble> U_vec;
   for ( size_t i = 0; i < nU; ++i )
     U_vec.push_back(U[i]);
 
-  std::vector<double> V_vec;
+  std::vector<adouble> V_vec;
   for ( size_t i = 0; i < nV; ++i )
     V_vec.push_back(V[i]);
 
@@ -182,22 +182,22 @@ mobius::outcome
 {
   outcome res( DescriptionFn() );
 
-  const double U[] = {0, 0, 0, 1, 2, 3};
-  const double V[] = {2, 2, 3, 5, 6};
-  const double W[] = {0, 4, 8};
-  const int    nU  = sizeof(U)/sizeof(double);
-  const int    nV  = sizeof(V)/sizeof(double);
-  const int    nW  = sizeof(W)/sizeof(double);
+  const adouble U[] = {0, 0, 0, 1, 2, 3};
+  const adouble V[] = {2, 2, 3, 5, 6};
+  const adouble W[] = {0, 4, 8};
+  const int    nU  = sizeof(U)/sizeof(adouble);
+  const int    nV  = sizeof(V)/sizeof(adouble);
+  const int    nW  = sizeof(W)/sizeof(adouble);
 
-  std::vector<double> U_vec;
+  std::vector<adouble> U_vec;
   for ( size_t i = 0; i < nU; ++i )
     U_vec.push_back(U[i]);
 
-  std::vector<double> V_vec;
+  std::vector<adouble> V_vec;
   for ( size_t i = 0; i < nV; ++i )
     V_vec.push_back(V[i]);
 
-  std::vector<double> W_vec;
+  std::vector<adouble> W_vec;
   for ( size_t i = 0; i < nW; ++i )
     W_vec.push_back(W[i]);
 

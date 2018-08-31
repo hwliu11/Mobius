@@ -126,9 +126,9 @@ void cascade_BSplineCurve3D_Eval::Evaluate(int* theDimension,
   {
   case 0:
     m_curve->Eval(u, PointOnCurve);
-    theResult[0] = PointOnCurve.X();
-    theResult[1] = PointOnCurve.Y();
-    theResult[2] = PointOnCurve.Z();
+    theResult[0] = PointOnCurve.X().getValue();
+    theResult[1] = PointOnCurve.Y().getValue();
+    theResult[2] = PointOnCurve.Z().getValue();
     break;
   case 1:
   case 2:
@@ -193,8 +193,8 @@ void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double        theTol3d
   threeDTol->Init(theTol3d);
 
   // Access parametric range
-  double f = m_mobiusCurve->MinParameter();
-  double l = m_mobiusCurve->MaxParameter();
+  double f = m_mobiusCurve->MinParameter().getValue();
+  double l = m_mobiusCurve->MaxParameter().getValue();
 
   // Re-approximate curve using OCCT Advanced Approximation facilities
   cascade_BSplineCurve3D_Eval Eval(m_mobiusCurve, f, l);
@@ -275,14 +275,14 @@ double mobius::cascade_BSplineCurve3D::MaxError() const
 void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
 {
   const std::vector<xyz>& srcPoles = m_mobiusCurve->Poles();
-  std::vector<double>     srcU     = m_mobiusCurve->Knots();
+  std::vector<adouble>    srcU     = m_mobiusCurve->Knots();
   const int               srcDeg   = m_mobiusCurve->Degree();
 
   // Poles are transferred as-is.
   TColgp_Array1OfPnt occtPoles( 1, (int) srcPoles.size() );
   for ( int i = occtPoles.Lower(); i <= occtPoles.Upper(); ++i )
   {
-    gp_Pnt P( srcPoles[i - 1].X(), srcPoles[i - 1].Y(), srcPoles[i - 1].Z() );
+    gp_Pnt P( srcPoles[i - 1].X().getValue(), srcPoles[i - 1].Y().getValue(), srcPoles[i - 1].Z().getValue() );
     occtPoles(i) = P;
   }
 
@@ -295,7 +295,7 @@ void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
   cascade_MultResolver MResolver;
   for ( int i = 0; i < (int) srcU.size(); ++i )
   {
-    MResolver.Resolve(srcU[i]);
+    MResolver.Resolve(srcU[i].getValue());
   }
 
   // Access handles
@@ -332,7 +332,7 @@ void mobius::cascade_BSplineCurve3D::convertToMobius()
 
   // Fill array of Mobius knots just repeating OCCT knots as many times
   // as multiplicity value dictates.
-  std::vector<double> mobiusU;
+  std::vector<adouble> mobiusU;
   //
   for ( int k = srcKnots.Lower(); k <= srcKnots.Upper(); ++k )
   {

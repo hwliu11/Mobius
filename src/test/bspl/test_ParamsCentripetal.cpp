@@ -61,7 +61,7 @@ mobius::outcome
    * ----------------- */
 
   // Collection of parameters
-  double t[3] = {0.0, 0.0, 0.0};
+  adouble t[3] = {0.0, 0.0, 0.0};
 
   // Perform
   if ( bspl_ParamsCentripetal::Calculate(Q_vec, t) != bspl_ParamsCentripetal::ErrCode_NoError )
@@ -79,10 +79,10 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  double t_ref[3] = {0.0, 0.5, 1.0};
+  adouble t_ref[3] = {0.0, 0.5, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
   for ( int k = 0; k < 3; ++k )
@@ -120,7 +120,7 @@ mobius::outcome
    * ----------------- */
 
   // Collection of parameters
-  double t[4] = {0.0, 0.0, 0.0, 0.0};
+  adouble t[4] = {0.0, 0.0, 0.0, 0.0};
 
   // Perform
   if ( bspl_ParamsCentripetal::Calculate(Q_vec, t) != bspl_ParamsCentripetal::ErrCode_NoError )
@@ -138,11 +138,11 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  const double d = 2.0 + sqrt(2.0);
-  double t_ref[4] = {0.0, 1.0/d, 2.0/d, 1.0};
+  const adouble d = 2.0 + sqrt(2.0);
+  adouble t_ref[4] = {0.0, 1.0/d, 2.0/d, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
   for ( int k = 0; k < 4; ++k )

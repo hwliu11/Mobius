@@ -46,8 +46,14 @@ mobius::outcome
   const int n = 2;
 
   // Collection of parameters
-  double* t = new double[n + 1];
+  adouble* t = new adouble[n + 1];
+
+#if defined USE_ADOLC
+  for ( int k = 0; k < n + 1; ++k )
+    t[k] = 0.0;
+#else
   memset(t, 0, (n + 1)*sizeof(double));
+#endif
 
   // Perform
   if ( bspl_ParamsUniform::Calculate(n, t) != bspl_ParamsUniform::ErrCode_NoError )
@@ -68,10 +74,10 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  double t_ref[3] = {0.0, 0.5, 1.0};
+  adouble t_ref[3] = {0.0, 0.5, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
   for ( int k = 0; k < 3; ++k )
@@ -97,8 +103,14 @@ mobius::outcome
   const int n = 3;
 
   // Collection of parameters
-  double* t = new double[n + 1];
+  adouble* t = new adouble[n + 1];
+
+#if defined USE_ADOLC
+  for ( int k = 0; k < n + 1; ++k )
+    t[k] = 0.0;
+#else
   memset(t, 0, (n + 1)*sizeof(double));
+#endif
 
   // Perform
   if ( bspl_ParamsUniform::Calculate(n, t) != bspl_ParamsUniform::ErrCode_NoError )
@@ -119,10 +131,10 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  double t_ref[4] = {0.0, 0.3333, 0.6666, 1.0};
+  adouble t_ref[4] = {0.0, 0.3333, 0.6666, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-4;
+  const adouble tol = 1.0e-4;
 
   // Compare with tolerance
   for ( int k = 0; k < 4; ++k )

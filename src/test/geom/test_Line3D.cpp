@@ -54,7 +54,7 @@ mobius::outcome
   core_Ptr<geom_Line> L = new geom_Line(O, Dir);
 
   // Calculate bounding box
-  double xMin, yMin, zMin, xMax, yMax, zMax;
+  adouble xMin, yMin, zMin, xMax, yMax, zMax;
   L->Bounds(xMin, xMax, yMin, yMax, zMin, zMax);
 
   // Evaluate line
@@ -73,7 +73,7 @@ mobius::outcome
    *  Verify calculation of bounding box
    * ==================================== */
 
-  const double prec = 1.0e-6;
+  const adouble prec = 1.0e-6;
 
   if ( xMin != -DBL_MAX )
     return res.failure();
@@ -95,7 +95,7 @@ mobius::outcome
   size_t num_pts = sizeof(P)/sizeof(core_XYZ);
   for ( size_t pt_idx = 0; pt_idx < num_pts; ++pt_idx )
   {
-    const double dist = (P[pt_idx] - P_ref[pt_idx]).Modulus();
+    const adouble dist = (P[pt_idx] - P_ref[pt_idx]).Modulus();
     if ( dist > prec )
       return res.failure();
   }

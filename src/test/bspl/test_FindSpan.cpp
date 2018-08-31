@@ -43,20 +43,20 @@ mobius::outcome mobius::test_FindSpan::eval01(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 5.0};
+  const std::vector<adouble> U = {0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 5.0};
   const int p = 1;
-  const double u1  = 0.0;
-  const double u2  = 0.5;
-  const double u3  = 1.0;
-  const double u4  = 1.1;
-  const double u5  = 1.9;
-  const double u6  = 2.0;
-  const double u7  = 2.7;
-  const double u8  = 3.0;
-  const double u9  = 3.5;
-  const double u10 = 4.5;
-  const double u11 = 5.0;
-  const double u12 = 100.0;
+  const adouble u1  = 0.0;
+  const adouble u2  = 0.5;
+  const adouble u3  = 1.0;
+  const adouble u4  = 1.1;
+  const adouble u5  = 1.9;
+  const adouble u6  = 2.0;
+  const adouble u7  = 2.7;
+  const adouble u8  = 3.0;
+  const adouble u9  = 3.5;
+  const adouble u10 = 4.5;
+  const adouble u11 = 5.0;
+  const adouble u12 = 100.0;
 
   bspl_FindSpan FindSpan(U, p);
   int I1  = FindSpan(u1);
@@ -88,14 +88,14 @@ mobius::outcome mobius::test_FindSpan::eval02(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 2.0};
+  const std::vector<adouble> U = {0.0, 0.0, 1.0, 2.0, 2.0};
   const int p = 1;
-  const double u1 = 0.0;
-  const double u2 = 0.5;
-  const double u3 = 1.0;
-  const double u4 = 1.5;
-  const double u5 = 2.0;
-  const double u6 = 2.5;
+  const adouble u1 = 0.0;
+  const adouble u2 = 0.5;
+  const adouble u3 = 1.0;
+  const adouble u4 = 1.5;
+  const adouble u5 = 2.0;
+  const adouble u6 = 2.5;
 
   bspl_FindSpan FindSpan(U, p);
   int I1 = FindSpan(u1);
@@ -120,9 +120,9 @@ mobius::outcome mobius::test_FindSpan::eval03(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
-  const double u = 5.0;
+  const adouble u = 5.0;
 
   bspl_FindSpan FindSpan(U, p);
   int I = FindSpan(u);
@@ -143,12 +143,12 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
   // Test 1.
   {
-    const double u = 0.0;
+    const adouble u = 0.0;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -161,7 +161,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 2.
   {
-    const double u = 0.1;
+    const adouble u = 0.1;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -174,7 +174,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 3.
   {
-    const double u = 0.9;
+    const adouble u = 0.9;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -187,7 +187,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 4.
   {
-    const double u = 1.0;
+    const adouble u = 1.0;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -200,7 +200,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 5.
   {
-    const double u = 1.5;
+    const adouble u = 1.5;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -213,7 +213,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 6.
   {
-    const double u = 2;
+    const adouble u = 2;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -226,7 +226,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 7.
   {
-    const double u = 3;
+    const adouble u = 3;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -239,7 +239,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 8.
   {
-    const double u = 4;
+    const adouble u = 4;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -252,7 +252,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 9.
   {
-    const double u = 4.3;
+    const adouble u = 4.3;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -265,7 +265,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 10.
   {
-    const double u = 5;
+    const adouble u = 5;
 
     bspl_FindSpan FindSpan(U, p);
     //
@@ -278,7 +278,7 @@ mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 
   // Test 11.
   {
-    const double u = 5.1;
+    const adouble u = 5.1;
 
     bspl_FindSpan FindSpan(U, p);
     //

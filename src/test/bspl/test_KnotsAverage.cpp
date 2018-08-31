@@ -55,14 +55,20 @@ mobius::outcome
   if ( m != 9 )
     return res.failure();
 
-  const double t[] = {0.0, 0.1, 0.25, 0.5, 0.75, 1.0};
+  const adouble t[] = {0.0, 0.1, 0.25, 0.5, 0.75, 1.0};
 
   /* -----------------
    *  Run calculation
    * ----------------- */
 
-  double* U = new double[m + 1];
+  adouble* U = new adouble[m + 1];
+
+#if defined USE_ADOLC
+  for ( int k = 0; k < m + 1; ++k )
+    U[k] = 0.0;
+#else
   memset(U, 0, (m + 1)*sizeof(double));
+#endif
 
   if ( bspl_KnotsAverage::Calculate(t, n, p, m,
                                     bspl_KnotsAverage::Recognize(false, false, false, false),
@@ -77,13 +83,13 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  double U_ref[] = {0.0, 0.0, 0.0, 0.0, 0.28333333, 0.5, 1.0, 1.0, 1.0, 1.0};
+  adouble U_ref[] = {0.0, 0.0, 0.0, 0.0, 0.28333333, 0.5, 1.0, 1.0, 1.0, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
-  for ( int k = 0; k < sizeof(U_ref)/sizeof(double); ++k )
+  for ( int k = 0; k < sizeof(U_ref)/sizeof(adouble); ++k )
     if ( fabs(U_ref[k] - U[k]) > tol )
       return res.failure();
 
@@ -111,14 +117,20 @@ mobius::outcome
   if ( m != 11 )
     return res.failure();
 
-  const double t[] = {0.0, 0.1, 0.25, 0.5, 0.75, 1.0};
+  const adouble t[] = {0.0, 0.1, 0.25, 0.5, 0.75, 1.0};
 
   /* -----------------
    *  Run calculation
    * ----------------- */
 
-  double* U = new double[m + 1];
+  adouble* U = new adouble[m + 1];
+
+#if defined USE_ADOLC
+  for ( int k = 0; k < m + 1; ++k )
+    U[k] = 0.0;
+#else
   memset(U, 0, (m + 1)*sizeof(double));
+#endif
 
   if ( bspl_KnotsAverage::Calculate(t, n, p, m,
                                     bspl_KnotsAverage::Recognize(true, true, false, false),
@@ -133,13 +145,13 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  double U_ref[] = {0.0, 0.0, 0.0, 0.0, 0.11666666, 0.2833333, 0.5, 0.75, 1.0, 1.0, 1.0, 1.0};
+  adouble U_ref[] = {0.0, 0.0, 0.0, 0.0, 0.11666666, 0.2833333, 0.5, 0.75, 1.0, 1.0, 1.0, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
-  for ( int k = 0; k < sizeof(U_ref)/sizeof(double); ++k )
+  for ( int k = 0; k < sizeof(U_ref)/sizeof(adouble); ++k )
     if ( fabs(U_ref[k] - U[k]) > tol )
       return res.failure();
 

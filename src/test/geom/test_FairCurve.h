@@ -79,8 +79,8 @@ private:
 
   static outcome runtest(const int          funcID,
                          const std::string& json,
-                         double             lambdas[4],
-                         double             refStrains[4]);
+                         adouble             lambdas[4],
+                         adouble             refStrains[4]);
 
 private:
 

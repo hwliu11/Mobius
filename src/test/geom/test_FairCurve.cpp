@@ -45,8 +45,8 @@
 mobius::outcome
   mobius::test_FairCurve::runtest(const int          funcID,
                                   const std::string& json,
-                                  double             lambdas[4],
-                                  double             refStrains[4])
+                                  adouble             lambdas[4],
+                                  adouble             refStrains[4])
 {
   outcome res( DescriptionFn() );
 
@@ -56,13 +56,13 @@ mobius::outcome
   // Create a curve from the passed JSON.
   ptr<bcurve> crv = bcurve::Instance(json);
 
-  double strain[4] = {0.0, 0.0, 0.0, 0.0};
+  adouble strain[4] = {0.0, 0.0, 0.0, 0.0};
 
   // Calculate original strain energy.
-  const double initStrain = crv->ComputeStrainEnergy();
+  const adouble initStrain = crv->ComputeStrainEnergy();
   //
   cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Initial strain energy is %1."
-                                                          << initStrain );
+                                                          << initStrain.getValue() );
 
   // Perform fairing.
   for ( int i = 0; i < 4; ++i )
@@ -73,7 +73,7 @@ mobius::outcome
     if ( !fairingTool.Perform() )
     {
       cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Fairing failed for lambda %1."
-                                                            << lambdas[i]);
+                                                            << lambdas[i].getValue());
       return res.failure();
     }
 
@@ -84,8 +84,8 @@ mobius::outcome
     strain[i] = faired->ComputeStrainEnergy();
     //
     cf->ProgressNotifier.SendLogMessage( MobiusInfo(Normal) << "Strain energy for lambda %1 is %2."
-                                                            << lambdas[i]
-                                                            << core::str::to_string<double>(strain[i]) );
+                                                            << lambdas[i].getValue()
+                                                            << core::str::to_string<adouble>(strain[i]) );
 
     // Basic verification that strain energy should decrease with increasing
     // fairing coefficient.
@@ -98,15 +98,15 @@ mobius::outcome
   }
 
   // Compare against the reference values.
-  const double eps     = 1e-5;
+  const adouble eps     = 1e-5;
   bool         isAllOk = true;
   
   for ( int i = 0; i < 4; ++i )
     if ( fabs(strain[i] - refStrains[i]) > eps )
     {
       cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Expected value %1 is different from actual %2."
-                                                             << core::str::to_string<double>(refStrains[i])
-                                                             << core::str::to_string<double>(strain[i]) );
+                                                             << core::str::to_string<adouble>(refStrains[i])
+                                                             << core::str::to_string<adouble>(strain[i]) );
 
       if ( isAllOk ) isAllOk = false;
     }
@@ -147,9 +147,9 @@ mobius::outcome
     }\
   }";
   //
-  double lambdas[4] = {1.e-6, 1.e-4, 1e-2, 1.0};
+  adouble lambdas[4] = {1.e-6, 1.e-4, 1e-2, 1.0};
   //
-  double refStrains[4] =
+  adouble refStrains[4] =
   {
     557466.92495228222,
     226406.56348683822,
@@ -191,9 +191,9 @@ mobius::outcome
     }\
   }";
   //
-  double lambdas[4] = {1.e-6, 1.e-4, 1e-2, 1.0};
+  adouble lambdas[4] = {1.e-6, 1.e-4, 1e-2, 1.0};
   //
-  double refStrains[4] =
+  adouble refStrains[4] =
   {
     8157.8382702687977,
     4078.6390239309244,
@@ -237,9 +237,9 @@ mobius::outcome
     }\
   }";
   //
-  double lambdas[4] = {1.e-6, 1.e-4, 1e-2, 1.0};
+  adouble lambdas[4] = {1.e-6, 1.e-4, 1e-2, 1.0};
   //
-  double refStrains[4] =
+  adouble refStrains[4] =
   {
     871.96998138905803,
     738.40080786367969,

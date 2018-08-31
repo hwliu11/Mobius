@@ -85,7 +85,12 @@ public:
               << &computeEnergy03
               << &computeEnergy04
               << &computeEnergy05
-              << &computeEnergy06;
+              << &computeEnergy06
+
+#if defined USE_ADOLC
+              << &computeDeriv01
+#endif
+    ;
   }
 
 private:
@@ -104,6 +109,10 @@ private:
   static outcome computeEnergy04 (const int funcID);
   static outcome computeEnergy05 (const int funcID);
   static outcome computeEnergy06 (const int funcID);
+
+#if defined USE_ADOLC
+  static outcome computeDeriv01  (const int funcID);
+#endif
 
 };
 

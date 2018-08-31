@@ -31,7 +31,10 @@
 // Own include
 #include <mobius/test_BSplineCurve.h>
 
-// geom includes
+// Test includes
+#include <mobius/test_CommonFacilities.h>
+
+// Geom includes
 #include <mobius/geom_BSplineCurve.h>
 
 //-----------------------------------------------------------------------------
@@ -59,7 +62,7 @@ mobius::outcome
                          xyz(7.0, 0.0, 0.0) };
 
   // Knot vector.
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
 
   // Degree.
   const int p = 2;
@@ -71,8 +74,8 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
-  const double u   = 0.5;
+  const adouble eps = 1e-7;
+  const adouble u   = 0.5;
   //
   const xyz P_ref(0.875, 0, 0);
 
@@ -112,7 +115,7 @@ mobius::outcome
                          xyz(7.0, 0.0, 0.0) };
 
   // Knot vector.
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
 
   // Degree.
   const int p = 2;
@@ -124,8 +127,8 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
-  const double u   = 5.5;
+  const adouble eps = 1e-7;
+  const adouble u   = 5.5;
   //
   const xyz P_ref(8.0, 0, 0);
 
@@ -165,7 +168,7 @@ mobius::outcome
                          xyz(7.0, 0.0, 0.0) };
 
   // Knot vector.
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
 
   // Degree.
   const int p = 2;
@@ -177,8 +180,8 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
-  const double u   = -1.0;
+  const adouble eps = 1e-7;
+  const adouble u   = -1.0;
   //
   const xyz P_ref(-2.5, 0, 0);
 
@@ -241,8 +244,8 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-7;
-  const double u   = 0.5;
+  const adouble eps = 1e-7;
+  const adouble u   = 0.5;
   //
   const xyz P_ref(10.0, 0, 0);
 
@@ -305,8 +308,8 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  const double eps = 1e-4;
-  const double u   = 0.5;
+  const adouble eps = 1e-4;
+  const adouble u   = 0.5;
   //
   const xyz P_ref(-70.5441, -6.21939, -30.8876);
 
@@ -320,3 +323,96 @@ mobius::outcome
 
   return res.success();
 }
+
+#if defined USE_ADOLC
+
+//-----------------------------------------------------------------------------
+
+//! Computes exact derivatives with ADOL-C.
+//!
+//! \param[in] funcID function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_BSplineCurve::computeDeriv01(const int funcID)
+{
+  outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  // Prepare a sample b-curve.
+  const int p             = 3;
+  const int SENS_POLE_IDX = 3;
+  //
+  std::vector<adouble>
+    U = {0, 0, 0, 0, 0.35, 0.4, 0.55, 1, 1, 1, 1};
+  //
+  xyz P1(0.0,  1.5, 0.0);
+  xyz P2(1.5, -1.1, 0.1);
+  xyz P3(2.0,  2.0, 0.2);
+  xyz P4(2.5, -2.2, 0.8);
+  xyz P5(2.8,  1.8, 0.1);
+  xyz P6(3.0,  0.5, 0.2);
+  xyz P7(4.0,  0.9, 0.0);
+  //
+  std::vector<xyz> Poles = {P1, P2, P3, P4, P5, P6, P7};
+  //
+  ptr<bcurve> c3d = new bcurve(Poles, U, p);
+
+  // Probe control point.
+  const adouble u_probe   = 0.5;
+  const xyz&    P_probe   = c3d->Poles()[SENS_POLE_IDX];
+  const adouble P_probe_x = P_probe.X();
+  const adouble P_probe_y = P_probe.Y();
+  const adouble P_probe_z = P_probe.Z();
+  const adouble delta     = 1.0e-3;
+
+  // Inputs
+  SetVarDescr("U", U,       ID(), funcID);
+  SetVarDescr("p", p,       ID(), funcID);
+  SetVarDescr("u", u_probe, ID(), funcID);
+
+  // Calculate derivative dC/dP[i]_x by finite difference.
+  double dC_finite_modulus;
+  {
+    // Variation of argument.
+    const adouble x2 = P_probe_x.getValue() + delta;
+    const adouble x1 = P_probe_x.getValue() - delta;
+
+    // Variation of function.
+    xyz C2, C1;
+    c3d->ChangePoles()[SENS_POLE_IDX].SetCoord(0, x2); c3d->Eval(u_probe, C2);
+    c3d->ChangePoles()[SENS_POLE_IDX].SetCoord(0, x1); c3d->Eval(u_probe, C1);
+    c3d->ChangePoles()[SENS_POLE_IDX].SetCoord(0, P_probe_x);
+    //
+    xyz dC_finite = (C2 - C1) / (2*delta);
+    dC_finite_modulus = dC_finite.Modulus().getValue();
+  }
+
+  // Calculate derivative dC/dP[3]_x by algorithmic differentiation.
+  double dC_auto_modulus;
+  {
+    // Active variable.
+    adouble ax = P_probe_x;
+    const double derivativeSeed = 1.;
+    ax.setADValue(&derivativeSeed);
+
+    // Evaluation in tapeless mode.
+    xyz C;
+    c3d->ChangePoles()[SENS_POLE_IDX].SetCoord(0, ax); c3d->Eval(u_probe, C);
+    //
+    dC_auto_modulus = *C.Coord(0).getADValue();
+  }
+
+  // Outputs
+  SetVarDescr("dC_finite", dC_finite_modulus, ID(), funcID);
+  SetVarDescr("dC_auto",   dC_auto_modulus,   ID(), funcID);
+
+  // Allowed deviation
+  const double dev = 1.0e-5;
+  if ( fabs(dC_auto_modulus - dC_finite_modulus) > dev )
+    return res.failure();
+
+  return res.success();
+}
+
+#endif

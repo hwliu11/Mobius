@@ -61,7 +61,7 @@ mobius::outcome
    * ----------------- */
 
   // Collection of parameters
-  double t[3] = {0.0, 0.0, 0.0};
+  adouble t[3] = {0.0, 0.0, 0.0};
 
   // Perform
   if ( bspl_ParamsChordLength::Calculate(Q_vec, t) != bspl_ParamsChordLength::ErrCode_NoError )
@@ -79,10 +79,10 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  double t_ref[3] = {0.0, 0.5, 1.0};
+  adouble t_ref[3] = {0.0, 0.5, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
   for ( int k = 0; k < 3; ++k )
@@ -120,7 +120,7 @@ mobius::outcome
    * ----------------- */
 
   // Collection of parameters
-  double t[4] = {0.0, 0.0, 0.0, 0.0};
+  adouble t[4] = {0.0, 0.0, 0.0, 0.0};
 
   // Perform
   if ( bspl_ParamsChordLength::Calculate(Q_vec, t) != bspl_ParamsChordLength::ErrCode_NoError )
@@ -138,10 +138,10 @@ mobius::outcome
    * ------------------- */
 
   // Referential parameters
-  double t_ref[4] = {0.0, 0.25, 0.5, 1.0};
+  adouble t_ref[4] = {0.0, 0.25, 0.5, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
   for ( int k = 0; k < 4; ++k )
@@ -181,8 +181,8 @@ mobius::outcome
    * ----------------- */
 
   // Collection of parameters
-  double u[2] = {0.0, 0.0};
-  double v[2] = {0.0, 0.0};
+  adouble u[2] = {0.0, 0.0};
+  adouble v[2] = {0.0, 0.0};
 
   // Perform
   if ( bspl_ParamsChordLength::Calculate(Q_vec, u, v) != bspl_ParamsChordLength::ErrCode_NoError )
@@ -194,19 +194,19 @@ mobius::outcome
 
   SetVarDescr("n",        1,                           ID(), 003);
   SetVarDescr("m",        1,                           ID(), 003);
-  SetVarDescr("params_U", u, sizeof(u)/sizeof(double), ID(), 003);
-  SetVarDescr("params_V", v, sizeof(v)/sizeof(double), ID(), 003);
+  SetVarDescr("params_U", u, sizeof(u)/sizeof(adouble), ID(), 003);
+  SetVarDescr("params_V", v, sizeof(v)/sizeof(adouble), ID(), 003);
 
   /* -------------------
    *  Verify parameters
    * ------------------- */
 
   // Referential parameters
-  double u_ref[2] = {0.0, 1.0};
-  double v_ref[2] = {0.0, 1.0};
+  adouble u_ref[2] = {0.0, 1.0};
+  adouble v_ref[2] = {0.0, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance
   for ( int k = 0; k < 2; ++k )
@@ -252,8 +252,8 @@ mobius::outcome
    * ----------------- */
 
   // Collection of parameters
-  double u[3] = {0.0, 0.0, 0.0};
-  double v[2] = {0.0, 0.0};
+  adouble u[3] = {0.0, 0.0, 0.0};
+  adouble v[2] = {0.0, 0.0};
 
   // Perform
   if ( bspl_ParamsChordLength::Calculate(Q_vec, u, v) != bspl_ParamsChordLength::ErrCode_NoError )
@@ -265,19 +265,19 @@ mobius::outcome
 
   SetVarDescr("n",        2,                           ID(), 004);
   SetVarDescr("m",        1,                           ID(), 004);
-  SetVarDescr("params_U", u, sizeof(u)/sizeof(double), ID(), 004);
-  SetVarDescr("params_V", v, sizeof(v)/sizeof(double), ID(), 004);
+  SetVarDescr("params_U", u, sizeof(u)/sizeof(adouble), ID(), 004);
+  SetVarDescr("params_V", v, sizeof(v)/sizeof(adouble), ID(), 004);
 
   /* -------------------
    *  Verify parameters
    * ------------------- */
 
   // Referential parameters
-  double u_ref[3] = {0.0, 0.661475, 1.0};
-  double v_ref[2] = {0.0, 1.0};
+  adouble u_ref[3] = {0.0, 0.661475, 1.0};
+  adouble v_ref[2] = {0.0, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance (U)
   for ( int k = 0; k < 3; ++k )
@@ -327,8 +327,8 @@ mobius::outcome
    * ----------------- */
 
   // Collection of parameters
-  double u[3] = {0.0, 0.0, 0.0};
-  double v[3] = {0.0, 0.0, 0.0};
+  adouble u[3] = {0.0, 0.0, 0.0};
+  adouble v[3] = {0.0, 0.0, 0.0};
 
   // Perform
   if ( bspl_ParamsChordLength::Calculate(Q_vec, u, v) != bspl_ParamsChordLength::ErrCode_NoError )
@@ -340,19 +340,19 @@ mobius::outcome
 
   SetVarDescr("n",        2,                           ID(), 005);
   SetVarDescr("m",        2,                           ID(), 005);
-  SetVarDescr("params_U", u, sizeof(u)/sizeof(double), ID(), 005);
-  SetVarDescr("params_V", v, sizeof(v)/sizeof(double), ID(), 005);
+  SetVarDescr("params_U", u, sizeof(u)/sizeof(adouble), ID(), 005);
+  SetVarDescr("params_V", v, sizeof(v)/sizeof(adouble), ID(), 005);
 
   /* -------------------
    *  Verify parameters
    * ------------------- */
 
   // Referential parameters
-  double u_ref[3] = {0.0, 0.612039, 1.0};
-  double v_ref[3] = {0.0, 0.655533, 1.0};
+  adouble u_ref[3] = {0.0, 0.612039, 1.0};
+  adouble v_ref[3] = {0.0, 0.655533, 1.0};
 
   // Tolerance
-  const double tol = 1.0e-6;
+  const adouble tol = 1.0e-6;
 
   // Compare with tolerance (U)
   for ( int k = 0; k < 3; ++k )

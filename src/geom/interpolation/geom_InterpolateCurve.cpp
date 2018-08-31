@@ -449,7 +449,13 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
   for ( int c = 0; c < 3; ++c )
   {
     pXYZ[c] = new adouble[dim];
-    memset(pXYZ[c], 0, dim*sizeof(adouble));
+
+#if defined USE_ADOLC
+    for ( int k = 0; k < dim; ++k )
+      pXYZ[c][k] = 0.0;
+#else
+    memset(pXYZ[c], 0, dim*sizeof(double));
+#endif
   }
 
   // Solver for linear system

@@ -236,6 +236,72 @@ public:
     SetVarDescr(varName, arrStr, caseID, funcID);
   }
 
+#if defined USE_ADOLC
+  //! Overloaded variable setter for adouble array.
+  //! \param varName [in] variable name.
+  //! \param arr     [in] array as a value.
+  //! \param n       [in] number of elements in the array.
+  //! \param caseID  [in] ID of the Test Case.
+  //! \param funcID  [in] 1-based ID of Test Function to be used as a namespace
+  //!                     for its own local variables mapping.
+  static void SetVarDescr(const std::string& varName,
+                          const adouble*     arr,
+                          const int          n,
+                          const int          caseID,
+                          const int          funcID)
+  {
+    std::string arrStr("[");
+    if ( n )
+    {
+      for ( int i = 0; i < n; ++i )
+      {
+        arrStr += core::str::to_string( arr[i].getValue() );
+        if ( i != (n - 1) )
+          arrStr += ", ";
+      }
+    }
+    arrStr += "]";
+
+    SetVarDescr(varName, arrStr, caseID, funcID);
+  }
+
+//! Overloaded variable setter for adouble matrix.
+  //! \param varName [in] variable name.
+  //! \param mx      [in] matrix as a value.
+  //! \param nRows   [in] number of rows in the matrix.
+  //! \param nCols   [in] number of columns in the matrix.
+  //! \param caseID  [in] ID of the Test Case.
+  //! \param funcID  [in] 1-based ID of Test Function to be used as a namespace
+  //!                     for its own local variables mapping.
+  static void SetVarDescr(const std::string& varName,
+                          adouble**          mx,
+                          const int          nRows,
+                          const int          nCols,
+                          const int          caseID,
+                          const int          funcID)
+  {
+    std::string mxStr;
+    if ( nRows )
+    {
+      for ( int i = 0; i < nRows; ++i )
+      {
+        mxStr += "[";
+        for ( int j = 0; j < nCols; ++j )
+        {
+          mxStr += core::str::to_string(mx[i][j].getValue());
+          if ( j != (nCols - 1) )
+            mxStr += ", ";
+        }
+        mxStr += "]";
+        if ( i != (nRows - 1) )
+          mxStr += ", ";
+      }
+    }
+
+    SetVarDescr(varName, mxStr, caseID, funcID);
+  }
+#endif
+
   //! Overloaded variable setter for a vector.
   //! \param varName [in] variable name.
   //! \param vec     [in] vector as a value.

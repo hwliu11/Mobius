@@ -122,8 +122,8 @@ void mobius::cascade_BSplineSurface::convertToOpenCascade()
 
   // Mobius properties of B-surface.
   const std::vector< std::vector<xyz> >& mobius_Poles  = m_mobiusSurface->Poles();
-  std::vector<double>                    mobius_UKnots = m_mobiusSurface->Knots_U();
-  std::vector<double>                    mobius_VKnots = m_mobiusSurface->Knots_V();
+  std::vector<adouble>                   mobius_UKnots = m_mobiusSurface->Knots_U();
+  std::vector<adouble>                   mobius_VKnots = m_mobiusSurface->Knots_V();
 
   // Poles are transferred as-is.
   TColgp_Array2OfPnt occt_Poles( 1, (int) mobius_Poles.size(),
@@ -134,19 +134,19 @@ void mobius::cascade_BSplineSurface::convertToOpenCascade()
     for ( int j = occt_Poles.LowerCol(); j <= occt_Poles.UpperCol(); ++j )
     {
       const xyz& P = mobius_Poles[i-1][j-1];
-      occt_Poles(i, j) = gp_Pnt( P.X(), P.Y(), P.Z() );
+      occt_Poles(i, j) = gp_Pnt( P.X().getValue(), P.Y().getValue(), P.Z().getValue() );
     }
   }
 
   // Resolve U knots.
   cascade_MultResolver uResolver;
   for ( int i = 0; i < (int) mobius_UKnots.size(); ++i )
-    uResolver.Resolve(mobius_UKnots[i]);
+    uResolver.Resolve(mobius_UKnots[i].getValue());
 
   // Resolve V knots.
   cascade_MultResolver vResolver;
   for ( int i = 0; i < (int) mobius_VKnots.size(); ++i )
-    vResolver.Resolve(mobius_VKnots[i]);
+    vResolver.Resolve(mobius_VKnots[i].getValue());
 
   // Access OCCT collections.
   Handle(TColStd_HArray1OfReal)    occt_UKnots = uResolver.GetOpenCascadeKnots();
@@ -205,7 +205,7 @@ void mobius::cascade_BSplineSurface::convertToMobius()
 
   // Fill array of Mobius knots just repeating OCCT knots as many times
   // as multiplicity value dictates.
-  std::vector<double> mobius_UKnots, mobius_VKnots;
+  std::vector<adouble> mobius_UKnots, mobius_VKnots;
   //
   for ( int k = occt_UKnots.Lower(); k <= occt_UKnots.Upper(); ++k )
   {

@@ -76,7 +76,12 @@ public:
               << &evalOutDomainRight
               << &evalOutDomainLeft
               << &evalJSON1
-              << &evalJSON2;
+              << &evalJSON2
+
+#if defined USE_ADOLC
+              << &computeDeriv01
+#endif
+    ;
   }
 
 private:
@@ -86,6 +91,10 @@ private:
   static outcome evalOutDomainLeft  (const int funcID);
   static outcome evalJSON1          (const int funcID);
   static outcome evalJSON2          (const int funcID);
+
+#if defined USE_ADOLC
+  static outcome computeDeriv01     (const int funcID);
+#endif
 
 };
 

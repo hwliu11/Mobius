@@ -45,19 +45,19 @@ mobius::outcome mobius::test_EffectiveNDers::test1(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
   const int n = 3;
 
   bspl_EffectiveNDers Eval;
 
-  double u = 2.5;
+  adouble u = 2.5;
   bspl_FindSpan FindSpan(U, p);
   const int span_i = FindSpan(u);
 
   // Prepare result matrix
-  core_HeapAlloc2D<double> Alloc;
-  double** dN = Alloc.Allocate(n+1, p+1, false);
+  core_HeapAlloc2D<adouble> Alloc;
+  adouble** dN = Alloc.Allocate(n+1, p+1, false);
 
   // Evaluate
   Eval(u, U, p, span_i, n, dN);
@@ -71,7 +71,7 @@ mobius::outcome mobius::test_EffectiveNDers::test1(const int funcID)
   SetVarDescr("dN", dN, n+1, p+1, ID(), funcID);
 
   // Referential output
-  double dN_ref[][3] =
+  adouble dN_ref[][3] =
     { { 0.125,  0.750, 0.125},   // (k) = 0
       {-0.500,  0.000, 0.500},   // (k) = 1
       { 1.000, -2.000, 1.000},   // (k) = 2
@@ -97,19 +97,19 @@ mobius::outcome mobius::test_EffectiveNDers::test2(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0, 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 5};
+  const std::vector<adouble> U = {0, 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5, 5};
   const int p = 3;
   const int n = 4;
 
   bspl_EffectiveNDers Eval;
 
-  double u = 3.5;
+  adouble u = 3.5;
   bspl_FindSpan FindSpan(U, p);
   const int span_i = FindSpan(u);
 
   // Prepare result matrix
-  core_HeapAlloc2D<double> Alloc;
-  double** dN = Alloc.Allocate(n+1, p+1, false);
+  core_HeapAlloc2D<adouble> Alloc;
+  adouble** dN = Alloc.Allocate(n+1, p+1, false);
 
   // Evaluate
   Eval(u, U, p, span_i, n, dN);
@@ -123,7 +123,7 @@ mobius::outcome mobius::test_EffectiveNDers::test2(const int funcID)
   SetVarDescr("dN", dN, n+1, p+1, ID(), funcID);
 
   // Referential output
-  double dN_ref[][4] =
+  adouble dN_ref[][4] =
     { { 0.0208333,  0.260417,  0.65625, 0.0625},   // (k) = 0
       {-0.1250000, -0.812500,  0.56250, 0.3750},   // (k) = 1
       { 0.5000000,  0.250000, -2.25000, 1.5000},   // (k) = 2
@@ -131,7 +131,7 @@ mobius::outcome mobius::test_EffectiveNDers::test2(const int funcID)
       { 0.0000000,  0.0000000, 0.00000, 0.0000} }; // (k) = 4
 
   // Validate results
-  const double tol = 1.0e-4; // Compare with tolerance
+  const adouble tol = 1.0e-4; // Compare with tolerance
   bool isSuccess = true;
   for ( int i = 0; i < n+1; ++i )
     for ( int j = 0; j < p+1; ++j )
@@ -151,19 +151,19 @@ mobius::outcome mobius::test_EffectiveNDers::test3(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 0.0, 0.0, 2.0, 4.0, 6.0, 8.0, 8.0, 8.0, 8.0};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 0.0, 2.0, 4.0, 6.0, 8.0, 8.0, 8.0, 8.0};
   const int p = 3;
   const int n = 1;
 
   bspl_EffectiveNDers Eval;
 
-  double u = 1.5;
+  adouble u = 1.5;
   bspl_FindSpan FindSpan(U, p);
   const int span_i = FindSpan(u);
 
   // Prepare result matrix
-  core_HeapAlloc2D<double> Alloc;
-  double** dN = Alloc.Allocate(n+1, p+1, false);
+  core_HeapAlloc2D<adouble> Alloc;
+  adouble** dN = Alloc.Allocate(n+1, p+1, false);
 
   // Evaluate
   Eval(u, U, p, span_i, n, dN);
@@ -177,12 +177,12 @@ mobius::outcome mobius::test_EffectiveNDers::test3(const int funcID)
   SetVarDescr("dN", dN, n+1, p+1, ID(), funcID);
 
   // Referential output
-  double dN_ref[][4] =
+  adouble dN_ref[][4] =
     { { 0.015625,  0.457031, 0.457031, 0.0703125},   // (k) = 0
       {-0.093750, -0.398438, 0.351563, 0.1406259} }; // (k) = 1
 
   // Validate results
-  const double tol = 1.0e-4; // Compare with tolerance
+  const adouble tol = 1.0e-4; // Compare with tolerance
   bool isSuccess = true;
   for ( int i = 0; i < n+1; ++i )
     for ( int j = 0; j < p+1; ++j )

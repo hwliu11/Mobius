@@ -60,15 +60,18 @@ void mobius::bspl_EffectiveNDers::operator()(const adouble               u,
   adouble left[mobiusBSpl_MaxDegree], right[mobiusBSpl_MaxDegree];
   adouble ndu[mobiusBSpl_MaxDegree][mobiusBSpl_MaxDegree];
   //
-  memset(left,  0, sizeof(adouble)*mobiusBSpl_MaxDegree);
-  memset(right, 0, sizeof(adouble)*mobiusBSpl_MaxDegree);
-  memset(ndu,   0, sizeof(adouble)*mobiusBSpl_MaxDegree*mobiusBSpl_MaxDegree);
-  /*for ( int i = 0; i < mobiusBSpl_MaxDegree; ++i )
+#if defined USE_ADOLC
+  for ( int i = 0; i < mobiusBSpl_MaxDegree; ++i )
   {
     left[i] = right[i] = 0.0;
     for ( int j = 0; j < mobiusBSpl_MaxDegree; ++j )
       ndu[i][j] = 0.0;
-  }*/
+  }
+#else
+  memset(left,  0, sizeof(double)*mobiusBSpl_MaxDegree);
+  memset(right, 0, sizeof(double)*mobiusBSpl_MaxDegree);
+  memset(ndu,   0, sizeof(double)*mobiusBSpl_MaxDegree*mobiusBSpl_MaxDegree);
+#endif
 
   //------------------------------------------------------
   // Evaluate basis functions along with knot differences

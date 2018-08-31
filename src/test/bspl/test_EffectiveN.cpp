@@ -44,16 +44,16 @@ mobius::outcome mobius::test_EffectiveN::evalInDomain(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
   bspl_EffectiveN Eval;
 
-  double u = 2.5;
+  adouble u = 2.5;
   bspl_FindSpan FindSpan(U, p);
   const int i = FindSpan(u);
 
-  double* N = new double[p+1];
+  adouble* N = new adouble[p+1];
   Eval(u, U, p, i, N);
 
   // Set description variables
@@ -82,16 +82,16 @@ mobius::outcome mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
   bspl_EffectiveN Eval;
 
-  double u = 5.1;
+  adouble u = 5.1;
   bspl_FindSpan FindSpan(U, p);
   const int i = FindSpan(u);
 
-  double* N = new double[p+1];
+  adouble* N = new adouble[p+1];
   Eval(u, U, p, i, N);
 
   // Set description variables
@@ -107,7 +107,7 @@ mobius::outcome mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
     return res.failure();
   }
 
-  const double eps = 1e-7;
+  const adouble eps = 1e-7;
   //
   if ( fabs(N[0] - 0.01) > eps ||
        fabs(N[1] + 0.22) > eps ||
@@ -130,16 +130,16 @@ mobius::outcome mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
 {
   outcome res( DescriptionFn() );
 
-  const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
+  const std::vector<adouble> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
 
   bspl_EffectiveN Eval;
 
-  double u = -0.1;
+  adouble u = -0.1;
   bspl_FindSpan FindSpan(U, p);
   const int i = FindSpan(u);
 
-  double* N = new double[p+1];
+  adouble* N = new adouble[p+1];
   Eval(u, U, p, i, N);
 
   // Set description variables
@@ -155,7 +155,7 @@ mobius::outcome mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
     return res.failure();
   }
 
-  const double eps = 1e-7;
+  const adouble eps = 1e-7;
   //
   if ( fabs(N[0] - 1.21)  > eps ||
        fabs(N[1] + 0.215) > eps ||
