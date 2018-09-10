@@ -7,6 +7,7 @@ set (DOX_FILES
   001_01_memory-management.md
   002_!_primitives.md
   002_01_bsurf.md
+  002_02_smesh.md
   003_!_core-algos.md
   003_01_bspl.md
   004_!_operators.md
