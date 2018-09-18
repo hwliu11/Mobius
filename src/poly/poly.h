@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 17 September 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,55 +28,27 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef poly_HeaderFile
+#define poly_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+#if defined _WIN32
+  #if defined mobiusPoly_EXPORTS
+    #define mobiusPoly_EXPORT __declspec(dllexport)
+  #else
+    #define mobiusPoly_EXPORT __declspec(dllimport)
+  #endif
+#else
+  #define mobiusPoly_EXPORT
+#endif
 
-//! IDs for Test Cases.
-enum test_CaseID
-{
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+#define poly_NotUsed(x)
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
-
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
-
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
-
-  CaseID_Geom_InterpolateCurve3D,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
-
-  CaseID_Poly_Mesh
-
-};
+//-----------------------------------------------------------------------------
+// DOXY group definition
+//-----------------------------------------------------------------------------
+//! \defgroup MOBIUS_POLY Poly
+//!
+//! Polygonal structures and algorithms.
+//-----------------------------------------------------------------------------
 
 #endif

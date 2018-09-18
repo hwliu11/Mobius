@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 18 September 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,55 +28,39 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+// Own include
+#include <mobius/test_Mesh.h>
 
-// Tests includes
-#include <mobius/test.h>
+// Test includes
+#include <mobius/test_CommonFacilities.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// Poly includes
+#include <mobius/poly_Mesh.h>
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 001.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testCreateVertex(const int funcID)
 {
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+  outcome res( DescriptionFn() );
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
+  ptr<poly_Mesh> mesh = new poly_Mesh;
 
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+  poly_VertexHandle hv0 = mesh->CreateVertex();
+  poly_VertexHandle hv1 = mesh->CreateVertex();
+  poly_VertexHandle hv2 = mesh->CreateVertex();
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  if ( hv0.GetIdx() != 0 )
+    return res.failure();
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  if ( hv1.GetIdx() != 1 )
+    return res.failure();
 
-  CaseID_Geom_InterpolateCurve3D,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
+  if ( hv2.GetIdx() != 2 )
+    return res.failure();
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
-
-  CaseID_Poly_Mesh
-
-};
-
-#endif
+  return res.success();
+}

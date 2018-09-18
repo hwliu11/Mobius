@@ -121,6 +121,7 @@ endif()
 #-------------------------------------------------------------------------------
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/core)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/poly)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/bspl)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/geom)
 #add_subdirectory(${CMAKE_SOURCE_DIR}/src/api)
@@ -172,6 +173,7 @@ endif()
 
 ################################################################################
 set_property(TARGET mobiusCore       PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusPoly       PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusBSpl       PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusGeom       PROPERTY FOLDER Kernel)
 #set_property(TARGET mobiusAPI           PROPERTY FOLDER Kernel)

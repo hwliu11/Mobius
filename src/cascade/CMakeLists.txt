@@ -106,6 +106,6 @@ install (TARGETS mobiusCascade
          CONFIGURATIONS Debug)
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusCascade.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusCascade.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusCascade.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 
 install (FILES ${H_FILES} DESTINATION include/mobius)

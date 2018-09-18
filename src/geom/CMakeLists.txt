@@ -230,7 +230,7 @@ install (TARGETS mobiusGeom
          CONFIGURATIONS Debug)
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusGeom.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusGeom.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusGeom.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 
 install (FILES ${H_FILES}               DESTINATION include/mobius)
 install (FILES ${classifiers_H_FILES}   DESTINATION include/mobius)

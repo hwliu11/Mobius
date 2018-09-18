@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 18 September 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,54 +28,52 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef poly_Elements_HeaderFile
+#define poly_Elements_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// Poly includes
+#include <mobius/poly_Handles.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// Core includes
+#include <mobius/core_XYZ.h>
+
+namespace mobius {
+
+//! \ingroup MOBIUS_POLY
+//!
+//! Vertex entity.
+class poly_Vertex
 {
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+  core_XYZ            coords;
+  poly_HalfEdgeHandle hHalfEdge;
+};
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
+//! \ingroup MOBIUS_POLY
+//!
+//! Half-edge entity.
+class poly_HalfEdge
+{
+  poly_FaceHandle     hFace;
+  poly_VertexHandle   hVertex;
+  poly_HalfEdgeHandle hNextHalfEdge;
+  poly_HalfEdgeHandle hPrevHalfEdge;
+};
 
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+//! \ingroup MOBIUS_POLY
+//!
+//! Edge entity.
+class poly_Edge
+{
+  poly_HalfEdge hHalfEdges[2];
+};
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
-
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
-
-  CaseID_Geom_InterpolateCurve3D,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
-
-  CaseID_Poly_Mesh
+//! \ingroup MOBIUS_POLY
+//!
+//! Face entity.
+class poly_Face
+{
+  poly_HalfEdgeHandle hHalfEdge;
+};
 
 };
 

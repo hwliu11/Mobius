@@ -86,6 +86,18 @@ set (geom_CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# Poly
+#------------------------------------------------------------------------------
+
+set (poly_H_FILES
+  poly/test_Mesh.h
+)
+
+set (poly_CPP_FILES
+  poly/test_Mesh.cpp
+)
+
+#------------------------------------------------------------------------------
 
 list (APPEND MOBIUS_MODULES test)
 set (MOBIUS_MODULES ${MOBIUS_MODULES} PARENT_SCOPE)
@@ -129,7 +141,15 @@ foreach (FILE ${geom_CPP_FILES})
   source_group ("Source Files\\Geom" FILES "${FILE}")
 endforeach (FILE)
 
-include_directories(${test_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${testEngine_include_dir})
+foreach (FILE ${poly_H_FILES})
+  source_group ("Header Files\\Poly" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${poly_CPP_FILES})
+  source_group ("Source Files\\Poly" FILES "${FILE}")
+endforeach (FILE)
+
+include_directories(${test_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${poly_include_dir} ${testEngine_include_dir})
 
 if (USE_ADOLC)
   include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
@@ -139,7 +159,9 @@ add_executable (mobiusTest
   ${H_FILES}      ${CPP_FILES}
   ${bspl_H_FILES} ${bspl_CPP_FILES}
   ${core_H_FILES} ${core_CPP_FILES}
-  ${geom_H_FILES} ${geom_CPP_FILES})
+  ${geom_H_FILES} ${geom_CPP_FILES}
+  ${poly_H_FILES} ${poly_CPP_FILES}
+)
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 
@@ -161,7 +183,7 @@ add_custom_command(
 # Dependencies
 #------------------------------------------------------------------------------
 
-target_link_libraries(mobiusTest mobiusCore mobiusBSpl mobiusGeom mobiusTestEngine)
+target_link_libraries(mobiusTest mobiusCore mobiusPoly mobiusBSpl mobiusGeom mobiusTestEngine)
 
 #------------------------------------------------------------------------------
 # Installation of Mobius as SDK
@@ -186,9 +208,10 @@ install (TARGETS mobiusTest
          CONFIGURATIONS Debug)
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusTest.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusTest.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusTest.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 
 install (FILES ${H_FILES}      DESTINATION include/mobius)
 install (FILES ${bspl_H_FILES} DESTINATION include/mobius)
 install (FILES ${core_H_FILES} DESTINATION include/mobius)
 install (FILES ${geom_H_FILES} DESTINATION include/mobius)
+install (FILES ${poly_H_FILES} DESTINATION include/mobius)

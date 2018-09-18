@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 18 September 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,54 +28,56 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef test_Mesh_HeaderFile
+#define test_Mesh_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// Test includes
+#include <mobius/test_CaseIDs.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// TestEngine includes
+#include <mobius/testEngine_TestCase.h>
+
+namespace mobius {
+
+//! Test functions for mesh data structure.
+class test_Mesh : public testEngine_TestCase
 {
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
+  //! Returns Test Case ID.
+  //! \return ID of the Test Case.
+  static int ID()
+  {
+    return CaseID_Poly_Mesh;
+  }
 
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+  //! Returns filename for the description.
+  //! \return filename for the description of the Test Case.
+  static std::string DescriptionFn()
+  {
+    return "test_Mesh";
+  }
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  //! Returns Test Case description directory.
+  //! \return description directory for the Test Case.
+  static std::string DescriptionDir()
+  {
+    return "structure";
+  }
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  //! Returns pointers to the Test Functions to launch.
+  //! \param[out] functions output collection of pointers.
+  static void Functions(MobiusTestFunctions& functions)
+  {
+    functions << &testCreateVertex
+    ; // Put semicolon here for convenient adding new functions above ;)
+  }
 
-  CaseID_Geom_InterpolateCurve3D,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
+private:
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
+  static outcome testCreateVertex (const int funcID);
 
-  CaseID_Poly_Mesh
+};
 
 };
 
