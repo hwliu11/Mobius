@@ -19,6 +19,7 @@ set (CPP_FILES
 
 set (base_H_FILES
   base/core_Continuity.h
+  base/core_IAlgorithm.h
   base/core_ILogger.h
   base/core_Integral.h
   base/core_IPlotter.h
@@ -32,6 +33,7 @@ set (base_H_FILES
   base/core_Vars.h
 )
 set (base_CPP_FILES
+  base/core_IAlgorithm.cpp
   base/core_Integral.cpp
   base/core_OBJECT.cpp
   base/core_OPERATOR.cpp

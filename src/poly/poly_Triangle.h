@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_Elements_HeaderFile
-#define poly_Elements_HeaderFile
+#ifndef poly_Triangle_HeaderFile
+#define poly_Triangle_HeaderFile
 
 // Poly includes
 #include <mobius/poly_Handles.h>
@@ -41,38 +41,29 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Vertex entity.
-class poly_Vertex
+//! Triangle entity.
+class poly_Triangle
 {
-  core_XYZ            coords;
-  poly_HalfEdgeHandle hHalfEdge;
-};
+public:
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Half-edge entity.
-class poly_HalfEdge
-{
-  poly_FaceHandle     hFace;
-  poly_VertexHandle   hVertex;
-  poly_HalfEdgeHandle hNextHalfEdge;
-  poly_HalfEdgeHandle hPrevHalfEdge;
-};
+  //! Default ctor.
+  mobiusPoly_EXPORT
+    poly_Triangle();
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Edge entity.
-class poly_Edge
-{
-  poly_HalfEdge hHalfEdges[2];
-};
+  //! Ctor accepting the nodes of the triangle. The nodes should be enumerated in
+  //! ccw order looking from the outside of the surrounded solid.
+  //! \param[in] hv0 first vertex of the triangle.
+  //! \param[in] hv1 second vertex of the triangle.
+  //! \param[in] hv2 third vertex of the triangle.
+  mobiusPoly_EXPORT
+    poly_Triangle(const poly_VertexHandle hv0,
+                  const poly_VertexHandle hv1,
+                  const poly_VertexHandle hv2);
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Face entity.
-class poly_Face
-{
-  poly_HalfEdgeHandle hHalfEdge;
+protected:
+
+  poly_VertexHandle m_hVertices[3]; //!< Handles to the vertices.
+
 };
 
 };

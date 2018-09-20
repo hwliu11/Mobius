@@ -46,13 +46,34 @@ class poly_Vertex
 {
 public:
 
+  //! Default ctor.
   mobiusPoly_EXPORT
-    poly_Vertex
+    poly_Vertex();
+
+  //! Constructor.
+  //! \param[in] coords coordinates to set.
+  mobiusPoly_EXPORT
+    poly_Vertex(const core_XYZ& coords);
+
+  //! Constructor.
+  //! \param[in] x coordinate x of the vertex.
+  //! \param[in] y coordinate y of the vertex.
+  //! \param[in] z coordinate z of the vertex.
+  mobiusPoly_EXPORT
+    poly_Vertex(const double x,
+                const double y,
+                const double z);
+
+public:
+
+  double X() const { return m_coords.X(); } //!< \return X coordinate.
+  double Y() const { return m_coords.Y(); } //!< \return Y coordinate.
+  double Z() const { return m_coords.Z(); } //!< \return Z coordinate.
 
 protected:
 
-  core_XYZ            coords;
-  poly_HalfEdgeHandle hHalfEdge;
+  core_XYZ m_coords; //!< Coordinates of the vertex.
+
 };
 
 };

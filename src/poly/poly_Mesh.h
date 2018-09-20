@@ -32,7 +32,9 @@
 #define poly_Mesh_HeaderFile
 
 // Poly includes
-#include <mobius/poly_Elements.h>
+#include <mobius/poly_Edge.h>
+#include <mobius/poly_Triangle.h>
+#include <mobius/poly_Vertex.h>
 
 // Core includes
 #include <mobius/core_OBJECT.h>
@@ -41,7 +43,9 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Mesh data structure.
+//! Data structure representing surface triangulation.
+//!
+//! \sa mobius::poly_ReadSTL
 class poly_Mesh : public core_OBJECT
 {
 // Construction & destruction:
@@ -53,56 +57,114 @@ public:
 
 public:
 
-  //! Returns handle of a vertex.
-  //! \param[in] vertex to access a handle for.
-  //! \return handle.
-  poly_VertexHandle GetHandle(const poly_Vertex& vertex) const
+  //! Returns vertex by its handle.
+  //! \param[in]  h      handle of a vertex to access.
+  //! \param[out] vertex vertex.
+  //! \return false if there is not such vertex.
+  bool GetVertex(const poly_VertexHandle h,
+                 poly_Vertex&            vertex)
   {
-    return poly_VertexHandle( int( &vertex - &m_vertices.front() ) );
-  }
-
-  //! Returns handle of an edge.
-  //! \param[in] edge to access a handle for.
-  //! \return handle.
-  poly_EdgeHandle GetHandle(const poly_Edge& edge) const
-  {
-    return poly_EdgeHandle( int( &edge - &m_edges.front() ) );
-  }
-
-  //! Returns handle of a face.
-  //! \param[in] face to access a handle for.
-  //! \return handle.
-  poly_FaceHandle GetHandle(const poly_Face& face) const
-  {
-    return poly_FaceHandle( int( &face - &m_faces.front() ) );
+    const int idx = h.GetIdx();
+    if ( idx < 0 || idx > m_vertices.size() ) return false;
+    //
+    vertex = m_vertices[idx];
+    return true;
   }
 
   //! Creates a new vertex and returns its handle.
   //! \return handle of the just added vertex.
-  poly_VertexHandle CreateVertex()
+  poly_VertexHandle AddVertex()
   {
-    m_vertices.push_back( poly_Vertex() );
-    //
-    return this->GetHandle( m_vertices.back() );
+    return this->AddVertex(0., 0., 0.);
+  }
+
+  //! Creates a new vertex and returns its handle.
+  //! \param[in] coords coordinates of the vertex.
+  //! \return handle of the just added vertex.
+  poly_VertexHandle AddVertex(const core_XYZ& coords)
+  {
+    return this->AddVertex( coords.X(), coords.Y(), coords.Z() );
+  }
+
+  //! Creates a new vertex with the given coordinates and returns its handle.
+  //! \param[in] x coordinate x of the vertex.
+  //! \param[in] y coordinate y of the vertex.
+  //! \param[in] z coordinate z of the vertex.
+  //! \return handle of the just added vertex.
+  poly_VertexHandle AddVertex(const double x,
+                              const double y,
+                              const double z)
+  {
+    m_vertices.push_back( poly_Vertex(x, y, z) );
+    poly_VertexHandle hVertex( int( m_vertices.size() ) - 1 );
+    return hVertex;
+  }
+
+  //! Creates a new invalid edge.
+  //! \return handle of the just added edge.
+  poly_EdgeHandle AddEdge()
+  {
+    poly_VertexHandle inv;
+    return this->AddEdge(inv, inv);
   }
 
   //! Creates a new edge between the passed two vertices.
   //! \param[in] hStartV  start vertex.
   //! \param[in] hFinishV finish vertex.
   //! \return handle of the just added edge.
-  poly_EdgeHandle CreateEdge()
+  poly_EdgeHandle AddEdge(const poly_VertexHandle hStartV,
+                          const poly_VertexHandle hFinishV)
   {
-    m_edges.push_back( poly_Edge() );
+    m_edges.push_back( poly_Edge(hStartV, hFinishV) );
+    poly_EdgeHandle hEdge( int( m_edges.size() ) - 1 );
+    return hEdge;
+  }
 
-    // Get handle of the just created edge.
-    poly_EdgeHandle hEdge = this->GetHandle( m_edges.back() );
+  //! Creates a new invalid triangle.
+  //! \return handle of the just added triangle.
+  poly_TriangleHandle AddTriangle()
+  {
+    poly_VertexHandle inv;
+    return this->AddTriangle(inv, inv, inv);
+  }
+
+  //! Creates a new triangle.
+  //! \param[in] hV0 1-st vertex.
+  //! \param[in] hV1 2-nd vertex.
+  //! \param[in] hV2 3-rd vertex.
+  //! \return handle of the just added triangle.
+  poly_TriangleHandle AddTriangle(const poly_VertexHandle hV0,
+                                  const poly_VertexHandle hV1,
+                                  const poly_VertexHandle hV2)
+  {
+    m_triangles.push_back( poly_Triangle(hV0, hV1, hV2) );
+    poly_TriangleHandle hTriangle( int( m_triangles.size() ) - 1 );
+    return hTriangle;
+  }
+
+  //! \return number of vertices.
+  int GetNumVertices() const
+  {
+    return int( m_vertices.size() );
+  }
+
+  //! \return number of edges.
+  int GetNumEdges() const
+  {
+    return int( m_edges.size() );
+  }
+
+  //! \return number of triangles.
+  int GetNumTriangles() const
+  {
+    return int( m_triangles.size() );
   }
 
 protected:
 
-  std::vector<poly_Vertex> m_vertices; //!< List of vertices.
-  std::vector<poly_Edge>   m_edges;    //!< List of edges.
-  std::vector<poly_Face>   m_faces;    //!< List of faces.
+  std::vector<poly_Vertex>   m_vertices;  //!< List of vertices.
+  std::vector<poly_Edge>     m_edges;     //!< List of edges.
+  std::vector<poly_Triangle> m_triangles; //!< List of triangles.
 
 };
 

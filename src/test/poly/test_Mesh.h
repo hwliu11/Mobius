@@ -70,12 +70,28 @@ public:
   static void Functions(MobiusTestFunctions& functions)
   {
     functions << &testCreateVertex
+              << &testReadSTL01
+              << &testReadSTL02
+              << &testReadSTL03
+              << &testReadSTL04
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
 private:
 
+  static outcome testReadSTL(const int   funcID,
+                             const char* filenameShort,
+                             const int   refNumVertices,
+                             const int   refNumEdges,
+                             const int   refNumTriangles);
+
+private:
+
   static outcome testCreateVertex (const int funcID);
+  static outcome testReadSTL01    (const int funcID);
+  static outcome testReadSTL02    (const int funcID);
+  static outcome testReadSTL03    (const int funcID);
+  static outcome testReadSTL04    (const int funcID);
 
 };
 

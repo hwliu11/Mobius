@@ -36,6 +36,77 @@
 
 // Poly includes
 #include <mobius/poly_Mesh.h>
+#include <mobius/poly_ReadSTL.h>
+
+//-----------------------------------------------------------------------------
+
+// Filenames are specified relatively to MOBIUS_TEST_DATA environment variable.
+#define filename_mesh_001 "mesh/mesh_001.stl"
+#define filename_mesh_002 "mesh/mesh_002.stl"
+#define filename_mesh_003 "mesh/mesh_003.stl"
+#define filename_mesh_004 "mesh/mesh_004_binary.stl"
+
+//-----------------------------------------------------------------------------
+
+//! Common function to test STL reader.
+mobius::outcome
+  mobius::test_Mesh::testReadSTL(const int   funcID,
+                                 const char* filenameShort,
+                                 const int   refNumVertices,
+                                 const int   refNumEdges,
+                                 const int   refNumTriangles)
+{
+  outcome res( DescriptionFn() );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filenameShort;
+
+  // Prepare reader.
+  poly_ReadSTL reader(cf->ProgressNotifier, NULL);
+
+  // Read STL.
+  if ( !reader.Perform(filename) )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "STL reader returned false.");
+    return res.failure();
+  }
+
+  // Get the constructed mesh.
+  const ptr<poly_Mesh>& mesh = reader.GetResult();
+  //
+  const int numVertices  = mesh->GetNumVertices();
+  const int numEdges     = mesh->GetNumEdges();
+  const int numTriangles = mesh->GetNumTriangles();
+
+  // Verify.
+  if ( refNumVertices != numVertices )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of vertices (%1 expected, %2 actual)."
+                                                          << refNumVertices << numVertices);
+    return res.failure();
+  }
+  //
+  if ( refNumEdges != numEdges )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of edges (%1 expected, %2 actual)."
+                                                          << refNumEdges << numEdges);
+    return res.failure();
+  }
+  //
+  if ( refNumTriangles != numTriangles )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of triangles (%1 expected, %2 actual)."
+                                                          << refNumTriangles << numTriangles);
+    return res.failure();
+  }
+
+  return res.success();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -43,24 +114,92 @@
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_Mesh::testCreateVertex(const int funcID)
+  mobius::test_Mesh::testCreateVertex(const int /*funcID*/)
 {
   outcome res( DescriptionFn() );
 
   ptr<poly_Mesh> mesh = new poly_Mesh;
 
-  poly_VertexHandle hv0 = mesh->CreateVertex();
-  poly_VertexHandle hv1 = mesh->CreateVertex();
-  poly_VertexHandle hv2 = mesh->CreateVertex();
-
+  // Add vertices and validate the returned handles.
+  poly_VertexHandle hv0 = mesh->AddVertex();
+  poly_VertexHandle hv1 = mesh->AddVertex();
+  poly_VertexHandle hv2 = mesh->AddVertex();
+  //
   if ( hv0.GetIdx() != 0 )
     return res.failure();
-
+  //
   if ( hv1.GetIdx() != 1 )
     return res.failure();
-
+  //
   if ( hv2.GetIdx() != 2 )
     return res.failure();
 
+  // Get any vertex to check.
+  poly_Vertex v0;
+  //
+  if ( !mesh->GetVertex(hv0, v0) )
+    return res.failure();
+  //
+  if ( v0.X() != 0. )
+    return res.failure();
+  //
+  if ( v0.Y() != 0. )
+    return res.failure();
+  //
+  if ( v0.Z() != 0. )
+    return res.failure();
+
   return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario for reading STL.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testReadSTL01(const int funcID)
+{
+  return testReadSTL(funcID,
+                     filename_mesh_001,
+                     1807, 0, 3609);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario for reading STL.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testReadSTL02(const int funcID)
+{
+  return testReadSTL(funcID,
+                     filename_mesh_002,
+                     1620, 0, 3236);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario for reading STL.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testReadSTL03(const int funcID)
+{
+  return testReadSTL(funcID,
+                     filename_mesh_003,
+                     2109, 0, 4199);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario for reading STL.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testReadSTL04(const int funcID)
+{
+  return testReadSTL(funcID,
+                     filename_mesh_004,
+                     17379, 0, 34838);
 }

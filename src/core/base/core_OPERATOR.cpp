@@ -38,7 +38,5 @@
 //! \param[in] plotter  Imperative Plotter.
 mobius::core_OPERATOR::core_OPERATOR(core_ProgressEntry progress,
                                      core_PlotterEntry  plotter)
-: core_OBJECT (),
-  m_progress  (progress),
-  m_plotter   (plotter)
+: core_IAlgorithm(progress, plotter)
 {}

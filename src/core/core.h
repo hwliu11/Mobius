@@ -215,6 +215,26 @@ namespace core
     }
   };
 
+  //! Hashers.
+  namespace hasher
+  {
+    //! Computes hash code for integer value.
+    //! \param[in] val   value in question.
+    //! \param[in] upper upper bound.
+    //! \return hash code.
+    mobiusCore_EXPORT int
+      HashCode(const int val,
+               const int upper);
+
+    //! Computes hash code for double value.
+    //! \param[in] val   value in question.
+    //! \param[in] upper upper bound.
+    //! \return hash code.
+    mobiusCore_EXPORT int
+      HashCode(const double val,
+               const int    upper);
+  };
+
 };
 
 };

@@ -249,3 +249,22 @@ bool mobius::core::str::getKeyValue(const std::string& source,
   value = chunks[1];
   return true;
 }
+
+//-----------------------------------------------------------------------------
+
+int mobius::core::hasher::HashCode(const int val, const int upper)
+{
+  return ( (val & 0x7fffffff) % upper ) + 1;
+}
+
+//-----------------------------------------------------------------------------
+
+int mobius::core::hasher::HashCode(const double val, const int upper)
+{
+  union {
+    double R;
+    int    I[2];
+  } U;
+  U.R = val;
+  return HashCode( (U.I[0] ^ U.I[1]), upper );
+}

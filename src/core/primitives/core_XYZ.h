@@ -221,6 +221,9 @@ public:
 
 public:
 
+  mobiusCore_EXPORT bool
+    operator==(const core_XYZ& XYZ) const;
+
   mobiusCore_EXPORT core_XYZ&
     operator=(const core_XYZ& XYZ);
 

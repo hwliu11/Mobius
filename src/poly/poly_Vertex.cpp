@@ -28,53 +28,25 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_Elements_HeaderFile
-#define poly_Elements_HeaderFile
-
 // Poly includes
-#include <mobius/poly_Handles.h>
+#include <mobius/poly_Vertex.h>
 
-// Core includes
-#include <mobius/core_XYZ.h>
+//-----------------------------------------------------------------------------
 
-namespace mobius {
-
-//! \ingroup MOBIUS_POLY
-//!
-//! Vertex entity.
-class poly_Vertex
+mobius::poly_Vertex::poly_Vertex()
 {
-  core_XYZ            coords;
-  poly_HalfEdgeHandle hHalfEdge;
-};
+}
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Half-edge entity.
-class poly_HalfEdge
-{
-  poly_FaceHandle     hFace;
-  poly_VertexHandle   hVertex;
-  poly_HalfEdgeHandle hNextHalfEdge;
-  poly_HalfEdgeHandle hPrevHalfEdge;
-};
+//-----------------------------------------------------------------------------
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Edge entity.
-class poly_Edge
-{
-  poly_HalfEdge hHalfEdges[2];
-};
+mobius::poly_Vertex::poly_Vertex(const core_XYZ& coords)
+: m_coords(coords)
+{}
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Face entity.
-class poly_Face
-{
-  poly_HalfEdgeHandle hHalfEdge;
-};
+//-----------------------------------------------------------------------------
 
-};
-
-#endif
+mobius::poly_Vertex::poly_Vertex(const double x,
+                                 const double y,
+                                 const double z)
+: m_coords(x, y, z)
+{}

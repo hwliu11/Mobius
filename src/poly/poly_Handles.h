@@ -136,13 +136,13 @@ struct poly_EdgeHandle : public poly_BaseHandle
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Handle for face.
-struct poly_FaceHandle : public poly_BaseHandle
+//! Handle for triangle.
+struct poly_TriangleHandle : public poly_BaseHandle
 {
   //! Ctor accepting the optional index.
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
-  explicit poly_FaceHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
+  explicit poly_TriangleHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
 };
 
 };
@@ -193,12 +193,12 @@ struct hash<mobius::poly_EdgeHandle>
 };
 
 template <>
-struct hash<mobius::poly_FaceHandle>
+struct hash<mobius::poly_TriangleHandle>
 {
-  typedef mobius::poly_FaceHandle argument_type;
-  typedef std::size_t             result_type;
+  typedef mobius::poly_TriangleHandle argument_type;
+  typedef std::size_t                 result_type;
   
-  std::size_t operator()(const mobius::poly_FaceHandle& h) const
+  std::size_t operator()(const mobius::poly_TriangleHandle& h) const
   {
     return h.GetIdx();
   }

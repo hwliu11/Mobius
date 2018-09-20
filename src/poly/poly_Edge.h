@@ -28,51 +28,36 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_Elements_HeaderFile
-#define poly_Elements_HeaderFile
+#ifndef poly_Edge_HeaderFile
+#define poly_Edge_HeaderFile
 
 // Poly includes
 #include <mobius/poly_Handles.h>
 
-// Core includes
-#include <mobius/core_XYZ.h>
-
 namespace mobius {
-
-//! \ingroup MOBIUS_POLY
-//!
-//! Vertex entity.
-class poly_Vertex
-{
-  core_XYZ            coords;
-  poly_HalfEdgeHandle hHalfEdge;
-};
-
-//! \ingroup MOBIUS_POLY
-//!
-//! Half-edge entity.
-class poly_HalfEdge
-{
-  poly_FaceHandle     hFace;
-  poly_VertexHandle   hVertex;
-  poly_HalfEdgeHandle hNextHalfEdge;
-  poly_HalfEdgeHandle hPrevHalfEdge;
-};
 
 //! \ingroup MOBIUS_POLY
 //!
 //! Edge entity.
 class poly_Edge
 {
-  poly_HalfEdge hHalfEdges[2];
-};
+public:
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Face entity.
-class poly_Face
-{
-  poly_HalfEdgeHandle hHalfEdge;
+  //! Default ctor.
+  mobiusPoly_EXPORT
+    poly_Edge();
+
+  //! Ctor accepting the nodes of the edge.
+  //! \param[in] hv0 first vertex of the edge.
+  //! \param[in] hv1 second vertex of the edge.
+  mobiusPoly_EXPORT
+    poly_Edge(const poly_VertexHandle hv0,
+              const poly_VertexHandle hv1);
+
+protected:
+
+  poly_VertexHandle m_hVertices[2]; //!< Handles to the vertices.
+
 };
 
 };

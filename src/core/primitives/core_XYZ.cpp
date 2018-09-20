@@ -149,6 +149,14 @@ inline double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
   return alpha;
 }
 
+//! Exact equality operator. Use with care.
+//! \param XYZ [in] point to compare with.
+//! \return true in case of exact (bit-to-bit) equality.
+bool mobius::core_XYZ::operator==(const core_XYZ& XYZ) const
+{
+  return (m_fX == XYZ.m_fX) && (m_fY == XYZ.m_fY) && (m_fZ == XYZ.m_fZ);
+}
+
 //! Assignment operator.
 //! \param XYZ [in] point to copy into this one.
 //! \return this one.

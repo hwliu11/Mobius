@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: July 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2017-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,28 +28,39 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef core_OPERATOR_HeaderFile
-#define core_OPERATOR_HeaderFile
+#ifndef core_IAlgorithm_HeaderFile
+#define core_IAlgorithm_HeaderFile
 
 // Core includes
-#include <mobius/core_IAlgorithm.h>
+#include <mobius/core_IPlotter.h>
+#include <mobius/core_IProgressNotifier.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_CORE
 //!
-//! Interface for modeling operators.
-class core_OPERATOR : public core_IAlgorithm
+//! Interface for algorithms.
+class core_IAlgorithm : public core_OBJECT
 {
+public:
+
+  core_ProgressEntry& GetProgress() const { return m_progress; }
+  core_PlotterEntry&  GetPlotter()  const { return m_plotter; }
+
 protected:
 
   mobiusCore_EXPORT
-    core_OPERATOR(core_ProgressEntry progress,
-                  core_PlotterEntry  plotter);
+    core_IAlgorithm(core_ProgressEntry progress,
+                    core_PlotterEntry  plotter);
 
-private:
+protected:
 
-  core_OPERATOR() : core_IAlgorithm() {}
+  mutable core_ProgressEntry m_progress; //!< Progress Notifier.
+  mutable core_PlotterEntry  m_plotter;  //!< Imperative Plotter.
+
+protected:
+
+  core_IAlgorithm() : core_OBJECT() {}
 
 };
 

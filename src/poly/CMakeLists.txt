@@ -9,12 +9,14 @@ set (H_FILES
   poly_Edge.h
   poly_Handles.h
   poly_Mesh.h
+  poly_ReadSTL.h
   poly_Triangle.h
   poly_Vertex.h
 )
 set (CPP_FILES
   poly_Edge.cpp
   poly_Mesh.cpp
+  poly_ReadSTL.cpp
   poly_Triangle.cpp
   poly_Vertex.cpp
 )
