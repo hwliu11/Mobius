@@ -60,7 +60,7 @@ public:
   //! Returns vertex by its handle.
   //! \param[in]  h      handle of a vertex to access.
   //! \param[out] vertex vertex.
-  //! \return false if there is not such vertex.
+  //! \return false if there is no such vertex.
   bool GetVertex(const poly_VertexHandle h,
                  poly_Vertex&            vertex)
   {
@@ -68,6 +68,34 @@ public:
     if ( idx < 0 || idx > m_vertices.size() ) return false;
     //
     vertex = m_vertices[idx];
+    return true;
+  }
+
+  //! Returns triangle by its handle.
+  //! \param[in]  h        handle of a triangle to access.
+  //! \param[out] triangle triangle.
+  //! \return false if there is no such triangle.
+  bool GetTriangle(const poly_TriangleHandle h,
+                   poly_Triangle&            triangle)
+  {
+    const int idx = h.GetIdx();
+    if ( idx < 0 || idx > m_triangles.size() ) return false;
+    //
+    triangle = m_triangles[idx];
+    return true;
+  }
+
+  //! Returns edge by its handle.
+  //! \param[in]  h    handle of an edge to access.
+  //! \param[out] edge edge.
+  //! \return false if there is no such edge.
+  bool GetEdge(const poly_EdgeHandle h,
+               poly_Edge&            edge)
+  {
+    const int idx = h.GetIdx();
+    if ( idx < 0 || idx > m_edges.size() ) return false;
+    //
+    edge = m_edges[idx];
     return true;
   }
 

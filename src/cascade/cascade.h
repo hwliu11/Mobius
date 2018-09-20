@@ -41,6 +41,14 @@
   #define mobiusCascade_EXPORT
 #endif
 
-#define cascade_NotUsed(x)
+#define cascade_NotUsed(x) x
+
+//-----------------------------------------------------------------------------
+// DOXY group definition
+//-----------------------------------------------------------------------------
+//! \defgroup MOBIUS_CASCADE OpenCascade
+//!
+//! Connectors with OpenCascade kernel.
+//-----------------------------------------------------------------------------
 
 #endif

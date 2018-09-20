@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 24 December 2014
+// Created on: 20 September 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,56 +28,73 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef cascade_MultResolver_HeaderFile
-#define cascade_MultResolver_HeaderFile
+#ifndef cascade_Triangulation_HeaderFile
+#define cascade_Triangulation_HeaderFile
 
 // Cascade includes
 #include <mobius/cascade.h>
 
-// BSpl includes
-#include <mobius/bspl_KnotMultiset.h>
+// Core includes
+#include <mobius/core_Ptr.h>
+
+// Poly includes
+#include <mobius/poly_Mesh.h>
 
 // OCCT includes
-#include <NCollection_Sequence.hxx>
-#include <TColStd_HArray1OfReal.hxx>
-#include <TColStd_HArray1OfInteger.hxx>
+#include <Poly_Triangulation.hxx>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_CASCADE
 //!
-//! The way how knots are represented in Mobius is different from OCCT.
-//! OCCT stores each knot value just once (without repetitions), however,
-//! it requires additional array with multiplicities. E.g. U = (0f, 0f, 1f, 2f, 2f)
-//! is represented by two arrays in OCCT: (0f, 1f, 2f) for the knot values
-//! and (2, 1, 2) for their multiplicities. Mobius is more straightforward
-//! concerning this. This auxiliary tool performs necessary conversion
-//! from Mobius notation to OCCT one.
-class cascade_MultResolver
+//! Bridge for conversions between Mobius and OCCT triangulations.
+class cascade_Triangulation
 {
-// Members:
-public:
-
-  NCollection_Sequence<bspl_KnotMultiset::elem> Knots; //!< Knots being processed.
-
 public:
 
   mobiusCascade_EXPORT
-    cascade_MultResolver();
+    cascade_Triangulation(const ptr<poly_Mesh>& mobiusMesh);
 
-  mobiusCascade_EXPORT virtual
-    ~cascade_MultResolver();
+  mobiusCascade_EXPORT
+    cascade_Triangulation(const Handle(Poly_Triangulation)& occtMesh);
+
+  mobiusCascade_EXPORT
+    ~cascade_Triangulation();
 
 public:
 
   mobiusCascade_EXPORT void
-    Resolve(const double u);
+    DirectConvert();
 
-  mobiusCascade_EXPORT Handle(TColStd_HArray1OfReal)
-    GetOpenCascadeKnots() const;
+public:
 
-  mobiusCascade_EXPORT Handle(TColStd_HArray1OfInteger)
-    GetOpenCascadeMults() const;
+  mobiusCascade_EXPORT const ptr<poly_Mesh>&
+    GetMobiusTriangulation() const;
+
+  mobiusCascade_EXPORT const Handle(Poly_Triangulation)&
+    GetOpenCascadeTriangulation() const;
+
+  mobiusCascade_EXPORT bool
+    IsDone() const;
+
+protected:
+
+  mobiusCascade_EXPORT void
+    convertToOpenCascade();
+
+  mobiusCascade_EXPORT void
+    convertToMobius();
+
+private:
+
+  //! Mobius data structure.
+  ptr<poly_Mesh> m_mobiusMesh;
+
+  //! OCCT data structure.
+  Handle(Poly_Triangulation) m_occtMesh;
+
+  //! Indicates whether conversion is done or not.
+  bool m_bIsDone;
 
 };
 

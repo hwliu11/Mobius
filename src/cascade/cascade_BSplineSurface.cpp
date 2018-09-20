@@ -70,8 +70,6 @@ mobius::cascade_BSplineSurface::~cascade_BSplineSurface()
 
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-
 //! Converts Mobius B-spline surface to OCCT one or vice versa by direct
 //! supplying of knots, multiplicities and poles.
 void mobius::cascade_BSplineSurface::DirectConvert()

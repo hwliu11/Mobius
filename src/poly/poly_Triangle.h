@@ -60,6 +60,21 @@ public:
                   const poly_VertexHandle hv1,
                   const poly_VertexHandle hv2);
 
+public:
+
+  //! Returns vertex handles defining the triangle.
+  //! \param[out] hv0 1-st vertex.
+  //! \param[out] hv1 2-nd vertex.
+  //! \param[out] hv2 3-rd vertex.
+  void GetVertices(poly_VertexHandle& hv0,
+                   poly_VertexHandle& hv1,
+                   poly_VertexHandle& hv2)
+  {
+    hv0 = m_hVertices[0];
+    hv1 = m_hVertices[1];
+    hv2 = m_hVertices[2];
+  }
+
 protected:
 
   poly_VertexHandle m_hVertices[3]; //!< Handles to the vertices.

@@ -42,6 +42,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_CASCADE
+//!
 //! Bridge for conversions between Mobius and OCCT B-surfaces.
 class cascade_BSplineSurface
 {
@@ -90,7 +92,6 @@ private:
 
   //! Indicates whether conversion is done or not.
   bool m_bIsDone;
-
 
 };
 

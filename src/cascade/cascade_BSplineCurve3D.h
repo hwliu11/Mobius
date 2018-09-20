@@ -43,6 +43,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_CASCADE
+//!
 //! Converter between OpenCascade and Mobius for B-curves.
 class cascade_BSplineCurve3D
 {

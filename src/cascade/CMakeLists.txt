@@ -9,11 +9,13 @@ set (H_FILES
   cascade_BSplineCurve3D.h
   cascade_BSplineSurface.h
   cascade_MultResolver.h
+  cascade_Triangulation.h
 )
 set (CPP_FILES
   cascade_BSplineCurve3D.cpp
   cascade_BSplineSurface.cpp
   cascade_MultResolver.cpp
+  cascade_Triangulation.cpp
 )
 
 #------------------------------------------------------------------------------
@@ -66,7 +68,7 @@ set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 # Dependencies
 #------------------------------------------------------------------------------
 
-target_link_libraries(mobiusCascade mobiusCore mobiusBSpl mobiusGeom)
+target_link_libraries(mobiusCascade mobiusCore mobiusPoly mobiusBSpl mobiusGeom)
 
 foreach (LIB_FILE ${OCCT_LIB_FILES})
   if (WIN32)
