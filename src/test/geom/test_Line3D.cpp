@@ -40,7 +40,7 @@
 mobius::outcome
   mobius::test_Line3D::test1(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Line properties
   core_XYZ O(1, 1, 1);

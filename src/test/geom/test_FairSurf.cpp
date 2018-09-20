@@ -56,7 +56,7 @@
 mobius::outcome
   mobius::test_FairSurf::testIndices(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // JSON definition.
   std::string json =
@@ -190,7 +190,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_FairSurf::testFairing01(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -291,7 +291,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_FairSurf::testFairing02(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -392,7 +392,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_FairSurf::testFairing03(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -466,7 +466,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_FairSurf::testFairing04(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -557,7 +557,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_FairSurf::testFairing05(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();

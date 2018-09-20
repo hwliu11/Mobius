@@ -40,9 +40,9 @@
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_ParamsChordLength::test1(const int test_NotUsed(funcID))
+  mobius::test_ParamsChordLength::test1(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ----------------------
    *  Prepare input points
@@ -98,9 +98,9 @@ mobius::outcome
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_ParamsChordLength::test2(const int test_NotUsed(funcID))
+  mobius::test_ParamsChordLength::test2(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ----------------------
    *  Prepare input points
@@ -157,9 +157,9 @@ mobius::outcome
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_ParamsChordLength::test3(const int test_NotUsed(funcID))
+  mobius::test_ParamsChordLength::test3(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ----------------------
    *  Prepare input points
@@ -227,9 +227,9 @@ mobius::outcome
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_ParamsChordLength::test4(const int test_NotUsed(funcID))
+  mobius::test_ParamsChordLength::test4(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ----------------------
    *  Prepare input points
@@ -302,9 +302,9 @@ mobius::outcome
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_ParamsChordLength::test5(const int test_NotUsed(funcID))
+  mobius::test_ParamsChordLength::test5(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ----------------------
    *  Prepare input points

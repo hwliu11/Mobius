@@ -42,9 +42,9 @@
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_UnifyKnots::test_unify(const int test_NotUsed(funcID))
+  mobius::test_UnifyKnots::test_unify(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const double U[] = {0, 0, 1, 2, 3};
   const double V[] = {2, 2, 3, 5, 6};

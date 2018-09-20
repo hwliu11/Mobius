@@ -56,7 +56,7 @@ mobius::outcome
                                  const int   refNumEdges,
                                  const int   refNumTriangles)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -114,9 +114,9 @@ mobius::outcome
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_Mesh::testCreateVertex(const int /*funcID*/)
+  mobius::test_Mesh::testCreateVertex(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   ptr<poly_Mesh> mesh = new poly_Mesh;
 

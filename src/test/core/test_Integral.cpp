@@ -277,7 +277,7 @@ private:
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test01(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U         = {0, 0, 0.2, 0.5, 1, 1};
   const int                 p         = 1;
@@ -334,7 +334,7 @@ mobius::outcome mobius::test_Integral::test01(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test02(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U         = {0, 0, 0, 0.2, 0.5, 1, 1, 1};
   const int                 p         = 2;
@@ -391,7 +391,7 @@ mobius::outcome mobius::test_Integral::test02(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test03(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U         = {0, 0, 0, 0, 0.2, 0.5, 1, 1, 1, 1};
   const int                 p         = 3;
@@ -448,7 +448,7 @@ mobius::outcome mobius::test_Integral::test03(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test04(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U         = {0, 0, 0, 0, 0, 0.2, 0.5, 1, 1, 1, 1, 1};
   const int                 p         = 4;
@@ -505,7 +505,7 @@ mobius::outcome mobius::test_Integral::test04(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test05(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U         = {0, 0, 0, 0, 0, 0, 0.3, 0.4, 0.5, 0.8, 1, 1, 1, 1, 1, 1};
   const int                 p         = 5;
@@ -562,7 +562,7 @@ mobius::outcome mobius::test_Integral::test05(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test06(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U         = {0, 0, 0, 0, 0, 0, 0.3, 0.4, 0.5, 0.8, 1, 1, 1, 1, 1, 1};
   const int                 p         = 5;
@@ -621,7 +621,7 @@ mobius::outcome mobius::test_Integral::test06(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test07(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const double           fVal   = 15.0;
   const std::vector<int> order  = {3, 3};
@@ -652,7 +652,7 @@ mobius::outcome mobius::test_Integral::test07(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test08(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<int> order  = {8, 8};
   const double           refVal = 2./3.;
@@ -682,7 +682,7 @@ mobius::outcome mobius::test_Integral::test08(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test09(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<int> order  = {6, 6};
   const double           refVal = 57.0;
@@ -712,7 +712,7 @@ mobius::outcome mobius::test_Integral::test09(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test10(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<int> order  = {6, 6};
   const double           refVal = 1./2.;
@@ -742,7 +742,7 @@ mobius::outcome mobius::test_Integral::test10(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_Integral::test11(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<int> order  = {6, 6};
   const double           refVal = 5.;

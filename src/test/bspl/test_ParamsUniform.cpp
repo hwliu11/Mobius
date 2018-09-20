@@ -38,9 +38,9 @@
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_ParamsUniform::test1(const int test_NotUsed(funcID))
+  mobius::test_ParamsUniform::test1(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Index of the last parameter
   const int n = 2;
@@ -89,9 +89,9 @@ mobius::outcome
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_ParamsUniform::test2(const int test_NotUsed(funcID))
+  mobius::test_ParamsUniform::test2(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Index of the last parameter
   const int n = 3;

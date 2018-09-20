@@ -45,7 +45,7 @@
 mobius::outcome
   mobius::test_BSplineSurface::evalInDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -97,7 +97,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::evalOutDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -152,7 +152,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::evalJSON1(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -232,7 +232,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::evalJSON2(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -367,7 +367,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::evalD1InDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -471,7 +471,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::evalD1OutDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -565,7 +565,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::evalD2InDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -682,7 +682,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::evalD2OutDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -792,7 +792,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::computeEnergy01(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -883,7 +883,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::computeEnergy02(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -968,7 +968,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::computeEnergy03(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -1048,7 +1048,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::computeEnergy04(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -1138,7 +1138,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::computeEnergy05(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -1228,7 +1228,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineSurface::computeEnergy06(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();

@@ -38,9 +38,9 @@
 //! \param funcID [in] function ID.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_InterpolateCurve3D::test1(const int test_NotUsed(funcID))
+  mobius::test_InterpolateCurve3D::test1(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ~~~~~~~~~~~~~~~~~~~~~~
    *  Prepare input points

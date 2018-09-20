@@ -42,7 +42,7 @@
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_EffectiveN::evalInDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
@@ -80,7 +80,7 @@ mobius::outcome mobius::test_EffectiveN::evalInDomain(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
@@ -128,7 +128,7 @@ mobius::outcome mobius::test_EffectiveN::evalOutDomainLeft(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_EffectiveN::evalOutDomainRight(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;

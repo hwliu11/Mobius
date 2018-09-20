@@ -119,7 +119,7 @@ public:
       const bool isOk = res.ok;
 
       // Dump summary.
-      m_progress.SendLogMessage(MobiusNotice(Normal) << "Function %1: "
+      m_progress.SendLogMessage(MobiusNotice(Normal) << "Summary on test function %1: "
                                                      << res.name);
       m_progress.SendLogMessage(MobiusNotice(Normal) << "\t\tIs ok: %1: "
                                                      << isOk);

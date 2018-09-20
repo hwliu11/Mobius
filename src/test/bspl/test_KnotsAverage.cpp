@@ -40,9 +40,9 @@
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_KnotsAverage::testCase1_noDerivativeConstraints(const int test_NotUsed(funcID))
+  mobius::test_KnotsAverage::testCase1_noDerivativeConstraints(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* --------------------
    *  Prepare input data
@@ -96,9 +96,9 @@ mobius::outcome
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_KnotsAverage::testCase1_endDerivativeConstraints(const int test_NotUsed(funcID))
+  mobius::test_KnotsAverage::testCase1_endDerivativeConstraints(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* --------------------
    *  Prepare input data

@@ -81,6 +81,20 @@ public:
     this->startTimer();
   }
 
+  //! Ctor accepting function name.
+  //! \param[in] _name   function name.
+  //! \param[in] _funcID function ID.
+  explicit outcome(const std::string& _name,
+                   const int          _funcID)
+  : name           (_name + "[" + core::str::to_string(_funcID) + "]"),
+    ok             (false),
+    elapsedTimeSec ("undefined"),
+    memBefore      (-1),
+    memAfter       (-1)
+  {
+    this->startTimer();
+  }
+
   //! Ctor accepting success/failure flag.
   //! \param[in] _ok Boolean value to set as execution status.
   explicit outcome(const bool _ok)

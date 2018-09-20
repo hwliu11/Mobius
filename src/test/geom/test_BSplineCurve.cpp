@@ -42,7 +42,7 @@
 mobius::outcome
   mobius::test_BSplineCurve::evalInDomain(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -95,7 +95,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineCurve::evalOutDomainRight(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -148,7 +148,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineCurve::evalOutDomainLeft(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -202,7 +202,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineCurve::evalJSON1(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points
@@ -266,7 +266,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_BSplineCurve::evalJSON2(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   /* ======================
    *  Prepare input points

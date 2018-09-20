@@ -41,7 +41,7 @@
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_FindSpan::eval01(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 5.0};
   const int p = 1;
@@ -86,7 +86,7 @@ mobius::outcome mobius::test_FindSpan::eval01(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_FindSpan::eval02(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U = {0.0, 0.0, 1.0, 2.0, 2.0};
   const int p = 1;
@@ -118,7 +118,7 @@ mobius::outcome mobius::test_FindSpan::eval02(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_FindSpan::eval03(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;
@@ -141,7 +141,7 @@ mobius::outcome mobius::test_FindSpan::eval03(const int funcID)
 //! \return true in case of success, false -- otherwise.
 mobius::outcome mobius::test_FindSpan::eval04(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
   const int p = 2;

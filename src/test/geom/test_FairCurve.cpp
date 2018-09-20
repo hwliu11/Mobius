@@ -48,7 +48,7 @@ mobius::outcome
                                   double             lambdas[4],
                                   double             refStrains[4])
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
   ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -212,7 +212,7 @@ mobius::outcome
 mobius::outcome
   mobius::test_FairCurve::test003(const int funcID)
 {
-  outcome res( DescriptionFn() );
+  outcome res( DescriptionFn(), funcID );
 
   // JSON definition.
   std::string json =
