@@ -103,15 +103,7 @@ public:
   //! \return handle of the just added vertex.
   poly_VertexHandle AddVertex()
   {
-    return this->AddVertex(0., 0., 0.);
-  }
-
-  //! Creates a new vertex and returns its handle.
-  //! \param[in] coords coordinates of the vertex.
-  //! \return handle of the just added vertex.
-  poly_VertexHandle AddVertex(const core_XYZ& coords)
-  {
-    return this->AddVertex( coords.X(), coords.Y(), coords.Z() );
+    return this->AddVertex( core_XYZ::O() );
   }
 
   //! Creates a new vertex with the given coordinates and returns its handle.
@@ -123,7 +115,15 @@ public:
                               const double y,
                               const double z)
   {
-    m_vertices.push_back( poly_Vertex(x, y, z) );
+    return this->AddVertex( core_XYZ(x, y, z) );
+  }
+
+  //! Creates a new vertex and returns its handle.
+  //! \param[in] coords coordinates of the vertex.
+  //! \return handle of the just added vertex.
+  poly_VertexHandle AddVertex(const core_XYZ& coords)
+  {
+    m_vertices.push_back( poly_Vertex(coords) );
     poly_VertexHandle hVertex( int( m_vertices.size() ) - 1 );
     return hVertex;
   }
