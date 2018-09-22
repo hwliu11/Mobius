@@ -8,7 +8,6 @@ win32/
 tmp/
 cmake-build-dir
 cmake-install-dir
-data
 doc/reference/generated/
 test/results/*
 test/dumping/*
