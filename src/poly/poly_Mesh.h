@@ -104,8 +104,8 @@ public:
   //! \param[in]  h    handle of a quad to access.
   //! \param[out] quad quad.
   //! \return false if there is no such quad.
-  bool GetTriangle(const poly_QuadHandle h,
-                   poly_Quad&            quad)
+  bool GetQuad(const poly_QuadHandle h,
+               poly_Quad&            quad)
   {
     const int idx = h.GetIdx();
     if ( idx < 0 || idx > m_quads.size() ) return false;
@@ -232,6 +232,95 @@ public:
   {
     return int( m_quads.size() );
   }
+
+public:
+
+  //! Base class for all iterators.
+  class BaseIterator
+  {
+  public:
+
+    //! Ctor accepting mesh.
+    BaseIterator(const ptr<poly_Mesh>& mesh) : m_mesh(mesh), m_pos(0) {}
+
+  protected:
+
+    ptr<poly_Mesh> m_mesh; //!< Mesh to iterate.
+    size_t         m_pos;  //!< Current position.
+
+  };
+
+  //! Iterator for vertices.
+  class VertexIterator : public BaseIterator
+  {
+  public:
+
+    //! Ctor accepting mesh.
+    VertexIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+
+  public:
+
+    bool More() const { return m_pos < m_mesh->m_vertices.size(); }
+
+    void Next() { m_pos++; }
+
+    poly_VertexHandle Current() const { return poly_VertexHandle( int(m_pos) ); }
+
+  };
+
+  //! Iterator for edges.
+  class EdgeIterator : public BaseIterator
+  {
+  public:
+
+    //! Ctor accepting mesh.
+    EdgeIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+
+  public:
+
+    bool More() const { return m_pos < m_mesh->m_edges.size(); }
+
+    void Next() { m_pos++; }
+
+    poly_EdgeHandle Current() const { return poly_EdgeHandle( int(m_pos) ); }
+
+  };
+
+  //! Iterator for triangles.
+  class TriangleIterator : public BaseIterator
+  {
+  public:
+
+    //! Ctor accepting mesh.
+    TriangleIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+
+  public:
+
+    bool More() const { return m_pos < m_mesh->m_triangles.size(); }
+
+    void Next() { m_pos++; }
+
+    poly_TriangleHandle Current() const { return poly_TriangleHandle( int(m_pos) ); }
+
+  };
+
+  //! Iterator for quads.
+  class QuadIterator : public BaseIterator
+  {
+  public:
+
+    //! Ctor accepting mesh.
+    QuadIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+
+  public:
+
+    bool More() const { return m_pos < m_mesh->m_quads.size(); }
+
+    void Next() { m_pos++; }
+
+    poly_QuadHandle Current() const { return poly_QuadHandle( int(m_pos) ); }
+
+  };
 
 protected:
 

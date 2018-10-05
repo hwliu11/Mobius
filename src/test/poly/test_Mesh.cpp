@@ -46,6 +46,7 @@
 #define filename_mesh_003 "mesh/mesh_003.stl"
 #define filename_mesh_004 "mesh/mesh_004_binary.stl"
 #define filename_mesh_005 "mesh/plate-with-quads_001.ply"
+#define filename_mesh_006 "mesh/plate-with-quads_002.ply"
 
 //-----------------------------------------------------------------------------
 
@@ -284,4 +285,17 @@ mobius::outcome
   return testReadPLY(funcID,
                      filename_mesh_005,
                      3274, 0, 662, 2842);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario for reading PLY.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testReadPLY02(const int funcID)
+{
+  return testReadPLY(funcID,
+                     filename_mesh_006,
+                     1443, 0, 12, 1325);
 }

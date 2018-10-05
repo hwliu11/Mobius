@@ -78,6 +78,7 @@ public:
               << &testReadSTL03
               << &testReadSTL04
               << &testReadPLY01
+              << &testReadPLY02
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -110,6 +111,7 @@ private:
   static outcome testReadSTL03    (const int funcID);
   static outcome testReadSTL04    (const int funcID);
   static outcome testReadPLY01    (const int funcID);
+  static outcome testReadPLY02    (const int funcID);
 
 };
 
