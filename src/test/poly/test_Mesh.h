@@ -37,6 +37,9 @@
 // TestEngine includes
 #include <mobius/testEngine_TestCase.h>
 
+// Poly includes
+#include <mobius/poly_Mesh.h>
+
 namespace mobius {
 
 //! Test functions for mesh data structure.
@@ -74,16 +77,30 @@ public:
               << &testReadSTL02
               << &testReadSTL03
               << &testReadSTL04
+              << &testReadPLY01
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
 private:
+
+  static bool verifyMeshContents(const ptr<poly_Mesh>& mesh,
+                                 const int             refNumVertices,
+                                 const int             refNumEdges,
+                                 const int             refNumTriangles,
+                                 const int             refNumQuads);
 
   static outcome testReadSTL(const int   funcID,
                              const char* filenameShort,
                              const int   refNumVertices,
                              const int   refNumEdges,
                              const int   refNumTriangles);
+
+  static outcome testReadPLY(const int   funcID,
+                             const char* filenameShort,
+                             const int   refNumVertices,
+                             const int   refNumEdges,
+                             const int   refNumTriangles,
+                             const int   refNumQuads);
 
 private:
 
@@ -92,6 +109,7 @@ private:
   static outcome testReadSTL02    (const int funcID);
   static outcome testReadSTL03    (const int funcID);
   static outcome testReadSTL04    (const int funcID);
+  static outcome testReadPLY01    (const int funcID);
 
 };
 

@@ -35,7 +35,7 @@
 #include <mobius/test_CommonFacilities.h>
 
 // Poly includes
-#include <mobius/poly_Mesh.h>
+#include <mobius/poly_ReadPLY.h>
 #include <mobius/poly_ReadSTL.h>
 
 //-----------------------------------------------------------------------------
@@ -45,6 +45,56 @@
 #define filename_mesh_002 "mesh/mesh_002.stl"
 #define filename_mesh_003 "mesh/mesh_003.stl"
 #define filename_mesh_004 "mesh/mesh_004_binary.stl"
+#define filename_mesh_005 "mesh/plate-with-quads_001.ply"
+
+//-----------------------------------------------------------------------------
+
+bool mobius::test_Mesh::verifyMeshContents(const ptr<poly_Mesh>& mesh,
+                                           const int             refNumVertices,
+                                           const int             refNumEdges,
+                                           const int             refNumTriangles,
+                                           const int             refNumQuads)
+{
+  // Get the actual summary.
+  const int numVertices  = mesh->GetNumVertices();
+  const int numEdges     = mesh->GetNumEdges();
+  const int numTriangles = mesh->GetNumTriangles();
+  const int numQuads     = mesh->GetNumQuads();
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  // Verify.
+  if ( refNumVertices != numVertices )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of vertices (%1 expected, %2 actual)."
+                                                          << refNumVertices << numVertices);
+    return false;
+  }
+  //
+  if ( refNumEdges != numEdges )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of edges (%1 expected, %2 actual)."
+                                                          << refNumEdges << numEdges);
+    return false;
+  }
+  //
+  if ( refNumTriangles != numTriangles )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of triangles (%1 expected, %2 actual)."
+                                                          << refNumTriangles << numTriangles);
+    return false;
+  }
+  //
+  if ( refNumQuads != numQuads )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of quads (%1 expected, %2 actual)."
+                                                          << refNumQuads << numQuads);
+    return false;
+  }
+
+  return true;
+}
 
 //-----------------------------------------------------------------------------
 
@@ -76,36 +126,55 @@ mobius::outcome
     return res.failure();
   }
 
-  // Get the constructed mesh.
-  const ptr<poly_Mesh>& mesh = reader.GetResult();
-  //
-  const int numVertices  = mesh->GetNumVertices();
-  const int numEdges     = mesh->GetNumEdges();
-  const int numTriangles = mesh->GetNumTriangles();
+  // Verify.
+  const bool isOk = verifyMeshContents(reader.GetResult(),
+                                       refNumVertices,
+                                       refNumEdges,
+                                       refNumTriangles,
+                                       0);
+
+  return res.status(isOk);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Common function to test PLY reader.
+mobius::outcome
+  mobius::test_Mesh::testReadPLY(const int   funcID,
+                                 const char* filenameShort,
+                                 const int   refNumVertices,
+                                 const int   refNumEdges,
+                                 const int   refNumTriangles,
+                                 const int   refNumQuads)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filenameShort;
+
+  // Prepare reader.
+  poly_ReadPLY reader(cf->ProgressNotifier, NULL);
+
+  // Read PLY.
+  if ( !reader.Perform(filename) )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "PLY reader returned false.");
+    return res.failure();
+  }
 
   // Verify.
-  if ( refNumVertices != numVertices )
-  {
-    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of vertices (%1 expected, %2 actual)."
-                                                          << refNumVertices << numVertices);
-    return res.failure();
-  }
-  //
-  if ( refNumEdges != numEdges )
-  {
-    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of edges (%1 expected, %2 actual)."
-                                                          << refNumEdges << numEdges);
-    return res.failure();
-  }
-  //
-  if ( refNumTriangles != numTriangles )
-  {
-    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected number of triangles (%1 expected, %2 actual)."
-                                                          << refNumTriangles << numTriangles);
-    return res.failure();
-  }
+  const bool isOk = verifyMeshContents(reader.GetResult(),
+                                       refNumVertices,
+                                       refNumEdges,
+                                       refNumTriangles,
+                                       refNumQuads);
 
-  return res.success();
+  return res.status(isOk);
 }
 
 //-----------------------------------------------------------------------------
@@ -202,4 +271,17 @@ mobius::outcome
   return testReadSTL(funcID,
                      filename_mesh_004,
                      17379, 0, 34838);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario for reading PLY.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testReadPLY01(const int funcID)
+{
+  return testReadPLY(funcID,
+                     filename_mesh_005,
+                     3274, 0, 662, 2842);
 }

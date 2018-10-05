@@ -9,6 +9,8 @@ set (H_FILES
   poly_Edge.h
   poly_Handles.h
   poly_Mesh.h
+  poly_Quad.h
+  poly_ReadPLY.h
   poly_ReadSTL.h
   poly_Triangle.h
   poly_Vertex.h
@@ -16,6 +18,8 @@ set (H_FILES
 set (CPP_FILES
   poly_Edge.cpp
   poly_Mesh.cpp
+  poly_Quad.cpp
+  poly_ReadPLY.cpp
   poly_ReadSTL.cpp
   poly_Triangle.cpp
   poly_Vertex.cpp

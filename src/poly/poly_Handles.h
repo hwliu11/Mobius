@@ -145,6 +145,19 @@ struct poly_TriangleHandle : public poly_BaseHandle
   explicit poly_TriangleHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
 };
 
+//-----------------------------------------------------------------------------
+
+//! \ingroup MOBIUS_POLY
+//!
+//! Handle for quad.
+struct poly_QuadHandle : public poly_BaseHandle
+{
+  //! Ctor accepting the optional index.
+  //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
+  //!                 invalidate the handle.
+  explicit poly_QuadHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
+};
+
 };
 
 //-----------------------------------------------------------------------------
@@ -199,6 +212,18 @@ struct hash<mobius::poly_TriangleHandle>
   typedef std::size_t                 result_type;
   
   std::size_t operator()(const mobius::poly_TriangleHandle& h) const
+  {
+    return h.GetIdx();
+  }
+};
+
+template <>
+struct hash<mobius::poly_QuadHandle>
+{
+  typedef mobius::poly_QuadHandle argument_type;
+  typedef std::size_t             result_type;
+  
+  std::size_t operator()(const mobius::poly_QuadHandle& h) const
   {
     return h.GetIdx();
   }

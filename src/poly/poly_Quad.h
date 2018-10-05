@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 18 September 2018
+// Created on: 05 October 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_Triangle_HeaderFile
-#define poly_Triangle_HeaderFile
+#ifndef poly_Quad_HeaderFile
+#define poly_Quad_HeaderFile
 
 // Poly includes
 #include <mobius/poly_Handles.h>
@@ -41,24 +41,26 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Triangle element.
-class poly_Triangle
+//! Quad element.
+class poly_Quad
 {
 public:
 
   //! Default ctor.
   mobiusPoly_EXPORT
-    poly_Triangle();
+    poly_Quad();
 
-  //! Ctor accepting the nodes of the triangle. The nodes should be enumerated in
+  //! Ctor accepting the nodes of the quad. The nodes should be enumerated in
   //! ccw order looking from the outside of the surrounded solid.
-  //! \param[in] hv0 first vertex of the triangle.
-  //! \param[in] hv1 second vertex of the triangle.
-  //! \param[in] hv2 third vertex of the triangle.
+  //! \param[in] hv0 first vertex of the quad.
+  //! \param[in] hv1 second vertex of the quad.
+  //! \param[in] hv2 third vertex of the quad.
+  //! \param[in] hv3 fourth vertex of the quad.
   mobiusPoly_EXPORT
-    poly_Triangle(const poly_VertexHandle hv0,
-                  const poly_VertexHandle hv1,
-                  const poly_VertexHandle hv2);
+    poly_Quad(const poly_VertexHandle hv0,
+              const poly_VertexHandle hv1,
+              const poly_VertexHandle hv2,
+              const poly_VertexHandle hv3);
 
 public:
 
@@ -66,18 +68,21 @@ public:
   //! \param[out] hv0 1-st vertex.
   //! \param[out] hv1 2-nd vertex.
   //! \param[out] hv2 3-rd vertex.
+  //! \param[out] hv3 4-th vertex.
   void GetVertices(poly_VertexHandle& hv0,
                    poly_VertexHandle& hv1,
-                   poly_VertexHandle& hv2)
+                   poly_VertexHandle& hv2,
+                   poly_VertexHandle& hv3)
   {
     hv0 = m_hVertices[0];
     hv1 = m_hVertices[1];
     hv2 = m_hVertices[2];
+    hv3 = m_hVertices[3];
   }
 
 protected:
 
-  poly_VertexHandle m_hVertices[3]; //!< Handles to the vertices.
+  poly_VertexHandle m_hVertices[4]; //!< Handles to the vertices.
 
 };
 

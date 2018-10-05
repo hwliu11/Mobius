@@ -33,11 +33,12 @@
 
 // Poly includes
 #include <mobius/poly_Edge.h>
+#include <mobius/poly_Quad.h>
 #include <mobius/poly_Triangle.h>
 #include <mobius/poly_Vertex.h>
 
 // Core includes
-#include <mobius/core_OBJECT.h>
+#include <mobius/core_Ptr.h>
 
 namespace mobius {
 
@@ -71,6 +72,20 @@ public:
     return true;
   }
 
+  //! Returns edge by its handle.
+  //! \param[in]  h    handle of an edge to access.
+  //! \param[out] edge edge.
+  //! \return false if there is no such edge.
+  bool GetEdge(const poly_EdgeHandle h,
+               poly_Edge&            edge)
+  {
+    const int idx = h.GetIdx();
+    if ( idx < 0 || idx > m_edges.size() ) return false;
+    //
+    edge = m_edges[idx];
+    return true;
+  }
+
   //! Returns triangle by its handle.
   //! \param[in]  h        handle of a triangle to access.
   //! \param[out] triangle triangle.
@@ -85,17 +100,17 @@ public:
     return true;
   }
 
-  //! Returns edge by its handle.
-  //! \param[in]  h    handle of an edge to access.
-  //! \param[out] edge edge.
-  //! \return false if there is no such edge.
-  bool GetEdge(const poly_EdgeHandle h,
-               poly_Edge&            edge)
+  //! Returns quad by its handle.
+  //! \param[in]  h    handle of a quad to access.
+  //! \param[out] quad quad.
+  //! \return false if there is no such quad.
+  bool GetTriangle(const poly_QuadHandle h,
+                   poly_Quad&            quad)
   {
     const int idx = h.GetIdx();
-    if ( idx < 0 || idx > m_edges.size() ) return false;
+    if ( idx < 0 || idx > m_quads.size() ) return false;
     //
-    edge = m_edges[idx];
+    quad = m_quads[idx];
     return true;
   }
 
@@ -170,6 +185,30 @@ public:
     return hTriangle;
   }
 
+  //! Creates a new invalid quad.
+  //! \return handle of the just added quad.
+  poly_QuadHandle AddQuad()
+  {
+    poly_VertexHandle inv;
+    return this->AddQuad(inv, inv, inv, inv);
+  }
+
+  //! Creates a new trianglquad.
+  //! \param[in] hV0 1-st vertex.
+  //! \param[in] hV1 2-nd vertex.
+  //! \param[in] hV2 3-rd vertex.
+  //! \param[in] hV3 4-th vertex.
+  //! \return handle of the just added quad.
+  poly_QuadHandle AddQuad(const poly_VertexHandle hV0,
+                          const poly_VertexHandle hV1,
+                          const poly_VertexHandle hV2,
+                          const poly_VertexHandle hV3)
+  {
+    m_quads.push_back( poly_Quad(hV0, hV1, hV2, hV3) );
+    poly_QuadHandle hQuad( int( m_quads.size() ) - 1 );
+    return hQuad;
+  }
+
   //! \return number of vertices.
   int GetNumVertices() const
   {
@@ -188,11 +227,18 @@ public:
     return int( m_triangles.size() );
   }
 
+  //! \return number of quads.
+  int GetNumQuads() const
+  {
+    return int( m_quads.size() );
+  }
+
 protected:
 
   std::vector<poly_Vertex>   m_vertices;  //!< List of vertices.
   std::vector<poly_Edge>     m_edges;     //!< List of edges.
   std::vector<poly_Triangle> m_triangles; //!< List of triangles.
+  std::vector<poly_Quad>     m_quads;     //!< List of quads.
 
 };
 

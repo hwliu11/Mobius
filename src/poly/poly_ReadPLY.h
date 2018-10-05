@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 18 September 2018
+// Created on: 05 October 2018
 //-----------------------------------------------------------------------------
 // Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,56 +28,50 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_Triangle_HeaderFile
-#define poly_Triangle_HeaderFile
+#ifndef poly_ReadPLY_HeaderFile
+#define poly_ReadPLY_HeaderFile
 
 // Poly includes
-#include <mobius/poly_Handles.h>
+#include <mobius/poly_Mesh.h>
 
 // Core includes
-#include <mobius/core_XYZ.h>
+#include <mobius/core_IAlgorithm.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Triangle element.
-class poly_Triangle
+//! Utility to read PLY files.
+class poly_ReadPLY : public core_IAlgorithm
 {
 public:
 
-  //! Default ctor.
-  mobiusPoly_EXPORT
-    poly_Triangle();
-
-  //! Ctor accepting the nodes of the triangle. The nodes should be enumerated in
-  //! ccw order looking from the outside of the surrounded solid.
-  //! \param[in] hv0 first vertex of the triangle.
-  //! \param[in] hv1 second vertex of the triangle.
-  //! \param[in] hv2 third vertex of the triangle.
-  mobiusPoly_EXPORT
-    poly_Triangle(const poly_VertexHandle hv0,
-                  const poly_VertexHandle hv1,
-                  const poly_VertexHandle hv2);
+  //! Ctor.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
+  poly_ReadPLY(core_ProgressEntry progress = NULL,
+               core_PlotterEntry  plotter  = NULL) : core_IAlgorithm(progress, plotter) {}
 
 public:
 
-  //! Returns vertex handles defining the triangle.
-  //! \param[out] hv0 1-st vertex.
-  //! \param[out] hv1 2-nd vertex.
-  //! \param[out] hv2 3-rd vertex.
-  void GetVertices(poly_VertexHandle& hv0,
-                   poly_VertexHandle& hv1,
-                   poly_VertexHandle& hv2)
+  //! \return constructed mesh.
+  const ptr<poly_Mesh>& GetResult() const
   {
-    hv0 = m_hVertices[0];
-    hv1 = m_hVertices[1];
-    hv2 = m_hVertices[2];
+    return m_mesh;
   }
+
+public:
+
+  //! Reads PLY file.
+  //!
+  //! \param[in] filename file to read.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    Perform(const std::string& filename);
 
 protected:
 
-  poly_VertexHandle m_hVertices[3]; //!< Handles to the vertices.
+  ptr<poly_Mesh> m_mesh; //!< Mesh data structure.
 
 };
 
