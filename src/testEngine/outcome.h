@@ -110,7 +110,7 @@ public:
   //! \param[in] _name function name.
   //! \param[in] _ok   Boolean value to set as execution status.
   explicit outcome(const std::string& _name,
-                    const bool         _ok)
+                   const bool         _ok)
   : name           (_name),
     ok             (_ok),
     elapsedTimeSec ("undefined"),
