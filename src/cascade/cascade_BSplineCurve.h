@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 05 August 2013
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,17 +28,13 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef cascade_BSplineCurve3D_HeaderFile
-#define cascade_BSplineCurve3D_HeaderFile
+#ifndef cascade_BSplineCurve_HeaderFile
+#define cascade_BSplineCurve_HeaderFile
 
 // Cascade includes
 #include <mobius/cascade.h>
 
-// Geom includes
-#include <mobius/geom_BSplineCurve.h>
-
 // OCCT includes
-#include <Geom_BSplineCurve.hxx>
 #include <GeomAbs_Shape.hxx>
 
 namespace mobius {
@@ -46,18 +42,18 @@ namespace mobius {
 //! \ingroup MOBIUS_CASCADE
 //!
 //! Converter between OpenCascade and Mobius for B-curves.
-class cascade_BSplineCurve3D
+class cascade_BSplineCurve
 {
 public:
 
   mobiusCascade_EXPORT
-    cascade_BSplineCurve3D(const ptr<bcurve>& mobiusCurve);
+    cascade_BSplineCurve(const ptr<bcurve>& mobiusCurve);
 
   mobiusCascade_EXPORT
-    cascade_BSplineCurve3D(const Handle(Geom_BSplineCurve)& occtCurve);
+    cascade_BSplineCurve(const Handle(Geom_BSplineCurve)& occtCurve);
 
   mobiusCascade_EXPORT
-    ~cascade_BSplineCurve3D();
+    ~cascade_BSplineCurve();
 
 public:
 

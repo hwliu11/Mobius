@@ -264,6 +264,18 @@ private:
 
 //! \ingroup MOBIUS_CORE
 //!
+//! Multiplication operator which allows prefix form.
+//! \param[in] coeff  coefficient to multiply by.
+//! \param[in] coords coordinates tuple.
+//! \return multiplication result.
+inline core_XYZ operator*(const double coeff, const core_XYZ& coords)
+{
+  core_XYZ r = coords*coeff;
+  return r;
+}
+
+//! \ingroup MOBIUS_CORE
+//!
 //! Convenience alias.
 typedef core_XYZ xyz;
 

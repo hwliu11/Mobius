@@ -50,75 +50,49 @@
   #define dump_filename "../../test/dumping/log.log"
 #endif
 
-//! Default constructor.
-mobius::geom_InterpolateSurface::geom_InterpolateSurface()
+//-----------------------------------------------------------------------------
+
+mobius::geom_InterpolateSurface::geom_InterpolateSurface(core_ProgressEntry progress,
+                                                         core_PlotterEntry  plotter)
+: core_OPERATOR(progress, plotter)
 {
   m_errCode = ErrCode_NotInitialized;
 }
 
-//! Complete constructor. Initializes the interpolation tool with a set
-//! of reper points and other properties which are necessary in order to
-//! reduce the generally sophisticated interpolation problem to a
-//! trivial linear algebraic system.
-//!
-//! \param points [in] data points to interpolate.
-//! \param deg_U [in] U-degree of the interpolant surface.
-//! \param deg_V [in] V-degree of the interpolant surface.
-//! \param paramsType [in] strategy for choosing interpolant parameters for
-//!        the data points.
-//! \param knotsType [in] strategy for choosing knot vector for interpolant
-//!        B-splines.
+//-----------------------------------------------------------------------------
+
 mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                                                          const int                              deg_U,
                                                          const int                              deg_V,
                                                          const bspl_ParamsSelection             paramsType,
-                                                         const bspl_KnotsSelection              knotsType)
+                                                         const bspl_KnotsSelection              knotsType,
+                                                         core_ProgressEntry                     progress,
+                                                         core_PlotterEntry                      plotter)
+: core_OPERATOR(progress, plotter)
 {
   this->Init(points, deg_U, deg_V, paramsType, knotsType);
 }
 
-//! Complete constructor. Initializes the interpolation tool with a set
-//! of reper points and other properties which are necessary in order to
-//! reduce the generally sophisticated interpolation problem to a
-//! trivial linear algebraic system.
-//! \param points [in] data points to interpolate.
-//! \param deg_U [in] U-degree of the interpolant surface.
-//! \param deg_V [in] V-degree of the interpolant surface.
-//! \param derivs_isoV_start_D1 [in] leading V-iso derivatives D1.
-//! \param derivs_isoV_end_D1 [in] trailing V-iso derivatives D1.
-//! \param paramsType [in] strategy for choosing interpolant parameters for
-//!        the data points.
-//! \param knotsType [in] strategy for choosing knot vector for interpolant
-//!        B-splines.
+//-----------------------------------------------------------------------------
+
 mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                                                          const int                              deg_U,
                                                          const int                              deg_V,
                                                          const ptr<geom_VectorField>&           derivs_isoV_start_D1,
                                                          const ptr<geom_VectorField>&           derivs_isoV_end_D1,
                                                          const bspl_ParamsSelection             paramsType,
-                                                         const bspl_KnotsSelection              knotsType)
+                                                         const bspl_KnotsSelection              knotsType,
+                                                         core_ProgressEntry                     progress,
+                                                         core_PlotterEntry                      plotter)
+: core_OPERATOR(progress, plotter)
 {
   this->Init(points, deg_U, deg_V,
              derivs_isoV_start_D1, derivs_isoV_end_D1,
              paramsType, knotsType);
 }
 
-//! Complete constructor. Initializes the interpolation tool with a set
-//! of reper points and other properties which are necessary in order to
-//! reduce the generally sophisticated interpolation problem to a
-//! trivial linear algebraic system.
-//!
-//! \param points [in] data points to interpolate.
-//! \param deg_U [in] U-degree of the interpolant surface.
-//! \param deg_V [in] V-degree of the interpolant surface.
-//! \param derivs_isoV_start_D1 [in] leading V-iso derivatives D1.
-//! \param derivs_isoV_end_D1 [in] trailing V-iso derivatives D1.
-//! \param derivs_isoV_start_D2 [in] leading V-iso derivatives D2.
-//! \param derivs_isoV_end_D2 [in] trailing V-iso derivatives D2.
-//! \param paramsType [in] strategy for choosing interpolant parameters for
-//!        the data points.
-//! \param knotsType [in] strategy for choosing knot vector for interpolant
-//!        B-splines.
+//-----------------------------------------------------------------------------
+
 mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                                                          const int                              deg_U,
                                                          const int                              deg_V,
@@ -127,7 +101,10 @@ mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std:
                                                          const ptr<geom_VectorField>&           derivs_isoV_start_D2,
                                                          const ptr<geom_VectorField>&           derivs_isoV_end_D2,
                                                          const bspl_ParamsSelection             paramsType,
-                                                         const bspl_KnotsSelection              knotsType)
+                                                         const bspl_KnotsSelection              knotsType,
+                                                         core_ProgressEntry                     progress,
+                                                         core_PlotterEntry                      plotter)
+: core_OPERATOR(progress, plotter)
 {
   this->Init(points, deg_U, deg_V,
              derivs_isoV_start_D1, derivs_isoV_end_D1,
@@ -135,14 +112,8 @@ mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std:
              paramsType, knotsType);
 }
 
-//! Initializes interpolation tool.
-//! \param points [in] data points to interpolate.
-//! \param deg_U [in] U-degree of the interpolant surface.
-//! \param deg_V [in] V-degree of the interpolant surface.
-//! \param paramsType [in] strategy for choosing interpolant parameters for
-//!        the data points.
-//! \param knotsType [in] strategy for choosing knot vector for interpolant
-//!        B-splines.
+//-----------------------------------------------------------------------------
+
 void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >& points,
                                            const int                              deg_U,
                                            const int                              deg_V,
@@ -157,16 +128,8 @@ void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >
   m_errCode    = ErrCode_NotDone;
 }
 
-//! Initializes interpolation tool.
-//! \param points [in] data points to interpolate.
-//! \param deg_U [in] U-degree of the interpolant surface.
-//! \param deg_V [in] V-degree of the interpolant surface.
-//! \param derivs_isoV_start_D1 [in] leading V-iso derivatives D1.
-//! \param derivs_isoV_end_D1 [in] trailing V-iso derivatives D1.
-//! \param paramsType [in] strategy for choosing interpolant parameters for
-//!        the data points.
-//! \param knotsType [in] strategy for choosing knot vector for interpolant
-//!        B-splines.
+//-----------------------------------------------------------------------------
+
 void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >& points,
                                            const int                              deg_U,
                                            const int                              deg_V,
@@ -185,18 +148,8 @@ void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >
   m_errCode              = ErrCode_NotDone;
 }
 
-//! Initializes interpolation tool.
-//! \param points [in] data points to interpolate.
-//! \param deg_U [in] U-degree of the interpolant surface.
-//! \param deg_V [in] V-degree of the interpolant surface.
-//! \param derivs_isoV_start_D1 [in] leading V-iso derivatives D1.
-//! \param derivs_isoV_end_D1 [in] trailing V-iso derivatives D1.
-//! \param derivs_isoV_start_D2 [in] leading V-iso derivatives D2.
-//! \param derivs_isoV_end_D2 [in] trailing V-iso derivatives D2.
-//! \param paramsType [in] strategy for choosing interpolant parameters for
-//!        the data points.
-//! \param knotsType [in] strategy for choosing knot vector for interpolant
-//!        B-splines.
+//-----------------------------------------------------------------------------
+
 void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >& points,
                                            const int                              deg_U,
                                            const int                              deg_V,
@@ -219,9 +172,9 @@ void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >
   m_errCode              = ErrCode_NotDone;
 }
 
-//! Performs interpolation.
-//! \return true in case of success, false -- otherwise.
-void mobius::geom_InterpolateSurface::Perform()
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_InterpolateSurface::Perform()
 {
   m_errCode = ErrCode_NoError;
 
@@ -235,7 +188,7 @@ void mobius::geom_InterpolateSurface::Perform()
   if ( m_points.size() < 2 )
   {
     m_errCode = ErrCode_PoorInitialGrid;
-    return;
+    return false;
   }
 
   // Check if the passed grid is rectangular
@@ -243,14 +196,14 @@ void mobius::geom_InterpolateSurface::Perform()
   if ( record_size < 2 )
   {
     m_errCode = ErrCode_PoorInitialGrid;
-    return;
+    return false;
   }
   for ( size_t record_idx = 1; record_idx < m_points.size(); ++record_idx )
   {
     if ( m_points[record_idx].size() != record_size )
     {
       m_errCode = ErrCode_NonRectangularGrid;
-      return;
+      return false;
     }
   }
 
@@ -278,22 +231,22 @@ void mobius::geom_InterpolateSurface::Perform()
   if ( hasDerivs_isoV_start_D1 && nDerivs_isoV_start_D1 != (m + 1) )
   {
     m_errCode = ErrCode_NotEnoughVDerivs_Start_D1;
-    return;
+    return false;
   }
   if ( hasDerivs_isoV_end_D1 && nDerivs_isoV_end_D1 != (m + 1) )
   {
     m_errCode = ErrCode_NotEnoughVDerivs_End_D1;
-    return;
+    return false;
   }
   if ( hasDerivs_isoV_start_D2 && nDerivs_isoV_start_D2 != (m + 1) )
   {
     m_errCode = ErrCode_NotEnoughVDerivs_Start_D2;
-    return;
+    return false;
   }
   if ( hasDerivs_isoV_end_D2 && nDerivs_isoV_end_D2 != (m + 1) )
   {
     m_errCode = ErrCode_NotEnoughVDerivs_End_D2;
-    return;
+    return false;
   }
 
   // Check if there are enough reper points
@@ -310,7 +263,7 @@ void mobius::geom_InterpolateSurface::Perform()
          bspl_ParamsUniform::Calculate(m, params_V) != bspl_ParamsUniform::ErrCode_NoError )
     {
       m_errCode = ErrCode_CannotSelectParameters;
-      return;
+      return false;
     }
   }
   else if ( m_paramsType == ParamsSelection_ChordLength )
@@ -318,7 +271,7 @@ void mobius::geom_InterpolateSurface::Perform()
     if ( bspl_ParamsChordLength::Calculate(m_points, params_U, params_V) != bspl_ParamsChordLength::ErrCode_NoError )
     {
       m_errCode = ErrCode_CannotSelectParameters;
-      return;
+      return false;
     }
   }
   else if ( m_paramsType == ParamsSelection_Centripetal )
@@ -326,7 +279,7 @@ void mobius::geom_InterpolateSurface::Perform()
     if ( bspl_ParamsCentripetal::Calculate(m_points, params_U, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
     {
       m_errCode = ErrCode_CannotSelectParameters;
-      return;
+      return false;
     }
   }
   else
@@ -363,7 +316,7 @@ void mobius::geom_InterpolateSurface::Perform()
                                       V) != bspl_KnotsAverage::ErrCode_NoError )
     {
       m_errCode = ErrCode_CannotSelectKnots;
-      return;
+      return false;
     }
   }
   else
@@ -402,7 +355,7 @@ void mobius::geom_InterpolateSurface::Perform()
                                         iso_V) )
     {
       m_errCode = ErrCode_CannotInterpolateIsoV;
-      return;
+      return false;
     }
     IsoV_Curves.push_back(iso_V);
   }
@@ -438,7 +391,7 @@ void mobius::geom_InterpolateSurface::Perform()
                                         R_interp) )
     {
       m_errCode = ErrCode_CannotInterpolateIsoU;
-      return;
+      return false;
     }
     ReperU_Curves.push_back(R_interp);
 
@@ -459,4 +412,6 @@ void mobius::geom_InterpolateSurface::Perform()
                         U, V,
                         r + 1, s + 1,
                         m_iDeg_U, m_iDeg_V);
+
+  return true;
 }

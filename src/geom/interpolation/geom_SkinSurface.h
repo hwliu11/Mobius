@@ -37,6 +37,7 @@
 
 // Core includes
 #include <mobius/core_HeapAlloc.h>
+#include <mobius/core_OPERATOR.h>
 
 // BSpl includes
 #include <mobius/bspl_KnotsSelection.h>
@@ -47,9 +48,11 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Creates B-surface passing through the given series of compatible (!)
 //! B-curves.
-class geom_SkinSurface
+class geom_SkinSurface : public core_OPERATOR
 {
 public:
 
@@ -72,18 +75,25 @@ public:
 public:
 
   //! Default ctor.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_SkinSurface();
+    geom_SkinSurface(core_ProgressEntry progress = NULL,
+                     core_PlotterEntry  plotter  = NULL);
 
   //! Complete constructor. Initializes the interpolation tool with a set
   //! of curves to skin the surface through.
   //! \param[in] curves      curves to skin the surface through.
   //! \param[in] deg_V       degree in V curvilinear direction.
   //! \param[in] unifyCurves indicates whether to unify curves before skinning.
+  //! \param[in] progress    progress notifier.
+  //! \param[in] plotter     imperative plotter.
   mobiusGeom_EXPORT
     geom_SkinSurface(const std::vector< ptr<bcurve> >& curves,
                      const int                         deg_V,
-                     const bool                        unifyCurves);
+                     const bool                        unifyCurves,
+                     core_ProgressEntry                progress = NULL,
+                     core_PlotterEntry                 plotter  = NULL);
 
 public:
 
@@ -116,14 +126,14 @@ public:
 
   //! Accessor for error code.
   //! \return error code.
-  int ErrorCode() const
+  int GetErrorCode() const
   {
     return m_errCode;
   }
 
   //! Accessor for the resulting surface.
   //! \return interpolant surface.
-  const ptr<bsurf>& Result() const
+  const ptr<bsurf>& GetResult() const
   {
     return m_surface;
   }

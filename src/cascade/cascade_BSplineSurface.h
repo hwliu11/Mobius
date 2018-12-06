@@ -34,12 +34,6 @@
 // Cascade includes
 #include <mobius/cascade.h>
 
-// Geom includes
-#include <mobius/geom_BSplineSurface.h>
-
-// OCCT includes
-#include <Geom_BSplineSurface.hxx>
-
 namespace mobius {
 
 //! \ingroup MOBIUS_CASCADE

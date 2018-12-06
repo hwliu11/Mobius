@@ -36,6 +36,9 @@
 #include <mobius/geom_BSplineSurface.h>
 #include <mobius/geom_VectorField.h>
 
+// Core includes
+#include <mobius/core_OPERATOR.h>
+
 // BSpl includes
 #include <mobius/bspl_KnotsSelection.h>
 #include <mobius/bspl_ParamsSelection.h>
@@ -45,8 +48,10 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Interpolates B-surface over the given collection of points.
-class geom_InterpolateSurface
+class geom_InterpolateSurface : public core_OPERATOR
 {
 public:
 
@@ -70,16 +75,52 @@ public:
 
 public:
 
+  //! Default ctor.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateSurface();
+    geom_InterpolateSurface(core_ProgressEntry progress = NULL,
+                            core_PlotterEntry  plotter  = NULL);
 
+  //! Complete constructor. Initializes the interpolation tool with a set
+  //! of reper points and other properties which are necessary in order to
+  //! reduce the generally sophisticated interpolation problem to a
+  //! trivial linear algebraic system.
+  //!
+  //! \param[in] points     data points to interpolate.
+  //! \param[in] deg_U      U-degree of the interpolant surface.
+  //! \param[in] deg_V      V-degree of the interpolant surface.
+  //! \param[in] paramsType strategy for choosing interpolant parameters for
+  //!                       the data points.
+  //! \param[in] knotsType  strategy for choosing knot vector for interpolant
+  //!                       B-splines.
+  //! \param[in] progress   progress notifier.
+  //! \param[in] plotter    imperative plotter.
   mobiusGeom_EXPORT
     geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                             const int                              deg_U,
                             const int                              deg_V,
                             const bspl_ParamsSelection             paramsType,
-                            const bspl_KnotsSelection              knotsType);
+                            const bspl_KnotsSelection              knotsType,
+                            core_ProgressEntry                     progress = NULL,
+                            core_PlotterEntry                      plotter  = NULL);
 
+  //! Complete constructor. Initializes the interpolation tool with a set
+  //! of reper points and other properties which are necessary in order to
+  //! reduce the generally sophisticated interpolation problem to a
+  //! trivial linear algebraic system.
+  //!
+  //! \param[in] points               data points to interpolate.
+  //! \param[in] deg_U                U-degree of the interpolant surface.
+  //! \param[in] deg_V                V-degree of the interpolant surface.
+  //! \param[in] derivs_isoV_start_D1 leading V-iso derivatives D1.
+  //! \param[in] derivs_isoV_end_D1   trailing V-iso derivatives D1.
+  //! \param[in] paramsType           strategy for choosing interpolant parameters for
+  //!                                 the data points.
+  //! \param[in] knotsType            strategy for choosing knot vector for interpolant
+  //!                                 B-splines.
+  //! \param[in] progress             progress notifier.
+  //! \param[in] plotter              imperative plotter.
   mobiusGeom_EXPORT
     geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                             const int                              deg_U,
@@ -87,8 +128,28 @@ public:
                             const ptr<geom_VectorField>&           derivs_isoV_start_D1,
                             const ptr<geom_VectorField>&           derivs_isoV_end_D1,
                             const bspl_ParamsSelection             paramsType,
-                            const bspl_KnotsSelection              knotsType);
+                            const bspl_KnotsSelection              knotsType,
+                            core_ProgressEntry                     progress = NULL,
+                            core_PlotterEntry                      plotter  = NULL);
 
+  //! Complete constructor. Initializes the interpolation tool with a set
+  //! of reper points and other properties which are necessary in order to
+  //! reduce the generally sophisticated interpolation problem to a
+  //! trivial linear algebraic system.
+  //!
+  //! \param[in] points               data points to interpolate.
+  //! \param[in] deg_U                U-degree of the interpolant surface.
+  //! \param[in] deg_V                V-degree of the interpolant surface.
+  //! \param[in] derivs_isoV_start_D1 leading V-iso derivatives D1.
+  //! \param[in] derivs_isoV_end_D1   trailing V-iso derivatives D1.
+  //! \param[in] derivs_isoV_start_D2 leading V-iso derivatives D2.
+  //! \param[in] derivs_isoV_end_D2   trailing V-iso derivatives D2.
+  //! \param[in] paramsType           strategy for choosing interpolant parameters for
+  //!                                 the data points.
+  //! \param[in] knotsType            strategy for choosing knot vector for interpolant
+  //!                                 B-splines.
+  //! \param[in] progress             progress notifier.
+  //! \param[in] plotter              imperative plotter.
   mobiusGeom_EXPORT
     geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
                             const int                              deg_U,
@@ -98,10 +159,20 @@ public:
                             const ptr<geom_VectorField>&           derivs_isoV_start_D2,
                             const ptr<geom_VectorField>&           derivs_isoV_end_D2,
                             const bspl_ParamsSelection             paramsType,
-                            const bspl_KnotsSelection              knotsType);
+                            const bspl_KnotsSelection              knotsType,
+                            core_ProgressEntry                     progress = NULL,
+                            core_PlotterEntry                      plotter  = NULL);
 
 public:
 
+  //! Initializes interpolation tool.
+  //! \param[in] points     data points to interpolate.
+  //! \param[in] deg_U      U-degree of the interpolant surface.
+  //! \param[in] deg_V      V-degree of the interpolant surface.
+  //! \param[in] paramsType strategy for choosing interpolant parameters for
+  //!                       the data points.
+  //! \param[in] knotsType  strategy for choosing knot vector for interpolant
+  //!                       B-splines.
   mobiusGeom_EXPORT void
     Init(const std::vector< std::vector<xyz> >& points,
          const int                              deg_U,
@@ -109,6 +180,16 @@ public:
          const bspl_ParamsSelection             paramsType,
          const bspl_KnotsSelection              knotsType);
 
+  //! Initializes interpolation tool.
+  //! \param[in] points               data points to interpolate.
+  //! \param[in] deg_U                U-degree of the interpolant surface.
+  //! \param[in] deg_V                V-degree of the interpolant surface.
+  //! \param[in] derivs_isoV_start_D1 leading V-iso derivatives D1.
+  //! \param[in] derivs_isoV_end_D1   trailing V-iso derivatives D1.
+  //! \param[in] paramsType           strategy for choosing interpolant parameters for
+  //!                                 the data points.
+  //! \param[in] knotsType            strategy for choosing knot vector for interpolant
+  //!                                 B-splines.
   mobiusGeom_EXPORT void
     Init(const std::vector< std::vector<xyz> >& points,
          const int                              deg_U,
@@ -118,6 +199,18 @@ public:
          const bspl_ParamsSelection             paramsType,
          const bspl_KnotsSelection              knotsType);
 
+  //! Initializes interpolation tool.
+  //! \param[in] points               data points to interpolate.
+  //! \param[in] deg_U                U-degree of the interpolant surface.
+  //! \param[in] deg_V                V-degree of the interpolant surface.
+  //! \param[in] derivs_isoV_start_D1 leading V-iso derivatives D1.
+  //! \param[in] derivs_isoV_end_D1   trailing V-iso derivatives D1.
+  //! \param[in] derivs_isoV_start_D2 leading V-iso derivatives D2.
+  //! \param[in] derivs_isoV_end_D2   trailing V-iso derivatives D2.
+  //! \param[in] paramsType           strategy for choosing interpolant parameters for
+  //!                                 the data points.
+  //! \param[in] knotsType            strategy for choosing knot vector for interpolant
+  //!                                 B-splines.
   mobiusGeom_EXPORT void
     Init(const std::vector< std::vector<xyz> >& points,
          const int                              deg_U,
@@ -129,21 +222,25 @@ public:
          const bspl_ParamsSelection             paramsType,
          const bspl_KnotsSelection              knotsType);
 
-  mobiusGeom_EXPORT void
+public:
+
+  //! Performs interpolation.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT bool
     Perform();
 
 public:
 
   //! Accessor for error code.
   //! \return error code.
-  int ErrorCode() const
+  int GetErrorCode() const
   {
     return m_errCode;
   }
 
   //! Accessor for the resulting surface.
   //! \return interpolant surface.
-  const ptr<bsurf>& Result() const
+  const ptr<bsurf>& GetResult() const
   {
     return m_surface;
   }

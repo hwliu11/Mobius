@@ -247,7 +247,7 @@ bool mobius::geom_FairBSurf::Perform()
     m_resultSurf->SetPole(i, j, P + D);
   }
 
-  m_plotter.REDRAW_SURFACE("faired", m_resultSurf.Access(), MobiusColor_Green);
+  m_plotter.REDRAW_SURFACE("faired", m_resultSurf, MobiusColor_Green);
 
   return true;
 }

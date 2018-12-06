@@ -269,7 +269,7 @@ public:
     else
     {
       ptr<core_VarString> var = new core_VarString(str);
-      m_args.push_back( var.Access() );
+      m_args.push_back(var);
     }
 
     return *this;
@@ -287,7 +287,7 @@ public:
       throw core_excMsgInit();
 
     ptr<core_VarInt> var = new core_VarInt(val);
-    m_args.push_back( var.Access() );
+    m_args.push_back(var);
 
     return *this;
   }
@@ -304,7 +304,7 @@ public:
       throw core_excMsgInit();
 
     ptr<core_VarReal> var = new core_VarReal(val);
-    m_args.push_back( var.Access() );
+    m_args.push_back(var);
 
     return *this;
   }

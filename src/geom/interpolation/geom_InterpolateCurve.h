@@ -31,8 +31,11 @@
 #ifndef geom_InterpolateCurve_HeaderFile
 #define geom_InterpolateCurve_HeaderFile
 
-// Geometry includes
+// Geom includes
 #include <mobius/geom_BSplineCurve.h>
+
+// Core includes
+#include <mobius/core_OPERATOR.h>
 
 // BSpl includes
 #include <mobius/bspl_KnotsSelection.h>
@@ -43,8 +46,10 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Interpolates B-curve over the given collection of points.
-class geom_InterpolateCurve
+class geom_InterpolateCurve : public core_OPERATOR
 {
 public:
 
@@ -61,25 +66,59 @@ public:
 
 public:
 
+  //! Default ctor.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateCurve();
+    geom_InterpolateCurve(core_ProgressEntry progress = NULL,
+                          core_PlotterEntry  plotter  = NULL);
 
+  //! Complete ctor.
+  //! \param[in] points     data points to interpolate.
+  //! \param[in] deg        degree of B-spline functions to use for blending.
+  //! \param[in] paramsType strategy for choosing interpolant parameters in
+  //!                       the data points.
+  //! \param[in] knotsType  strategy for choosing knot vector for interpolant
+  //!                       B-splines.
+  //! \param[in] progress   progress notifier.
+  //! \param[in] plotter    imperative plotter.
   mobiusGeom_EXPORT
     geom_InterpolateCurve(const std::vector<xyz>&    points,
                           const int                  deg,
                           const bspl_ParamsSelection paramsType,
-                          const bspl_KnotsSelection  knotsType);
+                          const bspl_KnotsSelection  knotsType,
+                          core_ProgressEntry         progress = NULL,
+                          core_PlotterEntry          plotter  = NULL);
 
+  //! Complete constructor accepting the manually defined paraneters and
+  //! knot vector.
+  //! \param[in] points   data points to interpolate.
+  //! \param[in] deg      degree of B-spline functions to use for blending.
+  //! \param[in] pParams  manually defined interpolation parameters.
+  //! \param[in] n        0-based index of the last parameter.
+  //! \param[in] pU       manually defined knot vector.
+  //! \param[in] m        0-based index of the last knot in the knot vector.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
     geom_InterpolateCurve(const std::vector<xyz>& points,
                           const int               deg,
                           double*                 pParams,
                           const int               n,
                           double*                 pU,
-                          const int               m);
+                          const int               m,
+                          core_ProgressEntry      progress = NULL,
+                          core_PlotterEntry       plotter  = NULL);
 
 public:
 
+  //! Initializes interpolation tool.
+  //! \param[in] points     data points to interpolate.
+  //! \param[in] deg        degree of B-spline functions to use for blending.
+  //! \param[in] paramsType strategy for choosing interpolant parameters in
+  //!                       the data points.
+  //! \param[in] pU         raw pointer to the knot vector.
+  //! \param[in] m          knot vector size minus one.
   mobiusGeom_EXPORT void
     Init(const std::vector<xyz>&    points,
          const int                  deg,
@@ -87,6 +126,13 @@ public:
          double*                    pU,
          const int                  m);
 
+  //! Initializes interpolation tool.
+  //! \param[in] points  data points to interpolate.
+  //! \param[in] deg     degree of B-spline functions to use for blending.
+  //! \param[in] pParams manually defined interpolation parameters.
+  //! \param[in] n       0-based index of the last parameter.
+  //! \param[in] pU      manually defined knot vector.
+  //! \param[in] m       0-based index of the last knot in the knot vector.
   mobiusGeom_EXPORT void
     Init(const std::vector<xyz>& points,
          const int               deg,
@@ -95,12 +141,28 @@ public:
          double*                 pU,
          const int               m);
 
+  //! Initializes interpolation tool.
+  //! \param[in] points  data points to interpolate.
+  //! \param[in] deg     degree of B-spline functions to use for blending.
+  //! \param[in] paramsType strategy for choosing interpolant parameters in
+  //!                       the data points.
+  //! \param[in] knotsType  strategy for choosing knot vector for interpolant
+  //!                       B-splines.
   mobiusGeom_EXPORT void
     Init(const std::vector<xyz>&    points,
          const int                  deg,
          const bspl_ParamsSelection paramsType,
          const bspl_KnotsSelection  knotsType);
 
+  //! Initializes interpolation tool.
+  //! \param[in] points     data points to interpolate.
+  //! \param[in] D0         derivative D1 at the first point.
+  //! \param[in] Dn         derivative D1 at the last point.
+  //! \param[in] deg        degree of B-spline functions to use for blending.
+  //! \param[in] paramsType strategy for choosing interpolant parameters in
+  //!                       the data points.
+  //! \param[in] knotsType  strategy for choosing knot vector for interpolant
+  //!                       B-splines.
   mobiusGeom_EXPORT void
     Init(const std::vector<xyz>&    points,
          const xyz&                 D0,
@@ -109,6 +171,17 @@ public:
          const bspl_ParamsSelection paramsType,
          const bspl_KnotsSelection  knotsType);
 
+  //! Initializes interpolation tool.
+  //! \param[in] points     data points to interpolate.
+  //! \param[in] D0         derivative D1 at the first point.
+  //! \param[in] Dn         derivative D1 at the last point.
+  //! \param[in] D20        derivative D2 at the first point.
+  //! \param[in] D2n        derivative D2 at the last point.
+  //! \param[in] deg        degree of B-spline functions to use for blending.
+  //! \param[in] paramsType strategy for choosing interpolant parameters in
+  //!                       the data points.
+  //! \param[in] knotsType  strategy for choosing knot vector for interpolant
+  //!                       B-splines.
   mobiusGeom_EXPORT void
     Init(const std::vector<xyz>&    points,
          const xyz&                 D0,
@@ -119,17 +192,38 @@ public:
          const bspl_ParamsSelection paramsType,
          const bspl_KnotsSelection  knotsType);
 
-  mobiusGeom_EXPORT void
+public:
+
+  //! Performs interpolation.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT bool
     Perform();
 
 public:
 
+  //! Interpolation kernel.
+  //! \param[in]  points           reper points.
+  //! \param[in]  n                index of the last pole (0-based).
+  //! \param[in]  p                B-spline degree.
+  //! \param[in]  params           parameters of the reper points.
+  //! \param[in]  pU               knot vector.
+  //! \param[in]  m                index of the last knot (0-based).
+  //! \param[in]  has_start_deriv  indicates whether start derivative D1 is specified.
+  //! \param[in]  has_end_deriv    indicates whether end derivative D1 is specified.
+  //! \param[in]  has_start_deriv2 indicates whether start derivative D2 is specified.
+  //! \param[in]  has_end_deriv2   indicates whether end derivative D2 is specified.
+  //! \param[in]  D0               derivative D1 at the first point.
+  //! \param[in]  Dn               derivative D1 at the last point.
+  //! \param[in]  D20              derivative D2 at the first point.
+  //! \param[in]  D2n              derivative D2 at the last point.
+  //! \param[out] crv              result.
+  //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT static bool
     Interp(const std::vector<xyz>& points,
            const int               n,
            const int               p,
            const double*           params,
-           const double*           U,
+           const double*           pU,
            const int               m,
            const bool              has_start_deriv,
            const bool              has_end_deriv,
@@ -139,35 +233,62 @@ public:
            const xyz&              Dn,
            const xyz&              D20,
            const xyz&              D2n,
-           ptr<bcurve>&          crv);
+           ptr<bcurve>&            crv);
 
 public:
 
   //! Accessor for error code.
   //! \return error code.
-  int ErrorCode() const
+  int GetErrorCode() const
   {
     return m_errCode;
   }
 
   //! Accessor for the resulting curve.
   //! \return interpolant curve.
-  const ptr<bcurve>& Result() const
+  const ptr<bcurve>& GetResult() const
   {
     return m_curve;
   }
 
 protected:
 
-  int  last_index_poles() const;
-  int  last_index_knots() const;
-  bool has_start_deriv()  const;
-  bool has_end_deriv()    const;
+  //! Returns index of the last pole. Notice that this index is zero-based,
+  //! so if we have K poles, it will return (K-1).
+  //! \return index of the last pole.
+  int last_index_poles() const;
+
+  //! Returns index of the last knot. Notice that this index is zero-based,
+  //! so if we have K knots, it will return (K-1).
+  //! \return index of the last knot.
+  int last_index_knots() const;
+
+  //! Returns true if start derivative D1 is specified, false -- otherwise.
+  //! \return true/false.
+  bool has_start_deriv() const;
+
+  //! Returns true if end derivative D1 is specified, false -- otherwise.
+  //! \return true/false.
+  bool has_end_deriv() const;
+
+  //! Returns true if start derivative D2 is specified, false -- otherwise.
+  //! \return true/false.
   bool has_start_deriv2() const;
-  bool has_end_deriv2()   const;
+
+  //! Returns true if end derivative D2 is specified, false -- otherwise.
+  //! \return true/false.
+  bool has_end_deriv2() const;
 
 protected:
 
+  //! Returns dimension of the problem: number of unknown variables and
+  //! equations in the linear system to solve.
+  //! \param[in] n                last pole index.
+  //! \param[in] has_start_deriv  indicates whether start derivative D1 is specified.
+  //! \param[in] has_end_deriv    indicates whether end derivative D1 is specified.
+  //! \param[in] has_start_deriv2 indicates whether start derivative D2 is specified.
+  //! \param[in] has_end_deriv2   indicates whether end derivative D2 is specified.
+  //! \return dimension.
   static int dimension(const int  n,
                        const bool has_start_deriv,
                        const bool has_end_deriv,

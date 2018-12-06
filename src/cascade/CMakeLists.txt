@@ -6,13 +6,14 @@ project (mobiusCascade)
 
 set (H_FILES
   cascade.h
-  cascade_BSplineCurve3D.h
+  cascade_BSplineCurve.h
   cascade_BSplineSurface.h
   cascade_MultResolver.h
   cascade_Triangulation.h
 )
 set (CPP_FILES
-  cascade_BSplineCurve3D.cpp
+  cascade.cpp
+  cascade_BSplineCurve.cpp
   cascade_BSplineSurface.cpp
   cascade_MultResolver.cpp
   cascade_Triangulation.cpp

@@ -49,7 +49,9 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_SkinSurface::geom_SkinSurface()
+mobius::geom_SkinSurface::geom_SkinSurface(core_ProgressEntry progress,
+                                           core_PlotterEntry  plotter)
+: core_OPERATOR(progress, plotter)
 {
   m_errCode = ErrCode_NotInitialized;
 }
@@ -58,7 +60,10 @@ mobius::geom_SkinSurface::geom_SkinSurface()
 
 mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< ptr<bcurve> >& curves,
                                            const int                         deg_V,
-                                           const bool                        unifyCurves)
+                                           const bool                        unifyCurves,
+                                           core_ProgressEntry                progress,
+                                           core_PlotterEntry                 plotter)
+: core_OPERATOR(progress, plotter)
 {
   this->Init(curves, deg_V, unifyCurves);
 }

@@ -127,6 +127,16 @@ public:
     return m_pRef;
   }
 
+  //! Conversion operator from this smart pointer to the smart pointer
+  //! holding a reference to the base type. This operator allows to pass
+  //! smart pointers to derived classes in functions accepting smart
+  //! pointers to base classes.
+  template <class T2, typename = typename std::enable_if<std::is_base_of<T2, SharedType>::value>::type>
+  operator const core_Ptr<T2>& () const
+  {
+    return reinterpret_cast<const core_Ptr<T2>&>(*this);
+  }
+
   //! Nullifies smart pointer.
   //! \return true/false.
   void Nullify()

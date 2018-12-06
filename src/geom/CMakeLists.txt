@@ -50,11 +50,13 @@ set (clouds_CPP_FILES
 
 set (interpolation_H_FILES
   interpolation/geom_InterpolateCurve.h
+  interpolation/geom_InterpolateMultiCurve.h
   interpolation/geom_InterpolateSurface.h
   interpolation/geom_SkinSurface.h
 )
 set (interpolation_CPP_FILES
   interpolation/geom_InterpolateCurve.cpp
+  interpolation/geom_InterpolateMultiCurve.cpp
   interpolation/geom_InterpolateSurface.cpp
   interpolation/geom_SkinSurface.cpp
 )
@@ -94,6 +96,7 @@ set (primitives_H_FILES
   primitives/geom_BSplineCurve.h
   primitives/geom_BSplineSurface.h
   primitives/geom_Circle.h
+  primitives/geom_CoonsSurface.h
   primitives/geom_Curve.h
   primitives/geom_Geometry.h
   primitives/geom_GordonSurface.h
@@ -112,6 +115,7 @@ set (primitives_CPP_FILES
   primitives/geom_BSplineCurve.cpp
   primitives/geom_BSplineSurface.cpp
   primitives/geom_Circle.cpp
+  primitives/geom_CoonsSurface.cpp
   primitives/geom_Curve.cpp
   primitives/geom_Geometry.cpp
   primitives/geom_GordonSurface.cpp

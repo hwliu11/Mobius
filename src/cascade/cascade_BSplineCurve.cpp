@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 05 August 2013
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/cascade_BSplineCurve3D.h>
+#include <mobius/cascade_BSplineCurve.h>
 
 // Cascade includes
 #include <mobius/cascade_MultResolver.h>
@@ -56,7 +56,7 @@ namespace mobius {
 //! curve. This class plays as a data source for approximation algorithm.
 //! It provides possibility to obtain curve data for any value within the
 //! specified parametric range.
-class cascade_BSplineCurve3D_Eval : public AdvApprox_EvaluatorFunction
+class cascade_BSplineCurve_Eval : public AdvApprox_EvaluatorFunction
 {
 public:
 
@@ -65,9 +65,9 @@ public:
   //! \param theCurve [in] source curve to evaluate.
   //! \param theFirstU [in] first value of the parametric range.
   //! \param theLastU [in] second value of the parametric range.
-  cascade_BSplineCurve3D_Eval(const ptr<bcurve>& theCurve,
-                              const double theFirstU,
-                              const double theLastU)
+  cascade_BSplineCurve_Eval(const ptr<bcurve>& theCurve,
+                            const double theFirstU,
+                            const double theLastU)
   {
     m_curve = theCurve;
     m_range[0] = theFirstU;
@@ -98,12 +98,12 @@ private:
 //! \param theOrder [in] derivation order to evaluate (C0, C1 or C2).
 //! \param theResult [out] evaluation result.
 //! \param theErrorCode [out] code of the error occured (if any).
-void cascade_BSplineCurve3D_Eval::Evaluate(int* theDimension,
-                                           double theRange[2],
-                                           double* theParam,
-                                           int* theOrder,
-                                           double* theResult,
-                                           int* theErrorCode)
+void cascade_BSplineCurve_Eval::Evaluate(int* theDimension,
+                                         double theRange[2],
+                                         double* theParam,
+                                         int* theOrder,
+                                         double* theResult,
+                                         int* theErrorCode)
 {
   *theErrorCode = 0; // Reset evaluation error code
   double u = *theParam;
@@ -148,7 +148,7 @@ void cascade_BSplineCurve3D_Eval::Evaluate(int* theDimension,
 
 //! Constructor.
 //! \param mobiusCurve [in] Mobius 3D curve to convert.
-mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const ptr<bcurve>& mobiusCurve)
+mobius::cascade_BSplineCurve::cascade_BSplineCurve(const ptr<bcurve>& mobiusCurve)
 {
   m_mobiusCurve = mobiusCurve;
   m_fMaxError   = 0.0;
@@ -159,7 +159,7 @@ mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const ptr<bcurve>& mobius
 
 //! Constructor.
 //! \param occtCurve [in] OCCT 3D curve to convert.
-mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const Handle(Geom_BSplineCurve)& occtCurve)
+mobius::cascade_BSplineCurve::cascade_BSplineCurve(const Handle(Geom_BSplineCurve)& occtCurve)
 {
   m_occtCurve = occtCurve;
   m_fMaxError = 0.0;
@@ -169,7 +169,7 @@ mobius::cascade_BSplineCurve3D::cascade_BSplineCurve3D(const Handle(Geom_BSpline
 //-----------------------------------------------------------------------------
 
 //! Destructor.
-mobius::cascade_BSplineCurve3D::~cascade_BSplineCurve3D()
+mobius::cascade_BSplineCurve::~cascade_BSplineCurve()
 {}
 
 //-----------------------------------------------------------------------------
@@ -179,10 +179,10 @@ mobius::cascade_BSplineCurve3D::~cascade_BSplineCurve3D()
 //! \param theOrder       [in] desired order.
 //! \param theMaxSegments [in] maximum number of segments.
 //! \param theMaxDegree   [in] maximum degree.
-void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double        theTol3d,
-                                                    const GeomAbs_Shape theOrder,
-                                                    const int           theMaxSegments,
-                                                    const int           theMaxDegree)
+void mobius::cascade_BSplineCurve::ReApproxMobius(const double        theTol3d,
+                                                  const GeomAbs_Shape theOrder,
+                                                  const int           theMaxSegments,
+                                                  const int           theMaxDegree)
 {
   m_fMaxError = 0.0;
 
@@ -197,7 +197,7 @@ void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double        theTol3d
   double l = m_mobiusCurve->MaxParameter();
 
   // Re-approximate curve using OCCT Advanced Approximation facilities
-  cascade_BSplineCurve3D_Eval Eval(m_mobiusCurve, f, l);
+  cascade_BSplineCurve_Eval Eval(m_mobiusCurve, f, l);
   AdvApprox_ApproxAFunction Approx(num1DSS, num2DSS, num3DSS,
                                    oneDTolNul, twoDTolNul, threeDTol,
                                    f, l,
@@ -224,7 +224,7 @@ void mobius::cascade_BSplineCurve3D::ReApproxMobius(const double        theTol3d
 
 //! Converts Mobius B-spline curve to OCCT one or vice versa by direct
 //! supplying of knots, multiplicities and poles as they are.
-void mobius::cascade_BSplineCurve3D::DirectConvert()
+void mobius::cascade_BSplineCurve::DirectConvert()
 {
   if ( !m_mobiusCurve.IsNull() )
     this->convertToOpenCascade();
@@ -237,7 +237,7 @@ void mobius::cascade_BSplineCurve3D::DirectConvert()
 //! Accessor for the Mobius curve.
 //! \return Mobius curve.
 const mobius::ptr<mobius::bcurve>&
-  mobius::cascade_BSplineCurve3D::GetMobiusCurve() const
+  mobius::cascade_BSplineCurve::GetMobiusCurve() const
 {
   return m_mobiusCurve;
 }
@@ -247,7 +247,7 @@ const mobius::ptr<mobius::bcurve>&
 //! Accessor for the OpenCascade curve.
 //! \return OpenCascade curve.
 const Handle(Geom_BSplineCurve)&
-  mobius::cascade_BSplineCurve3D::GetOpenCascadeCurve() const
+  mobius::cascade_BSplineCurve::GetOpenCascadeCurve() const
 {
   return m_occtCurve;
 }
@@ -256,7 +256,7 @@ const Handle(Geom_BSplineCurve)&
 
 //! Returns true if the result is accessible, false -- otherwise.
 //! \return true/false.
-bool mobius::cascade_BSplineCurve3D::IsDone() const
+bool mobius::cascade_BSplineCurve::IsDone() const
 {
   return m_bIsDone;
 }
@@ -265,14 +265,14 @@ bool mobius::cascade_BSplineCurve3D::IsDone() const
 
 //! Returns maximum achieved approximation error.
 //! \return maximum error.
-double mobius::cascade_BSplineCurve3D::MaxError() const
+double mobius::cascade_BSplineCurve::MaxError() const
 {
   return m_fMaxError;
 }
 
 //-----------------------------------------------------------------------------
 
-void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
+void mobius::cascade_BSplineCurve::convertToOpenCascade()
 {
   const std::vector<xyz>& srcPoles = m_mobiusCurve->Poles();
   std::vector<double>     srcU     = m_mobiusCurve->Knots();
@@ -314,7 +314,7 @@ void mobius::cascade_BSplineCurve3D::convertToOpenCascade()
 
 //-----------------------------------------------------------------------------
 
-void mobius::cascade_BSplineCurve3D::convertToMobius()
+void mobius::cascade_BSplineCurve::convertToMobius()
 {
   const TColgp_Array1OfPnt&      srcPoles = m_occtCurve->Poles();
   const TColStd_Array1OfReal&    srcKnots = m_occtCurve->Knots();

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 04 November 2013
+// Created on: 04 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -29,43 +29,52 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/test_InterpolateCurve3D.h>
+#include <mobius/cascade.h>
 
-// geom includes
-#include <mobius/geom_InterpolateCurve.h>
+// Cascade includes
+#include <mobius/cascade_BSplineCurve.h>
+#include <mobius/cascade_BSplineSurface.h>
 
-//! Test scenario 001.
-//! \param funcID [in] function ID.
-//! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_InterpolateCurve3D::test1(const int funcID)
+//-----------------------------------------------------------------------------
+
+Handle(Geom_BSplineCurve)
+  mobius::cascade::GetOpenCascadeBCurve(const ptr<bcurve>& curve)
 {
-  outcome res( DescriptionFn(), funcID );
+  cascade_BSplineCurve tool(curve);
+  tool.DirectConvert();
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~
-   *  Prepare input points
-   * ~~~~~~~~~~~~~~~~~~~~~~ */
+  return tool.GetOpenCascadeCurve();
+}
 
-  xyz Q[5] = { xyz( 0.0,  0.0, 0.0),
-               xyz( 3.0,  4.0, 0.0),
-               xyz(-1.0,  4.0, 0.0),
-               xyz(-4.0,  0.0, 0.0),
-               xyz(-4.0, -3.0, 0.0) };
+//-----------------------------------------------------------------------------
 
-  std::vector<xyz> Q_vec;
-  for ( int k = 0; k < sizeof(Q)/sizeof(xyz); ++k )
-    Q_vec.push_back(Q[k]);
+mobius::ptr<mobius::bcurve>
+  mobius::cascade::GetMobiusBCurve(const Handle(Geom_BSplineCurve)& curve)
+{
+  cascade_BSplineCurve tool(curve);
+  tool.DirectConvert();
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   *  Run interpolation algorithm
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  return tool.GetMobiusCurve();
+}
 
-  // Construct interpolation tool
-  geom_InterpolateCurve Interp(Q_vec, 3, ParamsSelection_ChordLength, KnotsSelection_Average);
+//-----------------------------------------------------------------------------
 
-  // Run interpolation
-  if ( !Interp.Perform() )
-    return res.failure();
+Handle(Geom_BSplineSurface)
+  mobius::cascade::GetOpenCascadeBSurface(const ptr<bsurf>& surface)
+{
+  cascade_BSplineSurface tool(surface);
+  tool.DirectConvert();
 
-  return res.success();
+  return tool.GetOpenCascadeSurface();
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::ptr<mobius::bsurf>
+  mobius::cascade::GetMobiusBSurface(const Handle(Geom_BSplineSurface)& surface)
+{
+  cascade_BSplineSurface tool(surface);
+  tool.DirectConvert();
+
+  return tool.GetMobiusSurface();
 }

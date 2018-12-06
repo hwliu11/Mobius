@@ -163,7 +163,7 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
     return;
   }
 
-  const ptr<bcurve>& crv = InterpCrv.Result();
+  const ptr<bcurve>& crv = InterpCrv.GetResult();
 
   ptr<geom_SectionLine> slice_before = new geom_SectionLine(this->ID, new pcloud);
   ptr<geom_SectionLine> slice_after  = new geom_SectionLine(this->ID, new pcloud);
@@ -354,7 +354,7 @@ void mobius::geom_SectionLine::Interpolate(const int deg,
   }
 
   interp_done = true;
-  this->Curve = InterpCrv.Result();
+  this->Curve = InterpCrv.GetResult();
 }
 
 //! Checks if the slices of this section (if any) form a continuous

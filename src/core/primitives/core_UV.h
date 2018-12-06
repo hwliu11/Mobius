@@ -180,6 +180,18 @@ private:
 
 //! \ingroup MOBIUS_CORE
 //!
+//! Multiplication operator which allows prefix form.
+//! \param[in] coeff  coefficient to multiply by.
+//! \param[in] coords coordinates tuple.
+//! \return multiplication result.
+inline core_UV operator*(const double coeff, const core_UV& coords)
+{
+  core_UV r = coords*coeff;
+  return r;
+}
+
+//! \ingroup MOBIUS_CORE
+//!
 //! Convenience alias.
 typedef core_UV uv;
 

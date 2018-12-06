@@ -43,6 +43,19 @@
 
 #define cascade_NotUsed(x) x
 
+// Core includes
+#include <mobius/core_Ptr.h>
+#include <mobius/core_XYZ.h>
+
+// Geom includes
+#include <mobius/geom_BSplineCurve.h>
+#include <mobius/geom_BSplineSurface.h>
+
+// OpenCascade includes
+#include <Geom_BSplineCurve.hxx>
+#include <Geom_BSplineSurface.hxx>
+#include <gp_Pnt.hxx>
+
 //-----------------------------------------------------------------------------
 // DOXY group definition
 //-----------------------------------------------------------------------------
@@ -50,5 +63,57 @@
 //!
 //! Connectors with OpenCascade kernel.
 //-----------------------------------------------------------------------------
+
+namespace mobius
+{
+  //! \ingroup MOBIUS_CASCADE
+  //!
+  //! Common conversion utilities.
+  class cascade
+  {
+  public:
+
+    //! Converts Mobius 3D point to OpenCascade 3D point.
+    //! \param[in] coords point to convert.
+    //! \return converted point.
+    static gp_Pnt GetOpenCascadePnt(const xyz& coords)
+    {
+      return gp_Pnt( coords.X(), coords.Y(), coords.Z() );
+    }
+
+    //! Converts OpenCascade 3D point to Mobius 3D point.
+    //! \param[in] coords point to convert.
+    //! \return converted point.
+    static xyz GetMobiusPnt(const gp_Pnt& coords)
+    {
+      return xyz( coords.X(), coords.Y(), coords.Z() );
+    }
+
+    //! Converts Mobius B-curve to OpenCascade B-curve.
+    //! \param[in] curve Mobius curve to convert.
+    //! \return OpenCascade curve.
+    mobiusCascade_EXPORT static Handle(Geom_BSplineCurve)
+      GetOpenCascadeBCurve(const ptr<bcurve>& curve);
+
+    //! Converts OpenCascade B-curve to Mobius B-curve.
+    //! \param[in] curve OpenCascade curve to convert.
+    //! \return Mobius curve.
+    mobiusCascade_EXPORT static ptr<bcurve>
+      GetMobiusBCurve(const Handle(Geom_BSplineCurve)& curve);
+
+    //! Converts Mobius B-surface to OpenCascade B-surface.
+    //! \param[in] surface Mobius surface to convert.
+    //! \return OpenCascade surface.
+    mobiusCascade_EXPORT static Handle(Geom_BSplineSurface)
+      GetOpenCascadeBSurface(const ptr<bsurf>& surface);
+
+    //! Converts OpenCascade B-surface to Mobius B-surface.
+    //! \param[in] surface OpenCascade surface to convert.
+    //! \return Mobius surface.
+    mobiusCascade_EXPORT static ptr<bsurf>
+      GetMobiusBSurface(const Handle(Geom_BSplineSurface)& surface);
+
+  };
+};
 
 #endif

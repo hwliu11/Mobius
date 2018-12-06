@@ -218,7 +218,7 @@ bool mobius::geom_FairBCurve::Perform()
   std::cout << "Num poles: " << m_resultCurve->Poles().size() << std::endl;
 #endif
 
-  m_plotter.REDRAW_CURVE("faired", m_resultCurve.Access(), MobiusColor_Green);
+  m_plotter.REDRAW_CURVE("faired", m_resultCurve, MobiusColor_Green);
 
   return true;
 }
