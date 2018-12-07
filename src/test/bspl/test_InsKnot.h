@@ -37,8 +37,8 @@
 // testEngine includes
 #include <mobius/testEngine_TestCase.h>
 
-// core includes
-#include <mobius/core.h>
+// Geom includes
+#include <mobius/geom_BSplineCurve.h>
 
 namespace mobius {
 
@@ -72,15 +72,28 @@ public:
   //! \param[out] functions output collection of pointers.
   static void Functions(MobiusTestFunctions& functions)
   {
-    functions << &test01;
+    functions << &test01
+              << &test02;
   }
 
 private:
 
-  //! Test scenario 001.
+  static bool insertKnotCurve(const ptr<bcurve>&         curve,
+                              const double               u,
+                              const int                  r,
+                              const std::vector<double>& refKnots);
+
+private:
+
+  //! Test scenario 01 for inserting knots in B-curves.
   //! \param[in] funcID ID of the test function.
   //! \return outcome structure representing the execution result.
-  static outcome test01 (const int funcID);
+  static outcome test01(const int funcID);
+
+  //! Test scenario 02 for inserting knots in B-curves.
+  //! \param[in] funcID ID of the test function.
+  //! \return outcome structure representing the execution result.
+  static outcome test02(const int funcID);
 
 };
 

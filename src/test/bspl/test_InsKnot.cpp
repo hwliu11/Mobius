@@ -36,6 +36,61 @@
 
 // bspl includes
 #include <mobius/bspl_InsKnot.h>
+#include <mobius/bspl_FindSpan.h>
+
+//-----------------------------------------------------------------------------
+
+bool
+  mobius::test_InsKnot::insertKnotCurve(const ptr<bcurve>&         curve,
+                                        const double               u,
+                                        const int                  r,
+                                        const std::vector<double>& refKnots)
+{
+  /* ====================================================
+   *  Prepare arguments for the knot insertion algorithm
+   * ==================================================== */
+
+  // Get properties of the input curve.
+  const std::vector<double>&   UP = curve->GetKnots();
+  const int                    p  = curve->GetDegree();
+  const std::vector<core_XYZ>& Pw = curve->GetPoles();
+  const int                    np = int( Pw.size() ) - 1;
+
+  // Find span the knot in question falls into.
+  bspl_FindSpan FindSpan(UP, p);
+  const int k = FindSpan(u);
+
+  // Resolve multiplicity
+  int s = 0;
+  for ( size_t i = 0; i < UP.size(); ++i )
+    if ( UP[i] == u )
+      s++;
+
+  // Output arguments.
+  int       nq = 0;
+  const int mq = np + p + 1 + r;
+  //
+  std::vector<double> UQ; UQ.resize(mq + 1);
+  std::vector<xyz> Qw;
+
+  /* ==================================
+   *  Perform knot insertion algorithm
+   * ================================== */
+
+  bspl_InsKnot InsKnot;
+
+  if ( !InsKnot(np, p, UP, Pw, u, k, s, r, nq, UQ, Qw) )
+    return false;
+
+  /* ===================
+   *  Verify the result
+   * =================== */
+
+  if ( UQ != refKnots )
+    return false;
+
+  return true;
+}
 
 //-----------------------------------------------------------------------------
 
@@ -76,38 +131,79 @@ mobius::outcome mobius::test_InsKnot::test01(const int funcID)
   if ( curve.IsNull() )
     return res.failure();
 
-  //// Prepare arguments for the knot insertion algorithm.
-  //const std::vector<double> UP = curve->Knots;
-  //const int                 np = int( UP.size() ) - 1;
-  //const int                 p  = 1;
+  /* ==================================
+   *  Perform knot insertion algorithm
+   * ================================== */
+
+  // Knot value to insert.
+  const double u = 0.5;
+
+  // How many times to insert.
+  const int r = 1;
+
+  // Reference data
+  const std::vector<double> refUQ = {0, 0, 0, 0, 0.5, 1, 1, 1, 1};
+
+  if ( !insertKnotCurve(curve, u, r, refUQ) )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::outcome mobius::test_InsKnot::test02(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  /* =====================
+   *  Prepare input curve
+   * ===================== */
+
+  // JSON definition.
+  std::string json =
+  "{\
+    entity: curve,\
+    type: b-curve,\
+    continuity: CN,\
+    domain: {\
+        U_min: 0,\
+        U_max: 1\
+    },\
+    flags: {\
+        is_rational: 0,\
+        is_periodic: 0,\
+        is_closed: 0\
+    },\
+    properties: {\
+        degree: 3,\
+        knots: [0, 0, 0, 0, 1, 1, 1, 1],\
+        num_poles: 4,\
+        poles: [[-1.7273331185814795e-016, -2.7903073454008515e-016, -1.9930766752863225e-016], [2.1356662204292287, 0.61293215795463996, 0.86133743282055253], [-0.10849860924114609, 2.748069190766909, 2.0868682935855745], [2, 3, 4]]\
+    }\
+  }";
+
+  // Construct B-curve.
+  ptr<bcurve> curve = bcurve::Instance(json);
   //
-  //             const std::vector<double>&   UP,
-  //             const std::vector<core_XYZ>& Pw,
-  //             const double                 u,
-  //             const int                    k,
-  //             const int                    s,
-  //             const int                    r,
-  //             int&                         nq,
-  //             std::vector<double>&         UQ,
-  //             std::vector<core_XYZ>&       Qw
+  if ( curve.IsNull() )
+    return res.failure();
 
-  //bspl_InsKnot InsKnot(U, p);
-  //int I1  = FindSpan(u1);
-  //int I2  = FindSpan(u2);
-  //int I3  = FindSpan(u3);
-  //int I4  = FindSpan(u4);
-  //int I5  = FindSpan(u5);
-  //int I6  = FindSpan(u6);
-  //int I7  = FindSpan(u7);
-  //int I8  = FindSpan(u8);
-  //int I9  = FindSpan(u9);
-  //int I10 = FindSpan(u10);
-  //int I11 = FindSpan(u11);
-  //int I12 = FindSpan(u12);
+  /* ==================================
+   *  Perform knot insertion algorithm
+   * ================================== */
 
-  //if ( I1 == 1 && I2 == 1 && I3 == 2 && I4 == 2 && I5 == 2 && I6 == 3 &&
-  //     I7 == 3 && I8 == 4 && I9 == 4 && I10 == 5 && I11 == 5 && I12 == 5 )
-  //  return res.success();
+  // Knot value to insert.
+  const double u = 0.5;
 
-  return res.failure();
+  // How many times to insert.
+  const int r = 2;
+
+  // Reference data
+  const std::vector<double> refUQ = {0, 0, 0, 0, 0.5, 0.5, 1, 1, 1, 1};
+
+  if ( !insertKnotCurve(curve, u, r, refUQ) )
+    return res.failure();
+
+  return res.success();
 }

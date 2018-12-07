@@ -522,7 +522,7 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
   int       nq = 0;
   int       mq = np + m_iDeg + 1 + num_times;
   //
-  std::vector<double> UQ; UQ.reserve(mq + 1);
+  std::vector<double> UQ; UQ.resize(mq + 1);
   std::vector<xyz> Qw;
 
   // Insert knot
@@ -614,7 +614,7 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
   const size_t nU_before = k + m_iDeg + 2;
 
   // Knots
-  std::vector<double> U_before; U_before.reserve(nU_before);
+  std::vector<double> U_before; U_before.resize(nU_before);
   //
   for ( size_t i = 0; i < nU_before - 1; ++i )
   {
@@ -636,7 +636,7 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
   const size_t        nU_after     = source_m - k + 1;
 
   // Knots
-  std::vector<double> U_after; U_after.reserve(nU_after);
+  std::vector<double> U_after; U_after.resize(nU_after);
   for ( int i = k + 1, j = 1; i <= source_m; ++i, ++j )
   {
     U_after[j] = source_knots[i];
