@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 04 November 2013
+// Created on: 07 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,44 +28,62 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-// Own include
-#include <mobius/test_InterpolateCurve3D.h>
+#ifndef test_InsKnot_HeaderFile
+#define test_InsKnot_HeaderFile
 
-// geom includes
-#include <mobius/geom_InterpolateCurve.h>
+// Tests includes
+#include <mobius/test_CaseIDs.h>
 
-//! Test scenario 001.
-//! \param funcID [in] function ID.
-//! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_InterpolateCurve3D::test1(const int funcID)
+// testEngine includes
+#include <mobius/testEngine_TestCase.h>
+
+// core includes
+#include <mobius/core.h>
+
+namespace mobius {
+
+//! Unit test for knot insertion algorithm.
+class test_InsKnot : public testEngine_TestCase
 {
-  outcome res( DescriptionFn(), funcID );
+public:
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~
-   *  Prepare input points
-   * ~~~~~~~~~~~~~~~~~~~~~~ */
+  //! Returns Test Case ID.
+  //! \return ID of the Test Case.
+  static int ID()
+  {
+    return CaseID_BSpl_InsKnot;
+  }
 
-  xyz Q[5] = { xyz( 0.0,  0.0, 0.0),
-               xyz( 3.0,  4.0, 0.0),
-               xyz(-1.0,  4.0, 0.0),
-               xyz(-4.0,  0.0, 0.0),
-               xyz(-4.0, -3.0, 0.0) };
+  //! Returns filename for the description.
+  //! \return filename for the description of the Test Case.
+  static std::string DescriptionFn()
+  {
+    return "test_InsKnot";
+  }
 
-  std::vector<xyz> Q_vec;
-  for ( int k = 0; k < sizeof(Q)/sizeof(xyz); ++k )
-    Q_vec.push_back(Q[k]);
+  //! Returns Test Case description directory.
+  //! \return description directory for the Test Case.
+  static std::string DescriptionDir()
+  {
+    return "BSpl";
+  }
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   *  Run interpolation algorithm
-   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  //! Returns pointers to the Test Functions to launch.
+  //! \param[out] functions output collection of pointers.
+  static void Functions(MobiusTestFunctions& functions)
+  {
+    functions << &test01;
+  }
 
-  // Construct interpolation tool
-  geom_InterpolateCurve Interp(Q_vec, 3, ParamsSelection_ChordLength, KnotsSelection_Average);
+private:
 
-  // Run interpolation
-  if ( !Interp.Perform() )
-    return res.failure();
+  //! Test scenario 001.
+  //! \param[in] funcID ID of the test function.
+  //! \return outcome structure representing the execution result.
+  static outcome test01 (const int funcID);
 
-  return res.success();
-}
+};
+
+};
+
+#endif

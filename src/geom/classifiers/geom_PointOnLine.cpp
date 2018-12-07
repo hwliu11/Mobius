@@ -41,8 +41,8 @@ bool mobius::geom_PointOnLine::operator()(const xyz&            P,
                                           const double          prec)
 {
   // Line properties
-  const xyz& Dir = Line->Dir();
-  const xyz& Ori = Line->Origin();
+  const xyz& Dir = Line->GetDir();
+  const xyz& Ori = Line->GetOrigin();
 
   // Vector from line's origin to P
   xyz Ori_P = P - Ori;

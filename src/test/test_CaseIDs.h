@@ -38,6 +38,13 @@
 enum test_CaseID
 {
   //---------------------------------------------------------------------------
+  // Core library
+  //---------------------------------------------------------------------------
+
+  CaseID_Core_Integral,
+  CaseID_Core_Quaternion,
+
+  //---------------------------------------------------------------------------
   // BSpl library
   //---------------------------------------------------------------------------
 
@@ -51,19 +58,13 @@ enum test_CaseID
   CaseID_BSpl_ParamsChordLength,
   CaseID_BSpl_ParamsUniform,
   CaseID_BSpl_UnifyKnots,
-
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
-
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  CaseID_BSpl_InsKnot,
 
   //---------------------------------------------------------------------------
   // Geom library
   //---------------------------------------------------------------------------
 
-  CaseID_Geom_InterpolateCurve3D,
+  CaseID_Geom_InterpolateCurve,
   CaseID_Geom_Line3D,
   CaseID_Geom_PointOnLine,
   CaseID_Geom_BSplineCurve,

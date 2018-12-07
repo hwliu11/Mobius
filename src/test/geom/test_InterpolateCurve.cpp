@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 05 August 2013
+// Created on: 04 November 2013
 //-----------------------------------------------------------------------------
 // Copyright (c) 2017, Sergey Slyadnev
 // All rights reserved.
@@ -28,48 +28,44 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_Curve_HeaderFile
-#define geom_Curve_HeaderFile
+// Own include
+#include <mobius/test_InterpolateCurve.h>
 
-// Geometry includes
-#include <mobius/geom_Geometry.h>
+// geom includes
+#include <mobius/geom_InterpolateCurve.h>
 
-// Core includes
-#include <mobius/core_XYZ.h>
-
-namespace mobius {
-
-//! \ingroup MOBIUS_GEOM
-//!
-//! Base class for 3D parametric curves.
-class geom_Curve : public geom_Geometry
+//! Test scenario 001.
+//! \param funcID [in] function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_InterpolateCurve::test1(const int funcID)
 {
-// Construction & destruction:
-public:
+  outcome res( DescriptionFn(), funcID );
 
-  mobiusGeom_EXPORT
-    geom_Curve( const core_IsoTransformChain& tChain = core_IsoTransformChain() );
+  /* ~~~~~~~~~~~~~~~~~~~~~~
+   *  Prepare input points
+   * ~~~~~~~~~~~~~~~~~~~~~~ */
 
-  mobiusGeom_EXPORT virtual
-    ~geom_Curve();
+  xyz Q[5] = { xyz( 0.0,  0.0, 0.0),
+               xyz( 3.0,  4.0, 0.0),
+               xyz(-1.0,  4.0, 0.0),
+               xyz(-4.0,  0.0, 0.0),
+               xyz(-4.0, -3.0, 0.0) };
 
-public:
+  std::vector<xyz> Q_vec;
+  for ( int k = 0; k < sizeof(Q)/sizeof(xyz); ++k )
+    Q_vec.push_back(Q[k]);
 
-  virtual double
-    GetMinParameter() const = 0;
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   *  Run interpolation algorithm
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-  virtual double
-    GetMaxParameter() const = 0;
+  // Construct interpolation tool
+  geom_InterpolateCurve Interp(Q_vec, 3, ParamsSelection_ChordLength, KnotsSelection_Average);
 
-  virtual void
-    Eval(const double u,
-         xyz&         P) const = 0;
+  // Run interpolation
+  if ( !Interp.Perform() )
+    return res.failure();
 
-};
-
-//! Convenience shortcut.
-typedef geom_Curve curve;
-
-};
-
-#endif
+  return res.success();
+}

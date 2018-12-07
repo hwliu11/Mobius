@@ -54,34 +54,34 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const override;
 
 public:
 
   mobiusGeom_EXPORT virtual double
-    MinParameter() const;
+    GetMinParameter() const override;
 
   mobiusGeom_EXPORT virtual double
-    MaxParameter() const;
+    GetMaxParameter() const override;
 
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
-         xyz&         P) const;
+         xyz&         P) const override;
 
 public:
 
   //! Accessor for the radius.
   //! \return radius of the circle.
-  double Radius() const
+  double GetRadius() const
   {
     return m_fRadius;
   }
 
   //! Accessor for the center.
   //! \return center of the circle.
-  xyz Center() const
+  xyz GetCenter() const
   {
     return m_tChain.Apply( xyz::O() );
   }

@@ -62,9 +62,9 @@ mobius::geom_BezierOnRailsSurface::~geom_BezierOnRailsSurface()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_BezierOnRailsSurface::Bounds(double& xMin, double& xMax,
-                                               double& yMin, double& yMax,
-                                               double& zMin, double& zMax) const
+void mobius::geom_BezierOnRailsSurface::GetBounds(double& xMin, double& xMax,
+                                                  double& yMin, double& yMax,
+                                                  double& zMin, double& zMax) const
 {
   /* =======================================
    *  This approach is very approximate (!)
@@ -72,15 +72,15 @@ void mobius::geom_BezierOnRailsSurface::Bounds(double& xMin, double& xMax,
 
   // r(u)
   double r_x_min, r_x_max, r_y_min, r_y_max, r_z_min, r_z_max;
-  m_r->Bounds(r_x_min, r_x_max, r_y_min, r_y_max, r_z_min, r_z_max);
+  m_r->GetBounds(r_x_min, r_x_max, r_y_min, r_y_max, r_z_min, r_z_max);
 
   // c(u)
   double c_x_min, c_x_max, c_y_min, c_y_max, c_z_min, c_z_max;
-  m_c->Bounds(c_x_min, c_x_max, c_y_min, c_y_max, c_z_min, c_z_max);
+  m_c->GetBounds(c_x_min, c_x_max, c_y_min, c_y_max, c_z_min, c_z_max);
 
   // q(u)
   double q_x_min, q_x_max, q_y_min, q_y_max, q_z_min, q_z_max;
-  m_q->Bounds(q_x_min, q_x_max, q_y_min, q_y_max, q_z_min, q_z_max);
+  m_q->GetBounds(q_x_min, q_x_max, q_y_min, q_y_max, q_z_min, q_z_max);
 
   // Set results
   xMin = fmin(r_x_min, fmin(c_x_min, q_x_min));
@@ -93,28 +93,28 @@ void mobius::geom_BezierOnRailsSurface::Bounds(double& xMin, double& xMax,
 
 //! Returns minimal U parameter.
 //! \return parameter value.
-double mobius::geom_BezierOnRailsSurface::MinParameter_U() const
+double mobius::geom_BezierOnRailsSurface::GetMinParameter_U() const
 {
-  return m_c->MinParameter();
+  return m_c->GetMinParameter();
 }
 
 //! Returns maximal U parameter.
 //! \return parameter value.
-double mobius::geom_BezierOnRailsSurface::MaxParameter_U() const
+double mobius::geom_BezierOnRailsSurface::GetMaxParameter_U() const
 {
-  return m_c->MaxParameter();
+  return m_c->GetMaxParameter();
 }
 
 //! Returns minimal V parameter.
 //! \return parameter value.
-double mobius::geom_BezierOnRailsSurface::MinParameter_V() const
+double mobius::geom_BezierOnRailsSurface::GetMinParameter_V() const
 {
   return 0.0;
 }
 
 //! Returns maximal V parameter.
 //! \return parameter value.
-double mobius::geom_BezierOnRailsSurface::MaxParameter_V() const
+double mobius::geom_BezierOnRailsSurface::GetMaxParameter_V() const
 {
   return 1.0;
 }

@@ -53,9 +53,9 @@ mobius::geom_Line::~geom_Line()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_Line::Bounds(double& xMin, double& xMax,
-                               double& yMin, double& yMax,
-                               double& zMin, double& zMax) const
+void mobius::geom_Line::GetBounds(double& xMin, double& xMax,
+                                  double& yMin, double& yMax,
+                                  double& zMin, double& zMax) const
 {
   // Even though it is possible to reduce infinite space to something more
   // representative for line, we do not do it as we do not have any
@@ -70,14 +70,14 @@ void mobius::geom_Line::Bounds(double& xMin, double& xMax,
 
 //! Returns minimal parameter value.
 //! \return minimal parameter value.
-double mobius::geom_Line::MinParameter() const
+double mobius::geom_Line::GetMinParameter() const
 {
   return -DBL_MAX;
 }
 
 //! Returns maximal parameter value.
 //! \return maximal parameter value.
-double mobius::geom_Line::MaxParameter() const
+double mobius::geom_Line::GetMaxParameter() const
 {
   return DBL_MAX;
 }

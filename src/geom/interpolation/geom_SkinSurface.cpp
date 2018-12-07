@@ -126,12 +126,12 @@ bool mobius::geom_SkinSurface::PrepareSections()
 
     if ( c == 0 )
     {
-      ref_degree = crv->Degree();
-      ref_U      = crv->Knots();
+      ref_degree = crv->GetDegree();
+      ref_U      = crv->GetKnots();
     }
     else
     {
-      if ( crv->Degree() != ref_degree )
+      if ( crv->GetDegree() != ref_degree )
       {
         areCompatible = false;
 
@@ -144,7 +144,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
           break;
       }
 
-      const std::vector<double>& curr_U = crv->Knots();
+      const std::vector<double>& curr_U = crv->GetKnots();
       //
       if ( curr_U != ref_U )
       {
@@ -171,7 +171,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
       m_curves[c]->ReparameterizeLinear(0.0, 1.0);
 
       // Get knots.
-      std::vector<double> U = m_curves[c]->Knots();
+      std::vector<double> U = m_curves[c]->GetKnots();
       U_all.push_back(U);
 
 #if defined COUT_DEBUG
@@ -216,7 +216,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
 bool mobius::geom_SkinSurface::BuildIsosU()
 {
   // Working dimensions.
-  const int n = (int) (m_curves[0]->Poles().size() - 1);
+  const int n = (int) (m_curves[0]->GetPoles().size() - 1);
   const int K = (int) (m_curves.size() - 1);
 
   // Check if the V degree is suitable.
@@ -238,7 +238,7 @@ bool mobius::geom_SkinSurface::BuildIsosU()
     for ( int c = 0; c < (int) m_curves.size(); ++c )
     {
       const ptr<bcurve>& crv = m_curves[c];
-      poles.push_back( crv->Poles()[i] );
+      poles.push_back( crv->GetPoles()[i] );
     }
     Q.push_back(poles);
   }
@@ -305,7 +305,7 @@ bool mobius::geom_SkinSurface::BuildIsosU()
 
 bool mobius::geom_SkinSurface::BuildSurface()
 {
-  const int n = (int) (m_curves[0]->Poles().size() - 1);
+  const int n = (int) (m_curves[0]->GetPoles().size() - 1);
   const int K = (int) (m_curves.size() - 1);
   const int m = bspl::M(K, m_iDeg_V);
 
@@ -314,10 +314,10 @@ bool mobius::geom_SkinSurface::BuildSurface()
   //
   for ( int i = 0; i <= n; ++i )
   {
-    final_poles.push_back( IsoU_Curves[i]->Poles() );
+    final_poles.push_back( IsoU_Curves[i]->GetPoles() );
   }
 
-  std::vector<double> U_knots = m_curves[0]->Knots();
+  std::vector<double> U_knots = m_curves[0]->GetKnots();
   double *U = m_alloc.Allocate(U_knots.size(), true);
   for ( size_t i = 0; i < U_knots.size(); ++i )
     U[i] = U_knots[i];
@@ -325,7 +325,7 @@ bool mobius::geom_SkinSurface::BuildSurface()
   m_surface = new bsurf(final_poles,
                         U, m_pV,
                         (int) U_knots.size(), m + 1,
-                        m_curves[0]->Degree(), m_iDeg_V);
+                        m_curves[0]->GetDegree(), m_iDeg_V);
 
   return true;
 }

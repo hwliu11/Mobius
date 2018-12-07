@@ -67,8 +67,8 @@ double mobius::geom_FairBCurveBj::Eval(const double u) const
    *  Calculate 2-nd derivative of basis spline at the given parameter
    * ================================================================== */
 
-  const std::vector<double>& U        = m_curve->Knots();
-  const int                  degree   = m_curve->Degree();
+  const std::vector<double>& U        = m_curve->GetKnots();
+  const int                  degree   = m_curve->GetDegree();
   const int                  order    = degree + 1;
   double                     d2N      = 0.0;
   double                     d2C_proj = 0.0;

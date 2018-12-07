@@ -55,7 +55,7 @@ mobius::outcome
 
   // Calculate bounding box
   double xMin, yMin, zMin, xMax, yMax, zMax;
-  L->Bounds(xMin, xMax, yMin, yMax, zMin, zMax);
+  L->GetBounds(xMin, xMax, yMin, yMax, zMin, zMax);
 
   // Evaluate line
   core_XYZ P[3];

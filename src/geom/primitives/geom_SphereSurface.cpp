@@ -55,9 +55,9 @@ mobius::geom_SphereSurface::~geom_SphereSurface()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_SphereSurface::Bounds(double& xMin, double& xMax,
-                                        double& yMin, double& yMax,
-                                        double& zMin, double& zMax) const
+void mobius::geom_SphereSurface::GetBounds(double& xMin, double& xMax,
+                                           double& yMin, double& yMax,
+                                           double& zMin, double& zMax) const
 {
   xyz global_center = m_tChain.Apply( this->Center() );
   xyz rad_pt(m_fRadius, m_fRadius, m_fRadius);
@@ -75,28 +75,28 @@ void mobius::geom_SphereSurface::Bounds(double& xMin, double& xMax,
 
 //! Returns minimal U parameter.
 //! \return parameter value.
-double mobius::geom_SphereSurface::MinParameter_U() const
+double mobius::geom_SphereSurface::GetMinParameter_U() const
 {
   return 0.0;
 }
 
 //! Returns maximal U parameter.
 //! \return parameter value.
-double mobius::geom_SphereSurface::MaxParameter_U() const
+double mobius::geom_SphereSurface::GetMaxParameter_U() const
 {
   return 2*M_PI;
 }
 
 //! Returns minimal V parameter.
 //! \return parameter value.
-double mobius::geom_SphereSurface::MinParameter_V() const
+double mobius::geom_SphereSurface::GetMinParameter_V() const
 {
   return -M_PI;
 }
 
 //! Returns maximal V parameter.
 //! \return parameter value.
-double mobius::geom_SphereSurface::MaxParameter_V() const
+double mobius::geom_SphereSurface::GetMaxParameter_V() const
 {
   return M_PI;
 }

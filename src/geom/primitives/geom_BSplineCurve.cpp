@@ -206,9 +206,9 @@ mobius::core_Ptr<mobius::geom_BSplineCurve>
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_BSplineCurve::Bounds(double& xMin, double& xMax,
-                                       double& yMin, double& yMax,
-                                       double& zMin, double& zMax) const
+void mobius::geom_BSplineCurve::GetBounds(double& xMin, double& xMax,
+                                          double& yMin, double& yMax,
+                                          double& zMin, double& zMax) const
 {
   double x_min = DBL_MAX, x_max = -DBL_MAX;
   double y_min = DBL_MAX, y_max = -DBL_MAX;
@@ -248,7 +248,7 @@ void mobius::geom_BSplineCurve::Bounds(double& xMin, double& xMax,
 
 //! Returns first knot.
 //! \return first knot.
-double mobius::geom_BSplineCurve::MinParameter() const
+double mobius::geom_BSplineCurve::GetMinParameter() const
 {
   return m_U[0];
 }
@@ -257,7 +257,7 @@ double mobius::geom_BSplineCurve::MinParameter() const
 
 //! Returns last knot.
 //! \return last knot.
-double mobius::geom_BSplineCurve::MaxParameter() const
+double mobius::geom_BSplineCurve::GetMaxParameter() const
 {
   return m_U[m_U.size()-1];
 }
@@ -386,24 +386,25 @@ double mobius::geom_BSplineCurve::K(const double u) const
 
 //! Returns continuity of the curve.
 //! \return continuity.
-mobius::core_Continuity mobius::geom_BSplineCurve::Continuity() const
+mobius::core_Continuity
+  mobius::geom_BSplineCurve::GetContinuity() const
 {
   std::vector<int> mults;
   int mult = 1;
   //
   for ( size_t i = 0; i < m_U.size(); ++i )
   {
-    if ( m_U[i] == this->MinParameter() )
+    if ( m_U[i] == this->GetMinParameter() )
       continue;
 
     if ( fabs( m_U[i] - m_U[i - 1] ) < DBL_EPSILON )
       ++mult;
-    else if ( m_U[i - 1] != this->MinParameter() )
+    else if ( m_U[i - 1] != this->GetMinParameter() )
     {
       mults.push_back(mult);
       mult = 1;
 
-      if ( m_U[i] == this->MaxParameter() )
+      if ( m_U[i] == this->GetMaxParameter() )
         break;
     }
   }
@@ -441,16 +442,16 @@ bool mobius::geom_BSplineCurve::InvertPoint(const xyz&   P,
   const int max_iter = 100;
   int       iter     = 0;
   bool      stop     = false;
-  double    u        = ( this->MinParameter() + this->MaxParameter() )*0.5;
+  double    u        = ( this->GetMinParameter() + this->GetMaxParameter() )*0.5;
 
   // Newton iterations
   do
   {
-    if ( u < this->MinParameter() )
-      u = this->MaxParameter(); // Try another extremity
+    if ( u < this->GetMinParameter() )
+      u = this->GetMaxParameter(); // Try another extremity
 
-    if ( u > this->MaxParameter() )
-      u = this->MinParameter(); // Try another extremity
+    if ( u > this->GetMaxParameter() )
+      u = this->GetMinParameter(); // Try another extremity
 
     const double f = BSplCurveProj::F(this, u, P);
     if ( fabs(f) < prec )
@@ -608,7 +609,7 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
   // Poles
   std::vector<xyz> poles_before;
   for ( int i = 0; i <= k; ++i )
-    poles_before.push_back( source->Poles()[i] );
+    poles_before.push_back( source->GetPoles()[i] );
 
   const size_t nU_before = k + m_iDeg + 2;
 
@@ -627,10 +628,10 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
 
   // Poles
   std::vector<xyz> poles_after;
-  for ( size_t i = k; i < source->Poles().size(); ++i )
-    poles_after.push_back( source->Poles()[i] );
+  for ( size_t i = k; i < source->GetPoles().size(); ++i )
+    poles_after.push_back( source->GetPoles()[i] );
 
-  std::vector<double> source_knots = source->Knots();
+  std::vector<double> source_knots = source->GetKnots();
   const int           source_m     = (int) (source_knots.size() - 1);
   const size_t        nU_after     = source_m - k + 1;
 
@@ -666,8 +667,8 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
 void mobius::geom_BSplineCurve::ReparameterizeLinear(const double s_min,
                                                      const double s_max)
 {
-  const double u_min = this->MinParameter();
-  const double u_max = this->MaxParameter();
+  const double u_min = this->GetMinParameter();
+  const double u_max = this->GetMaxParameter();
 
   for ( size_t i = 0; i < m_U.size(); ++i )
   {

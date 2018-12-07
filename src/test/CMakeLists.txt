@@ -25,6 +25,7 @@ set (bspl_H_FILES
   bspl/test_EffectiveN.h
   bspl/test_EffectiveNDers.h
   bspl/test_FindSpan.h
+  bspl/test_InsKnot.h
   bspl/test_KnotMultiset.h
   bspl/test_KnotsAverage.h
   bspl/test_N.h
@@ -38,6 +39,7 @@ set (bspl_CPP_FILES
   bspl/test_EffectiveN.cpp
   bspl/test_EffectiveNDers.cpp
   bspl/test_FindSpan.cpp
+  bspl/test_InsKnot.cpp
   bspl/test_KnotMultiset.cpp
   bspl/test_KnotsAverage.cpp
   bspl/test_N.cpp
@@ -70,7 +72,7 @@ set (geom_H_FILES
   geom/test_BSplineSurface.h
   geom/test_FairCurve.h
   geom/test_FairSurf.h
-  geom/test_InterpolateCurve3D.h
+  geom/test_InterpolateCurve.h
   geom/test_Line3D.h
   geom/test_PointOnLine.h
 )
@@ -80,7 +82,7 @@ set (geom_CPP_FILES
   geom/test_BSplineSurface.cpp
   geom/test_FairCurve.cpp
   geom/test_FairSurf.cpp
-  geom/test_InterpolateCurve3D.cpp
+  geom/test_InterpolateCurve.cpp
   geom/test_Line3D.cpp
   geom/test_PointOnLine.cpp
 )

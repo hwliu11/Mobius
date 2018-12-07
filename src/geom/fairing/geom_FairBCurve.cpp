@@ -73,8 +73,8 @@ mobius::geom_FairBCurve::geom_FairBCurve(const ptr<bcurve>& curve,
 bool mobius::geom_FairBCurve::Perform()
 {
   // Prepare flat sequence of knots and other working vars.
-  const std::vector<double>& U        = m_inputCurve->Knots();
-  const int                  p        = m_inputCurve->Degree();
+  const std::vector<double>& U        = m_inputCurve->GetKnots();
+  const int                  p        = m_inputCurve->GetDegree();
   const int                  m        = int( U.size() ) - 1;
   const int                  n        = m - p - 1;
   const int                  dim      = n + 1 - NUM_CONSTRAINED_POLES_LEADING - NUM_CONSTRAINED_POLES_TRAILING;
@@ -201,7 +201,7 @@ bool mobius::geom_FairBCurve::Perform()
   m_resultCurve = m_inputCurve->Copy();
 
   // Apply perturbations to poles.
-  const std::vector<xyz>& poles = m_resultCurve->Poles();
+  const std::vector<xyz>& poles = m_resultCurve->GetPoles();
   int                     r     = 0;
   //
   for ( int p = 0 + NUM_CONSTRAINED_POLES_LEADING;

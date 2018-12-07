@@ -53,9 +53,9 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const override;
 
 public:
 
@@ -66,10 +66,10 @@ public:
     NumLinks() const;
 
   mobiusGeom_EXPORT const std::vector< ptr<geom_Link> >&
-    Links() const;
+    GetLinks() const;
 
   mobiusGeom_EXPORT const ptr<geom_Link>&
-    Link(const size_t idx) const;
+    GetLink(const size_t idx) const;
 
 private:
 

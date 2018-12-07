@@ -52,9 +52,9 @@ mobius::geom_Link::~geom_Link()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_Link::Bounds(double& xMin, double& xMax,
-                               double& yMin, double& yMax,
-                               double& zMin, double& zMax) const
+void mobius::geom_Link::GetBounds(double& xMin, double& xMax,
+                                  double& yMin, double& yMax,
+                                  double& zMin, double& zMax) const
 {
   double x_min = DBL_MAX, x_max = -DBL_MAX;
   double y_min = DBL_MAX, y_max = -DBL_MAX;

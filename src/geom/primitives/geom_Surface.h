@@ -61,16 +61,16 @@ public:
 public:
 
   virtual double
-    MinParameter_U() const = 0;
+    GetMinParameter_U() const = 0;
 
   virtual double
-    MaxParameter_U() const = 0;
+    GetMaxParameter_U() const = 0;
 
   virtual double
-    MinParameter_V() const = 0;
+    GetMinParameter_V() const = 0;
 
   virtual double
-    MaxParameter_V() const = 0;
+    GetMaxParameter_V() const = 0;
 
   virtual void
     Eval(const double u,

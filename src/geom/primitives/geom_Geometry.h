@@ -50,9 +50,9 @@ class geom_Geometry : public core_OBJECT
 public:
 
   virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const = 0;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const = 0;
 
 public:
 
@@ -65,7 +65,7 @@ public:
 
   //! Returns transformation chain associated with the geometric primitive.
   //! \return transformation chain.
-  const core_IsoTransformChain& TransformChain() const
+  const core_IsoTransformChain& GetTransformChain() const
   {
     return m_tChain;
   }

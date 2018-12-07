@@ -53,9 +53,9 @@ mobius::geom_PositionCloud::~geom_PositionCloud()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_PositionCloud::Bounds(double& xMin, double& xMax,
-                                        double& yMin, double& yMax,
-                                        double& zMin, double& zMax) const
+void mobius::geom_PositionCloud::GetBounds(double& xMin, double& xMax,
+                                           double& yMin, double& yMax,
+                                           double& zMin, double& zMax) const
 {
   double x_min = DBL_MAX, x_max = -DBL_MAX;
   double y_min = DBL_MAX, y_max = -DBL_MAX;
@@ -101,7 +101,7 @@ void mobius::geom_PositionCloud::AddPoint(const xyz& point)
 
 //! Returns number of points.
 //! \return number of points.
-size_t mobius::geom_PositionCloud::NumberOfPoints() const
+size_t mobius::geom_PositionCloud::GetNumberOfPoints() const
 {
   return m_cloud.size();
 }
@@ -109,7 +109,7 @@ size_t mobius::geom_PositionCloud::NumberOfPoints() const
 //! Returns point with the given index.
 //! \param idx [in] index of point to access.
 //! \return requested point.
-const mobius::xyz& mobius::geom_PositionCloud::Point(const size_t idx) const
+const mobius::xyz& mobius::geom_PositionCloud::GetPoint(const size_t idx) const
 {
   return m_cloud.at(idx);
 }
@@ -123,7 +123,7 @@ void mobius::geom_PositionCloud::SetPoints(const std::vector<xyz>& cloud)
 
 //! Returns internal collection of points.
 //! \return internal collection of points.
-const std::vector<mobius::xyz>& mobius::geom_PositionCloud::Points() const
+const std::vector<mobius::xyz>& mobius::geom_PositionCloud::GetPoints() const
 {
   return m_cloud;
 }

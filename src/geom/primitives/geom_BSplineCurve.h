@@ -75,21 +75,23 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const override;
 
 public:
 
   mobiusGeom_EXPORT virtual double
-    MinParameter() const;
+    GetMinParameter() const override;
 
   mobiusGeom_EXPORT virtual double
-    MaxParameter() const;
+    GetMaxParameter() const override;
 
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
-         xyz&         P) const;
+         xyz&         P) const override;
+
+public:
 
   mobiusGeom_EXPORT virtual void
     Eval_Dk(const double u,
@@ -111,7 +113,7 @@ public:
     K(const double u) const;
 
   mobiusGeom_EXPORT virtual core_Continuity
-    Continuity() const;
+    GetContinuity() const;
 
 public:
 
@@ -155,7 +157,7 @@ public:
 
   //! Accessor for the collection of poles.
   //! \return poles of B-spline curve.
-  const std::vector<xyz>& Poles() const
+  const std::vector<xyz>& GetPoles() const
   {
     return m_poles;
   }
@@ -169,7 +171,7 @@ public:
 
   //! Returns the number of poles.
   //! \return number of poles.
-  int NumOfPoles() const
+  int GetNumOfPoles() const
   {
     return (int) m_poles.size();
   }
@@ -194,14 +196,14 @@ public:
 
   //! Accessor for the knot vector.
   //! \return knot vector.
-  const std::vector<double>& Knots() const
+  const std::vector<double>& GetKnots() const
   {
     return m_U;
   }
 
   //! Returns the number of knots.
   //! \return number of knots.
-  int NumOfKnots() const
+  int GetNumOfKnots() const
   {
     return (int) m_U.size();
   }
@@ -216,7 +218,7 @@ public:
 
   //! Returns the degree of the curve.
   //! \return degree.
-  int Degree() const
+  int GetDegree() const
   {
     return m_iDeg;
   }

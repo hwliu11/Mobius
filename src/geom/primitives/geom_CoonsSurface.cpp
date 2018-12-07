@@ -60,9 +60,9 @@ mobius::geom_CoonsSurface::~geom_CoonsSurface()
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_CoonsSurface::Bounds(double& xMin, double& xMax,
-                                       double& yMin, double& yMax,
-                                       double& zMin, double& zMax) const
+void mobius::geom_CoonsSurface::GetBounds(double& xMin, double& xMax,
+                                          double& yMin, double& yMax,
+                                          double& zMin, double& zMax) const
 {
   /* =======================================
    *  This approach is very approximate (!)
@@ -70,19 +70,19 @@ void mobius::geom_CoonsSurface::Bounds(double& xMin, double& xMax,
 
   // c0(u)
   double c0_x_min, c0_x_max, c0_y_min, c0_y_max, c0_z_min, c0_z_max;
-  m_c0->Bounds(c0_x_min, c0_x_max, c0_y_min, c0_y_max, c0_z_min, c0_z_max);
+  m_c0->GetBounds(c0_x_min, c0_x_max, c0_y_min, c0_y_max, c0_z_min, c0_z_max);
 
   // c1(u)
   double c1_x_min, c1_x_max, c1_y_min, c1_y_max, c1_z_min, c1_z_max;
-  m_c1->Bounds(c1_x_min, c1_x_max, c1_y_min, c1_y_max, c1_z_min, c1_z_max);
+  m_c1->GetBounds(c1_x_min, c1_x_max, c1_y_min, c1_y_max, c1_z_min, c1_z_max);
 
   // b0(u)
   double b0_x_min, b0_x_max, b0_y_min, b0_y_max, b0_z_min, b0_z_max;
-  m_b0->Bounds(b0_x_min, b0_x_max, b0_y_min, b0_y_max, b0_z_min, b0_z_max);
+  m_b0->GetBounds(b0_x_min, b0_x_max, b0_y_min, b0_y_max, b0_z_min, b0_z_max);
 
   // b1(u)
   double b1_x_min, b1_x_max, b1_y_min, b1_y_max, b1_z_min, b1_z_max;
-  m_b1->Bounds(b1_x_min, b1_x_max, b1_y_min, b1_y_max, b1_z_min, b1_z_max);
+  m_b1->GetBounds(b1_x_min, b1_x_max, b1_y_min, b1_y_max, b1_z_min, b1_z_max);
 
   // Set results
   xMin = fmin(c0_x_min, fmin(c1_x_min, fmin(b0_x_min, b1_x_min)));
@@ -95,30 +95,30 @@ void mobius::geom_CoonsSurface::Bounds(double& xMin, double& xMax,
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::MinParameter_U() const
+double mobius::geom_CoonsSurface::GetMinParameter_U() const
 {
-  return m_c0->MinParameter();
+  return m_c0->GetMinParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::MaxParameter_U() const
+double mobius::geom_CoonsSurface::GetMaxParameter_U() const
 {
-  return m_c0->MaxParameter();
+  return m_c0->GetMaxParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::MinParameter_V() const
+double mobius::geom_CoonsSurface::GetMinParameter_V() const
 {
-  return m_b0->MinParameter();
+  return m_b0->GetMinParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::MaxParameter_V() const
+double mobius::geom_CoonsSurface::GetMaxParameter_V() const
 {
-  return m_b0->MaxParameter();
+  return m_b0->GetMaxParameter();
 }
 
 //-----------------------------------------------------------------------------

@@ -54,34 +54,34 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const override;
 
 public:
 
   mobiusGeom_EXPORT virtual double
-    MinParameter() const;
+    GetMinParameter() const override;
 
   mobiusGeom_EXPORT virtual double
-    MaxParameter() const;
+    GetMaxParameter() const override;
 
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
-         core_XYZ&    P) const;
+         core_XYZ&    P) const override;
 
 public:
 
   //! Accessor for origin.
   //! \return origin of the line.
-  const core_XYZ& Origin() const
+  const core_XYZ& GetOrigin() const
   {
     return m_origin;
   }
 
   //! Accessor for direction.
   //! \return direction vector of the line.
-  const core_XYZ& Dir() const
+  const core_XYZ& GetDir() const
   {
     return m_dir;
   }

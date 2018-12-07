@@ -63,9 +63,9 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const override;
 
 public:
 
@@ -73,19 +73,19 @@ public:
     AddSection(const ptr<geom_SectionLine>& section);
 
   mobiusGeom_EXPORT size_t
-    NumberOfSections() const;
+    GetNumberOfSections() const;
 
   mobiusGeom_EXPORT const ptr<geom_SectionLine>&
-    SectionByIndex(const size_t idx) const;
+    GetSectionByIndex(const size_t idx) const;
 
   mobiusGeom_EXPORT ptr<geom_SectionLine>
-    SectionByID(const int ID) const;
+    GetSectionByID(const int ID) const;
 
   mobiusGeom_EXPORT const std::vector< ptr<geom_SectionLine> >&
-    Sections() const;
+    GetSections() const;
 
   mobiusGeom_EXPORT std::vector< std::vector<xyz> >
-    Points() const;
+    GetPoints() const;
 
   mobiusGeom_EXPORT ptr<pcloud>
     ToPositionCloud() const;

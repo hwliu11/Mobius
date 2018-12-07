@@ -54,14 +54,14 @@ void mobius::geom_VectorField::Clear()
 mobius::ptr<mobius::geom_VectorField> mobius::geom_VectorField::Copy() const
 {
   ptr<geom_VectorField> res = new geom_VectorField(m_cloud);
-  res->m_cloud = new pcloud( m_cloud->Points() );
+  res->m_cloud = new pcloud( m_cloud->GetPoints() );
   res->m_vectors = m_vectors;
   return res;
 }
 
 //! Returns the associated point cloud.
 //! \return point cloud.
-const mobius::ptr<mobius::pcloud>& mobius::geom_VectorField::Cloud() const
+const mobius::ptr<mobius::pcloud>& mobius::geom_VectorField::GetCloud() const
 {
   return m_cloud;
 }
@@ -86,7 +86,7 @@ void mobius::geom_VectorField::AddVector(const size_t pnt_index,
 //! \param pnt_index [in] 0-based index of a point.
 //! \return requested vector or null vector if nothing was found for the
 //!         given point.
-mobius::xyz mobius::geom_VectorField::Vector(const size_t pnt_index) const
+mobius::xyz mobius::geom_VectorField::GetVector(const size_t pnt_index) const
 {
   std::map<size_t, xyz>::const_iterator cit = m_vectors.find(pnt_index);
   if ( cit == m_vectors.cend() )

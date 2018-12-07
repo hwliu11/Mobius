@@ -39,12 +39,13 @@
 #include <mobius/test_FairCurve.h>
 #include <mobius/test_FairSurf.h>
 #include <mobius/test_FindSpan.h>
+#include <mobius/test_InsKnot.h>
 #include <mobius/test_Integral.h>
 #include <mobius/test_KnotMultiset.h>
 #include <mobius/test_Mesh.h>
 #include <mobius/test_N.h>
 #include <mobius/test_UnifyKnots.h>
-#include <mobius/test_InterpolateCurve3D.h>
+#include <mobius/test_InterpolateCurve.h>
 #include <mobius/test_KnotsAverage.h>
 #include <mobius/test_Line3D.h>
 #include <mobius/test_ParamsCentripetal.h>
@@ -83,11 +84,13 @@ int main(int /*argc*/, char* /*argv[]*/)
 
   // TODO: fix Test Cases
   //testEngine_Launcher<test_FindSpan>      T1;
-  //testEngine_Launcher<test_BasisN>             T2;
+  //testEngine_Launcher<test_BasisN>        T2;
 
   std::vector< core_Ptr<testEngine_CaseLauncherAPI> > CaseLaunchers;
-  //
+
+  // BSpl group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan>           (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InsKnot>            (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN>         (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers>     (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset>       (cf->ProgressNotifier) );
@@ -96,24 +99,30 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength>  (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform>      (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots>         (cf->ProgressNotifier) );
+
+  // Core group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral>           (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion>         (cf->ProgressNotifier) );
-  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve3D> (cf->ProgressNotifier) );
+
+  // Geom group.
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve>   (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D>             (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine>        (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve>       (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairSurf>           (cf->ProgressNotifier) );
+
+  // Poly group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Mesh>               (cf->ProgressNotifier) );
 
-  // Launcher of entire test suite
+  // Launcher of entire test suite.
   testEngine_Launcher Launcher;
   for ( int c = 0; c < (int) CaseLaunchers.size(); ++c )
     Launcher << CaseLaunchers[c];
 
   PRINT_DECOR
-  if ( !Launcher.Launch(&std::cout) ) // Launch Test Cases
+  if ( !Launcher.Launch(&std::cout) ) // Launch Test Cases.
   {
     std::cout << "\t***\n\tTests FAILED" << std::endl;
     PRINT_DECOR

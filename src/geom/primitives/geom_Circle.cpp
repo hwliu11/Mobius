@@ -54,9 +54,9 @@ mobius::geom_Circle::~geom_Circle()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_Circle::Bounds(double& xMin, double& xMax,
-                                 double& yMin, double& yMax,
-                                 double& zMin, double& zMax) const
+void mobius::geom_Circle::GetBounds(double& xMin, double& xMax,
+                                    double& yMin, double& yMax,
+                                    double& zMin, double& zMax) const
 {
   // TODO: NYI
   xMin = -DBL_MAX;
@@ -69,14 +69,14 @@ void mobius::geom_Circle::Bounds(double& xMin, double& xMax,
 
 //! Returns minimal parameter value.
 //! \return minimal parameter value.
-double mobius::geom_Circle::MinParameter() const
+double mobius::geom_Circle::GetMinParameter() const
 {
   return 0.0;
 }
 
 //! Returns maximal parameter value.
 //! \return maximal parameter value.
-double mobius::geom_Circle::MaxParameter() const
+double mobius::geom_Circle::GetMaxParameter() const
 {
   return 2*M_PI;
 }

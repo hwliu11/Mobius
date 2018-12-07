@@ -193,8 +193,8 @@ void mobius::cascade_BSplineCurve::ReApproxMobius(const double        theTol3d,
   threeDTol->Init(theTol3d);
 
   // Access parametric range
-  double f = m_mobiusCurve->MinParameter();
-  double l = m_mobiusCurve->MaxParameter();
+  double f = m_mobiusCurve->GetMinParameter();
+  double l = m_mobiusCurve->GetMaxParameter();
 
   // Re-approximate curve using OCCT Advanced Approximation facilities
   cascade_BSplineCurve_Eval Eval(m_mobiusCurve, f, l);
@@ -274,9 +274,9 @@ double mobius::cascade_BSplineCurve::MaxError() const
 
 void mobius::cascade_BSplineCurve::convertToOpenCascade()
 {
-  const std::vector<xyz>& srcPoles = m_mobiusCurve->Poles();
-  std::vector<double>     srcU     = m_mobiusCurve->Knots();
-  const int               srcDeg   = m_mobiusCurve->Degree();
+  const std::vector<xyz>& srcPoles = m_mobiusCurve->GetPoles();
+  std::vector<double>     srcU     = m_mobiusCurve->GetKnots();
+  const int               srcDeg   = m_mobiusCurve->GetDegree();
 
   // Poles are transferred as-is.
   TColgp_Array1OfPnt occtPoles( 1, (int) srcPoles.size() );

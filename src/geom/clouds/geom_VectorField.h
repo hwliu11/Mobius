@@ -66,7 +66,7 @@ public:
     Copy() const;
 
   mobiusGeom_EXPORT const ptr<pcloud>&
-    Cloud() const;
+    GetCloud() const;
 
   mobiusGeom_EXPORT ptr<pcloud>&
     ChangeCloud();
@@ -75,7 +75,7 @@ public:
     AddVector(const size_t pnt_index, const xyz& vector);
 
   mobiusGeom_EXPORT xyz
-    Vector(const size_t pnt_index) const;
+    GetVector(const size_t pnt_index) const;
 
   mobiusGeom_EXPORT bool
     HasVectors() const;

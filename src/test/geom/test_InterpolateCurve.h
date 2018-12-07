@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_InterpolateCurve3D_HeaderFile
-#define test_InterpolateCurve3D_HeaderFile
+#ifndef test_InterpolateCurve_HeaderFile
+#define test_InterpolateCurve_HeaderFile
 
 // Tests includes
 #include <mobius/test_CaseIDs.h>
@@ -42,8 +42,8 @@
 
 namespace mobius {
 
-//! Unit test for curve interpolation in 3D.
-class test_InterpolateCurve3D : public testEngine_TestCase
+//! Unit test for B-curve interpolation.
+class test_InterpolateCurve : public testEngine_TestCase
 {
 public:
 
@@ -51,14 +51,14 @@ public:
   //! \return ID of the Test Case.
   static int ID()
   {
-    return CaseID_Geom_InterpolateCurve3D;
+    return CaseID_Geom_InterpolateCurve;
   }
 
   //! Returns filename for the description.
   //! \return filename for the description of the Test Case.
   static std::string DescriptionFn()
   {
-    return "test_InterpolateCurve3D";
+    return "test_InterpolateCurve";
   }
 
   //! Returns Test Case description directory.

@@ -41,11 +41,25 @@ namespace mobius {
 
 //! \ingroup MOBIUS_BSPL
 //!
-//! Knot insertion implementation according to A5.1 from "The NURBS Book".
+//! Knot insertion implementation according to A5.1 (curves) and
+//! A5.3 (surfaces) algorithms from "The NURBS Book".
 class bspl_InsKnot
 {
 public:
 
+  //! Implements knot insertion algorithm.
+  //! \param[in]  np index of the last pole in the original curve.
+  //! \param[in]  p  degree.
+  //! \param[in]  UP original knot vector.
+  //! \param[in]  Pw original poles.
+  //! \param[in]  u  knot to insert.
+  //! \param[in]  k  knot interval.
+  //! \param[in]  s  original multiplicity.
+  //! \param[in]  r  how many times to insert.
+  //! \param[out] nq index of the last pole in resulting curve.
+  //! \param[out] UQ resulting knot vector.
+  //! \param[out] Qw resulting poles.
+  //! \return true in case of success, false -- otherwise.
   mobiusBSpl_EXPORT bool
     operator()(const int                    np,
                const int                    p,

@@ -186,9 +186,9 @@ void mobius::geom_BSplineSurface::Dump(std::ostream* out) const
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_BSplineSurface::Bounds(double& xMin, double& xMax,
-                                         double& yMin, double& yMax,
-                                         double& zMin, double& zMax) const
+void mobius::geom_BSplineSurface::GetBounds(double& xMin, double& xMax,
+                                            double& yMin, double& yMax,
+                                            double& zMin, double& zMax) const
 {
   double x_min = DBL_MAX, x_max = -DBL_MAX;
   double y_min = DBL_MAX, y_max = -DBL_MAX;
@@ -232,7 +232,7 @@ void mobius::geom_BSplineSurface::Bounds(double& xMin, double& xMax,
 
 //! Returns first knot in U dimension.
 //! \return first knot.
-double mobius::geom_BSplineSurface::MinParameter_U() const
+double mobius::geom_BSplineSurface::GetMinParameter_U() const
 {
   return m_U[0];
 }
@@ -241,7 +241,7 @@ double mobius::geom_BSplineSurface::MinParameter_U() const
 
 //! Returns last knot in U dimension.
 //! \return last knot.
-double mobius::geom_BSplineSurface::MaxParameter_U() const
+double mobius::geom_BSplineSurface::GetMaxParameter_U() const
 {
   return m_U[m_U.size()-1];
 }
@@ -250,7 +250,7 @@ double mobius::geom_BSplineSurface::MaxParameter_U() const
 
 //! Returns first knot in V dimension.
 //! \return first knot.
-double mobius::geom_BSplineSurface::MinParameter_V() const
+double mobius::geom_BSplineSurface::GetMinParameter_V() const
 {
   return m_V[0];
 }
@@ -259,7 +259,7 @@ double mobius::geom_BSplineSurface::MinParameter_V() const
 
 //! Returns last knot in V dimension.
 //! \return last knot.
-double mobius::geom_BSplineSurface::MaxParameter_V() const
+double mobius::geom_BSplineSurface::GetMaxParameter_V() const
 {
   return m_V[m_V.size()-1];
 }

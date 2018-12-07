@@ -46,9 +46,9 @@ mobius::geom_PolyLine::~geom_PolyLine()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_PolyLine::Bounds(double& xMin, double& xMax,
-                                   double& yMin, double& yMax,
-                                   double& zMin, double& zMax) const
+void mobius::geom_PolyLine::GetBounds(double& xMin, double& xMax,
+                                      double& yMin, double& yMax,
+                                      double& zMin, double& zMax) const
 {
   // Even though it is possible to reduce infinite space to something more
   // representative for polyline, we do not do it as we do not have any
@@ -76,7 +76,7 @@ int mobius::geom_PolyLine::NumLinks() const
 
 //! \return all links.
 const std::vector< mobius::ptr<mobius::geom_Link> >&
-  mobius::geom_PolyLine::Links() const
+  mobius::geom_PolyLine::GetLinks() const
 {
   return m_links;
 }
@@ -85,7 +85,7 @@ const std::vector< mobius::ptr<mobius::geom_Link> >&
 //! \param idx [in] index of the link to access.
 //! \return link.
 const mobius::ptr<mobius::geom_Link>&
-  mobius::geom_PolyLine::Link(const size_t idx) const
+  mobius::geom_PolyLine::GetLink(const size_t idx) const
 {
   return m_links[idx];
 }

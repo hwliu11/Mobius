@@ -69,9 +69,9 @@ mobius::geom_Point::~geom_Point()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_Point::Bounds(double& xMin, double& xMax,
-                                double& yMin, double& yMax,
-                                double& zMin, double& zMax) const
+void mobius::geom_Point::GetBounds(double& xMin, double& xMax,
+                                   double& yMin, double& yMax,
+                                   double& zMin, double& zMax) const
 {
   // Bounding box is degenerated
   xMin = xMax = m_XYZ.X();

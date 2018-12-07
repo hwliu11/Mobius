@@ -59,9 +59,9 @@ mobius::geom_KleinIsoCurve::~geom_KleinIsoCurve()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_KleinIsoCurve::Bounds(double& xMin, double& xMax,
-                                        double& yMin, double& yMax,
-                                        double& zMin, double& zMax) const
+void mobius::geom_KleinIsoCurve::GetBounds(double& xMin, double& xMax,
+                                           double& yMin, double& yMax,
+                                           double& zMin, double& zMax) const
 {
   xMin = -m_fR; xMax = m_fR;
   yMin = -m_fR; yMax = m_fR;
@@ -69,13 +69,13 @@ void mobius::geom_KleinIsoCurve::Bounds(double& xMin, double& xMax,
 }
 
 //! \return min parameter.
-double mobius::geom_KleinIsoCurve::MinParameter() const
+double mobius::geom_KleinIsoCurve::GetMinParameter() const
 {
   return 0.0;
 }
 
 //! \return max parameter.
-double mobius::geom_KleinIsoCurve::MaxParameter() const
+double mobius::geom_KleinIsoCurve::GetMaxParameter() const
 {
   return 2*M_PI;
 }

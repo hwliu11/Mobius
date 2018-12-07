@@ -60,9 +60,9 @@ public:
 public:
 
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const override;
 
 public:
 
@@ -70,16 +70,16 @@ public:
     AddPoint(const core_XYZ& point);
 
   mobiusGeom_EXPORT virtual size_t
-    NumberOfPoints() const;
+    GetNumberOfPoints() const;
 
   mobiusGeom_EXPORT virtual const core_XYZ&
-    Point(const size_t idx) const;
+    GetPoint(const size_t idx) const;
 
   mobiusGeom_EXPORT virtual void
     SetPoints(const std::vector<core_XYZ>& cloud);
 
   mobiusGeom_EXPORT virtual const std::vector<core_XYZ>&
-    Points() const;
+    GetPoints() const;
 
   mobiusGeom_EXPORT virtual void
     Clear();

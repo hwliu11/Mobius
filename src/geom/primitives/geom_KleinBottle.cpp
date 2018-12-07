@@ -51,9 +51,9 @@ mobius::geom_KleinBottle::~geom_KleinBottle()
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_KleinBottle::Bounds(double& xMin, double& xMax,
-                                      double& yMin, double& yMax,
-                                      double& zMin, double& zMax) const
+void mobius::geom_KleinBottle::GetBounds(double& xMin, double& xMax,
+                                         double& yMin, double& yMax,
+                                         double& zMin, double& zMax) const
 {
   xMin = -10.0; xMax = 10.0;
   yMin = -10.0; yMax = 10.0;
@@ -61,25 +61,25 @@ void mobius::geom_KleinBottle::Bounds(double& xMin, double& xMax,
 }
 
 //! \return min U parameter.
-double mobius::geom_KleinBottle::MinParameter_U() const
+double mobius::geom_KleinBottle::GetMinParameter_U() const
 {
   return 0.0;
 }
 
 //! \return max U parameter.
-double mobius::geom_KleinBottle::MaxParameter_U() const
+double mobius::geom_KleinBottle::GetMaxParameter_U() const
 {
   return 2*M_PI;
 }
 
 //! \return min V parameter.
-double mobius::geom_KleinBottle::MinParameter_V() const
+double mobius::geom_KleinBottle::GetMinParameter_V() const
 {
   return 0.0;
 }
 
 //! \return max V parameter.
-double mobius::geom_KleinBottle::MaxParameter_V() const
+double mobius::geom_KleinBottle::GetMaxParameter_V() const
 {
   return 2*M_PI;
 }

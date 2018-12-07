@@ -62,9 +62,9 @@ void mobius::geom_GordonSurface::Dump(std::ostream* out) const
 //! \param yMax [out] max Y.
 //! \param zMin [out] min Z.
 //! \param zMax [out] max Z.
-void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
-                                        double& yMin, double& yMax,
-                                        double& zMin, double& zMax) const
+void mobius::geom_GordonSurface::GetBounds(double& xMin, double& xMax,
+                                           double& yMin, double& yMax,
+                                           double& zMin, double& zMax) const
 {
   xMin = yMin = zMin =  DBL_MAX;
   xMax = yMax = zMax = -DBL_MAX;
@@ -73,7 +73,7 @@ void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
   for ( size_t i = 0; i < m_UCurves.size(); ++i )
   {
     double xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
-    m_UCurves[i]->Bounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
+    m_UCurves[i]->GetBounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
 
     xMin = min(xMin, xMin_crv);
     yMin = min(yMin, yMin_crv);
@@ -87,7 +87,7 @@ void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
   for ( size_t i = 0; i < m_VCurves.size(); ++i )
   {
     double xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
-    m_VCurves[i]->Bounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
+    m_VCurves[i]->GetBounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
 
     xMin = min(xMin, xMin_crv);
     yMin = min(yMin, yMin_crv);
@@ -100,28 +100,28 @@ void mobius::geom_GordonSurface::Bounds(double& xMin, double& xMax,
 
 //! Returns first parameter in U dimension.
 //! \return first parameter.
-double mobius::geom_GordonSurface::MinParameter_U() const
+double mobius::geom_GordonSurface::GetMinParameter_U() const
 {
   return 0.0;//m_pU[0];
 }
 
 //! Returns last parameter in U dimension.
 //! \return last parameter.
-double mobius::geom_GordonSurface::MaxParameter_U() const
+double mobius::geom_GordonSurface::GetMaxParameter_U() const
 {
   return 0.0;//m_pU[m_iU-1];
 }
 
 //! Returns first parameter in V dimension.
 //! \return first parameter.
-double mobius::geom_GordonSurface::MinParameter_V() const
+double mobius::geom_GordonSurface::GetMinParameter_V() const
 {
   return 0.0;//m_pV[0];
 }
 
 //! Returns last parameter in V dimension.
 //! \return last parameter.
-double mobius::geom_GordonSurface::MaxParameter_V() const
+double mobius::geom_GordonSurface::GetMaxParameter_V() const
 {
   return 0.0;//m_pV[m_iV-1];
 }

@@ -69,29 +69,31 @@ public:
   //! \param zMin [out] min Z.
   //! \param zMax [out] max Z.
   mobiusGeom_EXPORT virtual void
-    Bounds(double& xMin, double& xMax,
-           double& yMin, double& yMax,
-           double& zMin, double& zMax) const;
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const override;
+
+public:
 
   //! Returns minimal U parameter.
   //! \return parameter value.
   mobiusGeom_EXPORT virtual double
-    MinParameter_U() const;
+    GetMinParameter_U() const override;
 
   //! Returns maximal U parameter.
   //! \return parameter value.
   mobiusGeom_EXPORT virtual double
-    MaxParameter_U() const;
+    GetMaxParameter_U() const override;
 
   //! Returns minimal V parameter.
   //! \return parameter value.
   mobiusGeom_EXPORT virtual double
-    MinParameter_V() const;
+    GetMinParameter_V() const override;
 
   //! Returns maximal V parameter.
   //! \return parameter value.
   mobiusGeom_EXPORT virtual double
-    MaxParameter_V() const;
+    GetMaxParameter_V() const override;
 
   //! Evaluates surface in the given parametric point (u, v).
   //! \param[in]  u first parameter.
@@ -100,7 +102,7 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          const double v,
-         core_XYZ&    S) const;
+         core_XYZ&    S) const override;
 
 private:
 

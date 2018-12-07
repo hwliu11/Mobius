@@ -109,7 +109,7 @@ void mobius::geom_SectionLine::Split(const std::vector<xyz>& pts,
                         current = this;
   for ( size_t p = 0; p < indices.size(); ++p )
   {
-    const size_t idx_in_slice = find_index( current, this->Pts->Point(indices[p]) );
+    const size_t idx_in_slice = find_index( current, this->Pts->GetPoint(indices[p]) );
 
     this->Split(current, idx_in_slice, slice_before, slice_after, splitting_done);
 
@@ -132,7 +132,7 @@ void mobius::geom_SectionLine::Split(const std::vector<size_t>& indices,
 {
   std::vector<xyz> pts;
   for ( size_t i = 0; i < indices.size(); ++i )
-    pts.push_back( this->Pts->Point(indices[i]) );
+    pts.push_back( this->Pts->GetPoint(indices[i]) );
 
   this->Split(pts, splitting_done);
 }
@@ -150,7 +150,7 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
   // Build parametric polyline in order to split
   //---------------------------------------------
 
-  geom_InterpolateCurve InterpCrv(this->Pts->Points(), 1,
+  geom_InterpolateCurve InterpCrv(this->Pts->GetPoints(), 1,
                                   ParamsSelection_ChordLength,
                                   KnotsSelection_Average);
   try
@@ -287,8 +287,8 @@ void mobius::geom_SectionLine::InterpolateAndDiscrete(const int num_pts,
 
   this->Pts = new pcloud;
 
-  const double uMin = this->Curve->MinParameter();
-  const double uMax = this->Curve->MaxParameter();
+  const double uMin = this->Curve->GetMinParameter();
+  const double uMax = this->Curve->GetMaxParameter();
   const double step = (uMax - uMin) / (num_pts - 1);
   for ( int pnt_idx = 0; pnt_idx < num_pts; ++pnt_idx )
   {
@@ -312,8 +312,8 @@ void mobius::geom_SectionLine::Discrete(const int num_pts)
   if ( this->Curve.IsNull() )
     return;
 
-  const double uMin = this->Curve->MinParameter();
-  const double uMax = this->Curve->MaxParameter();
+  const double uMin = this->Curve->GetMinParameter();
+  const double uMax = this->Curve->GetMaxParameter();
   const double step = (uMax - uMin) / (num_pts - 1);
   for ( int pnt_idx = 0; pnt_idx < num_pts; ++pnt_idx )
   {
@@ -334,13 +334,13 @@ void mobius::geom_SectionLine::Discrete(const int num_pts)
 void mobius::geom_SectionLine::Interpolate(const int deg,
                                            bool&     interp_done)
 {
-  if ( this->Pts->NumberOfPoints() <= 1 )
+  if ( this->Pts->GetNumberOfPoints() <= 1 )
   {
     interp_done = false;
     return;
   }
 
-  geom_InterpolateCurve InterpCrv(this->Pts->Points(), deg,
+  geom_InterpolateCurve InterpCrv(this->Pts->GetPoints(), deg,
                                   ParamsSelection_ChordLength,
                                   KnotsSelection_Average);
   try
@@ -370,8 +370,8 @@ bool mobius::geom_SectionLine::IsChainOf(const int         num_segments,
 
   for ( size_t s = 0; s < this->Slices.size() - 1; ++s )
   {
-    const xyz& A = this->Slices[s]->Pts->Point(this->Slices[s]->Pts->NumberOfPoints() - 1);
-    const xyz& B = this->Slices[s + 1]->Pts->Point(0);
+    const xyz& A = this->Slices[s]->Pts->GetPoint(this->Slices[s]->Pts->GetNumberOfPoints() - 1);
+    const xyz& B = this->Slices[s + 1]->Pts->GetPoint(0);
 
     if ( !(A - B).IsOrigin( core_Precision::Resolution3D()) )
       return false;
@@ -396,7 +396,7 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
                                      ptr<geom_SectionLine>&       slice_after,
                                      bool&                        splitting_done)
 {
-  const size_t n_pts = source->Pts->NumberOfPoints();
+  const size_t n_pts = source->Pts->GetNumberOfPoints();
 
   // Check if the passed point lies on a border
   if ( idx == 0 || idx == n_pts - 1 )
@@ -408,12 +408,12 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
   // Construct slice before the point
   slice_before = new geom_SectionLine(source->ID, new pcloud);
   for ( size_t p = 0; p <= idx; ++p )
-    slice_before->Pts->AddPoint( source->Pts->Point(p) );
+    slice_before->Pts->AddPoint( source->Pts->GetPoint(p) );
 
   // Construct slice after the point
   slice_after = new geom_SectionLine(source->ID, new pcloud);
   for ( size_t p = idx; p < n_pts; ++p )
-    slice_after->Pts->AddPoint( source->Pts->Point(p) );
+    slice_after->Pts->AddPoint( source->Pts->GetPoint(p) );
 
   // Ok
   splitting_done = true;
@@ -425,9 +425,9 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
 int mobius::geom_SectionLine::find_index(const xyz& pnt) const
 {
   const double prec = core_Precision::Resolution3D();
-  for ( size_t p = 0; p < this->Pts->NumberOfPoints(); ++p )
+  for ( size_t p = 0; p < this->Pts->GetNumberOfPoints(); ++p )
   {
-    const xyz& sct_pt = this->Pts->Point(p);
+    const xyz& sct_pt = this->Pts->GetPoint(p);
     if ( (sct_pt - pnt).Modulus() < prec )
       return (int) p;
   }
@@ -442,9 +442,9 @@ int mobius::geom_SectionLine::find_index(const ptr<geom_SectionLine>& source,
                                          const xyz&                         pnt)
 {
   const double prec = core_Precision::Resolution3D();
-  for ( size_t p = 0; p < source->Pts->NumberOfPoints(); ++p )
+  for ( size_t p = 0; p < source->Pts->GetNumberOfPoints(); ++p )
   {
-    const xyz& sct_pt = source->Pts->Point(p);
+    const xyz& sct_pt = source->Pts->GetPoint(p);
     if ( (sct_pt - pnt).Modulus() < prec )
       return (int) p;
   }

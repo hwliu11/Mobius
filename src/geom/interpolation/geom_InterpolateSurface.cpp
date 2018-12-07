@@ -212,12 +212,12 @@ bool mobius::geom_InterpolateSurface::Perform()
   const int m = (int) (m_points.at(0).size() - 1);
 
   // Get number of D1 interpolation constraints (if any)
-  const int nDerivs_isoV_start_D1 = m_derivs_isoV_start_D1.IsNull() ? 0 : (int) m_derivs_isoV_start_D1->Cloud()->NumberOfPoints();
-  const int nDerivs_isoV_end_D1   = m_derivs_isoV_end_D1.IsNull() ? 0 : (int) m_derivs_isoV_end_D1->Cloud()->NumberOfPoints();
+  const int nDerivs_isoV_start_D1 = m_derivs_isoV_start_D1.IsNull() ? 0 : (int) m_derivs_isoV_start_D1->GetCloud()->GetNumberOfPoints();
+  const int nDerivs_isoV_end_D1   = m_derivs_isoV_end_D1.IsNull() ? 0 : (int) m_derivs_isoV_end_D1->GetCloud()->GetNumberOfPoints();
 
   // Get number of D2 interpolation constraints (if any)
-  const int nDerivs_isoV_start_D2 = m_derivs_isoV_start_D2.IsNull() ? 0 : (int) m_derivs_isoV_start_D2->Cloud()->NumberOfPoints();
-  const int nDerivs_isoV_end_D2   = m_derivs_isoV_end_D2.IsNull() ? 0 : (int) m_derivs_isoV_end_D2->Cloud()->NumberOfPoints();
+  const int nDerivs_isoV_start_D2 = m_derivs_isoV_start_D2.IsNull() ? 0 : (int) m_derivs_isoV_start_D2->GetCloud()->GetNumberOfPoints();
+  const int nDerivs_isoV_end_D2   = m_derivs_isoV_end_D2.IsNull() ? 0 : (int) m_derivs_isoV_end_D2->GetCloud()->GetNumberOfPoints();
 
   // Check if D1 constraints are active
   const bool hasDerivs_isoV_start_D1 = (nDerivs_isoV_start_D1 > 0);
@@ -336,10 +336,10 @@ bool mobius::geom_InterpolateSurface::Perform()
     for ( int k = 0; k <= n; ++k )
       iso_V_poles.push_back(m_points[k][l]);
 
-    xyz D1_start = hasDerivs_isoV_start_D1 ? m_derivs_isoV_start_D1->Vector(l) : xyz();
-    xyz D1_end   = hasDerivs_isoV_end_D1   ? m_derivs_isoV_end_D1->Vector(l)   : xyz();
-    xyz D2_start = hasDerivs_isoV_start_D2 ? m_derivs_isoV_start_D2->Vector(l) : xyz();
-    xyz D2_end   = hasDerivs_isoV_end_D2   ? m_derivs_isoV_end_D2->Vector(l)   : xyz();
+    xyz D1_start = hasDerivs_isoV_start_D1 ? m_derivs_isoV_start_D1->GetVector(l) : xyz();
+    xyz D1_end   = hasDerivs_isoV_end_D1   ? m_derivs_isoV_end_D1->GetVector(l)   : xyz();
+    xyz D2_start = hasDerivs_isoV_start_D2 ? m_derivs_isoV_start_D2->GetVector(l) : xyz();
+    xyz D2_end   = hasDerivs_isoV_end_D2   ? m_derivs_isoV_end_D2->GetVector(l)   : xyz();
 
     // Interpolate over these cross-sections only
     ptr<bcurve> iso_V;
@@ -381,7 +381,7 @@ bool mobius::geom_InterpolateSurface::Perform()
     // as reper points now
     std::vector<xyz> R_poles;
     for ( int l = 0; l <= m; ++l )
-      R_poles.push_back(IsoV_Curves[l]->Poles()[k]);
+      R_poles.push_back(IsoV_Curves[l]->GetPoles()[k]);
 
     // Interpolate again
     ptr<bcurve> R_interp;
@@ -398,7 +398,7 @@ bool mobius::geom_InterpolateSurface::Perform()
     // Poles in V column of the resulting grid
     std::vector<xyz> V_column_poles;
     for ( int p = 0; p <= m; ++p )
-      V_column_poles.push_back(R_interp->Poles()[p]);
+      V_column_poles.push_back(R_interp->GetPoles()[p]);
 
     // Save to resulting grid
     final_poles.push_back(V_column_poles);
