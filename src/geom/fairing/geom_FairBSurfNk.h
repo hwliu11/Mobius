@@ -71,13 +71,13 @@ public:
     m_alloc     (alloc)
   {
     // Initialize Ni and Nj from surface.
-    m_Ni.U = surface->Knots_U();
-    m_Ni.p = surface->Degree_U();
+    m_Ni.U = surface->GetKnots_U();
+    m_Ni.p = surface->GetDegree_U();
     //
-    m_Nj.V = surface->Knots_V();
-    m_Nj.q = surface->Degree_V();
+    m_Nj.V = surface->GetKnots_V();
+    m_Nj.q = surface->GetDegree_V();
     //
-    bspl::PairIndicesFromSerial(k, int( surface->Poles()[0].size() ), m_Ni.i, m_Nj.j);
+    bspl::PairIndicesFromSerial(k, int( surface->GetPoles()[0].size() ), m_Ni.i, m_Nj.j);
   }
 
 public:

@@ -130,9 +130,13 @@ public:
   mobiusGeom_EXPORT ptr<geom_BSplineSurface>
     Copy() const;
 
-  //mobiusGeom_EXPORT bool
-  //  InsertKnot(const double u,
-  //             const int    num_times = 1);
+  mobiusGeom_EXPORT bool
+    InsertKnot_U(const double u,
+                 const int    num_times = 1);
+
+  mobiusGeom_EXPORT bool
+    InsertKnot_V(const double v,
+                 const int    num_times = 1);
 
   mobiusGeom_EXPORT ptr<geom_BSplineCurve>
     Iso_U(const double u) const;
@@ -161,7 +165,7 @@ public:
   //! dedicated to U, and second -- for V. E.g. Poles[0][1] addresses
   //! point at intersection of 0-th U-isoline and 1-st V-isoline.
   //! \return poles of B-spline surface.
-  const std::vector< std::vector<xyz> >& Poles() const
+  const std::vector< std::vector<xyz> >& GetPoles() const
   {
     return m_poles;
   }
@@ -180,42 +184,42 @@ public:
 
   //! Accessor for the knot vector in U dimension.
   //! \return knot vector.
-  const std::vector<double>& Knots_U() const
+  const std::vector<double>& GetKnots_U() const
   {
     return m_U;
   }
 
   //! Accessor for the knot vector in V dimension.
   //! \return knot vector.
-  const std::vector<double>& Knots_V() const
+  const std::vector<double>& GetKnots_V() const
   {
     return m_V;
   }
 
   //! Returns the number of knots in U dimension.
   //! \return number of knots.
-  int NumOfKnots_U() const
+  int GetNumOfKnots_U() const
   {
     return (int) m_U.size();
   }
 
   //! Returns the number of knots in V dimension.
   //! \return number of knots.
-  int NumOfKnots_V() const
+  int GetNumOfKnots_V() const
   {
     return (int) m_V.size();
   }
 
   //! Returns the degree of the surface in U dimension.
   //! \return degree.
-  int Degree_U() const
+  int GetDegree_U() const
   {
     return m_iDegU;
   }
 
   //! Returns the degree of the surface in V dimension.
   //! \return degree.
-  int Degree_V() const
+  int GetDegree_V() const
   {
     return m_iDegV;
   }

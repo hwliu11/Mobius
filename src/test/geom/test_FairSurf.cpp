@@ -500,8 +500,8 @@ mobius::outcome
   geom_FairBSurf F(surf, 1.0, NULL, NULL);
 
   // Constraint borders.
-  const int nPolesU = int( surf->Poles().size() );
-  const int nPolesV = int( surf->Poles()[0].size() );
+  const int nPolesU = int( surf->GetPoles().size() );
+  const int nPolesV = int( surf->GetPoles()[0].size() );
   //
   for ( int i = 0; i < nPolesU; ++i )
   {

@@ -44,6 +44,7 @@
 #include <mobius/bspl_EffectiveN.h>
 #include <mobius/bspl_EffectiveNDers.h>
 #include <mobius/bspl_FindSpan.h>
+#include <mobius/bspl_InsKnot.h>
 
 //-----------------------------------------------------------------------------
 
@@ -167,12 +168,26 @@ mobius::core_Ptr<mobius::geom_BSplineSurface>
 //-----------------------------------------------------------------------------
 
 //! Dumps the surface data to string stream.
-//! \param stream [in/out] target stream.
+//! \param stream [in,out] target stream.
 void mobius::geom_BSplineSurface::Dump(std::ostream* out) const
 {
   *out << "B-surface with the following properties:\n"
        << "\t U degree (p) = " << m_iDegU << "\n"
        << "\t V degree (q) = " << m_iDegV << "\n";
+}
+
+//-----------------------------------------------------------------------------
+
+//! Dumps this B-surface as JSON object.
+//! \return JSON string.
+std::string mobius::geom_BSplineSurface::DumpJSON() const
+{
+  geom_JSON dumper;
+  dumper.DumpBSurface(this);
+
+  std::string res = dumper.GetJSON();
+
+  return res;
 }
 
 //-----------------------------------------------------------------------------
@@ -459,6 +474,110 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
 mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const
 {
   return new bsurf(m_poles, m_U, m_V, m_iDegU, m_iDegV);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Inserts knot in U parametric direction of the B-surface.
+//! \param[in] u         knot value to insert.
+//! \param[in] num_times how many times to insert.
+//! \return true in case of success, false -- otherwise.
+bool
+  mobius::geom_BSplineSurface::InsertKnot_U(const double u,
+                                            const int    num_times)
+{
+  // Get properties of the input surface.
+  const std::vector<double>&             UP = this->GetKnots_U();
+  const std::vector<double>&             VP = this->GetKnots_V();
+  const int                              p  = this->GetDegree_U();
+  const int                              q  = this->GetDegree_V();
+  const std::vector< std::vector<xyz> >& Pw = this->GetPoles();
+  const int                              np = int( Pw.size() ) - 1;
+  const int                              mp = int( Pw[0].size() ) - 1;
+
+  // Find span and resolve multiplicity.
+  int k = -1, s = 0;
+  bspl_FindSpan FindSpan(UP, p);
+  k = FindSpan(u);
+
+  // Multiplicity.
+  for ( size_t i = 0; i < UP.size(); ++i )
+    if ( UP[i] == u )
+      s++;
+
+  // Output arguments.
+  int nq = 0, mq = 0;
+  //
+  std::vector<double> UQ, VQ;
+  std::vector< std::vector<xyz> > Qw;
+
+  // Perform knot insertion algorithm.
+  bspl_InsKnot InsKnot;
+  //
+  try {
+    if ( !InsKnot(np, p, UP, mp, q, VP, Pw, ParamDirection_U, u, k, s, num_times, nq, UQ, mq, VQ, Qw) )
+      return false;
+  }
+  catch ( ... )
+  {
+    return false;
+  }
+
+  // Reinitialize.
+  this->init(Qw, UQ, VQ, p, q);
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+//! Inserts knot in V parametric direction of the B-surface.
+//! \param[in] v         knot value to insert.
+//! \param[in] num_times how many times to insert.
+//! \return true in case of success, false -- otherwise.
+bool
+  mobius::geom_BSplineSurface::InsertKnot_V(const double v,
+                                            const int    num_times)
+{
+  // Get properties of the input surface.
+  const std::vector<double>&             UP = this->GetKnots_U();
+  const std::vector<double>&             VP = this->GetKnots_V();
+  const int                              p  = this->GetDegree_U();
+  const int                              q  = this->GetDegree_V();
+  const std::vector< std::vector<xyz> >& Pw = this->GetPoles();
+  const int                              np = int( Pw.size() ) - 1;
+  const int                              mp = int( Pw[0].size() ) - 1;
+
+  // Find span and resolve multiplicity.
+  int k = -1, s = 0;
+  bspl_FindSpan FindSpan(VP, q);
+  k = FindSpan(v);
+
+  // Multiplicity.
+  for ( size_t i = 0; i < VP.size(); ++i )
+    if ( VP[i] == v )
+      s++;
+
+  // Output arguments.
+  int nq = 0, mq = 0;
+  //
+  std::vector<double> UQ, VQ;
+  std::vector< std::vector<xyz> > Qw;
+
+  // Perform knot insertion algorithm.
+  bspl_InsKnot InsKnot;
+  //
+  try {
+    if ( !InsKnot(np, p, UP, mp, q, VP, Pw, ParamDirection_V, v, k, s, num_times, nq, UQ, mq, VQ, Qw) )
+      return false;
+  }
+  catch ( ... )
+  {
+    return false;
+  }
+
+  // Reinitialize.
+  this->init(Qw, UQ, VQ, p, q);
+  return true;
 }
 
 //-----------------------------------------------------------------------------

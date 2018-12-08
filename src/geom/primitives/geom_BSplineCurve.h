@@ -74,6 +74,11 @@ public:
 
 public:
 
+  mobiusGeom_EXPORT std::string
+    DumpJSON() const;
+
+public:
+
   mobiusGeom_EXPORT virtual void
     GetBounds(double& xMin, double& xMax,
               double& yMin, double& yMax,

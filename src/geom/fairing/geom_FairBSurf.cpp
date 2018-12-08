@@ -111,8 +111,8 @@ mobius::geom_FairBSurf::geom_FairBSurf(const ptr<bsurf>&  surface,
 {
   m_inputSurf  = surface;
   m_fLambda    = lambda;
-  m_iNumPolesU = int( surface->Poles().size() );
-  m_iNumPolesV = int( surface->Poles()[0].size() );
+  m_iNumPolesU = int( surface->GetPoles().size() );
+  m_iNumPolesV = int( surface->GetPoles()[0].size() );
 }
 
 //-----------------------------------------------------------------------------
@@ -128,10 +128,10 @@ bool mobius::geom_FairBSurf::Perform()
   std::cout << "Dimension: " << dim << std::endl;
 
   // Prepare working variables.
-  const std::vector<double>& U = m_inputSurf->Knots_U();
-  const std::vector<double>& V = m_inputSurf->Knots_V();
-  const int                  p = m_inputSurf->Degree_U();
-  const int                  q = m_inputSurf->Degree_V();
+  const std::vector<double>& U = m_inputSurf->GetKnots_U();
+  const std::vector<double>& V = m_inputSurf->GetKnots_V();
+  const int                  p = m_inputSurf->GetDegree_U();
+  const int                  q = m_inputSurf->GetDegree_V();
 
   // Prepare reusable memory blocks for running sub-routines efficiently.
   ptr<alloc2d> sharedAlloc = new alloc2d;
@@ -233,7 +233,7 @@ bool mobius::geom_FairBSurf::Perform()
   m_resultSurf = m_inputSurf->Copy();
 
   // Apply perturbations to poles.
-  const std::vector< std::vector<xyz> >& poles = m_resultSurf->Poles();
+  const std::vector< std::vector<xyz> >& poles = m_resultSurf->GetPoles();
   //
   for ( int r = 0; r < dim; ++r )
   {

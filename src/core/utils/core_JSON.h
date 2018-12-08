@@ -32,6 +32,7 @@
 #define core_JSON_HeaderFile
 
 // Core includes
+#include <mobius/core_Continuity.h>
 #include <mobius/core_XYZ.h>
 
 namespace mobius {
@@ -68,6 +69,33 @@ public:
                   std::vector< std::vector<xyz> >& vector) const;
 
 public:
+
+  //! \return JSON string.
+  const std::string& GetJSON() const
+  {
+    return m_json;
+  }
+
+  //! Converts continuity enum to string.
+  //! \param[in] cont enum to convert.
+  //! \return string representation of continuity enum.
+  std::string ContinuityToString(const core_Continuity cont) const
+  {
+    std::string contStr;
+
+    // Check continuity.
+    switch ( cont )
+    {
+      case Continuity_C0 : contStr = "C0"; break;
+      case Continuity_C1 : contStr = "C1"; break;
+      case Continuity_C2 : contStr = "C2"; break;
+      case Continuity_C3 : contStr = "C3"; break;
+      case Continuity_CN : contStr = "CN"; break;
+      default: break;
+    }
+
+    return contStr;
+  }
 
   template <typename T>
   bool ExtractNumericBlockForKey(const std::string& key,

@@ -33,6 +33,12 @@
 
 //-----------------------------------------------------------------------------
 
+//! Default ctor.
+mobius::core_JSON::core_JSON()
+{}
+
+//-----------------------------------------------------------------------------
+
 //! Constructor accepting JSON string to process.
 //! \param[in] json string representing JSON to process.
 mobius::core_JSON::core_JSON(const std::string& json)
@@ -43,8 +49,7 @@ mobius::core_JSON::core_JSON(const std::string& json)
 
 //! Destructor.
 mobius::core_JSON::~core_JSON()
-{
-}
+{}
 
 //-----------------------------------------------------------------------------
 

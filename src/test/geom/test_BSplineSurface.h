@@ -72,7 +72,7 @@ public:
   //! \param functions [out] output collection of pointers.
   static void Functions(MobiusTestFunctions& functions)
   {
-    functions << &evalInDomain
+    functions /*<< &evalInDomain
               << &evalOutDomain
               << &evalJSON1
               << &evalJSON2
@@ -85,7 +85,9 @@ public:
               << &computeEnergy03
               << &computeEnergy04
               << &computeEnergy05
-              << &computeEnergy06;
+              << &computeEnergy06*/
+              << &insertKnot01
+              ;
   }
 
 private:
@@ -104,6 +106,7 @@ private:
   static outcome computeEnergy04 (const int funcID);
   static outcome computeEnergy05 (const int funcID);
   static outcome computeEnergy06 (const int funcID);
+  static outcome insertKnot01    (const int funcID);
 
 };
 

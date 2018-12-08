@@ -37,8 +37,12 @@
 // testEngine includes
 #include <mobius/testEngine_TestCase.h>
 
+// BSpl includes
+#include <mobius/bspl_ParamDirection.h>
+
 // Geom includes
 #include <mobius/geom_BSplineCurve.h>
+#include <mobius/geom_BSplineSurface.h>
 
 namespace mobius {
 
@@ -73,7 +77,9 @@ public:
   static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test01
-              << &test02;
+              << &test02
+              << &test03
+              << &test04;
   }
 
 private:
@@ -83,17 +89,33 @@ private:
                               const int                  r,
                               const std::vector<double>& refKnots);
 
+  static bool insertKnotSurface(const ptr<bsurf>&          surface,
+                                const double               knot,
+                                const bspl_ParamDirection  dir,
+                                const int                  r,
+                                const std::vector<double>& refKnots);
+
 private:
 
-  //! Test scenario 01 for inserting knots in B-curves.
+  //! Test scenario 01 for inserting knots in B-curve.
   //! \param[in] funcID ID of the test function.
   //! \return outcome structure representing the execution result.
   static outcome test01(const int funcID);
 
-  //! Test scenario 02 for inserting knots in B-curves.
+  //! Test scenario 02 for inserting knots in B-curve.
   //! \param[in] funcID ID of the test function.
   //! \return outcome structure representing the execution result.
   static outcome test02(const int funcID);
+
+  //! Test scenario 03 for inserting knots in B-surface.
+  //! \param[in] funcID ID of the test function.
+  //! \return outcome structure representing the execution result.
+  static outcome test03(const int funcID);
+
+  //! Test scenario 04 for inserting knots in B-surface.
+  //! \param[in] funcID ID of the test function.
+  //! \return outcome structure representing the execution result.
+  static outcome test04(const int funcID);
 
 };
 

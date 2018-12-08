@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 19 June 2018
+// Created on: 08 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,47 +28,22 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_JSON_HeaderFile
-#define geom_JSON_HeaderFile
+#ifndef bspl_ParamDirection_HeaderFile
+#define bspl_ParamDirection_HeaderFile
 
-// Geom includes
-#include <mobius/geom_BSplineCurve.h>
-#include <mobius/geom_BSplineSurface.h>
-
-// Core includes
-#include <mobius/core_JSON.h>
+// bspl includes
+#include <mobius/bspl.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_BSPL
 //!
-//! Utility class to process JSON objects representing geometric primitives.
-class geom_JSON : public core_JSON
+//! Parametric direction (U, V).
+enum bspl_ParamDirection
 {
-public:
-
-  mobiusGeom_EXPORT
-    geom_JSON(const std::string& json);
-
-  mobiusGeom_EXPORT
-    ~geom_JSON();
-
-public:
-
-  mobiusGeom_EXPORT void
-    DumpBCurve(const core_Ptr<bcurve>& curve,
-              std::ostream&           out) const;
-
-  mobiusGeom_EXPORT void
-    DumpBSurface(const core_Ptr<bsurf>& surface,
-                 std::ostream&          out) const;
-
-  mobiusGeom_EXPORT bool
-    ExtractBCurve(core_Ptr<bcurve>& curve) const;
-
-  mobiusGeom_EXPORT bool
-    ExtractBSurface(core_Ptr<bsurf>& surface) const;
-
+  ParamDirection_Undefined, //!< Undefined direction.
+  ParamDirection_U,         //!< U direction.
+  ParamDirection_V          //!< V direction.
 };
 
 };

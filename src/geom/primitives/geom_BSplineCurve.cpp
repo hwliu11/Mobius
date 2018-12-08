@@ -197,6 +197,20 @@ mobius::core_Ptr<mobius::geom_BSplineCurve>
 
 //-----------------------------------------------------------------------------
 
+//! Dumps this B-curve as JSON object.
+//! \return JSON string.
+std::string mobius::geom_BSplineCurve::DumpJSON() const
+{
+  geom_JSON dumper;
+  dumper.DumpBCurve(this);
+
+  std::string res = dumper.GetJSON();
+
+  return res;
+}
+
+//-----------------------------------------------------------------------------
+
 //! Calculates boundary box for the B-spline curve by its control polygon.
 //! Notice that this peculiarity can look weird as control polygon only
 //! outlines the B-spline curve, but does not follow its exact shape.
@@ -520,9 +534,8 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
   // Working variables
   const int np = (int) (m_poles.size() - 1);
   int       nq = 0;
-  int       mq = np + m_iDeg + 1 + num_times;
   //
-  std::vector<double> UQ; UQ.resize(mq + 1);
+  std::vector<double> UQ;
   std::vector<xyz> Qw;
 
   // Insert knot
@@ -530,7 +543,7 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
   if ( !Insert(np, m_iDeg, m_U, m_poles, u, k, s, num_times, nq, UQ, Qw) )
     return false;
 
-  // Release resources
+  // Reinitialize
   this->init(Qw, UQ, m_iDeg);
   return true;
 }

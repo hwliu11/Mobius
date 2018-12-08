@@ -24,6 +24,7 @@ set (basis_H_FILES
   basis/bspl_KnotMultiset.h
   basis/bspl_N.h
   basis/bspl_NDiscrete.h
+  basis/bspl_ParamDirection.h
   basis/bspl_RefineKnots.h
   basis/bspl_UnifyKnots.h
 )

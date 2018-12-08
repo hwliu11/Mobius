@@ -115,13 +115,13 @@ bool mobius::cascade_BSplineSurface::IsDone() const
 void mobius::cascade_BSplineSurface::convertToOpenCascade()
 {
   // Degrees in U and V directions.
-  const int uDeg = m_mobiusSurface->Degree_U();
-  const int vDeg = m_mobiusSurface->Degree_V();
+  const int uDeg = m_mobiusSurface->GetDegree_U();
+  const int vDeg = m_mobiusSurface->GetDegree_V();
 
   // Mobius properties of B-surface.
-  const std::vector< std::vector<xyz> >& mobius_Poles  = m_mobiusSurface->Poles();
-  std::vector<double>                    mobius_UKnots = m_mobiusSurface->Knots_U();
-  std::vector<double>                    mobius_VKnots = m_mobiusSurface->Knots_V();
+  const std::vector< std::vector<xyz> >& mobius_Poles  = m_mobiusSurface->GetPoles();
+  std::vector<double>                    mobius_UKnots = m_mobiusSurface->GetKnots_U();
+  std::vector<double>                    mobius_VKnots = m_mobiusSurface->GetKnots_V();
 
   // Poles are transferred as-is.
   TColgp_Array2OfPnt occt_Poles( 1, (int) mobius_Poles.size(),
