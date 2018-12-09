@@ -45,6 +45,9 @@ class core_JSON
 public:
 
   mobiusCore_EXPORT
+    core_JSON();
+
+  mobiusCore_EXPORT
     core_JSON(const std::string& json);
 
   mobiusCore_EXPORT

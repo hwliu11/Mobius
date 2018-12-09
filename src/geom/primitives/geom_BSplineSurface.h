@@ -76,6 +76,9 @@ public:
   mobiusGeom_EXPORT virtual void
     Dump(std::ostream* out) const;
 
+  mobiusGeom_EXPORT std::string
+    DumpJSON() const;
+
 public:
 
   mobiusGeom_EXPORT virtual void
@@ -124,6 +127,9 @@ public:
             const int    memBlockResultU  = -1,
             const int    memBlockResultV  = -1,
             const int    memBlockInternal = -1) const;
+
+  mobiusGeom_EXPORT virtual core_Continuity
+    GetContinuity() const;
 
 public:
 
@@ -208,6 +214,20 @@ public:
   int GetNumOfKnots_V() const
   {
     return (int) m_V.size();
+  }
+
+  //! Returns the number of poles in U direction.
+  //! \return number of poles.
+  int GetNumOfPoles_U() const
+  {
+    return (int) m_poles.size();
+  }
+
+  //! Returns the number of poles in V direction.
+  //! \return number of poles.
+  int GetNumOfPoles_V() const
+  {
+    return (int) m_poles[0].size();
   }
 
   //! Returns the degree of the surface in U dimension.

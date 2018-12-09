@@ -53,7 +53,7 @@ mobius::geom_JSON::~geom_JSON()
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_JSON::DumpBCurve(const core_Ptr<bcurve>& curve) const
+void mobius::geom_JSON::DumpBCurve(const core_Ptr<bcurve>& curve)
 {
   std::stringstream out;
 
@@ -113,11 +113,14 @@ void mobius::geom_JSON::DumpBCurve(const core_Ptr<bcurve>& curve) const
   out << "\n    }"; // End 'properties'.
 
   out << "\n}";
+ 
+  // Initialize json.
+  m_json = out.str();
 }
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface) const
+void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface)
 {
   std::stringstream out;
 
@@ -188,7 +191,7 @@ void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface) const
   //
   for ( int uIdx = 0; uIdx < int( poles.size() ); ++uIdx )
   {
-    out << "\n            u" << (uIdx - 1) << ": [";
+    out << "\n            u" << uIdx << ": [";
     for ( int vIdx = 0; vIdx < int( poles[0].size() ); ++vIdx )
     {
       const xyz& P = poles[uIdx][vIdx];
@@ -206,6 +209,9 @@ void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface) const
   out << "\n    }"; // End 'properties'.
 
   out << "\n}";
+
+  // Initialize json.
+  m_json = out.str();
 }
 
 //-----------------------------------------------------------------------------

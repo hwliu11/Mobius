@@ -48,6 +48,9 @@ class geom_JSON : public core_JSON
 public:
 
   mobiusGeom_EXPORT
+    geom_JSON();
+
+  mobiusGeom_EXPORT
     geom_JSON(const std::string& json);
 
   mobiusGeom_EXPORT
@@ -56,12 +59,10 @@ public:
 public:
 
   mobiusGeom_EXPORT void
-    DumpBCurve(const core_Ptr<bcurve>& curve,
-              std::ostream&           out) const;
+    DumpBCurve(const core_Ptr<bcurve>& curve);
 
   mobiusGeom_EXPORT void
-    DumpBSurface(const core_Ptr<bsurf>& surface,
-                 std::ostream&          out) const;
+    DumpBSurface(const core_Ptr<bsurf>& surface);
 
   mobiusGeom_EXPORT bool
     ExtractBCurve(core_Ptr<bcurve>& curve) const;

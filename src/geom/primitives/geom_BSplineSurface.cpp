@@ -469,6 +469,22 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
 
 //-----------------------------------------------------------------------------
 
+mobius::core_Continuity
+  mobius::geom_BSplineSurface::GetContinuity() const
+{
+  // Get continuity in U direction.
+  const core_Continuity
+    uCont = geom_BSplineCurve::CheckContinuityByKnots(m_U, m_iDegU);
+
+  // Get continuity in V direction.
+  const core_Continuity
+    vCont = geom_BSplineCurve::CheckContinuityByKnots(m_V, m_iDegV);
+
+  return min(uCont, vCont);
+}
+
+//-----------------------------------------------------------------------------
+
 //! Creates a copy of this B-curve.
 //! \return copy of B-curve.
 mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const

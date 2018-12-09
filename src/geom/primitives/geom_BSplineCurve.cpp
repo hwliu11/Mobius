@@ -398,27 +398,26 @@ double mobius::geom_BSplineCurve::K(const double u) const
 
 //-----------------------------------------------------------------------------
 
-//! Returns continuity of the curve.
-//! \return continuity.
 mobius::core_Continuity
-  mobius::geom_BSplineCurve::GetContinuity() const
+  mobius::geom_BSplineCurve::CheckContinuityByKnots(const std::vector<double>& knots,
+                                                    const int                  degree)
 {
   std::vector<int> mults;
   int mult = 1;
   //
-  for ( size_t i = 0; i < m_U.size(); ++i )
+  for ( size_t i = 0; i < knots.size(); ++i )
   {
-    if ( m_U[i] == this->GetMinParameter() )
+    if ( knots[i] == knots[0] )
       continue;
 
-    if ( fabs( m_U[i] - m_U[i - 1] ) < DBL_EPSILON )
+    if ( fabs( knots[i] - knots[i - 1] ) < DBL_EPSILON )
       ++mult;
-    else if ( m_U[i - 1] != this->GetMinParameter() )
+    else if ( knots[i - 1] != knots[0] )
     {
       mults.push_back(mult);
       mult = 1;
 
-      if ( m_U[i] == this->GetMaxParameter() )
+      if ( knots[i] == knots[knots.size() - 1] )
         break;
     }
   }
@@ -426,7 +425,7 @@ mobius::core_Continuity
   if ( mults.size() )
   {
     const int max_mult = *std::max_element( mults.begin(), mults.end() );
-    const int cont     = m_iDeg - max_mult;
+    const int cont     = degree - max_mult;
 
     if ( cont <= 0 )
       return Continuity_C0;
@@ -439,6 +438,16 @@ mobius::core_Continuity
   }
 
   return Continuity_CN;
+}
+
+//-----------------------------------------------------------------------------
+
+//! Returns continuity of the curve.
+//! \return continuity.
+mobius::core_Continuity
+  mobius::geom_BSplineCurve::GetContinuity() const
+{
+  return CheckContinuityByKnots(m_U, m_iDeg);
 }
 
 //-----------------------------------------------------------------------------

@@ -117,6 +117,10 @@ public:
   mobiusGeom_EXPORT virtual double
     K(const double u) const;
 
+  mobiusGeom_EXPORT static core_Continuity
+    CheckContinuityByKnots(const std::vector<double>& knots,
+                           const int                  degree);
+
   mobiusGeom_EXPORT virtual core_Continuity
     GetContinuity() const;
 
