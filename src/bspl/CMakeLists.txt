@@ -17,6 +17,7 @@ set (CPP_FILES
 #------------------------------------------------------------------------------
 
 set (basis_H_FILES
+  basis/bspl_Decompose.h
   basis/bspl_EffectiveN.h
   basis/bspl_EffectiveNDers.h
   basis/bspl_FindSpan.h
@@ -29,6 +30,7 @@ set (basis_H_FILES
   basis/bspl_UnifyKnots.h
 )
 set (basis_CPP_FILES 
+  basis/bspl_Decompose.cpp
   basis/bspl_EffectiveN.cpp
   basis/bspl_EffectiveNDers.cpp
   basis/bspl_FindSpan.cpp

@@ -34,6 +34,7 @@
 // Tests includes
 #include <mobius/test_BSplineCurve.h>
 #include <mobius/test_BSplineSurface.h>
+#include <mobius/test_Decompose.h>
 #include <mobius/test_EffectiveN.h>
 #include <mobius/test_EffectiveNDers.h>
 #include <mobius/test_FairCurve.h>
@@ -99,6 +100,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength>  (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform>      (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Decompose>          (cf->ProgressNotifier) );
 
   // Core group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral>           (cf->ProgressNotifier) );

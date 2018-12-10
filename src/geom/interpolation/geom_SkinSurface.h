@@ -55,7 +55,7 @@ namespace mobius {
 //! isolines. The skinning process follows the algorithm described in
 //! paragraph 10.3 of The NURBS Books
 //!
-//! [Piegl, L. and Tiller, W. 1995. The NURBS Book. Springer Berlin Heidelberg, Berlin, Heidelberg.].
+//! [Piegl, L. and Tiller, W. 1995. The NURBS Book. Springer Berlin Heidelberg, Berlin, Heidelberg].
 //!
 //! At the first stage, the input curves are made compatible (this stage can
 //! be skipped by a dedicated flag). Then, the control points of the

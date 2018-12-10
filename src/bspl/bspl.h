@@ -54,7 +54,12 @@
 //-----------------------------------------------------------------------------
 //! \defgroup MOBIUS_BSPL BSpl
 //!
-//! Data structures and algorithms for operating with B-spline functions.
+//! Data structures and algorithms for operating with B-spline functions. This
+//! package contains the fundamental algorithms for working with B-curves
+//! and B-surfaces. To some extent, BSpl package implements the contents of
+//! the 5-th chapter from The NURBS Book.
+//!
+//! [Piegl, L. and Tiller, W. 1995. The NURBS Book. Springer Berlin Heidelberg, Berlin, Heidelberg].
 //-----------------------------------------------------------------------------
 
 #define mobiusBSpl_MaxDegree 25

@@ -22,6 +22,7 @@ set (CPP_FILES
 #------------------------------------------------------------------------------
 
 set (bspl_H_FILES
+  bspl/test_Decompose.h
   bspl/test_EffectiveN.h
   bspl/test_EffectiveNDers.h
   bspl/test_FindSpan.h
@@ -36,6 +37,7 @@ set (bspl_H_FILES
 )
 
 set (bspl_CPP_FILES
+  bspl/test_Decompose.cpp
   bspl/test_EffectiveN.cpp
   bspl/test_EffectiveNDers.cpp
   bspl/test_FindSpan.cpp

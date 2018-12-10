@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 10 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,56 +28,44 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef bspl_Decompose_HeaderFile
+#define bspl_Decompose_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// bspl includes
+#include <mobius/bspl_ParamDirection.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// core includes
+#include <mobius/core_UV.h>
+#include <mobius/core_XYZ.h>
+
+namespace mobius {
+
+//! \ingroup MOBIUS_BSPL
+//!
+//! Decomposition algorithm from "The NURBS Book".
+class bspl_Decompose
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  //! Implements decomposition algorithm for curves (A5.6).
+  //!
+  //! \param[in]  n  index of the last pole in the original curve.
+  //! \param[in]  p  degree.
+  //! \param[in]  U  knot vector.
+  //! \param[in]  Pw controls points.
+  //! \param[out] nb number of Bezier segments.
+  //! \param[out] Qw poles of the resulting Bezier segments.
+  //!
+  //! \return true in case of success, false -- otherwise.
+  mobiusBSpl_EXPORT bool
+    operator()(const int                        n,
+               const int                        p,
+               const std::vector<double>&       U,
+               const std::vector<xyz>&          Pw,
+               int&                             nb,
+               std::vector< std::vector<xyz> >& Qw) const;
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
-
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
-
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
-
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
-
-  CaseID_Poly_Mesh
+};
 
 };
 
