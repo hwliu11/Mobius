@@ -113,8 +113,9 @@ bool mobius::geom_SkinSurface::PrepareSections()
 
   // Check compatibility of curves.
   bool areCompatible = true;
-  int ref_degree = 0;
+  int  ref_degree    = 0;
   std::vector<double> ref_U;
+  //
   for ( size_t c = 0; c < m_curves.size(); ++c )
   {
     const ptr<bcurve>& crv = m_curves[c];
@@ -131,6 +132,8 @@ bool mobius::geom_SkinSurface::PrepareSections()
     }
     else
     {
+      // Check if the second, the third, etc. curves are of the same degree
+      // as the first one.
       if ( crv->GetDegree() != ref_degree )
       {
         areCompatible = false;
@@ -144,12 +147,16 @@ bool mobius::geom_SkinSurface::PrepareSections()
           break;
       }
 
+      // Check if the second, the third, etc. curves are have the same knot
+      // vectors as the first one.
       const std::vector<double>& curr_U = crv->GetKnots();
       //
       if ( curr_U != ref_U )
       {
         areCompatible = false;
 
+        // Check if unification is allowed. If not, skinning algorithm
+        // cannot proceed with uncompatible curves.
         if ( !m_bUnify )
         {
           m_errCode = ErrCode_NotCompatibleCurves_Knots;
@@ -161,6 +168,7 @@ bool mobius::geom_SkinSurface::PrepareSections()
     }
   }
 
+  // Now if the curves are not compatible, it is time to make them such.
   if ( !areCompatible && m_bUnify )
   {
     // Normalize and collect knot vectors.
@@ -185,11 +193,11 @@ bool mobius::geom_SkinSurface::PrepareSections()
 #endif
     }
 
-    // Compute extension.
+    // Compute complementary knots.
     bspl_UnifyKnots Unify;
     std::vector< std::vector<double> > X = Unify(U_all);
 
-    // Unify knots
+    // Unify knots.
     for ( size_t c = 0; c < m_curves.size(); ++c )
     {
       m_curves[c]->RefineKnots(X[c]);
@@ -243,7 +251,7 @@ bool mobius::geom_SkinSurface::BuildIsosU()
     Q.push_back(poles);
   }
 
-  // Allocate arrays for reper parameters
+  // Allocate arrays for reper parameters.
   double* params_V = m_alloc.Allocate(K + 1, true);
   if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
   {

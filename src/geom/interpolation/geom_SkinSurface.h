@@ -50,8 +50,17 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Creates B-surface passing through the given series of compatible (!)
-//! B-curves.
+//! Creates B-surface passing through the given series of B-curves. The
+//! constructed surface will have the input curves as its `u = const`
+//! isolines. The skinning process follows the algorithm described in
+//! paragraph 10.3 of The NURBS Books
+//!
+//! [Piegl, L. and Tiller, W. 1995. The NURBS Book. Springer Berlin Heidelberg, Berlin, Heidelberg.].
+//!
+//! At the first stage, the input curves are made compatible (this stage can
+//! be skipped by a dedicated flag). Then, the control points of the
+//! input curves are interpolated and the poles of the interpolant curves
+//! are taken as the resulting poles for a B-surface.
 class geom_SkinSurface : public core_OPERATOR
 {
 public:
@@ -113,12 +122,24 @@ public:
 
 public:
 
+  //! Prepares input section curves for skinning. This method first checks
+  //! if the curves are compatible. If not, and if unification is allowed
+  //! by `unifyCurves` flag passed at initialization, the curves are made
+  //! compatible.
+  //! \return true if the sections are ready for skinning, false -- otherwise.
   mobiusGeom_EXPORT bool
     PrepareSections();
 
+  //! Builds intermediate curves by interpolating the poles of the section
+  //! curves. This method is essentially the skinning itself. Once this method
+  //! is done, the only remaining thing is to organize the obtained control
+  //! points in a grid and construct the resulting B-surface explicitly.
+  //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT bool
     BuildIsosU();
 
+  //! Constructs the resulting B-surface.
+  //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT bool
     BuildSurface();
 
@@ -138,9 +159,9 @@ public:
     return m_surface;
   }
 
-// For maintenance:
 public:
 
+  //! Intermediate interpolants.
   std::vector< ptr<bcurve> > IsoU_Curves;
 
 private:

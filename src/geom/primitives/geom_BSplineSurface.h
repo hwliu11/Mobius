@@ -164,6 +164,12 @@ public:
   mobiusGeom_EXPORT double
     ComputeBendingEnergy() const;
 
+  //! Flips the parameterization of the B-surface so that its U direction
+  //! becomes V direction and vice versa. As a result, the natural orientation
+  //! of the surface becomes inverted.
+  mobiusGeom_EXPORT void
+    ExchangeUV();
+
 public:
 
   //! Accessor for the collection of poles. The collection of poles is
@@ -246,6 +252,12 @@ public:
 
 private:
 
+  //! Initializes B-spline surface with complete data.
+  //! \param[in] Poles control points.
+  //! \param[in] U     knot vector in U dimension.
+  //! \param[in] V     knot vector in V dimension.
+  //! \param[in] p     degree of the B-spline basis functions in U dimension.
+  //! \param[in] q     degree of the B-spline basis functions in V dimension.
   void init(const std::vector< std::vector<xyz> >& Poles,
             const std::vector<double>&             U,
             const std::vector<double>&             V,

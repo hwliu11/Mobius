@@ -724,12 +724,38 @@ double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
 
 //-----------------------------------------------------------------------------
 
-//! Initializes B-spline surface with complete data.
-//! \param Poles [in] control points.
-//! \param U     [in] knot vector in U dimension.
-//! \param V     [in] knot vector in V dimension.
-//! \param p     [in] degree of the B-spline basis functions in U dimension.
-//! \param q     [in] degree of the B-spline basis functions in V dimension.
+void mobius::geom_BSplineSurface::ExchangeUV()
+{
+  // Transpose control net.
+  std::vector< std::vector<xyz> > cNet;
+  //
+  for ( size_t col = 0; col < m_poles[0].size(); ++col )
+  {
+    std::vector<xyz> newRow;
+
+    for ( size_t row = 0; row < m_poles.size(); ++row )
+    {
+      newRow.push_back( m_poles[row][col] );
+    }
+
+    cNet.push_back(newRow);
+  }
+  //
+  m_poles = cNet;
+
+  // Exchange knot vectors.
+  std::vector<double> tmpKnots = m_U;
+  m_U = m_V;
+  m_V = tmpKnots;
+
+  // Exchange degrees.
+  int tmpDeg = m_iDegU;
+  m_iDegU = m_iDegV;
+  m_iDegV = tmpDeg;
+}
+
+//-----------------------------------------------------------------------------
+
 void mobius::geom_BSplineSurface::init(const std::vector< std::vector<xyz> >& Poles,
                                        const std::vector<double>&             U,
                                        const std::vector<double>&             V,
