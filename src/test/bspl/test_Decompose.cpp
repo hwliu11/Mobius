@@ -40,8 +40,9 @@
 //-----------------------------------------------------------------------------
 
 bool
-  mobius::test_Decompose::decomposeCurve(const ptr<bcurve>& curve,
-                                         const int          numSegmentsRef)
+  mobius::test_Decompose::decomposeCurve(const ptr<bcurve>&      curve,
+                                         const int               numSegmentsRef,
+                                         const std::vector<int>& breakpointsRef)
 {
   // Input arguments.
   const int                  n  = curve->GetNumOfPoles() - 1;
@@ -52,15 +53,20 @@ bool
   // Output arguments.
   int nb = 0;
   std::vector< std::vector<xyz> > Qw;
+  std::vector<int> breakpoints;
 
   // Perform curve decomposition.
   bspl_Decompose decomposer;
   //
-  if ( !decomposer(n, p, U, Pw, nb, Qw) )
+  if ( !decomposer(n, p, U, Pw, nb, Qw, breakpoints) )
     return false;
 
   // Check the expected number of segments.
   if ( Qw.size() != numSegmentsRef )
+    return false;
+
+  // Check the indices of the breakpoints.
+  if ( breakpoints != breakpointsRef )
     return false;
 
   return true;
@@ -112,8 +118,11 @@ mobius::outcome mobius::test_Decompose::test01(const int funcID)
   // Expected number of segments.
   const int refNumSegments = 5;
 
+  // Expected breakpoints.
+  std::vector<int> breakpoints = {6, 9, 12, 15, 18};
+
   // Perform test.
-  if ( !decomposeCurve(curve, refNumSegments) )
+  if ( !decomposeCurve(curve, refNumSegments, breakpoints) )
     return res.failure();
 
   return res.success();
@@ -165,8 +174,11 @@ mobius::outcome mobius::test_Decompose::test02(const int funcID)
   // Expected number of segments.
   const int refNumSegments = 1;
 
+  // Expected breakpoints.
+  std::vector<int> breakpoints = {4};
+
   // Perform test.
-  if ( !decomposeCurve(curve, refNumSegments) )
+  if ( !decomposeCurve(curve, refNumSegments, breakpoints) )
     return res.failure();
 
   return res.success();

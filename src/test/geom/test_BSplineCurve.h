@@ -76,7 +76,9 @@ public:
               << &evalOutDomainRight
               << &evalOutDomainLeft
               << &evalJSON1
-              << &evalJSON2;
+              << &evalJSON2
+              << &splitToBezier01
+              ;
   }
 
 private:
@@ -86,6 +88,7 @@ private:
   static outcome evalOutDomainLeft  (const int funcID);
   static outcome evalJSON1          (const int funcID);
   static outcome evalJSON2          (const int funcID);
+  static outcome splitToBezier01    (const int funcID);
 
 };
 

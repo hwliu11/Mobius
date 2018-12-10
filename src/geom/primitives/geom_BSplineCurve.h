@@ -162,6 +162,14 @@ public:
   mobiusGeom_EXPORT double
     ComputeStrainEnergy() const;
 
+  //! Splits this B-curve into an ordered collection of Bezier segments.
+  //! \param[out] segments decomposed segments.
+  //! \return false if decomposition was not done (e.g., if the current
+  //!         B-curve is already a Bezier curve which is a special case
+  //!         of a B-curve).
+  mobiusGeom_EXPORT bool
+    SplitToBezier(std::vector< ptr<geom_BSplineCurve> >& segments) const;
+
 public:
 
   //! Accessor for the collection of poles.
@@ -234,6 +242,10 @@ public:
 
 private:
 
+  //! Initializes B-spline curve with complete data.
+  //! \param[in] Poles control points.
+  //! \param[in] U     knot vector.
+  //! \param[in] p     degree of the B-spline basis functions.
   void init(const std::vector<xyz>&    Poles,
             const std::vector<double>& U,
             const int                  p);

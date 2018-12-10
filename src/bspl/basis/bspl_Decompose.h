@@ -49,12 +49,15 @@ public:
 
   //! Implements decomposition algorithm for curves (A5.6).
   //!
-  //! \param[in]  n  index of the last pole in the original curve.
-  //! \param[in]  p  degree.
-  //! \param[in]  U  knot vector.
-  //! \param[in]  Pw controls points.
-  //! \param[out] nb number of Bezier segments.
-  //! \param[out] Qw poles of the resulting Bezier segments.
+  //! \param[in]  n           index of the last pole in the original curve.
+  //! \param[in]  p           degree.
+  //! \param[in]  U           knot vector.
+  //! \param[in]  Pw          controls points.
+  //! \param[out] nb          number of Bezier segments.
+  //! \param[out] Qw          poles of the resulting Bezier segments.
+  //! \param[out] breakpoints indices of the knots where the original B-curve
+  //!                         is split. The number of values in this collection
+  //!                         is equal to the number of Bezier segments `nb`.
   //!
   //! \return true in case of success, false -- otherwise.
   mobiusBSpl_EXPORT bool
@@ -63,7 +66,8 @@ public:
                const std::vector<double>&       U,
                const std::vector<xyz>&          Pw,
                int&                             nb,
-               std::vector< std::vector<xyz> >& Qw) const;
+               std::vector< std::vector<xyz> >& Qw,
+               std::vector<int>&                breakpoints) const;
 
 };
 

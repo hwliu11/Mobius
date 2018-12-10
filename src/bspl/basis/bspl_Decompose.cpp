@@ -41,7 +41,8 @@ bool mobius::bspl_Decompose::operator()(const int                        n,
                                         const std::vector<double>&       U,
                                         const std::vector<xyz>&          Pw,
                                         int&                             nb,
-                                        std::vector< std::vector<xyz> >& Qw) const
+                                        std::vector< std::vector<xyz> >& Qw,
+                                        std::vector<int>&                breakpoints) const
 {
   const int m = n + p + 1;
   int       a = p;
@@ -107,6 +108,9 @@ bool mobius::bspl_Decompose::operator()(const int                        n,
     }
 
     nb = nb + 1; // Bezier segment completed.
+
+    // Add breakpoint index.
+    breakpoints.push_back(i);
 
     if ( b < m )
     {

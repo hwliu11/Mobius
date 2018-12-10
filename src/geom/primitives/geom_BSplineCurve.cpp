@@ -41,6 +41,7 @@
 #include <mobius/core_UnivariateFunc.h>
 
 // BSpl includes
+#include <mobius/bspl_Decompose.h>
 #include <mobius/bspl_EffectiveN.h>
 #include <mobius/bspl_EffectiveNDers.h>
 #include <mobius/bspl_FindSpan.h>
@@ -727,10 +728,64 @@ double mobius::geom_BSplineCurve::ComputeStrainEnergy() const
 
 //-----------------------------------------------------------------------------
 
-//! Initializes B-spline curve with complete data.
-//! \param Poles [in] control points.
-//! \param U     [in] knot vector.
-//! \param p     [in] degree of the B-spline basis functions.
+bool mobius::geom_BSplineCurve::SplitToBezier(std::vector< ptr<bcurve> >& segments) const
+{
+  // Input arguments.
+  const int                  n  = this->GetNumOfPoles() - 1;
+  const int                  p  = this->GetDegree();
+  const std::vector<double>& U  = this->GetKnots();
+  const std::vector<xyz>&    Pw = this->GetPoles();
+
+  // Output arguments.
+  int nb = 0;
+  std::vector< std::vector<xyz> > Qw;
+  std::vector<int> breakpoints;
+
+  // Perform curve decomposition.
+  bspl_Decompose decomposer;
+  //
+  if ( !decomposer(n, p, U, Pw, nb, Qw, breakpoints) )
+    return false;
+
+  // At least two segments are expected for the decomposition to be
+  // successful.
+  if ( Qw.size() <= 1 )
+    return false;
+
+  // Construct B-curves for the segments.
+  for ( size_t k = 0; k < Qw.size(); ++k )
+  {
+    // Order of the Bezier segment is equal to the number of points in a segment.
+    const int bezOrder = int( Qw[k].size() );
+
+    // Prepare min knot.
+    double bezUmin;
+    //
+    if ( k > 0 )
+      bezUmin = m_U[ breakpoints[k - 1] ];
+    else
+      bezUmin = this->GetMinParameter();
+
+    // Prepare max knot.
+    const double bezUmax = m_U[ breakpoints[k] ];
+
+    // Prepare knot vector.
+    std::vector<double> bezU;
+    //
+    for ( int ii = 0; ii < bezOrder; ++ii ) bezU.push_back(bezUmin);
+    for ( int ii = 0; ii < bezOrder; ++ii ) bezU.push_back(bezUmax);
+
+    // Construct Bezier segment.
+    ptr<bcurve> segment = new bcurve(Qw[k], bezU, bezOrder - 1);
+    //
+    segments.push_back(segment);
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 void mobius::geom_BSplineCurve::init(const std::vector<xyz>&    Poles,
                                      const std::vector<double>& U,
                                      const int                  p)
