@@ -46,6 +46,9 @@ public:
   mobiusCore_EXPORT static double
     Resolution3D();
 
+  mobiusCore_EXPORT static double
+    Resolution2D();
+
 };
 
 };

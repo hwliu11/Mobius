@@ -36,3 +36,10 @@ double mobius::core_Precision::Resolution3D()
 {
   return 1.0e-6;
 }
+
+//! Precision in 2D space to cover rounding errors.
+//! \return geometric precision to use in 2D.
+double mobius::core_Precision::Resolution2D()
+{
+  return 1.0e-8;
+}

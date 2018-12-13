@@ -54,6 +54,7 @@
 #include <mobius/test_ParamsUniform.h>
 #include <mobius/test_PointOnLine.h>
 #include <mobius/test_Quaternion.h>
+#include <mobius/test_SkinSurface.h>
 
 // testEngine includes
 #include <mobius/testEngine_Launcher.h>
@@ -114,6 +115,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairSurf>           (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_SkinSurface>        (cf->ProgressNotifier) );
 
   // Poly group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Mesh>               (cf->ProgressNotifier) );

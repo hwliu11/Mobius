@@ -71,6 +71,20 @@ public:
   mobiusGeom_EXPORT static core_Ptr<geom_BSplineSurface>
     Instance(const std::string& json);
 
+  //! Compares two passed B-surfaces with the prescribed tolerances.
+  //! \param[in] F     first surface to compare.
+  //! \param[in] G     second surface to compare.
+  //! \param[in] tol2d tolerance to use in the two-dimensional space. This
+  //!                  value is used to compare knot vectors.
+  //! \param[in] tol3d tolerance to use in the three-dimensional space. This
+  //!                  value is used to compare poles.
+  //! \return true if the surfaces are structurally and geometrically equal.
+  mobiusGeom_EXPORT static bool
+    Compare(const core_Ptr<geom_BSplineSurface>& F,
+            const core_Ptr<geom_BSplineSurface>& G,
+            const double                         tol2d,
+            const double                         tol3d);
+
 public:
 
   mobiusGeom_EXPORT virtual void
@@ -182,16 +196,41 @@ public:
     return m_poles;
   }
 
+  //! Returns the coordinates of a pole with the given indices.
+  //! \param[in] i zero-based row index.
+  //! \param[in] j zero-based column index.
+  //! \return pole coordinates.
+  const xyz& GetPole(const int i,
+                     const int j) const
+  {
+    return m_poles[i][j];
+  }
+
   //! Sets new coordinates for a pole.
   //! \param[in] i   zero-based row index.
   //! \param[in] j   zero-based column index.
   //! \param[in] xyz pole coordinates to set.
-  //! \return pole.
   void SetPole(const int  i,
                const int  j,
                const xyz& xyz)
   {
     m_poles[i][j] = xyz;
+  }
+
+  //! Returns a knot value for the given zero-based index.
+  //! \param[in] i zero-based index of a U knot to access.
+  //! \return knot value.
+  double GetKnot_U(const int i) const
+  {
+    return m_U[i];
+  }
+
+  //! Returns a knot value for the given zero-based index.
+  //! \param[in] j zero-based index of a V knot to access.
+  //! \return knot value.
+  double GetKnot_V(const int j) const
+  {
+    return m_V[j];
   }
 
   //! Accessor for the knot vector in U dimension.

@@ -72,6 +72,7 @@ enum test_CaseID
   CaseID_Geom_BSplineSurface,
   CaseID_Geom_FairCurve,
   CaseID_Geom_FairSurf,
+  CaseID_Geom_SkinSurface,
 
   //---------------------------------------------------------------------------
   // Poly library

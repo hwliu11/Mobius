@@ -167,6 +167,61 @@ mobius::core_Ptr<mobius::geom_BSplineSurface>
 
 //-----------------------------------------------------------------------------
 
+bool mobius::geom_BSplineSurface::Compare(const ptr<bsurf>& F,
+                                          const ptr<bsurf>& G,
+                                          const double      tol2d,
+                                          const double      tol3d)
+{
+  // Compare degrees.
+  if ( F->GetDegree_U() != G->GetDegree_U() ||
+       F->GetDegree_V() != G->GetDegree_V() )
+    return false;
+
+  // Compare number of poles.
+  if ( F->GetNumOfPoles_U() != G->GetNumOfPoles_U() ||
+       F->GetNumOfPoles_V() != G->GetNumOfPoles_V() )
+    return false;
+
+  // Compare number of knots.
+  if ( F->GetNumOfKnots_U() != G->GetNumOfKnots_U() ||
+       F->GetNumOfKnots_V() != G->GetNumOfKnots_V() )
+    return false;
+
+  const int numKnotsU = F->GetNumOfKnots_U();
+  const int numKnotsV = F->GetNumOfKnots_V();
+  const int numPolesU = F->GetNumOfPoles_U();
+  const int numPolesV = F->GetNumOfPoles_V();
+
+  // Compare knots.
+  for ( int ii = 0; ii < numKnotsU; ++ii )
+  {
+    if ( fabs( F->GetKnot_U(ii) - G->GetKnot_U(ii) ) > tol2d )
+      return false;
+  }
+  //
+  for ( int ii = 0; ii < numKnotsV; ++ii )
+  {
+    if ( fabs( F->GetKnot_V(ii) - G->GetKnot_V(ii) ) > tol2d )
+      return false;
+  }
+
+  // Compare poles.
+  for ( int i = 0; i < numPolesU; ++i )
+    for ( int j = 0; j < numPolesV; ++j )
+    {
+      const xyz&   P = F->GetPole(i, j);
+      const xyz&   Q = G->GetPole(i, j);
+      const double d = (P - Q).Modulus();
+
+      if ( d > tol3d )
+        return false;
+    }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 //! Dumps the surface data to string stream.
 //! \param stream [in,out] target stream.
 void mobius::geom_BSplineSurface::Dump(std::ostream* out) const
