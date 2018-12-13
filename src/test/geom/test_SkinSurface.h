@@ -73,6 +73,8 @@ public:
   static void Functions(MobiusTestFunctions& functions)
   {
     functions << &test001
+              << &test002
+              << &test003
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -85,6 +87,8 @@ private:
   //! any possible round-off errors.
   //!
   //! \param[in] sections array of section curves.
+  //! \param[in] D1lead   tangency constraints for the leading curve.
+  //! \param[in] D1tail   tangency constraints for the trailing curve.
   //! \param[in] unify    indicates whether to unify section curves or not.
   //!                     If not, it means that the section curves have
   //!                     already been unified.
@@ -93,6 +97,8 @@ private:
   //!
   //! \return true in case of success, false -- otherwise.
   static bool runtest(const std::vector< ptr<bcurve> >& sections,
+                      const std::vector<xyz>&           D1lead,
+                      const std::vector<xyz>&           D1tail,
                       const bool                        unify,
                       const int                         degV,
                       const ptr<bsurf>&                 surfRef);
@@ -100,6 +106,8 @@ private:
 private:
 
   static outcome test001(const int funcID);
+  static outcome test002(const int funcID);
+  static outcome test003(const int funcID);
 
 };
 

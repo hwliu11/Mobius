@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 24 December 2014
+// Created on: 13 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,39 +28,58 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-// Own include
-#include <mobius/cascade_MultResolver.h>
+#ifndef bspl_MultResolver_HeaderFile
+#define bspl_MultResolver_HeaderFile
 
-//-----------------------------------------------------------------------------
+// BSpl includes
+#include <mobius/bspl_KnotMultiset.h>
 
-//! Default constructor.
-mobius::cascade_MultResolver::cascade_MultResolver() : bspl_MultResolver()
-{}
+namespace mobius {
 
-//-----------------------------------------------------------------------------
-
-//! \return knot array in OCCT form.
-Handle(TColStd_HArray1OfReal)
-  mobius::cascade_MultResolver::GetOpenCascadeKnots() const
+//! \ingroup MOBIUS_BSPL
+//!
+//! Utility to count multiplicity of knots.
+class bspl_MultResolver
 {
-  Handle(TColStd_HArray1OfReal) res = new TColStd_HArray1OfReal( 0, Knots.size() - 1 );
-  for ( int i = 0; i < Knots.size(); ++i )
-  {
-    res->SetValue( i, Knots[i].u );
-  }
-  return res;
-}
+// Members:
+public:
 
-//-----------------------------------------------------------------------------
+  std::vector<bspl_KnotMultiset::elem> Knots; //!< Knots being processed.
 
-//! \return multiplicity array in OCCT form.
-Handle(TColStd_HArray1OfInteger)
-  mobius::cascade_MultResolver::GetOpenCascadeMults() const
-{
-  Handle(TColStd_HArray1OfInteger) res = new TColStd_HArray1OfInteger( 0, Knots.size() - 1 );
-  for ( int i = 0; i < Knots.size(); ++i )
-  {
-    res->SetValue( i, Knots[i].m );
-  }
-  return res;
-}
+public:
+
+  //! Default ctor.
+  mobiusBSpl_EXPORT
+    bspl_MultResolver();
+
+  //! Ctor accepting the knot vector to resolve. This ctor automatically
+  //! calls Resolve() method.
+  //! \param[in] U knot vector to resolve.
+  mobiusBSpl_EXPORT
+    bspl_MultResolver(const std::vector<double>& U);
+
+public:
+
+  //! Resolves multiplicities for the passed parameter.
+  //! \param[in] u knot value to resolve.
+  mobiusBSpl_EXPORT void
+    Resolve(const double u);
+
+  //! Resolves multiplicities for the passed knot vector.
+  //! \param[in] U knot vector to resolve.
+  mobiusBSpl_EXPORT void
+    Resolve(const std::vector<double>& U);
+
+public:
+
+  //! \return first knot with its multiplicity.
+  const bspl_KnotMultiset::elem& GetFirstKnot() const { return Knots[0]; }
+
+  //! \return last knot with its multiplicity.
+  const bspl_KnotMultiset::elem& GetLastKnot() const { return Knots[Knots.size() - 1]; }
+
+};
+
+};
+
+#endif

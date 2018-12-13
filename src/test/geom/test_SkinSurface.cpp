@@ -45,6 +45,8 @@
 
 bool
   mobius::test_SkinSurface::runtest(const std::vector< ptr<bcurve> >& sections,
+                                    const std::vector<xyz>&           D1lead,
+                                    const std::vector<xyz>&           D1tail,
                                     const bool                        unify,
                                     const int                         degV,
                                     const ptr<bsurf>&                 surfRef)
@@ -54,6 +56,9 @@ bool
 
   // Skin ruled surface through the section curves.
   geom_SkinSurface skinner(sections, degV, unify);
+  //
+  skinner.AddLeadingTangencies(D1lead);
+  skinner.AddTrailingTangencies(D1tail);
   //
   if ( !skinner.Perform() )
   {
@@ -192,7 +197,234 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  if ( !runtest(sections, false, 2, surfRef) )
+  if ( !runtest(sections, std::vector<xyz>(), std::vector<xyz>(), false, 2, surfRef) )
+    return res.failure();
+
+  // Report execution time.
+  SetVarDescr("time", res.time(), ID(), funcID);
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 002. Tests that skinning results good error code when
+//! the user specifies wrong V degree.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_SkinSurface::test002(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  /* ======================
+   *  Build section curves
+   * ====================== */
+
+  std::vector< ptr<bcurve> > sections;
+
+  // Tangency constraints.
+  std::vector<mobius::xyz> c0_D1, c1_D1;
+
+  // Build curves.
+  {
+    std::vector<mobius::xyz> c0_pts = {
+      mobius::xyz(0.,  0.,  0.),
+      mobius::xyz(1.,  1.,  1.),
+      mobius::xyz(1.,  2.,  2.),
+    };
+    //
+    c0_D1 = {
+      mobius::xyz(0.,  0.,  3.),
+      mobius::xyz(0.,  0.,  3.),
+      mobius::xyz(0.,  0.,  3.),
+    };
+
+    std::vector<mobius::xyz> c1_pts = {
+      mobius::xyz(5.,  0.,  0.),
+      mobius::xyz(5.,  1.,  2.),
+      mobius::xyz(5.,  2.,  2.),
+    };
+    //
+    c1_D1 = {
+      mobius::xyz(0.,  0.,  -3.),
+      mobius::xyz(0.,  0.,  -3.),
+      mobius::xyz(0.,  0.,  -3.),
+    };
+
+    // Prepare points interpolator to build curves.
+    geom_InterpolateMultiCurve multiInterp(2,
+                                           ParamsSelection_Centripetal,
+                                           KnotsSelection_Average);
+    //
+    multiInterp.AddRow(c0_pts);
+    multiInterp.AddRow(c1_pts);
+
+    // Perform interpolation.
+    if ( multiInterp.Perform() )
+    {
+      // Get section curves.
+      for ( int k = 0; k < multiInterp.GetNumRows(); ++k )
+        sections.push_back( multiInterp.GetResult(k) );
+    }
+    else
+    {
+      cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Multi-curve interpolation failed.");
+      return res.failure();
+    }
+  }
+
+  /* ==============
+   *  Perform test
+   * ============== */
+
+  // Skin ruled surface through the section curves.
+  geom_SkinSurface skinner(sections, 1, false);
+  //
+  skinner.AddLeadingTangencies(c0_D1);
+  skinner.AddTrailingTangencies(c1_D1);
+  //
+  if ( skinner.Perform() )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected success status.");
+    return res.failure();
+  }
+  //
+  if ( skinner.GetErrorCode() != geom_SkinSurface::ErrCode_BadVDegree)
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "ErrCode_BadVDegree is expected.");
+    return res.failure();
+  }
+
+  // Report execution time.
+  SetVarDescr("time", res.time(), ID(), funcID);
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 003. Performs skinning with tangency constraints.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_SkinSurface::test003(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  /* ======================
+   *  Build section curves
+   * ====================== */
+
+  std::vector< ptr<bcurve> > sections;
+
+  // Tangency constraints.
+  std::vector<mobius::xyz> c0_D1, c1_D1;
+
+  // Build curves.
+  {
+    std::vector<mobius::xyz> c0_pts = {
+      mobius::xyz(0.,  0.,  0.),
+      mobius::xyz(1.,  1.,  1.),
+      mobius::xyz(1.,  2.,  2.),
+    };
+    //
+    c0_D1 = {
+      mobius::xyz(0.,  0.,  3.),
+      mobius::xyz(0.,  0.,  3.),
+      mobius::xyz(0.,  0.,  3.),
+    };
+
+    std::vector<mobius::xyz> c1_pts = {
+      mobius::xyz(5.,  0.,  0.),
+      mobius::xyz(5.,  1.,  2.),
+      mobius::xyz(5.,  2.,  2.),
+    };
+    //
+    c1_D1 = {
+      mobius::xyz(0.,  0.,  -3.),
+      mobius::xyz(0.,  0.,  -3.),
+      mobius::xyz(0.,  0.,  -3.),
+    };
+
+    // Prepare points interpolator to build curves.
+    geom_InterpolateMultiCurve multiInterp(2,
+                                           ParamsSelection_Centripetal,
+                                           KnotsSelection_Average);
+    //
+    multiInterp.AddRow(c0_pts);
+    multiInterp.AddRow(c1_pts);
+
+    // Perform interpolation.
+    if ( multiInterp.Perform() )
+    {
+      // Get section curves.
+      for ( int k = 0; k < multiInterp.GetNumRows(); ++k )
+        sections.push_back( multiInterp.GetResult(k) );
+    }
+    else
+    {
+      cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Multi-curve interpolation failed.");
+      return res.failure();
+    }
+  }
+
+  /* ===========================
+   *  Prepare reference surface
+   * =========================== */
+
+  // JSON definition.
+  std::string json =
+  "{\
+    entity: surface,\
+    type: b-surface,\
+    continuity: C1,\
+    domain: {\
+        U_min: 0,\
+        U_max: 1,\
+        V_min: 0,\
+        V_max: 1\
+    },\
+    flags: {\
+        is_U_rational: 0,\
+        is_V_rational: 0,\
+        is_U_periodic: 0,\
+        is_V_periodic: 0,\
+        is_U_closed: 0,\
+        is_V_closed: 0\
+    },\
+    properties: {\
+        U_degree: 2,\
+        V_degree: 2,\
+        U_knots: [0, 0, 0, 1, 1, 1],\
+        V_knots: [0, 0, 0, 0.5, 1, 1, 1],\
+        num_poles_in_U_axis: 3,\
+        num_poles_in_V_axis: 4,\
+        poles: {\
+            u0: [[-8.6014429388883521e-016, 6.9624504123215511e-016, 7.8504622934188746e-016], [-1.8841109504205307e-015, 6.962450412321553e-016, 0.75000000000000078], [5.0000000000000009, 6.962450412321554e-016, 0.75000000000000022], [5, 6.962450412321554e-016, 2.3551386880256624e-016]],\
+            u1: [[1.3892253635443865, 0.74692395306220616, 0.74692395306220583], [1.3892253635443863, 0.74692395306220605, 1.4969239530622054], [4.9999999999999982, 0.7469239530622066, 3.5284507270887753], [4.9999999999999973, 0.74692395306220649, 2.7784507270887748]],\
+            u2: [[0.99999999999999889, 1.9999999999999993, 1.9999999999999991], [0.99999999999999822, 1.9999999999999993, 2.7499999999999991], [5.0000000000000009, 1.9999999999999998, 2.7499999999999996], [5, 1.9999999999999998, 1.9999999999999998]]\
+        }\
+    }\
+  }";
+
+  // Construct reference B-surface.
+  core_Ptr<bsurf> surfRef = bsurf::Instance(json);
+  //
+  if ( surfRef.IsNull() )
+    return res.failure();
+
+  /* ==============
+   *  Perform test
+   * ============== */
+
+  if ( !runtest(sections, c0_D1, c1_D1, false, 2, surfRef) )
     return res.failure();
 
   // Report execution time.

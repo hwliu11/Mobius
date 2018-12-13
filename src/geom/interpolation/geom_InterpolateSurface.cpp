@@ -257,6 +257,7 @@ bool mobius::geom_InterpolateSurface::Perform()
   double* params_U = Alloc.Allocate(n + 1, true);
   double* params_V = Alloc.Allocate(m + 1, true);
 
+  // Prepare parameterization
   if ( m_paramsType == ParamsSelection_Uniform )
   {
     if ( bspl_ParamsUniform::Calculate(n, params_U) != bspl_ParamsUniform::ErrCode_NoError ||

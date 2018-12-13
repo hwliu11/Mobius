@@ -82,6 +82,20 @@ void mobius::geom_SkinSurface::Init(const std::vector< ptr<bcurve> >& curves,
 
 //-----------------------------------------------------------------------------
 
+void mobius::geom_SkinSurface::AddLeadingTangencies(const std::vector<xyz>& tangencies)
+{
+  m_D1lead = tangencies;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::geom_SkinSurface::AddTrailingTangencies(const std::vector<xyz>& tangencies)
+{
+  m_D1tail = tangencies;
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::geom_SkinSurface::Perform()
 {
   // Prepare sections.
@@ -227,8 +241,12 @@ bool mobius::geom_SkinSurface::BuildIsosU()
   const int n = (int) (m_curves[0]->GetPoles().size() - 1);
   const int K = (int) (m_curves.size() - 1);
 
+  // Check if tangency constraints are defined.
+  const bool isTangLead = (m_D1lead.size() > 0);
+  const bool isTangTail = (m_D1tail.size() > 0);
+
   // Check if the V degree is suitable.
-  if ( !bspl::Check(K, m_iDeg_V) )
+  if ( !bspl::Check(K + (isTangLead ? 1 : 0) + (isTangTail ? 1 : 0), m_iDeg_V) )
   {
     m_errCode = ErrCode_BadVDegree;
     return false;
@@ -263,14 +281,28 @@ bool mobius::geom_SkinSurface::BuildIsosU()
    *  Choose knots by averaging
    * --------------------------- */
 
-  const int m = bspl::M(K, m_iDeg_V);
-  m_pV = m_alloc.Allocate(m + 1, true);
+  // Availability of tangency constraints makes it necessary to have
+  // additional knots.
+  const int m = bspl::M(K, m_iDeg_V) + (isTangLead ? 1 : 0) + (isTangTail ? 1 : 0);
 
+  // Choose knots.
+  m_V.resize(m + 1);
+  //
   if ( bspl_KnotsAverage::Calculate(params_V, K, m_iDeg_V, m,
-                                    bspl_KnotsAverage::Recognize(false, false, false, false),
-                                    m_pV) != bspl_KnotsAverage::ErrCode_NoError )
+                                    bspl_KnotsAverage::Recognize(isTangLead,
+                                                                 isTangTail,
+                                                                 false,
+                                                                 false),
+                                    &m_V[0]) != bspl_KnotsAverage::ErrCode_NoError )
   {
     m_errCode = ErrCode_CannotSelectKnots;
+    return false;
+  }
+
+  // Check if the resulting knot vector is clamped.
+  if ( !bspl::CheckClampedKnots(m_V, m_iDeg_V) )
+  {
+    m_errCode = ErrCode_BadVDegree;
     return false;
   }
 
@@ -288,13 +320,13 @@ bool mobius::geom_SkinSurface::BuildIsosU()
 
     // Interpolate over these poles.
     ptr<bcurve> iso_U;
-    if ( !geom_InterpolateCurve::Interp(iso_U_poles, K, m_iDeg_V, params_V, m_pV, m,
+    if ( !geom_InterpolateCurve::Interp(iso_U_poles, K, m_iDeg_V, params_V, &m_V[0], m,
+                                        isTangLead,
+                                        isTangTail,
                                         false,
                                         false,
-                                        false,
-                                        false,
-                                        xyz(),
-                                        xyz(),
+                                        isTangLead ? m_D1lead[i] : xyz(),
+                                        isTangTail ? m_D1tail[i] : xyz(),
                                         xyz(),
                                         xyz(),
                                         iso_U) )
@@ -313,26 +345,18 @@ bool mobius::geom_SkinSurface::BuildIsosU()
 
 bool mobius::geom_SkinSurface::BuildSurface()
 {
+  // Working variables.
   const int n = (int) (m_curves[0]->GetPoles().size() - 1);
-  const int K = (int) (m_curves.size() - 1);
-  const int m = bspl::M(K, m_iDeg_V);
 
   // Collect poles.
   std::vector< std::vector<xyz> > final_poles;
-  //
   for ( int i = 0; i <= n; ++i )
-  {
     final_poles.push_back( IsoU_Curves[i]->GetPoles() );
-  }
-
-  std::vector<double> U_knots = m_curves[0]->GetKnots();
-  double *U = m_alloc.Allocate(U_knots.size(), true);
-  for ( size_t i = 0; i < U_knots.size(); ++i )
-    U[i] = U_knots[i];
-
+  
+  // Construct B-surface.
   m_surface = new bsurf(final_poles,
-                        U, m_pV,
-                        (int) U_knots.size(), m + 1,
+                        m_curves[0]->GetKnots(),
+                        m_V,
                         m_curves[0]->GetDegree(), m_iDeg_V);
 
   return true;

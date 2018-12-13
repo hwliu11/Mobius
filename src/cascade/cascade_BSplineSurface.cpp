@@ -163,7 +163,7 @@ void mobius::cascade_BSplineSurface::convertToOpenCascade()
                                           /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
                                           /* Periodic surfaces are not supported in Mobius currently (winter, 2014) */
                                           /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-                                          false, 
+                                          false,
                                           false);
 
   m_bIsDone = true;

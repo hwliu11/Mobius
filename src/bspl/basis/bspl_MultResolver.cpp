@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 19 July 2017
+// Created on: 13 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017-present, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -29,83 +29,56 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/bspl.h>
-
-// BSpl includes
 #include <mobius/bspl_MultResolver.h>
 
 //-----------------------------------------------------------------------------
 
-int mobius::bspl::M(const int n, const int p)
+mobius::bspl_MultResolver::bspl_MultResolver()
+{}
+
+//-----------------------------------------------------------------------------
+
+mobius::bspl_MultResolver::bspl_MultResolver(const std::vector<double>& U)
 {
-  return n + p + 1; // Common formula.
+  this->Resolve(U);
 }
 
 //-----------------------------------------------------------------------------
 
-int mobius::bspl::N(const int m, const int p)
+void mobius::bspl_MultResolver::Resolve(const double u)
 {
-  return m - p - 1; // Common formula.
-}
-
-//-----------------------------------------------------------------------------
-
-int mobius::bspl::NumberOfKnots(const int n, const int p)
-{
-  return M(n, p) + 1;
-}
-
-//-----------------------------------------------------------------------------
-
-bool mobius::bspl::Check(const int n, const int p)
-{
-  const int r = NumberOfKnots(n, p);
+  bool isFound = false;
+  int foundIdx = -1;
+  knot_multiset::elem foundStruct;
   //
-  if ( r < 2*(p + 1) )
-    return false;
-
-  return true;
+  for ( int i = 0; i < Knots.size(); ++i )
+  {
+    const knot_multiset::elem& knotWithMult = Knots[i];
+    if ( fabs(knotWithMult.u - u) < DBL_EPSILON )
+    {
+      isFound     = true;
+      foundIdx    = i;
+      foundStruct = knotWithMult;
+      break;
+    }
+  }
+  if ( isFound )
+  {
+    foundStruct.m += 1;
+    Knots[foundIdx] = foundStruct;
+  }
+  else
+  {
+    foundStruct.u = u;
+    foundStruct.m = 1;
+    Knots.push_back(foundStruct);
+  }
 }
 
 //-----------------------------------------------------------------------------
 
-bool mobius::bspl::Check(const int n, const int m, const int p)
+void mobius::bspl_MultResolver::Resolve(const std::vector<double>& U)
 {
-  const int m_expected = NumberOfKnots(n, p) - 1;
-  return m == m_expected;
-}
-
-//-----------------------------------------------------------------------------
-
-bool mobius::bspl::CheckClampedKnots(const std::vector<double>& U, const int p)
-{
-  bspl_MultResolver resMults(U);
-
-  if ( resMults.GetFirstKnot().m != p + 1 )
-    return false;
-
-  if ( resMults.GetLastKnot().m != p + 1 )
-    return false;
-
-  return true;
-}
-
-//-----------------------------------------------------------------------------
-
-int mobius::bspl::SerialIndexFromPair(const int i,
-                                      const int j,
-                                      const int numCols)
-{
-  return numCols*i + j;
-}
-
-//-----------------------------------------------------------------------------
-
-void mobius::bspl::PairIndicesFromSerial(const int k,
-                                         const int numCols,
-                                         int&      i,
-                                         int&      j)
-{
-  i = k / numCols;
-  j = k % numCols;
+  for ( size_t ii = 0; ii < U.size(); ++ii )
+    this->Resolve(U[ii]);
 }

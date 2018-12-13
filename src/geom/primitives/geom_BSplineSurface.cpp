@@ -821,11 +821,18 @@ void mobius::geom_BSplineSurface::init(const std::vector< std::vector<xyz> >& Po
   if ( p > mobiusBSpl_MaxDegree || q > mobiusBSpl_MaxDegree )
     throw bspl_excMaxDegreeViolation();
 
-  // Check if B-surface can be constructed.
+  // Check relation between m, n and p.
   if ( !bspl::Check( int( Poles.size() ) - 1, int( U.size() ) - 1, p ) )
     throw geom_excBSurfaceCtor();
   //
   if ( !bspl::Check( int( Poles[0].size() ) - 1, int( V.size() ) - 1, q ) )
+    throw geom_excBSurfaceCtor();
+
+  // Check that the knot vectors are clamped.
+  if ( !bspl::CheckClampedKnots(U, p) )
+    throw geom_excBSurfaceCtor();
+  //
+  if ( !bspl::CheckClampedKnots(V, q) )
     throw geom_excBSurfaceCtor();
 
   m_poles = Poles;

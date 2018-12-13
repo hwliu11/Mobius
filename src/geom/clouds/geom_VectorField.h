@@ -39,11 +39,12 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Represents position point cloud with associated vectors. Ideally, one
 //! should have a vector associated with each point in the cloud. However,
-//! if you don't have some, this container assumes that zero vector is
-//! there. Of course, zero vectors are not stored in the Vector Field
-//! objects.
+//! if you do not have any, this container assumes that zero vector is
+//! there. Such zero vectors are not stored in the Vector Field objects.
 class geom_VectorField : public core_OBJECT
 {
 // Construction & destruction:

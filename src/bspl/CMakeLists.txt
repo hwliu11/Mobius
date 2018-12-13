@@ -23,6 +23,7 @@ set (basis_H_FILES
   basis/bspl_FindSpan.h
   basis/bspl_InsKnot.h
   basis/bspl_KnotMultiset.h
+  basis/bspl_MultResolver.h
   basis/bspl_N.h
   basis/bspl_NDiscrete.h
   basis/bspl_ParamDirection.h
@@ -36,6 +37,7 @@ set (basis_CPP_FILES
   basis/bspl_FindSpan.cpp
   basis/bspl_InsKnot.cpp
   basis/bspl_KnotMultiset.cpp
+  basis/bspl_MultResolver.cpp
   basis/bspl_N.cpp
   basis/bspl_NDiscrete.cpp
   basis/bspl_RefineKnots.cpp

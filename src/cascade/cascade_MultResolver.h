@@ -35,7 +35,7 @@
 #include <mobius/cascade.h>
 
 // BSpl includes
-#include <mobius/bspl_KnotMultiset.h>
+#include <mobius/bspl_MultResolver.h>
 
 // OCCT includes
 #include <NCollection_Sequence.hxx>
@@ -53,25 +53,14 @@ namespace mobius {
 //! and (2, 1, 2) for their multiplicities. Mobius is more straightforward
 //! concerning this. This auxiliary tool performs necessary conversion
 //! from Mobius notation to OCCT one.
-class cascade_MultResolver
+class cascade_MultResolver : public bspl_MultResolver
 {
-// Members:
-public:
-
-  NCollection_Sequence<bspl_KnotMultiset::elem> Knots; //!< Knots being processed.
-
 public:
 
   mobiusCascade_EXPORT
     cascade_MultResolver();
 
-  mobiusCascade_EXPORT virtual
-    ~cascade_MultResolver();
-
 public:
-
-  mobiusCascade_EXPORT void
-    Resolve(const double u);
 
   mobiusCascade_EXPORT Handle(TColStd_HArray1OfReal)
     GetOpenCascadeKnots() const;

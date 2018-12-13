@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 09 March 2015
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2015-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
 #ifndef geom_SkinSurface_HeaderFile
 #define geom_SkinSurface_HeaderFile
 
-// Geometry includes
+// Geom includes
 #include <mobius/geom_BSplineCurve.h>
 #include <mobius/geom_BSplineSurface.h>
 
@@ -42,9 +42,6 @@
 // BSpl includes
 #include <mobius/bspl_KnotsSelection.h>
 #include <mobius/bspl_ParamsSelection.h>
-
-// STL includes
-#include <vector>
 
 namespace mobius {
 
@@ -115,6 +112,20 @@ public:
          const int                         deg_V,
          const bool                        unifyCurves);
 
+  //! Sets tangency constraints for the poles of the leading section. The
+  //! passed array will be treated as an array of vectors where index of an
+  //! element corresponds to the index of a certain iso-U interpolant.
+  //! \param[in] tangencies tangency constraints to set.
+  mobiusGeom_EXPORT void
+    AddLeadingTangencies(const std::vector<xyz>& tangencies);
+
+  //! Sets tangency constraints for the poles of the trailing section. The
+  //! passed array will be treated as an array of vectors where index of an
+  //! element corresponds to the index of a certain iso-U interpolant.
+  //! \param[in] tangencies tangency constraints to set.
+  mobiusGeom_EXPORT void
+    AddTrailingTangencies(const std::vector<xyz>& tangencies);
+
   //! Performs skinning.
   //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT bool
@@ -168,7 +179,9 @@ private:
 
   core_HeapAlloc<double>     m_alloc;   //!< Heap allocator.
   std::vector< ptr<bcurve> > m_curves;  //!< Curves to interpolate.
-  double*                    m_pV;      //!< Knot vector in V direction.
+  std::vector<xyz>           m_D1lead;  //!< Leading tangency constraints.
+  std::vector<xyz>           m_D1tail;  //!< Trailing tangency constraints.
+  std::vector<double>        m_V;       //!< Knot vector in V direction.
   int                        m_iDeg_V;  //!< V-degree of interpolant surface.
   bool                       m_bUnify;  //!< Indicates whether to unify curves.
   ErrCode                    m_errCode; //!< Error code.

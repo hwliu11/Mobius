@@ -794,8 +794,12 @@ void mobius::geom_BSplineCurve::init(const std::vector<xyz>&    Poles,
   if ( p > mobiusBSpl_MaxDegree )
     throw bspl_excMaxDegreeViolation();
 
-  // Check if B-curve can be constructed.
+  // Check relation between m, n and p.
   if ( !bspl::Check(int( Poles.size() ) - 1, int( U.size() ) - 1, p) )
+    throw geom_excBCurveCtor();
+
+  // Check that the knot vector is clamped.
+  if ( !bspl::CheckClampedKnots(U, p) )
     throw geom_excBCurveCtor();
 
   // Initialize members.

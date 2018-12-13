@@ -74,7 +74,7 @@ namespace mobius {
 namespace bspl
 {
   //! Returns last knot index (0-based). That's a handy shortcut for
-  //! evaluating "m = n + p + 1".
+  //! evaluating `m = n + p + 1`.
   //!
   //! \param[in] n index of the last pole (0-based).
   //! \param[in] p degree of the B-spline basis function to use.
@@ -83,7 +83,7 @@ namespace bspl
     M(const int n, const int p);
 
   //! Returns last pole index (0-based). That's a handy shortcut for
-  //! evaluating "n = m - p - 1".
+  //! evaluating `n = m - p - 1`.
   //!
   //! \param[in] m index of the last knot (0-based).
   //! \param[in] p degree of the B-spline basis function to use.
@@ -94,7 +94,7 @@ namespace bspl
   //! Returns number of knots for the given indices related to the
   //! B-spline degree and number of control points to be used for
   //! a derived B-object. This is nothing more than a convenience method which
-  //! you could prefer to use! instead of explicit well-known "m = n + p + 1"
+  //! you could prefer to use instead of explicit well-known `m = n + p + 1`
   //! formulation.
   //!
   //! \param[in] n index of the last pole (0-based).
@@ -112,7 +112,7 @@ namespace bspl
   mobiusBSpl_EXPORT bool
     Check(const int n, const int p);
 
-  //! Checks equation "m = n + p + 1".
+  //! Checks equation `m = n + p + 1`.
   //!
   //! \param[in] n index of the last pole (0-based).
   //! \param[in] m index of the last knot (0-based).
@@ -120,6 +120,15 @@ namespace bspl
   //! \return true/false.
   mobiusBSpl_EXPORT bool
     Check(const int n, const int m, const int p);
+
+  //! Checks if the passed knot vector is a valid clamped knot vector.
+  //! The rule to check is that the leading and the trailing knots
+  //! have multiplicities equal to `p + 1`.
+  //! \param[in] U knot vector to check.
+  //! \param[in] p degree.
+  //! \return true if the knot vector is valid, false -- otherwise.
+  mobiusBSpl_EXPORT bool
+    CheckClampedKnots(const std::vector<double>& U, const int p);
 
   //! Converts the passed two indices i and j to one serial index.
   //! \param[in] i       0-based row index.
