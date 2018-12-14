@@ -54,7 +54,16 @@ namespace mobius {
 //! \f[ \textbf{s}(u,v) = \sum_i \sum_j \textbf{P}_{ij} N_i^p(u) N_j^q(v) = \sum_k \textbf{C}_k N_k(u,v) \f]
 //!
 //! To use functions \f$N_k(u,v)\f$, all control points of the surface \f$\textbf{s}(u,v)\f$
-//! have to be renumbered.
+//! have to be renumbered. It is assumed that the controls points are
+//! enumerated in V direction as rows and in U directions as columns
+//! (check documentation for details).
+//!
+//! This function employs caching technique internally. I.e., whenever you
+//! invoke its evaluation method for a certain pair of `(u,v)` coordinates,
+//! the function checks whether such coordinates were evaluated before or
+//! not. If yes, the cached values are returned. This caching technique
+//! only requires that you use the same instance of geom_BSurfNk class as
+//! long as your algorithm unfolds.
 class geom_BSurfNk : public core_OBJECT
 {
 public:
@@ -71,13 +80,34 @@ public:
     m_alloc     (alloc)
   {
     // Initialize Ni and Nj from surface.
-    m_Ni.U = surface->GetKnots_U();
-    m_Ni.p = surface->GetDegree_U();
-    //
-    m_Nj.V = surface->GetKnots_V();
-    m_Nj.q = surface->GetDegree_V();
-    //
-    bspl::PairIndicesFromSerial(k, int( surface->GetPoles()[0].size() ), m_Ni.i, m_Nj.j);
+    this->init( surface->GetKnots_U(),
+                surface->GetDegree_U(),
+                surface->GetKnots_V(),
+                surface->GetDegree_V(),
+                k,
+                int( surface->GetPoles()[0].size() ) - 1 );
+  }
+
+  //! \brief Ctor accepting all properties of the involved i-th and j-th
+  //!        basis functions.
+  //! \param[in] U     knot vector in U direction.
+  //! \param[in] p     spline degree in U direction.
+  //! \param[in] V     knot vector in V direction.
+  //! \param[in] q     spline degree in V direction.
+  //! \param[in] k     serial index of the basis Nk coeff.
+  //! \param[in] n     index of the last pole in V direction.
+  //! \param[in] alloc shared allocator.
+  geom_BSurfNk(const std::vector<double>& U,
+               const int                  p,
+               const std::vector<double>& V,
+               const int                  q,
+               const int                  k,
+               const int                  n,
+               ptr<alloc2d>               alloc)
+  : core_OBJECT (),
+    m_alloc     (alloc)
+  {
+    this->init(U, p, V, q, k, n);
   }
 
 public:
@@ -162,6 +192,32 @@ protected:
 
     t_values() : N(0.), dN_dU(0.), dN_dV(0.), d2N_dU2(0.), d2N_dUV(0.), d2N_dV2(0.) {}
   };
+
+protected:
+
+  //! Initializes this object with descriptors of basis spline functions.
+  //! \param[in] U knot vector in U direction.
+  //! \param[in] p spline degree in U direction.
+  //! \param[in] V knot vector in V direction.
+  //! \param[in] q spline degree in V direction.
+  //! \param[in] k serial index of the basis Nk coeff.
+  //! \param[in] n index of the last pole in V direction.
+  void init(const std::vector<double>& U,
+            const int                  p,
+            const std::vector<double>& V,
+            const int                  q,
+            const int                  k,
+            const int                  n)
+  {
+    // Initialize Ni and Nj.
+    m_Ni.U = U;
+    m_Ni.p = p;
+    //
+    m_Nj.V = V;
+    m_Nj.q = q;
+    //
+    bspl::PairIndicesFromSerial(k, n + 1, m_Ni.i, m_Nj.j);
+  }
 
 protected:
 

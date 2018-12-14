@@ -67,9 +67,11 @@ set (interpolation_CPP_FILES
 
 set (common_H_FILES
   common/geom_BSurfNk.h
+  common/geom_MakeBicubicBSurf.h
 )
 set (common_CPP_FILES
   common/geom_BSurfNk.cpp
+  common/geom_MakeBicubicBSurf.cpp
 )
 
 #------------------------------------------------------------------------------

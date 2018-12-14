@@ -76,6 +76,7 @@ set (geom_H_FILES
   geom/test_FairSurf.h
   geom/test_InterpolateCurve.h
   geom/test_Line3D.h
+  geom/test_MakeBicubicBSurf.h
   geom/test_PointOnLine.h
   geom/test_SkinSurface.h
 )
@@ -87,6 +88,7 @@ set (geom_CPP_FILES
   geom/test_FairSurf.cpp
   geom/test_InterpolateCurve.cpp
   geom/test_Line3D.cpp
+  geom/test_MakeBicubicBSurf.cpp
   geom/test_PointOnLine.cpp
   geom/test_SkinSurface.cpp
 )

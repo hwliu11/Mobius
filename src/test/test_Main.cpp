@@ -49,6 +49,7 @@
 #include <mobius/test_InterpolateCurve.h>
 #include <mobius/test_KnotsAverage.h>
 #include <mobius/test_Line3D.h>
+#include <mobius/test_MakeBicubicBSurf.h>
 #include <mobius/test_ParamsCentripetal.h>
 #include <mobius/test_ParamsChordLength.h>
 #include <mobius/test_ParamsUniform.h>
@@ -110,6 +111,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   // Geom group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve>   (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D>             (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_MakeBicubicBSurf>   (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine>        (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve>       (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
