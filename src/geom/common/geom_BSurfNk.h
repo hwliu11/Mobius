@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairBSurfNk_HeaderFile
-#define geom_FairBSurfNk_HeaderFile
+#ifndef geom_BSurfNk_HeaderFile
+#define geom_BSurfNk_HeaderFile
 
 // Geom includes
 #include <mobius/geom_BSplineSurface.h>
@@ -55,7 +55,7 @@ namespace mobius {
 //!
 //! To use functions \f$N_k(u,v)\f$, all control points of the surface \f$\textbf{s}(u,v)\f$
 //! have to be renumbered.
-class geom_FairBSurfNk : public core_OBJECT
+class geom_BSurfNk : public core_OBJECT
 {
 public:
 
@@ -64,9 +64,9 @@ public:
   //! \param[in] surface B-spline surface to take basis functions from.
   //! \param[in] k       0-based serial index.
   //! \param[in] alloc   shared allocator.
-  geom_FairBSurfNk(const ptr<bsurf>& surface,
-                   const int         k,
-                   ptr<alloc2d>      alloc)
+  geom_BSurfNk(const ptr<bsurf>& surface,
+               const int         k,
+               ptr<alloc2d>      alloc)
   : core_OBJECT (),
     m_alloc     (alloc)
   {

@@ -45,12 +45,12 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBSurfBl::geom_FairBSurfBl(const ptr<bsurf>&                           surface,
-                                           const int                                   coord,
-                                           const int                                   l,
-                                           const std::vector< ptr<geom_FairBSurfNk> >& Nk,
-                                           const double                                lambda,
-                                           ptr<alloc2d>                                alloc)
+mobius::geom_FairBSurfBl::geom_FairBSurfBl(const ptr<bsurf>&                       surface,
+                                           const int                               coord,
+                                           const int                               l,
+                                           const std::vector< ptr<geom_BSurfNk> >& Nk,
+                                           const double                            lambda,
+                                           ptr<alloc2d>                            alloc)
 : geom_FairBSurfCoeff (lambda),
   m_surface           (surface),
   m_iCoord            (coord),

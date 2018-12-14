@@ -234,25 +234,25 @@ mobius::outcome
     std::vector<mobius::xyz> c0_pts = {
       mobius::xyz(0.,  0.,  0.),
       mobius::xyz(1.,  1.,  1.),
-      mobius::xyz(1.,  2.,  2.),
+      mobius::xyz(1.,  2.,  2.)
     };
     //
     c0_D1 = {
       mobius::xyz(0.,  0.,  3.),
       mobius::xyz(0.,  0.,  3.),
-      mobius::xyz(0.,  0.,  3.),
+      mobius::xyz(0.,  0.,  3.)
     };
 
     std::vector<mobius::xyz> c1_pts = {
       mobius::xyz(5.,  0.,  0.),
       mobius::xyz(5.,  1.,  2.),
-      mobius::xyz(5.,  2.,  2.),
+      mobius::xyz(5.,  2.,  2.)
     };
     //
     c1_D1 = {
       mobius::xyz(0.,  0.,  -3.),
       mobius::xyz(0.,  0.,  -3.),
-      mobius::xyz(0.,  0.,  -3.),
+      mobius::xyz(0.,  0.,  -3.)
     };
 
     // Prepare points interpolator to build curves.
@@ -332,25 +332,25 @@ mobius::outcome
     std::vector<mobius::xyz> c0_pts = {
       mobius::xyz(0.,  0.,  0.),
       mobius::xyz(1.,  1.,  1.),
-      mobius::xyz(1.,  2.,  2.),
+      mobius::xyz(1.,  2.,  2.)
     };
     //
     c0_D1 = {
       mobius::xyz(0.,  0.,  3.),
       mobius::xyz(0.,  0.,  3.),
-      mobius::xyz(0.,  0.,  3.),
+      mobius::xyz(0.,  0.,  3.)
     };
 
     std::vector<mobius::xyz> c1_pts = {
       mobius::xyz(5.,  0.,  0.),
       mobius::xyz(5.,  1.,  2.),
-      mobius::xyz(5.,  2.,  2.),
+      mobius::xyz(5.,  2.,  2.)
     };
     //
     c1_D1 = {
       mobius::xyz(0.,  0.,  -3.),
       mobius::xyz(0.,  0.,  -3.),
-      mobius::xyz(0.,  0.,  -3.),
+      mobius::xyz(0.,  0.,  -3.)
     };
 
     // Prepare points interpolator to build curves.

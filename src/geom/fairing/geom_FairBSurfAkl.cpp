@@ -45,10 +45,10 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBSurfAkl::geom_FairBSurfAkl(const int                                   k,
-                                             const int                                   l,
-                                             const double                                lambda,
-                                             const std::vector< ptr<geom_FairBSurfNk> >& Nk)
+mobius::geom_FairBSurfAkl::geom_FairBSurfAkl(const int                               k,
+                                             const int                               l,
+                                             const double                            lambda,
+                                             const std::vector< ptr<geom_BSurfNk> >& Nk)
 : geom_FairBSurfCoeff (lambda),
   m_iK                (k),
   m_iL                (l),

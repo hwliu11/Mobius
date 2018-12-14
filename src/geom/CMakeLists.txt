@@ -62,6 +62,17 @@ set (interpolation_CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# Common
+#------------------------------------------------------------------------------
+
+set (common_H_FILES
+  common/geom_BSurfNk.h
+)
+set (common_CPP_FILES
+  common/geom_BSurfNk.cpp
+)
+
+#------------------------------------------------------------------------------
 # Fairing
 #------------------------------------------------------------------------------
 
@@ -74,7 +85,6 @@ set (fairing_H_FILES
   fairing/geom_FairBSurfAkl.h
   fairing/geom_FairBSurfBl.h
   fairing/geom_FairBSurfCoeff.h
-  fairing/geom_FairBSurfNk.h
   fairing/geom_FairingMemBlocks.h
 )
 set (fairing_CPP_FILES
@@ -84,7 +94,6 @@ set (fairing_CPP_FILES
   fairing/geom_FairBSurf.cpp
   fairing/geom_FairBSurfAkl.cpp
   fairing/geom_FairBSurfBl.cpp
-  fairing/geom_FairBSurfNk.cpp
 )
 
 #------------------------------------------------------------------------------
@@ -157,6 +166,14 @@ foreach (FILE ${classifiers_CPP_FILES})
   source_group ("Source Files\\Classifiers" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${common_H_FILES})
+  source_group ("Header Files\\Common" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${common_CPP_FILES})
+  source_group ("Source Files\\Common" FILES "${FILE}")
+endforeach (FILE)
+
 foreach (FILE ${fairing_H_FILES})
   source_group ("Header Files\\Fairing" FILES "${FILE}")
 endforeach (FILE)
@@ -198,6 +215,7 @@ endif()
 add_library (mobiusGeom SHARED
   ${H_FILES}               ${CPP_FILES}
   ${classifiers_H_FILES}   ${classifiers_CPP_FILES}
+  ${common_H_FILES}        ${common_CPP_FILES}
   ${fairing_H_FILES}       ${fairing_CPP_FILES}
   ${clouds_H_FILES}        ${clouds_CPP_FILES}
   ${interpolation_H_FILES} ${interpolation_CPP_FILES}
@@ -238,6 +256,7 @@ install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMP
 
 install (FILES ${H_FILES}               DESTINATION include/mobius)
 install (FILES ${classifiers_H_FILES}   DESTINATION include/mobius)
+install (FILES ${common_H_FILES}        DESTINATION include/mobius)
 install (FILES ${fairing_H_FILES}       DESTINATION include/mobius)
 install (FILES ${clouds_H_FILES}        DESTINATION include/mobius)
 install (FILES ${interpolation_H_FILES} DESTINATION include/mobius)

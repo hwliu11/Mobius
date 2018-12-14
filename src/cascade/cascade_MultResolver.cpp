@@ -43,7 +43,9 @@ mobius::cascade_MultResolver::cascade_MultResolver() : bspl_MultResolver()
 Handle(TColStd_HArray1OfReal)
   mobius::cascade_MultResolver::GetOpenCascadeKnots() const
 {
-  Handle(TColStd_HArray1OfReal) res = new TColStd_HArray1OfReal( 0, Knots.size() - 1 );
+  Handle(TColStd_HArray1OfReal)
+    res = new TColStd_HArray1OfReal( 0, int( Knots.size() ) - 1 );
+  //
   for ( int i = 0; i < Knots.size(); ++i )
   {
     res->SetValue( i, Knots[i].u );
@@ -57,7 +59,9 @@ Handle(TColStd_HArray1OfReal)
 Handle(TColStd_HArray1OfInteger)
   mobius::cascade_MultResolver::GetOpenCascadeMults() const
 {
-  Handle(TColStd_HArray1OfInteger) res = new TColStd_HArray1OfInteger( 0, Knots.size() - 1 );
+  Handle(TColStd_HArray1OfInteger)
+    res = new TColStd_HArray1OfInteger( 0, int( Knots.size() ) - 1 );
+  //
   for ( int i = 0; i < Knots.size(); ++i )
   {
     res->SetValue( i, Knots[i].m );

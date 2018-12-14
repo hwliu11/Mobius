@@ -261,8 +261,8 @@ void mobius::geom_FairBSurf::prepareNk(ptr<alloc2d> alloc)
   for ( int k = 0; k < nPoles; ++k )
   {
     // Prepare evaluator for N_k(u,v).
-    ptr<geom_FairBSurfNk>
-      Nk = new geom_FairBSurfNk(m_inputSurf, k, alloc);
+    ptr<geom_BSurfNk>
+      Nk = new geom_BSurfNk(m_inputSurf, k, alloc);
     //
     m_Nk.push_back(Nk);
   }

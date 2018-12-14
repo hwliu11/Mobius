@@ -33,7 +33,7 @@
 
 // Geometry includes
 #include <mobius/geom_BSplineSurface.h>
-#include <mobius/geom_FairBSurfNk.h>
+#include <mobius/geom_BSurfNk.h>
 
 // BSpl includes
 #include <mobius/bspl.h>
@@ -156,7 +156,7 @@ protected:
   std::set<int> m_pinnedPoles;
 
   //! Evaluators of \f$N_k(u,v)\f$ functions.
-  std::vector< ptr<geom_FairBSurfNk> > m_Nk;
+  std::vector< ptr<geom_BSurfNk> > m_Nk;
 
 };
 

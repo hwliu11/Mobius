@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/geom_FairBSurfNk.h>
+#include <mobius/geom_BSurfNk.h>
 
 // Geometry includes
 #include <mobius/geom_FairingMemBlocks.h>
@@ -43,14 +43,14 @@
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_FairBSurfNk::Eval_D2(const double u,
-                                       const double v,
-                                       double&      N,
-                                       double&      dN_dU,
-                                       double&      dN_dV,
-                                       double&      d2N_dU2,
-                                       double&      d2N_dUV,
-                                       double&      d2N_dV2)
+void mobius::geom_BSurfNk::Eval_D2(const double u,
+                                   const double v,
+                                   double&      N,
+                                   double&      dN_dU,
+                                   double&      dN_dV,
+                                   double&      d2N_dU2,
+                                   double&      d2N_dUV,
+                                   double&      d2N_dV2)
 {
   t_cell askedCell(uv(u, v), 1e-4);
 
