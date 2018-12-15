@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 05 August 2013
+// Created on: 14 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,58 +28,34 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_Curve_HeaderFile
-#define geom_Curve_HeaderFile
+#ifndef bspl_HermiteLaw_HeaderFile
+#define bspl_HermiteLaw_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_Geometry.h>
-
-// Core includes
-#include <mobius/core_XYZ.h>
+// bspl includes
+#include <mobius/bspl_ScalarLaw.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_BSPL
 //!
-//! Base class for 3D parametric curves.
-class geom_Curve : public geom_Geometry
+//! Cubic Hermite polynomial.
+class bspl_HermiteLaw : public bspl_ScalarLaw
 {
-// Construction & destruction:
 public:
 
-  mobiusGeom_EXPORT
-    geom_Curve( const core_IsoTransformChain& tChain = core_IsoTransformChain() );
-
-  mobiusGeom_EXPORT virtual
-    ~geom_Curve();
+  mobiusBSpl_EXPORT
+    bspl_HermiteLaw(const int idx);
 
 public:
 
-  virtual double
-    GetMinParameter() const = 0;
+  mobiusBSpl_EXPORT virtual double
+    Eval(const double u) const;
 
-  virtual double
-    GetMaxParameter() const = 0;
+protected:
 
-  virtual void
-    Eval(const double u,
-         xyz&         P) const = 0;
-
-public:
-
-  virtual xyz
-    Eval(const double u) const
-  {
-    xyz C;
-    this->Eval(u, C);
-    //
-    return C;
-  }
+  int m_iIdx; //!< Index.
 
 };
-
-//! Convenience shortcut.
-typedef geom_Curve curve;
 
 };
 

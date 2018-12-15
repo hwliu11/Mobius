@@ -55,6 +55,7 @@
 #include <Geom_BSplineCurve.hxx>
 #include <Geom_BSplineSurface.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
 
 //-----------------------------------------------------------------------------
 // DOXY group definition
@@ -79,6 +80,14 @@ namespace mobius
     static gp_Pnt GetOpenCascadePnt(const xyz& coords)
     {
       return gp_Pnt( coords.X(), coords.Y(), coords.Z() );
+    }
+
+    //! Converts Mobius 3D point to OpenCascade 3D vector.
+    //! \param[in] coords point to convert.
+    //! \return converted vector.
+    static gp_Vec GetOpenCascadeVec(const xyz& coords)
+    {
+      return gp_Vec( coords.X(), coords.Y(), coords.Z() );
     }
 
     //! Converts OpenCascade 3D point to Mobius 3D point.

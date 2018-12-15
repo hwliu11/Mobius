@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_CoonsSurface_HeaderFile
-#define geom_CoonsSurface_HeaderFile
+#ifndef geom_CoonsSurfaceLinear_HeaderFile
+#define geom_CoonsSurfaceLinear_HeaderFile
 
 // Geometry includes
 #include <mobius/geom_Curve.h>
@@ -39,24 +39,24 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Four-sided Coons patch.
-class geom_CoonsSurface : public geom_Surface
+//! Four-sided linear Coons patch.
+class geom_CoonsSurfaceLinear : public geom_Surface
 {
 // Construction & destruction:
 public:
 
   mobiusGeom_EXPORT
-    geom_CoonsSurface(const ptr<curve>& c0,
-                      const ptr<curve>& c1,
-                      const ptr<curve>& b0,
-                      const ptr<curve>& b1,
-                      const xyz&        p00,
-                      const xyz&        p01,
-                      const xyz&        p10,
-                      const xyz&        p11);
+    geom_CoonsSurfaceLinear(const ptr<curve>& c0,
+                            const ptr<curve>& c1,
+                            const ptr<curve>& b0,
+                            const ptr<curve>& b1,
+                            const xyz&        p00,
+                            const xyz&        p01,
+                            const xyz&        p10,
+                            const xyz&        p11);
 
   mobiusGeom_EXPORT virtual
-    ~geom_CoonsSurface();
+    ~geom_CoonsSurfaceLinear();
 
 // Interface methods:
 public:

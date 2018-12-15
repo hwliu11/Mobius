@@ -29,18 +29,18 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/geom_CoonsSurface.h>
+#include <mobius/geom_CoonsSurfaceLinear.h>
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_CoonsSurface::geom_CoonsSurface(const ptr<curve>& c0,
-                                             const ptr<curve>& c1,
-                                             const ptr<curve>& b0,
-                                             const ptr<curve>& b1,
-                                             const xyz&        p00,
-                                             const xyz&        p01,
-                                             const xyz&        p10,
-                                             const xyz&        p11)
+mobius::geom_CoonsSurfaceLinear::geom_CoonsSurfaceLinear(const ptr<curve>& c0,
+                                                         const ptr<curve>& c1,
+                                                         const ptr<curve>& b0,
+                                                         const ptr<curve>& b1,
+                                                         const xyz&        p00,
+                                                         const xyz&        p01,
+                                                         const xyz&        p10,
+                                                         const xyz&        p11)
 : geom_Surface (),
   m_c0         (c0),
   m_c1         (c1),
@@ -55,14 +55,14 @@ mobius::geom_CoonsSurface::geom_CoonsSurface(const ptr<curve>& c0,
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_CoonsSurface::~geom_CoonsSurface()
+mobius::geom_CoonsSurfaceLinear::~geom_CoonsSurfaceLinear()
 {}
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_CoonsSurface::GetBounds(double& xMin, double& xMax,
-                                          double& yMin, double& yMax,
-                                          double& zMin, double& zMax) const
+void mobius::geom_CoonsSurfaceLinear::GetBounds(double& xMin, double& xMax,
+                                                double& yMin, double& yMax,
+                                                double& zMin, double& zMax) const
 {
   /* =======================================
    *  This approach is very approximate (!)
@@ -95,37 +95,37 @@ void mobius::geom_CoonsSurface::GetBounds(double& xMin, double& xMax,
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::GetMinParameter_U() const
+double mobius::geom_CoonsSurfaceLinear::GetMinParameter_U() const
 {
   return m_c0->GetMinParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::GetMaxParameter_U() const
+double mobius::geom_CoonsSurfaceLinear::GetMaxParameter_U() const
 {
   return m_c0->GetMaxParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::GetMinParameter_V() const
+double mobius::geom_CoonsSurfaceLinear::GetMinParameter_V() const
 {
   return m_b0->GetMinParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_CoonsSurface::GetMaxParameter_V() const
+double mobius::geom_CoonsSurfaceLinear::GetMaxParameter_V() const
 {
   return m_b0->GetMaxParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_CoonsSurface::Eval(const double u,
-                                     const double v,
-                                     xyz&         S) const
+void mobius::geom_CoonsSurfaceLinear::Eval(const double u,
+                                           const double v,
+                                           xyz&         S) const
 {
   xyz c0, c1, b0, b1;
   m_c0->Eval(u, c0);

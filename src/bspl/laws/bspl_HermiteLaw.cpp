@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 05 August 2013
+// Created on: 14 December 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2018-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,59 +28,39 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_Curve_HeaderFile
-#define geom_Curve_HeaderFile
+// Own include
+#include <mobius/bspl_HermiteLaw.h>
 
-// Geometry includes
-#include <mobius/geom_Geometry.h>
+//-----------------------------------------------------------------------------
 
-// Core includes
-#include <mobius/core_XYZ.h>
-
-namespace mobius {
-
-//! \ingroup MOBIUS_GEOM
-//!
-//! Base class for 3D parametric curves.
-class geom_Curve : public geom_Geometry
+mobius::bspl_HermiteLaw::bspl_HermiteLaw(const int idx)
 {
-// Construction & destruction:
-public:
+  m_iIdx = idx;
+}
 
-  mobiusGeom_EXPORT
-    geom_Curve( const core_IsoTransformChain& tChain = core_IsoTransformChain() );
+//-----------------------------------------------------------------------------
 
-  mobiusGeom_EXPORT virtual
-    ~geom_Curve();
-
-public:
-
-  virtual double
-    GetMinParameter() const = 0;
-
-  virtual double
-    GetMaxParameter() const = 0;
-
-  virtual void
-    Eval(const double u,
-         xyz&         P) const = 0;
-
-public:
-
-  virtual xyz
-    Eval(const double u) const
+double mobius::bspl_HermiteLaw::Eval(const double u) const
+{
+  double res = 0;
+  switch ( m_iIdx )
   {
-    xyz C;
-    this->Eval(u, C);
-    //
-    return C;
-  }
+    case 0:
+      res = 1.0 - 3.0*pow(u,2) + 2.0*pow(u,3);
+      break;
+    case 1:
+      res = 3.0*pow(u,2) - 2.0*pow(u,3);
+      break;
+    case 2:
+      res = u - 2.0*pow(u,2) + pow(u,3);
+      break;
+    case 3:;
+      res = -pow(u,2) + pow(u,3);
+      break;
+    default:
+      res = 0.0;
+      break;
+  };
 
-};
-
-//! Convenience shortcut.
-typedef geom_Curve curve;
-
-};
-
-#endif
+  return res;
+}

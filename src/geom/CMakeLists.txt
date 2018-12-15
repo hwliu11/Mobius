@@ -107,7 +107,8 @@ set (primitives_H_FILES
   primitives/geom_BSplineCurve.h
   primitives/geom_BSplineSurface.h
   primitives/geom_Circle.h
-  primitives/geom_CoonsSurface.h
+  primitives/geom_CoonsSurfaceCubic.h
+  primitives/geom_CoonsSurfaceLinear.h
   primitives/geom_Curve.h
   primitives/geom_Geometry.h
   primitives/geom_GordonSurface.h
@@ -126,7 +127,8 @@ set (primitives_CPP_FILES
   primitives/geom_BSplineCurve.cpp
   primitives/geom_BSplineSurface.cpp
   primitives/geom_Circle.cpp
-  primitives/geom_CoonsSurface.cpp
+  primitives/geom_CoonsSurfaceCubic.cpp
+  primitives/geom_CoonsSurfaceLinear.cpp
   primitives/geom_Curve.cpp
   primitives/geom_Geometry.cpp
   primitives/geom_GordonSurface.cpp

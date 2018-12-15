@@ -49,11 +49,13 @@ set (basis_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (laws_H_FILES
-  laws/bspl_ScalarLaw.h
   laws/bspl_ConstLaw.h
+  laws/bspl_HermiteLaw.h
+  laws/bspl_ScalarLaw.h
 )
 set (laws_CPP_FILES 
   laws/bspl_ConstLaw.cpp
+  laws/bspl_HermiteLaw.cpp
 )
 
 #------------------------------------------------------------------------------
