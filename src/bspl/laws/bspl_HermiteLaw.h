@@ -51,6 +51,9 @@ public:
   mobiusBSpl_EXPORT virtual double
     Eval(const double u) const;
 
+  mobiusBSpl_EXPORT virtual double
+    Eval_D1(const double u) const;
+
 protected:
 
   int m_iIdx; //!< Index.

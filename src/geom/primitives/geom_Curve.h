@@ -62,18 +62,31 @@ public:
     GetMaxParameter() const = 0;
 
   virtual void
-    Eval(const double u,
-         xyz&         P) const = 0;
+    Eval(const double t,
+         xyz&         C) const = 0;
+
+  virtual void
+    Eval_D1(const double t,
+            xyz&         dC_dt) const = 0;
 
 public:
 
   virtual xyz
-    Eval(const double u) const
+    Eval(const double t) const
   {
     xyz C;
-    this->Eval(u, C);
+    this->Eval(t, C);
     //
     return C;
+  }
+
+  virtual xyz
+    Eval_D1(const double t) const
+  {
+    xyz dC_dt;
+    this->Eval_D1(t, dC_dt);
+    //
+    return dC_dt;
   }
 
 };

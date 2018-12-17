@@ -64,3 +64,30 @@ double mobius::bspl_HermiteLaw::Eval(const double u) const
 
   return res;
 }
+
+//-----------------------------------------------------------------------------
+
+double mobius::bspl_HermiteLaw::Eval_D1(const double u) const
+{
+  double res = 0;
+  switch ( m_iIdx )
+  {
+    case 0:
+      res = -6.0*u + 6.0*pow(u,2);
+      break;
+    case 1:
+      res = 6.0*u - 6.0*pow(u,2);
+      break;
+    case 2:
+      res = 1 - 4.0*u + 3.0*pow(u,2);
+      break;
+    case 3:;
+      res = -2.0*u + 3.0*pow(u,2);
+      break;
+    default:
+      res = 0.0;
+      break;
+  };
+
+  return res;
+}

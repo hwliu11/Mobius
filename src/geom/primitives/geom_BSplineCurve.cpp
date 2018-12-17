@@ -309,6 +309,14 @@ void mobius::geom_BSplineCurve::Eval(const double u,
 
 //-----------------------------------------------------------------------------
 
+void mobius::geom_BSplineCurve::Eval_D1(const double u,
+                                        xyz&         dC_dt) const
+{
+  this->Eval_Dk(u, 1, dC_dt);
+}
+
+//-----------------------------------------------------------------------------
+
 //! Evaluates derivative of the B-spline curve for the given parameter.
 //! \param u                [in]  parameter value to evaluate curve for.
 //! \param k                [in]  the desired order of derivative.

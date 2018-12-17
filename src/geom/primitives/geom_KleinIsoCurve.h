@@ -80,6 +80,11 @@ public:
     Eval(const double p,
          xyz&         C) const override;
 
+  //! \todo NYI Eval_D1() method.
+  virtual void
+    Eval_D1(const double,
+            xyz&) const override {}
+
 private:
 
   //! Radius of hole.

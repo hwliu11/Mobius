@@ -96,6 +96,10 @@ public:
     Eval(const double u,
          xyz&         P) const override;
 
+  mobiusGeom_EXPORT virtual void
+    Eval_D1(const double t,
+            xyz&         dC_dt) const override;
+
 public:
 
   mobiusGeom_EXPORT virtual void

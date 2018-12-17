@@ -70,6 +70,11 @@ public:
     Eval(const double u,
          xyz&         P) const override;
 
+  //! \todo NYI Eval_D1() method.
+  virtual void
+    Eval_D1(const double,
+            xyz&) const override {}
+
 public:
 
   //! Accessor for the radius.
