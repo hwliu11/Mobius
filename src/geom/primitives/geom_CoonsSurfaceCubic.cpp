@@ -63,21 +63,21 @@ mobius::geom_CoonsSurfaceCubic::geom_CoonsSurfaceCubic(const ptr<curve>& Su0,
   m_d2S_dudv11 (d2S_dudv11)
 {
   // Initialize positional constraints.
-  m_S00 = m_Su0->Eval(0.0);
-  m_S01 = m_S0v->Eval(1.0);
-  m_S10 = m_Su0->Eval(1.0);
-  m_S11 = m_S1v->Eval(1.0);
+  m_S00 = m_Su0->D0(0.0);
+  m_S01 = m_S0v->D0(1.0);
+  m_S10 = m_Su0->D0(1.0);
+  m_S11 = m_S1v->D0(1.0);
 
   // Initialize derivative values at corner points.
-  m_dS00_du = m_dS0v_du->Eval(0.0);
-  m_dS01_du = m_dS0v_du->Eval(1.0);
-  m_dS10_du = m_dS1v_du->Eval(0.0);
-  m_dS11_du = m_dS1v_du->Eval(1.0);
+  m_dS00_du = m_dS0v_du->D0(0.0);
+  m_dS01_du = m_dS0v_du->D0(1.0);
+  m_dS10_du = m_dS1v_du->D0(0.0);
+  m_dS11_du = m_dS1v_du->D0(1.0);
   //
-  m_dS00_dv = m_dSu0_dv->Eval(0.0);
-  m_dS01_dv = m_dSu1_dv->Eval(0.0);
-  m_dS10_dv = m_dSu0_dv->Eval(1.0);
-  m_dS11_dv = m_dSu1_dv->Eval(1.0);
+  m_dS00_dv = m_dSu0_dv->D0(0.0);
+  m_dS01_dv = m_dSu1_dv->D0(0.0);
+  m_dS10_dv = m_dSu0_dv->D0(1.0);
+  m_dS11_dv = m_dSu1_dv->D0(1.0);
 
   this->SetEvalComponent(EvalComponent_All);
 }
@@ -228,10 +228,10 @@ void mobius::geom_CoonsSurfaceCubic::Eval_P1S(const double u,
   bspl_HermiteLaw b0(2);
   bspl_HermiteLaw b1(3);
 
-  S = a0.Eval(v) * m_Su0->Eval(u)
-    + a1.Eval(v) * m_Su1->Eval(u)
-    + b0.Eval(v) * m_dSu0_dv->Eval(u)
-    + b1.Eval(v) * m_dSu1_dv->Eval(u);
+  S = a0.Eval(v) * m_Su0->D0(u)
+    + a1.Eval(v) * m_Su1->D0(u)
+    + b0.Eval(v) * m_dSu0_dv->D0(u)
+    + b1.Eval(v) * m_dSu1_dv->D0(u);
 }
 
 //-----------------------------------------------------------------------------
@@ -245,10 +245,10 @@ void mobius::geom_CoonsSurfaceCubic::Eval_P2S(const double u,
   bspl_HermiteLaw b0(2);
   bspl_HermiteLaw b1(3);
 
-  S = a0.Eval(u) * m_S0v->Eval(v)
-    + a1.Eval(u) * m_S1v->Eval(v)
-    + b0.Eval(u) * m_dS0v_du->Eval(v)
-    + b1.Eval(u) * m_dS1v_du->Eval(v);
+  S = a0.Eval(u) * m_S0v->D0(v)
+    + a1.Eval(u) * m_S1v->D0(v)
+    + b0.Eval(u) * m_dS0v_du->D0(v)
+    + b1.Eval(u) * m_dS1v_du->D0(v);
 }
 
 //-----------------------------------------------------------------------------
@@ -300,10 +300,10 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1_P1S(const double u,
   const double B1 = b1.Eval(v);
 
   // Compute derivatives of constraints.
-  const xyz dS1 = m_Su0->Eval_D1(u);
-  const xyz dS2 = m_Su1->Eval_D1(u);
-  const xyz dS3 = m_dSu0_dv->Eval_D1(u);
-  const xyz dS4 = m_dSu1_dv->Eval_D1(u);
+  const xyz dS1 = m_Su0->D1(u);
+  const xyz dS2 = m_Su1->D1(u);
+  const xyz dS3 = m_dSu0_dv->D1(u);
+  const xyz dS4 = m_dSu1_dv->D1(u);
 
   xyz dP1S_dU = A0*dS1 + A1*dS2 + B0*dS3 + B1*dS4;
   xyz dP1S_dV = xyz(); // todo nyi
@@ -331,10 +331,10 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1_P2S(const double u,
   const double dB1 = b1.Eval_D1(u);
 
   // Compute constraints.
-  const xyz S1 = m_S0v->Eval(v);
-  const xyz S2 = m_S1v->Eval(v);
-  const xyz S3 = m_dS0v_du->Eval(v);
-  const xyz S4 = m_dS1v_du->Eval(v);
+  const xyz S1 = m_S0v->D0(v);
+  const xyz S2 = m_S1v->D0(v);
+  const xyz S3 = m_dS0v_du->D0(v);
+  const xyz S4 = m_dS1v_du->D0(v);
 
   xyz dP2S_dU = dA0*S1 + dA1*S2 + dB0*S3 + dB1*S4;
   xyz dP2S_dV = xyz(); // todo nyi

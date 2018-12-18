@@ -31,12 +31,33 @@
 // Own include
 #include <mobius/geom_Curve.h>
 
-//! Constructor accepting transformations to apply.
-//! \param tChain [in] associated transformations.
+//-----------------------------------------------------------------------------
+
 mobius::geom_Curve::geom_Curve(const core_IsoTransformChain& tChain)
 : geom_Geometry(tChain)
 {}
 
-//! Destructor.
+//-----------------------------------------------------------------------------
+
 mobius::geom_Curve::~geom_Curve()
 {}
+
+//-----------------------------------------------------------------------------
+
+mobius::xyz mobius::geom_Curve::D0(const double t) const
+{
+  xyz C;
+  this->Eval(t, C);
+  //
+  return C;
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::xyz mobius::geom_Curve::D1(const double t) const
+{
+  xyz dC_dt;
+  this->Eval_D1(t, dC_dt);
+  //
+  return dC_dt;
+}

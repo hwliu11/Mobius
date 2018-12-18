@@ -47,9 +47,12 @@ class geom_Curve : public geom_Geometry
 // Construction & destruction:
 public:
 
+  //! Constructor accepting transformations to apply.
+  //! \param[in] tChain associated transformations.
   mobiusGeom_EXPORT
     geom_Curve( const core_IsoTransformChain& tChain = core_IsoTransformChain() );
 
+  //! Destructor.
   mobiusGeom_EXPORT virtual
     ~geom_Curve();
 
@@ -71,23 +74,11 @@ public:
 
 public:
 
-  virtual xyz
-    Eval(const double t) const
-  {
-    xyz C;
-    this->Eval(t, C);
-    //
-    return C;
-  }
+  mobiusGeom_EXPORT xyz
+    D0(const double t) const;
 
-  virtual xyz
-    Eval_D1(const double t) const
-  {
-    xyz dC_dt;
-    this->Eval_D1(t, dC_dt);
-    //
-    return dC_dt;
-  }
+  mobiusGeom_EXPORT xyz
+    D1(const double t) const;
 
 };
 

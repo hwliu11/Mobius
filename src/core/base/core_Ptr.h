@@ -165,6 +165,12 @@ public:
     return this->Access();
   }
 
+  //! Dereferencing operator.
+  SharedType& operator*() const
+  {
+    return *this->Access();
+  }
+
 public:
 
   //! Casts the passed pointer to the necessary type.
