@@ -33,6 +33,7 @@
 
 // Geometry includes
 #include <mobius/geom_InterpolateCurve.h>
+#include <mobius/geom_UnifyBCurves.h>
 
 // BSpl includes
 #include <mobius/bspl_KnotsAverage.h>
@@ -125,109 +126,34 @@ bool mobius::geom_SkinSurface::PrepareSections()
     return false;
   }
 
-  // Check compatibility of curves.
-  bool areCompatible = true;
-  int  ref_degree    = 0;
-  std::vector<double> ref_U;
+  // Prepare compatibility tool.
+  geom_UnifyBCurves unifyCurves(m_progress, m_plotter);
   //
   for ( size_t c = 0; c < m_curves.size(); ++c )
+    unifyCurves.AddCurve(m_curves[c]);
+
+  // Check compatibility of curves.
+  const bool areCompatible = unifyCurves.AreCompatible();
+  //
+  if ( !areCompatible && !m_bUnify )
   {
-    const ptr<bcurve>& crv = m_curves[c];
-    if ( crv.IsNull() )
-    {
-      m_errCode = ErrCode_NullCurvePassed;
-      return false;
-    }
-
-    if ( c == 0 )
-    {
-      ref_degree = crv->GetDegree();
-      ref_U      = crv->GetKnots();
-    }
-    else
-    {
-      // Check if the second, the third, etc. curves are of the same degree
-      // as the first one.
-      if ( crv->GetDegree() != ref_degree )
-      {
-        areCompatible = false;
-
-        if ( !m_bUnify )
-        {
-          m_errCode = ErrCode_NotCompatibleCurves_Degree;
-          return false;
-        }
-        else
-          break;
-      }
-
-      // Check if the second, the third, etc. curves are have the same knot
-      // vectors as the first one.
-      const std::vector<double>& curr_U = crv->GetKnots();
-      //
-      if ( curr_U != ref_U )
-      {
-        areCompatible = false;
-
-        // Check if unification is allowed. If not, skinning algorithm
-        // cannot proceed with uncompatible curves.
-        if ( !m_bUnify )
-        {
-          m_errCode = ErrCode_NotCompatibleCurves_Knots;
-          return false;
-        }
-        else
-          break;
-      }
-    }
+    m_errCode = ErrCode_NotCompatibleCurves;
+    m_progress.SendLogMessage(MobiusErr(Normal) << "Incompatible curves should be unified.");
+    return false;
   }
 
   // Now if the curves are not compatible, it is time to make them such.
   if ( !areCompatible && m_bUnify )
   {
-    // Normalize and collect knot vectors.
-    std::vector< std::vector<double> > U_all;
-    for ( size_t c = 0; c < m_curves.size(); ++c )
+    if ( !unifyCurves.Perform() )
     {
-      // Normalize.
-      m_curves[c]->ReparameterizeLinear(0.0, 1.0);
-
-      // Get knots.
-      std::vector<double> U = m_curves[c]->GetKnots();
-      U_all.push_back(U);
-
-#if defined COUT_DEBUG
-      // Dump knots
-      std::cout << "Curve " << (c + 1) << ": ";
-      for ( size_t j = 0; j < U.size(); ++j )
-      {
-        std::cout << U[j] << "\t";
-      }
-      std::cout << std::endl;
-#endif
+      m_errCode = ErrCode_NotDoneUnification;
+      m_progress.SendLogMessage(MobiusErr(Normal) << "Unification process failed.");
+      return false;
     }
 
-    // Compute complementary knots.
-    bspl_UnifyKnots Unify;
-    std::vector< std::vector<double> > X = Unify(U_all);
-
-    // Unify knots.
-    for ( size_t c = 0; c < m_curves.size(); ++c )
-    {
-      m_curves[c]->RefineKnots(X[c]);
-
-#if defined COUT_DEBUG
-      const std::vector<double>& U = m_curves[c]->Knots();
-
-      // Dump knots
-      std::cout << "Curve [refined] " << (c + 1) << ": ";
-      for ( size_t j = 0; j < U.size(); ++j )
-      {
-        std::cout << U[j] << "\t";
-      }
-      std::cout << std::endl;
-#endif
-    }
+    // Update curves.
+    m_curves = unifyCurves.GetResult();
   }
 
   return true;
