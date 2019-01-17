@@ -53,14 +53,52 @@ protected:
     core_IAlgorithm(core_ProgressEntry progress,
                     core_PlotterEntry  plotter);
 
+public:
+
+  //! Sets status code as an integer.
+  //! \param[in] status code to set.
+  void SetStatusCode(const int status)
+  {
+    m_iStatusCode = status;
+  }
+
+  //! \return integer status code.
+  int GetStatusCode() const
+  {
+    return m_iStatusCode;
+  }
+
+  //! Adds status to the currently stored one. The derived classes take
+  //! responsibility to implement status codes as bitmasks like 0x01, 0x02,
+  //! 0x04, 0x08, 0x10, 0x20, 0x40, etc. This may we can store several statuses
+  //! in one integer variable.
+  //! \param[in] statBit status bit to add to the current status.
+  void AddStatusCode(const int statBit)
+  {
+    m_iStatusCode |= statBit;
+  }
+
+  //! Checks whether the stored status code contains bits for the passed
+  //! status.
+  //! \param[in] statBit bits to check.
+  //! \return true/false.
+  bool HasStatusCode(const int statBit) const
+  {
+    return (m_iStatusCode & statBit) > 0;
+  }
+
 protected:
 
   mutable core_ProgressEntry m_progress; //!< Progress Notifier.
   mutable core_PlotterEntry  m_plotter;  //!< Imperative Plotter.
 
+  //! Status code which can be an error code, warning code or any other
+  //! status which gives more detalisation on algorithm's execution state.
+  int m_iStatusCode;
+
 protected:
 
-  core_IAlgorithm() : core_OBJECT() {}
+  core_IAlgorithm() : core_OBJECT() {} //!< Default ctor.
 
 };
 

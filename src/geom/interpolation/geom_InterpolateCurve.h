@@ -48,7 +48,8 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Interpolates B-curve over the given collection of points.
+//! Interpolates B-curve over the given collection of points. See
+//! algorithm A9.1 from The NURBS Book.
 class geom_InterpolateCurve : public core_OPERATOR
 {
 public:

@@ -50,7 +50,8 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Interpolates B-surface over the given collection of points.
+//! Interpolates B-surface over the given collection of points. See algorithm
+//! A9.4 from The NURBS Book.
 class geom_InterpolateSurface : public core_OPERATOR
 {
 public:
