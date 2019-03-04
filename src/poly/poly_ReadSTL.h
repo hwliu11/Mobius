@@ -54,7 +54,9 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   poly_ReadSTL(core_ProgressEntry progress = NULL,
-               core_PlotterEntry  plotter  = NULL) : core_IAlgorithm(progress, plotter) {}
+               core_PlotterEntry  plotter  = NULL) : core_IAlgorithm (progress, plotter),
+                                                     m_bMergeNodes   (true)
+  {}
 
 public:
 
@@ -62,6 +64,18 @@ public:
   const ptr<poly_Mesh>& GetResult() const
   {
     return m_mesh;
+  }
+
+  //! Enables merging nodes.
+  void SetMergeNodesOn()
+  {
+    m_bMergeNodes = true;
+  }
+
+  //! Disables merging nodes.
+  void SetMergeNodesOff()
+  {
+    m_bMergeNodes = false;
   }
 
 public:
@@ -126,6 +140,8 @@ protected:
 protected:
 
   ptr<poly_Mesh> m_mesh; //!< Mesh data structure.
+
+  bool m_bMergeNodes; //!< Whether to merge nodes.
 
 };
 

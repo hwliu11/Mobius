@@ -247,7 +247,7 @@ inline mobius::core_XYZ mobius::core_XYZ::Invert() const
 //! \return result of subtraction.
 inline mobius::core_XYZ mobius::core_XYZ::operator-(const core_XYZ& XYZ) const
 {
-  return this->operator+( XYZ.Invert() );
+  return core_XYZ(this->m_fX - XYZ.m_fX, this->m_fY - XYZ.m_fY, this->m_fZ - XYZ.m_fZ);
 }
 
 //! Adds the passed point to this one.

@@ -74,8 +74,21 @@ namespace mobius
       }
     };
 
+    //! Equality checker for map.
+    struct compare
+    {
+      //! Checks if the two passed points are equal.
+      bool operator()(const core_XYZ& P1, const core_XYZ& P2) const 
+      {
+        return (P1 - P2).SquaredModulus() < core_Precision::SquaredResolution3D();
+      }
+    };
+
     //! Map storing coordinates for coincidence check.
-    typedef std::unordered_map<core_XYZ, poly_VertexHandle, NodeMerger::hasher> t_xyzVertexMap;
+    typedef std::unordered_map<core_XYZ,
+                               poly_VertexHandle,
+                               NodeMerger::hasher,
+                               NodeMerger::compare> t_xyzVertexMap;
 
   public:
 
@@ -334,9 +347,9 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
     }
 
     // Add triangle to mesh data structure.
-    const poly_VertexHandle hv0 = MergeTool.AddVertex(x1, y1, z1);
-    const poly_VertexHandle hv1 = MergeTool.AddVertex(x2, y2, z2);
-    const poly_VertexHandle hv2 = MergeTool.AddVertex(x3, y3, z3);
+    const poly_VertexHandle hv0 = ( m_bMergeNodes ? MergeTool.AddVertex(x1, y1, z1) : this->AddVertex( xyz(x1, y1, z1) ) );
+    const poly_VertexHandle hv1 = ( m_bMergeNodes ? MergeTool.AddVertex(x2, y2, z2) : this->AddVertex( xyz(x2, y2, z2) ) );
+    const poly_VertexHandle hv2 = ( m_bMergeNodes ? MergeTool.AddVertex(x3, y3, z3) : this->AddVertex( xyz(x3, y3, z3) ) );
     //
     if ( hv0 != hv1 && hv1 != hv2 && hv2 != hv0 )
       this->AddTriangle(hv0, hv1, hv2);
@@ -409,9 +422,9 @@ bool mobius::poly_ReadSTL::readBinary(std::istream& stream)
     core_XYZ P3 = readStlFloatVec3(bufferPtr + vec3Size * 3);
 
     // Add triangle to mesh data structure.
-    const poly_VertexHandle hv0 = MergeTool.AddVertex( P1.X(), P1.Y(), P1.Z() );
-    const poly_VertexHandle hv1 = MergeTool.AddVertex( P2.X(), P2.Y(), P2.Z() );
-    const poly_VertexHandle hv2 = MergeTool.AddVertex( P3.X(), P3.Y(), P3.Z() );
+    const poly_VertexHandle hv0 = ( m_bMergeNodes ? MergeTool.AddVertex( P1.X(), P1.Y(), P1.Z() ) : this->AddVertex(P1) );
+    const poly_VertexHandle hv1 = ( m_bMergeNodes ? MergeTool.AddVertex( P2.X(), P2.Y(), P2.Z() ) : this->AddVertex(P2) );
+    const poly_VertexHandle hv2 = ( m_bMergeNodes ? MergeTool.AddVertex( P3.X(), P3.Y(), P3.Z() ) : this->AddVertex(P3) );
     //
     if ( hv0 != hv1 && hv1 != hv2 && hv2 != hv0 )
       this->AddTriangle(hv0, hv1, hv2);
