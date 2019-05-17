@@ -97,28 +97,26 @@ protected:
 
 };
 
-};
-
 //-----------------------------------------------------------------------------
 
-//! Auxiliary functions.
+//! Auxiliary functions for point inversion on curve.
 namespace BSplCurveProj
 {
-  double F(const mobius::bcurve* crv,
-           const double          u,
-           const mobius::xyz&    P)
+  double F(const bcurve* crv,
+           const double  u,
+           const xyz&    P)
   {
-    mobius::xyz C, d1C;
+    xyz C, d1C;
     crv->Eval(u, C);
     crv->Eval_Dk(u, 1, d1C);
     return (C - P).Dot(d1C);
   }
 
-  double dF(const mobius::bcurve* crv,
-            const double          u,
-            const mobius::xyz&    P)
+  double dF(const bcurve* crv,
+            const double  u,
+            const xyz&    P)
   {
-    mobius::xyz C, d1C, d2C;
+    xyz C, d1C, d2C;
     crv->Eval(u, C);
     crv->Eval_Dk(u, 1, d1C);
     crv->Eval_Dk(u, 2, d2C);
@@ -139,6 +137,8 @@ namespace BSplCurveProj
 
     return param;
   }
+};
+
 };
 
 //-----------------------------------------------------------------------------

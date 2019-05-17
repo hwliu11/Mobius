@@ -76,9 +76,9 @@ double mobius::geom_FairBSurfBl::Eval(const double u, const double v) const
   m_Nk[m_iL]->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
 
   // Calculate result.
-  const xyz res =  d2S_dU2 * d2Nl_dU2 * m_fLambda
-                +  d2S_dUV * d2Nl_dUV * m_fLambda * 2.
-                +  d2S_dV2 * d2Nl_dV2 * m_fLambda;
+  const xyz res = d2S_dU2 * d2Nl_dU2 * m_fLambda
+                + d2S_dUV * d2Nl_dUV * m_fLambda * 2.
+                + d2S_dV2 * d2Nl_dV2 * m_fLambda;
   //
   const double res_proj = res.Coord(m_iCoord);
 

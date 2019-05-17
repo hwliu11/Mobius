@@ -24,6 +24,7 @@ set (base_H_FILES
   base/core_Integral.h
   base/core_IPlotter.h
   base/core_IProgressNotifier.h
+  base/core_Newton2x2.h
   base/core_OBJECT.h
   base/core_OPERATOR.h
   base/core_Precision.h

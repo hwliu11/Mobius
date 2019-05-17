@@ -94,6 +94,27 @@ protected:
 
 };
 
+//! Auxiliary functions for point inversion on surface.
+namespace BSplSurfProj
+{
+  //! Computes residual function.
+  //! \param[in] s surface to evaluate.
+  //! \param[in] u U value.
+  //! \param[in] v V value.
+  //! \param[in] P point to check deviation from.
+  xyz r(const bsurf* s,
+        const double u,
+        const double v,
+        const xyz&   P)
+  {
+    xyz S;
+    s->Eval(u, v, S);
+
+    xyz res = S - P;
+    return res;
+  }
+}
+
 };
 
 //-----------------------------------------------------------------------------
@@ -545,6 +566,14 @@ mobius::core_Continuity
 mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const
 {
   return new bsurf(m_poles, m_U, m_V, m_iDegU, m_iDegV);
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
+                                              uv&          params,
+                                              const double prec) const
+{
 }
 
 //-----------------------------------------------------------------------------

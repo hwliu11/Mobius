@@ -151,6 +151,11 @@ public:
     Copy() const;
 
   mobiusGeom_EXPORT bool
+    InvertPoint(const xyz&   P,
+                uv&          params,
+                const double prec = 1.0e-6) const;
+
+  mobiusGeom_EXPORT bool
     InsertKnot_U(const double u,
                  const int    num_times = 1);
 
