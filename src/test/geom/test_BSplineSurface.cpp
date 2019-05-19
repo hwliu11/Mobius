@@ -36,6 +36,7 @@
 
 // Core includes
 #include <mobius/core_FileDumper.h>
+#include <mobius/core_Precision.h>
 
 // Geom includes
 #include <mobius/geom_BSplineSurface.h>
@@ -1556,6 +1557,82 @@ mobius::outcome mobius::test_BSplineSurface::exchangeUV01(const int funcID)
 
   // Verify.
   if ( jsonRes != jsonRef )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Inverts point on a B-surface.
+//!
+//! \param[in] funcID function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_BSplineSurface::invertPoint01(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  /* =======================
+   *  Prepare input surface
+   * ======================= */
+
+  // JSON definition.
+  std::string json =
+  "{\
+    entity: surface,\
+    type: b-surface,\
+    continuity: C2,\
+    domain: {\
+        U_min: 0,\
+        U_max: 1,\
+        V_min: 0,\
+        V_max: 1\
+    },\
+    flags: {\
+        is_U_rational: 0,\
+        is_V_rational: 0,\
+        is_U_periodic: 0,\
+        is_V_periodic: 0,\
+        is_U_closed: 0,\
+        is_V_closed: 0\
+    },\
+    properties: {\
+        U_degree: 3,\
+        V_degree: 1,\
+        U_knots: [0, 0, 0, 0, 0.41551883124182798, 0.59974028777161115, 1, 1, 1, 1],\
+        V_knots: [0, 0, 1, 1],\
+        num_poles_in_U_axis: 6,\
+        num_poles_in_V_axis: 2,\
+        poles: {\
+            u0: [[241.87747035573125, 62.485923112593042, 0], [307.49011857707512, 49.837701768719491, 0]],\
+            u1: [[245.29391602546553, 57.035146252318057, 0], [306.57174310419981, 45.021517271473421, 0]],\
+            u2: [[250.62433050286035, 49.413132207145885, 25], [303.8174241480333, 37.906450425886014, 0]],\
+            u3: [[260.43129359394032, 37.406082628166004, -22], [295.65540308364263, 29.098297811030434, -30]],\
+            u4: [[266.65853554251112, 30.811365428505532, 0], [288.81855843279288, 26.561552469297354, 0]],\
+            u5: [[271.12648221343875, 26.517543665952715, 0], [284.16996047430831, 25.727029831960614, 0]]\
+        }\
+    }\
+  }";
+
+  // Construct B-surface.
+  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  //
+  if ( surf.IsNull() )
+    return res.failure();
+
+  /* ==============
+   *  Perform test
+   * ============== */
+
+  // Invert point.
+  uv Pproj;
+  if ( !surf->InvertPoint(xyz(280., 40., 10.), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.330102,0.533378) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();

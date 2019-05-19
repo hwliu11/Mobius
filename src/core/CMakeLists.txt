@@ -30,6 +30,7 @@ set (base_H_FILES
   base/core_Precision.h
   base/core_Ptr.h
   base/core_TwovariateFunc.h
+  base/core_TwovariateFuncWithGradient.h
   base/core_UnivariateFunc.h
   base/core_Vars.h
 )

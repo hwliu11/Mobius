@@ -31,6 +31,9 @@
 #ifndef geom_BSplineSurface_HeaderFile
 #define geom_BSplineSurface_HeaderFile
 
+// Core includes
+#include <mobius/core_UV.h>
+
 // Geometry includes
 #include <mobius/geom_BSplineCurve.h>
 #include <mobius/geom_Surface.h>

@@ -88,6 +88,7 @@ public:
               << &computeEnergy06
               << &insertKnot01
               << &exchangeUV01
+              << &invertPoint01
               ;
   }
 
@@ -109,6 +110,7 @@ private:
   static outcome computeEnergy06 (const int funcID);
   static outcome insertKnot01    (const int funcID);
   static outcome exchangeUV01    (const int funcID);
+  static outcome invertPoint01   (const int funcID);
 
 };
 

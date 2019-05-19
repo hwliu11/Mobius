@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 19 August 2018
+// Created on: 18 May 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018-present, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,23 +28,33 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef core_TwovariateFunc_HeaderFile
-#define core_TwovariateFunc_HeaderFile
+#ifndef core_TwovariateFuncWithGradient_HeaderFile
+#define core_TwovariateFuncWithGradient_HeaderFile
 
 // core includes
-#include <mobius/core_OBJECT.h>
+#include <mobius/core_TwovariateFunc.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_CORE
 //!
-//! Abstract twovariate scalar function.
-class core_TwovariateFunc : public core_OBJECT
+//! Abstract twovariate scalar function with gradient.
+class core_TwovariateFuncWithGradient : public core_TwovariateFunc
 {
 public:
 
-  virtual double
-    Eval(const double x, const double y) const = 0;
+  //! Evaluates function with its gradient for the given argument value.
+  //! \param[in]  x     first argument.
+  //! \param[in]  y     second argument.
+  //! \param[out] F     function value.
+  //! \param[out] dF_dX partial first-order derivative by the first argument.
+  //! \param[out] dF_dY partial first-order derivative by the second argument.
+  virtual void
+    EvalWithGrad(const double x,
+                 const double y,
+                 double&      F,
+                 double&      dF_dX,
+                 double&      dF_dY) const = 0;
 
 };
 

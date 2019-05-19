@@ -38,7 +38,7 @@
 #include <mobius/core_HeapAlloc.h>
 #include <mobius/core_Integral.h>
 #include <mobius/core_JSON.h>
-#include <mobius/core_TwovariateFunc.h>
+#include <mobius/core_Newton2x2.h>
 
 // BSpl includes
 #include <mobius/bspl_EffectiveN.h>
@@ -97,23 +97,158 @@ protected:
 //! Auxiliary functions for point inversion on surface.
 namespace BSplSurfProj
 {
-  //! Computes residual function.
-  //! \param[in] s surface to evaluate.
-  //! \param[in] u U value.
-  //! \param[in] v V value.
-  //! \param[in] P point to check deviation from.
-  xyz r(const bsurf* s,
-        const double u,
-        const double v,
-        const xyz&   P)
+  class func_base : public core_TwovariateFuncWithGradient
   {
-    xyz S;
-    s->Eval(u, v, S);
+  public:
 
-    xyz res = S - P;
-    return res;
-  }
-}
+    //! Ctor accepting the B-surface and the point to invert.
+    //! \param[in] S surface in question.
+    //! \param[in] P point to invert.
+    func_base(const core_Ptr<bsurf>& S,
+              const xyz&             P)
+    : core_TwovariateFuncWithGradient(), m_S(S), m_P(P)
+    {}
+
+  protected:
+
+    //! Evaluates residual between `S(u,v)` and point to invert `P`.
+    xyz eval_r(const double u, const double v) const
+    {
+      xyz S;
+      m_S->Eval(u, v, S);
+      return S - m_P;
+    }
+
+  protected:
+
+    core_Ptr<bsurf> m_S; //!< Surface in question.
+    xyz             m_P; //!< Point to invert.
+  };
+
+  class func_f : public func_base
+  {
+  public:
+
+    //! Ctor accepting the B-surface and the point to invert.
+    //! \param[in] S surface in question.
+    //! \param[in] P point to invert.
+    func_f(const core_Ptr<bsurf>& S,
+           const xyz&             P)
+    : func_base(S, P)
+    {}
+
+  public:
+
+    //! Evaluates function.
+    //! \param[in] u u argument.
+    //! \param[in] v v argument.
+    //! \return function value.
+    virtual double
+      Eval(const double u, const double v) const
+    {
+      const xyz r = this->eval_r(u, v);
+
+      // Evaluate dS/dU.
+      xyz S, dS_dU, dS_dV;
+      m_S->Eval_D1(u, v, S, dS_dU, dS_dV);
+
+      // Evaluate dot product.
+      const double res = r.Dot(dS_dU);
+      return res;
+    }
+
+    //! Evaluates function with its gradient.
+    //! \param[in]  u     u argument.
+    //! \param[in]  v     v argument.
+    //! \param[out] F     function value.
+    //! \param[out] dF_du first-order partial derivative by u.
+    //! \param[out] dF_dv first-order partial derivative by v.
+    virtual void
+      EvalWithGrad(const double u,
+                   const double v,
+                   double&      F,
+                   double&      dF_du,
+                   double&      dF_dv) const
+    {
+      const xyz r = this->eval_r(u, v);
+
+      // Evaluate dS/dU.
+      xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+      m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
+
+      // Evaluate F.
+      F = r.Dot(dS_dU);
+
+      // Evaluate dF/dU.
+      dF_du = dS_dU.Dot(dS_dU) + r.Dot(d2S_dU2);
+
+      // Evaluate dF/dV.
+      dF_dv = dS_dU.Dot(dS_dV) + r.Dot(d2S_dUV);
+    }
+  };
+
+  class func_g : public func_base
+  {
+  public:
+
+    //! Ctor accepting the B-surface and the point to invert.
+    //! \param[in] S surface in question.
+    //! \param[in] P point to invert.
+    func_g(const core_Ptr<bsurf>& S,
+           const xyz&             P)
+    : func_base(S, P)
+    {}
+
+  public:
+
+    //! Evaluates function.
+    //! \param[in] u u argument.
+    //! \param[in] v v argument.
+    //! \return function value.
+    virtual double
+      Eval(const double u, const double v) const
+    {
+      const xyz r = this->eval_r(u, v);
+
+      // Evaluate dS/dU.
+      xyz S, dS_dU, dS_dV;
+      m_S->Eval_D1(u, v, S, dS_dU, dS_dV);
+
+      // Evaluate dot product.
+      const double res = r.Dot(dS_dV);
+      return res;
+    }
+
+    //! Evaluates function with its gradient.
+    //! \param[in]  u     u argument.
+    //! \param[in]  v     v argument.
+    //! \param[out] G     function value.
+    //! \param[out] dG_du first-order partial derivative by u.
+    //! \param[out] dG_dv first-order partial derivative by v.
+    virtual void
+      EvalWithGrad(const double u,
+                   const double v,
+                   double&      G,
+                   double&      dG_du,
+                   double&      dG_dv) const
+    {
+      const xyz r = this->eval_r(u, v);
+
+      // Evaluate dS/dU.
+      xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+      m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
+
+      // Evaluate F.
+      G = r.Dot(dS_dV);
+
+      // Evaluate dG/dU.
+      dG_du = dS_dU.Dot(dS_dV) + r.Dot(d2S_dUV);
+
+      // Evaluate dG/dV.
+      dG_dv = dS_dV.Dot(dS_dV) + r.Dot(d2S_dV2);
+    }
+  };
+};
 
 };
 
@@ -574,6 +709,29 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
                                               uv&          params,
                                               const double prec) const
 {
+  // Create objective functions.
+  core_Ptr<core_TwovariateFuncWithGradient> f = new BSplSurfProj::func_f(this, P);
+  core_Ptr<core_TwovariateFuncWithGradient> g = new BSplSurfProj::func_g(this, P);
+
+  // Prepare Newton iterations.
+  core_Newton2x2 newton(f, g);
+
+  // Choose the initial guess.
+  const double uMin = this->GetMinParameter_U();
+  const double uMax = this->GetMaxParameter_U();
+  const double vMin = this->GetMinParameter_V();
+  const double vMax = this->GetMaxParameter_V();
+  //
+  uv initPt = ( uv(uMin, vMin) + uv(uMax, vMax) )*0.5;
+
+  // Run optimizer.
+  uv res;
+  //
+  if ( !newton.Perform(initPt, prec, res) )
+    return false;
+
+  params = res;
+  return true;
 }
 
 //-----------------------------------------------------------------------------
