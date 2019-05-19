@@ -89,6 +89,7 @@ public:
               << &insertKnot01
               << &exchangeUV01
               << &invertPoint01
+              << &invertPoint02
               ;
   }
 
@@ -111,6 +112,7 @@ private:
   static outcome insertKnot01    (const int funcID);
   static outcome exchangeUV01    (const int funcID);
   static outcome invertPoint01   (const int funcID);
+  static outcome invertPoint02   (const int funcID);
 
 };
 
