@@ -1627,12 +1627,27 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint01(const int funcID)
    *  Perform test
    * ============== */
 
-  // Invert point.
   uv Pproj;
+
+  // Invert point.
   if ( !surf->InvertPoint(xyz(280., 40., 10.), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.330102,0.533378) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - uv(0.330102, 0.533378) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(270., 40., 11.), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.367026, 0.342485) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(260., 35., 4.), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.917776, -0.496616) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();
