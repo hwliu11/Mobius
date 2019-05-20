@@ -707,6 +707,7 @@ mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const
 
 bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
                                               uv&          params,
+                                              const bool   snapToBounds,
                                               const double prec) const
 {
   // Create objective functions.
@@ -729,6 +730,21 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
   //
   if ( !newton.Perform(initPt, prec, res) )
     return false;
+
+  // Snap to parametric boundaries if requested.
+  if ( snapToBounds )
+  {
+    double usol = res.U();
+    double vsol = res.V();
+
+         if ( usol > uMax ) usol = uMax;
+    else if ( usol < uMin ) usol = uMin;
+
+         if ( vsol > vMax ) vsol = vMax;
+    else if ( vsol < vMin ) vsol = vMin;
+
+    res = uv(usol, vsol);
+  }
 
   params = res;
   return true;

@@ -156,6 +156,7 @@ public:
   mobiusGeom_EXPORT bool
     InvertPoint(const xyz&   P,
                 uv&          params,
+                const bool   snapToBounds = true,
                 const double prec = 1.0e-6) const;
 
   mobiusGeom_EXPORT bool

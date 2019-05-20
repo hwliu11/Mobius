@@ -1644,10 +1644,17 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint01(const int funcID)
     return res.failure();
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(260., 35., 4.), Pproj) )
+  if ( !surf->InvertPoint(xyz(260., 35., 4.), Pproj, false) ) // No snapping.
     return res.failure();
   //
   if ( ( Pproj - uv(0.917776, -0.496616) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(260., 35., 4.), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.917776, 0.) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();
