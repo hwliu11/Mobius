@@ -707,22 +707,21 @@ mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const
 
 bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
                                               uv&          params,
-                                              const bool   snapToBounds,
                                               const double prec) const
 {
   // Create objective functions.
   core_Ptr<core_TwovariateFuncWithGradient> f = new BSplSurfProj::func_f(this, P);
   core_Ptr<core_TwovariateFuncWithGradient> g = new BSplSurfProj::func_g(this, P);
 
-  // Prepare Newton iterations.
-  core_Newton2x2 newton(f, g);
-
-  // Choose the initial guess.
   const double uMin = this->GetMinParameter_U();
   const double uMax = this->GetMaxParameter_U();
   const double vMin = this->GetMinParameter_V();
   const double vMax = this->GetMaxParameter_V();
-  //
+
+  // Prepare Newton iterations.
+  core_Newton2x2 newton(f, g, uMin, uMax, vMin, vMax);
+
+  // Choose the initial guess.
   uv initPt = ( uv(uMin, vMin) + uv(uMax, vMax) )*0.5;
 
   // Run optimizer.
@@ -730,21 +729,6 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
   //
   if ( !newton.Perform(initPt, prec, res) )
     return false;
-
-  // Snap to parametric boundaries if requested.
-  if ( snapToBounds )
-  {
-    double usol = res.U();
-    double vsol = res.V();
-
-         if ( usol > uMax ) usol = uMax;
-    else if ( usol < uMin ) usol = uMin;
-
-         if ( vsol > vMax ) vsol = vMax;
-    else if ( vsol < vMin ) vsol = vMin;
-
-    res = uv(usol, vsol);
-  }
 
   params = res;
   return true;

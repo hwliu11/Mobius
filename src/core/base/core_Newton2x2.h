@@ -33,6 +33,7 @@
 
 // Core includes
 #include <mobius/core_IAlgorithm.h>
+#include <mobius/core_Precision.h>
 #include <mobius/core_TwovariateFuncWithGradient.h>
 #include <mobius/core_UV.h>
 
@@ -55,16 +56,28 @@ public:
   //! Ctor.
   //! \param[in] f        first component of the objective vector function.
   //! \param[in] g        second component of the objective vector function.
+  //! \param[in] umin     min value of the first argument.
+  //! \param[in] umax     max value of the first argument.
+  //! \param[in] vmin     min value of the second argument.
+  //! \param[in] vmax     max value of the second argument.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   core_Newton2x2(const core_Ptr<core_TwovariateFuncWithGradient>& f,
                  const core_Ptr<core_TwovariateFuncWithGradient>& g,
+                 const double                                     umin,
+                 const double                                     umax,
+                 const double                                     vmin,
+                 const double                                     vmax,
                  core_ProgressEntry                               progress = NULL,
                  core_PlotterEntry                                plotter  = NULL)
   //
   : core_IAlgorithm (progress, plotter),
     m_f             (f),
-    m_g             (g)
+    m_g             (g),
+    m_fUmin         (umin),
+    m_fUmax         (umax),
+    m_fVmin         (vmin),
+    m_fVmax         (vmax)
   {}
 
 public:
@@ -84,6 +97,7 @@ public:
     bool      success = false;
     const int maxIter = 100;
     int       iter    = 0;
+    double    prec2d  = core_Precision::Resolution2D();
 
     do
     {
@@ -108,10 +122,26 @@ public:
 #endif
 
       // Compute next value of v.
-      const double v_next = v_i + (gu_i*f_i - g_i*fu_i) / (fu_i*gv_i - gu_i*fv_i);
+      double v_next = v_i + (gu_i*f_i - g_i*fu_i) / (fu_i*gv_i - gu_i*fv_i);
 
       // Compute next value of u.
-      const double u_next = u_i - ( f_i + fv_i*(v_next - v_i) ) / fu_i;
+      double u_next = u_i - ( f_i + fv_i*(v_next - v_i) ) / fu_i;
+
+      // Snap to the search domain boundaries.
+      if      ( u_next > m_fUmax ) u_next = m_fUmax;
+      else if ( u_next < m_fUmin ) u_next = m_fUmin;
+      //
+      if      ( v_next > m_fVmax ) v_next = m_fVmax;
+      else if ( v_next < m_fVmin ) v_next = m_fVmin;
+
+      // Step is not changing.
+      if ( fabs(u_next - u_i) < prec2d && fabs(v_next - v_i) < prec2d )
+      {
+        stop    = true;
+        success = true;
+        xsol    = uv(u_i, v_i);
+        continue;
+      }
 
       // Halt by exceeding the limit of iterations.
       if ( ++iter == maxIter )
@@ -132,6 +162,11 @@ private:
 
   core_Ptr<core_TwovariateFuncWithGradient> m_f; //!< First-component function.
   core_Ptr<core_TwovariateFuncWithGradient> m_g; //!< Second-component function.
+
+  double m_fUmin; //!< Min value of the first argument.
+  double m_fUmax; //!< Max value of the first argument.
+  double m_fVmin; //!< Min value of the second argument.
+  double m_fVmax; //!< Max value of the second argument.
 
 };
 

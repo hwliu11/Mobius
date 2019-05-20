@@ -90,6 +90,8 @@ public:
               << &exchangeUV01
               << &invertPoint01
               << &invertPoint02
+              << &invertPoint03
+              << &invertPoint04
               ;
   }
 
@@ -113,6 +115,8 @@ private:
   static outcome exchangeUV01    (const int funcID);
   static outcome invertPoint01   (const int funcID);
   static outcome invertPoint02   (const int funcID);
+  static outcome invertPoint03   (const int funcID);
+  static outcome invertPoint04   (const int funcID);
 
 };
 
