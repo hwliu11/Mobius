@@ -713,16 +713,44 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
   core_Ptr<core_TwovariateFuncWithGradient> f = new BSplSurfProj::func_f(this, P);
   core_Ptr<core_TwovariateFuncWithGradient> g = new BSplSurfProj::func_g(this, P);
 
+  // Get domain bounds to limit search.
   const double uMin = this->GetMinParameter_U();
   const double uMax = this->GetMaxParameter_U();
   const double vMin = this->GetMinParameter_V();
   const double vMax = this->GetMaxParameter_V();
 
+  // Find the closest control point to P.
+  double minD = DBL_MAX;
+  int    closest_i = 0, closest_j = 0;
+  //
+  for ( int iFixedU = 0; iFixedU < int( m_poles.size() ); ++iFixedU )
+  {
+    for ( int iFixedV = 0; iFixedV < int( m_poles[0].size() ); ++iFixedV )
+    {
+      const double d =(m_poles[iFixedU][iFixedV] - P).Modulus();
+      //
+      if ( d < minD )
+      {
+        minD      = d;
+        closest_i = iFixedU;
+        closest_j = iFixedV;
+      }
+    }
+  }
+
+  // We can now take the subdomain [u_i, u_{i+p+1}) x [v_j, v_{j+q+1}) where
+  // the only non-vanishing basis functions reside. Let's then take the
+  // midpoint in this subdomain as the initial guess.
+  //
+  double usubMin = m_U[closest_i];
+  double usubMax = m_U[closest_i + m_iDegU + 1];
+  double vsubMin = m_V[closest_j];
+  double vsubMax = m_V[closest_j + m_iDegV + 1];
+  //
+  uv initPt = ( uv(usubMin, vsubMin) + uv(usubMax, vsubMax) )*0.5;
+
   // Prepare Newton iterations.
   core_Newton2x2 newton(f, g, uMin, uMax, vMin, vMax);
-
-  // Choose the initial guess.
-  uv initPt = ( uv(uMin, vMin) + uv(uMax, vMax) )*0.5;
 
   // Run optimizer.
   uv res;
