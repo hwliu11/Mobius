@@ -92,6 +92,7 @@ public:
               << &invertPoint02
               << &invertPoint03
               << &invertPoint04
+              << &invertPoint05
               ;
   }
 
@@ -117,6 +118,7 @@ private:
   static outcome invertPoint02   (const int funcID);
   static outcome invertPoint03   (const int funcID);
   static outcome invertPoint04   (const int funcID);
+  static outcome invertPoint05   (const int funcID);
 
 };
 

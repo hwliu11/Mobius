@@ -48,6 +48,14 @@
 
 //-----------------------------------------------------------------------------
 
+// Filenames are specified relatively to MOBIUS_TEST_DATA environment variable.
+#define filename_bsurf_001 "bsurf/bsurf_001.json"
+#define filename_bsurf_002 "bsurf/bsurf_002.json"
+#define filename_bsurf_003 "bsurf/bsurf_003.json"
+#define filename_bsurf_004 "bsurf/bsurf_004.json"
+
+//-----------------------------------------------------------------------------
+
 //! Test scenario 001: evaluate B-surface in its domain.
 //! \param[in] funcID function ID.
 //! \return true in case of success, false -- otherwise.
@@ -1975,6 +1983,93 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint04(const int funcID)
     return res.failure();
   //
   if ( ( Pproj - uv(13.839296586939369, 0.14938030843899999) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Inverts point on a B-surface.
+//!
+//! \param[in] funcID function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_BSplineSurface::invertPoint05(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  /* =======================
+   *  Prepare input surface
+   * ======================= */
+
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filename_bsurf_004;
+
+  // Read file.
+  std::ifstream FILE(filename);
+  std::stringstream buffer;
+  buffer << FILE.rdbuf();
+
+  // JSON definition.
+  std::string json = buffer.str();
+
+  // Construct B-surface.
+  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  //
+  if ( surf.IsNull() )
+    return res.failure();
+
+  /* ==============
+   *  Perform test
+   * ============== */
+
+  uv Pproj;
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(-58.529525756835938, -1.2663847208023071, 1.3287150859832764), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.1521258313958907, 0) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(-89.192314147949219, 9.112696647644043, -38.65899658203125), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.13731445118356825, 0.87063787791083846) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(-75.953231811523438, -2.9174678325653076, -29.082473754882813), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.084237605907114155, 0.56641825819012248) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(-76.162773132324219, -5.1329221725463867, -34.326473236083984), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.037909899223990663, 0.61000413737984371) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(-85.975509643554688, -1.3057748079299927, -43.200931549072266), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.054110672666824365, 0.82714845292773875) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+  
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(-65.886886596679687, -3.9525032043457031, -12.483232498168945), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.12252459837230584, 0.26051543661153131) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();
