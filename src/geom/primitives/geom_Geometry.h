@@ -36,7 +36,8 @@
 
 // Core includes
 #include <mobius/core_IsoTransformChain.h>
-#include <mobius/core_Ptr.h>
+#include <mobius/core_IPlotter.h>
+#include <mobius/core_IProgressNotifier.h>
 
 namespace mobius {
 
@@ -70,6 +71,16 @@ public:
     return m_tChain;
   }
 
+  //! Sets diagnostic tools for the object.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
+  void SetDiagnosticTools(core_ProgressEntry progress,
+                          core_PlotterEntry  plotter)
+  {
+    m_progress = progress;
+    m_plotter  = plotter;
+  }
+
 // Construction & destruction:
 protected:
 
@@ -82,6 +93,11 @@ protected:
 protected:
 
   core_IsoTransformChain m_tChain; //!< Transformation chain.
+
+protected:
+
+  mutable core_ProgressEntry m_progress; //!< Progress notifier.
+  mutable core_PlotterEntry  m_plotter;  //!< Imperative plotter.
 
 };
 
