@@ -748,9 +748,11 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
   double vsubMax = m_V[closest_j + m_iDegV + 1];
   //
   uv initPt = ( uv(usubMin, vsubMin) + uv(usubMax, vsubMax) )*0.5;
+  //
+  m_plotter.DRAW_POINT(initPt, MobiusColor_Red, "initPt2d");
 
   // Prepare Newton iterations.
-  core_Newton2x2 newton(f, g, uMin, uMax, vMin, vMax);
+  core_Newton2x2 newton(f, g, uMin, uMax, vMin, vMax, m_progress, m_plotter);
 
   // Run optimizer.
   uv res;

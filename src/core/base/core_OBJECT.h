@@ -35,8 +35,9 @@
 #include <windows.h>
 #endif
 
-// core includes
-#include <mobius/core.h>
+// Core includes
+#include <mobius/core_IPlotter.h>
+#include <mobius/core_IProgressNotifier.h>
 
 namespace mobius {
 
@@ -76,6 +77,18 @@ public:
 
 public:
 
+  //! Sets diagnostic tools for the object.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
+  void SetDiagnosticTools(core_ProgressEntry progress,
+                          core_PlotterEntry  plotter)
+  {
+    m_progress = progress;
+    m_plotter  = plotter;
+  }
+
+public:
+
   mobiusCore_EXPORT virtual void
     Dump(std::ostream* out) const;
 
@@ -86,6 +99,11 @@ private:
 #else
   int m_iRefCount;
 #endif
+
+protected:
+
+  mutable core_ProgressEntry m_progress; //!< Progress notifier.
+  mutable core_PlotterEntry  m_plotter;  //!< Imperative plotter.
 
 };
 
