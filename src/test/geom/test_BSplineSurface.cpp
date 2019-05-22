@@ -2074,3 +2074,55 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint05(const int funcID)
 
   return res.success();
 }
+
+//-----------------------------------------------------------------------------
+
+//! Inverts point on a B-surface.
+//!
+//! \param[in] funcID function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_BSplineSurface::invertPoint06(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  /* =======================
+   *  Prepare input surface
+   * ======================= */
+
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filename_bsurf_002;
+
+  // Read file.
+  std::ifstream FILE(filename);
+  std::stringstream buffer;
+  buffer << FILE.rdbuf();
+
+  // JSON definition.
+  std::string json = buffer.str();
+
+  // Construct B-surface.
+  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  //
+  if ( surf.IsNull() )
+    return res.failure();
+
+  /* ==============
+   *  Perform test
+   * ============== */
+
+  uv Pproj;
+
+  // Invert point.
+  if ( !surf->InvertPoint(xyz(109.2, 208.1, 293.6), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - uv(0.46398398639457306, 0.020440572304156825) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  return res.success();
+}

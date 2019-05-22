@@ -248,6 +248,61 @@ namespace BSplSurfProj
       dG_dv = dS_dV.Dot(dS_dV) + r.Dot(d2S_dV2);
     }
   };
+
+  //! Newton method specialization for point inversion.
+  class Newton2x2 : public core_Newton2x2
+  {
+  public:
+
+    //! Ctor.
+    //! \param[in] S        surface in question.
+    //! \param[in] f        first component of the objective vector function.
+    //! \param[in] g        second component of the objective vector function.
+    //! \param[in] umin     min value of the first argument.
+    //! \param[in] umax     max value of the first argument.
+    //! \param[in] vmin     min value of the second argument.
+    //! \param[in] vmax     max value of the second argument.
+    //! \param[in] progress progress notifier.
+    //! \param[in] plotter  imperative plotter.
+    Newton2x2(const core_Ptr<geom_BSplineSurface>&             S,
+              const core_Ptr<core_TwovariateFuncWithGradient>& f,
+              const core_Ptr<core_TwovariateFuncWithGradient>& g,
+              const double                                     umin,
+              const double                                     umax,
+              const double                                     vmin,
+              const double                                     vmax,
+              core_ProgressEntry                               progress = NULL,
+              core_PlotterEntry                                plotter  = NULL)
+    //
+    : core_Newton2x2 (f, g, umin, umax, vmin, vmax, progress, plotter),
+      m_S            (S),
+      m_P            (DBL_MAX, 0., 0.)
+    {}
+
+  private:
+
+    //! Callback on choosing the next point.
+    //! \param[in] u next u.
+    //! \param[in] v next v.
+    virtual void onNextEvaluation(const double u, const double v)
+    {
+      // Draw 3D point.
+      xyz P;
+      m_S->Eval(u, v, P);
+      //
+      m_plotter.DRAW_POINT(P, MobiusColor_Magenta, "onNextStep");
+
+      if ( m_P.X() != DBL_MAX )
+        m_plotter.DRAW_LINK(m_P, P, MobiusColor_Magenta, "onNextStep");
+      //
+      m_P = P;
+    }
+
+  private:
+
+    core_Ptr<geom_BSplineSurface> m_S; //!< Surface in question.
+    xyz                           m_P; //!< Last evaluated point.
+  };
 };
 
 };
@@ -727,7 +782,7 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
   {
     for ( int iFixedV = 0; iFixedV < int( m_poles[0].size() ); ++iFixedV )
     {
-      const double d =(m_poles[iFixedU][iFixedV] - P).Modulus();
+      const double d = (m_poles[iFixedU][iFixedV] - P).Modulus();
       //
       if ( d < minD )
       {
@@ -748,11 +803,33 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
   double vsubMax = m_V[closest_j + m_iDegV + 1];
   //
   uv initPt = ( uv(usubMin, vsubMin) + uv(usubMax, vsubMax) )*0.5;
-  //
-  m_plotter.DRAW_POINT(initPt, MobiusColor_Red, "initPt2d");
+
+  // Visual dump of the effective subdomain.
+  if ( !m_plotter.GetPlotter().IsNull() )
+  {
+    m_plotter.REDRAW_POINT("initPt2d", initPt, MobiusColor_Magenta);
+
+    // Draw 3D point.
+    xyz initPt3d;
+    this->Eval(initPt.U(), initPt.V(), initPt3d);
+    //
+    m_plotter.REDRAW_POINT("initPt3d", initPt3d, MobiusColor_Magenta);
+
+    // Draw isos.
+    ptr<bcurve> usubMinIso = this->Iso_U(usubMin);
+    ptr<bcurve> usubMaxIso = this->Iso_U(usubMax);
+    ptr<bcurve> vsubMinIso = this->Iso_V(vsubMin);
+    ptr<bcurve> vsubMaxIso = this->Iso_V(vsubMax);
+    //
+    m_plotter.REDRAW_CURVE("usubMinIso", usubMinIso, MobiusColor_Magenta);
+    m_plotter.REDRAW_CURVE("usubMaxIso", usubMaxIso, MobiusColor_Magenta);
+    m_plotter.REDRAW_CURVE("vsubMinIso", vsubMinIso, MobiusColor_Magenta);
+    m_plotter.REDRAW_CURVE("vsubMaxIso", vsubMaxIso, MobiusColor_Magenta);
+  }
 
   // Prepare Newton iterations.
-  core_Newton2x2 newton(f, g, uMin, uMax, vMin, vMax, m_progress, m_plotter);
+  BSplSurfProj::Newton2x2 newton(this, f, g, uMin, uMax, vMin, vMax,
+                                 m_progress, m_plotter);
 
   // Run optimizer.
   uv res;

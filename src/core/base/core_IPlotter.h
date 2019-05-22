@@ -48,28 +48,29 @@ class core_XYZ;
 //! Simplistic structure to hold color components.
 struct core_Color
 {
-  unsigned uRed;   //!< Red component in range [0, 255].
-  unsigned uGreen; //!< Green component in range [0, 255].
-  unsigned uBlue;  //!< Blue component in range [0, 255].
+  double fRed;   //!< Red component in range [0, 1].
+  double fGreen; //!< Green component in range [0, 1].
+  double fBlue;  //!< Blue component in range [0, 1].
 
-  core_Color() : uRed(0), uGreen(0), uBlue(0) {} //!< Default ctor.
+  core_Color() : fRed(0.), fGreen(0.), fBlue(0.) {} //!< Default ctor.
 
   //! Complete ctor.
   //! \param[in] _r red component to set.
   //! \param[in] _g green component to set.
   //! \param[in] _b blue component to set.
-  core_Color(const unsigned _r, const unsigned _g, const unsigned _b)
-  : uRed(_r), uGreen(_g), uBlue(_b) {}
+  core_Color(const double _r, const double _g, const double _b)
+  : fRed(_r), fGreen(_g), fBlue(_b) {}
 };
 
 //-----------------------------------------------------------------------------
 
-#define MobiusColor_Red       core_Color(255, 000, 000)
-#define MobiusColor_Green     core_Color(000, 255, 000)
-#define MobiusColor_Blue      core_Color(000, 000, 255)
-#define MobiusColor_Yellow    core_Color(255, 255, 000)
-#define MobiusColor_White     core_Color(255, 255, 255)
+#define MobiusColor_Red       core_Color(1.0, 000, 000)
+#define MobiusColor_Green     core_Color(000, 1.0, 000)
+#define MobiusColor_Blue      core_Color(000, 000, 1.0)
+#define MobiusColor_Yellow    core_Color(1.0, 1.0, 000)
+#define MobiusColor_White     core_Color(1.0, 1.0, 1.0)
 #define MobiusColor_Black     core_Color(000, 000, 000)
+#define MobiusColor_Magenta   core_Color(1.0, 000, 1.0)
 
 //-----------------------------------------------------------------------------
 
@@ -221,25 +222,25 @@ public:
     DRAW_LINK(const core_XYZ&,
               const core_XYZ&,
               const core_Color&,
-              const std::string&);
+              const std::string&) {}
 
   virtual void
     DRAW_LINK(const core_UV&,
               const core_UV&,
               const core_Color&,
-              const std::string&);
+              const std::string&) {}
 
   virtual void
     REDRAW_LINK(const std::string&,
                 const core_XYZ&,
                 const core_XYZ&,
-                const core_Color&);
+                const core_Color&) {}
 
   virtual void
     REDRAW_LINK(const std::string&,
                 const core_UV&,
                 const core_UV&,
-                const core_Color&);
+                const core_Color&) {}
 
 };
 
@@ -527,6 +528,58 @@ public:
     if ( m_iv.IsNull() ) return;
     //
     m_iv->REDRAW_SURFACE(name, surface, uMin, uMax, vMin, vMax, color, opacity);
+  }
+
+//---------------------------------------------------------------------------//
+
+  virtual void
+    DRAW_LINK(const core_XYZ&    P1,
+              const core_XYZ&    P2,
+              const core_Color&  color,
+              const std::string& name)
+  {
+    if ( m_iv.IsNull() ) return;
+    //
+    m_iv->DRAW_LINK(P1, P2, color, name);
+  }
+
+//---------------------------------------------------------------------------//
+
+  virtual void
+    DRAW_LINK(const core_UV&     P1,
+              const core_UV&     P2,
+              const core_Color&  color,
+              const std::string& name)
+  {
+    if ( m_iv.IsNull() ) return;
+    //
+    m_iv->DRAW_LINK(P1, P2, color, name);
+  }
+
+//---------------------------------------------------------------------------//
+
+  virtual void
+    REDRAW_LINK(const std::string& name,
+                const core_XYZ&    P1,
+                const core_XYZ&    P2,
+                const core_Color&  color)
+  {
+    if ( m_iv.IsNull() ) return;
+    //
+    m_iv->REDRAW_LINK(name, P1, P2, color);
+  }
+
+//---------------------------------------------------------------------------//
+
+  virtual void
+    REDRAW_LINK(const std::string& name,
+                const core_UV&     P1,
+                const core_UV&     P2,
+                const core_Color&  color)
+  {
+    if ( m_iv.IsNull() ) return;
+    //
+    m_iv->REDRAW_LINK(name, P1, P2, color);
   }
 
 private:

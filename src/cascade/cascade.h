@@ -82,6 +82,14 @@ namespace mobius
       return gp_Pnt( coords.X(), coords.Y(), coords.Z() );
     }
 
+    //! Converts Mobius 2D point to OpenCascade 2D point.
+    //! \param[in] coords point to convert.
+    //! \return converted point.
+    static gp_Pnt2d GetOpenCascadePnt2d(const uv& coords)
+    {
+      return gp_Pnt2d( coords.U(), coords.V() );
+    }
+
     //! Converts Mobius 3D point to OpenCascade 3D vector.
     //! \param[in] coords point to convert.
     //! \return converted vector.
@@ -96,6 +104,14 @@ namespace mobius
     static xyz GetMobiusPnt(const gp_Pnt& coords)
     {
       return xyz( coords.X(), coords.Y(), coords.Z() );
+    }
+
+    //! Converts OpenCascade 2D point to Mobius 2D point.
+    //! \param[in] coords point to convert.
+    //! \return converted point.
+    static uv GetMobiusPnt2d(const gp_Pnt2d& coords)
+    {
+      return uv( coords.X(), coords.Y() );
     }
 
     //! Converts Mobius B-curve to OpenCascade B-curve.
