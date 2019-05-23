@@ -36,6 +36,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Base class for point clouds.
 class geom_PointCloud : public geom_Geometry
 {

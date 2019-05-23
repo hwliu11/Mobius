@@ -37,6 +37,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Auxiliary structure representing one cross-section being a subject of
 //! reverse engineering. In a simplest case we need to have just several
 //! ordered points which can be then interpolated (or approximated) for

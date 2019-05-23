@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/core_XYZ.h>
 
+// Standard includes
+#include <math.h>
+
 //-----------------------------------------------------------------------------
 // Class-level API
 //-----------------------------------------------------------------------------
@@ -149,6 +152,31 @@ inline double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
   return alpha;
 }
 
+//! Calculates the angle, in radians, between this vector and vector `other`.
+//! The result is a value between -M_PI and M_PI. The vector `ref` defines
+//! the positive sense of rotation: the angular value is positive, if the
+//! cross product `this ^ other` has the same orientation as `ref` relative
+//! to the plane defined by the vectors `this` and `other`. Otherwise, the
+//! angular value is negative.
+inline double mobius::core_XYZ::AngleWithRef(const core_XYZ& other,
+                                             const core_XYZ& ref) const
+{
+  xyz XYZ = this->Cross(other).Normalized();
+
+  double alpha;
+  double Cosinus = this->Normalized().Dot( other.Normalized() );
+  double Sinus   = XYZ.Modulus();
+  //
+  if ( Cosinus > -0.70710678118655 && Cosinus < 0.70710678118655 )
+    alpha = acos(Cosinus);
+  else {
+    if ( Cosinus < 0.0 ) alpha = M_PI - asin(Sinus);
+    else                 alpha =        asin(Sinus);
+  }
+  if ( XYZ.Dot(ref) >= 0.0 )  return  alpha;
+  else                        return -alpha;
+}
+
 //! Exact equality operator. Use with care.
 //! \param XYZ [in] point to compare with.
 //! \return true in case of exact (bit-to-bit) equality.
@@ -187,6 +215,15 @@ inline mobius::core_XYZ mobius::core_XYZ::operator*=(const double coeff)
   this->m_fY *= coeff;
   this->m_fZ *= coeff;
   return *this;
+}
+
+//! Computes the cross product between this triple of coordinates and the
+//! passed argument.
+//! \param[in] XYZ argument triple.
+//! \return cross product.
+inline mobius::core_XYZ mobius::core_XYZ::operator^(const core_XYZ& XYZ) const
+{
+  return this->Cross(XYZ);
 }
 
 //! Divides copy of point by the passed scalar value.

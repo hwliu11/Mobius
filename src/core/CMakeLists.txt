@@ -48,9 +48,11 @@ set (base_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (blas_H_FILES
+  blas/core_SolveCovarianceEigens.h
   blas/core_SolveLinearSystem.h
 )
-set (blas_CPP_FILES 
+set (blas_CPP_FILES
+  blas/core_SolveCovarianceEigens.cpp
   blas/core_SolveLinearSystem.cpp
 )
 
@@ -59,6 +61,7 @@ set (blas_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (primitives_H_FILES 
+  primitives/core_Axis.h
   primitives/core_IsoTransform.h
   primitives/core_IsoTransformChain.h
   primitives/core_Quaternion.h

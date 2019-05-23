@@ -30,6 +30,7 @@ set (classifiers_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (clouds_H_FILES
+  clouds/geom_BuildAveragePlane.h
   clouds/geom_PointCloud.h
   clouds/geom_PositionCloud.h
   clouds/geom_SectionCloud.h
@@ -37,6 +38,7 @@ set (clouds_H_FILES
   clouds/geom_VectorField.h
 )
 set (clouds_CPP_FILES
+  clouds/geom_BuildAveragePlane.cpp
   clouds/geom_PointCloud.cpp
   clouds/geom_PositionCloud.cpp
   clouds/geom_SectionCloud.cpp
@@ -118,6 +120,7 @@ set (primitives_H_FILES
   primitives/geom_KleinIsoCurve.h
   primitives/geom_Line.h
   primitives/geom_Link.h
+  primitives/geom_PlaneSurface.h
   primitives/geom_Point.h
   primitives/geom_PolyLine.h
   primitives/geom_SectionPatch.h
@@ -138,6 +141,7 @@ set (primitives_CPP_FILES
   primitives/geom_KleinIsoCurve.cpp
   primitives/geom_Line.cpp
   primitives/geom_Link.cpp
+  primitives/geom_PlaneSurface.cpp
   primitives/geom_Point.cpp
   primitives/geom_PolyLine.cpp
   primitives/geom_SphereSurface.cpp

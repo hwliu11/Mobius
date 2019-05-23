@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 15 November 2013
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -101,15 +101,15 @@ void mobius::geom_PositionCloud::AddPoint(const xyz& point)
 
 //! Returns number of points.
 //! \return number of points.
-size_t mobius::geom_PositionCloud::GetNumberOfPoints() const
+int mobius::geom_PositionCloud::GetNumberOfPoints() const
 {
-  return m_cloud.size();
+  return int( m_cloud.size() );
 }
 
 //! Returns point with the given index.
 //! \param idx [in] index of point to access.
 //! \return requested point.
-const mobius::xyz& mobius::geom_PositionCloud::GetPoint(const size_t idx) const
+const mobius::xyz& mobius::geom_PositionCloud::GetPoint(const int idx) const
 {
   return m_cloud.at(idx);
 }

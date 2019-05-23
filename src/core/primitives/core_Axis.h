@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 15 November 2013
+// Created on: 23 May 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,73 +28,70 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_PositionCloud_HeaderFile
-#define geom_PositionCloud_HeaderFile
+#ifndef core_Axis_HeaderFile
+#define core_Axis_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_PointCloud.h>
-
-// Core includes
+// core includes
 #include <mobius/core_XYZ.h>
-
-// STL includes
-#include <vector>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_CORE
 //!
-//! Represents simple point cloud as a collection of points.
-class geom_PositionCloud : public geom_PointCloud
+//! Axis which is a vector with position.
+class core_Axis
 {
 // Construction & destruction:
 public:
 
-  mobiusGeom_EXPORT
-    geom_PositionCloud();
+  //! Default ctor.
+  core_Axis() {}
 
-  mobiusGeom_EXPORT
-    geom_PositionCloud(const std::vector<core_XYZ>& pts);
-
-  mobiusGeom_EXPORT virtual
-    ~geom_PositionCloud();
-
-public:
-
-  mobiusGeom_EXPORT virtual void
-    GetBounds(double& xMin, double& xMax,
-              double& yMin, double& yMax,
-              double& zMin, double& zMax) const override;
+  //! Complete ctor.
+  //! \param[in] pos origin of the axis.
+  //! \param[in] dir direction of the axis.
+  core_Axis(const xyz& pos,
+            const xyz& dir) : m_pos(pos), m_dir(dir) {}
 
 public:
 
-  mobiusGeom_EXPORT virtual void
-    AddPoint(const core_XYZ& point);
+  //! \return position of the axis.
+  const xyz& GetPosition() const
+  {
+    return m_pos;
+  }
 
-  mobiusGeom_EXPORT virtual int
-    GetNumberOfPoints() const;
+  //! Sets the position of the axis.
+  //! \param[in] pos position coordinates to set.
+  void SetPosition(const xyz& pos)
+  {
+    m_pos = pos;
+  }
 
-  mobiusGeom_EXPORT virtual const core_XYZ&
-    GetPoint(const int idx) const;
+  //! \return direction of the axis.
+  const xyz& GetDirection() const
+  {
+    return m_dir;
+  }
 
-  mobiusGeom_EXPORT virtual void
-    SetPoints(const std::vector<core_XYZ>& cloud);
+  //! Sets the direction of the axis.
+  //! \param[in] dir direction vector to set.
+  void SetDirection(const xyz& dir)
+  {
+    m_dir = dir;
+  }
 
-  mobiusGeom_EXPORT virtual const std::vector<core_XYZ>&
-    GetPoints() const;
+private:
 
-  mobiusGeom_EXPORT virtual void
-    Clear();
-
-protected:
-
-  //! Actual collection of points.
-  std::vector<core_XYZ> m_cloud;
+  xyz m_pos; //!< Position.
+  xyz m_dir; //!< Direction.
 
 };
 
-//! Handy alias for double type.
-typedef geom_PositionCloud pcloud;
+//! \ingroup MOBIUS_CORE
+//!
+//! Convenience alias.
+typedef core_Axis axis;
 
 };
 

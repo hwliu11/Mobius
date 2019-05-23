@@ -330,7 +330,7 @@ private:
 
 };
 
-//! Convenience shortcuts.
+//! Convenience shortcut.
 typedef geom_BSplineSurface bsurf;
 
 };

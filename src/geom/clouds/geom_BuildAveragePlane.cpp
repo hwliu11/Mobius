@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 15 November 2013
+// Created on: 23 May 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -12,7 +12,7 @@
 //    * Redistributions in binary form must reproduce the above copyright
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
-//    * Neither the name of Sergey Slyadnev nor the
+//    * Neither the name of the copyright holder(s) nor the
 //      names of all contributors may be used to endorse or promote products
 //      derived from this software without specific prior written permission.
 //
@@ -28,74 +28,40 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_PositionCloud_HeaderFile
-#define geom_PositionCloud_HeaderFile
-
-// Geometry includes
-#include <mobius/geom_PointCloud.h>
+// Own include
+#include <mobius/geom_BuildAveragePlane.h>
 
 // Core includes
-#include <mobius/core_XYZ.h>
+#include <mobius/core_SolveCovarianceEigens.h>
 
-// STL includes
-#include <vector>
-
-namespace mobius {
-
-//! \ingroup MOBIUS_GEOM
-//!
-//! Represents simple point cloud as a collection of points.
-class geom_PositionCloud : public geom_PointCloud
-{
-// Construction & destruction:
-public:
-
-  mobiusGeom_EXPORT
-    geom_PositionCloud();
-
-  mobiusGeom_EXPORT
-    geom_PositionCloud(const std::vector<core_XYZ>& pts);
-
-  mobiusGeom_EXPORT virtual
-    ~geom_PositionCloud();
-
-public:
-
-  mobiusGeom_EXPORT virtual void
-    GetBounds(double& xMin, double& xMax,
-              double& yMin, double& yMax,
-              double& zMin, double& zMax) const override;
-
-public:
-
-  mobiusGeom_EXPORT virtual void
-    AddPoint(const core_XYZ& point);
-
-  mobiusGeom_EXPORT virtual int
-    GetNumberOfPoints() const;
-
-  mobiusGeom_EXPORT virtual const core_XYZ&
-    GetPoint(const int idx) const;
-
-  mobiusGeom_EXPORT virtual void
-    SetPoints(const std::vector<core_XYZ>& cloud);
-
-  mobiusGeom_EXPORT virtual const std::vector<core_XYZ>&
-    GetPoints() const;
-
-  mobiusGeom_EXPORT virtual void
-    Clear();
-
-protected:
-
-  //! Actual collection of points.
-  std::vector<core_XYZ> m_cloud;
-
-};
-
-//! Handy alias for double type.
-typedef geom_PositionCloud pcloud;
-
-};
-
+#undef COUT_DEBUG
+#if defined COUT_DEBUG
+  #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
+
+//-----------------------------------------------------------------------------
+
+mobius::geom_BuildAveragePlane::geom_BuildAveragePlane(core_ProgressEntry progress,
+                                                       core_PlotterEntry  plotter)
+: core_OPERATOR(progress, plotter)
+{}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_BuildAveragePlane::Build(const ptr<pcloud>& points,
+                                           ptr<plane>&        result) const
+{
+  // Compute eigen vectors of a covariance matrix for the point cloud.
+  core_SolveCovarianceEigens solver;
+  //
+  xyz C, Dx, Dy, Dz;
+  if ( !solver(points->GetPoints(), C, Dx, Dy, Dz) )
+  {
+    m_progress.SendLogMessage(MobiusErr(Normal) << "Failed to compute eigen vectors of a covariance matrix.");
+    return false;
+  }
+
+  // Build plane.
+  result = new plane(C, Dx, Dy);
+  return true;
+}

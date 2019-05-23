@@ -42,6 +42,8 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Represents point cloud arranged as ordered sections of points.
 class geom_SectionCloud : public geom_PointCloud
 {

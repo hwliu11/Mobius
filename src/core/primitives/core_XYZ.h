@@ -219,6 +219,10 @@ public:
   mobiusCore_EXPORT double
     Angle(const core_XYZ& XYZ) const;
 
+  mobiusCore_EXPORT double
+    AngleWithRef(const core_XYZ& other,
+                 const core_XYZ& ref) const;
+
 public:
 
   mobiusCore_EXPORT bool
@@ -232,6 +236,9 @@ public:
 
   mobiusCore_EXPORT core_XYZ
     operator*=(const double coeff);
+
+  mobiusCore_EXPORT core_XYZ
+    operator^(const core_XYZ& XYZ) const;
 
   mobiusCore_EXPORT core_XYZ
     operator/(const double coeff) const;
