@@ -50,10 +50,12 @@
 // Geom includes
 #include <mobius/geom_BSplineCurve.h>
 #include <mobius/geom_BSplineSurface.h>
+#include <mobius/geom_PlaneSurface.h>
 
 // OpenCascade includes
 #include <Geom_BSplineCurve.hxx>
 #include <Geom_BSplineSurface.hxx>
+#include <Geom_Plane.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
 
@@ -106,6 +108,14 @@ namespace mobius
       return xyz( coords.X(), coords.Y(), coords.Z() );
     }
 
+    //! Converts OpenCascade 3D vector to Mobius 3D vector.
+    //! \param[in] coords vector to convert.
+    //! \return converted triple of coordinates.
+    static xyz GetMobiusVec(const gp_Vec& coords)
+    {
+      return xyz( coords.X(), coords.Y(), coords.Z() );
+    }
+
     //! Converts OpenCascade 2D point to Mobius 2D point.
     //! \param[in] coords point to convert.
     //! \return converted point.
@@ -137,6 +147,18 @@ namespace mobius
     //! \return Mobius surface.
     mobiusCascade_EXPORT static ptr<bsurf>
       GetMobiusBSurface(const Handle(Geom_BSplineSurface)& surface);
+
+    //! Converts Mobius plane to OpenCascade plane.
+    //! \param[in] surface Mobius surface to convert.
+    //! \return OpenCascade surface.
+    mobiusCascade_EXPORT static Handle(Geom_Plane)
+      GetOpenCascadePlane(const ptr<plane>& surface);
+
+    //! Converts OpenCascade plane to Mobius plane.
+    //! \param[in] surface OpenCascade surface to convert.
+    //! \return Mobius surface.
+    mobiusCascade_EXPORT static ptr<plane>
+      GetMobiusPlane(const Handle(Geom_Plane)& surface);
 
   };
 };

@@ -78,3 +78,29 @@ mobius::ptr<mobius::bsurf>
 
   return tool.GetMobiusSurface();
 }
+
+//-----------------------------------------------------------------------------
+
+Handle(Geom_Plane)
+  mobius::cascade::GetOpenCascadePlane(const ptr<plane>& surface)
+{
+  gp_Pnt O  = GetOpenCascadePnt( surface->GetOrigin() );
+  gp_Vec Du = GetOpenCascadeVec( surface->GetD1() );
+  gp_Vec Dv = GetOpenCascadeVec( surface->GetD2() );
+  //
+  return new Geom_Plane( gp_Ax3(O, Du^Dv, Du) );
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::ptr<mobius::plane>
+  mobius::cascade::GetMobiusPlane(const Handle(Geom_Plane)& surface)
+{
+  const gp_Ax3& ax3 = surface->Position();
+  //
+  xyz O  = GetMobiusPnt( ax3.Location() );
+  xyz Du = GetMobiusVec( ax3.XDirection() );
+  xyz Dv = GetMobiusVec( ax3.YDirection() );
+
+  return new plane(O, Du, Dv);
+}

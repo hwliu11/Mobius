@@ -42,6 +42,15 @@ mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<xyz>& pts) : ge
   this->SetPoints(pts);
 }
 
+//! Ctor accepting the plain vector of coordinates. This plain vector will
+//! be converted to the vector of triples.
+//! \param[in] coords coordinates packed in a plain vector.
+mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<double>& coords)
+{
+  for ( size_t k = 0; k < coords.size() - 2; k += 3 )
+    m_cloud.push_back( xyz(coords[k], coords[k+1], coords[k+2]) );
+}
+
 //! Destructor.
 mobius::geom_PositionCloud::~geom_PositionCloud()
 {}

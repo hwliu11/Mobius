@@ -56,6 +56,9 @@ public:
   mobiusGeom_EXPORT
     geom_PositionCloud(const std::vector<core_XYZ>& pts);
 
+  mobiusGeom_EXPORT
+    geom_PositionCloud(const std::vector<double>& coords);
+
   mobiusGeom_EXPORT virtual
     ~geom_PositionCloud();
 

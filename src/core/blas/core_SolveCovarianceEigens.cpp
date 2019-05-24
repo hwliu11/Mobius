@@ -40,7 +40,7 @@
 #include <Eigen/Dense>
 #pragma warning(default : 4702 4701)
 
-#undef COUT_DEBUG
+#define COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
@@ -85,18 +85,18 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
   {
     mu += pts[i];
   }
-  mu /= nPts;
+  mu /= int(nPts);
 
   /* =========================
    *  Build covariance matrix
    * ========================= */
 
   Eigen::Matrix3d C;
-  for ( int j = 1; j <= 3; ++j )
+  for ( int j = 0; j <= 2; ++j )
   {
-    for ( int k = 1; k <= 3; ++k )
+    for ( int k = 0; k <= 2; ++k )
     {
-      C(j-1, k-1) = 0.0; // TODO: is that necessary?
+      C(j, k) = 0.0; // TODO: is that necessary?
     }
   }
 
@@ -105,28 +105,29 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
     const xyz& p      = pts[i];
     xyz        p_dash = p - mu;
 
-    for ( int j = 1; j <= 3; ++j )
+    for ( int j = 0; j <= 2; ++j )
     {
-      for ( int k = 1; k <= 3; ++k )
+      for ( int k = 0; k <= 2; ++k )
       {
-        C(j-1, k-1) += ( p_dash.Coord(j)*p_dash.Coord(k) );
+        C(j, k) += ( p_dash.Coord(j)*p_dash.Coord(k) );
       }
     }
   }
 
-  for ( int j = 1; j <= 3; ++j )
+  for ( int j = 0; j <= 2; ++j )
   {
-    for ( int k = 1; k <= 3; ++k )
+    for ( int k = 0; k <= 2; ++k )
     {
-      C(j-1, k-1) /= nPts;
+      C(j, k) /= nPts;
     }
   }
 
   Eigen::EigenSolver<Eigen::Matrix3d> EigenSolver(C);
 
 #if defined COUT_DEBUG
-  std::cout << "\tThe eigen values of C are:" << std::endl << EigenSolver.eigenvalues() << std::endl;
-  std::cout << "\tThe matrix of eigenvectors, V, is:" << std::endl << EigenSolver.eigenvectors() << std::endl << std::endl;
+  std::cout << "\t[Mobius] Covariance matrix: " << std::endl << C << std::endl;
+  std::cout << "\t[Mobius] The eigen values of C are:" << std::endl << EigenSolver.eigenvalues() << std::endl;
+  std::cout << "\t[Mobius] The matrix of eigenvectors, V, is:" << std::endl << EigenSolver.eigenvectors() << std::endl << std::endl;
 #endif
 
   Eigen::Vector3cd v1 = EigenSolver.eigenvectors().col(0);
@@ -159,7 +160,7 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
   }
 
   // Check if the system is right-handed
-  const double ang = vec_X.AngleWithRef(vec_Y,vec_Z);
+  const double ang = vec_X.AngleWithRef(vec_Y, vec_Z);
   //
   if ( ang < 0 ) // Flip
   {

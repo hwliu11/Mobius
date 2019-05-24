@@ -51,8 +51,8 @@ public:
   //! \param[in] progress progress indicator.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_BuildAveragePlane(core_ProgressEntry progress,
-                           core_PlotterEntry  plotter);
+    geom_BuildAveragePlane(core_ProgressEntry progress = NULL,
+                           core_PlotterEntry  plotter  = NULL);
 
 public:
 
