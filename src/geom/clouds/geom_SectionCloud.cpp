@@ -79,7 +79,7 @@ void mobius::geom_SectionCloud::GetBounds(double& xMin, double& xMax,
     const ptr<geom_SectionLine>& S = m_cloud.at(s);
 
     // Iterate over the section points
-    for ( size_t p = 0; p < S->Pts->GetNumberOfPoints(); ++p )
+    for ( int p = 0; p < S->Pts->GetNumberOfPoints(); ++p )
     {
       const xyz& P = S->Pts->GetPoint(p);
       const double x = P.X(), y = P.Y(), z = P.Z();

@@ -54,6 +54,7 @@
 #include <mobius/test_ParamsChordLength.h>
 #include <mobius/test_ParamsUniform.h>
 #include <mobius/test_PointOnLine.h>
+#include <mobius/test_PositionCloud.h>
 #include <mobius/test_Quaternion.h>
 #include <mobius/test_SkinSurface.h>
 
@@ -113,6 +114,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D>             (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_MakeBicubicBSurf>   (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine>        (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PositionCloud>      (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve>       (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );

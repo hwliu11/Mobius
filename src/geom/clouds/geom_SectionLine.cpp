@@ -107,9 +107,9 @@ void mobius::geom_SectionLine::Split(const std::vector<xyz>& pts,
   ptr<geom_SectionLine> slice_before,
                         slice_after,
                         current = this;
-  for ( size_t p = 0; p < indices.size(); ++p )
+  for ( int p = 0; p < int( indices.size() ); ++p )
   {
-    const size_t idx_in_slice = find_index( current, this->Pts->GetPoint(indices[p]) );
+    const int idx_in_slice = find_index( current, this->Pts->GetPoint(indices[p]) );
 
     this->Split(current, idx_in_slice, slice_before, slice_after, splitting_done);
 
@@ -131,7 +131,7 @@ void mobius::geom_SectionLine::Split(const std::vector<size_t>& indices,
                                      bool&                      splitting_done)
 {
   std::vector<xyz> pts;
-  for ( size_t i = 0; i < indices.size(); ++i )
+  for ( int i = 0; i < int( indices.size() ); ++i )
     pts.push_back( this->Pts->GetPoint(indices[i]) );
 
   this->Split(pts, splitting_done);
@@ -407,12 +407,12 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
 
   // Construct slice before the point
   slice_before = new geom_SectionLine(source->ID, new pcloud);
-  for ( size_t p = 0; p <= idx; ++p )
+  for ( int p = 0; p <= idx; ++p )
     slice_before->Pts->AddPoint( source->Pts->GetPoint(p) );
 
   // Construct slice after the point
   slice_after = new geom_SectionLine(source->ID, new pcloud);
-  for ( size_t p = idx; p < n_pts; ++p )
+  for ( int p = idx; p < n_pts; ++p )
     slice_after->Pts->AddPoint( source->Pts->GetPoint(p) );
 
   // Ok
@@ -425,7 +425,7 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
 int mobius::geom_SectionLine::find_index(const xyz& pnt) const
 {
   const double prec = core_Precision::Resolution3D();
-  for ( size_t p = 0; p < this->Pts->GetNumberOfPoints(); ++p )
+  for ( int p = 0; p < this->Pts->GetNumberOfPoints(); ++p )
   {
     const xyz& sct_pt = this->Pts->GetPoint(p);
     if ( (sct_pt - pnt).Modulus() < prec )
@@ -442,7 +442,7 @@ int mobius::geom_SectionLine::find_index(const ptr<geom_SectionLine>& source,
                                          const xyz&                         pnt)
 {
   const double prec = core_Precision::Resolution3D();
-  for ( size_t p = 0; p < source->Pts->GetNumberOfPoints(); ++p )
+  for ( int p = 0; p < source->Pts->GetNumberOfPoints(); ++p )
   {
     const xyz& sct_pt = source->Pts->GetPoint(p);
     if ( (sct_pt - pnt).Modulus() < prec )

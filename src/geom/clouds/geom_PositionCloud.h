@@ -50,20 +50,34 @@ class geom_PositionCloud : public geom_PointCloud
 // Construction & destruction:
 public:
 
+  //! Default ctor.
   mobiusGeom_EXPORT
     geom_PositionCloud();
 
+  //! Ctor accepting points of the cloud.
+  //! \param[in] pts point to populate the cloud with.
   mobiusGeom_EXPORT
     geom_PositionCloud(const std::vector<core_XYZ>& pts);
 
+  //! Ctor accepting the plain vector of coordinates. This plain vector will
+  //! be converted to the vector of triples.
+  //! \param[in] coords coordinates packed in a plain vector.
   mobiusGeom_EXPORT
     geom_PositionCloud(const std::vector<double>& coords);
 
+  //! Dtor.
   mobiusGeom_EXPORT virtual
     ~geom_PositionCloud();
 
 public:
 
+  //! Calculates boundary box for the point cloud.
+  //! \param[out] xMin min X.
+  //! \param[out] xMax max X.
+  //! \param[out] yMin min Y.
+  //! \param[out] yMax max Y.
+  //! \param[out] zMin min Z.
+  //! \param[out] zMax max Z.
   mobiusGeom_EXPORT virtual void
     GetBounds(double& xMin, double& xMax,
               double& yMin, double& yMax,
@@ -71,23 +85,71 @@ public:
 
 public:
 
+  //! Adds new point to the cloud.
+  //! \param[in] point point to add.
   mobiusGeom_EXPORT virtual void
     AddPoint(const core_XYZ& point);
 
+  //! Adds new point to the cloud.
+  //! \param[in] x X coordinate of a point to add.
+  //! \param[in] y Y coordinate of a point to add.
+  //! \param[in] z Z coordinate of a point to add.
+  mobiusGeom_EXPORT virtual void
+    AddPoint(const double x,
+             const double y,
+             const double z);
+
+  //! Returns number of points.
+  //! \return number of points.
   mobiusGeom_EXPORT virtual int
     GetNumberOfPoints() const;
 
+  //! Returns point with the given zero-based index.
+  //! \param[in] idx 0-based index of point to access.
+  //! \return requested point.
   mobiusGeom_EXPORT virtual const core_XYZ&
     GetPoint(const int idx) const;
 
+  //! Returns point with the given zero-based index.
+  //! \param[in]  idx 0-based index of point to access.
+  //! \param[out] x   X coordinate of a point.
+  //! \param[out] y   Y coordinate of a point.
+  //! \param[out] z   Z coordinate of a point.
+  mobiusGeom_EXPORT virtual void
+    GetPoint(const int idx,
+             double&   x,
+             double&   y,
+             double&   z) const;
+
+  //! Sets point cloud.
+  //! \param[in] cloud points to set.
   mobiusGeom_EXPORT virtual void
     SetPoints(const std::vector<core_XYZ>& cloud);
 
+  //! Returns internal collection of points.
+  //! \return const reference to the internal collection of points.
   mobiusGeom_EXPORT virtual const std::vector<core_XYZ>&
     GetPoints() const;
 
+  //! Cleans up the cloud.
   mobiusGeom_EXPORT virtual void
     Clear();
+
+public:
+
+  //! Reads position cloud stored in the input file with common XYZ format. That
+  //! is, the file contains just coordinate triples without any additional
+  //! structuring information.
+  //! \param[in] filename file to read.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT bool
+    Load(const std::string& filename);
+
+  //! Writes position cloud to file with given filename.
+  //! \param[in] filename file to write into.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT bool
+    SaveAs(const std::string& filename) const;
 
 protected:
 

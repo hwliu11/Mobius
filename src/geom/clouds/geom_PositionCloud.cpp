@@ -31,37 +31,36 @@
 // Own include
 #include <mobius/geom_PositionCloud.h>
 
-//! Default constructor.
+// Standard includes
+#include <fstream>
+
+//-----------------------------------------------------------------------------
+
 mobius::geom_PositionCloud::geom_PositionCloud() : geom_PointCloud()
 {}
 
-//! Constructor accepting points of the cloud.
-//! \param pts [in] point to populate the cloud with.
+//-----------------------------------------------------------------------------
+
 mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<xyz>& pts) : geom_PointCloud()
 {
   this->SetPoints(pts);
 }
 
-//! Ctor accepting the plain vector of coordinates. This plain vector will
-//! be converted to the vector of triples.
-//! \param[in] coords coordinates packed in a plain vector.
+//-----------------------------------------------------------------------------
+
 mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<double>& coords)
 {
   for ( size_t k = 0; k < coords.size() - 2; k += 3 )
     m_cloud.push_back( xyz(coords[k], coords[k+1], coords[k+2]) );
 }
 
-//! Destructor.
+//-----------------------------------------------------------------------------
+
 mobius::geom_PositionCloud::~geom_PositionCloud()
 {}
 
-//! Calculates boundary box for the point cloud.
-//! \param xMin [out] min X.
-//! \param xMax [out] max X.
-//! \param yMin [out] min Y.
-//! \param yMax [out] max Y.
-//! \param zMin [out] min Z.
-//! \param zMax [out] max Z.
+//-----------------------------------------------------------------------------
+
 void mobius::geom_PositionCloud::GetBounds(double& xMin, double& xMax,
                                            double& yMin, double& yMax,
                                            double& zMin, double& zMax) const
@@ -101,44 +100,120 @@ void mobius::geom_PositionCloud::GetBounds(double& xMin, double& xMax,
   zMax = z_max;
 }
 
-//! Adds new point to the cloud.
-//! \param section [in] point to add.
+//-----------------------------------------------------------------------------
+
 void mobius::geom_PositionCloud::AddPoint(const xyz& point)
 {
   m_cloud.push_back(point);
 }
 
-//! Returns number of points.
-//! \return number of points.
+//-----------------------------------------------------------------------------
+
+void mobius::geom_PositionCloud::AddPoint(const double x,
+                                          const double y,
+                                          const double z)
+{
+  this->AddPoint( xyz(x, y, z) );
+}
+
+//-----------------------------------------------------------------------------
+
 int mobius::geom_PositionCloud::GetNumberOfPoints() const
 {
   return int( m_cloud.size() );
 }
 
-//! Returns point with the given index.
-//! \param idx [in] index of point to access.
-//! \return requested point.
+//-----------------------------------------------------------------------------
+
 const mobius::xyz& mobius::geom_PositionCloud::GetPoint(const int idx) const
 {
   return m_cloud.at(idx);
 }
 
-//! Sets point cloud.
-//! \param cloud [in] points to set.
+//-----------------------------------------------------------------------------
+
+void mobius::geom_PositionCloud::GetPoint(const int idx,
+                                          double&   x,
+                                          double&   y,
+                                          double&   z) const
+{
+  const xyz& pt = this->GetPoint(idx);
+  //
+  x = pt.X();
+  y = pt.Y();
+  z = pt.Z();
+}
+
+//-----------------------------------------------------------------------------
+
 void mobius::geom_PositionCloud::SetPoints(const std::vector<xyz>& cloud)
 {
   m_cloud = cloud;
 }
 
-//! Returns internal collection of points.
-//! \return internal collection of points.
+//-----------------------------------------------------------------------------
+
 const std::vector<mobius::xyz>& mobius::geom_PositionCloud::GetPoints() const
 {
   return m_cloud;
 }
 
-//! Cleans up the cloud.
+//-----------------------------------------------------------------------------
+
 void mobius::geom_PositionCloud::Clear()
 {
   m_cloud.clear();
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_PositionCloud::Load(const std::string& filename)
+{
+  std::ifstream FILE(filename);
+  if ( !FILE.is_open() )
+    return false;
+
+  while ( !FILE.eof() )
+  {
+    char str[256];
+    FILE.getline(str, 256);
+
+    std::vector<std::string> tokens;
+    std::istringstream iss(str);
+    std::copy( std::istream_iterator<std::string>(iss),
+               std::istream_iterator<std::string>(),
+               std::back_inserter< std::vector<std::string> >(tokens) );
+
+    if ( tokens.empty() || tokens.size() < 3 )
+      continue;
+
+    double x = atof( tokens[0].c_str() ),
+           y = atof( tokens[1].c_str() ),
+           z = atof( tokens[2].c_str() );
+
+    this->AddPoint(x, y, z);
+  }
+
+  FILE.close();
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_PositionCloud::SaveAs(const std::string& filename) const
+{
+  std::ofstream FILE(filename);
+  if ( !FILE.is_open() )
+    return false;
+
+  for ( int i = 0; i < this->GetNumberOfPoints(); ++i )
+  {
+    double x, y, z;
+    this->GetPoint(i, x, y, z);
+
+    FILE << x << " " << y << " " << z << "\n";
+  }
+
+  FILE.close();
+  return true;
 }
