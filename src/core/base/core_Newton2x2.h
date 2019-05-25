@@ -193,7 +193,7 @@ protected:
     }
 
     // Set the result.
-    xsol = uv(u_i, v_i);
+    xsol = t_uv(u_i, v_i);
 
     return success;
   }

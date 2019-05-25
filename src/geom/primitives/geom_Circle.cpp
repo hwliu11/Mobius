@@ -85,12 +85,12 @@ double mobius::geom_Circle::GetMaxParameter() const
 //! \param u [in] parameter value to evaluate curve for.
 //! \param P [out] 3D point corresponding to the given parameter on curve.
 void mobius::geom_Circle::Eval(const double u,
-                               xyz&         P) const
+                               t_xyz&       P) const
 {
   const double x = m_fRadius*cos(u);
   const double y = m_fRadius*sin(u);
   const double z = 0.0;
 
-  xyz P_local(x, y, z);
+  t_xyz P_local(x, y, z);
   P = m_tChain.Apply(P_local);
 }

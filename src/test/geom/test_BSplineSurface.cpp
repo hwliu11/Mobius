@@ -69,10 +69,10 @@ mobius::outcome
    * ======================= */
 
   // Control points.
-  std::vector< std::vector<xyz> >
-    Q = { { xyz(0.0, 0.0, 0.0), xyz(0.0, 1.0, 0.0) },
-          { xyz(1.0, 0.0, 0.0), xyz(1.0, 1.0, 0.0) },
-          { xyz(2.0, 0.0, 0.0), xyz(2.0, 1.0, 0.0) } };
+  std::vector< std::vector<t_xyz> >
+    Q = { { t_xyz(0.0, 0.0, 0.0), t_xyz(0.0, 1.0, 0.0) },
+          { t_xyz(1.0, 0.0, 0.0), t_xyz(1.0, 1.0, 0.0) },
+          { t_xyz(2.0, 0.0, 0.0), t_xyz(2.0, 1.0, 0.0) } };
 
   // Knot vectors.
   const std::vector<double> U = {0, 0, 0.5, 1, 1};
@@ -83,7 +83,7 @@ mobius::outcome
   const int q = 1;
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = new bsurf(Q, U, V, p, q);
+  core_Ptr<t_bsurf> surf = new t_bsurf(Q, U, V, p, q);
 
   /* ==============
    *  Perform test
@@ -93,10 +93,10 @@ mobius::outcome
   const double u   = 0.5;
   const double v   = 0.5;
   //
-  const xyz P_ref(1, 0.5, 0);
+  const t_xyz P_ref(1, 0.5, 0);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   surf->Eval(u, v, P);
 
   // Check.
@@ -121,10 +121,10 @@ mobius::outcome
    * ======================= */
 
   // Control points.
-  std::vector< std::vector<xyz> >
-    Q = { { xyz(0.0, 0.0, 0.0), xyz(0.0, 1.0, 0.0) },
-          { xyz(1.0, 0.0, 0.0), xyz(1.0, 1.0, 0.0) },
-          { xyz(2.0, 0.0, 0.0), xyz(2.0, 1.0, 0.0) } };
+  std::vector< std::vector<t_xyz> >
+    Q = { { t_xyz(0.0, 0.0, 0.0), t_xyz(0.0, 1.0, 0.0) },
+          { t_xyz(1.0, 0.0, 0.0), t_xyz(1.0, 1.0, 0.0) },
+          { t_xyz(2.0, 0.0, 0.0), t_xyz(2.0, 1.0, 0.0) } };
 
   // Knot vectors.
   const std::vector<double> U = {0, 0, 0.5, 1, 1};
@@ -135,7 +135,7 @@ mobius::outcome
   const int q = 1;
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = new bsurf(Q, U, V, p, q);
+  core_Ptr<t_bsurf> surf = new t_bsurf(Q, U, V, p, q);
 
   /* ==============
    *  Perform test
@@ -145,10 +145,10 @@ mobius::outcome
   const double u   = 1.5;
   const double v   = 1.5;
   //
-  const xyz P_ref(3, 1.5, 0);
+  const t_xyz P_ref(3, 1.5, 0);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   surf->Eval(u, v, P);
 
   // Check.
@@ -211,7 +211,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -224,10 +224,10 @@ mobius::outcome
   const double u   = 0.5;
   const double v   = 0.5;
   //
-  const xyz P_ref(0, 0, 10);
+  const t_xyz P_ref(0, 0, 10);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   surf->Eval(u, v, P);
 
   // Check.
@@ -297,7 +297,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -313,10 +313,10 @@ mobius::outcome
     const double u = 0.5;
     const double v = 3;
     //
-    const xyz P_ref(2966.1562033533373, -975.99025344537256, 868.77888598126765);
+    const t_xyz P_ref(2966.1562033533373, -975.99025344537256, 868.77888598126765);
 
     // Evaluate.
-    xyz P;
+    t_xyz P;
     surf->Eval(u, v, P);
 
     // Check.
@@ -329,10 +329,10 @@ mobius::outcome
     const double u = 0.5;
     const double v = 5;
     //
-    const xyz P_ref(4936.6672840131978, -1017.8903156478241, 740.14824482133531);
+    const t_xyz P_ref(4936.6672840131978, -1017.8903156478241, 740.14824482133531);
 
     // Evaluate.
-    xyz P;
+    t_xyz P;
     surf->Eval(u, v, P);
 
     // Check.
@@ -345,10 +345,10 @@ mobius::outcome
     const double u = 0.95031615985331297; // U_max.
     const double v = 5.2866714434994; // V_max.
     //
-    const xyz P_ref(5229.8220700325737, -1058.8898967817131, 716.93503449971013);
+    const t_xyz P_ref(5229.8220700325737, -1058.8898967817131, 716.93503449971013);
 
     // Evaluate.
-    xyz P;
+    t_xyz P;
     surf->Eval(u, v, P);
 
     // Check.
@@ -361,10 +361,10 @@ mobius::outcome
     const double u = 0.96; // > U_max.
     const double v = 5.29; // > V_max.
     //
-    const xyz P_ref(5228.8089992117957, -1055.7995537824584, 716.37072890072977);
+    const t_xyz P_ref(5228.8089992117957, -1055.7995537824584, 716.37072890072977);
 
     // Evaluate.
-    xyz P;
+    t_xyz P;
     surf->Eval(u, v, P);
 
     // Check.
@@ -438,7 +438,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -454,12 +454,12 @@ mobius::outcome
     const double u = 0.5;
     const double v = 0.5;
     //
-    const xyz P_ref  (102.01056087867869, 186.81000791347395, 633.12859242907416);
-    const xyz dU_ref (35.950281444623457, 63.027026776358525, -29.57316833575419);
-    const xyz dV_ref (54.198526472252823, -47.810554718737549, -36.061975169786187);
+    const t_xyz P_ref  (102.01056087867869, 186.81000791347395, 633.12859242907416);
+    const t_xyz dU_ref (35.950281444623457, 63.027026776358525, -29.57316833575419);
+    const t_xyz dV_ref (54.198526472252823, -47.810554718737549, -36.061975169786187);
 
     // Evaluate.
-    xyz P, dU, dV;
+    t_xyz P, dU, dV;
     surf->Eval_D1(u, v, P, dU, dV);
 
     // Check.
@@ -533,7 +533,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -549,12 +549,12 @@ mobius::outcome
     const double u = 1.1; // Out of range
     const double v = 1.1; // Out of range
     //
-    const xyz P_ref  (281.32712540796518, 25.457981859438284, -4.6248038997486107);
-    const xyz dU_ref (-41.09642504354224, -0.19347502194278832, -99.247529960069542);
-    const xyz dV_ref (6.1947345560560407, 1.9242835963289397, -1.0971603699159702);
+    const t_xyz P_ref  (281.32712540796518, 25.457981859438284, -4.6248038997486107);
+    const t_xyz dU_ref (-41.09642504354224, -0.19347502194278832, -99.247529960069542);
+    const t_xyz dV_ref (6.1947345560560407, 1.9242835963289397, -1.0971603699159702);
 
     // Evaluate.
-    xyz P, dU, dV;
+    t_xyz P, dU, dV;
     surf->Eval_D1(u, v, P, dU, dV);
 
     // Check.
@@ -634,7 +634,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -650,15 +650,15 @@ mobius::outcome
     const double u = 0.5;
     const double v = 0.5;
     //
-    const xyz P_ref    (-22.706047383292336, 333.52296737858524, 691.82936585037669);
-    const xyz dU_ref   (17.546897305703443, -56.897917238716673, 19.295889729809545);
-    const xyz dV_ref   (81.77400940347907, 35.096894390732892, 29.212838153775664);
-    const xyz d2U_ref  (0.47248769963618997, 0.2925996490603211, -1.6452620516647585);
-    const xyz d2V_ref  (43.216529778428388, -21.764066664486815, -87.653539779464523);
-    const xyz d2UV_ref (8.5485138408561028, -4.5829356176438463, -18.049028139532204);
+    const t_xyz P_ref    (-22.706047383292336, 333.52296737858524, 691.82936585037669);
+    const t_xyz dU_ref   (17.546897305703443, -56.897917238716673, 19.295889729809545);
+    const t_xyz dV_ref   (81.77400940347907, 35.096894390732892, 29.212838153775664);
+    const t_xyz d2U_ref  (0.47248769963618997, 0.2925996490603211, -1.6452620516647585);
+    const t_xyz d2V_ref  (43.216529778428388, -21.764066664486815, -87.653539779464523);
+    const t_xyz d2UV_ref (8.5485138408561028, -4.5829356176438463, -18.049028139532204);
 
     // Evaluate.
-    xyz P, dU, dV, d2U, d2V, d2UV;
+    t_xyz P, dU, dV, d2U, d2V, d2UV;
     surf->Eval_D2(u, v, P, dU, dV, d2U, d2V, d2UV);
 
     // Check.
@@ -745,7 +745,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -761,15 +761,15 @@ mobius::outcome
     const double u = 1.1;
     const double v = 1.1;
     //
-    const xyz P_ref    (104.53943984031076, 1292.5685875750669, 355.45132840944336);
-    const xyz dU_ref   (12.080309354083056, -26.340178053556883, 53.835544419115649);
-    const xyz dV_ref   (22.517942991946665, -59.606086811962442, -34.388841735288388);
-    const xyz d2U_ref  (-86.780463486775261, -11.254684308398282, 11.424264721055806);
-    const xyz d2V_ref  (274.96474650340139, 43.290890528124187, -43.074735047177242);
-    const xyz d2UV_ref (190.07621243626522, 27.613712693159414, -30.906419886843764);
+    const t_xyz P_ref    (104.53943984031076, 1292.5685875750669, 355.45132840944336);
+    const t_xyz dU_ref   (12.080309354083056, -26.340178053556883, 53.835544419115649);
+    const t_xyz dV_ref   (22.517942991946665, -59.606086811962442, -34.388841735288388);
+    const t_xyz d2U_ref  (-86.780463486775261, -11.254684308398282, 11.424264721055806);
+    const t_xyz d2V_ref  (274.96474650340139, 43.290890528124187, -43.074735047177242);
+    const t_xyz d2UV_ref (190.07621243626522, 27.613712693159414, -30.906419886843764);
 
     // Evaluate.
-    xyz P, dU, dV, d2U, d2V, d2UV;
+    t_xyz P, dU, dV, d2U, d2V, d2UV;
     surf->Eval_D2(u, v, P, dU, dV, d2U, d2V, d2UV);
 
     // Check.
@@ -812,7 +812,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -864,7 +864,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -903,7 +903,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -949,7 +949,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -988,7 +988,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1029,7 +1029,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1068,7 +1068,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1119,7 +1119,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1158,7 +1158,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1209,7 +1209,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1248,7 +1248,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1299,7 +1299,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1339,7 +1339,7 @@ mobius::outcome mobius::test_BSplineSurface::insertKnot01(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1384,7 +1384,7 @@ mobius::outcome mobius::test_BSplineSurface::insertKnot01(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1453,7 +1453,7 @@ mobius::outcome mobius::test_BSplineSurface::exchangeUV01(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1498,7 +1498,7 @@ mobius::outcome mobius::test_BSplineSurface::exchangeUV01(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1581,7 +1581,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint01(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1626,7 +1626,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint01(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1635,27 +1635,27 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint01(const int funcID)
    *  Perform test
    * ============== */
 
-  uv Pproj;
+  t_uv Pproj;
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(280., 40., 10.), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(280., 40., 10.), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.66421764007935813, 0.36658532925338544) ).Modulus() > core_Precision::Resolution3D() )
-    return res.failure();
-
-  // Invert point.
-  if ( !surf->InvertPoint(xyz(270., 40., 11.), Pproj) )
-    return res.failure();
-  //
-  if ( ( Pproj - uv(0.67436609955040450, 0.099876736239783770) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.66421764007935813, 0.36658532925338544) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(260., 35., 4.), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(270., 40., 11.), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.66538649492044832, 0.) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.67436609955040450, 0.099876736239783770) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(t_xyz(260., 35., 4.), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - t_uv(0.66538649492044832, 0.) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();
@@ -1672,7 +1672,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint02(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1724,7 +1724,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint02(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1733,13 +1733,13 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint02(const int funcID)
    *  Perform test
    * ============== */
 
-  uv Pproj;
+  t_uv Pproj;
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-10, -75, -5), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-10, -75, -5), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(6.259585339, 2.927319537) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(6.259585339, 2.927319537) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();
@@ -1756,7 +1756,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint03(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1808,7 +1808,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint03(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1817,70 +1817,70 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint03(const int funcID)
    *  Perform test
    * ============== */
 
-  std::vector<uv> refPts =
+  std::vector<t_uv> refPts =
   {
-    uv(-0.0026677784320499999, 0),
-    uv(-0.002287514498425426, 3.6268214661468097),
-    uv(-0.0026677784320499999, 7.3033930420851814),
-    uv(-0.0026676538115228124, 10.9302176543),
-    uv(0.018476720613953071, 0),
-    uv(0.018857912061932342, 3.6268179321188607),
-    uv(0.018060781872214913, 7.3033920717134562),
-    uv(0.018476535870880505, 10.9302176543),
-    uv(0.90391436674726855, 0),
-    uv(0.90422469364105262, 3.6205908289065123),
-    uv(0.90332792045705579, 7.3016025412926657),
-    uv(0.90365250659223417, 10.9302176543),
-    uv(2.6528028879243326, 0),
-    uv(2.6531152275342564, 3.6095800558283373),
-    uv(2.652528312779618, 7.2992367453489253),
-    uv(2.6533711855075635, 10.9302176543),
-    uv(5.247147585895779, 0),
-    uv(5.2476844763946593, 3.6099459264036753),
-    uv(5.2476277693731621, 7.299642345831983),
-    uv(5.2492143183253237, 10.9302176543),
-    uv(7.8507140179198309, 0),
-    uv(7.8514834550575996, 3.609629062003731),
-    uv(7.8519760430307963, 7.2994637874834138),
-    uv(7.8543272216727136, 10.9302176543),
-    uv(10.473540949401562, 0),
-    uv(10.474568634935917, 3.6086572165918378),
-    uv(10.475645616680106, 7.2986902383074543),
-    uv(10.478781131998707, 10.9302176543),
-    uv(13.122768677223393, 0),
-    uv(13.124080205025901, 3.606998609429255),
-    uv(13.125792349245282, 7.2972643106791582),
-    uv(13.129758554159624, 10.9302176543),
-    uv(15.801744951298646, 0),
-    uv(15.803378337930242, 3.6045769089144239),
-    uv(15.805804006554657, 7.2950897369455596),
-    uv(15.810677283142688, 10.9302176543),
-    uv(18.507269528916201, 0),
-    uv(18.50926254805497, 3.6013579753606049),
-    uv(18.51250123423759, 7.2920623548135355),
-    uv(18.518398730303826, 10.9302176543),
-    uv(21.22733247755923, 0),
-    uv(21.229731629254129, 3.5973271445908046),
-    uv(21.233902477035318, 7.2880963783273476),
-    uv(21.240962692721549, 10.928891995907533),
-    uv(23.053438934182633, 0),
-    uv(23.054666923025426, 3.6154933550541282),
-    uv(23.055764570077532, 7.2968432511136614),
-    uv(23.058881452588256, 10.928403940762101),
-    uv(23.966244189000001, 0),
-    uv(23.966244189000001, 3.6268362212762084),
-    uv(23.965745916375472, 7.303373685437939),
-    uv(23.966244188978376, 10.9302176543)
+    t_uv(-0.0026677784320499999, 0),
+    t_uv(-0.002287514498425426, 3.6268214661468097),
+    t_uv(-0.0026677784320499999, 7.3033930420851814),
+    t_uv(-0.0026676538115228124, 10.9302176543),
+    t_uv(0.018476720613953071, 0),
+    t_uv(0.018857912061932342, 3.6268179321188607),
+    t_uv(0.018060781872214913, 7.3033920717134562),
+    t_uv(0.018476535870880505, 10.9302176543),
+    t_uv(0.90391436674726855, 0),
+    t_uv(0.90422469364105262, 3.6205908289065123),
+    t_uv(0.90332792045705579, 7.3016025412926657),
+    t_uv(0.90365250659223417, 10.9302176543),
+    t_uv(2.6528028879243326, 0),
+    t_uv(2.6531152275342564, 3.6095800558283373),
+    t_uv(2.652528312779618, 7.2992367453489253),
+    t_uv(2.6533711855075635, 10.9302176543),
+    t_uv(5.247147585895779, 0),
+    t_uv(5.2476844763946593, 3.6099459264036753),
+    t_uv(5.2476277693731621, 7.299642345831983),
+    t_uv(5.2492143183253237, 10.9302176543),
+    t_uv(7.8507140179198309, 0),
+    t_uv(7.8514834550575996, 3.609629062003731),
+    t_uv(7.8519760430307963, 7.2994637874834138),
+    t_uv(7.8543272216727136, 10.9302176543),
+    t_uv(10.473540949401562, 0),
+    t_uv(10.474568634935917, 3.6086572165918378),
+    t_uv(10.475645616680106, 7.2986902383074543),
+    t_uv(10.478781131998707, 10.9302176543),
+    t_uv(13.122768677223393, 0),
+    t_uv(13.124080205025901, 3.606998609429255),
+    t_uv(13.125792349245282, 7.2972643106791582),
+    t_uv(13.129758554159624, 10.9302176543),
+    t_uv(15.801744951298646, 0),
+    t_uv(15.803378337930242, 3.6045769089144239),
+    t_uv(15.805804006554657, 7.2950897369455596),
+    t_uv(15.810677283142688, 10.9302176543),
+    t_uv(18.507269528916201, 0),
+    t_uv(18.50926254805497, 3.6013579753606049),
+    t_uv(18.51250123423759, 7.2920623548135355),
+    t_uv(18.518398730303826, 10.9302176543),
+    t_uv(21.22733247755923, 0),
+    t_uv(21.229731629254129, 3.5973271445908046),
+    t_uv(21.233902477035318, 7.2880963783273476),
+    t_uv(21.240962692721549, 10.928891995907533),
+    t_uv(23.053438934182633, 0),
+    t_uv(23.054666923025426, 3.6154933550541282),
+    t_uv(23.055764570077532, 7.2968432511136614),
+    t_uv(23.058881452588256, 10.928403940762101),
+    t_uv(23.966244189000001, 0),
+    t_uv(23.966244189000001, 3.6268362212762084),
+    t_uv(23.965745916375472, 7.303373685437939),
+    t_uv(23.966244188978376, 10.9302176543)
   };
 
   // Loop over the control points and invert each one to the surface.
-  std::vector< std::vector<xyz> > poles = surf->GetPoles();
+  std::vector< std::vector<t_xyz> > poles = surf->GetPoles();
   //
   for ( int i = 0; i < int( poles.size() ); ++i )
   {
     for ( int j = 0; j < int( poles[0].size() ); ++j )
     {
-      uv Pproj;
+      t_uv Pproj;
 
       // Invert point.
       if ( !surf->InvertPoint(poles[i][j], Pproj) )
@@ -1909,7 +1909,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint04(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -1960,7 +1960,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint04(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -1969,20 +1969,20 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint04(const int funcID)
    *  Perform test
    * ============== */
 
-  uv Pproj;
+  t_uv Pproj;
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-28.1820755004, -89.3485260009, 7.2158327102), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-28.1820755004, -89.3485260009, 7.2158327102), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.57502918904599154, 5.9001342914778085) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.57502918904599154, 5.9001342914778085) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-39.34436, -88.29045, 16.36935), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-39.34436, -88.29045, 16.36935), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(13.839296586939369, 0.14938030843899999) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(13.839296586939369, 0.14938030843899999) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();
@@ -1999,7 +1999,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint05(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -2019,7 +2019,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint05(const int funcID)
   std::string json = buffer.str();
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -2028,48 +2028,48 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint05(const int funcID)
    *  Perform test
    * ============== */
 
-  uv Pproj;
+  t_uv Pproj;
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-58.529525756835938, -1.2663847208023071, 1.3287150859832764), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-58.529525756835938, -1.2663847208023071, 1.3287150859832764), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.1521258313958907, 0) ).Modulus() > core_Precision::Resolution3D() )
-    return res.failure();
-
-  // Invert point.
-  if ( !surf->InvertPoint(xyz(-89.192314147949219, 9.112696647644043, -38.65899658203125), Pproj) )
-    return res.failure();
-  //
-  if ( ( Pproj - uv(0.13731445118356825, 0.87063787791083846) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.1521258313958907, 0) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-75.953231811523438, -2.9174678325653076, -29.082473754882813), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-89.192314147949219, 9.112696647644043, -38.65899658203125), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.084237605907114155, 0.56641825819012248) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.13731445118356825, 0.87063787791083846) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-76.162773132324219, -5.1329221725463867, -34.326473236083984), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-75.953231811523438, -2.9174678325653076, -29.082473754882813), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.037909899223990663, 0.61000413737984371) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.084237605907114155, 0.56641825819012248) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-85.975509643554688, -1.3057748079299927, -43.200931549072266), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-76.162773132324219, -5.1329221725463867, -34.326473236083984), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.054110672666824365, 0.82714845292773875) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.037909899223990663, 0.61000413737984371) ).Modulus() > core_Precision::Resolution3D() )
+    return res.failure();
+
+  // Invert point.
+  if ( !surf->InvertPoint(t_xyz(-85.975509643554688, -1.3057748079299927, -43.200931549072266), Pproj) )
+    return res.failure();
+  //
+  if ( ( Pproj - t_uv(0.054110672666824365, 0.82714845292773875) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
   
   // Invert point.
-  if ( !surf->InvertPoint(xyz(-65.886886596679687, -3.9525032043457031, -12.483232498168945), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(-65.886886596679687, -3.9525032043457031, -12.483232498168945), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.12252459837230584, 0.26051543661153131) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.12252459837230584, 0.26051543661153131) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();
@@ -2086,7 +2086,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint06(const int funcID)
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =======================
    *  Prepare input surface
@@ -2106,7 +2106,7 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint06(const int funcID)
   std::string json = buffer.str();
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -2115,13 +2115,13 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint06(const int funcID)
    *  Perform test
    * ============== */
 
-  uv Pproj;
+  t_uv Pproj;
 
   // Invert point.
-  if ( !surf->InvertPoint(xyz(109.2, 208.1, 293.6), Pproj) )
+  if ( !surf->InvertPoint(t_xyz(109.2, 208.1, 293.6), Pproj) )
     return res.failure();
   //
-  if ( ( Pproj - uv(0.46398398639457306, 0.020440572304156825) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Pproj - t_uv(0.46398398639457306, 0.020440572304156825) ).Modulus() > core_Precision::Resolution3D() )
     return res.failure();
 
   return res.success();

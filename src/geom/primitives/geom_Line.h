@@ -45,8 +45,8 @@ class geom_Line : public geom_Curve
 public:
 
   mobiusGeom_EXPORT
-    geom_Line(const core_XYZ& origin,
-              const core_XYZ& dir);
+    geom_Line(const t_xyz& origin,
+              const t_xyz& dir);
 
   mobiusGeom_EXPORT virtual
     ~geom_Line();
@@ -68,25 +68,25 @@ public:
 
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
-         core_XYZ&    P) const override;
+         t_xyz&       P) const override;
 
   //! \todo NYI Eval_D1() method.
   virtual void
     Eval_D1(const double,
-            xyz&) const override {}
+            t_xyz&) const override {}
 
 public:
 
   //! Accessor for origin.
   //! \return origin of the line.
-  const core_XYZ& GetOrigin() const
+  const t_xyz& GetOrigin() const
   {
     return m_origin;
   }
 
   //! Accessor for direction.
   //! \return direction vector of the line.
-  const core_XYZ& GetDir() const
+  const t_xyz& GetDir() const
   {
     return m_dir;
   }
@@ -94,12 +94,15 @@ public:
 private:
 
   //! Origin of the line.
-  core_XYZ m_origin;
+  t_xyz m_origin;
 
   //! Direction of the line.
-  core_XYZ m_dir;
+  t_xyz m_dir;
 
 };
+
+//! Convenience shortcut.
+typedef geom_Line t_line;
 
 };
 

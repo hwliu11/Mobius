@@ -62,10 +62,10 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_FairBSurf(const ptr<bsurf>&  surface,
-                   const double       lambda,
-                   core_ProgressEntry progress,
-                   core_PlotterEntry  plotter);
+    geom_FairBSurf(const t_ptr<t_bsurf>& surface,
+                   const double          lambda,
+                   core_ProgressEntry    progress,
+                   core_PlotterEntry     plotter);
 
 public:
 
@@ -77,7 +77,7 @@ public:
 public:
 
   //! \return resulting surface.
-  const ptr<bsurf>& GetResult() const
+  const t_ptr<t_bsurf>& GetResult() const
   {
     return m_resultSurf;
   }
@@ -133,15 +133,15 @@ public:
 
 private:
 
-  void prepareNk(ptr<alloc2d> alloc);
+  void prepareNk(t_ptr<t_alloc2d> alloc);
 
 protected:
 
   //! Surface to fair.
-  ptr<bsurf> m_inputSurf;
+  t_ptr<t_bsurf> m_inputSurf;
 
   //! Result of fairing.
-  ptr<bsurf> m_resultSurf;
+  t_ptr<t_bsurf> m_resultSurf;
 
   //! Fairing coefficient.
   double m_fLambda;
@@ -156,7 +156,7 @@ protected:
   std::set<int> m_pinnedPoles;
 
   //! Evaluators of \f$N_k(u,v)\f$ functions.
-  std::vector< ptr<geom_BSurfNk> > m_Nk;
+  std::vector< t_ptr<geom_BSurfNk> > m_Nk;
 
 };
 

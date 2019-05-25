@@ -51,7 +51,7 @@ bool mobius::geom_UnifyBCurves::AreCompatible() const
   //
   for ( int c = 0; c < int( m_curves.size() ); ++c )
   {
-    const ptr<bcurve>& crv = m_curves[c];
+    const t_ptr<t_bcurve>& crv = m_curves[c];
     //
     if ( crv.IsNull() )
     {

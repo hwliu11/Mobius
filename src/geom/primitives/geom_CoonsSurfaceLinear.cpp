@@ -33,14 +33,14 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_CoonsSurfaceLinear::geom_CoonsSurfaceLinear(const ptr<curve>& c0,
-                                                         const ptr<curve>& c1,
-                                                         const ptr<curve>& b0,
-                                                         const ptr<curve>& b1,
-                                                         const xyz&        p00,
-                                                         const xyz&        p01,
-                                                         const xyz&        p10,
-                                                         const xyz&        p11)
+mobius::geom_CoonsSurfaceLinear::geom_CoonsSurfaceLinear(const t_ptr<t_curve>& c0,
+                                                         const t_ptr<t_curve>& c1,
+                                                         const t_ptr<t_curve>& b0,
+                                                         const t_ptr<t_curve>& b1,
+                                                         const t_xyz&          p00,
+                                                         const t_xyz&          p01,
+                                                         const t_xyz&          p10,
+                                                         const t_xyz&          p11)
 : geom_Surface (),
   m_c0         (c0),
   m_c1         (c1),
@@ -125,9 +125,9 @@ double mobius::geom_CoonsSurfaceLinear::GetMaxParameter_V() const
 
 void mobius::geom_CoonsSurfaceLinear::Eval(const double u,
                                            const double v,
-                                           xyz&         S) const
+                                           t_xyz&       S) const
 {
-  xyz c0, c1, b0, b1;
+  t_xyz c0, c1, b0, b1;
   m_c0->Eval(u, c0);
   m_c1->Eval(u, c1);
   m_b0->Eval(v, b0);

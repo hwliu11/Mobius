@@ -180,8 +180,8 @@ bool mobius::core_JSON::ExtractVector1d(const std::string&   keyword,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::core_JSON::ExtractVector3d(const std::string& keyword,
-                                        std::vector<xyz>&  vector) const
+bool mobius::core_JSON::ExtractVector3d(const std::string&  keyword,
+                                        std::vector<t_xyz>& vector) const
 {
   std::string block;
   this->ExtractBlockForKey(keyword, block);
@@ -203,9 +203,9 @@ bool mobius::core_JSON::ExtractVector3d(const std::string& keyword,
     if ( coordChunks.size() != 3 )
       return false;
 
-    xyz P( core::str::to_number<double>(coordChunks[0], 0),
-           core::str::to_number<double>(coordChunks[1], 0),
-           core::str::to_number<double>(coordChunks[2], 0) );
+    t_xyz P( core::str::to_number<double>(coordChunks[0], 0),
+             core::str::to_number<double>(coordChunks[1], 0),
+             core::str::to_number<double>(coordChunks[2], 0) );
     //
     vector.push_back(P);
   }
@@ -215,8 +215,8 @@ bool mobius::core_JSON::ExtractVector3d(const std::string& keyword,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::core_JSON::ExtractGrid3d(const std::string&               keyword,
-                                      std::vector< std::vector<xyz> >& vector) const
+bool mobius::core_JSON::ExtractGrid3d(const std::string&                 keyword,
+                                      std::vector< std::vector<t_xyz> >& vector) const
 {
   std::string block;
   this->ExtractBlockForKey(keyword, block);
@@ -232,7 +232,7 @@ bool mobius::core_JSON::ExtractGrid3d(const std::string&               keyword,
     if ( tupleChunks.size() < 3 )
       continue;
 
-    std::vector<xyz> row;
+    std::vector<t_xyz> row;
     for ( size_t j = 0; j < tupleChunks.size(); ++j )
     {
       std::vector<std::string> coordChunks;
@@ -241,9 +241,9 @@ bool mobius::core_JSON::ExtractGrid3d(const std::string&               keyword,
       if ( coordChunks.size() != 3 )
         continue;
 
-      xyz P( core::str::to_number<double>(coordChunks[0], 0),
-             core::str::to_number<double>(coordChunks[1], 0),
-             core::str::to_number<double>(coordChunks[2], 0) );
+      t_xyz P( core::str::to_number<double>(coordChunks[0], 0),
+               core::str::to_number<double>(coordChunks[1], 0),
+               core::str::to_number<double>(coordChunks[2], 0) );
       //
       row.push_back(P);
     }

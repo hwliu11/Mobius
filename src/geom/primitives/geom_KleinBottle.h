@@ -77,14 +77,14 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          const double v,
-         xyz&         C) const override;
+         t_xyz&       C) const override;
 
 public:
 
-  mobiusGeom_EXPORT ptr<geom_KleinIsoCurve>
+  mobiusGeom_EXPORT t_ptr<geom_KleinIsoCurve>
     Iso_U(const double u) const;
 
-  mobiusGeom_EXPORT ptr<geom_KleinIsoCurve>
+  mobiusGeom_EXPORT t_ptr<geom_KleinIsoCurve>
     Iso_V(const double v) const;
 
 public:

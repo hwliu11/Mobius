@@ -58,10 +58,10 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBCurve::geom_FairBCurve(const ptr<bcurve>& curve,
-                                         const double       lambda,
-                                         core_ProgressEntry progress,
-                                         core_PlotterEntry  plotter)
+mobius::geom_FairBCurve::geom_FairBCurve(const t_ptr<t_bcurve>& curve,
+                                         const double           lambda,
+                                         core_ProgressEntry     progress,
+                                         core_PlotterEntry      plotter)
 : core_OPERATOR(progress, plotter)
 {
   m_inputCurve = curve;
@@ -82,7 +82,8 @@ bool mobius::geom_FairBCurve::Perform()
   int                        nAijEval = 0;
 
   // Prepare reusable memory blocks for running sub-routines efficiently.
-  ptr<alloc2d> sharedAlloc = new alloc2d;
+  t_ptr<t_alloc2d> sharedAlloc = new t_alloc2d;
+  //
   sharedAlloc->Allocate(3,     p + 1, true); // memBlockCurve_EffectiveNDersResult
   sharedAlloc->Allocate(2,     3,     true); // memBlockCurve_EffectiveNDersInternal
   sharedAlloc->Allocate(p + 1, p + 1, true); // memBlockCurve_BSplineCurveEvalDk
@@ -201,15 +202,15 @@ bool mobius::geom_FairBCurve::Perform()
   m_resultCurve = m_inputCurve->Copy();
 
   // Apply perturbations to poles.
-  const std::vector<xyz>& poles = m_resultCurve->GetPoles();
-  int                     r     = 0;
+  const std::vector<t_xyz>& poles = m_resultCurve->GetPoles();
+  int                       r     = 0;
   //
   for ( int p = 0 + NUM_CONSTRAINED_POLES_LEADING;
         p <= int( poles.size() ) - 1 - NUM_CONSTRAINED_POLES_TRAILING;
         ++p, ++r )
   {
-    const xyz& P = poles[p];
-    xyz        D = xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
+    const t_xyz& P = poles[p];
+    t_xyz        D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
     //
     m_resultCurve->SetPole(p, P + D);
   }

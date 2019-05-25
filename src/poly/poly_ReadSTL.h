@@ -61,7 +61,7 @@ public:
 public:
 
   //! \return constructed mesh.
-  const ptr<poly_Mesh>& GetResult() const
+  const t_ptr<poly_Mesh>& GetResult() const
   {
     return m_mesh;
   }
@@ -139,9 +139,8 @@ protected:
 
 protected:
 
-  ptr<poly_Mesh> m_mesh; //!< Mesh data structure.
-
-  bool m_bMergeNodes; //!< Whether to merge nodes.
+  t_ptr<poly_Mesh> m_mesh;        //!< Mesh data structure.
+  bool             m_bMergeNodes; //!< Whether to merge nodes.
 
 };
 

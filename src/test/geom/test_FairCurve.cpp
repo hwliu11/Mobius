@@ -51,10 +51,10 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // Create a curve from the passed JSON.
-  ptr<bcurve> crv = bcurve::Instance(json);
+  t_ptr<t_bcurve> crv = t_bcurve::Instance(json);
 
   double strain[4] = {0.0, 0.0, 0.0, 0.0};
 
@@ -78,7 +78,7 @@ mobius::outcome
     }
 
     // Get faired curve.
-    const ptr<bcurve>& faired = fairingTool.GetResult();
+    const t_ptr<t_bcurve>& faired = fairingTool.GetResult();
 
     // Calculate strain energy for the faired curve.
     strain[i] = faired->ComputeStrainEnergy();

@@ -50,12 +50,12 @@ public:
   {
     double U;
     double V;
-    xyz    P;
+    t_xyz  P;
 
     TGridPoint() : U(0.0), V(0.0) {}
     TGridPoint(const double _U,
                const double _V,
-               const xyz&   _P) : U(_U), V(_V), P(_P) {}
+               const t_xyz& _P) : U(_U), V(_V), P(_P) {}
   };
 
   typedef std::vector<TGridPoint>     TGridPointList;
@@ -65,9 +65,9 @@ public:
 public:
 
   mobiusGeom_EXPORT
-    geom_GordonSurface(const std::vector< ptr<curve> >& U_curves,
-                       const std::vector< ptr<curve> >& V_curves,
-                       const TGrid&                     grid);
+    geom_GordonSurface(const std::vector< t_ptr<t_curve> >& U_curves,
+                       const std::vector< t_ptr<t_curve> >& V_curves,
+                       const TGrid&                         grid);
 
   mobiusGeom_EXPORT virtual
     ~geom_GordonSurface();
@@ -139,10 +139,10 @@ private:
 private:
 
   //! Iso U curves.
-  std::vector< ptr<curve> > m_UCurves;
+  std::vector< t_ptr<t_curve> > m_UCurves;
 
   //! Iso V curves.
-  std::vector< ptr<curve> > m_VCurves;
+  std::vector< t_ptr<t_curve> > m_VCurves;
 
   //! Grid of parameters.
   TGrid m_grid;
@@ -150,7 +150,7 @@ private:
 };
 
 //! Convenience shortcut.
-typedef geom_GordonSurface gordon_surf;
+typedef geom_GordonSurface t_gordon_surf;
 
 };
 

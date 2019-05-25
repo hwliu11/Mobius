@@ -44,7 +44,7 @@ class cascade_BSplineSurface
 public:
 
   mobiusCascade_EXPORT
-    cascade_BSplineSurface(const ptr<bsurf>& mobiusSurface);
+    cascade_BSplineSurface(const t_ptr<t_bsurf>& mobiusSurface);
 
   mobiusCascade_EXPORT
     cascade_BSplineSurface(const Handle(Geom_BSplineSurface)& occtSurface);
@@ -59,7 +59,7 @@ public:
 
 public:
 
-  mobiusCascade_EXPORT const ptr<bsurf>&
+  mobiusCascade_EXPORT const t_ptr<t_bsurf>&
     GetMobiusSurface() const;
 
   mobiusCascade_EXPORT const Handle(Geom_BSplineSurface)&
@@ -79,7 +79,7 @@ protected:
 private:
 
   //! Mobius surface.
-  ptr<bsurf> m_mobiusSurface;
+  t_ptr<t_bsurf> m_mobiusSurface;
 
   //! OCCT surface.
   Handle(Geom_BSplineSurface) m_occtSurface;

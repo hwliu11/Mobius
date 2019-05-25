@@ -82,7 +82,7 @@ public:
 
 private:
 
-  static bool decomposeCurve(const ptr<bcurve>&      curve,
+  static bool decomposeCurve(const t_ptr<t_bcurve>&  curve,
                              const int               numSegmentsRef,
                              const std::vector<int>& breakpointsRef);
 

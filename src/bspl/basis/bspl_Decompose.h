@@ -61,13 +61,13 @@ public:
   //!
   //! \return true in case of success, false -- otherwise.
   mobiusBSpl_EXPORT bool
-    operator()(const int                        n,
-               const int                        p,
-               const std::vector<double>&       U,
-               const std::vector<xyz>&          Pw,
-               int&                             nb,
-               std::vector< std::vector<xyz> >& Qw,
-               std::vector<int>&                breakpoints) const;
+    operator()(const int                          n,
+               const int                          p,
+               const std::vector<double>&         U,
+               const std::vector<t_xyz>&          Pw,
+               int&                               nb,
+               std::vector< std::vector<t_xyz> >& Qw,
+               std::vector<int>&                  breakpoints) const;
 
 };
 

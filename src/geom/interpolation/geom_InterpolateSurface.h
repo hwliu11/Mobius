@@ -98,13 +98,13 @@ public:
   //! \param[in] progress   progress notifier.
   //! \param[in] plotter    imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
-                            const int                              deg_U,
-                            const int                              deg_V,
-                            const bspl_ParamsSelection             paramsType,
-                            const bspl_KnotsSelection              knotsType,
-                            core_ProgressEntry                     progress = NULL,
-                            core_PlotterEntry                      plotter  = NULL);
+    geom_InterpolateSurface(const std::vector< std::vector<t_xyz> >& points,
+                            const int                                deg_U,
+                            const int                                deg_V,
+                            const bspl_ParamsSelection               paramsType,
+                            const bspl_KnotsSelection                knotsType,
+                            core_ProgressEntry                       progress = NULL,
+                            core_PlotterEntry                        plotter  = NULL);
 
   //! Complete constructor. Initializes the interpolation tool with a set
   //! of reper points and other properties which are necessary in order to
@@ -123,15 +123,15 @@ public:
   //! \param[in] progress             progress notifier.
   //! \param[in] plotter              imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
-                            const int                              deg_U,
-                            const int                              deg_V,
-                            const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                            const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-                            const bspl_ParamsSelection             paramsType,
-                            const bspl_KnotsSelection              knotsType,
-                            core_ProgressEntry                     progress = NULL,
-                            core_PlotterEntry                      plotter  = NULL);
+    geom_InterpolateSurface(const std::vector< std::vector<t_xyz> >& points,
+                            const int                                deg_U,
+                            const int                                deg_V,
+                            const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                            const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                            const bspl_ParamsSelection               paramsType,
+                            const bspl_KnotsSelection                knotsType,
+                            core_ProgressEntry                       progress = NULL,
+                            core_PlotterEntry                        plotter  = NULL);
 
   //! Complete constructor. Initializes the interpolation tool with a set
   //! of reper points and other properties which are necessary in order to
@@ -152,17 +152,17 @@ public:
   //! \param[in] progress             progress notifier.
   //! \param[in] plotter              imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
-                            const int                              deg_U,
-                            const int                              deg_V,
-                            const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                            const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-                            const ptr<geom_VectorField>&           derivs_isoV_start_D2,
-                            const ptr<geom_VectorField>&           derivs_isoV_end_D2,
-                            const bspl_ParamsSelection             paramsType,
-                            const bspl_KnotsSelection              knotsType,
-                            core_ProgressEntry                     progress = NULL,
-                            core_PlotterEntry                      plotter  = NULL);
+    geom_InterpolateSurface(const std::vector< std::vector<t_xyz> >& points,
+                            const int                                deg_U,
+                            const int                                deg_V,
+                            const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                            const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                            const t_ptr<geom_VectorField>&           derivs_isoV_start_D2,
+                            const t_ptr<geom_VectorField>&           derivs_isoV_end_D2,
+                            const bspl_ParamsSelection               paramsType,
+                            const bspl_KnotsSelection                knotsType,
+                            core_ProgressEntry                       progress = NULL,
+                            core_PlotterEntry                        plotter  = NULL);
 
 public:
 
@@ -175,11 +175,11 @@ public:
   //! \param[in] knotsType  strategy for choosing knot vector for interpolant
   //!                       B-splines.
   mobiusGeom_EXPORT void
-    Init(const std::vector< std::vector<xyz> >& points,
-         const int                              deg_U,
-         const int                              deg_V,
-         const bspl_ParamsSelection             paramsType,
-         const bspl_KnotsSelection              knotsType);
+    Init(const std::vector< std::vector<t_xyz> >& points,
+         const int                                deg_U,
+         const int                                deg_V,
+         const bspl_ParamsSelection               paramsType,
+         const bspl_KnotsSelection                knotsType);
 
   //! Initializes interpolation tool.
   //! \param[in] points               data points to interpolate.
@@ -192,13 +192,13 @@ public:
   //! \param[in] knotsType            strategy for choosing knot vector for interpolant
   //!                                 B-splines.
   mobiusGeom_EXPORT void
-    Init(const std::vector< std::vector<xyz> >& points,
-         const int                              deg_U,
-         const int                              deg_V,
-         const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-         const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-         const bspl_ParamsSelection             paramsType,
-         const bspl_KnotsSelection              knotsType);
+    Init(const std::vector< std::vector<t_xyz> >& points,
+         const int                                deg_U,
+         const int                                deg_V,
+         const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+         const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+         const bspl_ParamsSelection               paramsType,
+         const bspl_KnotsSelection                knotsType);
 
   //! Initializes interpolation tool.
   //! \param[in] points               data points to interpolate.
@@ -213,15 +213,15 @@ public:
   //! \param[in] knotsType            strategy for choosing knot vector for interpolant
   //!                                 B-splines.
   mobiusGeom_EXPORT void
-    Init(const std::vector< std::vector<xyz> >& points,
-         const int                              deg_U,
-         const int                              deg_V,
-         const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-         const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-         const ptr<geom_VectorField>&           derivs_isoV_start_D2,
-         const ptr<geom_VectorField>&           derivs_isoV_end_D2,
-         const bspl_ParamsSelection             paramsType,
-         const bspl_KnotsSelection              knotsType);
+    Init(const std::vector< std::vector<t_xyz> >& points,
+         const int                                deg_U,
+         const int                                deg_V,
+         const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+         const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+         const t_ptr<geom_VectorField>&           derivs_isoV_start_D2,
+         const t_ptr<geom_VectorField>&           derivs_isoV_end_D2,
+         const bspl_ParamsSelection               paramsType,
+         const bspl_KnotsSelection                knotsType);
 
 public:
 
@@ -241,35 +241,35 @@ public:
 
   //! Accessor for the resulting surface.
   //! \return interpolant surface.
-  const ptr<bsurf>& GetResult() const
+  const t_ptr<t_bsurf>& GetResult() const
   {
     return m_surface;
   }
 
 private:
 
-  int                             m_iDeg_U;     //!< U-degree of interpolant surface.
-  int                             m_iDeg_V;     //!< V-degree of interpolant surface.
-  ErrCode                         m_errCode;    //!< Error code.
-  std::vector< std::vector<xyz> > m_points;     //!< Points to interpolate.
-  bspl_ParamsSelection            m_paramsType; //!< Parameterization type.
-  bspl_KnotsSelection             m_knotsType;  //!< Knots selection type.
-  ptr<bsurf>                      m_surface;    //!< Interpolant surface.
+  int                               m_iDeg_U;     //!< U-degree of interpolant surface.
+  int                               m_iDeg_V;     //!< V-degree of interpolant surface.
+  ErrCode                           m_errCode;    //!< Error code.
+  std::vector< std::vector<t_xyz> > m_points;     //!< Points to interpolate.
+  bspl_ParamsSelection              m_paramsType; //!< Parameterization type.
+  bspl_KnotsSelection               m_knotsType;  //!< Knots selection type.
+  t_ptr<t_bsurf>                    m_surface;    //!< Interpolant surface.
 
 // Derivative constraints:
 private:
 
-  ptr<geom_VectorField> m_derivs_isoV_start_D1; //!< Leading derivative D1 constraints on V iso.
-  ptr<geom_VectorField> m_derivs_isoV_end_D1;   //!< Trailing derivative D1 constraints on V iso.
+  t_ptr<geom_VectorField> m_derivs_isoV_start_D1; //!< Leading derivative D1 constraints on V iso.
+  t_ptr<geom_VectorField> m_derivs_isoV_end_D1;   //!< Trailing derivative D1 constraints on V iso.
 
-  ptr<geom_VectorField> m_derivs_isoV_start_D2; //!< Leading derivative D2 constraints on V iso.
-  ptr<geom_VectorField> m_derivs_isoV_end_D2;   //!< Trailing derivative D2 constraints on V iso.
+  t_ptr<geom_VectorField> m_derivs_isoV_start_D2; //!< Leading derivative D2 constraints on V iso.
+  t_ptr<geom_VectorField> m_derivs_isoV_end_D2;   //!< Trailing derivative D2 constraints on V iso.
 
 // For maintenance:
 public:
 
-  std::vector< ptr<bcurve> > IsoV_Curves;
-  std::vector< ptr<bcurve> > ReperU_Curves;
+  std::vector< t_ptr<t_bcurve> > IsoV_Curves;
+  std::vector< t_ptr<t_bcurve> > ReperU_Curves;
 
 };
 

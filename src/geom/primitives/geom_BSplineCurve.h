@@ -54,13 +54,13 @@ class geom_BSplineCurve : public geom_Curve
 public:
 
   mobiusGeom_EXPORT
-    geom_BSplineCurve(const std::vector<xyz>& Poles,
-                      const double*           U,
-                      const int               nU,
-                      const int               p);
+    geom_BSplineCurve(const std::vector<t_xyz>& Poles,
+                      const double*             U,
+                      const int                 nU,
+                      const int                 p);
 
   mobiusGeom_EXPORT
-    geom_BSplineCurve(const std::vector<xyz>&    Poles,
+    geom_BSplineCurve(const std::vector<t_xyz>&  Poles,
                       const std::vector<double>& U,
                       const int                  p);
 
@@ -94,29 +94,29 @@ public:
 
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
-         xyz&         P) const override;
+         t_xyz&       P) const override;
 
   mobiusGeom_EXPORT virtual void
     Eval_D1(const double t,
-            xyz&         dC_dt) const override;
+            t_xyz&       dC_dt) const override;
 
 public:
 
   mobiusGeom_EXPORT virtual void
-    Eval_Dk(const double u,
-            const int    k,
-            xyz&         dkC,
-            ptr<alloc2d> alloc            = NULL,
-            const int    memBlockResult   = -1,
-            const int    memBlockInternal = -1) const;
+    Eval_Dk(const double     u,
+            const int        k,
+            t_xyz&           dkC,
+            t_ptr<t_alloc2d> alloc            = NULL,
+            const int        memBlockResult   = -1,
+            const int        memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT virtual void
-    Eval_Dk(double**     dN,
-            const double u,
-            const int    k,
-            xyz&         dkC,
-            ptr<alloc2d> alloc            = NULL,
-            const int    memBlockInternal = -1) const;
+    Eval_Dk(double**         dN,
+            const double     u,
+            const int        k,
+            t_xyz&           dkC,
+            t_ptr<t_alloc2d> alloc            = NULL,
+            const int        memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT virtual double
     K(const double u) const;
@@ -130,11 +130,11 @@ public:
 
 public:
 
-  mobiusGeom_EXPORT ptr<geom_BSplineCurve>
+  mobiusGeom_EXPORT t_ptr<geom_BSplineCurve>
     Copy() const;
 
   mobiusGeom_EXPORT bool
-    InvertPoint(const xyz&   P,
+    InvertPoint(const t_xyz& P,
                 double&      param,
                 const double prec = 1.0e-6) const;
 
@@ -152,7 +152,7 @@ public:
 
   mobiusGeom_EXPORT bool
     Split(const double                           u,
-          std::vector< ptr<geom_BSplineCurve> >& slices) const;
+          std::vector< t_ptr<geom_BSplineCurve> >& slices) const;
 
   mobiusGeom_EXPORT void
     ReparameterizeLinear(const double s_min,
@@ -172,20 +172,20 @@ public:
   //!         B-curve is already a Bezier curve which is a special case
   //!         of a B-curve).
   mobiusGeom_EXPORT bool
-    SplitToBezier(std::vector< ptr<geom_BSplineCurve> >& segments) const;
+    SplitToBezier(std::vector< t_ptr<geom_BSplineCurve> >& segments) const;
 
 public:
 
   //! Accessor for the collection of poles.
   //! \return poles of B-spline curve.
-  const std::vector<xyz>& GetPoles() const
+  const std::vector<t_xyz>& GetPoles() const
   {
     return m_poles;
   }
 
   //! Accessor for the collection of poles.
   //! \return poles of B-spline curve.
-  std::vector<xyz>& ChangePoles()
+  std::vector<t_xyz>& ChangePoles()
   {
     return m_poles;
   }
@@ -200,7 +200,7 @@ public:
   //! Returns pole by its zero-based index.
   //! \param[in] poleIdx zero-based pole index.
   //! \return pole.
-  const xyz& GetPole(const int poleIdx) const
+  const t_xyz& GetPole(const int poleIdx) const
   {
     return m_poles[poleIdx];
   }
@@ -209,8 +209,8 @@ public:
   //! \param[in] poleIdx zero-based pole index.
   //! \param[in] xyz     pole coordinates to set.
   //! \return pole.
-  void SetPole(const int  poleIdx,
-               const xyz& xyz)
+  void SetPole(const int    poleIdx,
+               const t_xyz& xyz)
   {
     m_poles[poleIdx] = xyz;
   }
@@ -250,14 +250,14 @@ private:
   //! \param[in] Poles control points.
   //! \param[in] U     knot vector.
   //! \param[in] p     degree of the B-spline basis functions.
-  void init(const std::vector<xyz>&    Poles,
+  void init(const std::vector<t_xyz>&  Poles,
             const std::vector<double>& U,
             const int                  p);
 
 private:
 
   //! Poles of B-spline curve.
-  std::vector<xyz> m_poles;
+  std::vector<t_xyz> m_poles;
 
   //! Knot vector.
   std::vector<double> m_U;
@@ -268,7 +268,7 @@ private:
 };
 
 //! Convenience shortcut.
-typedef geom_BSplineCurve bcurve;
+typedef geom_BSplineCurve t_bcurve;
 
 };
 

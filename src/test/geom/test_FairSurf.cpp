@@ -97,7 +97,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -193,7 +193,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // JSON definition.
   std::string json =
@@ -234,7 +234,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -254,7 +254,7 @@ mobius::outcome
     return res.failure();
 
   // Get the result.
-  const core_Ptr<bsurf>& result = F.GetResult();
+  const core_Ptr<t_bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
   const double resEnergy = result->ComputeBendingEnergy();
@@ -294,7 +294,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // JSON definition.
   std::string json =
@@ -337,7 +337,7 @@ mobius::outcome
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -355,7 +355,7 @@ mobius::outcome
     return res.failure();
 
   // Get the result.
-  const core_Ptr<bsurf>& result = F.GetResult();
+  const core_Ptr<t_bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
   const double resEnergy = result->ComputeBendingEnergy();
@@ -395,7 +395,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // File to read.
   std::string
@@ -411,7 +411,7 @@ mobius::outcome
   std::string json = buffer.str();
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -429,7 +429,7 @@ mobius::outcome
     return res.failure();
 
   // Get the result.
-  const core_Ptr<bsurf>& result = F.GetResult();
+  const core_Ptr<t_bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
   const double resEnergy = result->ComputeBendingEnergy();
@@ -469,7 +469,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // File to read.
   std::string
@@ -485,7 +485,7 @@ mobius::outcome
   std::string json = buffer.str();
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -520,7 +520,7 @@ mobius::outcome
     return res.failure();
 
   // Get the result.
-  const core_Ptr<bsurf>& result = F.GetResult();
+  const core_Ptr<t_bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
   const double resEnergy = result->ComputeBendingEnergy();
@@ -560,7 +560,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // File to read.
   std::string
@@ -576,7 +576,7 @@ mobius::outcome
   std::string json = buffer.str();
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -595,7 +595,7 @@ mobius::outcome
     return res.failure();
 
   // Get the result.
-  const core_Ptr<bsurf>& result = F.GetResult();
+  const core_Ptr<t_bsurf>& result = F.GetResult();
 
   // Compute bending energy after fairing.
   const double resEnergy = result->ComputeBendingEnergy();

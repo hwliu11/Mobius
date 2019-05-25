@@ -65,7 +65,7 @@ public:
 
   //! ctor.
   //! \param[in] curve parametric curve in question.
-  geom_CuuSquared(const ptr<geom_BSplineCurve>& curve) : core_UnivariateFunc()
+  geom_CuuSquared(const t_ptr<geom_BSplineCurve>& curve) : core_UnivariateFunc()
   {
     m_curve = curve;
   }
@@ -77,7 +77,7 @@ public:
   //! \return evaluated function.
   virtual double Eval(const double u) const
   {
-    xyz D2;
+    t_xyz D2;
     m_curve->Eval_Dk(u, 2, D2);
 
     return D2.Dot(D2);
@@ -86,14 +86,14 @@ public:
 public:
 
   //! \return curve in question.
-  const ptr<geom_BSplineCurve>& GetCurve() const
+  const t_ptr<geom_BSplineCurve>& GetCurve() const
   {
     return m_curve;
   }
 
 protected:
 
-  ptr<geom_BSplineCurve> m_curve; //!< Curve.
+  t_ptr<geom_BSplineCurve> m_curve; //!< Curve.
 
 };
 
@@ -102,21 +102,21 @@ protected:
 //! Auxiliary functions for point inversion on curve.
 namespace BSplCurveProj
 {
-  double F(const bcurve* crv,
-           const double  u,
-           const xyz&    P)
+  double F(const t_bcurve* crv,
+           const double    u,
+           const t_xyz&    P)
   {
-    xyz C, d1C;
+    t_xyz C, d1C;
     crv->Eval(u, C);
     crv->Eval_Dk(u, 1, d1C);
     return (C - P).Dot(d1C);
   }
 
-  double dF(const bcurve* crv,
-            const double  u,
-            const xyz&    P)
+  double dF(const t_bcurve* crv,
+            const double    u,
+            const t_xyz&    P)
   {
-    xyz C, d1C, d2C;
+    t_xyz C, d1C, d2C;
     crv->Eval(u, C);
     crv->Eval_Dk(u, 1, d1C);
     crv->Eval_Dk(u, 2, d2C);
@@ -148,10 +148,10 @@ namespace BSplCurveProj
 //! \param U     [in] knot vector.
 //! \param nU    [in] number of knots.
 //! \param p     [in] degree.
-mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>& Poles,
-                                             const double*           U,
-                                             const int               nU,
-                                             const int               p)
+mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<t_xyz>& Poles,
+                                             const double*             U,
+                                             const int                 nU,
+                                             const int                 p)
 : geom_Curve()
 {
   std::vector<double> Uvec;
@@ -167,7 +167,7 @@ mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>& Poles,
 //! \param Poles [in] poles for B-spline curve.
 //! \param U     [in] knot vector.
 //! \param p     [in] degree.
-mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<xyz>&    Poles,
+mobius::geom_BSplineCurve::geom_BSplineCurve(const std::vector<t_xyz>&  Poles,
                                              const std::vector<double>& U,
                                              const int                  p)
 : geom_Curve()
@@ -189,7 +189,7 @@ mobius::geom_BSplineCurve::~geom_BSplineCurve()
 mobius::core_Ptr<mobius::geom_BSplineCurve>
   mobius::geom_BSplineCurve::Instance(const std::string& json)
 {
-  core_Ptr<bcurve> result;
+  core_Ptr<t_bcurve> result;
   if ( !geom_JSON(json).ExtractBCurve(result) )
     return NULL;
 
@@ -233,7 +233,7 @@ void mobius::geom_BSplineCurve::GetBounds(double& xMin, double& xMax,
   // it as a rough solution
   for ( int p = 0; p < (int) m_poles.size(); ++p )
   {
-    const xyz& P = m_poles.at(p);
+    const t_xyz& P = m_poles.at(p);
     const double x = P.X(), y = P.Y(), z = P.Z();
 
     if ( x > x_max )
@@ -285,7 +285,7 @@ double mobius::geom_BSplineCurve::GetMaxParameter() const
 //! \param u [in]  parameter value to evaluate the curve for.
 //! \param P [out] 3D point corresponding to the given parameter on the curve.
 void mobius::geom_BSplineCurve::Eval(const double u,
-                                     xyz&         P) const
+                                     t_xyz&       P) const
 {
   // Find span the passed u falls into
   bspl_FindSpan FindSpan(m_U, m_iDeg);
@@ -297,7 +297,7 @@ void mobius::geom_BSplineCurve::Eval(const double u,
   EffectiveN(u, m_U, m_iDeg, span, N);
 
   // Evaluate curve
-  xyz C;
+  t_xyz C;
   for ( int i = 0; i <= m_iDeg; ++i )
   {
     C += m_poles[span-m_iDeg+i].Multiplied(N[i]); // See theory for clarifications on indices
@@ -310,7 +310,7 @@ void mobius::geom_BSplineCurve::Eval(const double u,
 //-----------------------------------------------------------------------------
 
 void mobius::geom_BSplineCurve::Eval_D1(const double u,
-                                        xyz&         dC_dt) const
+                                        t_xyz&       dC_dt) const
 {
   this->Eval_Dk(u, 1, dC_dt);
 }
@@ -324,19 +324,19 @@ void mobius::geom_BSplineCurve::Eval_D1(const double u,
 //! \param alloc            [in]  optional allocator.
 //! \param memBlockResult   [in]  index of the memory block for the result.
 //! \param memBlockInternal [in]  index of the memory block for internal calculations.
-void mobius::geom_BSplineCurve::Eval_Dk(const double u,
-                                        const int    k,
-                                        xyz&         dkC,
-                                        ptr<alloc2d> alloc,
-                                        const int    memBlockResult,
-                                        const int    memBlockInternal) const
+void mobius::geom_BSplineCurve::Eval_Dk(const double     u,
+                                        const int        k,
+                                        t_xyz&           dkC,
+                                        t_ptr<t_alloc2d> alloc,
+                                        const int        memBlockResult,
+                                        const int        memBlockInternal) const
 {
-  ptr<alloc2d> localAlloc;
+  t_ptr<t_alloc2d> localAlloc;
 
   double** dN;
   if ( alloc.IsNull() )
   {
-    localAlloc = new alloc2d;
+    localAlloc = new t_alloc2d;
     dN = localAlloc->Allocate(m_iDeg + 1, m_iDeg + 1, true);
   }
   else
@@ -354,12 +354,12 @@ void mobius::geom_BSplineCurve::Eval_Dk(const double u,
 //! \param d1C              [out] derivative vector.
 //! \param alloc            [in]  optional allocator.
 //! \param memBlockInternal [in]  index of the memory block for internal calculations.
-void mobius::geom_BSplineCurve::Eval_Dk(double**     dN,
-                                        const double u,
-                                        const int    k,
-                                        xyz&         d1C,
-                                        ptr<alloc2d> alloc,
-                                        const int    memBlockInternal) const
+void mobius::geom_BSplineCurve::Eval_Dk(double**         dN,
+                                        const double     u,
+                                        const int        k,
+                                        t_xyz&           d1C,
+                                        t_ptr<t_alloc2d> alloc,
+                                        const int        memBlockInternal) const
 {
   // Find span the passed u falls into
   bspl_FindSpan FindSpan(m_U, m_iDeg);
@@ -370,7 +370,7 @@ void mobius::geom_BSplineCurve::Eval_Dk(double**     dN,
   NDers(u, m_U, m_iDeg, span, k, dN);
 
   // Evaluate curve
-  xyz C;
+  t_xyz C;
   for ( int i = 0; i <= m_iDeg; ++i )
   {
     C += m_poles[span-m_iDeg+i].Multiplied(dN[k][i]); // See theory for clarifications on indices
@@ -384,9 +384,9 @@ void mobius::geom_BSplineCurve::Eval_Dk(double**     dN,
 
 //! Creates a copy of this B-curve.
 //! \return copy of B-curve.
-mobius::ptr<mobius::bcurve> mobius::geom_BSplineCurve::Copy() const
+mobius::t_ptr<mobius::t_bcurve> mobius::geom_BSplineCurve::Copy() const
 {
-  return new bcurve(m_poles, m_U, m_iDeg);
+  return new t_bcurve(m_poles, m_U, m_iDeg);
 }
 
 //-----------------------------------------------------------------------------
@@ -396,7 +396,7 @@ mobius::ptr<mobius::bcurve> mobius::geom_BSplineCurve::Copy() const
 //! \return curvature value.
 double mobius::geom_BSplineCurve::K(const double u) const
 {
-  xyz d1C, d2C;
+  t_xyz d1C, d2C;
   this->Eval_Dk(u, 1, d1C);
   this->Eval_Dk(u, 2, d2C);
 
@@ -466,7 +466,7 @@ mobius::core_Continuity
 //! \param prec  [in]  precision to use.
 //! \param param [out] parameter on curve.
 //! \return true in case of success, false -- otherwise.
-bool mobius::geom_BSplineCurve::InvertPoint(const xyz&   P,
+bool mobius::geom_BSplineCurve::InvertPoint(const t_xyz& P,
                                             double&      param,
                                             const double prec) const
 {
@@ -554,7 +554,7 @@ bool mobius::geom_BSplineCurve::InsertKnot(const double u,
   int       nq = 0;
   //
   std::vector<double> UQ;
-  std::vector<xyz> Qw;
+  std::vector<t_xyz> Qw;
 
   // Insert knot
   bspl_InsKnot Insert;
@@ -595,7 +595,7 @@ bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
   for ( int k = 0; k < m_new + 1; ++k )
     Ubar.push_back(0.0);
 
-  std::vector<xyz> Qw;
+  std::vector<t_xyz> Qw;
 
   // Refine knots
   bspl_RefineKnots Refine;
@@ -614,12 +614,12 @@ bool mobius::geom_BSplineCurve::RefineKnots(const std::vector<double>& X)
 //! \param u      [in]  parameter to split by.
 //! \param slices [out] resulting curve slices.
 //! \return true in case of success, false -- otherwise.
-bool mobius::geom_BSplineCurve::Split(const double                u,
-                                      std::vector< ptr<bcurve> >& slices) const
+bool mobius::geom_BSplineCurve::Split(const double                    u,
+                                      std::vector< t_ptr<t_bcurve> >& slices) const
 {
   // Create a copy of this curve as knot insertion modifies the object
   // (not real geometry)
-  ptr<bcurve> source = this->Copy();
+  t_ptr<t_bcurve> source = this->Copy();
 
   // Resolve multiplicity
   int s = 0;
@@ -638,7 +638,7 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
    * ============================================== */
 
   // Poles
-  std::vector<xyz> poles_before;
+  std::vector<t_xyz> poles_before;
   for ( int i = 0; i <= k; ++i )
     poles_before.push_back( source->GetPoles()[i] );
 
@@ -658,7 +658,7 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
    * ============================================= */
 
   // Poles
-  std::vector<xyz> poles_after;
+  std::vector<t_xyz> poles_after;
   for ( size_t i = k; i < source->GetPoles().size(); ++i )
     poles_after.push_back( source->GetPoles()[i] );
 
@@ -678,11 +678,11 @@ bool mobius::geom_BSplineCurve::Split(const double                u,
    *  Create b-curves and finish
    * ============================ */
 
-  ptr<bcurve>
-    slice_before = new bcurve(poles_before, U_before, m_iDeg);
+  t_ptr<t_bcurve>
+    slice_before = new t_bcurve(poles_before, U_before, m_iDeg);
 
-  ptr<bcurve>
-    slice_after = new bcurve(poles_after, U_after, m_iDeg);
+  t_ptr<t_bcurve>
+    slice_after = new t_bcurve(poles_after, U_after, m_iDeg);
 
   slices.push_back(slice_before);
   slices.push_back(slice_after);
@@ -736,17 +736,17 @@ double mobius::geom_BSplineCurve::ComputeStrainEnergy() const
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_BSplineCurve::SplitToBezier(std::vector< ptr<bcurve> >& segments) const
+bool mobius::geom_BSplineCurve::SplitToBezier(std::vector< t_ptr<t_bcurve> >& segments) const
 {
   // Input arguments.
   const int                  n  = this->GetNumOfPoles() - 1;
   const int                  p  = this->GetDegree();
   const std::vector<double>& U  = this->GetKnots();
-  const std::vector<xyz>&    Pw = this->GetPoles();
+  const std::vector<t_xyz>&  Pw = this->GetPoles();
 
   // Output arguments.
   int nb = 0;
-  std::vector< std::vector<xyz> > Qw;
+  std::vector< std::vector<t_xyz> > Qw;
   std::vector<int> breakpoints;
 
   // Perform curve decomposition.
@@ -784,7 +784,7 @@ bool mobius::geom_BSplineCurve::SplitToBezier(std::vector< ptr<bcurve> >& segmen
     for ( int ii = 0; ii < bezOrder; ++ii ) bezU.push_back(bezUmax);
 
     // Construct Bezier segment.
-    ptr<bcurve> segment = new bcurve(Qw[k], bezU, bezOrder - 1);
+    t_ptr<t_bcurve> segment = new t_bcurve(Qw[k], bezU, bezOrder - 1);
     //
     segments.push_back(segment);
   }
@@ -794,7 +794,7 @@ bool mobius::geom_BSplineCurve::SplitToBezier(std::vector< ptr<bcurve> >& segmen
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_BSplineCurve::init(const std::vector<xyz>&    Poles,
+void mobius::geom_BSplineCurve::init(const std::vector<t_xyz>&  Poles,
                                      const std::vector<double>& U,
                                      const int                  p)
 {

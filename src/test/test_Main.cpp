@@ -84,7 +84,7 @@ using namespace mobius;
 
 int main(int /*argc*/, char* /*argv[]*/)
 {
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // TODO: fix Test Cases
   //testEngine_Launcher<test_FindSpan>      T1;

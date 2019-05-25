@@ -34,7 +34,7 @@
 //! Constructs degenerated vector field (all vectors are nulls) under the
 //! given position point cloud.
 //! \param cloud [in] points.
-mobius::geom_VectorField::geom_VectorField(const ptr<pcloud>& cloud)
+mobius::geom_VectorField::geom_VectorField(const t_ptr<t_pcloud>& cloud)
 : core_OBJECT(),
   m_cloud(cloud)
 {}
@@ -51,24 +51,24 @@ void mobius::geom_VectorField::Clear()
 
 //! Prepares a copy of this vector field.
 //! \return copy.
-mobius::ptr<mobius::geom_VectorField> mobius::geom_VectorField::Copy() const
+mobius::t_ptr<mobius::geom_VectorField> mobius::geom_VectorField::Copy() const
 {
-  ptr<geom_VectorField> res = new geom_VectorField(m_cloud);
-  res->m_cloud = new pcloud( m_cloud->GetPoints() );
+  t_ptr<geom_VectorField> res = new geom_VectorField(m_cloud);
+  res->m_cloud = new t_pcloud( m_cloud->GetPoints() );
   res->m_vectors = m_vectors;
   return res;
 }
 
 //! Returns the associated point cloud.
 //! \return point cloud.
-const mobius::ptr<mobius::pcloud>& mobius::geom_VectorField::GetCloud() const
+const mobius::t_ptr<mobius::t_pcloud>& mobius::geom_VectorField::GetCloud() const
 {
   return m_cloud;
 }
 
 //! Returns the associated point cloud for modification.
 //! \return point cloud.
-mobius::ptr<mobius::pcloud>& mobius::geom_VectorField::ChangeCloud()
+mobius::t_ptr<mobius::t_pcloud>& mobius::geom_VectorField::ChangeCloud()
 {
   return m_cloud;
 }
@@ -77,20 +77,20 @@ mobius::ptr<mobius::pcloud>& mobius::geom_VectorField::ChangeCloud()
 //! \param pnt_index [in] 0-based index of a point.
 //! \param vector [in] vector to bind to a point.
 void mobius::geom_VectorField::AddVector(const size_t pnt_index,
-                                         const xyz&   vector)
+                                         const t_xyz& vector)
 {
-  m_vectors.insert( std::pair<size_t, xyz>(pnt_index, vector) );
+  m_vectors.insert( std::pair<size_t, t_xyz>(pnt_index, vector) );
 }
 
 //! Returns vector associated with the given point index.
 //! \param pnt_index [in] 0-based index of a point.
 //! \return requested vector or null vector if nothing was found for the
 //!         given point.
-mobius::xyz mobius::geom_VectorField::GetVector(const size_t pnt_index) const
+mobius::t_xyz mobius::geom_VectorField::GetVector(const size_t pnt_index) const
 {
-  std::map<size_t, xyz>::const_iterator cit = m_vectors.find(pnt_index);
+  std::map<size_t, t_xyz>::const_iterator cit = m_vectors.find(pnt_index);
   if ( cit == m_vectors.cend() )
-    return xyz();
+    return t_xyz();
 
   return cit->second;
 }

@@ -52,7 +52,7 @@ void mobius::geom_BSurfNk::Eval_D2(const double u,
                                    double&      d2N_dUV,
                                    double&      d2N_dV2)
 {
-  t_cell askedCell(uv(u, v), 1e-4);
+  t_cell askedCell(t_uv(u, v), 1e-4);
 
   // Return cached values.
   if ( m_cells.find(askedCell) != m_cells.end() )
@@ -69,7 +69,7 @@ void mobius::geom_BSurfNk::Eval_D2(const double u,
     return;
   }
 
-  ptr<alloc2d> localAlloc;
+  t_ptr<t_alloc2d> localAlloc;
 
   const int orderU = m_Ni.p + 1;
   const int orderV = m_Nj.q + 1;
@@ -93,7 +93,7 @@ void mobius::geom_BSurfNk::Eval_D2(const double u,
   //
   if ( m_alloc.IsNull() )
   {
-    localAlloc = new alloc2d;
+    localAlloc = new t_alloc2d;
     dNi = localAlloc->Allocate(3, orderU, true);
     dNj = localAlloc->Allocate(3, orderV, true);
   }

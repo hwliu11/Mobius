@@ -347,9 +347,9 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
     }
 
     // Add triangle to mesh data structure.
-    const poly_VertexHandle hv0 = ( m_bMergeNodes ? MergeTool.AddVertex(x1, y1, z1) : this->AddVertex( xyz(x1, y1, z1) ) );
-    const poly_VertexHandle hv1 = ( m_bMergeNodes ? MergeTool.AddVertex(x2, y2, z2) : this->AddVertex( xyz(x2, y2, z2) ) );
-    const poly_VertexHandle hv2 = ( m_bMergeNodes ? MergeTool.AddVertex(x3, y3, z3) : this->AddVertex( xyz(x3, y3, z3) ) );
+    const poly_VertexHandle hv0 = ( m_bMergeNodes ? MergeTool.AddVertex(x1, y1, z1) : this->AddVertex( t_xyz(x1, y1, z1) ) );
+    const poly_VertexHandle hv1 = ( m_bMergeNodes ? MergeTool.AddVertex(x2, y2, z2) : this->AddVertex( t_xyz(x2, y2, z2) ) );
+    const poly_VertexHandle hv2 = ( m_bMergeNodes ? MergeTool.AddVertex(x3, y3, z3) : this->AddVertex( t_xyz(x3, y3, z3) ) );
     //
     if ( hv0 != hv1 && hv1 != hv2 && hv2 != hv0 )
       this->AddTriangle(hv0, hv1, hv2);

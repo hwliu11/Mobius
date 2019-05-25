@@ -161,7 +161,7 @@ inline double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
 inline double mobius::core_XYZ::AngleWithRef(const core_XYZ& other,
                                              const core_XYZ& ref) const
 {
-  xyz XYZ = this->Cross(other).Normalized();
+  core_XYZ XYZ = this->Cross(other).Normalized();
 
   double alpha;
   double Cosinus = this->Normalized().Dot( other.Normalized() );

@@ -64,7 +64,7 @@ mobius::geom_InterpolateCurve::geom_InterpolateCurve(core_ProgressEntry progress
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>&    points,
+mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<t_xyz>&  points,
                                                      const int                  deg,
                                                      const bspl_ParamsSelection paramsType,
                                                      const bspl_KnotsSelection  knotsType,
@@ -77,14 +77,14 @@ mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>&    
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>& points,
-                                                     const int               deg,
-                                                     double*                 pParams,
-                                                     const int               n,
-                                                     double*                 pU,
-                                                     const int               m,
-                                                     core_ProgressEntry      progress,
-                                                     core_PlotterEntry       plotter)
+mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<t_xyz>& points,
+                                                     const int                 deg,
+                                                     double*                   pParams,
+                                                     const int                 n,
+                                                     double*                   pU,
+                                                     const int                 m,
+                                                     core_ProgressEntry        progress,
+                                                     core_PlotterEntry         plotter)
 : core_OPERATOR(progress, plotter)
 {
   this->Init(points, deg, pParams, n, pU, m);
@@ -92,7 +92,7 @@ mobius::geom_InterpolateCurve::geom_InterpolateCurve(const std::vector<xyz>& poi
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
+void mobius::geom_InterpolateCurve::Init(const std::vector<t_xyz>&  points,
                                          const int                  deg,
                                          const bspl_ParamsSelection paramsType,
                                          const bspl_KnotsSelection  knotsType)
@@ -110,12 +110,12 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>& points,
-                                         const int               deg,
-                                         double*                 pParams,
-                                         const int               n,
-                                         double*                 pU,
-                                         const int               m)
+void mobius::geom_InterpolateCurve::Init(const std::vector<t_xyz>& points,
+                                         const int                 deg,
+                                         double*                   pParams,
+                                         const int                 n,
+                                         double*                   pU,
+                                         const int                 m)
 {
   m_points     = points;
   m_iDeg       = deg;
@@ -130,9 +130,9 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>& points,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
-                                         const xyz&                 D0,
-                                         const xyz&                 Dn,
+void mobius::geom_InterpolateCurve::Init(const std::vector<t_xyz>&  points,
+                                         const t_xyz&               D0,
+                                         const t_xyz&               Dn,
                                          const int                  deg,
                                          const bspl_ParamsSelection paramsType,
                                          const bspl_KnotsSelection  knotsType)
@@ -152,11 +152,11 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateCurve::Init(const std::vector<xyz>&    points,
-                                         const xyz&                 D0,
-                                         const xyz&                 Dn,
-                                         const xyz&                 D20,
-                                         const xyz&                 D2n,
+void mobius::geom_InterpolateCurve::Init(const std::vector<t_xyz>&  points,
+                                         const t_xyz&               D0,
+                                         const t_xyz&               Dn,
+                                         const t_xyz&               D20,
+                                         const t_xyz&               D2n,
                                          const int                  deg,
                                          const bspl_ParamsSelection paramsType,
                                          const bspl_KnotsSelection  knotsType)
@@ -298,21 +298,21 @@ bool mobius::geom_InterpolateCurve::Perform()
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
-                                           const int               n,
-                                           const int               p,
-                                           const double*           params,
-                                           const double*           pU,
-                                           const int               m,
-                                           const bool              has_start_deriv,
-                                           const bool              has_end_deriv,
-                                           const bool              has_start_deriv2,
-                                           const bool              has_end_deriv2,
-                                           const xyz&              D0,
-                                           const xyz&              Dn,
-                                           const xyz&              D20,
-                                           const xyz&              D2n,
-                                           ptr<bcurve>&            crv)
+bool mobius::geom_InterpolateCurve::Interp(const std::vector<t_xyz>& points,
+                                           const int                 n,
+                                           const int                 p,
+                                           const double*             params,
+                                           const double*             pU,
+                                           const int                 m,
+                                           const bool                has_start_deriv,
+                                           const bool                has_end_deriv,
+                                           const bool                has_start_deriv2,
+                                           const bool                has_end_deriv2,
+                                           const t_xyz&              D0,
+                                           const t_xyz&              Dn,
+                                           const t_xyz&              D20,
+                                           const t_xyz&              D2n,
+                                           t_ptr<t_bcurve>&          crv)
 {
   if ( has_start_deriv2 && !has_start_deriv || has_end_deriv2 && !has_end_deriv )
     throw std::exception("Cannot handle D2 without D1"); // TODO: this limitation can be easily escaped
@@ -446,15 +446,15 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<xyz>& points,
    * ------------------------------- */
 
   // Pack results
-  std::vector<xyz> Poles;
+  std::vector<t_xyz> Poles;
   for ( int k = 0; k < dim; ++k )
   {
-    xyz P(pXYZ[0][k], pXYZ[1][k], pXYZ[2][k]);
+    t_xyz P(pXYZ[0][k], pXYZ[1][k], pXYZ[2][k]);
     Poles.push_back(P);
   }
 
   // Set result
-  crv = new bcurve(Poles, U, p);
+  crv = new t_bcurve(Poles, U, p);
 
   /* ----------------
    *  Release memory

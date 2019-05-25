@@ -36,15 +36,17 @@
 
 namespace mobius {
 
+//! \ingroup MOBIUS_GEOM
+//!
 //! Checks whether a point belongs to a line.
 class geom_PointOnLine
 {
 public:
 
   mobiusGeom_EXPORT bool
-    operator()(const xyz&            P,
-               const ptr<geom_Line>& Line,
-               const double          prec = 1.0e-6);
+    operator()(const t_xyz&         P,
+               const t_ptr<t_line>& Line,
+               const double         prec = 1.0e-6);
 
 };
 

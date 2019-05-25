@@ -96,9 +96,9 @@ private:
 private:
 
   static outcome doTest(const int    funcID,
-                        const xyz&   LineOri,
-                        const xyz&   LineDir,
-                        const xyz&   P,
+                        const t_xyz& LineOri,
+                        const t_xyz& LineDir,
+                        const t_xyz& P,
                         const double classiPrec,
                         const bool   resultRef);
 

@@ -46,14 +46,14 @@ mobius::outcome
    *  Prepare input points
    * ~~~~~~~~~~~~~~~~~~~~~~ */
 
-  xyz Q[5] = { xyz( 0.0,  0.0, 0.0),
-               xyz( 3.0,  4.0, 0.0),
-               xyz(-1.0,  4.0, 0.0),
-               xyz(-4.0,  0.0, 0.0),
-               xyz(-4.0, -3.0, 0.0) };
+  t_xyz Q[5] = { t_xyz( 0.0,  0.0, 0.0),
+                 t_xyz( 3.0,  4.0, 0.0),
+                 t_xyz(-1.0,  4.0, 0.0),
+                 t_xyz(-4.0,  0.0, 0.0),
+                 t_xyz(-4.0, -3.0, 0.0) };
 
-  std::vector<xyz> Q_vec;
-  for ( int k = 0; k < sizeof(Q)/sizeof(xyz); ++k )
+  std::vector<t_xyz> Q_vec;
+  for ( int k = 0; k < sizeof(Q)/sizeof(t_xyz); ++k )
     Q_vec.push_back(Q[k]);
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

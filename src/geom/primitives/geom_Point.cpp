@@ -134,7 +134,7 @@ mobius::geom_Point&
 //! \param hPP [in] point to add.
 //! \return result of addition.
 mobius::geom_Point&
-  mobius::geom_Point::operator+=(const ptr<geom_Point>& hPP)
+  mobius::geom_Point::operator+=(const t_ptr<geom_Point>& hPP)
 {
   return this->operator+=( *hPP.Access() );
 }
@@ -164,7 +164,7 @@ mobius::geom_Point&
 //! \param hPP [in] point to subtract.
 //! \return result of subtraction.
 mobius::geom_Point&
-  mobius::geom_Point::operator-=(const ptr<geom_Point>& hPP)
+  mobius::geom_Point::operator-=(const t_ptr<geom_Point>& hPP)
 {
   return this->operator-=( *hPP.Access() );
 }

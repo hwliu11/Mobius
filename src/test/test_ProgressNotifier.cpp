@@ -196,9 +196,9 @@ void mobius::test_ProgressNotifier::SetProgress(const int progress)
 //-----------------------------------------------------------------------------
 
 template<typename T, typename VT>
-std::string toString(const mobius::ptr<mobius::core_VarBase>& varBase)
+std::string toString(const mobius::t_ptr<mobius::core_VarBase>& varBase)
 {
-  mobius::ptr<T> var = mobius::ptr<T>::DownCast(varBase);
+  mobius::t_ptr<T> var = mobius::t_ptr<T>::DownCast(varBase);
   //
   if ( var.IsNull() )
     return "";
@@ -208,7 +208,7 @@ std::string toString(const mobius::ptr<mobius::core_VarBase>& varBase)
 
 //-----------------------------------------------------------------------------
 
-std::string getString(const mobius::ptr<mobius::core_VarBase>& varBase)
+std::string getString(const mobius::t_ptr<mobius::core_VarBase>& varBase)
 {
   std::string varInt = toString<mobius::core_VarInt, int>(varBase);
   //

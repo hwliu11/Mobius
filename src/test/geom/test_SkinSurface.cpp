@@ -44,15 +44,15 @@
 //-----------------------------------------------------------------------------
 
 bool
-  mobius::test_SkinSurface::runtest(const std::vector< ptr<bcurve> >& sections,
-                                    const std::vector<xyz>&           D1lead,
-                                    const std::vector<xyz>&           D1tail,
-                                    const bool                        unify,
-                                    const int                         degV,
-                                    const ptr<bsurf>&                 surfRef)
+  mobius::test_SkinSurface::runtest(const std::vector< t_ptr<t_bcurve> >& sections,
+                                    const std::vector<t_xyz>&             D1lead,
+                                    const std::vector<t_xyz>&             D1tail,
+                                    const bool                            unify,
+                                    const int                             degV,
+                                    const t_ptr<t_bsurf>&                 surfRef)
 {
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // Skin ruled surface through the section curves.
   geom_SkinSurface skinner(sections, degV, unify);
@@ -66,13 +66,13 @@ bool
     return false;
   }
   //
-  const ptr<bsurf>& surfRes = skinner.GetResult();
+  const t_ptr<t_bsurf>& surfRes = skinner.GetResult();
 
   // Compare the constructed surface with the reference one.
-  if ( !bsurf::Compare( surfRes,
-                        surfRef,
-                        core_Precision::Resolution2D(),
-                        core_Precision::Resolution3D() ) )
+  if ( !t_bsurf::Compare( surfRes,
+                          surfRef,
+                          core_Precision::Resolution2D(),
+                          core_Precision::Resolution3D() ) )
   {
     cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Skinned surface deviates to much "
                                                              "from the expected surface.");
@@ -93,35 +93,35 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Build section curves
    * ====================== */
 
-  std::vector< ptr<bcurve> > sections;
+  std::vector< t_ptr<t_bcurve> > sections;
 
   // Build curves.
   {
-    std::vector<mobius::xyz> c0_pts = {
-      mobius::xyz(0.,  0.,  0.),
-      mobius::xyz(1.,  1.,  1.),
-      mobius::xyz(1.,  2.,  2.),
-      mobius::xyz(2.,  3.,  4.)
+    std::vector<t_xyz> c0_pts = {
+      t_xyz(0.,  0.,  0.),
+      t_xyz(1.,  1.,  1.),
+      t_xyz(1.,  2.,  2.),
+      t_xyz(2.,  3.,  4.)
     };
 
-    std::vector<mobius::xyz> c1_pts = {
-      mobius::xyz(5.,  0.,  0.),
-      mobius::xyz(5.,  1.,  2.),
-      mobius::xyz(5.,  2.,  2.),
-      mobius::xyz(6.,  3.,  5.)
+    std::vector<t_xyz> c1_pts = {
+      t_xyz(5.,  0.,  0.),
+      t_xyz(5.,  1.,  2.),
+      t_xyz(5.,  2.,  2.),
+      t_xyz(6.,  3.,  5.)
     };
 
-    std::vector<mobius::xyz> c2_pts = {
-      mobius::xyz(9.,  0.,  0.),
-      mobius::xyz(9.1, 1.,  2.),
-      mobius::xyz(9.,  2.,  2.),
-      mobius::xyz(9.1, 1.,  6.)
+    std::vector<t_xyz> c2_pts = {
+      t_xyz(9.,  0.,  0.),
+      t_xyz(9.1, 1.,  2.),
+      t_xyz(9.,  2.,  2.),
+      t_xyz(9.1, 1.,  6.)
     };
 
     // Prepare points interpolator to build curves.
@@ -188,7 +188,7 @@ mobius::outcome
   }";
 
   // Construct reference B-surface.
-  core_Ptr<bsurf> surfRef = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surfRef = t_bsurf::Instance(json);
   //
   if ( surfRef.IsNull() )
     return res.failure();
@@ -197,7 +197,7 @@ mobius::outcome
    *  Perform test
    * ============== */
 
-  if ( !runtest(sections, std::vector<xyz>(), std::vector<xyz>(), false, 2, surfRef) )
+  if ( !runtest(sections, std::vector<t_xyz>(), std::vector<t_xyz>(), false, 2, surfRef) )
     return res.failure();
 
   // Report execution time.
@@ -218,41 +218,41 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Build section curves
    * ====================== */
 
-  std::vector< ptr<bcurve> > sections;
+  std::vector< t_ptr<t_bcurve> > sections;
 
   // Tangency constraints.
-  std::vector<mobius::xyz> c0_D1, c1_D1;
+  std::vector<t_xyz> c0_D1, c1_D1;
 
   // Build curves.
   {
-    std::vector<mobius::xyz> c0_pts = {
-      mobius::xyz(0.,  0.,  0.),
-      mobius::xyz(1.,  1.,  1.),
-      mobius::xyz(1.,  2.,  2.)
+    std::vector<t_xyz> c0_pts = {
+      t_xyz(0.,  0.,  0.),
+      t_xyz(1.,  1.,  1.),
+      t_xyz(1.,  2.,  2.)
     };
     //
     c0_D1 = {
-      mobius::xyz(0.,  0.,  3.),
-      mobius::xyz(0.,  0.,  3.),
-      mobius::xyz(0.,  0.,  3.)
+      t_xyz(0.,  0.,  3.),
+      t_xyz(0.,  0.,  3.),
+      t_xyz(0.,  0.,  3.)
     };
 
-    std::vector<mobius::xyz> c1_pts = {
-      mobius::xyz(5.,  0.,  0.),
-      mobius::xyz(5.,  1.,  2.),
-      mobius::xyz(5.,  2.,  2.)
+    std::vector<t_xyz> c1_pts = {
+      t_xyz(5.,  0.,  0.),
+      t_xyz(5.,  1.,  2.),
+      t_xyz(5.,  2.,  2.)
     };
     //
     c1_D1 = {
-      mobius::xyz(0.,  0.,  -3.),
-      mobius::xyz(0.,  0.,  -3.),
-      mobius::xyz(0.,  0.,  -3.)
+      t_xyz(0.,  0.,  -3.),
+      t_xyz(0.,  0.,  -3.),
+      t_xyz(0.,  0.,  -3.)
     };
 
     // Prepare points interpolator to build curves.
@@ -316,41 +316,41 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* ======================
    *  Build section curves
    * ====================== */
 
-  std::vector< ptr<bcurve> > sections;
+  std::vector< t_ptr<t_bcurve> > sections;
 
   // Tangency constraints.
-  std::vector<mobius::xyz> c0_D1, c1_D1;
+  std::vector<t_xyz> c0_D1, c1_D1;
 
   // Build curves.
   {
-    std::vector<mobius::xyz> c0_pts = {
-      mobius::xyz(0.,  0.,  0.),
-      mobius::xyz(1.,  1.,  1.),
-      mobius::xyz(1.,  2.,  2.)
+    std::vector<t_xyz> c0_pts = {
+      t_xyz(0.,  0.,  0.),
+      t_xyz(1.,  1.,  1.),
+      t_xyz(1.,  2.,  2.)
     };
     //
     c0_D1 = {
-      mobius::xyz(0.,  0.,  3.),
-      mobius::xyz(0.,  0.,  3.),
-      mobius::xyz(0.,  0.,  3.)
+      t_xyz(0.,  0.,  3.),
+      t_xyz(0.,  0.,  3.),
+      t_xyz(0.,  0.,  3.)
     };
 
-    std::vector<mobius::xyz> c1_pts = {
-      mobius::xyz(5.,  0.,  0.),
-      mobius::xyz(5.,  1.,  2.),
-      mobius::xyz(5.,  2.,  2.)
+    std::vector<t_xyz> c1_pts = {
+      t_xyz(5.,  0.,  0.),
+      t_xyz(5.,  1.,  2.),
+      t_xyz(5.,  2.,  2.)
     };
     //
     c1_D1 = {
-      mobius::xyz(0.,  0.,  -3.),
-      mobius::xyz(0.,  0.,  -3.),
-      mobius::xyz(0.,  0.,  -3.)
+      t_xyz(0.,  0.,  -3.),
+      t_xyz(0.,  0.,  -3.),
+      t_xyz(0.,  0.,  -3.)
     };
 
     // Prepare points interpolator to build curves.
@@ -415,7 +415,7 @@ mobius::outcome
   }";
 
   // Construct reference B-surface.
-  core_Ptr<bsurf> surfRef = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surfRef = t_bsurf::Instance(json);
   //
   if ( surfRef.IsNull() )
     return res.failure();

@@ -50,11 +50,11 @@
 
 //-----------------------------------------------------------------------------
 
-bool mobius::test_Mesh::verifyMeshContents(const ptr<poly_Mesh>& mesh,
-                                           const int             refNumVertices,
-                                           const int             refNumEdges,
-                                           const int             refNumTriangles,
-                                           const int             refNumQuads)
+bool mobius::test_Mesh::verifyMeshContents(const t_ptr<poly_Mesh>& mesh,
+                                           const int               refNumVertices,
+                                           const int               refNumEdges,
+                                           const int               refNumTriangles,
+                                           const int               refNumQuads)
 {
   // Get the actual summary.
   const int numVertices  = mesh->GetNumVertices();
@@ -63,7 +63,7 @@ bool mobius::test_Mesh::verifyMeshContents(const ptr<poly_Mesh>& mesh,
   const int numQuads     = mesh->GetNumQuads();
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // Verify.
   if ( refNumVertices != numVertices )
@@ -110,7 +110,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // File to read.
   std::string
@@ -151,7 +151,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // File to read.
   std::string
@@ -188,7 +188,7 @@ mobius::outcome
 {
   outcome res( DescriptionFn(), funcID );
 
-  ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
 
   // Add vertices and validate the returned handles.
   poly_VertexHandle hv0 = mesh->AddVertex();

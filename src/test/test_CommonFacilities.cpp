@@ -31,9 +31,9 @@
 // Own include
 #include <mobius/test_CommonFacilities.h>
 
-mobius::ptr<mobius::test_CommonFacilities> mobius::test_CommonFacilities::Instance()
+mobius::t_ptr<mobius::test_CommonFacilities> mobius::test_CommonFacilities::Instance()
 {
-  static ptr<test_CommonFacilities> ref = new test_CommonFacilities;
+  static t_ptr<test_CommonFacilities> ref = new test_CommonFacilities;
 
   return ref;
 }

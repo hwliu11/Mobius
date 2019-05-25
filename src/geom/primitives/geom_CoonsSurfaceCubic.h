@@ -55,18 +55,18 @@ public:
   };
 
   mobiusGeom_EXPORT
-    geom_CoonsSurfaceCubic(const ptr<curve>& Su0,         // `s(u,0)` boundary curve.
-                           const ptr<curve>& Su1,         // `s(u,1)` boundary curve.
-                           const ptr<curve>& S0v,         // `s(0,v)` boundary curve.
-                           const ptr<curve>& S1v,         // `s(1,v)` boundary curve.
-                           const ptr<curve>& dSu0_dv,     // `s_v(u,0)` boundary derivative.
-                           const ptr<curve>& dSu1_dv,     // `s_v(u,1)` boundary derivative.
-                           const ptr<curve>& dS0v_du,     // `s_u(0,v)` boundary derivative.
-                           const ptr<curve>& dS1v_du,     // `s_u(1,v)` boundary derivative.
-                           const xyz&        d2S_dudv00,  // Twist vector at corner `(0,0)`.
-                           const xyz&        d2S_dudv01,  // Twist vector at corner `(0,1)`.
-                           const xyz&        d2S_dudv10,  // Twist vector at corner `(1,0)`.
-                           const xyz&        d2S_dudv11); // Twist vector at corner `(1,1)`.
+    geom_CoonsSurfaceCubic(const t_ptr<t_curve>& Su0,         // `s(u,0)` boundary curve.
+                           const t_ptr<t_curve>& Su1,         // `s(u,1)` boundary curve.
+                           const t_ptr<t_curve>& S0v,         // `s(0,v)` boundary curve.
+                           const t_ptr<t_curve>& S1v,         // `s(1,v)` boundary curve.
+                           const t_ptr<t_curve>& dSu0_dv,     // `s_v(u,0)` boundary derivative.
+                           const t_ptr<t_curve>& dSu1_dv,     // `s_v(u,1)` boundary derivative.
+                           const t_ptr<t_curve>& dS0v_du,     // `s_u(0,v)` boundary derivative.
+                           const t_ptr<t_curve>& dS1v_du,     // `s_u(1,v)` boundary derivative.
+                           const t_xyz&          d2S_dudv00,  // Twist vector at corner `(0,0)`.
+                           const t_xyz&          d2S_dudv01,  // Twist vector at corner `(0,1)`.
+                           const t_xyz&          d2S_dudv10,  // Twist vector at corner `(1,0)`.
+                           const t_xyz&          d2S_dudv11); // Twist vector at corner `(1,1)`.
 
   mobiusGeom_EXPORT virtual
     ~geom_CoonsSurfaceCubic();
@@ -115,50 +115,50 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          const double v,
-         xyz&         S) const override;
+         t_xyz&       S) const override;
 
 public:
 
   mobiusGeom_EXPORT virtual void
     Eval_D1(const double u,
             const double v,
-            xyz&         dU,
-            xyz&         dV) const;
+            t_xyz&       dU,
+            t_xyz&       dV) const;
 
 public:
 
   mobiusGeom_EXPORT void
     Eval_P1S(const double u,
              const double v,
-             xyz&         S) const;
+             t_xyz&       S) const;
 
   mobiusGeom_EXPORT void
     Eval_P2S(const double u,
              const double v,
-             xyz&         S) const;
+             t_xyz&       S) const;
 
   mobiusGeom_EXPORT void
     Eval_P12S(const double u,
               const double v,
-              xyz&         S) const;
+              t_xyz&       S) const;
 
   mobiusGeom_EXPORT void
     Eval_D1_P1S(const double u,
                 const double v,
-                xyz&         dU,
-                xyz&         dV) const;
+                t_xyz&       dU,
+                t_xyz&       dV) const;
 
   mobiusGeom_EXPORT void
     Eval_D1_P2S(const double u,
                 const double v,
-                xyz&         dU,
-                xyz&         dV) const;
+                t_xyz&       dU,
+                t_xyz&       dV) const;
 
   mobiusGeom_EXPORT void
     Eval_D1_P12S(const double u,
                  const double v,
-                 xyz&         dU,
-                 xyz&         dV) const;
+                 t_xyz&       dU,
+                 t_xyz&       dV) const;
 
 public:
 
@@ -171,45 +171,45 @@ public:
 
 protected:
 
-  xyz evalS12Row(const int    row,
-                 const double v) const;
+  t_xyz evalS12Row(const int    row,
+                   const double v) const;
 
 private:
 
   /* Inputs */
 
-  ptr<curve> m_Su0;        //!< Rail curve `s(u,0)`.
-  ptr<curve> m_Su1;        //!< Rail curve `s(u,1)`.
-  ptr<curve> m_S0v;        //!< Rail curve `s(0,v)`.
-  ptr<curve> m_S1v;        //!< Rail curve `s(1,v)`.
-  ptr<curve> m_dS0v_du;    //!< `s_u(0,v)` boundary derivative.
-  ptr<curve> m_dS1v_du;    //!< `s_u(1,v)` boundary derivative.
-  ptr<curve> m_dSu0_dv;    //!< `s_v(u,0)` boundary derivative.
-  ptr<curve> m_dSu1_dv;    //!< `s_v(u,1)` boundary derivative.
-  xyz        m_d2S_dudv00; //!< Derivative constraint at `(u,v) = (0,0)`.
-  xyz        m_d2S_dudv01; //!< Derivative constraint at `(u,v) = (0,1)`.
-  xyz        m_d2S_dudv10; //!< Derivative constraint at `(u,v) = (1,0)`.
-  xyz        m_d2S_dudv11; //!< Derivative constraint at `(u,v) = (1,1)`.
+  t_ptr<t_curve> m_Su0;        //!< Rail curve `s(u,0)`.
+  t_ptr<t_curve> m_Su1;        //!< Rail curve `s(u,1)`.
+  t_ptr<t_curve> m_S0v;        //!< Rail curve `s(0,v)`.
+  t_ptr<t_curve> m_S1v;        //!< Rail curve `s(1,v)`.
+  t_ptr<t_curve> m_dS0v_du;    //!< `s_u(0,v)` boundary derivative.
+  t_ptr<t_curve> m_dS1v_du;    //!< `s_u(1,v)` boundary derivative.
+  t_ptr<t_curve> m_dSu0_dv;    //!< `s_v(u,0)` boundary derivative.
+  t_ptr<t_curve> m_dSu1_dv;    //!< `s_v(u,1)` boundary derivative.
+  t_xyz          m_d2S_dudv00; //!< Derivative constraint at `(u,v) = (0,0)`.
+  t_xyz          m_d2S_dudv01; //!< Derivative constraint at `(u,v) = (0,1)`.
+  t_xyz          m_d2S_dudv10; //!< Derivative constraint at `(u,v) = (1,0)`.
+  t_xyz          m_d2S_dudv11; //!< Derivative constraint at `(u,v) = (1,1)`.
 
   //! Component of the Boolean sum to evaluate.
   EvalComponents m_comp;
 
   /* Cached values */
 
-  xyz m_S00; //!< Positional constraint at `(u,v) = (0,0)`.
-  xyz m_S01; //!< Positional constraint at `(u,v) = (0,1)`.
-  xyz m_S10; //!< Positional constraint at `(u,v) = (1,0)`.
-  xyz m_S11; //!< Positional constraint at `(u,v) = (1,1)`.
+  t_xyz m_S00; //!< Positional constraint at `(u,v) = (0,0)`.
+  t_xyz m_S01; //!< Positional constraint at `(u,v) = (0,1)`.
+  t_xyz m_S10; //!< Positional constraint at `(u,v) = (1,0)`.
+  t_xyz m_S11; //!< Positional constraint at `(u,v) = (1,1)`.
 
-  xyz m_dS00_du; //!< Derivative value `s_u(0,0)`.
-  xyz m_dS01_du; //!< Derivative value `s_u(0,1)`.
-  xyz m_dS10_du; //!< Derivative value `s_u(1,0)`.
-  xyz m_dS11_du; //!< Derivative value `s_u(1,1)`.
+  t_xyz m_dS00_du; //!< Derivative value `s_u(0,0)`.
+  t_xyz m_dS01_du; //!< Derivative value `s_u(0,1)`.
+  t_xyz m_dS10_du; //!< Derivative value `s_u(1,0)`.
+  t_xyz m_dS11_du; //!< Derivative value `s_u(1,1)`.
 
-  xyz m_dS00_dv; //!< Derivative value `s_v(0,0)`.
-  xyz m_dS01_dv; //!< Derivative value `s_v(0,1)`.
-  xyz m_dS10_dv; //!< Derivative value `s_v(1,0)`.
-  xyz m_dS11_dv; //!< Derivative value `s_v(1,1)`.
+  t_xyz m_dS00_dv; //!< Derivative value `s_v(0,0)`.
+  t_xyz m_dS01_dv; //!< Derivative value `s_v(0,1)`.
+  t_xyz m_dS10_dv; //!< Derivative value `s_v(1,0)`.
+  t_xyz m_dS11_dv; //!< Derivative value `s_v(1,1)`.
 
 };
 

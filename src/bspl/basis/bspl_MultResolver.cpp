@@ -49,11 +49,11 @@ void mobius::bspl_MultResolver::Resolve(const double u)
 {
   bool isFound = false;
   int foundIdx = -1;
-  knot_multiset::elem foundStruct;
+  t_knot_multiset::elem foundStruct;
   //
   for ( int i = 0; i < Knots.size(); ++i )
   {
-    const knot_multiset::elem& knotWithMult = Knots[i];
+    const t_knot_multiset::elem& knotWithMult = Knots[i];
     if ( fabs(knotWithMult.u - u) < DBL_EPSILON )
     {
       isFound     = true;

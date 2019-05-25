@@ -51,20 +51,20 @@ class geom_BSplineSurface : public geom_Surface
 public:
 
   mobiusGeom_EXPORT
-    geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                        const double*                          U,
-                        const double*                          V,
-                        const int                              nU,
-                        const int                              nV,
-                        const int                              p,
-                        const int                              q);
+    geom_BSplineSurface(const std::vector< std::vector<t_xyz> >& Poles,
+                        const double*                            U,
+                        const double*                            V,
+                        const int                                nU,
+                        const int                                nV,
+                        const int                                p,
+                        const int                                q);
 
   mobiusGeom_EXPORT
-    geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                        const std::vector<double>&             U,
-                        const std::vector<double>&             V,
-                        const int                              p,
-                        const int                              q);
+    geom_BSplineSurface(const std::vector< std::vector<t_xyz> >& Poles,
+                        const std::vector<double>&               U,
+                        const std::vector<double>&               V,
+                        const int                                p,
+                        const int                                q);
 
   mobiusGeom_EXPORT virtual
     ~geom_BSplineSurface();
@@ -120,42 +120,42 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          const double v,
-         xyz&         S) const override;
+         t_xyz&       S) const override;
 
 public:
 
   mobiusGeom_EXPORT virtual void
     Eval_D1(const double u,
             const double v,
-            xyz&         S,
-            xyz&         dU,
-            xyz&         dV) const;
+            t_xyz&       S,
+            t_xyz&       dU,
+            t_xyz&       dV) const;
 
   mobiusGeom_EXPORT virtual void
-    Eval_D2(const double u,
-            const double v,
-            xyz&         S,
-            xyz&         dU,
-            xyz&         dV,
-            xyz&         d2U,
-            xyz&         d2V,
-            xyz&         d2UV,
-            ptr<alloc2d> alloc            = NULL,
-            const int    memBlockResultU  = -1,
-            const int    memBlockResultV  = -1,
-            const int    memBlockInternal = -1) const;
+    Eval_D2(const double     u,
+            const double     v,
+            t_xyz&           S,
+            t_xyz&           dU,
+            t_xyz&           dV,
+            t_xyz&           d2U,
+            t_xyz&           d2V,
+            t_xyz&           d2UV,
+            t_ptr<t_alloc2d> alloc            = NULL,
+            const int        memBlockResultU  = -1,
+            const int        memBlockResultV  = -1,
+            const int        memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT virtual core_Continuity
     GetContinuity() const;
 
 public:
 
-  mobiusGeom_EXPORT ptr<geom_BSplineSurface>
+  mobiusGeom_EXPORT t_ptr<geom_BSplineSurface>
     Copy() const;
 
   mobiusGeom_EXPORT bool
-    InvertPoint(const xyz&   P,
-                uv&          params,
+    InvertPoint(const t_xyz& P,
+                t_uv&        params,
                 const double prec = 1.0e-6) const;
 
   mobiusGeom_EXPORT bool
@@ -166,10 +166,10 @@ public:
     InsertKnot_V(const double v,
                  const int    num_times = 1);
 
-  mobiusGeom_EXPORT ptr<geom_BSplineCurve>
+  mobiusGeom_EXPORT t_ptr<geom_BSplineCurve>
     Iso_U(const double u) const;
 
-  mobiusGeom_EXPORT ptr<geom_BSplineCurve>
+  mobiusGeom_EXPORT t_ptr<geom_BSplineCurve>
     Iso_V(const double v) const;
 
   /*mobiusGeom_EXPORT core_XYZ
@@ -199,7 +199,7 @@ public:
   //! dedicated to U, and second -- for V. E.g. Poles[0][1] addresses
   //! point at intersection of 0-th U-isoline and 1-st V-isoline.
   //! \return poles of B-spline surface.
-  const std::vector< std::vector<xyz> >& GetPoles() const
+  const std::vector< std::vector<t_xyz> >& GetPoles() const
   {
     return m_poles;
   }
@@ -208,8 +208,8 @@ public:
   //! \param[in] i zero-based row index.
   //! \param[in] j zero-based column index.
   //! \return pole coordinates.
-  const xyz& GetPole(const int i,
-                     const int j) const
+  const t_xyz& GetPole(const int i,
+                       const int j) const
   {
     return m_poles[i][j];
   }
@@ -218,9 +218,9 @@ public:
   //! \param[in] i   zero-based row index.
   //! \param[in] j   zero-based column index.
   //! \param[in] xyz pole coordinates to set.
-  void SetPole(const int  i,
-               const int  j,
-               const xyz& xyz)
+  void SetPole(const int    i,
+               const int    j,
+               const t_xyz& xyz)
   {
     m_poles[i][j] = xyz;
   }
@@ -305,16 +305,16 @@ private:
   //! \param[in] V     knot vector in V dimension.
   //! \param[in] p     degree of the B-spline basis functions in U dimension.
   //! \param[in] q     degree of the B-spline basis functions in V dimension.
-  void init(const std::vector< std::vector<xyz> >& Poles,
-            const std::vector<double>&             U,
-            const std::vector<double>&             V,
-            const int                              p,
-            const int                              q);
+  void init(const std::vector< std::vector<t_xyz> >& Poles,
+            const std::vector<double>&               U,
+            const std::vector<double>&               V,
+            const int                                p,
+            const int                                q);
 
 private:
 
   //! Poles of B-spline surface.
-  std::vector< std::vector<xyz> > m_poles;
+  std::vector< std::vector<t_xyz> > m_poles;
 
   //! Knot vector in U dimension.
   std::vector<double> m_U;
@@ -331,7 +331,7 @@ private:
 };
 
 //! Convenience shortcut.
-typedef geom_BSplineSurface bsurf;
+typedef geom_BSplineSurface t_bsurf;
 
 };
 

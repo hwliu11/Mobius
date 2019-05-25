@@ -64,12 +64,12 @@ public:
                     std::vector<double>& vector) const;
 
   mobiusCore_EXPORT bool
-    ExtractVector3d(const std::string& keyword,
-                    std::vector<xyz>&  vector) const;
+    ExtractVector3d(const std::string&  keyword,
+                    std::vector<t_xyz>& vector) const;
 
   mobiusCore_EXPORT bool
-    ExtractGrid3d(const std::string&               keyword,
-                  std::vector< std::vector<xyz> >& vector) const;
+    ExtractGrid3d(const std::string&                 keyword,
+                  std::vector< std::vector<t_xyz> >& vector) const;
 
 public:
 
@@ -102,8 +102,8 @@ public:
 
   template <typename T>
   bool ExtractNumericBlockForKey(const std::string& key,
-                                  T&                 result,
-                                  const T            default_value = 0) const
+                                 T&                 result,
+                                 const T            default_value = 0) const
   {
     std::string block;
     if ( !this->ExtractBlockForKey(key, block) )

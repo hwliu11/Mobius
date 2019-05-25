@@ -50,11 +50,11 @@
 bool mobius::bspl_RefineKnots::operator()(const int                  n,
                                           const int                  p,
                                           const std::vector<double>& U,
-                                          const std::vector<xyz>&    Pw,
+                                          const std::vector<t_xyz>&  Pw,
                                           const double*              X,
                                           const int                  r,
                                           std::vector<double>&       Ubar,
-                                          std::vector<xyz>&          Qw) const
+                                          std::vector<t_xyz>&        Qw) const
 {
   const int m  = n + p + 1;
   const int nq = n + r + 1;
@@ -65,7 +65,7 @@ bool mobius::bspl_RefineKnots::operator()(const int                  n,
   b = b + 1;
 
   for ( int i = 0; i <= nq; ++i )
-    Qw.push_back( xyz() );
+    Qw.push_back( t_xyz() );
 
   for ( int j = 0;     j <= a - p; ++j ) Qw[j]           = Pw[j];
   for ( int j = b - 1; j <= n;     ++j ) Qw[j + r + 1]   = Pw[j];

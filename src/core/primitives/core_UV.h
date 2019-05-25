@@ -193,7 +193,7 @@ inline core_UV operator*(const double coeff, const core_UV& coords)
 //! \ingroup MOBIUS_CORE
 //!
 //! Convenience alias.
-typedef core_UV uv;
+typedef core_UV t_uv;
 
 //! \ingroup MOBIUS_CORE
 //!
@@ -203,7 +203,7 @@ typedef core_UV core_XY;
 //! \ingroup MOBIUS_CORE
 //!
 //! Convenience alias.
-typedef core_XY xy;
+typedef core_XY t_xy;
 
 };
 

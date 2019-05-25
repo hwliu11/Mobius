@@ -50,11 +50,11 @@ public:
     operator()(const int                  n,
                const int                  p,
                const std::vector<double>& U,
-               const std::vector<xyz>&    Pw,
+               const std::vector<t_xyz>&  Pw,
                const double*              X,
                const int                  r,
                std::vector<double>&       Ubar,
-               std::vector<xyz>&          Qw) const;
+               std::vector<t_xyz>&        Qw) const;
 
 };
 

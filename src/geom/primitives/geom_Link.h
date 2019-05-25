@@ -48,8 +48,8 @@ class geom_Link : public geom_Geometry
 public:
 
   mobiusGeom_EXPORT
-    geom_Link(const xyz& P1,
-              const xyz& P2);
+    geom_Link(const t_xyz& P1,
+              const t_xyz& P2);
 
   mobiusGeom_EXPORT virtual
     ~geom_Link();
@@ -65,22 +65,22 @@ public:
 
   //! Returns the first connection point.
   //! \return first point.
-  const xyz& P1() const
+  const t_xyz& P1() const
   {
     return m_p1;
   }
 
   //! Returns the second connection point.
   //! \return second point.
-  const xyz& P2() const
+  const t_xyz& P2() const
   {
     return m_p2;
   }
 
 private:
 
-  xyz m_p1; //!< First point.
-  xyz m_p2; //!< Second point.
+  t_xyz m_p1; //!< First point.
+  t_xyz m_p2; //!< Second point.
 
 };
 

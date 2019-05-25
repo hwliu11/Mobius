@@ -225,7 +225,7 @@ private:
 //-----------------------------------------------------------------------------
 
 //! Shortcut for Mobius shared pointer.
-#define ptr core_Ptr
+#define t_ptr core_Ptr
 
 };
 

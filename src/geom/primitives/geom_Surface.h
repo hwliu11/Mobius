@@ -75,7 +75,7 @@ public:
   virtual void
     Eval(const double u,
          const double v,
-         xyz&         S) const = 0;
+         t_xyz&       S) const = 0;
 
 };
 

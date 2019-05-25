@@ -88,14 +88,14 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          const double v,
-         xyz&         S) const override;
+         t_xyz&       S) const override;
 
 public:
 
-  mobiusGeom_EXPORT ptr<geom_Circle>
+  mobiusGeom_EXPORT t_ptr<geom_Circle>
     Iso_U(const double u) const;
 
-  mobiusGeom_EXPORT ptr<geom_Circle>
+  mobiusGeom_EXPORT t_ptr<geom_Circle>
     Iso_V(const double v) const;
 
 public:
@@ -109,9 +109,9 @@ public:
 
   //! Accessor for the center.
   //! \return center of the circle.
-  xyz Center() const
+  t_xyz Center() const
   {
-    return m_tChain.Apply( xyz::O() );
+    return m_tChain.Apply( t_xyz::O() );
   }
 
 private:

@@ -64,9 +64,9 @@ public:
   //! \param[in] D1 first direction.
   //! \param[in] D2 second direction.
   mobiusGeom_EXPORT
-    geom_PlaneSurface(const xyz& O,
-                      const xyz& D1,
-                      const xyz& D2);
+    geom_PlaneSurface(const t_xyz& O,
+                      const t_xyz& D1,
+                      const t_xyz& D2);
 
   //! Dtor.
   mobiusGeom_EXPORT virtual
@@ -112,18 +112,18 @@ public:
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          const double v,
-         xyz&         S) const override;
+         t_xyz&       S) const override;
 
   //! Returns isoparametric curve for a fixed `u`.
   //! \param[in] u fixed parameter.
   //! \return isoparametric curve.
-  mobiusGeom_EXPORT ptr<geom_Line>
+  mobiusGeom_EXPORT t_ptr<t_line>
     Iso_U(const double u) const;
 
   //! Returns isoparametric curve for a fixed `v`.
   //! \param[in] v fixed parameter.
   //! \return isoparametric curve.
-  mobiusGeom_EXPORT ptr<geom_Line>
+  mobiusGeom_EXPORT t_ptr<t_line>
     Iso_V(const double v) const;
 
 public:
@@ -162,30 +162,30 @@ public:
 
   //! Accessor for the origin of a plane.
   //! \return origin `O`.
-  const xyz& GetOrigin() const
+  const t_xyz& GetOrigin() const
   {
     return m_origin;
   }
 
   //! Accessor for the first vector of a plane.
   //! \return vector `D1`.
-  const xyz& GetD1() const
+  const t_xyz& GetD1() const
   {
     return m_D1;
   }
 
   //! Accessor for the second vector of a plane.
   //! \return vector `D2`.
-  const xyz& GetD2() const
+  const t_xyz& GetD2() const
   {
     return m_D2;
   }
 
 protected:
 
-  xyz m_origin; //!< Origin of a plane.
-  xyz m_D1;     //!< Vector D1.
-  xyz m_D2;     //!< Vector D2.
+  t_xyz m_origin; //!< Origin of a plane.
+  t_xyz m_D1;     //!< Vector D1.
+  t_xyz m_D2;     //!< Vector D2.
 
   double m_fUMin; //!< Min value of U.
   double m_fUMax; //!< Max value of U.
@@ -195,7 +195,7 @@ protected:
 };
 
 //! Convenience shortcut.
-typedef geom_PlaneSurface plane;
+typedef geom_PlaneSurface t_plane;
 
 };
 

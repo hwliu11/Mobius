@@ -39,10 +39,10 @@
 //! \param c [in] middle weighted curve.
 //! \param q [in] second rail curve.
 //! \param w [in] weight law.
-mobius::geom_BezierOnRailsSurface::geom_BezierOnRailsSurface(const ptr<curve>&          r,
-                                                             const ptr<curve>&          c,
-                                                             const ptr<curve>&          q,
-                                                             const ptr<bspl_ScalarLaw>& w)
+mobius::geom_BezierOnRailsSurface::geom_BezierOnRailsSurface(const t_ptr<t_curve>&        r,
+                                                             const t_ptr<t_curve>&        c,
+                                                             const t_ptr<t_curve>&        q,
+                                                             const t_ptr<bspl_ScalarLaw>& w)
 : geom_Surface(),
   m_r(r),
   m_c(c),
@@ -125,9 +125,9 @@ double mobius::geom_BezierOnRailsSurface::GetMaxParameter_V() const
 //! \param S [out] evaluated spatial point S(u, v).
 void mobius::geom_BezierOnRailsSurface::Eval(const double u,
                                              const double v,
-                                             xyz&         S) const
+                                             t_xyz&       S) const
 {
-  xyz S1;
+  t_xyz S1;
   double S2;
 
   this->eval_S1(u, v, S1);
@@ -146,9 +146,9 @@ void mobius::geom_BezierOnRailsSurface::Eval(const double u,
 //! \param P [out] evaluated spatial point S(u, v).
 void mobius::geom_BezierOnRailsSurface::eval_S1(const double u,
                                                 const double v,
-                                                xyz&         P) const
+                                                t_xyz&       P) const
 {
-  xyz P_r, P_c, P_q;
+  t_xyz P_r, P_c, P_q;
   double w = m_w->Eval(u);
 
   m_r->Eval(u, P_r);

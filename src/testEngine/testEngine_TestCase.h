@@ -195,7 +195,7 @@ public:
   //! \param funcID  [in] 1-based ID of Test Function to be used as a namespace
   //!                     for its own local variables mapping.
   static void SetVarDescr(const std::string& varName,
-                          const xyz&         XYZ,
+                          const t_xyz&       XYZ,
                           const int          caseID,
                           const int          funcID)
   {

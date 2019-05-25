@@ -84,7 +84,7 @@ double mobius::geom_KleinIsoCurve::GetMaxParameter() const
 //! \param p [in] parameter value to evaluate curve for.
 //! \param C [out] 3D point evaluated for the given parameter.
 void mobius::geom_KleinIsoCurve::Eval(const double p,
-                                      xyz&         C) const
+                                      t_xyz&       C) const
 {
   double u = ( (m_type == Iso_U) ? m_fParam : p );
   double v = ( (m_type == Iso_V) ? m_fParam : p );

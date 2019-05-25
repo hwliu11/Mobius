@@ -148,7 +148,7 @@ protected:
 //! \ingroup MOBIUS_BSPL
 //!
 //! Handy shortcuts.
-typedef bspl_KnotMultiset knot_multiset;
+typedef bspl_KnotMultiset t_knot_multiset;
 
 };
 

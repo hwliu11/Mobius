@@ -36,16 +36,16 @@
 //! \param Line [in] line to check.
 //! \param prec [in] precision (tolerance around line).
 //! \return true if the point belongs to the line, false -- otherwise.
-bool mobius::geom_PointOnLine::operator()(const xyz&            P,
-                                          const ptr<geom_Line>& Line,
-                                          const double          prec)
+bool mobius::geom_PointOnLine::operator()(const t_xyz&         P,
+                                          const t_ptr<t_line>& Line,
+                                          const double         prec)
 {
   // Line properties
-  const xyz& Dir = Line->GetDir();
-  const xyz& Ori = Line->GetOrigin();
+  const t_xyz& Dir = Line->GetDir();
+  const t_xyz& Ori = Line->GetOrigin();
 
   // Vector from line's origin to P
-  xyz Ori_P = P - Ori;
+  t_xyz Ori_P = P - Ori;
   const double Ori_P_mod = Ori_P.Modulus();
   if ( Ori_P_mod < prec)
     return true;

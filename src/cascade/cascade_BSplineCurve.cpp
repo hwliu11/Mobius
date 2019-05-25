@@ -65,9 +65,9 @@ public:
   //! \param theCurve [in] source curve to evaluate.
   //! \param theFirstU [in] first value of the parametric range.
   //! \param theLastU [in] second value of the parametric range.
-  cascade_BSplineCurve_Eval(const ptr<bcurve>& theCurve,
-                            const double theFirstU,
-                            const double theLastU)
+  cascade_BSplineCurve_Eval(const t_ptr<t_bcurve>& theCurve,
+                            const double           theFirstU,
+                            const double           theLastU)
   {
     m_curve = theCurve;
     m_range[0] = theFirstU;
@@ -84,7 +84,7 @@ public:
 private:
 
   //! Curve to evaluate.
-  ptr<bcurve> m_curve;
+  t_ptr<t_bcurve> m_curve;
 
   //! Parametric range.
   Standard_Real m_range[2];
@@ -119,7 +119,7 @@ void cascade_BSplineCurve_Eval::Evaluate(int* theDimension,
   }
 
   // Resulting values
-  xyz PointOnCurve;
+  t_xyz PointOnCurve;
 
   // Answer the query
   switch ( *theOrder )
@@ -148,7 +148,7 @@ void cascade_BSplineCurve_Eval::Evaluate(int* theDimension,
 
 //! Constructor.
 //! \param mobiusCurve [in] Mobius 3D curve to convert.
-mobius::cascade_BSplineCurve::cascade_BSplineCurve(const ptr<bcurve>& mobiusCurve)
+mobius::cascade_BSplineCurve::cascade_BSplineCurve(const t_ptr<t_bcurve>& mobiusCurve)
 {
   m_mobiusCurve = mobiusCurve;
   m_fMaxError   = 0.0;
@@ -236,7 +236,7 @@ void mobius::cascade_BSplineCurve::DirectConvert()
 
 //! Accessor for the Mobius curve.
 //! \return Mobius curve.
-const mobius::ptr<mobius::bcurve>&
+const mobius::t_ptr<mobius::t_bcurve>&
   mobius::cascade_BSplineCurve::GetMobiusCurve() const
 {
   return m_mobiusCurve;
@@ -274,9 +274,9 @@ double mobius::cascade_BSplineCurve::MaxError() const
 
 void mobius::cascade_BSplineCurve::convertToOpenCascade()
 {
-  const std::vector<xyz>& srcPoles = m_mobiusCurve->GetPoles();
-  std::vector<double>     srcU     = m_mobiusCurve->GetKnots();
-  const int               srcDeg   = m_mobiusCurve->GetDegree();
+  const std::vector<t_xyz>& srcPoles = m_mobiusCurve->GetPoles();
+  std::vector<double>       srcU     = m_mobiusCurve->GetKnots();
+  const int                 srcDeg   = m_mobiusCurve->GetDegree();
 
   // Poles are transferred as-is.
   TColgp_Array1OfPnt occtPoles( 1, (int) srcPoles.size() );
@@ -322,11 +322,11 @@ void mobius::cascade_BSplineCurve::convertToMobius()
   const int                      srcDeg   = m_occtCurve->Degree();
 
   // Poles are transferred as is
-  std::vector<xyz> mobiusPoles;
+  std::vector<t_xyz> mobiusPoles;
   //
   for ( int i = srcPoles.Lower(); i <= srcPoles.Upper(); ++i )
   {
-    xyz P( srcPoles(i).X(), srcPoles(i).Y(), srcPoles(i).Z() );
+    t_xyz P( srcPoles(i).X(), srcPoles(i).Y(), srcPoles(i).Z() );
     mobiusPoles.push_back(P);
   }
 
@@ -345,7 +345,7 @@ void mobius::cascade_BSplineCurve::convertToMobius()
   }
 
   // Build Mobius curve from scratch
-  m_mobiusCurve = new bcurve(mobiusPoles, mobiusU, srcDeg);
+  m_mobiusCurve = new t_bcurve(mobiusPoles, mobiusU, srcDeg);
   m_fMaxError   = 0.0;
   m_bIsDone     = true;
 }

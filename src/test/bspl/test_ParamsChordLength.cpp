@@ -48,12 +48,12 @@ mobius::outcome
    *  Prepare input points
    * ---------------------- */
 
-  xyz Q[3] = { xyz(0.0, 0.0, 0.0),
-               xyz(1.0, 0.0, 0.0),
-               xyz(2.0, 0.0, 0.0) };
+  t_xyz Q[3] = { t_xyz(0.0, 0.0, 0.0),
+                 t_xyz(1.0, 0.0, 0.0),
+                 t_xyz(2.0, 0.0, 0.0) };
 
-  std::vector<xyz> Q_vec;
-  for ( int k = 0; k < sizeof(Q)/sizeof(xyz); ++k )
+  std::vector<t_xyz> Q_vec;
+  for ( int k = 0; k < sizeof(Q)/sizeof(t_xyz); ++k )
     Q_vec.push_back(Q[k]);
 
   /* -----------------
@@ -106,13 +106,13 @@ mobius::outcome
    *  Prepare input points
    * ---------------------- */
 
-  xyz Q[4] = { xyz(0.0, 0.0, 0.0),
-               xyz(1.0, 0.0, 0.0),
-               xyz(2.0, 0.0, 0.0),
-               xyz(4.0, 0.0, 0.0)};
+  t_xyz Q[4] = { t_xyz(0.0, 0.0, 0.0),
+                 t_xyz(1.0, 0.0, 0.0),
+                 t_xyz(2.0, 0.0, 0.0),
+                 t_xyz(4.0, 0.0, 0.0)};
 
-  std::vector<xyz> Q_vec;
-  for ( int k = 0; k < sizeof(Q)/sizeof(xyz); ++k )
+  std::vector<t_xyz> Q_vec;
+  for ( int k = 0; k < sizeof(Q)/sizeof(t_xyz); ++k )
     Q_vec.push_back(Q[k]);
 
   /* -----------------
@@ -165,13 +165,13 @@ mobius::outcome
    *  Prepare input points
    * ---------------------- */
 
-  xyz Q[2][2] = { { xyz(0.0, 0.0, 0.0), xyz(0.0, 1.0, 0.0) },
-                  { xyz(1.0, 0.0, 0.0), xyz(1.0, 1.0, 0.0) } };
+  t_xyz Q[2][2] = { { t_xyz(0.0, 0.0, 0.0), t_xyz(0.0, 1.0, 0.0) },
+                    { t_xyz(1.0, 0.0, 0.0), t_xyz(1.0, 1.0, 0.0) } };
 
-  std::vector< std::vector<xyz> > Q_vec;
+  std::vector< std::vector<t_xyz> > Q_vec;
   for ( int k = 0; k < 2; ++k )
   {
-    Q_vec.push_back( std::vector<xyz>() );
+    Q_vec.push_back( std::vector<t_xyz>() );
     for ( int l = 0; l < 2; ++l )
       Q_vec[k].push_back( Q[k][l] );
   }
@@ -235,14 +235,14 @@ mobius::outcome
    *  Prepare input points
    * ---------------------- */
 
-  xyz Q[3][2] = { { xyz(0.0,  0.0, 0.0), xyz(0.0,  1.0, 0.0) },
-                  { xyz(0.75, 0.0, 0.0), xyz(0.75, 1.0, 0.0) },
-                  { xyz(1.0,  0.0, 0.0), xyz(1.0,  1.5, 0.0) } };
+  t_xyz Q[3][2] = { { t_xyz(0.0,  0.0, 0.0), t_xyz(0.0,  1.0, 0.0) },
+                    { t_xyz(0.75, 0.0, 0.0), t_xyz(0.75, 1.0, 0.0) },
+                    { t_xyz(1.0,  0.0, 0.0), t_xyz(1.0,  1.5, 0.0) } };
 
-  std::vector< std::vector<xyz> > Q_vec;
+  std::vector< std::vector<t_xyz> > Q_vec;
   for ( int k = 0; k < 3; ++k )
   {
-    Q_vec.push_back( std::vector<xyz>() );
+    Q_vec.push_back( std::vector<t_xyz>() );
     for ( int l = 0; l < 2; ++l )
       Q_vec[k].push_back( Q[k][l] );
   }
@@ -310,14 +310,14 @@ mobius::outcome
    *  Prepare input points
    * ---------------------- */
 
-  xyz Q[3][3] = { { xyz(0.0,  0.0, 0.0), xyz(0.0,  1.0, 0.0), xyz(0.0,  1.5,  0.0) },
-                  { xyz(0.75, 0.0, 0.0), xyz(0.75, 1.0, 0.0), xyz(0.75, 1.75, 0.0) },
-                  { xyz(1.0,  0.0, 0.0), xyz(1.0,  1.5, 0.0), xyz(1.5,  1.75, 0.0) } };
+  t_xyz Q[3][3] = { { t_xyz(0.0,  0.0, 0.0), t_xyz(0.0,  1.0, 0.0), t_xyz(0.0,  1.5,  0.0) },
+                    { t_xyz(0.75, 0.0, 0.0), t_xyz(0.75, 1.0, 0.0), t_xyz(0.75, 1.75, 0.0) },
+                    { t_xyz(1.0,  0.0, 0.0), t_xyz(1.0,  1.5, 0.0), t_xyz(1.5,  1.75, 0.0) } };
 
-  std::vector< std::vector<xyz> > Q_vec;
+  std::vector< std::vector<t_xyz> > Q_vec;
   for ( int k = 0; k < 3; ++k )
   {
-    Q_vec.push_back( std::vector<xyz>() );
+    Q_vec.push_back( std::vector<t_xyz>() );
     for ( int l = 0; l < 3; ++l )
       Q_vec[k].push_back( Q[k][l] );
   }

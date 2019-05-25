@@ -39,14 +39,14 @@
 bool mobius::bspl_InsKnot::operator()(const int                  np,
                                       const int                  p,
                                       const std::vector<double>& UP,
-                                      const std::vector<xyz>&    Pw,
+                                      const std::vector<t_xyz>&  Pw,
                                       const double               u,
                                       const int                  k,
                                       const int                  s,
                                       const int                  r,
                                       int&                       nq,
                                       std::vector<double>&       UQ,
-                                      std::vector<xyz>&          Qw) const
+                                      std::vector<t_xyz>&        Qw) const
 {
   if ( r + s > p )
     return false; // Resulting multiplicity should not be greater than degree.
@@ -55,7 +55,7 @@ bool mobius::bspl_InsKnot::operator()(const int                  np,
   nq = np + r;
 
   // Internal array.
-  std::vector<xyz> Rw(p + 1);
+  std::vector<t_xyz> Rw(p + 1);
   UQ.resize(mp + r + 1);
   Qw.resize(nq + 1);
 
@@ -92,28 +92,28 @@ bool mobius::bspl_InsKnot::operator()(const int                  np,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::bspl_InsKnot::operator()(const int                              np,
-                                      const int                              p,
-                                      const std::vector<double>&             UP,
-                                      const int                              mp,
-                                      const int                              q,
-                                      const std::vector<double>&             VP,
-                                      const std::vector< std::vector<xyz> >& Pw,
-                                      const bspl_ParamDirection              dir,
-                                      const double                           knot,
-                                      const int                              k,
-                                      const int                              s,
-                                      const int                              r,
-                                      int&                                   nq,
-                                      std::vector<double>&                   UQ,
-                                      int&                                   mq,
-                                      std::vector<double>&                   VQ,
-                                      std::vector< std::vector<xyz> >&       Qw) const
+bool mobius::bspl_InsKnot::operator()(const int                                np,
+                                      const int                                p,
+                                      const std::vector<double>&               UP,
+                                      const int                                mp,
+                                      const int                                q,
+                                      const std::vector<double>&               VP,
+                                      const std::vector< std::vector<t_xyz> >& Pw,
+                                      const bspl_ParamDirection                dir,
+                                      const double                             knot,
+                                      const int                                k,
+                                      const int                                s,
+                                      const int                                r,
+                                      int&                                     nq,
+                                      std::vector<double>&                     UQ,
+                                      int&                                     mq,
+                                      std::vector<double>&                     VQ,
+                                      std::vector< std::vector<t_xyz> >&       Qw) const
 {
   if ( dir == ParamDirection_Undefined )
     return false; // Contract check.
 
-  ptr<alloc2d> localAlloc = new alloc2d;
+  t_ptr<t_alloc2d> localAlloc = new t_alloc2d;
 
   // Process insertion in U direction.
   if ( dir == ParamDirection_U )
@@ -126,12 +126,12 @@ bool mobius::bspl_InsKnot::operator()(const int                              np,
     mq = mp;     // Index of last pole in U direction.
 
     // Internal array.
-    std::vector<xyz> Rw(p + 1);
+    std::vector<t_xyz> Rw(p + 1);
     Qw.resize(nq + 1);
     //
     for ( size_t i = 0; i < Qw.size(); ++i )
     {
-      std::vector<xyz> pts; pts.resize(mq + 1);
+      std::vector<t_xyz> pts; pts.resize(mq + 1);
       Qw[i] = pts;
     }
 
@@ -193,12 +193,12 @@ bool mobius::bspl_InsKnot::operator()(const int                              np,
     mq = mp + r; // New index of last pole in V direction.
 
     // Internal array.
-    std::vector<xyz> Rw(q + 1);
+    std::vector<t_xyz> Rw(q + 1);
     Qw.resize(nq + 1); // Number of rows does not change in V insertion (it's the same as in Pw).
     //
     for ( size_t i = 0; i < Qw.size(); ++i )
     {
-      std::vector<xyz> pts; pts.resize(mq + 1); // The number of poles in columns increases on `r`.
+      std::vector<t_xyz> pts; pts.resize(mq + 1); // The number of poles in columns increases on `r`.
       Qw[i] = pts;
     }
 

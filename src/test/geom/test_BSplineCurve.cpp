@@ -49,14 +49,14 @@ mobius::outcome
    * ====================== */
 
   // Control points.
-  std::vector<xyz> Q = { xyz(0.0, 0.0, 0.0),
-                         xyz(1.0, 0.0, 0.0),
-                         xyz(2.0, 0.0, 0.0),
-                         xyz(3.0, 0.0, 0.0),
-                         xyz(4.0, 0.0, 0.0),
-                         xyz(5.0, 0.0, 0.0),
-                         xyz(6.0, 0.0, 0.0),
-                         xyz(7.0, 0.0, 0.0) };
+  std::vector<t_xyz> Q = { t_xyz(0.0, 0.0, 0.0),
+                           t_xyz(1.0, 0.0, 0.0),
+                           t_xyz(2.0, 0.0, 0.0),
+                           t_xyz(3.0, 0.0, 0.0),
+                           t_xyz(4.0, 0.0, 0.0),
+                           t_xyz(5.0, 0.0, 0.0),
+                           t_xyz(6.0, 0.0, 0.0),
+                           t_xyz(7.0, 0.0, 0.0) };
 
   // Knot vector.
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
@@ -65,7 +65,7 @@ mobius::outcome
   const int p = 2;
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = new bcurve(Q, U, p);
+  core_Ptr<t_bcurve> curve = new t_bcurve(Q, U, p);
 
   /* ==============
    *  Perform test
@@ -74,10 +74,10 @@ mobius::outcome
   const double eps = 1e-7;
   const double u   = 0.5;
   //
-  const xyz P_ref(0.875, 0, 0);
+  const t_xyz P_ref(0.875, 0, 0);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   curve->Eval(u, P);
 
   // Check.
@@ -102,14 +102,14 @@ mobius::outcome
    * ====================== */
 
   // Control points.
-  std::vector<xyz> Q = { xyz(0.0, 0.0, 0.0),
-                         xyz(1.0, 0.0, 0.0),
-                         xyz(2.0, 0.0, 0.0),
-                         xyz(3.0, 0.0, 0.0),
-                         xyz(4.0, 0.0, 0.0),
-                         xyz(5.0, 0.0, 0.0),
-                         xyz(6.0, 0.0, 0.0),
-                         xyz(7.0, 0.0, 0.0) };
+  std::vector<t_xyz> Q = { t_xyz(0.0, 0.0, 0.0),
+                           t_xyz(1.0, 0.0, 0.0),
+                           t_xyz(2.0, 0.0, 0.0),
+                           t_xyz(3.0, 0.0, 0.0),
+                           t_xyz(4.0, 0.0, 0.0),
+                           t_xyz(5.0, 0.0, 0.0),
+                           t_xyz(6.0, 0.0, 0.0),
+                           t_xyz(7.0, 0.0, 0.0) };
 
   // Knot vector.
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
@@ -118,7 +118,7 @@ mobius::outcome
   const int p = 2;
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = new bcurve(Q, U, p);
+  core_Ptr<t_bcurve> curve = new t_bcurve(Q, U, p);
 
   /* ==============
    *  Perform test
@@ -127,10 +127,10 @@ mobius::outcome
   const double eps = 1e-7;
   const double u   = 5.5;
   //
-  const xyz P_ref(8.0, 0, 0);
+  const t_xyz P_ref(8.0, 0, 0);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   curve->Eval(u, P);
 
   // Check.
@@ -155,14 +155,14 @@ mobius::outcome
    * ====================== */
 
   // Control points.
-  std::vector<xyz> Q = { xyz(0.0, 0.0, 0.0),
-                         xyz(1.0, 0.0, 0.0),
-                         xyz(2.0, 0.0, 0.0),
-                         xyz(3.0, 0.0, 0.0),
-                         xyz(4.0, 0.0, 0.0),
-                         xyz(5.0, 0.0, 0.0),
-                         xyz(6.0, 0.0, 0.0),
-                         xyz(7.0, 0.0, 0.0) };
+  std::vector<t_xyz> Q = { t_xyz(0.0, 0.0, 0.0),
+                           t_xyz(1.0, 0.0, 0.0),
+                           t_xyz(2.0, 0.0, 0.0),
+                           t_xyz(3.0, 0.0, 0.0),
+                           t_xyz(4.0, 0.0, 0.0),
+                           t_xyz(5.0, 0.0, 0.0),
+                           t_xyz(6.0, 0.0, 0.0),
+                           t_xyz(7.0, 0.0, 0.0) };
 
   // Knot vector.
   const std::vector<double> U = {0.0, 0.0, 0.0, 1, 2, 3, 4, 4, 5, 5, 5};
@@ -171,7 +171,7 @@ mobius::outcome
   const int p = 2;
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = new bcurve(Q, U, p);
+  core_Ptr<t_bcurve> curve = new t_bcurve(Q, U, p);
 
   /* ==============
    *  Perform test
@@ -180,10 +180,10 @@ mobius::outcome
   const double eps = 1e-7;
   const double u   = -1.0;
   //
-  const xyz P_ref(-2.5, 0, 0);
+  const t_xyz P_ref(-2.5, 0, 0);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   curve->Eval(u, P);
 
   // Check.
@@ -232,7 +232,7 @@ mobius::outcome
   }";
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = bcurve::Instance(json);
+  core_Ptr<t_bcurve> curve = t_bcurve::Instance(json);
   //
   if ( curve.IsNull() )
     return res.failure();
@@ -244,10 +244,10 @@ mobius::outcome
   const double eps = 1e-7;
   const double u   = 0.5;
   //
-  const xyz P_ref(10.0, 0, 0);
+  const t_xyz P_ref(10.0, 0, 0);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   curve->Eval(u, P);
 
   // Check.
@@ -296,7 +296,7 @@ mobius::outcome
   }";
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = bcurve::Instance(json);
+  core_Ptr<t_bcurve> curve = t_bcurve::Instance(json);
   //
   if ( curve.IsNull() )
     return res.failure();
@@ -308,10 +308,10 @@ mobius::outcome
   const double eps = 1e-4;
   const double u   = 0.5;
   //
-  const xyz P_ref(-70.5441, -6.21939, -30.8876);
+  const t_xyz P_ref(-70.5441, -6.21939, -30.8876);
 
   // Evaluate.
-  xyz P;
+  t_xyz P;
   curve->Eval(u, P);
 
   // Check.
@@ -355,7 +355,7 @@ mobius::outcome mobius::test_BSplineCurve::splitToBezier01(const int funcID)
   }";
 
   // Construct B-curve.
-  core_Ptr<bcurve> curve = bcurve::Instance(json);
+  core_Ptr<t_bcurve> curve = t_bcurve::Instance(json);
   //
   if ( curve.IsNull() )
     return res.failure();
@@ -367,7 +367,7 @@ mobius::outcome mobius::test_BSplineCurve::splitToBezier01(const int funcID)
   const int numSegmentsRef = 5;
 
   // Split to Bezier sergments.
-  std::vector< ptr<bcurve> > segments;
+  std::vector< t_ptr<t_bcurve> > segments;
   //
   if ( !curve->SplitToBezier(segments) )
     return res.failure();

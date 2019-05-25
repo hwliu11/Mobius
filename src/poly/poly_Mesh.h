@@ -241,12 +241,12 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    BaseIterator(const ptr<poly_Mesh>& mesh) : m_mesh(mesh), m_pos(0) {}
+    BaseIterator(const t_ptr<poly_Mesh>& mesh) : m_mesh(mesh), m_pos(0) {}
 
   protected:
 
-    ptr<poly_Mesh> m_mesh; //!< Mesh to iterate.
-    size_t         m_pos;  //!< Current position.
+    t_ptr<poly_Mesh> m_mesh; //!< Mesh to iterate.
+    size_t           m_pos;  //!< Current position.
 
   };
 
@@ -256,7 +256,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    VertexIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    VertexIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -274,7 +274,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    EdgeIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    EdgeIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -292,7 +292,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    TriangleIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    TriangleIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -310,7 +310,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    QuadIterator(const ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    QuadIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -332,7 +332,7 @@ protected:
 };
 
 //! Convenience shortcuts.
-typedef poly_Mesh mesh;
+typedef poly_Mesh t_mesh;
 
 };
 

@@ -35,9 +35,9 @@
 //! \param U_curves [in] iso U curves.
 //! \param V_curves [in] iso V curves.
 //! \param grid     [in] two-dimensional grid of joints.
-mobius::geom_GordonSurface::geom_GordonSurface(const std::vector< ptr<curve> >& U_curves,
-                                               const std::vector< ptr<curve> >& V_curves,
-                                               const TGrid&                     grid)
+mobius::geom_GordonSurface::geom_GordonSurface(const std::vector< t_ptr<t_curve> >& U_curves,
+                                               const std::vector< t_ptr<t_curve> >& V_curves,
+                                               const TGrid&                         grid)
 {
   m_UCurves = U_curves;
   m_VCurves = V_curves;
@@ -132,7 +132,7 @@ double mobius::geom_GordonSurface::GetMaxParameter_V() const
 //! \param C [out] 3D point corresponding to the given parameter pair.
 void mobius::geom_GordonSurface::Eval(const double u,
                                       const double v,
-                                      xyz&         C) const
+                                      t_xyz&       C) const
 {
   /*const int n = this->get_n();
   const int m = this->get_m();

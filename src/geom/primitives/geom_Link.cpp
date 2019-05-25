@@ -34,8 +34,8 @@
 //! Complete constructor.
 //! \param P1 [in] first point.
 //! \param P2 [in] second point.
-mobius::geom_Link::geom_Link(const xyz& P1,
-                             const xyz& P2) : geom_Geometry()
+mobius::geom_Link::geom_Link(const t_xyz& P1,
+                             const t_xyz& P2) : geom_Geometry()
 {
   m_p1 = P1;
   m_p2 = P2;

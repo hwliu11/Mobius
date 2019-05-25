@@ -70,22 +70,22 @@ public:
   //! \param[in] progress   progress notifier.
   //! \param[in] plotter    imperative plotter.
   mobiusGeom_EXPORT
-    geom_MakeBicubicBSurf(const xyz&         S00,
-                          const xyz&         S01,
-                          const xyz&         S10,
-                          const xyz&         S11,
-                          const xyz&         dS_du00,
-                          const xyz&         dS_du01,
-                          const xyz&         dS_du10,
-                          const xyz&         dS_du11,
-                          const xyz&         dS_dv00,
-                          const xyz&         dS_dv01,
-                          const xyz&         dS_dv10,
-                          const xyz&         dS_dv11,
-                          const xyz&         d2S_dudv00,
-                          const xyz&         d2S_dudv01,
-                          const xyz&         d2S_dudv10,
-                          const xyz&         d2S_dudv11,
+    geom_MakeBicubicBSurf(const t_xyz&       S00,
+                          const t_xyz&       S01,
+                          const t_xyz&       S10,
+                          const t_xyz&       S11,
+                          const t_xyz&       dS_du00,
+                          const t_xyz&       dS_du01,
+                          const t_xyz&       dS_du10,
+                          const t_xyz&       dS_du11,
+                          const t_xyz&       dS_dv00,
+                          const t_xyz&       dS_dv01,
+                          const t_xyz&       dS_dv10,
+                          const t_xyz&       dS_dv11,
+                          const t_xyz&       d2S_dudv00,
+                          const t_xyz&       d2S_dudv01,
+                          const t_xyz&       d2S_dudv10,
+                          const t_xyz&       d2S_dudv11,
                           core_ProgressEntry progress,
                           core_PlotterEntry  plotter);
 
@@ -99,32 +99,32 @@ public:
 public:
 
   //! \return resulting surface.
-  const ptr<bsurf>& GetResult() const
+  const t_ptr<t_bsurf>& GetResult() const
   {
     return m_surf;
   }
 
 protected:
 
-  xyz m_S00;        //!< Positional constraint at `(u,v) = (0,0)`.
-  xyz m_S01;        //!< Positional constraint at `(u,v) = (0,1)`.
-  xyz m_S10;        //!< Positional constraint at `(u,v) = (1,0)`.
-  xyz m_S11;        //!< Positional constraint at `(u,v) = (1,1)`.
-  xyz m_dS_du00;    //!< Derivative constraint at `(u,v) = (0,0)`.
-  xyz m_dS_du01;    //!< Derivative constraint at `(u,v) = (0,1)`.
-  xyz m_dS_du10;    //!< Derivative constraint at `(u,v) = (1,0)`.
-  xyz m_dS_du11;    //!< Derivative constraint at `(u,v) = (1,1)`.
-  xyz m_dS_dv00;    //!< Derivative constraint at `(u,v) = (0,0)`.
-  xyz m_dS_dv01;    //!< Derivative constraint at `(u,v) = (0,1)`.
-  xyz m_dS_dv10;    //!< Derivative constraint at `(u,v) = (1,0)`.
-  xyz m_dS_dv11;    //!< Derivative constraint at `(u,v) = (1,1)`.
-  xyz m_d2S_dudv00; //!< Derivative constraint at `(u,v) = (0,0)`.
-  xyz m_d2S_dudv01; //!< Derivative constraint at `(u,v) = (0,1)`.
-  xyz m_d2S_dudv10; //!< Derivative constraint at `(u,v) = (1,0)`.
-  xyz m_d2S_dudv11; //!< Derivative constraint at `(u,v) = (1,1)`.
+  t_xyz m_S00;        //!< Positional constraint at `(u,v) = (0,0)`.
+  t_xyz m_S01;        //!< Positional constraint at `(u,v) = (0,1)`.
+  t_xyz m_S10;        //!< Positional constraint at `(u,v) = (1,0)`.
+  t_xyz m_S11;        //!< Positional constraint at `(u,v) = (1,1)`.
+  t_xyz m_dS_du00;    //!< Derivative constraint at `(u,v) = (0,0)`.
+  t_xyz m_dS_du01;    //!< Derivative constraint at `(u,v) = (0,1)`.
+  t_xyz m_dS_du10;    //!< Derivative constraint at `(u,v) = (1,0)`.
+  t_xyz m_dS_du11;    //!< Derivative constraint at `(u,v) = (1,1)`.
+  t_xyz m_dS_dv00;    //!< Derivative constraint at `(u,v) = (0,0)`.
+  t_xyz m_dS_dv01;    //!< Derivative constraint at `(u,v) = (0,1)`.
+  t_xyz m_dS_dv10;    //!< Derivative constraint at `(u,v) = (1,0)`.
+  t_xyz m_dS_dv11;    //!< Derivative constraint at `(u,v) = (1,1)`.
+  t_xyz m_d2S_dudv00; //!< Derivative constraint at `(u,v) = (0,0)`.
+  t_xyz m_d2S_dudv01; //!< Derivative constraint at `(u,v) = (0,1)`.
+  t_xyz m_d2S_dudv10; //!< Derivative constraint at `(u,v) = (1,0)`.
+  t_xyz m_d2S_dudv11; //!< Derivative constraint at `(u,v) = (1,1)`.
 
   //! Constructed surface.
-  ptr<bsurf> m_surf;
+  t_ptr<t_bsurf> m_surf;
 
 };
 

@@ -59,11 +59,11 @@ mobius::geom_SkinSurface::geom_SkinSurface(core_ProgressEntry progress,
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< ptr<bcurve> >& curves,
-                                           const int                         deg_V,
-                                           const bool                        unifyCurves,
-                                           core_ProgressEntry                progress,
-                                           core_PlotterEntry                 plotter)
+mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< t_ptr<t_bcurve> >& curves,
+                                           const int                             deg_V,
+                                           const bool                            unifyCurves,
+                                           core_ProgressEntry                    progress,
+                                           core_PlotterEntry                     plotter)
 : core_OPERATOR(progress, plotter)
 {
   this->Init(curves, deg_V, unifyCurves);
@@ -71,9 +71,9 @@ mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< ptr<bcurve> >& cur
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_SkinSurface::Init(const std::vector< ptr<bcurve> >& curves,
-                                    const int                         deg_V,
-                                    const bool                        unifyCurves)
+void mobius::geom_SkinSurface::Init(const std::vector< t_ptr<t_bcurve> >& curves,
+                                    const int                             deg_V,
+                                    const bool                            unifyCurves)
 {
   m_curves  = curves;
   m_iDeg_V  = deg_V;
@@ -83,14 +83,14 @@ void mobius::geom_SkinSurface::Init(const std::vector< ptr<bcurve> >& curves,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_SkinSurface::AddLeadingTangencies(const std::vector<xyz>& tangencies)
+void mobius::geom_SkinSurface::AddLeadingTangencies(const std::vector<t_xyz>& tangencies)
 {
   m_D1lead = tangencies;
 }
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_SkinSurface::AddTrailingTangencies(const std::vector<xyz>& tangencies)
+void mobius::geom_SkinSurface::AddTrailingTangencies(const std::vector<t_xyz>& tangencies)
 {
   m_D1tail = tangencies;
 }
@@ -183,13 +183,13 @@ bool mobius::geom_SkinSurface::BuildIsosU()
    * ----------------------------------------------------------- */
 
   // Prepare rectangular collection of control points.
-  std::vector< std::vector<xyz> > Q;
+  std::vector< std::vector<t_xyz> > Q;
   for ( int i = 0; i <= n; ++i )
   {
-    std::vector<xyz> poles;
+    std::vector<t_xyz> poles;
     for ( int c = 0; c < (int) m_curves.size(); ++c )
     {
-      const ptr<bcurve>& crv = m_curves[c];
+      const t_ptr<t_bcurve>& crv = m_curves[c];
       poles.push_back( crv->GetPoles()[i] );
     }
     Q.push_back(poles);
@@ -240,21 +240,21 @@ bool mobius::geom_SkinSurface::BuildIsosU()
   for ( int i = 0; i <= n; ++i )
   {
     // Populate reper points (poles of curves) for fixed U values.
-    std::vector<xyz> iso_U_poles;
+    std::vector<t_xyz> iso_U_poles;
     for ( int k = 0; k <= K; ++k )
       iso_U_poles.push_back(Q[i][k]);
 
     // Interpolate over these poles.
-    ptr<bcurve> iso_U;
+    t_ptr<t_bcurve> iso_U;
     if ( !geom_InterpolateCurve::Interp(iso_U_poles, K, m_iDeg_V, params_V, &m_V[0], m,
                                         isTangLead,
                                         isTangTail,
                                         false,
                                         false,
-                                        isTangLead ? m_D1lead[i] : xyz(),
-                                        isTangTail ? m_D1tail[i] : xyz(),
-                                        xyz(),
-                                        xyz(),
+                                        isTangLead ? m_D1lead[i] : t_xyz(),
+                                        isTangTail ? m_D1tail[i] : t_xyz(),
+                                        t_xyz(),
+                                        t_xyz(),
                                         iso_U) )
     {
       m_errCode = ErrCode_CannotInterpolateIsoU;
@@ -275,15 +275,15 @@ bool mobius::geom_SkinSurface::BuildSurface()
   const int n = (int) (m_curves[0]->GetPoles().size() - 1);
 
   // Collect poles.
-  std::vector< std::vector<xyz> > final_poles;
+  std::vector< std::vector<t_xyz> > final_poles;
   for ( int i = 0; i <= n; ++i )
     final_poles.push_back( IsoU_Curves[i]->GetPoles() );
   
   // Construct B-surface.
-  m_surface = new bsurf(final_poles,
-                        m_curves[0]->GetKnots(),
-                        m_V,
-                        m_curves[0]->GetDegree(), m_iDeg_V);
+  m_surface = new t_bsurf(final_poles,
+                          m_curves[0]->GetKnots(),
+                          m_V,
+                          m_curves[0]->GetDegree(), m_iDeg_V);
 
   return true;
 }

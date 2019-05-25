@@ -57,7 +57,7 @@ public:
   //! Ctor accepting points of the cloud.
   //! \param[in] pts point to populate the cloud with.
   mobiusGeom_EXPORT
-    geom_PositionCloud(const std::vector<core_XYZ>& pts);
+    geom_PositionCloud(const std::vector<t_xyz>& pts);
 
   //! Ctor accepting the plain vector of coordinates. This plain vector will
   //! be converted to the vector of triples.
@@ -88,7 +88,7 @@ public:
   //! Adds new point to the cloud.
   //! \param[in] point point to add.
   mobiusGeom_EXPORT virtual void
-    AddPoint(const core_XYZ& point);
+    AddPoint(const t_xyz& point);
 
   //! Adds new point to the cloud.
   //! \param[in] x X coordinate of a point to add.
@@ -107,7 +107,7 @@ public:
   //! Returns point with the given zero-based index.
   //! \param[in] idx 0-based index of point to access.
   //! \return requested point.
-  mobiusGeom_EXPORT virtual const core_XYZ&
+  mobiusGeom_EXPORT virtual const t_xyz&
     GetPoint(const int idx) const;
 
   //! Returns point with the given zero-based index.
@@ -124,11 +124,11 @@ public:
   //! Sets point cloud.
   //! \param[in] cloud points to set.
   mobiusGeom_EXPORT virtual void
-    SetPoints(const std::vector<core_XYZ>& cloud);
+    SetPoints(const std::vector<t_xyz>& cloud);
 
   //! Returns internal collection of points.
   //! \return const reference to the internal collection of points.
-  mobiusGeom_EXPORT virtual const std::vector<core_XYZ>&
+  mobiusGeom_EXPORT virtual const std::vector<t_xyz>&
     GetPoints() const;
 
   //! Cleans up the cloud.
@@ -154,12 +154,12 @@ public:
 protected:
 
   //! Actual collection of points.
-  std::vector<core_XYZ> m_cloud;
+  std::vector<t_xyz> m_cloud;
 
 };
 
 //! Handy alias for double type.
-typedef geom_PositionCloud pcloud;
+typedef geom_PositionCloud t_pcloud;
 
 };
 

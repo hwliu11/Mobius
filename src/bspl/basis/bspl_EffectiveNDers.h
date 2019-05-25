@@ -65,8 +65,11 @@ class bspl_EffectiveNDers
 {
 public:
 
-  bspl_EffectiveNDers(ptr<alloc2d> alloc    = NULL,
-                      const int    memBlock = -1)
+  //! Ctor.
+  //! \param[in] alloc    two-dimensional allocator.
+  //! \param[in] memBlock index of a memory block to reuse.
+  bspl_EffectiveNDers(t_ptr<t_alloc2d> alloc    = NULL,
+                      const int        memBlock = -1)
   {
     m_pAlloc    = alloc;
     m_iMemBlock = memBlock;
@@ -84,8 +87,8 @@ public:
 
 protected:
 
-  ptr<alloc2d> m_pAlloc;
-  int          m_iMemBlock;
+  t_ptr<t_alloc2d> m_pAlloc;    //!< Allocator.
+  int              m_iMemBlock; //!< Index of a memory block to reuse.
 
 };
 

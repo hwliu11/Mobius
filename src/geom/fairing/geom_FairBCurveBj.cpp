@@ -45,11 +45,11 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBCurveBj::geom_FairBCurveBj(const ptr<bcurve>& curve,
-                                             const int          coord,
-                                             const int          j,
-                                             const double       lambda,
-                                             ptr<alloc2d>       alloc)
+mobius::geom_FairBCurveBj::geom_FairBCurveBj(const t_ptr<t_bcurve>& curve,
+                                             const int              coord,
+                                             const int              j,
+                                             const double           lambda,
+                                             t_ptr<t_alloc2d>       alloc)
 : geom_FairBCurveCoeff (lambda),
   m_curve              (curve),
   m_iCoord             (coord),
@@ -61,7 +61,7 @@ mobius::geom_FairBCurveBj::geom_FairBCurveBj(const ptr<bcurve>& curve,
 
 double mobius::geom_FairBCurveBj::Eval(const double u) const
 {
-  ptr<alloc2d> localAlloc;
+  t_ptr<t_alloc2d> localAlloc;
 
   /* ==================================================================
    *  Calculate 2-nd derivative of basis spline at the given parameter
@@ -83,7 +83,7 @@ double mobius::geom_FairBCurveBj::Eval(const double u) const
   double** dN;
   if ( m_alloc.IsNull() )
   {
-    localAlloc = new alloc2d;
+    localAlloc = new t_alloc2d;
     dN = localAlloc->Allocate(3, order, true);
   }
   else
@@ -113,7 +113,7 @@ double mobius::geom_FairBCurveBj::Eval(const double u) const
    *  Calculate 2-nd derivative of the curve in question
    * ==================================================== */
 
-  xyz d2C;
+  t_xyz d2C;
   m_curve->Eval_Dk(u, 2, d2C,
                    m_alloc,
                    memBlockCurve_BSplineCurveEvalDk,

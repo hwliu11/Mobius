@@ -50,7 +50,7 @@ mobius::geom_FairBCurveAij::geom_FairBCurveAij(const std::vector<double>& U,
                                                const int                  i,
                                                const int                  j,
                                                const double               lambda,
-                                               ptr<alloc2d>               alloc)
+                                               t_ptr<t_alloc2d>           alloc)
 : geom_FairBCurveCoeff (lambda),
   m_U                  (U),
   m_iDegree            (p),
@@ -63,7 +63,7 @@ mobius::geom_FairBCurveAij::geom_FairBCurveAij(const std::vector<double>& U,
 
 double mobius::geom_FairBCurveAij::Eval(const double u) const
 {
-  ptr<alloc2d> localAlloc;
+  t_ptr<t_alloc2d> localAlloc;
 
   const int order = m_iDegree + 1;
   double    Ni    = 0.0;
@@ -81,7 +81,7 @@ double mobius::geom_FairBCurveAij::Eval(const double u) const
   double** dN;
   if ( m_alloc.IsNull() )
   {
-    localAlloc = new alloc2d;
+    localAlloc = new t_alloc2d;
     dN = localAlloc->Allocate(3, order, true);
   }
   else

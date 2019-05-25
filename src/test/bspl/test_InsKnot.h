@@ -84,12 +84,12 @@ public:
 
 private:
 
-  static bool insertKnotCurve(const ptr<bcurve>&         curve,
+  static bool insertKnotCurve(const t_ptr<t_bcurve>&     curve,
                               const double               u,
                               const int                  r,
                               const std::vector<double>& refKnots);
 
-  static bool insertKnotSurface(const ptr<bsurf>&          surface,
+  static bool insertKnotSurface(const t_ptr<t_bsurf>&      surface,
                                 const double               knot,
                                 const bspl_ParamDirection  dir,
                                 const int                  r,

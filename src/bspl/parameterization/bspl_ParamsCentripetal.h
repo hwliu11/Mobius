@@ -75,8 +75,8 @@ public:
   //! \param Q [in]  input points.
   //! \param t [out] calculated parameter values.
   //! \return error code.
-  static ErrCode Calculate(const std::vector<xyz>& Q,
-                           double*                 t)
+  static ErrCode Calculate(const std::vector<t_xyz>& Q,
+                           double*                   t)
   {
     const int len = (int) Q.size();
     if ( len == 1 )
@@ -89,15 +89,15 @@ public:
     double d = 0.0;
     for ( int idx = 1; idx < len; ++idx )
     {
-      xyz QQ =  Q.at(idx) - Q.at(idx-1);
-      d      += sqrt( QQ.Modulus() );
+      t_xyz QQ =  Q.at(idx) - Q.at(idx-1);
+      d       += sqrt( QQ.Modulus() );
     }
 
     // Calculate next parameter
     for ( int idx = 1; idx < len-1; ++idx )
     {
-      xyz QQ = Q.at(idx) - Q.at(idx-1);
-      t[idx] = t[idx-1] + sqrt( QQ.Modulus() ) / d;
+      t_xyz QQ = Q.at(idx) - Q.at(idx-1);
+      t[idx]   = t[idx-1] + sqrt( QQ.Modulus() ) / d;
     }
 
     // Last parameter
@@ -114,9 +114,9 @@ public:
   //! \param u [out] calculated parameter values in U direction.
   //! \param v [out] calculated parameter values in V direction.
   //! \return error code.
-  static ErrCode Calculate(const std::vector< std::vector<xyz> >& Q,
-                           double*                                u,
-                           double*                                v)
+  static ErrCode Calculate(const std::vector< std::vector<t_xyz> >& Q,
+                           double*                                  u,
+                           double*                                  v)
   {
     const int n = (int) Q.size() - 1;
     if ( n <= 0 )
@@ -144,7 +144,7 @@ public:
       // Loop over the U direction
       for ( int k = 1; k <= n; ++k )
       {
-        xyz    QQ =  Q[k][l] - Q[k-1][l];
+        t_xyz  QQ  = Q[k][l] - Q[k-1][l];
         d_isoV[l] += sqrt( QQ.Modulus() );
       }
     }
@@ -156,7 +156,7 @@ public:
       // Loop over the V direction
       for ( int l = 1; l <= m; ++l )
       {
-        xyz    QQ =  Q[k][l] - Q[k][l-1];
+        t_xyz QQ   = Q[k][l] - Q[k][l-1];
         d_isoU[k] += sqrt( QQ.Modulus() );
       }
     }
@@ -178,7 +178,7 @@ public:
       // Loop over the U direction calculating parameters
       for ( int i = 1; i < n; ++i )
       {
-        xyz           QQ = Q[i][j] - Q[i-1][j];
+        t_xyz         QQ = Q[i][j] - Q[i-1][j];
         param_isoV[i][j] = param_isoV[i-1][j] + sqrt( QQ.Modulus() )/d_isoV[j];
       }
 
@@ -195,7 +195,7 @@ public:
       // Loop over the V direction calculating parameters
       for ( int j = 1; j < m; ++j )
       {
-        xyz           QQ = Q[i][j] - Q[i][j-1];
+        t_xyz         QQ = Q[i][j] - Q[i][j-1];
         param_isoU[i][j] = param_isoU[i][j-1] + sqrt( QQ.Modulus() )/d_isoU[i];
       }
 
@@ -253,8 +253,8 @@ public:
   //! \param Q [in]  input points.
   //! \param v [out] calculated parameter values in V direction.
   //! \return error code.
-  static ErrCode Calculate_V(const std::vector< std::vector<xyz> >& Q,
-                             double*                                v)
+  static ErrCode Calculate_V(const std::vector< std::vector<t_xyz> >& Q,
+                             double*                                  v)
   {
     const int n = (int) Q.size() - 1;
     if ( n <= 0 )
@@ -284,7 +284,7 @@ public:
       // Loop over the V direction
       for ( int l = 1; l <= m; ++l )
       {
-        xyz    QQ =  Q[k][l] - Q[k][l-1];
+        t_xyz  QQ  = Q[k][l] - Q[k][l-1];
         d_isoU[k] += sqrt( QQ.Modulus() );
       }
     }
@@ -305,7 +305,7 @@ public:
       // Loop over the V direction calculating parameters
       for ( int j = 1; j < m; ++j )
       {
-        xyz           QQ = Q[i][j] - Q[i][j-1];
+        t_xyz         QQ = Q[i][j] - Q[i][j-1];
         param_isoU[i][j] = param_isoU[i][j-1] + sqrt( QQ.Modulus() )/d_isoU[i];
       }
 

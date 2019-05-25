@@ -33,7 +33,7 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::cascade_Triangulation::cascade_Triangulation(const ptr<poly_Mesh>& mobiusMesh)
+mobius::cascade_Triangulation::cascade_Triangulation(const t_ptr<poly_Mesh>& mobiusMesh)
 {
   m_mobiusMesh = mobiusMesh;
   m_bIsDone    = false;
@@ -64,7 +64,7 @@ void mobius::cascade_Triangulation::DirectConvert()
 
 //-----------------------------------------------------------------------------
 
-const mobius::ptr<mobius::poly_Mesh>&
+const mobius::t_ptr<mobius::poly_Mesh>&
   mobius::cascade_Triangulation::GetMobiusTriangulation() const
 {
   return m_mobiusMesh;

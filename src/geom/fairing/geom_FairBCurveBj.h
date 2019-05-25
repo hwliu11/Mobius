@@ -54,11 +54,11 @@ public:
   //! \param[in] lambda fairing coefficent.
   //! \param[in] alloc  shared memory allocator.
   mobiusGeom_EXPORT
-    geom_FairBCurveBj(const ptr<bcurve>&         curve,
-                      const int                  coord,
-                      const int                  j,
-                      const double               lambda,
-                      ptr<alloc2d>               alloc);
+    geom_FairBCurveBj(const t_ptr<t_bcurve>& curve,
+                      const int              coord,
+                      const int              j,
+                      const double           lambda,
+                      t_ptr<t_alloc2d>       alloc);
 
 public:
 
@@ -74,10 +74,10 @@ private:
 
 protected:
 
-  ptr<bcurve>  m_curve;  //!< Curve in question.
-  int          m_iCoord; //!< Coordinate in question.
-  int          m_iIndex; //!< 0-based index of the spline function.
-  ptr<alloc2d> m_alloc;  //!< Shared memory allocator.
+  t_ptr<t_bcurve>  m_curve;  //!< Curve in question.
+  int              m_iCoord; //!< Coordinate in question.
+  int              m_iIndex; //!< 0-based index of the spline function.
+  t_ptr<t_alloc2d> m_alloc;  //!< Shared memory allocator.
 
 };
 

@@ -60,7 +60,7 @@ public:
 
   //! ctor.
   //! \param[in] surface parametric surface in question.
-  geom_ThinPlateEnergies(const ptr<geom_BSplineSurface>& surface) : core_TwovariateFunc()
+  geom_ThinPlateEnergies(const t_ptr<geom_BSplineSurface>& surface) : core_TwovariateFunc()
   {
     m_surface = surface;
   }
@@ -73,7 +73,7 @@ public:
   //! \return evaluated function.
   virtual double Eval(const double u, const double v) const
   {
-    xyz P, dU, dV, d2U, d2V, d2UV;
+    t_xyz P, dU, dV, d2U, d2V, d2UV;
     m_surface->Eval_D2(u, v, P, dU, dV, d2U, d2V, d2UV);
 
     const double E = d2U.Dot(d2U) + 2*d2UV.Dot(d2UV) + d2V.Dot(d2V);
@@ -83,14 +83,14 @@ public:
 public:
 
   //! \return surface in question.
-  const ptr<geom_BSplineSurface>& GetSurface() const
+  const t_ptr<geom_BSplineSurface>& GetSurface() const
   {
     return m_surface;
   }
 
 protected:
 
-  ptr<geom_BSplineSurface> m_surface; //!< Surface.
+  t_ptr<geom_BSplineSurface> m_surface; //!< Surface.
 
 };
 
@@ -104,25 +104,25 @@ namespace BSplSurfProj
     //! Ctor accepting the B-surface and the point to invert.
     //! \param[in] S surface in question.
     //! \param[in] P point to invert.
-    func_base(const core_Ptr<bsurf>& S,
-              const xyz&             P)
+    func_base(const core_Ptr<t_bsurf>& S,
+              const t_xyz&             P)
     : core_TwovariateFuncWithGradient(), m_S(S), m_P(P)
     {}
 
   protected:
 
     //! Evaluates residual between `S(u,v)` and point to invert `P`.
-    xyz eval_r(const double u, const double v) const
+    t_xyz eval_r(const double u, const double v) const
     {
-      xyz S;
+      t_xyz S;
       m_S->Eval(u, v, S);
       return S - m_P;
     }
 
   protected:
 
-    core_Ptr<bsurf> m_S; //!< Surface in question.
-    xyz             m_P; //!< Point to invert.
+    core_Ptr<t_bsurf> m_S; //!< Surface in question.
+    t_xyz             m_P; //!< Point to invert.
   };
 
   class func_f : public func_base
@@ -132,8 +132,8 @@ namespace BSplSurfProj
     //! Ctor accepting the B-surface and the point to invert.
     //! \param[in] S surface in question.
     //! \param[in] P point to invert.
-    func_f(const core_Ptr<bsurf>& S,
-           const xyz&             P)
+    func_f(const core_Ptr<t_bsurf>& S,
+           const t_xyz&             P)
     : func_base(S, P)
     {}
 
@@ -146,10 +146,10 @@ namespace BSplSurfProj
     virtual double
       Eval(const double u, const double v) const
     {
-      const xyz r = this->eval_r(u, v);
+      const t_xyz r = this->eval_r(u, v);
 
       // Evaluate dS/dU.
-      xyz S, dS_dU, dS_dV;
+      t_xyz S, dS_dU, dS_dV;
       m_S->Eval_D1(u, v, S, dS_dU, dS_dV);
 
       // Evaluate dot product.
@@ -170,10 +170,10 @@ namespace BSplSurfProj
                    double&      dF_du,
                    double&      dF_dv) const
     {
-      const xyz r = this->eval_r(u, v);
+      const t_xyz r = this->eval_r(u, v);
 
       // Evaluate dS/dU.
-      xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+      t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
       m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
 
       // Evaluate F.
@@ -194,8 +194,8 @@ namespace BSplSurfProj
     //! Ctor accepting the B-surface and the point to invert.
     //! \param[in] S surface in question.
     //! \param[in] P point to invert.
-    func_g(const core_Ptr<bsurf>& S,
-           const xyz&             P)
+    func_g(const core_Ptr<t_bsurf>& S,
+           const t_xyz&             P)
     : func_base(S, P)
     {}
 
@@ -208,10 +208,10 @@ namespace BSplSurfProj
     virtual double
       Eval(const double u, const double v) const
     {
-      const xyz r = this->eval_r(u, v);
+      const t_xyz r = this->eval_r(u, v);
 
       // Evaluate dS/dU.
-      xyz S, dS_dU, dS_dV;
+      t_xyz S, dS_dU, dS_dV;
       m_S->Eval_D1(u, v, S, dS_dU, dS_dV);
 
       // Evaluate dot product.
@@ -232,10 +232,10 @@ namespace BSplSurfProj
                    double&      dG_du,
                    double&      dG_dv) const
     {
-      const xyz r = this->eval_r(u, v);
+      const t_xyz r = this->eval_r(u, v);
 
       // Evaluate dS/dU.
-      xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+      t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
       m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
 
       // Evaluate F.
@@ -287,7 +287,7 @@ namespace BSplSurfProj
     virtual void onNextEvaluation(const double u, const double v)
     {
       // Draw 3D point.
-      xyz P;
+      t_xyz P;
       m_S->Eval(u, v, P);
       //
       m_plotter.DRAW_POINT(P, MobiusColor_Magenta, "onNextStep");
@@ -301,7 +301,7 @@ namespace BSplSurfProj
   private:
 
     core_Ptr<geom_BSplineSurface> m_S; //!< Surface in question.
-    xyz                           m_P; //!< Last evaluated point.
+    t_xyz                         m_P; //!< Last evaluated point.
   };
 };
 
@@ -317,13 +317,13 @@ namespace BSplSurfProj
 //! \param nV    [in] number of knots in V dimension.
 //! \param p     [in] degree in U dimension.
 //! \param q     [in] degree in V dimension.
-mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                                                 const double*                          U,
-                                                 const double*                          V,
-                                                 const int                              nU,
-                                                 const int                              nV,
-                                                 const int                              p,
-                                                 const int                              q)
+mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<t_xyz> >& Poles,
+                                                 const double*                            U,
+                                                 const double*                            V,
+                                                 const int                                nU,
+                                                 const int                                nV,
+                                                 const int                                p,
+                                                 const int                                q)
 : geom_Surface()
 {
   std::vector<double> Uvec;
@@ -345,11 +345,11 @@ mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<
 //! \param V     [in] knot vector in V dimension.
 //! \param p     [in] degree in U dimension.
 //! \param q     [in] degree in V dimension.
-mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<xyz> >& Poles,
-                                                 const std::vector<double>&             U,
-                                                 const std::vector<double>&             V,
-                                                 const int                              p,
-                                                 const int                              q)
+mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<t_xyz> >& Poles,
+                                                 const std::vector<double>&               U,
+                                                 const std::vector<double>&               V,
+                                                 const int                                p,
+                                                 const int                                q)
 : geom_Surface()
 {
   this->init(Poles, U, V, p, q);
@@ -369,7 +369,7 @@ mobius::geom_BSplineSurface::~geom_BSplineSurface()
 mobius::core_Ptr<mobius::geom_BSplineSurface>
   mobius::geom_BSplineSurface::Instance(const std::string& json)
 {
-  core_Ptr<bsurf> result;
+  core_Ptr<t_bsurf> result;
   if ( !geom_JSON(json).ExtractBSurface(result) )
     return NULL;
 
@@ -378,10 +378,10 @@ mobius::core_Ptr<mobius::geom_BSplineSurface>
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_BSplineSurface::Compare(const ptr<bsurf>& F,
-                                          const ptr<bsurf>& G,
-                                          const double      tol2d,
-                                          const double      tol3d)
+bool mobius::geom_BSplineSurface::Compare(const t_ptr<t_bsurf>& F,
+                                          const t_ptr<t_bsurf>& G,
+                                          const double          tol2d,
+                                          const double          tol3d)
 {
   // Compare degrees.
   if ( F->GetDegree_U() != G->GetDegree_U() ||
@@ -420,8 +420,8 @@ bool mobius::geom_BSplineSurface::Compare(const ptr<bsurf>& F,
   for ( int i = 0; i < numPolesU; ++i )
     for ( int j = 0; j < numPolesV; ++j )
     {
-      const xyz&   P = F->GetPole(i, j);
-      const xyz&   Q = G->GetPole(i, j);
+      const t_xyz& P = F->GetPole(i, j);
+      const t_xyz& Q = G->GetPole(i, j);
       const double d = (P - Q).Modulus();
 
       if ( d > tol3d )
@@ -479,10 +479,10 @@ void mobius::geom_BSplineSurface::GetBounds(double& xMin, double& xMax,
   // it as a rough solution
   for ( int i = 0; i < (int) m_poles.size(); ++i )
   {
-    const std::vector<xyz>& uLine = m_poles.at(i);
+    const std::vector<t_xyz>& uLine = m_poles.at(i);
     for ( int j = 0; j < (int) uLine.size(); ++j )
     {
-      const xyz& P = uLine.at(j);
+      const t_xyz& P = uLine.at(j);
       const double x = P.X(), y = P.Y(), z = P.Z();
 
       if ( x > x_max )
@@ -555,7 +555,7 @@ double mobius::geom_BSplineSurface::GetMaxParameter_V() const
 //! \param S [out] 3D point corresponding to the given parameter pair.
 void mobius::geom_BSplineSurface::Eval(const double u,
                                        const double v,
-                                       xyz&         S) const
+                                       t_xyz&       S) const
 {
   // Find spans the passed u and v fall into
   bspl_FindSpan FindSpanU(m_U, m_iDegU);
@@ -583,13 +583,13 @@ void mobius::geom_BSplineSurface::Eval(const double u,
   const int u_first_idx = span_u - m_iDegU;
   const int v_first_idx = span_v - m_iDegV;
 
-  xyz Res;
+  t_xyz Res;
   for ( int i = 0; i <= m_iDegU; ++i )
   {
-    xyz temp;
+    t_xyz temp;
     for ( int j = 0; j <= m_iDegV; ++j )
     {
-      const xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
+      const t_xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
       temp += P_ij*N_v[j];
     }
     Res += temp*N_u[i];
@@ -603,9 +603,9 @@ void mobius::geom_BSplineSurface::Eval(const double u,
 
 void mobius::geom_BSplineSurface::Eval_D1(const double u,
                                           const double v,
-                                          xyz&         S,
-                                          xyz&         dU,
-                                          xyz&         dV) const
+                                          t_xyz&       S,
+                                          t_xyz&       dU,
+                                          t_xyz&       dV) const
 {
   // Find spans the passed u and v fall into
   bspl_FindSpan FindSpanU(m_U, m_iDegU);
@@ -614,7 +614,7 @@ void mobius::geom_BSplineSurface::Eval_D1(const double u,
   const int span_u = FindSpanU(u);
   const int span_v = FindSpanV(v);
 
-  ptr<alloc2d> localAlloc = new alloc2d;
+  t_ptr<t_alloc2d> localAlloc = new t_alloc2d;
   //
   double** dNu = localAlloc->Allocate(2, m_iDegU + 1, true);
   double** dNv = localAlloc->Allocate(2, m_iDegV + 1, true);
@@ -631,13 +631,14 @@ void mobius::geom_BSplineSurface::Eval_D1(const double u,
   const int u_first_idx = span_u - m_iDegU;
   const int v_first_idx = span_v - m_iDegV;
 
-  xyz res_S, res_dU, res_dV;
+  t_xyz res_S, res_dU, res_dV;
   for ( int i = 0; i <= m_iDegU; ++i )
   {
-    xyz temp_S, temp_dU, temp_dV;
+    t_xyz temp_S, temp_dU, temp_dV;
     for ( int j = 0; j <= m_iDegV; ++j )
     {
-      const xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
+      const t_xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
+      //
       temp_S  += P_ij * dNv[0][j]; // Primal (0 index)
       temp_dU += P_ij * dNv[0][j]; // Primal (0 index)
       temp_dV += P_ij * dNv[1][j];
@@ -655,25 +656,25 @@ void mobius::geom_BSplineSurface::Eval_D1(const double u,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_BSplineSurface::Eval_D2(const double u,
-                                          const double v,
-                                          xyz&         S,
-                                          xyz&         dU,
-                                          xyz&         dV,
-                                          xyz&         d2U,
-                                          xyz&         d2V,
-                                          xyz&         d2UV,
-                                          ptr<alloc2d> alloc,
-                                          const int    memBlockResultU,
-                                          const int    memBlockResultV,
-                                          const int    memBlockInternal) const
+void mobius::geom_BSplineSurface::Eval_D2(const double     u,
+                                          const double     v,
+                                          t_xyz&           S,
+                                          t_xyz&           dU,
+                                          t_xyz&           dV,
+                                          t_xyz&           d2U,
+                                          t_xyz&           d2V,
+                                          t_xyz&           d2UV,
+                                          t_ptr<t_alloc2d> alloc,
+                                          const int        memBlockResultU,
+                                          const int        memBlockResultV,
+                                          const int        memBlockInternal) const
 {
-  ptr<alloc2d> localAlloc;
+  t_ptr<t_alloc2d> localAlloc;
 
   double** dNu, **dNv;
   if ( alloc.IsNull() )
   {
-    localAlloc = new alloc2d;
+    localAlloc = new t_alloc2d;
     dNu = localAlloc->Allocate(3, m_iDegU + 1, true);
     dNv = localAlloc->Allocate(3, m_iDegV + 1, true);
   }
@@ -702,13 +703,14 @@ void mobius::geom_BSplineSurface::Eval_D2(const double u,
   const int u_first_idx = span_u - m_iDegU;
   const int v_first_idx = span_v - m_iDegV;
 
-  xyz res_S, res_dU, res_dV, res_d2U, res_d2V, res_d2UV;
+  t_xyz res_S, res_dU, res_dV, res_d2U, res_d2V, res_d2UV;
   for ( int i = 0; i <= m_iDegU; ++i )
   {
-    xyz temp_S, temp_dU, temp_dV, temp_d2U, temp_d2V, temp_d2UV;
+    t_xyz temp_S, temp_dU, temp_dV, temp_d2U, temp_d2V, temp_d2UV;
     for ( int j = 0; j <= m_iDegV; ++j )
     {
-      const xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
+      const t_xyz& P_ij = m_poles.at(u_first_idx + i).at(v_first_idx + j);
+      //
       temp_S    += P_ij * dNv[0][j]; // Primal (0 index)
       temp_dU   += P_ij * dNv[0][j]; // Primal (0 index)
       temp_dV   += P_ij * dNv[1][j];
@@ -753,15 +755,15 @@ mobius::core_Continuity
 
 //! Creates a copy of this B-curve.
 //! \return copy of B-curve.
-mobius::ptr<mobius::bsurf> mobius::geom_BSplineSurface::Copy() const
+mobius::t_ptr<mobius::t_bsurf> mobius::geom_BSplineSurface::Copy() const
 {
-  return new bsurf(m_poles, m_U, m_V, m_iDegU, m_iDegV);
+  return new t_bsurf(m_poles, m_U, m_V, m_iDegU, m_iDegV);
 }
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
-                                              uv&          params,
+bool mobius::geom_BSplineSurface::InvertPoint(const t_xyz& P,
+                                              t_uv&        params,
                                               const double prec) const
 {
   // Create objective functions.
@@ -802,7 +804,7 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
   double vsubMin = m_V[closest_j];
   double vsubMax = m_V[closest_j + m_iDegV + 1];
   //
-  uv initPt = ( uv(usubMin, vsubMin) + uv(usubMax, vsubMax) )*0.5;
+  t_uv initPt = ( t_uv(usubMin, vsubMin) + t_uv(usubMax, vsubMax) )*0.5;
 
   // Visual dump of the effective subdomain.
   if ( !m_plotter.GetPlotter().IsNull() )
@@ -810,16 +812,16 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
     m_plotter.REDRAW_POINT("initPt2d", initPt, MobiusColor_Magenta);
 
     // Draw 3D point.
-    xyz initPt3d;
+    t_xyz initPt3d;
     this->Eval(initPt.U(), initPt.V(), initPt3d);
     //
     m_plotter.REDRAW_POINT("initPt3d", initPt3d, MobiusColor_Magenta);
 
     // Draw isos.
-    ptr<bcurve> usubMinIso = this->Iso_U(usubMin);
-    ptr<bcurve> usubMaxIso = this->Iso_U(usubMax);
-    ptr<bcurve> vsubMinIso = this->Iso_V(vsubMin);
-    ptr<bcurve> vsubMaxIso = this->Iso_V(vsubMax);
+    t_ptr<t_bcurve> usubMinIso = this->Iso_U(usubMin);
+    t_ptr<t_bcurve> usubMaxIso = this->Iso_U(usubMax);
+    t_ptr<t_bcurve> vsubMinIso = this->Iso_V(vsubMin);
+    t_ptr<t_bcurve> vsubMaxIso = this->Iso_V(vsubMax);
     //
     m_plotter.REDRAW_CURVE("usubMinIso", usubMinIso, MobiusColor_Magenta);
     m_plotter.REDRAW_CURVE("usubMaxIso", usubMaxIso, MobiusColor_Magenta);
@@ -832,7 +834,7 @@ bool mobius::geom_BSplineSurface::InvertPoint(const xyz&   P,
                                  m_progress, m_plotter);
 
   // Run optimizer.
-  uv res;
+  t_uv res;
   //
   if ( !newton.Perform(initPt, prec, res) )
     return false;
@@ -852,13 +854,13 @@ bool
                                             const int    num_times)
 {
   // Get properties of the input surface.
-  const std::vector<double>&             UP = this->GetKnots_U();
-  const std::vector<double>&             VP = this->GetKnots_V();
-  const int                              p  = this->GetDegree_U();
-  const int                              q  = this->GetDegree_V();
-  const std::vector< std::vector<xyz> >& Pw = this->GetPoles();
-  const int                              np = int( Pw.size() ) - 1;
-  const int                              mp = int( Pw[0].size() ) - 1;
+  const std::vector<double>&               UP = this->GetKnots_U();
+  const std::vector<double>&               VP = this->GetKnots_V();
+  const int                                p  = this->GetDegree_U();
+  const int                                q  = this->GetDegree_V();
+  const std::vector< std::vector<t_xyz> >& Pw = this->GetPoles();
+  const int                                np = int( Pw.size() ) - 1;
+  const int                                mp = int( Pw[0].size() ) - 1;
 
   // Find span and resolve multiplicity.
   int k = -1, s = 0;
@@ -874,7 +876,7 @@ bool
   int nq = 0, mq = 0;
   //
   std::vector<double> UQ, VQ;
-  std::vector< std::vector<xyz> > Qw;
+  std::vector< std::vector<t_xyz> > Qw;
 
   // Perform knot insertion algorithm.
   bspl_InsKnot InsKnot;
@@ -904,13 +906,13 @@ bool
                                             const int    num_times)
 {
   // Get properties of the input surface.
-  const std::vector<double>&             UP = this->GetKnots_U();
-  const std::vector<double>&             VP = this->GetKnots_V();
-  const int                              p  = this->GetDegree_U();
-  const int                              q  = this->GetDegree_V();
-  const std::vector< std::vector<xyz> >& Pw = this->GetPoles();
-  const int                              np = int( Pw.size() ) - 1;
-  const int                              mp = int( Pw[0].size() ) - 1;
+  const std::vector<double>&               UP = this->GetKnots_U();
+  const std::vector<double>&               VP = this->GetKnots_V();
+  const int                                p  = this->GetDegree_U();
+  const int                                q  = this->GetDegree_V();
+  const std::vector< std::vector<t_xyz> >& Pw = this->GetPoles();
+  const int                                np = int( Pw.size() ) - 1;
+  const int                                mp = int( Pw[0].size() ) - 1;
 
   // Find span and resolve multiplicity.
   int k = -1, s = 0;
@@ -926,7 +928,7 @@ bool
   int nq = 0, mq = 0;
   //
   std::vector<double> UQ, VQ;
-  std::vector< std::vector<xyz> > Qw;
+  std::vector< std::vector<t_xyz> > Qw;
 
   // Perform knot insertion algorithm.
   bspl_InsKnot InsKnot;
@@ -950,7 +952,7 @@ bool
 //! Extracts isoparametric curve corresponding to the passed {u} level.
 //! \param u [in] parameter value to extract isoparametric curve for.
 //! \return isoline.
-mobius::ptr<mobius::bcurve>
+mobius::t_ptr<mobius::t_bcurve>
   mobius::geom_BSplineSurface::Iso_U(const double u) const
 {
   // Heap allocator
@@ -971,13 +973,13 @@ mobius::ptr<mobius::bcurve>
   const int u_first_idx = span_u - m_iDegU;
 
   // Calculate new poles
-  std::vector<xyz> Q;
+  std::vector<t_xyz> Q;
   for ( int j = 0; j < (int) m_poles[0].size(); ++j )
   {
-    xyz Q_j;
+    t_xyz Q_j;
     for ( int i = 0; i <= m_iDegU; ++i )
     {
-      const xyz& P_ij = m_poles[u_first_idx + i][j];
+      const t_xyz& P_ij = m_poles[u_first_idx + i][j];
       Q_j += P_ij*N_u[i];
     }
     Q.push_back(Q_j);
@@ -987,7 +989,7 @@ mobius::ptr<mobius::bcurve>
   // Create B-spline curve
   //-----------------------
 
-  ptr<bcurve> Iso = new bcurve(Q, m_V, m_iDegV);
+  t_ptr<t_bcurve> Iso = new t_bcurve(Q, m_V, m_iDegV);
   return Iso;
 }
 
@@ -996,7 +998,7 @@ mobius::ptr<mobius::bcurve>
 //! Extracts isoparametric curve corresponding to the passed {v} level.
 //! \param v [in] parameter value to extract isoparametric curve for.
 //! \return isoline.
-mobius::ptr<mobius::bcurve>
+mobius::t_ptr<mobius::t_bcurve>
   mobius::geom_BSplineSurface::Iso_V(const double v) const
 {
   // Heap allocator
@@ -1017,13 +1019,13 @@ mobius::ptr<mobius::bcurve>
   const int v_first_idx = span_v - m_iDegV;
 
   // Calculate new poles
-  std::vector<xyz> Q;
+  std::vector<t_xyz> Q;
   for ( int i = 0; i < (int) m_poles.size(); ++i )
   {
-    xyz Q_i;
+    t_xyz Q_i;
     for ( int j = 0; j <= m_iDegV; ++j )
     {
-      const xyz& P_ij = m_poles[i][v_first_idx + j];
+      const t_xyz& P_ij = m_poles[i][v_first_idx + j];
       Q_i += P_ij*N_v[j];
     }
     Q.push_back(Q_i);
@@ -1033,7 +1035,7 @@ mobius::ptr<mobius::bcurve>
   // Create B-spline curve
   //-----------------------
 
-  ptr<bcurve> Iso = new bcurve(Q, m_U, m_iDegU);
+  t_ptr<t_bcurve> Iso = new t_bcurve(Q, m_U, m_iDegU);
   return Iso;
 }
 
@@ -1076,11 +1078,11 @@ double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
 void mobius::geom_BSplineSurface::ExchangeUV()
 {
   // Transpose control net.
-  std::vector< std::vector<xyz> > cNet;
+  std::vector< std::vector<t_xyz> > cNet;
   //
   for ( size_t col = 0; col < m_poles[0].size(); ++col )
   {
-    std::vector<xyz> newRow;
+    std::vector<t_xyz> newRow;
 
     for ( size_t row = 0; row < m_poles.size(); ++row )
     {
@@ -1105,11 +1107,11 @@ void mobius::geom_BSplineSurface::ExchangeUV()
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_BSplineSurface::init(const std::vector< std::vector<xyz> >& Poles,
-                                       const std::vector<double>&             U,
-                                       const std::vector<double>&             V,
-                                       const int                              p,
-                                       const int                              q)
+void mobius::geom_BSplineSurface::init(const std::vector< std::vector<t_xyz> >& Poles,
+                                       const std::vector<double>&               U,
+                                       const std::vector<double>&               V,
+                                       const int                                p,
+                                       const int                                q)
 {
   // Check degrees.
   if ( p > mobiusBSpl_MaxDegree || q > mobiusBSpl_MaxDegree )

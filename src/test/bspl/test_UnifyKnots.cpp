@@ -117,7 +117,7 @@ mobius::outcome
   //----------------------------------------------
 
   // Original and eXtension vectors
-  knot_multiset U_o(U_vec), V_o(V_vec), W_o(W_vec), U_x(X[0]), V_x(X[1]), W_x(X[2]);
+  t_knot_multiset U_o(U_vec), V_o(V_vec), W_o(W_vec), U_x(X[0]), V_x(X[1]), W_x(X[2]);
 
   // Apply extensions
   std::vector<double> U_final = (U_o ^ U_x).Convert();

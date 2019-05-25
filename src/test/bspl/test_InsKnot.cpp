@@ -41,7 +41,7 @@
 //-----------------------------------------------------------------------------
 
 bool
-  mobius::test_InsKnot::insertKnotCurve(const ptr<bcurve>&         curve,
+  mobius::test_InsKnot::insertKnotCurve(const t_ptr<t_bcurve>&     curve,
                                         const double               u,
                                         const int                  r,
                                         const std::vector<double>& refKnots)
@@ -53,7 +53,7 @@ bool
   // Get properties of the input curve.
   const std::vector<double>& UP = curve->GetKnots();
   const int                  p  = curve->GetDegree();
-  const std::vector<xyz>&    Pw = curve->GetPoles();
+  const std::vector<t_xyz>&  Pw = curve->GetPoles();
   const int                  np = int( Pw.size() ) - 1;
 
   // Find span the knot in question falls into.
@@ -69,7 +69,7 @@ bool
   // Output arguments.
   int nq = 0;
   std::vector<double> UQ;
-  std::vector<xyz> Qw;
+  std::vector<t_xyz> Qw;
 
   /* ==================================
    *  Perform knot insertion algorithm
@@ -92,7 +92,7 @@ bool
 
 //-----------------------------------------------------------------------------
 
-bool mobius::test_InsKnot::insertKnotSurface(const ptr<bsurf>&          surface,
+bool mobius::test_InsKnot::insertKnotSurface(const t_ptr<t_bsurf>&      surface,
                                              const double               knot,
                                              const bspl_ParamDirection  dir,
                                              const int                  r,
@@ -103,13 +103,13 @@ bool mobius::test_InsKnot::insertKnotSurface(const ptr<bsurf>&          surface,
    * ==================================================== */
 
   // Get properties of the input surface.
-  const std::vector<double>&             UP = surface->GetKnots_U();
-  const std::vector<double>&             VP = surface->GetKnots_V();
-  const int                              p  = surface->GetDegree_U();
-  const int                              q  = surface->GetDegree_V();
-  const std::vector< std::vector<xyz> >& Pw = surface->GetPoles();
-  const int                              np = int( Pw.size() ) - 1;
-  const int                              mp = int( Pw[0].size() ) - 1;
+  const std::vector<double>&               UP = surface->GetKnots_U();
+  const std::vector<double>&               VP = surface->GetKnots_V();
+  const int                                p  = surface->GetDegree_U();
+  const int                                q  = surface->GetDegree_V();
+  const std::vector< std::vector<t_xyz> >& Pw = surface->GetPoles();
+  const int                                np = int( Pw.size() ) - 1;
+  const int                                mp = int( Pw[0].size() ) - 1;
 
   // Find span and resolve multiplicity.
   int k = -1, s = 0;
@@ -140,7 +140,7 @@ bool mobius::test_InsKnot::insertKnotSurface(const ptr<bsurf>&          surface,
   int nq = 0, mq = 0;
   //
   std::vector<double> UQ, VQ;
-  std::vector< std::vector<xyz> > Qw;
+  std::vector< std::vector<t_xyz> > Qw;
 
   /* ==================================
    *  Perform knot insertion algorithm
@@ -198,7 +198,7 @@ mobius::outcome mobius::test_InsKnot::test01(const int funcID)
   }";
 
   // Construct B-curve.
-  ptr<bcurve> curve = bcurve::Instance(json);
+  t_ptr<t_bcurve> curve = t_bcurve::Instance(json);
   //
   if ( curve.IsNull() )
     return res.failure();
@@ -256,7 +256,7 @@ mobius::outcome mobius::test_InsKnot::test02(const int funcID)
   }";
 
   // Construct B-curve.
-  ptr<bcurve> curve = bcurve::Instance(json);
+  t_ptr<t_bcurve> curve = t_bcurve::Instance(json);
   //
   if ( curve.IsNull() )
     return res.failure();
@@ -338,7 +338,7 @@ mobius::outcome mobius::test_InsKnot::test03(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();
@@ -437,7 +437,7 @@ mobius::outcome mobius::test_InsKnot::test04(const int funcID)
   }";
 
   // Construct B-surface.
-  core_Ptr<bsurf> surf = bsurf::Instance(json);
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
   //
   if ( surf.IsNull() )
     return res.failure();

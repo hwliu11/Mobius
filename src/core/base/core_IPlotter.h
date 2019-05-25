@@ -144,30 +144,30 @@ public:
   //-------------------------------------------------------------------------//
 
   virtual void
-    DRAW_CURVE(const ptr<geom_Curve>&,
+    DRAW_CURVE(const t_ptr<geom_Curve>&,
                const core_Color&,
                const std::string&) {}
 
   virtual void
     REDRAW_CURVE(const std::string&,
-                 const ptr<geom_Curve>&,
+                 const t_ptr<geom_Curve>&,
                  const core_Color&) {}
 
   //-------------------------------------------------------------------------//
 
   virtual void
-    DRAW_SURFACE(const ptr<geom_Surface>&,
+    DRAW_SURFACE(const t_ptr<geom_Surface>&,
                  const core_Color&,
                  const std::string&) {}
 
   virtual void
-    DRAW_SURFACE(const ptr<geom_Surface>&,
+    DRAW_SURFACE(const t_ptr<geom_Surface>&,
                  const core_Color&,
                  const double, // opacity
                  const std::string&) {}
 
   virtual void
-    DRAW_SURFACE(const ptr<geom_Surface>&,
+    DRAW_SURFACE(const t_ptr<geom_Surface>&,
                  const double, // U min
                  const double, // U max
                  const double, // V min
@@ -176,7 +176,7 @@ public:
                  const std::string&) {}
 
   virtual void
-    DRAW_SURFACE(const ptr<geom_Surface>&,
+    DRAW_SURFACE(const t_ptr<geom_Surface>&,
                  const double, // U min
                  const double, // U max
                  const double, // V min
@@ -187,18 +187,18 @@ public:
 
   virtual void
     REDRAW_SURFACE(const std::string&,
-                   const ptr<geom_Surface>&,
+                   const t_ptr<geom_Surface>&,
                    const core_Color&) {}
 
   virtual void
     REDRAW_SURFACE(const std::string&,
-                   const ptr<geom_Surface>&,
+                   const t_ptr<geom_Surface>&,
                    const core_Color&,
                    const double) {} // opacity
 
   virtual void
     REDRAW_SURFACE(const std::string&,
-                   const ptr<geom_Surface>&,
+                   const t_ptr<geom_Surface>&,
                    const double, // U min
                    const double, // U max
                    const double, // V min
@@ -207,7 +207,7 @@ public:
 
   virtual void
     REDRAW_SURFACE(const std::string&,
-                   const ptr<geom_Surface>&,
+                   const t_ptr<geom_Surface>&,
                    const double, // U min
                    const double, // U max
                    const double, // V min
@@ -261,12 +261,12 @@ public:
 
   //! Constructor.
   //! \param iv [in] IV to wrap.
-  core_PlotterEntry(const ptr<core_IPlotter>& iv) : m_iv(iv) {}
+  core_PlotterEntry(const t_ptr<core_IPlotter>& iv) : m_iv(iv) {}
 
 public:
 
   //! \return Journal instance.
-  const ptr<core_IPlotter>& GetPlotter() const { return m_iv; }
+  const t_ptr<core_IPlotter>& GetPlotter() const { return m_iv; }
 
 public:
 
@@ -393,9 +393,9 @@ public:
 //---------------------------------------------------------------------------//
 
   void
-    DRAW_CURVE(const ptr<geom_Curve>& curve,
-               const core_Color&      color,
-               const std::string&     name = "")
+    DRAW_CURVE(const t_ptr<geom_Curve>& curve,
+               const core_Color&        color,
+               const std::string&       name = "")
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -405,9 +405,9 @@ public:
 //---------------------------------------------------------------------------//
 
   void
-    REDRAW_CURVE(const std::string&     name,
-                 const ptr<geom_Curve>& curve,
-                 const core_Color&      color)
+    REDRAW_CURVE(const std::string&       name,
+                 const t_ptr<geom_Curve>& curve,
+                 const core_Color&        color)
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -417,9 +417,9 @@ public:
 //---------------------------------------------------------------------------//
 
   void
-    DRAW_SURFACE(const ptr<geom_Surface>& surface,
-                 const core_Color&        color,
-                 const std::string&       name = "")
+    DRAW_SURFACE(const t_ptr<geom_Surface>& surface,
+                 const core_Color&          color,
+                 const std::string&         name = "")
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -429,10 +429,10 @@ public:
 //---------------------------------------------------------------------------//
 
   void
-    DRAW_SURFACE(const ptr<geom_Surface>& surface,
-                 const core_Color&        color,
-                 const double             opacity,
-                 const std::string&       name = "")
+    DRAW_SURFACE(const t_ptr<geom_Surface>& surface,
+                 const core_Color&          color,
+                 const double               opacity,
+                 const std::string&         name = "")
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -442,13 +442,13 @@ public:
 //---------------------------------------------------------------------------//
 
   void
-    DRAW_SURFACE(const ptr<geom_Surface>& surface,
-                 const double             uMin,
-                 const double             uMax,
-                 const double             vMin,
-                 const double             vMax,
-                 const core_Color&        color,
-                 const std::string&       name = "")
+    DRAW_SURFACE(const t_ptr<geom_Surface>& surface,
+                 const double               uMin,
+                 const double               uMax,
+                 const double               vMin,
+                 const double               vMax,
+                 const core_Color&          color,
+                 const std::string&         name = "")
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -458,14 +458,14 @@ public:
 //---------------------------------------------------------------------------//
 
   void
-    DRAW_SURFACE(const ptr<geom_Surface>& surface,
-                 const double             uMin,
-                 const double             uMax,
-                 const double             vMin,
-                 const double             vMax,
-                 const core_Color&        color,
-                 const double             opacity,
-                 const std::string&       name = "")
+    DRAW_SURFACE(const t_ptr<geom_Surface>& surface,
+                 const double               uMin,
+                 const double               uMax,
+                 const double               vMin,
+                 const double               vMax,
+                 const core_Color&          color,
+                 const double               opacity,
+                 const std::string&         name = "")
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -475,9 +475,9 @@ public:
 //---------------------------------------------------------------------------//
 
   void
-    REDRAW_SURFACE(const std::string&       name,
-                   const ptr<geom_Surface>& surface,
-                   const core_Color&        color)
+    REDRAW_SURFACE(const std::string&         name,
+                   const t_ptr<geom_Surface>& surface,
+                   const core_Color&          color)
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -487,10 +487,10 @@ public:
 //---------------------------------------------------------------------------//
 
   virtual void
-    REDRAW_SURFACE(const std::string&       name,
-                   const ptr<geom_Surface>& surface,
-                   const core_Color&        color,
-                   const double             opacity)
+    REDRAW_SURFACE(const std::string&         name,
+                   const t_ptr<geom_Surface>& surface,
+                   const core_Color&          color,
+                   const double               opacity)
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -500,13 +500,13 @@ public:
 //---------------------------------------------------------------------------//
 
   virtual void
-    REDRAW_SURFACE(const std::string&       name,
-                   const ptr<geom_Surface>& surface,
-                   const double             uMin,
-                   const double             uMax,
-                   const double             vMin,
-                   const double             vMax,
-                   const core_Color&        color)
+    REDRAW_SURFACE(const std::string&         name,
+                   const t_ptr<geom_Surface>& surface,
+                   const double               uMin,
+                   const double               uMax,
+                   const double               vMin,
+                   const double               vMax,
+                   const core_Color&          color)
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -516,14 +516,14 @@ public:
 //---------------------------------------------------------------------------//
 
   virtual void
-    REDRAW_SURFACE(const std::string&       name,
-                   const ptr<geom_Surface>& surface,
-                   const double             uMin,
-                   const double             uMax,
-                   const double             vMin,
-                   const double             vMax,
-                   const core_Color&        color,
-                   const double             opacity)
+    REDRAW_SURFACE(const std::string&         name,
+                   const t_ptr<geom_Surface>& surface,
+                   const double               uMin,
+                   const double               uMax,
+                   const double               vMin,
+                   const double               vMax,
+                   const core_Color&          color,
+                   const double               opacity)
   {
     if ( m_iv.IsNull() ) return;
     //
@@ -584,7 +584,7 @@ public:
 
 private:
 
-  ptr<core_IPlotter> m_iv; //!< IV instance.
+  t_ptr<core_IPlotter> m_iv; //!< IV instance.
 
 };
 

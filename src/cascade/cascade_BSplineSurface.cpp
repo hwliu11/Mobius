@@ -46,7 +46,7 @@
 
 //! Constructor.
 //! \param[in] mobiusSurface Mobius surface to convert.
-mobius::cascade_BSplineSurface::cascade_BSplineSurface(const ptr<bsurf>& mobiusSurface)
+mobius::cascade_BSplineSurface::cascade_BSplineSurface(const t_ptr<t_bsurf>& mobiusSurface)
 {
   m_mobiusSurface = mobiusSurface;
   m_bIsDone       = false;
@@ -84,7 +84,7 @@ void mobius::cascade_BSplineSurface::DirectConvert()
 
 //! Accessor for the Mobius surface.
 //! \return Mobius surface.
-const mobius::ptr<mobius::bsurf>&
+const mobius::t_ptr<mobius::t_bsurf>&
   mobius::cascade_BSplineSurface::GetMobiusSurface() const
 {
   return m_mobiusSurface;
@@ -119,9 +119,9 @@ void mobius::cascade_BSplineSurface::convertToOpenCascade()
   const int vDeg = m_mobiusSurface->GetDegree_V();
 
   // Mobius properties of B-surface.
-  const std::vector< std::vector<xyz> >& mobius_Poles  = m_mobiusSurface->GetPoles();
-  std::vector<double>                    mobius_UKnots = m_mobiusSurface->GetKnots_U();
-  std::vector<double>                    mobius_VKnots = m_mobiusSurface->GetKnots_V();
+  const std::vector< std::vector<t_xyz> >& mobius_Poles  = m_mobiusSurface->GetPoles();
+  std::vector<double>                      mobius_UKnots = m_mobiusSurface->GetKnots_U();
+  std::vector<double>                      mobius_VKnots = m_mobiusSurface->GetKnots_V();
 
   // Poles are transferred as-is.
   TColgp_Array2OfPnt occt_Poles( 1, (int) mobius_Poles.size(),
@@ -131,7 +131,7 @@ void mobius::cascade_BSplineSurface::convertToOpenCascade()
   {
     for ( int j = occt_Poles.LowerCol(); j <= occt_Poles.UpperCol(); ++j )
     {
-      const xyz& P = mobius_Poles[i-1][j-1];
+      const t_xyz& P = mobius_Poles[i-1][j-1];
       occt_Poles(i, j) = gp_Pnt( P.X(), P.Y(), P.Z() );
     }
   }
@@ -186,16 +186,16 @@ void mobius::cascade_BSplineSurface::convertToMobius()
   const TColStd_Array1OfInteger& occt_VMults = m_occtSurface->VMultiplicities();
   
   // Poles are transferred as-is.
-  std::vector< std::vector<xyz> > mobius_Poles;
+  std::vector< std::vector<t_xyz> > mobius_Poles;
   //
   for ( int i = occt_Poles.LowerRow(); i <= occt_Poles.UpperRow(); ++i )
   {
-    std::vector<xyz> row;
+    std::vector<t_xyz> row;
 
     for ( int j = occt_Poles.LowerCol(); j <= occt_Poles.UpperCol(); ++j )
     {
       const gp_Pnt& P = occt_Poles(i, j);
-      row.push_back( xyz( P.X(), P.Y(), P.Z() ) );
+      row.push_back( t_xyz( P.X(), P.Y(), P.Z() ) );
     }
 
     mobius_Poles.push_back(row);
@@ -226,7 +226,7 @@ void mobius::cascade_BSplineSurface::convertToMobius()
   }
 
   // Construct Mobius surface.
-  m_mobiusSurface = new bsurf(mobius_Poles, mobius_UKnots, mobius_VKnots, uDeg, vDeg);
+  m_mobiusSurface = new t_bsurf(mobius_Poles, mobius_UKnots, mobius_VKnots, uDeg, vDeg);
 
   m_bIsDone = true;
 }

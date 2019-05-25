@@ -55,13 +55,13 @@ mobius::outcome
     U_vec.push_back(U[i]);
 
   // Convert to multiset
-  knot_multiset mset(U_vec);
+  t_knot_multiset mset(U_vec);
 
   // Convert back to vector
   std::vector<double> U_back = mset.Convert();
 
   // Referential multiset
-  knot_multiset ref_mset;
+  t_knot_multiset ref_mset;
   ref_mset.AddKnot(0, 3);
   ref_mset.AddKnot(1, 1);
   ref_mset.AddKnot(2, 1);
@@ -104,14 +104,14 @@ mobius::outcome
     V_vec.push_back(V[i]);
 
   // Convert to multisets
-  knot_multiset U_mset(U_vec);
-  knot_multiset V_mset(V_vec);
+  t_knot_multiset U_mset(U_vec);
+  t_knot_multiset V_mset(V_vec);
 
   // Unite
-  knot_multiset UV_mset = U_mset + V_mset;
+  t_knot_multiset UV_mset = U_mset + V_mset;
 
   // Referential multiset
-  knot_multiset ref_mset;
+  t_knot_multiset ref_mset;
   ref_mset.AddKnot(0, 3);
   ref_mset.AddKnot(1, 3);
   ref_mset.AddKnot(2, 2);
@@ -152,14 +152,14 @@ mobius::outcome
     V_vec.push_back(V[i]);
 
   // Convert to multisets
-  knot_multiset U_mset(U_vec);
-  knot_multiset V_mset(V_vec);
+  t_knot_multiset U_mset(U_vec);
+  t_knot_multiset V_mset(V_vec);
 
   // Unite
-  knot_multiset UV_mset = U_mset - V_mset;
+  t_knot_multiset UV_mset = U_mset - V_mset;
 
   // Referential multiset
-  knot_multiset ref_mset;
+  t_knot_multiset ref_mset;
   ref_mset.AddKnot(0, 1);
   ref_mset.AddKnot(9, 1);
   ref_mset.AddKnot(10, 2);
@@ -202,15 +202,15 @@ mobius::outcome
     W_vec.push_back(W[i]);
 
   // Convert to multisets
-  knot_multiset U_mset(U_vec);
-  knot_multiset V_mset(V_vec);
-  knot_multiset W_mset(W_vec);
+  t_knot_multiset U_mset(U_vec);
+  t_knot_multiset V_mset(V_vec);
+  t_knot_multiset W_mset(W_vec);
 
   // Unite
-  knot_multiset UV_mset = V_mset + W_mset - U_mset;
+  t_knot_multiset UV_mset = V_mset + W_mset - U_mset;
 
   // Referential multiset
-  knot_multiset ref_mset;
+  t_knot_multiset ref_mset;
   ref_mset.AddKnot(2, 1);
   ref_mset.AddKnot(4, 1);
   ref_mset.AddKnot(5, 1);

@@ -50,48 +50,48 @@ public:
   //! Complete ctor.
   //! \param[in] pos origin of the axis.
   //! \param[in] dir direction of the axis.
-  core_Axis(const xyz& pos,
-            const xyz& dir) : m_pos(pos), m_dir(dir) {}
+  core_Axis(const t_xyz& pos,
+            const t_xyz& dir) : m_pos(pos), m_dir(dir) {}
 
 public:
 
   //! \return position of the axis.
-  const xyz& GetPosition() const
+  const t_xyz& GetPosition() const
   {
     return m_pos;
   }
 
   //! Sets the position of the axis.
   //! \param[in] pos position coordinates to set.
-  void SetPosition(const xyz& pos)
+  void SetPosition(const t_xyz& pos)
   {
     m_pos = pos;
   }
 
   //! \return direction of the axis.
-  const xyz& GetDirection() const
+  const t_xyz& GetDirection() const
   {
     return m_dir;
   }
 
   //! Sets the direction of the axis.
   //! \param[in] dir direction vector to set.
-  void SetDirection(const xyz& dir)
+  void SetDirection(const t_xyz& dir)
   {
     m_dir = dir;
   }
 
 private:
 
-  xyz m_pos; //!< Position.
-  xyz m_dir; //!< Direction.
+  t_xyz m_pos; //!< Position.
+  t_xyz m_dir; //!< Direction.
 
 };
 
 //! \ingroup MOBIUS_CORE
 //!
 //! Convenience alias.
-typedef core_Axis axis;
+typedef core_Axis t_axis;
 
 };
 

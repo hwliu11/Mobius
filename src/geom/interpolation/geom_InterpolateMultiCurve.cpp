@@ -55,7 +55,7 @@ mobius::geom_InterpolateMultiCurve::geom_InterpolateMultiCurve(const int        
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateMultiCurve::AddRow(const std::vector<xyz>& points)
+void mobius::geom_InterpolateMultiCurve::AddRow(const std::vector<t_xyz>& points)
 {
   m_pointsGrid.push_back(points);
 }
@@ -84,7 +84,7 @@ bool mobius::geom_InterpolateMultiCurve::Perform()
   //
   for ( int secIdx = 0; secIdx < numSections; ++secIdx )
   {
-    const std::vector<xyz>& points = m_pointsGrid[secIdx];
+    const std::vector<t_xyz>& points = m_pointsGrid[secIdx];
 
     // Choose interpolation parameters. There are as many parameters as
     // many data points are passed for interpolation.
@@ -198,7 +198,7 @@ bool mobius::geom_InterpolateMultiCurve::Perform()
 
   for ( int secIdx = 0; secIdx < numSections; ++secIdx )
   {
-    const std::vector<xyz>& points = m_pointsGrid[secIdx];
+    const std::vector<t_xyz>& points = m_pointsGrid[secIdx];
 
     // Iterpolate curve given that each interpolation task in a loop is
     // solved on the same parameters and knots vectors.

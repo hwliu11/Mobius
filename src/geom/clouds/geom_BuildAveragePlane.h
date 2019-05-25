@@ -62,8 +62,8 @@ public:
   //! \param[out] result resulting plane.
   //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT bool
-    Build(const ptr<pcloud>& points,
-          ptr<plane>&        result) const;
+    Build(const t_ptr<t_pcloud>& points,
+          t_ptr<t_plane>&        result) const;
 
 };
 

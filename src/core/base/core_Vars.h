@@ -72,7 +72,7 @@ public:
   //! \param[in] name  variable name.
   //! \param[in] value variable value.
   //! \return variable instance.
-  static ptr<core_VarInt>
+  static t_ptr<core_VarInt>
     Instance(const std::string& name,
              const int          value)
   {
@@ -125,7 +125,7 @@ public:
   //! \param[in] name  variable name.
   //! \param[in] value variable value.
   //! \return variable instance.
-  static ptr<core_VarReal>
+  static t_ptr<core_VarReal>
     Instance(const std::string& name,
              const double       value)
   {
@@ -178,7 +178,7 @@ public:
   //! \param[in] name  variable name.
   //! \param[in] value variable value.
   //! \return variable instance.
-  static ptr<core_VarRealVector>
+  static t_ptr<core_VarRealVector>
     Instance(const std::string&         name,
              const std::vector<double>& value)
   {
@@ -231,7 +231,7 @@ public:
   //! \param[in] name  variable name.
   //! \param[in] value variable value.
   //! \return variable instance.
-  static ptr<core_VarBool>
+  static t_ptr<core_VarBool>
     Instance(const std::string& name,
              const bool         value)
   {
@@ -284,7 +284,7 @@ public:
   //! \param[in] name  variable name.
   //! \param[in] value variable value.
   //! \return variable instance.
-  static ptr<core_VarString>
+  static t_ptr<core_VarString>
     Instance(const std::string& name,
              const std::string& value)
   {
@@ -329,7 +329,7 @@ public:
 //! \ingroup MOBIUS_CORE
 //!
 //! Collection of variables.
-typedef std::vector< ptr<core_VarBase> > core_Vars;
+typedef std::vector< t_ptr<core_VarBase> > core_Vars;
 
 };
 

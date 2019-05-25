@@ -59,11 +59,11 @@ void mobius::geom_SphereSurface::GetBounds(double& xMin, double& xMax,
                                            double& yMin, double& yMax,
                                            double& zMin, double& zMax) const
 {
-  xyz global_center = m_tChain.Apply( this->Center() );
-  xyz rad_pt(m_fRadius, m_fRadius, m_fRadius);
+  t_xyz global_center = m_tChain.Apply( this->Center() );
+  t_xyz rad_pt(m_fRadius, m_fRadius, m_fRadius);
 
-  xyz min_pt = global_center - rad_pt;
-  xyz max_pt = global_center + rad_pt;
+  t_xyz min_pt = global_center - rad_pt;
+  t_xyz max_pt = global_center + rad_pt;
 
   xMin = min_pt.X();
   xMax = max_pt.X();
@@ -107,7 +107,7 @@ double mobius::geom_SphereSurface::GetMaxParameter_V() const
 //! \param P [out] evaluated spatial point S(u, v).
 void mobius::geom_SphereSurface::Eval(const double u,
                                       const double v,
-                                      xyz&         S) const
+                                      t_xyz&       S) const
 {
   /* ==========================
    *  Sphere point in local CS
@@ -131,7 +131,7 @@ void mobius::geom_SphereSurface::Eval(const double u,
 //! Returns isoparametric curve for a fixed {u}.
 //! \param u [in] fixed parameter.
 //! \return isoparametric curve.
-mobius::ptr<mobius::geom_Circle>
+mobius::t_ptr<mobius::geom_Circle>
   mobius::geom_SphereSurface::Iso_U(const double u) const
 {
   const double r             = m_fRadius; // Radius is the same
@@ -139,13 +139,13 @@ mobius::ptr<mobius::geom_Circle>
   const double ang_around_OZ = u;         // Rotate to have iso-u
 
   // Rotation to represent iso-u in a local system of axes of sphere
-  core_Quaternion qn_around_OX(xyz::OX(), ang_around_OX);
-  core_Quaternion qn_around_OZ(xyz::OZ(), ang_around_OZ);
+  core_Quaternion qn_around_OX(t_xyz::OX(), ang_around_OX);
+  core_Quaternion qn_around_OZ(t_xyz::OZ(), ang_around_OZ);
   core_Quaternion qn_local = qn_around_OZ * qn_around_OX;
 
   // Prepare transformation chain for the resulting isoline
   core_IsoTransformChain tChain;
-  tChain << m_tChain << core_IsoTransform( qn_local, xyz() );
+  tChain << m_tChain << core_IsoTransform( qn_local, t_xyz() );
 
   // Return result
   return new geom_Circle(r, tChain);
@@ -154,14 +154,14 @@ mobius::ptr<mobius::geom_Circle>
 //! Returns isoparametric curve for a fixed {v}.
 //! \param v [in] fixed parameter.
 //! \return isoparametric curve.
-mobius::ptr<mobius::geom_Circle>
+mobius::t_ptr<mobius::geom_Circle>
   mobius::geom_SphereSurface::Iso_V(const double v) const
 {
   const double r  = m_fRadius*cos(v); // Radius is the same
   const double dZ = m_fRadius*sin(v); // Elevation
 
   // Transformation to apply in local CS of sphere
-  xyz elevation(0.0, 0.0, dZ);
+  t_xyz elevation(0.0, 0.0, dZ);
   core_IsoTransform T_local(core_Quaternion(), elevation);
 
   // Prepare transformation chain for the resulting isoline

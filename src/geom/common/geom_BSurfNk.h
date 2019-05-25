@@ -73,9 +73,10 @@ public:
   //! \param[in] surface B-spline surface to take basis functions from.
   //! \param[in] k       0-based serial index.
   //! \param[in] alloc   shared allocator.
-  geom_BSurfNk(const ptr<bsurf>& surface,
-               const int         k,
-               ptr<alloc2d>      alloc)
+  geom_BSurfNk(const t_ptr<t_bsurf>& surface,
+               const int             k,
+               t_ptr<t_alloc2d>      alloc)
+  //
   : core_OBJECT (),
     m_alloc     (alloc)
   {
@@ -103,7 +104,8 @@ public:
                const int                  q,
                const int                  k,
                const int                  n,
-               ptr<alloc2d>               alloc)
+               t_ptr<t_alloc2d>           alloc)
+  //
   : core_OBJECT (),
     m_alloc     (alloc)
   {
@@ -147,13 +149,13 @@ protected:
 
   struct t_cell
   {
-    uv  coords;
-    int indices[2];
+    t_uv coords;
+    int  indices[2];
 
     t_cell() { indices[0] = indices[1] = 0; } //!< Default ctor.
 
     //! Complete ctor.
-    t_cell(const uv& p, const double cellSize)
+    t_cell(const t_uv& p, const double cellSize)
     {
       for ( int k = 0; k < 2; ++k )
       {
@@ -227,7 +229,7 @@ protected:
   //! by Gauss integration scheme.
   std::unordered_map<t_cell, t_values, t_cell::hasher> m_cells;
 
-  ptr<alloc2d> m_alloc; //!< Shared memory allocator.
+  t_ptr<t_alloc2d> m_alloc; //!< Shared memory allocator.
 
   //! First basis function \f$N_i^p(u)\f$.
   struct

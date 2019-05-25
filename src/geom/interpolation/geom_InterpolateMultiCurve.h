@@ -73,7 +73,7 @@ public:
   //! Adds a row of points to interpolate.
   //! \param[in] points ordered points to interpolate.
   mobiusGeom_EXPORT void
-    AddRow(const std::vector<xyz>& points);
+    AddRow(const std::vector<t_xyz>& points);
 
   //! Performs interpolation.
   //! \return true in case of success, false -- otherwise.
@@ -85,7 +85,7 @@ public:
   //! Accessor for the resulting curve.
   //! \param[in] idx 0-based index of the curve to access.
   //! \return interpolant curve.
-  const ptr<bcurve>& GetResult(const int idx) const
+  const t_ptr<t_bcurve>& GetResult(const int idx) const
   {
     return m_curves[idx];
   }
@@ -98,11 +98,11 @@ public:
 
 private:
 
-  int                             m_iDeg;       //!< Degree of interpolant curve.
-  std::vector< std::vector<xyz> > m_pointsGrid; //!< Points to interpolate.
-  bspl_ParamsSelection            m_paramsType; //!< Parameterization type.
-  bspl_KnotsSelection             m_knotsType;  //!< Knots selection type.
-  std::vector< ptr<bcurve> >      m_curves;     //!< Interpolant curves.
+  int                               m_iDeg;       //!< Degree of interpolant curve.
+  std::vector< std::vector<t_xyz> > m_pointsGrid; //!< Points to interpolate.
+  bspl_ParamsSelection              m_paramsType; //!< Parameterization type.
+  bspl_KnotsSelection               m_knotsType;  //!< Knots selection type.
+  std::vector< t_ptr<t_bcurve> >    m_curves;     //!< Interpolant curves.
 
 };
 

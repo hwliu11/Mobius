@@ -64,11 +64,11 @@ public:
   //! \param[out] Dz     3-rd eigen vector.
   //! \return true in case of success, false -- otherwise.
   mobiusCore_EXPORT bool
-    operator()(const std::vector<xyz>& pts,
-               xyz&                    center,
-               xyz&                    Dx,
-               xyz&                    Dy,
-               xyz&                    Dz);
+    operator()(const std::vector<t_xyz>& pts,
+               t_xyz&                    center,
+               t_xyz&                    Dx,
+               t_xyz&                    Dy,
+               t_xyz&                    Dz);
 
 };
 

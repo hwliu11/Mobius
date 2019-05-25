@@ -38,7 +38,7 @@
 //-----------------------------------------------------------------------------
 
 Handle(Geom_BSplineCurve)
-  mobius::cascade::GetOpenCascadeBCurve(const ptr<bcurve>& curve)
+  mobius::cascade::GetOpenCascadeBCurve(const t_ptr<t_bcurve>& curve)
 {
   cascade_BSplineCurve tool(curve);
   tool.DirectConvert();
@@ -48,7 +48,7 @@ Handle(Geom_BSplineCurve)
 
 //-----------------------------------------------------------------------------
 
-mobius::ptr<mobius::bcurve>
+mobius::t_ptr<mobius::t_bcurve>
   mobius::cascade::GetMobiusBCurve(const Handle(Geom_BSplineCurve)& curve)
 {
   cascade_BSplineCurve tool(curve);
@@ -60,7 +60,7 @@ mobius::ptr<mobius::bcurve>
 //-----------------------------------------------------------------------------
 
 Handle(Geom_BSplineSurface)
-  mobius::cascade::GetOpenCascadeBSurface(const ptr<bsurf>& surface)
+  mobius::cascade::GetOpenCascadeBSurface(const t_ptr<t_bsurf>& surface)
 {
   cascade_BSplineSurface tool(surface);
   tool.DirectConvert();
@@ -70,7 +70,7 @@ Handle(Geom_BSplineSurface)
 
 //-----------------------------------------------------------------------------
 
-mobius::ptr<mobius::bsurf>
+mobius::t_ptr<mobius::t_bsurf>
   mobius::cascade::GetMobiusBSurface(const Handle(Geom_BSplineSurface)& surface)
 {
   cascade_BSplineSurface tool(surface);
@@ -82,7 +82,7 @@ mobius::ptr<mobius::bsurf>
 //-----------------------------------------------------------------------------
 
 Handle(Geom_Plane)
-  mobius::cascade::GetOpenCascadePlane(const ptr<plane>& surface)
+  mobius::cascade::GetOpenCascadePlane(const t_ptr<t_plane>& surface)
 {
   gp_Pnt O  = GetOpenCascadePnt( surface->GetOrigin() );
   gp_Vec Du = GetOpenCascadeVec( surface->GetD1() );
@@ -93,14 +93,14 @@ Handle(Geom_Plane)
 
 //-----------------------------------------------------------------------------
 
-mobius::ptr<mobius::plane>
+mobius::t_ptr<mobius::t_plane>
   mobius::cascade::GetMobiusPlane(const Handle(Geom_Plane)& surface)
 {
   const gp_Ax3& ax3 = surface->Position();
   //
-  xyz O  = GetMobiusPnt( ax3.Location() );
-  xyz Du = GetMobiusVec( ax3.XDirection() );
-  xyz Dv = GetMobiusVec( ax3.YDirection() );
+  t_xyz O  = GetMobiusPnt( ax3.Location() );
+  t_xyz Du = GetMobiusVec( ax3.XDirection() );
+  t_xyz Dv = GetMobiusVec( ax3.YDirection() );
 
-  return new plane(O, Du, Dv);
+  return new t_plane(O, Du, Dv);
 }

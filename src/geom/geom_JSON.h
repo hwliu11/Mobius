@@ -59,16 +59,16 @@ public:
 public:
 
   mobiusGeom_EXPORT void
-    DumpBCurve(const core_Ptr<bcurve>& curve);
+    DumpBCurve(const t_ptr<t_bcurve>& curve);
 
   mobiusGeom_EXPORT void
-    DumpBSurface(const core_Ptr<bsurf>& surface);
+    DumpBSurface(const t_ptr<t_bsurf>& surface);
 
   mobiusGeom_EXPORT bool
-    ExtractBCurve(core_Ptr<bcurve>& curve) const;
+    ExtractBCurve(t_ptr<t_bcurve>& curve) const;
 
   mobiusGeom_EXPORT bool
-    ExtractBSurface(core_Ptr<bsurf>& surface) const;
+    ExtractBSurface(t_ptr<t_bsurf>& surface) const;
 
 };
 

@@ -55,7 +55,7 @@ public:
 public:
 
   //! \return constructed mesh.
-  const ptr<poly_Mesh>& GetResult() const
+  const t_ptr<poly_Mesh>& GetResult() const
   {
     return m_mesh;
   }
@@ -71,7 +71,7 @@ public:
 
 protected:
 
-  ptr<poly_Mesh> m_mesh; //!< Mesh data structure.
+  t_ptr<poly_Mesh> m_mesh; //!< Mesh data structure.
 
 };
 

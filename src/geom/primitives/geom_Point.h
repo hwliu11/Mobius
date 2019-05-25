@@ -41,9 +41,7 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Geometric primitive for 3D point.
-//!
-//! \todo complete description
+//! Geometric primitive for a shared 3D point.
 class geom_Point : public geom_Geometry
 {
 // Construction & destruction:
@@ -113,7 +111,7 @@ public:
     operator+=(const geom_Point& PP);
 
   mobiusGeom_EXPORT geom_Point&
-    operator+=(const ptr<geom_Point>& hPP);
+    operator+=(const t_ptr<geom_Point>& hPP);
 
   mobiusGeom_EXPORT geom_Point
     operator-(const geom_Point& PP) const;
@@ -122,11 +120,11 @@ public:
     operator-=(const geom_Point& PP);
 
   mobiusGeom_EXPORT geom_Point&
-    operator-=(const ptr<geom_Point>& hPP);
+    operator-=(const t_ptr<geom_Point>& hPP);
 
 private:
 
-  xyz m_XYZ; //!< XYZ primitive.
+  t_xyz m_XYZ; //!< XYZ primitive.
 
 };
 

@@ -40,7 +40,7 @@
 //-----------------------------------------------------------------------------
 
 bool
-  mobius::test_Decompose::decomposeCurve(const ptr<bcurve>&      curve,
+  mobius::test_Decompose::decomposeCurve(const t_ptr<t_bcurve>&  curve,
                                          const int               numSegmentsRef,
                                          const std::vector<int>& breakpointsRef)
 {
@@ -48,11 +48,11 @@ bool
   const int                  n  = curve->GetNumOfPoles() - 1;
   const int                  p  = curve->GetDegree();
   const std::vector<double>& U  = curve->GetKnots();
-  const std::vector<xyz>&    Pw = curve->GetPoles();
+  const std::vector<t_xyz>&  Pw = curve->GetPoles();
 
   // Output arguments.
   int nb = 0;
-  std::vector< std::vector<xyz> > Qw;
+  std::vector< std::vector<t_xyz> > Qw;
   std::vector<int> breakpoints;
 
   // Perform curve decomposition.
@@ -106,7 +106,7 @@ mobius::outcome mobius::test_Decompose::test01(const int funcID)
   }";
 
   // Construct B-curve.
-  ptr<bcurve> curve = bcurve::Instance(json);
+  t_ptr<t_bcurve> curve = t_bcurve::Instance(json);
   //
   if ( curve.IsNull() )
     return res.failure();
@@ -162,7 +162,7 @@ mobius::outcome mobius::test_Decompose::test02(const int funcID)
   }";
 
   // Construct B-curve.
-  ptr<bcurve> curve = bcurve::Instance(json);
+  t_ptr<t_bcurve> curve = t_bcurve::Instance(json);
   //
   if ( curve.IsNull() )
     return res.failure();

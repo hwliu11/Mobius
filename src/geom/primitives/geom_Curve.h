@@ -66,24 +66,24 @@ public:
 
   virtual void
     Eval(const double t,
-         xyz&         C) const = 0;
+         t_xyz&       C) const = 0;
 
   virtual void
     Eval_D1(const double t,
-            xyz&         dC_dt) const = 0;
+            t_xyz&       dC_dt) const = 0;
 
 public:
 
-  mobiusGeom_EXPORT xyz
+  mobiusGeom_EXPORT t_xyz
     D0(const double t) const;
 
-  mobiusGeom_EXPORT xyz
+  mobiusGeom_EXPORT t_xyz
     D1(const double t) const;
 
 };
 
 //! Convenience shortcut.
-typedef geom_Curve curve;
+typedef geom_Curve t_curve;
 
 };
 

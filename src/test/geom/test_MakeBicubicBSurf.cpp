@@ -42,33 +42,33 @@
 
 //-----------------------------------------------------------------------------
 
-bool mobius::test_MakeBicubicBSurf::verifyConstraints(const xyz&        S00,
-                                                      const xyz&        S01,
-                                                      const xyz&        S10,
-                                                      const xyz&        S11,
-                                                      const xyz&        dS_du00,
-                                                      const xyz&        dS_du01,
-                                                      const xyz&        dS_du10,
-                                                      const xyz&        dS_du11,
-                                                      const xyz&        dS_dv00,
-                                                      const xyz&        dS_dv01,
-                                                      const xyz&        dS_dv10,
-                                                      const xyz&        dS_dv11,
-                                                      const xyz&        d2S_dudv00,
-                                                      const xyz&        d2S_dudv01,
-                                                      const xyz&        d2S_dudv10,
-                                                      const xyz&        d2S_dudv11,
-                                                      const ptr<bsurf>& resSurf)
+bool mobius::test_MakeBicubicBSurf::verifyConstraints(const t_xyz&          S00,
+                                                      const t_xyz&          S01,
+                                                      const t_xyz&          S10,
+                                                      const t_xyz&          S11,
+                                                      const t_xyz&          dS_du00,
+                                                      const t_xyz&          dS_du01,
+                                                      const t_xyz&          dS_du10,
+                                                      const t_xyz&          dS_du11,
+                                                      const t_xyz&          dS_dv00,
+                                                      const t_xyz&          dS_dv01,
+                                                      const t_xyz&          dS_dv10,
+                                                      const t_xyz&          dS_dv11,
+                                                      const t_xyz&          d2S_dudv00,
+                                                      const t_xyz&          d2S_dudv01,
+                                                      const t_xyz&          d2S_dudv10,
+                                                      const t_xyz&          d2S_dudv11,
+                                                      const t_ptr<t_bsurf>& resSurf)
 {
   // Precision to compare Cartesian coordinates.
   const double prec = core_Precision::Resolution3D();
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // (u,v) = (0,0):
   {
-    xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+    t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
     resSurf->Eval_D2(0., 0., S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
 
     // Primal.
@@ -102,7 +102,7 @@ bool mobius::test_MakeBicubicBSurf::verifyConstraints(const xyz&        S00,
 
   // (u,v) = (0,1):
   {
-    xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+    t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
     resSurf->Eval_D2(0., 1., S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
 
     // Primal.
@@ -136,7 +136,7 @@ bool mobius::test_MakeBicubicBSurf::verifyConstraints(const xyz&        S00,
 
   // (u,v) = (1,0):
   {
-    xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+    t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
     resSurf->Eval_D2(1., 0., S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
 
     // Primal.
@@ -170,7 +170,7 @@ bool mobius::test_MakeBicubicBSurf::verifyConstraints(const xyz&        S00,
 
   // (u,v) = (1,1):
   {
-    xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
+    t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
     resSurf->Eval_D2(1., 1., S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
 
     // Primal.
@@ -208,28 +208,28 @@ bool mobius::test_MakeBicubicBSurf::verifyConstraints(const xyz&        S00,
 //-----------------------------------------------------------------------------
 
 mobius::outcome
-  mobius::test_MakeBicubicBSurf::performTest(const int  funcID,
-                                             const xyz& S00,
-                                             const xyz& S01,
-                                             const xyz& S10,
-                                             const xyz& S11,
-                                             const xyz& dS_du00,
-                                             const xyz& dS_du01,
-                                             const xyz& dS_du10,
-                                             const xyz& dS_du11,
-                                             const xyz& dS_dv00,
-                                             const xyz& dS_dv01,
-                                             const xyz& dS_dv10,
-                                             const xyz& dS_dv11,
-                                             const xyz& d2S_dudv00,
-                                             const xyz& d2S_dudv01,
-                                             const xyz& d2S_dudv10,
-                                             const xyz& d2S_dudv11)
+  mobius::test_MakeBicubicBSurf::performTest(const int    funcID,
+                                             const t_xyz& S00,
+                                             const t_xyz& S01,
+                                             const t_xyz& S10,
+                                             const t_xyz& S11,
+                                             const t_xyz& dS_du00,
+                                             const t_xyz& dS_du01,
+                                             const t_xyz& dS_du10,
+                                             const t_xyz& dS_du11,
+                                             const t_xyz& dS_dv00,
+                                             const t_xyz& dS_dv01,
+                                             const t_xyz& dS_dv10,
+                                             const t_xyz& dS_dv11,
+                                             const t_xyz& d2S_dudv00,
+                                             const t_xyz& d2S_dudv01,
+                                             const t_xyz& d2S_dudv10,
+                                             const t_xyz& d2S_dudv11)
 {
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   /* =============
    *  Build patch
@@ -252,7 +252,7 @@ mobius::outcome
   SetVarDescr("time", res.time(), ID(), funcID);
 
   // Get result.
-  const ptr<bsurf>& resSurf = mkBicubic.GetResult();
+  const t_ptr<t_bsurf>& resSurf = mkBicubic.GetResult();
 
   /* ============================================================
    *  Evaluate surface to check if the constraints are satisfied
@@ -274,22 +274,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test001(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 1., 1.);
-  const xyz dS_du01    = xyz(0., 0., 0.);
-  const xyz dS_du10    = xyz(0., 0., 0.);
-  const xyz dS_du11    = xyz(0., 0., 1.);
-  const xyz dS_dv00    = xyz(1., 0., 0.);
-  const xyz dS_dv01    = xyz(0., 0., 0.);
-  const xyz dS_dv10    = xyz(0., 0., 0.);
-  const xyz dS_dv11    = xyz(0., 0., 3.);
-  const xyz d2S_dudv00 = xyz(0., 0., 0.);
-  const xyz d2S_dudv01 = xyz(0., 0., 0.);
-  const xyz d2S_dudv10 = xyz(0., 0., 0.);
-  const xyz d2S_dudv11 = xyz(0., 0., 0.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 1., 1.);
+  const t_xyz dS_du01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du11    = t_xyz(0., 0., 1.);
+  const t_xyz dS_dv00    = t_xyz(1., 0., 0.);
+  const t_xyz dS_dv01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv11    = t_xyz(0., 0., 3.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv01 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv11 = t_xyz(0., 0., 0.);
 
   // Perform test.
   return performTest(funcID,
@@ -305,22 +305,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test002(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 1., 1.);
-  const xyz dS_du01    = xyz(0., 0., 0.);
-  const xyz dS_du10    = xyz(0., 0., 0.);
-  const xyz dS_du11    = xyz(0., 0., 1.);
-  const xyz dS_dv00    = xyz(1., 0., 0.);
-  const xyz dS_dv01    = xyz(0., 0., 0.);
-  const xyz dS_dv10    = xyz(0., 0., 0.);
-  const xyz dS_dv11    = xyz(0., 0., 3.);
-  const xyz d2S_dudv00 = xyz(0., 0., 0.);
-  const xyz d2S_dudv01 = xyz(0., 0., 0.);
-  const xyz d2S_dudv10 = xyz(0., 0., 0.);
-  const xyz d2S_dudv11 = xyz(1., 1., 0.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 1., 1.);
+  const t_xyz dS_du01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du11    = t_xyz(0., 0., 1.);
+  const t_xyz dS_dv00    = t_xyz(1., 0., 0.);
+  const t_xyz dS_dv01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv11    = t_xyz(0., 0., 3.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv01 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv11 = t_xyz(1., 1., 0.);
 
   // Perform test.
   return performTest(funcID,
@@ -336,22 +336,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test003(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 1., 1.);
-  const xyz dS_du01    = xyz(0., 0., 1.);
-  const xyz dS_du10    = xyz(0., 0., 1.);
-  const xyz dS_du11    = xyz(0., 0., 1.);
-  const xyz dS_dv00    = xyz(1., 0., 0.);
-  const xyz dS_dv01    = xyz(0., 0., 0.);
-  const xyz dS_dv10    = xyz(0., 0., 0.);
-  const xyz dS_dv11    = xyz(0., 0., 3.);
-  const xyz d2S_dudv00 = xyz(0., 1., 1.);
-  const xyz d2S_dudv01 = xyz(1., 1., 0.);
-  const xyz d2S_dudv10 = xyz(1., 1., 1.);
-  const xyz d2S_dudv11 = xyz(1., 1., 0.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 1., 1.);
+  const t_xyz dS_du01    = t_xyz(0., 0., 1.);
+  const t_xyz dS_du10    = t_xyz(0., 0., 1.);
+  const t_xyz dS_du11    = t_xyz(0., 0., 1.);
+  const t_xyz dS_dv00    = t_xyz(1., 0., 0.);
+  const t_xyz dS_dv01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv11    = t_xyz(0., 0., 3.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 1., 1.);
+  const t_xyz d2S_dudv01 = t_xyz(1., 1., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(1., 1., 1.);
+  const t_xyz d2S_dudv11 = t_xyz(1., 1., 0.);
 
   // Perform test.
   return performTest(funcID,
@@ -367,22 +367,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test004(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 0., 10.);
-  const xyz dS_du01    = xyz(0., 0., -10.);
-  const xyz dS_du10    = xyz(0., 0., 10.);
-  const xyz dS_du11    = xyz(0., 0., -10.);
-  const xyz dS_dv00    = xyz(0., 0., 10.);
-  const xyz dS_dv01    = xyz(0., 0., -10.);
-  const xyz dS_dv10    = xyz(0., 0., 10.);
-  const xyz dS_dv11    = xyz(0., 0., -10.);
-  const xyz d2S_dudv00 = xyz(0., 0., 0.);
-  const xyz d2S_dudv01 = xyz(0., 0., 0.);
-  const xyz d2S_dudv10 = xyz(0., 0., 0.);
-  const xyz d2S_dudv11 = xyz(0., 0., 0.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 0., 10.);
+  const t_xyz dS_du01    = t_xyz(0., 0., -10.);
+  const t_xyz dS_du10    = t_xyz(0., 0., 10.);
+  const t_xyz dS_du11    = t_xyz(0., 0., -10.);
+  const t_xyz dS_dv00    = t_xyz(0., 0., 10.);
+  const t_xyz dS_dv01    = t_xyz(0., 0., -10.);
+  const t_xyz dS_dv10    = t_xyz(0., 0., 10.);
+  const t_xyz dS_dv11    = t_xyz(0., 0., -10.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv01 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv11 = t_xyz(0., 0., 0.);
 
   // Perform test.
   return performTest(funcID,
@@ -398,22 +398,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test005(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 0., 0.);
-  const xyz dS_du01    = xyz(0., 0., 0.);
-  const xyz dS_du10    = xyz(0., 0., 0.);
-  const xyz dS_du11    = xyz(0., 0., 0.);
-  const xyz dS_dv00    = xyz(0., 0., 0.);
-  const xyz dS_dv01    = xyz(0., 0., 0.);
-  const xyz dS_dv10    = xyz(0., 0., 0.);
-  const xyz dS_dv11    = xyz(0., 0., 0.);
-  const xyz d2S_dudv00 = xyz(0., 0., 0.);
-  const xyz d2S_dudv01 = xyz(0., 0., 0.);
-  const xyz d2S_dudv10 = xyz(0., 0., 0.);
-  const xyz d2S_dudv11 = xyz(0., 0., 0.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du11    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv00    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv11    = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv01 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv11 = t_xyz(0., 0., 0.);
 
   // Perform test.
   return performTest(funcID,
@@ -429,22 +429,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test006(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 0., 0.);
-  const xyz dS_du01    = xyz(0., 0., 0.);
-  const xyz dS_du10    = xyz(0., 0., 0.);
-  const xyz dS_du11    = xyz(0., 0., 0.);
-  const xyz dS_dv00    = xyz(0., 0., 0.);
-  const xyz dS_dv01    = xyz(0., 0., 0.);
-  const xyz dS_dv10    = xyz(0., 0., 0.);
-  const xyz dS_dv11    = xyz(0., 0., 0.);
-  const xyz d2S_dudv00 = xyz(0., 0., 0.);
-  const xyz d2S_dudv01 = xyz(0., 0., 0.);
-  const xyz d2S_dudv10 = xyz(0., 0., 0.);
-  const xyz d2S_dudv11 = xyz(0., 0., 10.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du11    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv00    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv11    = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv01 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv11 = t_xyz(0., 0., 10.);
 
   // Perform test.
   return performTest(funcID,
@@ -460,22 +460,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test007(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 0., 0.);
-  const xyz dS_du01    = xyz(0., 0., 0.);
-  const xyz dS_du10    = xyz(0., 0., 0.);
-  const xyz dS_du11    = xyz(0., 0., 0.);
-  const xyz dS_dv00    = xyz(0., 0., 0.);
-  const xyz dS_dv01    = xyz(0., 0., 0.);
-  const xyz dS_dv10    = xyz(0., 0., 0.);
-  const xyz dS_dv11    = xyz(0., 0., 0.);
-  const xyz d2S_dudv00 = xyz(0., 0., 0.);
-  const xyz d2S_dudv01 = xyz(0., 0., 0.);
-  const xyz d2S_dudv10 = xyz(0., 0., 0.);
-  const xyz d2S_dudv11 = xyz(0., 0., 50.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_du11    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv00    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv01    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv10    = t_xyz(0., 0., 0.);
+  const t_xyz dS_dv11    = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv01 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv11 = t_xyz(0., 0., 50.);
 
   // Perform test.
   return performTest(funcID,
@@ -491,22 +491,22 @@ mobius::outcome
   mobius::test_MakeBicubicBSurf::test008(const int funcID)
 {
   // Define constraints.
-  const xyz S00        = xyz(0., 0., 0.);
-  const xyz S01        = xyz(3., 0., 0.);
-  const xyz S10        = xyz(0., 3., 0.);
-  const xyz S11        = xyz(4., 3., 0.);
-  const xyz dS_du00    = xyz(0., 1., 0.);
-  const xyz dS_du01    = xyz(0., 5., 0.);
-  const xyz dS_du10    = xyz(5., 0., 0.);
-  const xyz dS_du11    = xyz(1., 1., 1.);
-  const xyz dS_dv00    = xyz(1., 0., 0.);
-  const xyz dS_dv01    = xyz(0., 5., 0.);
-  const xyz dS_dv10    = xyz(5., 0., 0.);
-  const xyz dS_dv11    = xyz(1., 1., 1.);
-  const xyz d2S_dudv00 = xyz(0., 0., 0.);
-  const xyz d2S_dudv01 = xyz(0., 0., 0.);
-  const xyz d2S_dudv10 = xyz(0., 0., 0.);
-  const xyz d2S_dudv11 = xyz(0., 0., 0.);
+  const t_xyz S00        = t_xyz(0., 0., 0.);
+  const t_xyz S01        = t_xyz(3., 0., 0.);
+  const t_xyz S10        = t_xyz(0., 3., 0.);
+  const t_xyz S11        = t_xyz(4., 3., 0.);
+  const t_xyz dS_du00    = t_xyz(0., 1., 0.);
+  const t_xyz dS_du01    = t_xyz(0., 5., 0.);
+  const t_xyz dS_du10    = t_xyz(5., 0., 0.);
+  const t_xyz dS_du11    = t_xyz(1., 1., 1.);
+  const t_xyz dS_dv00    = t_xyz(1., 0., 0.);
+  const t_xyz dS_dv01    = t_xyz(0., 5., 0.);
+  const t_xyz dS_dv10    = t_xyz(5., 0., 0.);
+  const t_xyz dS_dv11    = t_xyz(1., 1., 1.);
+  const t_xyz d2S_dudv00 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv01 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv10 = t_xyz(0., 0., 0.);
+  const t_xyz d2S_dudv11 = t_xyz(0., 0., 0.);
 
   // Perform test.
   return performTest(funcID,

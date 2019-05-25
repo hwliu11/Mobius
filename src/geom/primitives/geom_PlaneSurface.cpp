@@ -46,9 +46,9 @@ mobius::geom_PlaneSurface::geom_PlaneSurface()
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_PlaneSurface::geom_PlaneSurface(const xyz& O,
-                                             const xyz& D1,
-                                             const xyz& D2)
+mobius::geom_PlaneSurface::geom_PlaneSurface(const t_xyz& O,
+                                             const t_xyz& D1,
+                                             const t_xyz& D2)
 //
 : geom_Surface ( ),
   m_fUMin      ( -DBL_MAX ),
@@ -71,7 +71,7 @@ void mobius::geom_PlaneSurface::GetBounds(double& xMin, double& xMax,
                                           double& yMin, double& yMax,
                                           double& zMin, double& zMax) const
 {
-  xyz min_pt, max_pt;
+  t_xyz min_pt, max_pt;
   //
   this->Eval(m_fUMin, m_fVMin, min_pt);
   this->Eval(m_fUMax, m_fVMax, max_pt);
@@ -116,33 +116,33 @@ double mobius::geom_PlaneSurface::GetMaxParameter_V() const
 
 void mobius::geom_PlaneSurface::Eval(const double u,
                                      const double v,
-                                     xyz&         S) const
+                                     t_xyz&       S) const
 {
   S = m_origin + m_D1*u + m_D2*v;
 }
 
 //-----------------------------------------------------------------------------
 
-mobius::ptr<mobius::geom_Line>
+mobius::t_ptr<mobius::geom_Line>
   mobius::geom_PlaneSurface::Iso_U(const double u) const
 {
-  xyz isoOrigin;
+  t_xyz isoOrigin;
   this->Eval(u, 0., isoOrigin);
 
-  ptr<geom_Line> line = new geom_Line(isoOrigin, m_D2);
+  t_ptr<geom_Line> line = new geom_Line(isoOrigin, m_D2);
 
   return line;
 }
 
 //-----------------------------------------------------------------------------
 
-mobius::ptr<mobius::geom_Line>
+mobius::t_ptr<mobius::geom_Line>
   mobius::geom_PlaneSurface::Iso_V(const double v) const
 {
-  xyz isoOrigin;
+  t_xyz isoOrigin;
   this->Eval(0., v, isoOrigin);
 
-  ptr<geom_Line> line = new geom_Line(isoOrigin, m_D1);
+  t_ptr<geom_Line> line = new geom_Line(isoOrigin, m_D1);
 
   return line;
 }

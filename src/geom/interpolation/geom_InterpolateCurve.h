@@ -84,7 +84,7 @@ public:
   //! \param[in] progress   progress notifier.
   //! \param[in] plotter    imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateCurve(const std::vector<xyz>&    points,
+    geom_InterpolateCurve(const std::vector<t_xyz>&  points,
                           const int                  deg,
                           const bspl_ParamsSelection paramsType,
                           const bspl_KnotsSelection  knotsType,
@@ -102,14 +102,14 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateCurve(const std::vector<xyz>& points,
-                          const int               deg,
-                          double*                 pParams,
-                          const int               n,
-                          double*                 pU,
-                          const int               m,
-                          core_ProgressEntry      progress = NULL,
-                          core_PlotterEntry       plotter  = NULL);
+    geom_InterpolateCurve(const std::vector<t_xyz>& points,
+                          const int                 deg,
+                          double*                   pParams,
+                          const int                 n,
+                          double*                   pU,
+                          const int                 m,
+                          core_ProgressEntry        progress = NULL,
+                          core_PlotterEntry         plotter  = NULL);
 
 public:
 
@@ -121,7 +121,7 @@ public:
   //! \param[in] pU         raw pointer to the knot vector.
   //! \param[in] m          knot vector size minus one.
   mobiusGeom_EXPORT void
-    Init(const std::vector<xyz>&    points,
+    Init(const std::vector<t_xyz>&  points,
          const int                  deg,
          const bspl_ParamsSelection paramsType,
          double*                    pU,
@@ -135,12 +135,12 @@ public:
   //! \param[in] pU      manually defined knot vector.
   //! \param[in] m       0-based index of the last knot in the knot vector.
   mobiusGeom_EXPORT void
-    Init(const std::vector<xyz>& points,
-         const int               deg,
-         double*                 pParams,
-         const int               n,
-         double*                 pU,
-         const int               m);
+    Init(const std::vector<t_xyz>& points,
+         const int                 deg,
+         double*                   pParams,
+         const int                 n,
+         double*                   pU,
+         const int                 m);
 
   //! Initializes interpolation tool.
   //! \param[in] points  data points to interpolate.
@@ -150,7 +150,7 @@ public:
   //! \param[in] knotsType  strategy for choosing knot vector for interpolant
   //!                       B-splines.
   mobiusGeom_EXPORT void
-    Init(const std::vector<xyz>&    points,
+    Init(const std::vector<t_xyz>&  points,
          const int                  deg,
          const bspl_ParamsSelection paramsType,
          const bspl_KnotsSelection  knotsType);
@@ -165,9 +165,9 @@ public:
   //! \param[in] knotsType  strategy for choosing knot vector for interpolant
   //!                       B-splines.
   mobiusGeom_EXPORT void
-    Init(const std::vector<xyz>&    points,
-         const xyz&                 D0,
-         const xyz&                 Dn,
+    Init(const std::vector<t_xyz>&  points,
+         const t_xyz&               D0,
+         const t_xyz&               Dn,
          const int                  deg,
          const bspl_ParamsSelection paramsType,
          const bspl_KnotsSelection  knotsType);
@@ -184,11 +184,11 @@ public:
   //! \param[in] knotsType  strategy for choosing knot vector for interpolant
   //!                       B-splines.
   mobiusGeom_EXPORT void
-    Init(const std::vector<xyz>&    points,
-         const xyz&                 D0,
-         const xyz&                 Dn,
-         const xyz&                 D20,
-         const xyz&                 D2n,
+    Init(const std::vector<t_xyz>&  points,
+         const t_xyz&               D0,
+         const t_xyz&               Dn,
+         const t_xyz&               D20,
+         const t_xyz&               D2n,
          const int                  deg,
          const bspl_ParamsSelection paramsType,
          const bspl_KnotsSelection  knotsType);
@@ -220,21 +220,21 @@ public:
   //! \param[out] crv              result.
   //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT static bool
-    Interp(const std::vector<xyz>& points,
-           const int               n,
-           const int               p,
-           const double*           params,
-           const double*           pU,
-           const int               m,
-           const bool              has_start_deriv,
-           const bool              has_end_deriv,
-           const bool              has_start_deriv2,
-           const bool              has_end_deriv2,
-           const xyz&              D0,
-           const xyz&              Dn,
-           const xyz&              D20,
-           const xyz&              D2n,
-           ptr<bcurve>&            crv);
+    Interp(const std::vector<t_xyz>& points,
+           const int                 n,
+           const int                 p,
+           const double*             params,
+           const double*             pU,
+           const int                 m,
+           const bool                has_start_deriv,
+           const bool                has_end_deriv,
+           const bool                has_start_deriv2,
+           const bool                has_end_deriv2,
+           const t_xyz&              D0,
+           const t_xyz&              Dn,
+           const t_xyz&              D20,
+           const t_xyz&              D2n,
+           t_ptr<t_bcurve>&          crv);
 
 public:
 
@@ -247,7 +247,7 @@ public:
 
   //! Accessor for the resulting curve.
   //! \return interpolant curve.
-  const ptr<bcurve>& GetResult() const
+  const t_ptr<t_bcurve>& GetResult() const
   {
     return m_curve;
   }
@@ -300,18 +300,18 @@ private:
 
   int                  m_iDeg;       //!< Degree of interpolant curve.
   ErrCode              m_errCode;    //!< Error code.
-  std::vector<xyz>     m_points;     //!< Points to interpolate.
-  xyz                  m_D0;         //!< Derivative D1 at the first point.
-  xyz                  m_Dn;         //!< Derivative D1 at the last point.
-  xyz                  m_D20;        //!< Derivative D2 at the first point.
-  xyz                  m_D2n;        //!< Derivative D2 at the last point.
+  std::vector<t_xyz>   m_points;     //!< Points to interpolate.
+  t_xyz                m_D0;         //!< Derivative D1 at the first point.
+  t_xyz                m_Dn;         //!< Derivative D1 at the last point.
+  t_xyz                m_D20;        //!< Derivative D2 at the first point.
+  t_xyz                m_D2n;        //!< Derivative D2 at the last point.
   bspl_ParamsSelection m_paramsType; //!< Parameterization type.
   double*              m_pParams;    //!< Parameters externally defined for interpolation.
   int                  m_iNumParams; //!< Number of parameters.
   bspl_KnotsSelection  m_knotsType;  //!< Knots selection type.
   double*              m_pU;         //!< Knot vector externally defined for interpolation.
   int                  m_iNumKnots;  //!< Number of knots.
-  ptr<bcurve>          m_curve;      //!< Interpolant curve.
+  t_ptr<t_bcurve>      m_curve;      //!< Interpolant curve.
 
 };
 

@@ -79,7 +79,7 @@ namespace mobius
     //! Converts Mobius 3D point to OpenCascade 3D point.
     //! \param[in] coords point to convert.
     //! \return converted point.
-    static gp_Pnt GetOpenCascadePnt(const xyz& coords)
+    static gp_Pnt GetOpenCascadePnt(const t_xyz& coords)
     {
       return gp_Pnt( coords.X(), coords.Y(), coords.Z() );
     }
@@ -87,7 +87,7 @@ namespace mobius
     //! Converts Mobius 2D point to OpenCascade 2D point.
     //! \param[in] coords point to convert.
     //! \return converted point.
-    static gp_Pnt2d GetOpenCascadePnt2d(const uv& coords)
+    static gp_Pnt2d GetOpenCascadePnt2d(const t_uv& coords)
     {
       return gp_Pnt2d( coords.U(), coords.V() );
     }
@@ -95,7 +95,7 @@ namespace mobius
     //! Converts Mobius 3D point to OpenCascade 3D vector.
     //! \param[in] coords point to convert.
     //! \return converted vector.
-    static gp_Vec GetOpenCascadeVec(const xyz& coords)
+    static gp_Vec GetOpenCascadeVec(const t_xyz& coords)
     {
       return gp_Vec( coords.X(), coords.Y(), coords.Z() );
     }
@@ -103,61 +103,61 @@ namespace mobius
     //! Converts OpenCascade 3D point to Mobius 3D point.
     //! \param[in] coords point to convert.
     //! \return converted point.
-    static xyz GetMobiusPnt(const gp_Pnt& coords)
+    static t_xyz GetMobiusPnt(const gp_Pnt& coords)
     {
-      return xyz( coords.X(), coords.Y(), coords.Z() );
+      return t_xyz( coords.X(), coords.Y(), coords.Z() );
     }
 
     //! Converts OpenCascade 3D vector to Mobius 3D vector.
     //! \param[in] coords vector to convert.
     //! \return converted triple of coordinates.
-    static xyz GetMobiusVec(const gp_Vec& coords)
+    static t_xyz GetMobiusVec(const gp_Vec& coords)
     {
-      return xyz( coords.X(), coords.Y(), coords.Z() );
+      return t_xyz( coords.X(), coords.Y(), coords.Z() );
     }
 
     //! Converts OpenCascade 2D point to Mobius 2D point.
     //! \param[in] coords point to convert.
     //! \return converted point.
-    static uv GetMobiusPnt2d(const gp_Pnt2d& coords)
+    static t_uv GetMobiusPnt2d(const gp_Pnt2d& coords)
     {
-      return uv( coords.X(), coords.Y() );
+      return t_uv( coords.X(), coords.Y() );
     }
 
     //! Converts Mobius B-curve to OpenCascade B-curve.
     //! \param[in] curve Mobius curve to convert.
     //! \return OpenCascade curve.
     mobiusCascade_EXPORT static Handle(Geom_BSplineCurve)
-      GetOpenCascadeBCurve(const ptr<bcurve>& curve);
+      GetOpenCascadeBCurve(const t_ptr<t_bcurve>& curve);
 
     //! Converts OpenCascade B-curve to Mobius B-curve.
     //! \param[in] curve OpenCascade curve to convert.
     //! \return Mobius curve.
-    mobiusCascade_EXPORT static ptr<bcurve>
+    mobiusCascade_EXPORT static t_ptr<t_bcurve>
       GetMobiusBCurve(const Handle(Geom_BSplineCurve)& curve);
 
     //! Converts Mobius B-surface to OpenCascade B-surface.
     //! \param[in] surface Mobius surface to convert.
     //! \return OpenCascade surface.
     mobiusCascade_EXPORT static Handle(Geom_BSplineSurface)
-      GetOpenCascadeBSurface(const ptr<bsurf>& surface);
+      GetOpenCascadeBSurface(const t_ptr<t_bsurf>& surface);
 
     //! Converts OpenCascade B-surface to Mobius B-surface.
     //! \param[in] surface OpenCascade surface to convert.
     //! \return Mobius surface.
-    mobiusCascade_EXPORT static ptr<bsurf>
+    mobiusCascade_EXPORT static t_ptr<t_bsurf>
       GetMobiusBSurface(const Handle(Geom_BSplineSurface)& surface);
 
     //! Converts Mobius plane to OpenCascade plane.
     //! \param[in] surface Mobius surface to convert.
     //! \return OpenCascade surface.
     mobiusCascade_EXPORT static Handle(Geom_Plane)
-      GetOpenCascadePlane(const ptr<plane>& surface);
+      GetOpenCascadePlane(const t_ptr<t_plane>& surface);
 
     //! Converts OpenCascade plane to Mobius plane.
     //! \param[in] surface OpenCascade surface to convert.
     //! \return Mobius surface.
-    mobiusCascade_EXPORT static ptr<plane>
+    mobiusCascade_EXPORT static t_ptr<t_plane>
       GetMobiusPlane(const Handle(Geom_Plane)& surface);
 
   };

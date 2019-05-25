@@ -67,14 +67,14 @@ public:
     operator()(const int                  np,
                const int                  p,
                const std::vector<double>& UP,
-               const std::vector<xyz>&    Pw,
+               const std::vector<t_xyz>&  Pw,
                const double               u,
                const int                  k,
                const int                  s,
                const int                  r,
                int&                       nq,
                std::vector<double>&       UQ,
-               std::vector<xyz>&          Qw) const;
+               std::vector<t_xyz>&        Qw) const;
 
   //! Implements knot insertion algorithm for surfaces (A5.3). The knot
   //! values can be inserted in U direction or V direction.
@@ -99,23 +99,23 @@ public:
   //!
   //! \return true in case of success, false -- otherwise.
   mobiusBSpl_EXPORT bool
-    operator()(const int                              np,
-               const int                              p,
-               const std::vector<double>&             UP,
-               const int                              mp,
-               const int                              q,
-               const std::vector<double>&             VP,
-               const std::vector< std::vector<xyz> >& Pw,
-               const bspl_ParamDirection              dir,
-               const double                           knot,
-               const int                              k,
-               const int                              s,
-               const int                              r,
-               int&                                   nq,
-               std::vector<double>&                   UQ,
-               int&                                   mq,
-               std::vector<double>&                   VQ,
-               std::vector< std::vector<xyz> >&       Qw) const;
+    operator()(const int                                np,
+               const int                                p,
+               const std::vector<double>&               UP,
+               const int                                mp,
+               const int                                q,
+               const std::vector<double>&               VP,
+               const std::vector< std::vector<t_xyz> >& Pw,
+               const bspl_ParamDirection                dir,
+               const double                             knot,
+               const int                                k,
+               const int                                s,
+               const int                                r,
+               int&                                     nq,
+               std::vector<double>&                     UQ,
+               int&                                     mq,
+               std::vector<double>&                     VQ,
+               std::vector< std::vector<t_xyz> >&       Qw) const;
 
 };
 

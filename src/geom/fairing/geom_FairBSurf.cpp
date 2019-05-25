@@ -103,10 +103,10 @@ namespace mobius {
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBSurf::geom_FairBSurf(const ptr<bsurf>&  surface,
-                                       const double       lambda,
-                                       core_ProgressEntry progress,
-                                       core_PlotterEntry  plotter)
+mobius::geom_FairBSurf::geom_FairBSurf(const t_ptr<t_bsurf>& surface,
+                                       const double          lambda,
+                                       core_ProgressEntry    progress,
+                                       core_PlotterEntry     plotter)
 : core_OPERATOR(progress, plotter)
 {
   m_inputSurf  = surface;
@@ -134,7 +134,8 @@ bool mobius::geom_FairBSurf::Perform()
   const int                  q = m_inputSurf->GetDegree_V();
 
   // Prepare reusable memory blocks for running sub-routines efficiently.
-  ptr<alloc2d> sharedAlloc = new alloc2d;
+  t_ptr<t_alloc2d> sharedAlloc = new t_alloc2d;
+  //
   sharedAlloc->Allocate(3, p + 1, true); // memBlockSurf_EffectiveNDersUResult
   sharedAlloc->Allocate(3, q + 1, true); // memBlockSurf_EffectiveNDersVResult
   sharedAlloc->Allocate(2, 3,     true); // memBlockSurf_EffectiveNDersUInternal
@@ -233,7 +234,7 @@ bool mobius::geom_FairBSurf::Perform()
   m_resultSurf = m_inputSurf->Copy();
 
   // Apply perturbations to poles.
-  const std::vector< std::vector<xyz> >& poles = m_resultSurf->GetPoles();
+  const std::vector< std::vector<t_xyz> >& poles = m_resultSurf->GetPoles();
   //
   for ( int r = 0; r < dim; ++r )
   {
@@ -241,8 +242,8 @@ bool mobius::geom_FairBSurf::Perform()
     int i, j;
     this->GetIJ(k, i, j);
 
-    const xyz& P = poles[i][j];
-    xyz        D = xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
+    const t_xyz& P = poles[i][j];
+    t_xyz        D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
     //
     m_resultSurf->SetPole(i, j, P + D);
   }
@@ -254,14 +255,14 @@ bool mobius::geom_FairBSurf::Perform()
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_FairBSurf::prepareNk(ptr<alloc2d> alloc)
+void mobius::geom_FairBSurf::prepareNk(t_ptr<t_alloc2d> alloc)
 {
   const int nPoles = m_iNumPolesU*m_iNumPolesV;
 
   for ( int k = 0; k < nPoles; ++k )
   {
     // Prepare evaluator for N_k(u,v).
-    ptr<geom_BSurfNk>
+    t_ptr<geom_BSurfNk>
       Nk = new geom_BSurfNk(m_inputSurf, k, alloc);
     //
     m_Nk.push_back(Nk);

@@ -84,11 +84,11 @@ public:
 
 private:
 
-  static bool verifyMeshContents(const ptr<poly_Mesh>& mesh,
-                                 const int             refNumVertices,
-                                 const int             refNumEdges,
-                                 const int             refNumTriangles,
-                                 const int             refNumQuads);
+  static bool verifyMeshContents(const t_ptr<poly_Mesh>& mesh,
+                                 const int               refNumVertices,
+                                 const int               refNumEdges,
+                                 const int               refNumTriangles,
+                                 const int               refNumQuads);
 
   static outcome testReadSTL(const int   funcID,
                              const char* filenameShort,

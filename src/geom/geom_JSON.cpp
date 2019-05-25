@@ -53,7 +53,7 @@ mobius::geom_JSON::~geom_JSON()
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_JSON::DumpBCurve(const core_Ptr<bcurve>& curve)
+void mobius::geom_JSON::DumpBCurve(const t_ptr<t_bcurve>& curve)
 {
   std::stringstream out;
 
@@ -95,14 +95,14 @@ void mobius::geom_JSON::DumpBCurve(const core_Ptr<bcurve>& curve)
   out << "]";
 
   // Dump poles.
-  const std::vector<xyz>& poles = curve->GetPoles();
+  const std::vector<t_xyz>& poles = curve->GetPoles();
   //
   out << ",\n        num_poles: " << curve->GetNumOfPoles();
   out << ",\n        poles: [";
   //
   for ( int uIdx = 0; uIdx < int( poles.size() ); ++uIdx )
   {
-    const xyz& P = poles[uIdx];
+    const t_xyz& P = poles[uIdx];
 
     out << "[" << P.X() << ", " << P.Y() << ", " << P.Z() << "]";
 
@@ -120,7 +120,7 @@ void mobius::geom_JSON::DumpBCurve(const core_Ptr<bcurve>& curve)
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface)
+void mobius::geom_JSON::DumpBSurface(const t_ptr<t_bsurf>& surface)
 {
   std::stringstream out;
 
@@ -183,7 +183,7 @@ void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface)
   out << "]";
 
   // Dump poles.
-  const std::vector< std::vector<xyz> >& poles = surface->GetPoles();
+  const std::vector< std::vector<t_xyz> >& poles = surface->GetPoles();
   //
   out << ",\n        num_poles_in_U_axis: " << surface->GetNumOfPoles_U();
   out << ",\n        num_poles_in_V_axis: " << surface->GetNumOfPoles_V();
@@ -194,7 +194,7 @@ void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface)
     out << "\n            u" << uIdx << ": [";
     for ( int vIdx = 0; vIdx < int( poles[0].size() ); ++vIdx )
     {
-      const xyz& P = poles[uIdx][vIdx];
+      const t_xyz& P = poles[uIdx][vIdx];
 
       out << "[" << P.X() << ", " << P.Y() << ", " << P.Z() << "]";
 
@@ -216,7 +216,7 @@ void mobius::geom_JSON::DumpBSurface(const core_Ptr<bsurf>& surface)
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_JSON::ExtractBCurve(core_Ptr<bcurve>& curve) const
+bool mobius::geom_JSON::ExtractBCurve(t_ptr<t_bcurve>& curve) const
 {
   // Extract degree.
   int p = 0;
@@ -229,18 +229,18 @@ bool mobius::geom_JSON::ExtractBCurve(core_Ptr<bcurve>& curve) const
     return false;
 
   // Extract poles.
-  std::vector<xyz> poles;
+  std::vector<t_xyz> poles;
   if ( !this->ExtractVector3d("poles", poles) )
     return false;
 
   // Construct B-curve.
-  curve = new bcurve(poles, U, p);
+  curve = new t_bcurve(poles, U, p);
   return true;
 }
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_JSON::ExtractBSurface(core_Ptr<bsurf>& surface) const
+bool mobius::geom_JSON::ExtractBSurface(t_ptr<t_bsurf>& surface) const
 {
   // Extract degrees.
   int p = 0, q = 0;
@@ -257,11 +257,11 @@ bool mobius::geom_JSON::ExtractBSurface(core_Ptr<bsurf>& surface) const
     return false;
 
   // Extract poles.
-  std::vector< std::vector<xyz> > poles;
+  std::vector< std::vector<t_xyz> > poles;
   if ( !this->ExtractGrid3d("poles", poles) )
     return false;
 
   // Costruct B-surface.
-  surface = new bsurf(poles, U, V, p, q);
+  surface = new t_bsurf(poles, U, V, p, q);
   return true;
 }

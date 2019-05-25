@@ -36,27 +36,27 @@
 
 //-----------------------------------------------------------------------------
 
-bool mobius::bspl_Decompose::operator()(const int                        n,
-                                        const int                        p,
-                                        const std::vector<double>&       U,
-                                        const std::vector<xyz>&          Pw,
-                                        int&                             nb,
-                                        std::vector< std::vector<xyz> >& Qw,
-                                        std::vector<int>&                breakpoints) const
+bool mobius::bspl_Decompose::operator()(const int                          n,
+                                        const int                          p,
+                                        const std::vector<double>&         U,
+                                        const std::vector<t_xyz>&          Pw,
+                                        int&                               nb,
+                                        std::vector< std::vector<t_xyz> >& Qw,
+                                        std::vector<int>&                  breakpoints) const
 {
   const int m = n + p + 1;
   int       a = p;
   int       b = p + 1;
 
   // Dynamically allocate an array for alphas.
-  ptr<alloc1d> localAlloc = new alloc1d;
+  t_ptr<t_alloc1d> localAlloc = new t_alloc1d;
   //
   double* alphas = localAlloc->Allocate(p, true);
 
   // Prepare array for control points.
   nb = 0;
   //
-  Qw.push_back( std::vector<xyz>() );
+  Qw.push_back( std::vector<t_xyz>() );
   //
   for ( int i = 0; i <= p; ++i )
     Qw[nb].push_back( Pw[i] );
@@ -97,7 +97,7 @@ bool mobius::bspl_Decompose::operator()(const int                        n,
           // Enlarge output collection.
           if ( Qw.size() <= nb + 1 )
           {
-            Qw.push_back( std::vector<xyz>() );
+            Qw.push_back( std::vector<t_xyz>() );
             Qw[nb + 1].resize(p + 1);
           }
 

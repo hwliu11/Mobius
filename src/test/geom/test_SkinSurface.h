@@ -96,12 +96,12 @@ private:
   //! \param[in] surfRef  reference surface to verify the result.
   //!
   //! \return true in case of success, false -- otherwise.
-  static bool runtest(const std::vector< ptr<bcurve> >& sections,
-                      const std::vector<xyz>&           D1lead,
-                      const std::vector<xyz>&           D1tail,
-                      const bool                        unify,
-                      const int                         degV,
-                      const ptr<bsurf>&                 surfRef);
+  static bool runtest(const std::vector< t_ptr<t_bcurve> >& sections,
+                      const std::vector<t_xyz>&             D1lead,
+                      const std::vector<t_xyz>&             D1tail,
+                      const bool                            unify,
+                      const int                             degV,
+                      const t_ptr<t_bsurf>&                 surfRef);
 
 private:
 

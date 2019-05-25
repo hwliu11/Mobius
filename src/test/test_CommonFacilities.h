@@ -46,7 +46,7 @@ public:
 public:
 
   //! \return single instance of facilities.
-  static ptr<test_CommonFacilities> Instance();
+  static t_ptr<test_CommonFacilities> Instance();
 
 private:
 

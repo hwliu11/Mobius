@@ -51,7 +51,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
                                              const int                  order,
                                              double**                   ders) const
 {
-  ptr<alloc2d> localAlloc;
+  t_ptr<t_alloc2d> localAlloc;
 
   // Prepare working arrays:
   //
@@ -115,7 +115,7 @@ void mobius::bspl_EffectiveNDers::operator()(const double               u,
   double** a;
   if ( m_pAlloc.IsNull() )
   {
-    localAlloc = new alloc2d;
+    localAlloc = new t_alloc2d;
     a = localAlloc->Allocate(2, order+1, true); // Two working rows
   }
   else

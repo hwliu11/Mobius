@@ -45,9 +45,9 @@
 //! \param pnt            [in]  point to split the line by.
 //! \param splitting_done [out] true in case of success, false -- otherwise.
 //! \param pnt_belong     [out] true if the passed point belongs to the line.
-void mobius::geom_SectionLine::Split(const xyz& pnt,
-                                     bool&      splitting_done,
-                                     bool&      pnt_belongs)
+void mobius::geom_SectionLine::Split(const t_xyz& pnt,
+                                     bool&        splitting_done,
+                                     bool&        pnt_belongs)
 {
   const int pnt_idx = this->find_index(pnt);
 
@@ -67,11 +67,11 @@ void mobius::geom_SectionLine::Split(const xyz& pnt,
 //! slices are returned in the order of the natural line's orientation.
 //! \param idx            [in]  index of the point to split the line by.
 //! \param splitting_done [out] true in case of success, false -- otherwise.
-void mobius::geom_SectionLine::Split(const size_t idx,
-                                     bool&        splitting_done)
+void mobius::geom_SectionLine::Split(const int idx,
+                                     bool&     splitting_done)
 {
-  ptr<geom_SectionLine> sct_ptr = this,
-                              slice_before, slice_after;
+  t_ptr<geom_SectionLine> sct_ptr = this,
+                          slice_before, slice_after;
   Split(sct_ptr, idx, slice_before, slice_after, splitting_done);
 
   this->Slices.clear();
@@ -84,17 +84,17 @@ void mobius::geom_SectionLine::Split(const size_t idx,
 //! original section) are pushed to the output collection.
 //! \param pts            [in]  points to split by.
 //! \param splitting_done [out] true in case of success, false -- otherwise.
-void mobius::geom_SectionLine::Split(const std::vector<xyz>& pts,
-                                     bool&                   splitting_done)
+void mobius::geom_SectionLine::Split(const std::vector<t_xyz>& pts,
+                                     bool&                     splitting_done)
 {
   // Find indices of all points
-  std::vector<size_t> indices;
+  std::vector<int> indices;
   for ( size_t p = 0; p < pts.size(); ++p )
   {
-    const xyz& pnt = pts[p];
+    const t_xyz& pnt = pts[p];
     const int idx = this->find_index(pnt);
     if ( idx != -1 )
-      indices.push_back( (size_t) idx );
+      indices.push_back(idx);
   }
 
   // Sort indices so that the points are in the natural section's order
@@ -104,9 +104,10 @@ void mobius::geom_SectionLine::Split(const std::vector<xyz>& pts,
   this->Slices.clear();
 
   // Split section point by point
-  ptr<geom_SectionLine> slice_before,
-                        slice_after,
-                        current = this;
+  t_ptr<geom_SectionLine> slice_before,
+                          slice_after,
+                          current = this;
+  //
   for ( int p = 0; p < int( indices.size() ); ++p )
   {
     const int idx_in_slice = find_index( current, this->Pts->GetPoint(indices[p]) );
@@ -127,10 +128,10 @@ void mobius::geom_SectionLine::Split(const std::vector<xyz>& pts,
 //! original section) are pushed to the output collection.
 //! \param pts            [in]  points to split by.
 //! \param splitting_done [out] true in case of success, false -- otherwise.
-void mobius::geom_SectionLine::Split(const std::vector<size_t>& indices,
-                                     bool&                      splitting_done)
+void mobius::geom_SectionLine::Split(const std::vector<int>& indices,
+                                     bool&                   splitting_done)
 {
-  std::vector<xyz> pts;
+  std::vector<t_xyz> pts;
   for ( int i = 0; i < int( indices.size() ); ++i )
     pts.push_back( this->Pts->GetPoint(indices[i]) );
 
@@ -163,10 +164,10 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
     return;
   }
 
-  const ptr<bcurve>& crv = InterpCrv.GetResult();
+  const t_ptr<t_bcurve>& crv = InterpCrv.GetResult();
 
-  ptr<geom_SectionLine> slice_before = new geom_SectionLine(this->ID, new pcloud);
-  ptr<geom_SectionLine> slice_after  = new geom_SectionLine(this->ID, new pcloud);
+  t_ptr<geom_SectionLine> slice_before = new geom_SectionLine(this->ID, new t_pcloud);
+  t_ptr<geom_SectionLine> slice_after  = new geom_SectionLine(this->ID, new t_pcloud);
 
   //-------------------------------------------------------
   // Generate new sections with uniform point distribution
@@ -184,7 +185,7 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
       if ( fabs(u - uMax) < 1.0e-10 )
         u = uMax; // Just to compensate round off errors
 
-      xyz C;
+      t_xyz C;
       crv->Eval(u, C);
       slice_before->Pts->AddPoint(C);
     }
@@ -202,7 +203,7 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
       if ( fabs(u - uMax) < 1.0e-10 )
         u = uMax; // Just to compensate round off errors
 
-      xyz C;
+      t_xyz C;
       crv->Eval(u, C);
       slice_after->Pts->AddPoint(C);
     }
@@ -219,15 +220,15 @@ void mobius::geom_SectionLine::SplitAndDiscrete(const double t,
 //! If there is just one point, the line is simply split in two slices.
 //! \param pts          [in]  break points.
 //! \param cutting_done [out] true in case of success, false -- otherwise.
-void mobius::geom_SectionLine::Cut(const std::vector<xyz>& pts,
-                                   bool&                   cutting_done)
+void mobius::geom_SectionLine::Cut(const std::vector<t_xyz>& pts,
+                                   bool&                     cutting_done)
 {
-  std::vector<size_t> belonging_indices;
+  std::vector<int> belonging_indices;
   for ( size_t p = 0; p < pts.size(); ++p )
   {
     const int p_idx = this->find_index(pts[p]);
     if ( p_idx != -1 )
-      belonging_indices.push_back( (size_t) p_idx );
+      belonging_indices.push_back(p_idx);
   }
 
   // No points, do nothing
@@ -240,7 +241,7 @@ void mobius::geom_SectionLine::Cut(const std::vector<xyz>& pts,
   // One point leads to simple splitting
   if ( belonging_indices.size() == 1 )
   {
-    ptr<geom_SectionLine> slice_before, slice_after;
+    t_ptr<geom_SectionLine> slice_before, slice_after;
     this->Split(belonging_indices[0], cutting_done);
     return;
   }
@@ -255,7 +256,7 @@ void mobius::geom_SectionLine::Cut(const std::vector<xyz>& pts,
   }
 
   // Clean up slices storing intermediate collection in local variable
-  std::vector< ptr<geom_SectionLine> > pre_slices = this->Slices;
+  std::vector< t_ptr<geom_SectionLine> > pre_slices = this->Slices;
   this->Slices.clear();
 
   // Ok
@@ -285,7 +286,7 @@ void mobius::geom_SectionLine::InterpolateAndDiscrete(const int num_pts,
   // Generate new uniform point distribution
   //-----------------------------------------
 
-  this->Pts = new pcloud;
+  this->Pts = new t_pcloud;
 
   const double uMin = this->Curve->GetMinParameter();
   const double uMax = this->Curve->GetMaxParameter();
@@ -297,7 +298,7 @@ void mobius::geom_SectionLine::InterpolateAndDiscrete(const int num_pts,
     if ( fabs(u - uMax) < 1.0e-10 )
       u = uMax; // Just to compensate round off errors
 
-    xyz C;
+    t_xyz C;
     this->Curve->Eval(u, C);
     this->Pts->AddPoint(C);
   }
@@ -308,7 +309,7 @@ void mobius::geom_SectionLine::InterpolateAndDiscrete(const int num_pts,
 //! \param num_pts [in] number of points to use.
 void mobius::geom_SectionLine::Discrete(const int num_pts)
 {
-  this->Pts = new pcloud;
+  this->Pts = new t_pcloud;
   if ( this->Curve.IsNull() )
     return;
 
@@ -322,7 +323,7 @@ void mobius::geom_SectionLine::Discrete(const int num_pts)
     if ( fabs(u - uMax) < 1.0e-10 )
       u = uMax; // Just to compensate round off errors
 
-    xyz C;
+    t_xyz C;
     this->Curve->Eval(u, C);
     this->Pts->AddPoint(C);
   }
@@ -362,16 +363,16 @@ void mobius::geom_SectionLine::Interpolate(const int deg,
 //! \param num_segments [in]  desired number of segments.
 //! \param joints       [out] connection of joint points.
 //! \return true/false.
-bool mobius::geom_SectionLine::IsChainOf(const int         num_segments,
-                                         std::vector<xyz>& joints) const
+bool mobius::geom_SectionLine::IsChainOf(const int           num_segments,
+                                         std::vector<t_xyz>& joints) const
 {
   if ( (int) this->Slices.size() != num_segments )
     return false;
 
   for ( size_t s = 0; s < this->Slices.size() - 1; ++s )
   {
-    const xyz& A = this->Slices[s]->Pts->GetPoint(this->Slices[s]->Pts->GetNumberOfPoints() - 1);
-    const xyz& B = this->Slices[s + 1]->Pts->GetPoint(0);
+    const t_xyz& A = this->Slices[s]->Pts->GetPoint(this->Slices[s]->Pts->GetNumberOfPoints() - 1);
+    const t_xyz& B = this->Slices[s + 1]->Pts->GetPoint(0);
 
     if ( !(A - B).IsOrigin( core_Precision::Resolution3D()) )
       return false;
@@ -390,11 +391,11 @@ bool mobius::geom_SectionLine::IsChainOf(const int         num_segments,
 //! \param slice_before   [out] section slice preceding the point.
 //! \param slice_after    [out] section slice after the point.
 //! \param splitting_done [out] true in case of success, false -- otherwise.
-void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
-                                     const size_t                 idx,
-                                     ptr<geom_SectionLine>&       slice_before,
-                                     ptr<geom_SectionLine>&       slice_after,
-                                     bool&                        splitting_done)
+void mobius::geom_SectionLine::Split(const t_ptr<geom_SectionLine>& source,
+                                     const size_t                   idx,
+                                     t_ptr<geom_SectionLine>&       slice_before,
+                                     t_ptr<geom_SectionLine>&       slice_after,
+                                     bool&                          splitting_done)
 {
   const size_t n_pts = source->Pts->GetNumberOfPoints();
 
@@ -406,12 +407,12 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
   }
 
   // Construct slice before the point
-  slice_before = new geom_SectionLine(source->ID, new pcloud);
+  slice_before = new geom_SectionLine(source->ID, new t_pcloud);
   for ( int p = 0; p <= idx; ++p )
     slice_before->Pts->AddPoint( source->Pts->GetPoint(p) );
 
   // Construct slice after the point
-  slice_after = new geom_SectionLine(source->ID, new pcloud);
+  slice_after = new geom_SectionLine(source->ID, new t_pcloud);
   for ( int p = idx; p < n_pts; ++p )
     slice_after->Pts->AddPoint( source->Pts->GetPoint(p) );
 
@@ -422,12 +423,12 @@ void mobius::geom_SectionLine::Split(const ptr<geom_SectionLine>& source,
 //! Finds index of the point in the section line by coordinates.
 //! \param pnt [in] point to locate in the line.
 //! \return 0-based index or -1 if the point was not found.
-int mobius::geom_SectionLine::find_index(const xyz& pnt) const
+int mobius::geom_SectionLine::find_index(const t_xyz& pnt) const
 {
   const double prec = core_Precision::Resolution3D();
   for ( int p = 0; p < this->Pts->GetNumberOfPoints(); ++p )
   {
-    const xyz& sct_pt = this->Pts->GetPoint(p);
+    const t_xyz& sct_pt = this->Pts->GetPoint(p);
     if ( (sct_pt - pnt).Modulus() < prec )
       return (int) p;
   }
@@ -438,13 +439,13 @@ int mobius::geom_SectionLine::find_index(const xyz& pnt) const
 //! \param source [in] section line to analyze.
 //! \param pnt    [in] point to locate in the line.
 //! \return 0-based index or -1 if the point was not found.
-int mobius::geom_SectionLine::find_index(const ptr<geom_SectionLine>& source,
-                                         const xyz&                         pnt)
+int mobius::geom_SectionLine::find_index(const t_ptr<geom_SectionLine>& source,
+                                         const t_xyz&                   pnt)
 {
   const double prec = core_Precision::Resolution3D();
   for ( int p = 0; p < source->Pts->GetNumberOfPoints(); ++p )
   {
-    const xyz& sct_pt = source->Pts->GetPoint(p);
+    const t_xyz& sct_pt = source->Pts->GetPoint(p);
     if ( (sct_pt - pnt).Modulus() < prec )
       return (int) p;
   }

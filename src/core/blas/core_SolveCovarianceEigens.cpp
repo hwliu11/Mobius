@@ -68,11 +68,11 @@ mobius::core_SolveCovarianceEigens::~core_SolveCovarianceEigens()
 
 //-----------------------------------------------------------------------------
 
-bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
-                                                    xyz&                    center,
-                                                    xyz&                    Dx,
-                                                    xyz&                    Dy,
-                                                    xyz&                    Dz)
+bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<t_xyz>& pts,
+                                                    t_xyz&                    center,
+                                                    t_xyz&                    Dx,
+                                                    t_xyz&                    Dy,
+                                                    t_xyz&                    Dz)
 {
   const size_t nPts = pts.size();
 
@@ -80,7 +80,7 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
    *  Calculate mean point
    * ====================== */
 
-  xyz mu;
+  t_xyz mu;
   for ( size_t i = 0; i < nPts; ++i )
   {
     mu += pts[i];
@@ -102,8 +102,8 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
 
   for ( int i = 0; i < nPts; ++i )
   {
-    const xyz& p      = pts[i];
-    xyz        p_dash = p - mu;
+    const t_xyz& p      = pts[i];
+    t_xyz        p_dash = p - mu;
 
     for ( int j = 0; j <= 2; ++j )
     {
@@ -134,9 +134,9 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
   Eigen::Vector3cd v2 = EigenSolver.eigenvectors().col(1);
   Eigen::Vector3cd v3 = EigenSolver.eigenvectors().col(2);
 
-  xyz V[3] = { xyz( v1.x().real(), v1.y().real(), v1.z().real() ),
-               xyz( v2.x().real(), v2.y().real(), v2.z().real() ),
-               xyz( v3.x().real(), v3.y().real(), v3.z().real() ) };
+  t_xyz V[3] = { t_xyz( v1.x().real(), v1.y().real(), v1.z().real() ),
+                 t_xyz( v2.x().real(), v2.y().real(), v2.z().real() ),
+                 t_xyz( v3.x().real(), v3.y().real(), v3.z().real() ) };
   //
   std::vector< std::pair<double, int> >
     lambda { std::pair<double, int>( EigenSolver.eigenvalues()(0).real(), 0 ),
@@ -145,9 +145,9 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
   //
   std::sort(lambda.begin(), lambda.end(), covariance::compare);
   //
-  xyz vec_X( V[lambda[0].second] );
-  xyz vec_Y( V[lambda[1].second] );
-  xyz vec_Z( V[lambda[2].second] );
+  t_xyz vec_X( V[lambda[0].second] );
+  t_xyz vec_Y( V[lambda[1].second] );
+  t_xyz vec_Z( V[lambda[2].second] );
   //
   if ( (vec_X ^ vec_Y).Modulus() < core_Precision::Resolution3D() ||
        (vec_X ^ vec_Z).Modulus() < core_Precision::Resolution3D() ||
@@ -164,7 +164,7 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<xyz>& pts,
   //
   if ( ang < 0 ) // Flip
   {
-    xyz tmp = vec_X;
+    t_xyz tmp = vec_X;
     vec_X = vec_Y;
     vec_Y = tmp;
   }

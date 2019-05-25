@@ -51,7 +51,7 @@ class geom_VectorField : public core_OBJECT
 public:
 
   mobiusGeom_EXPORT
-    geom_VectorField(const ptr<pcloud>& cloud);
+    geom_VectorField(const t_ptr<t_pcloud>& cloud);
 
   mobiusGeom_EXPORT virtual
     ~geom_VectorField();
@@ -63,19 +63,19 @@ public:
 
 public:
 
-  mobiusGeom_EXPORT ptr<geom_VectorField>
+  mobiusGeom_EXPORT t_ptr<geom_VectorField>
     Copy() const;
 
-  mobiusGeom_EXPORT const ptr<pcloud>&
+  mobiusGeom_EXPORT const t_ptr<t_pcloud>&
     GetCloud() const;
 
-  mobiusGeom_EXPORT ptr<pcloud>&
+  mobiusGeom_EXPORT t_ptr<t_pcloud>&
     ChangeCloud();
 
   mobiusGeom_EXPORT void
-    AddVector(const size_t pnt_index, const xyz& vector);
+    AddVector(const size_t pnt_index, const t_xyz& vector);
 
-  mobiusGeom_EXPORT xyz
+  mobiusGeom_EXPORT t_xyz
     GetVector(const size_t pnt_index) const;
 
   mobiusGeom_EXPORT bool
@@ -84,15 +84,15 @@ public:
 private:
 
   //! Positions for vectors.
-  ptr<pcloud> m_cloud;
+  t_ptr<t_pcloud> m_cloud;
 
   //! Collection of vectors associated with points.
-  std::map<size_t, xyz> m_vectors;
+  std::map<size_t, t_xyz> m_vectors;
 
 };
 
 //! Handy shortcut.
-typedef geom_VectorField vector_field;
+typedef geom_VectorField t_vector_field;
 
 };
 

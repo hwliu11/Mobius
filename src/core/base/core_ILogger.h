@@ -59,7 +59,7 @@ namespace mobius {
 //! \ingroup MOBIUS_CORE
 //!
 //! Type definition for logging arguments of heterogeneous types.
-typedef std::vector< ptr<core_VarBase> > core_MsgArguments;
+typedef std::vector< t_ptr<core_VarBase> > core_MsgArguments;
 
 //-----------------------------------------------------------------------------
 
@@ -103,7 +103,7 @@ struct core_Msg
   std::string MsgKey;
 
   //! Timestamp.
-  ptr<core_TimeStamp> TimeStamp;
+  t_ptr<core_TimeStamp> TimeStamp;
 
   //! Arguments for logging message.
   core_MsgArguments Arguments;
@@ -118,11 +118,11 @@ struct core_Msg
   //! \param[in] msgKey    message localization key.
   //! \param[in] arguments arguments for the logging message if any.
   //! \param[in] timeStamp timestamp.
-  core_Msg(const core_MsgPriority     priority,
-           const core_MsgSeverity     severity,
-           const std::string&         msgKey,
-           const core_MsgArguments&   arguments = core_MsgArguments(),
-           const ptr<core_TimeStamp>& timeStamp = NULL)
+  core_Msg(const core_MsgPriority       priority,
+           const core_MsgSeverity       severity,
+           const std::string&           msgKey,
+           const core_MsgArguments&     arguments = core_MsgArguments(),
+           const t_ptr<core_TimeStamp>& timeStamp = NULL)
   : Priority  (priority),
     Severity  (severity),
     MsgKey    (msgKey),
@@ -147,28 +147,28 @@ public:
 public:
 
   virtual void
-    SendInfo(const std::string&         msgKey,
-             const core_MsgPriority     priority  = MsgPriority_Normal,
-             const core_MsgArguments&   arguments = core_MsgArguments(),
-             const ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+    SendInfo(const std::string&           msgKey,
+             const core_MsgPriority       priority  = MsgPriority_Normal,
+             const core_MsgArguments&     arguments = core_MsgArguments(),
+             const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
 
   virtual void
-    SendNotice(const std::string&         msgKey,
-               const core_MsgPriority     priority  = MsgPriority_Normal,
-               const core_MsgArguments&   arguments = core_MsgArguments(),
-               const ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+    SendNotice(const std::string&           msgKey,
+               const core_MsgPriority       priority  = MsgPriority_Normal,
+               const core_MsgArguments&     arguments = core_MsgArguments(),
+               const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
 
   virtual void
-    SendWarning(const std::string&         msgKey,
-                const core_MsgPriority     priority  = MsgPriority_Normal,
-                const core_MsgArguments&   arguments = core_MsgArguments(),
-                const ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+    SendWarning(const std::string&           msgKey,
+                const core_MsgPriority       priority  = MsgPriority_Normal,
+                const core_MsgArguments&     arguments = core_MsgArguments(),
+                const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
 
   virtual void
-    SendError(const std::string&         msgKey,
-              const core_MsgPriority     priority  = MsgPriority_Normal,
-              const core_MsgArguments&   arguments = core_MsgArguments(),
-              const ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+    SendError(const std::string&           msgKey,
+              const core_MsgPriority       priority  = MsgPriority_Normal,
+              const core_MsgArguments&     arguments = core_MsgArguments(),
+              const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
 
 public:
 
@@ -268,7 +268,7 @@ public:
     }
     else
     {
-      ptr<core_VarString> var = new core_VarString(str);
+      t_ptr<core_VarString> var = new core_VarString(str);
       m_args.push_back(var);
     }
 
@@ -286,7 +286,7 @@ public:
     if ( !m_bIsMsgInitialized )
       throw core_excMsgInit();
 
-    ptr<core_VarInt> var = new core_VarInt(val);
+    t_ptr<core_VarInt> var = new core_VarInt(val);
     m_args.push_back(var);
 
     return *this;
@@ -303,7 +303,7 @@ public:
     if ( !m_bIsMsgInitialized )
       throw core_excMsgInit();
 
-    ptr<core_VarReal> var = new core_VarReal(val);
+    t_ptr<core_VarReal> var = new core_VarReal(val);
     m_args.push_back(var);
 
     return *this;
@@ -319,7 +319,7 @@ public:
 
   //! Pushes the streamed message to the passed Logger.
   //! \param[in] logger target Logger.
-  void operator>>(const ptr<core_ILogger>& logger)
+  void operator>>(const t_ptr<core_ILogger>& logger)
   {
     if ( m_bIsDummy )
       return;

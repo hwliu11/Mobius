@@ -34,11 +34,11 @@
 //! Constructor.
 //! \param origin [in] origin of line.
 //! \param dir    [in] direction vector for line.
-mobius::geom_Line::geom_Line(const xyz& origin,
-                             const xyz& dir)
-: geom_Curve(),
-  m_origin(origin),
-  m_dir( dir.Normalized() )
+mobius::geom_Line::geom_Line(const t_xyz& origin,
+                             const t_xyz& dir)
+: geom_Curve ( ),
+  m_origin   ( origin ),
+  m_dir      ( dir.Normalized() )
 {
 }
 
@@ -86,7 +86,7 @@ double mobius::geom_Line::GetMaxParameter() const
 //! \param u [in]  parameter value to evaluate curve for.
 //! \param P [out] 3D point corresponding to the given parameter on curve.
 void mobius::geom_Line::Eval(const double u,
-                             xyz&         P) const
+                             t_xyz&       P) const
 {
   P = m_origin + m_dir*u;
 }

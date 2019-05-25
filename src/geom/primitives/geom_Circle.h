@@ -68,12 +68,12 @@ public:
 
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
-         xyz&         P) const override;
+         t_xyz&       P) const override;
 
   //! \todo NYI Eval_D1() method.
   virtual void
     Eval_D1(const double,
-            xyz&) const override {}
+            t_xyz&) const override {}
 
 public:
 
@@ -86,9 +86,9 @@ public:
 
   //! Accessor for the center.
   //! \return center of the circle.
-  xyz GetCenter() const
+  t_xyz GetCenter() const
   {
-    return m_tChain.Apply( xyz::O() );
+    return m_tChain.Apply( t_xyz::O() );
   }
 
 private:

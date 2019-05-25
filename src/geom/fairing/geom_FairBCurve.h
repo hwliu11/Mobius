@@ -55,10 +55,10 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_FairBCurve(const ptr<bcurve>& curve,
-                    const double       lambda,
-                    core_ProgressEntry progress,
-                    core_PlotterEntry  plotter);
+    geom_FairBCurve(const t_ptr<t_bcurve>& curve,
+                    const double           lambda,
+                    core_ProgressEntry     progress,
+                    core_PlotterEntry      plotter);
 
 public:
 
@@ -70,7 +70,7 @@ public:
 public:
 
   //! \return resulting curve.
-  const ptr<bcurve>& GetResult() const
+  const t_ptr<t_bcurve>& GetResult() const
   {
     return m_resultCurve;
   }
@@ -78,10 +78,10 @@ public:
 protected:
 
   //! Curve to fair.
-  ptr<bcurve> m_inputCurve;
+  t_ptr<t_bcurve> m_inputCurve;
 
   //! Result of fairing.
-  ptr<bcurve> m_resultCurve;
+  t_ptr<t_bcurve> m_resultCurve;
 
   //! Fairing coefficient.
   double m_fLambda;

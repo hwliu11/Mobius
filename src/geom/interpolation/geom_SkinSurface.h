@@ -94,11 +94,11 @@ public:
   //! \param[in] progress    progress notifier.
   //! \param[in] plotter     imperative plotter.
   mobiusGeom_EXPORT
-    geom_SkinSurface(const std::vector< ptr<bcurve> >& curves,
-                     const int                         deg_V,
-                     const bool                        unifyCurves,
-                     core_ProgressEntry                progress = NULL,
-                     core_PlotterEntry                 plotter  = NULL);
+    geom_SkinSurface(const std::vector< t_ptr<t_bcurve> >& curves,
+                     const int                             deg_V,
+                     const bool                            unifyCurves,
+                     core_ProgressEntry                    progress = NULL,
+                     core_PlotterEntry                     plotter  = NULL);
 
 public:
 
@@ -107,23 +107,23 @@ public:
   //! \param[in] deg_V       degree in V curvilinear direction.
   //! \param[in] unifyCurves indicates whether to unify curves before skinning.
   mobiusGeom_EXPORT void
-    Init(const std::vector< ptr<bcurve> >& curves,
-         const int                         deg_V,
-         const bool                        unifyCurves);
+    Init(const std::vector< t_ptr<t_bcurve> >& curves,
+         const int                             deg_V,
+         const bool                            unifyCurves);
 
   //! Sets tangency constraints for the poles of the leading section. The
   //! passed array will be treated as an array of vectors where index of an
   //! element corresponds to the index of a certain iso-U interpolant.
   //! \param[in] tangencies tangency constraints to set.
   mobiusGeom_EXPORT void
-    AddLeadingTangencies(const std::vector<xyz>& tangencies);
+    AddLeadingTangencies(const std::vector<t_xyz>& tangencies);
 
   //! Sets tangency constraints for the poles of the trailing section. The
   //! passed array will be treated as an array of vectors where index of an
   //! element corresponds to the index of a certain iso-U interpolant.
   //! \param[in] tangencies tangency constraints to set.
   mobiusGeom_EXPORT void
-    AddTrailingTangencies(const std::vector<xyz>& tangencies);
+    AddTrailingTangencies(const std::vector<t_xyz>& tangencies);
 
   //! Performs skinning.
   //! \return true in case of success, false -- otherwise.
@@ -164,7 +164,7 @@ public:
 
   //! Accessor for the resulting surface.
   //! \return interpolant surface.
-  const ptr<bsurf>& GetResult() const
+  const t_ptr<t_bsurf>& GetResult() const
   {
     return m_surface;
   }
@@ -172,19 +172,19 @@ public:
 public:
 
   //! Intermediate interpolants.
-  std::vector< ptr<bcurve> > IsoU_Curves;
+  std::vector< t_ptr<t_bcurve> > IsoU_Curves;
 
 private:
 
-  core_HeapAlloc<double>     m_alloc;   //!< Heap allocator.
-  std::vector< ptr<bcurve> > m_curves;  //!< Curves to interpolate.
-  std::vector<xyz>           m_D1lead;  //!< Leading tangency constraints.
-  std::vector<xyz>           m_D1tail;  //!< Trailing tangency constraints.
-  std::vector<double>        m_V;       //!< Knot vector in V direction.
-  int                        m_iDeg_V;  //!< V-degree of interpolant surface.
-  bool                       m_bUnify;  //!< Indicates whether to unify curves.
-  ErrCode                    m_errCode; //!< Error code.
-  ptr<bsurf>                 m_surface; //!< Interpolant surface.
+  core_HeapAlloc<double>         m_alloc;   //!< Heap allocator.
+  std::vector< t_ptr<t_bcurve> > m_curves;  //!< Curves to interpolate.
+  std::vector<t_xyz>             m_D1lead;  //!< Leading tangency constraints.
+  std::vector<t_xyz>             m_D1tail;  //!< Trailing tangency constraints.
+  std::vector<double>            m_V;       //!< Knot vector in V direction.
+  int                            m_iDeg_V;  //!< V-degree of interpolant surface.
+  bool                           m_bUnify;  //!< Indicates whether to unify curves.
+  ErrCode                        m_errCode; //!< Error code.
+  t_ptr<t_bsurf>                 m_surface; //!< Interpolant surface.
 
 };
 

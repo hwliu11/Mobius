@@ -57,7 +57,7 @@ public:
 
   //! Adds another curve to unify.
   //! \param[in] curve another curve to add.
-  void AddCurve(const ptr<bcurve> curve)
+  void AddCurve(const t_ptr<t_bcurve> curve)
   {
     m_curves.push_back(curve);
   }
@@ -79,14 +79,14 @@ public:
 public:
 
   //! \return resulting collection of compatible curves.
-  const std::vector< ptr<bcurve> >& GetResult() const
+  const std::vector< t_ptr<t_bcurve> >& GetResult() const
   {
     return m_curves;
   }
 
 protected:
 
-  std::vector< ptr<bcurve> > m_curves; //!< Curves to make compatible.
+  std::vector< t_ptr<t_bcurve> > m_curves; //!< Curves to make compatible.
 
 };
 

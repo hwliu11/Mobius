@@ -54,10 +54,10 @@ public:
     geom_SectionCloud();
 
   mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< ptr<geom_SectionLine> >& sections);
+    geom_SectionCloud(const std::vector< t_ptr<geom_SectionLine> >& sections);
 
   mobiusGeom_EXPORT
-    geom_SectionCloud(const std::vector< std::vector<xyz> >& sections);
+    geom_SectionCloud(const std::vector< std::vector<t_xyz> >& sections);
 
   mobiusGeom_EXPORT virtual
     ~geom_SectionCloud();
@@ -72,35 +72,35 @@ public:
 public:
 
   mobiusGeom_EXPORT void
-    AddSection(const ptr<geom_SectionLine>& section);
+    AddSection(const t_ptr<geom_SectionLine>& section);
 
   mobiusGeom_EXPORT size_t
     GetNumberOfSections() const;
 
-  mobiusGeom_EXPORT const ptr<geom_SectionLine>&
+  mobiusGeom_EXPORT const t_ptr<geom_SectionLine>&
     GetSectionByIndex(const size_t idx) const;
 
-  mobiusGeom_EXPORT ptr<geom_SectionLine>
+  mobiusGeom_EXPORT t_ptr<geom_SectionLine>
     GetSectionByID(const int ID) const;
 
-  mobiusGeom_EXPORT const std::vector< ptr<geom_SectionLine> >&
+  mobiusGeom_EXPORT const std::vector< t_ptr<geom_SectionLine> >&
     GetSections() const;
 
-  mobiusGeom_EXPORT std::vector< std::vector<xyz> >
+  mobiusGeom_EXPORT std::vector< std::vector<t_xyz> >
     GetPoints() const;
 
-  mobiusGeom_EXPORT ptr<pcloud>
+  mobiusGeom_EXPORT t_ptr<t_pcloud>
     ToPositionCloud() const;
 
 private:
 
   //! Actual collection of points distributed by sections.
-  std::vector< ptr<geom_SectionLine> > m_cloud;
+  std::vector< t_ptr<geom_SectionLine> > m_cloud;
 
 };
 
 //! Handy shortcut.
-typedef geom_SectionCloud scloud;
+typedef geom_SectionCloud t_scloud;
 
 };
 

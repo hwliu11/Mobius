@@ -206,7 +206,7 @@ public:
 
   //! Complete ctor.
   //! \param[in] progress Progress Notifier instance to set.
-  core_ProgressEntry(const ptr<core_IProgressNotifier>& progress)
+  core_ProgressEntry(const t_ptr<core_IProgressNotifier>& progress)
   {
     m_PNotifier = progress;
   }
@@ -333,7 +333,7 @@ public:
 
   //! Accessor for the underlying Progress Notifier.
   //! \return Progress Notifier instance.
-  const ptr<core_IProgressNotifier>& Access() const
+  const t_ptr<core_IProgressNotifier>& Access() const
   {
     return m_PNotifier;
   }
@@ -382,7 +382,7 @@ public:
 private:
 
   //! Managed instance of Progress Notifier.
-  ptr<core_IProgressNotifier> m_PNotifier;
+  t_ptr<core_IProgressNotifier> m_PNotifier;
 
 };
 

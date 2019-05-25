@@ -61,13 +61,13 @@ mobius::geom_InterpolateSurface::geom_InterpolateSurface(core_ProgressEntry prog
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
-                                                         const int                              deg_U,
-                                                         const int                              deg_V,
-                                                         const bspl_ParamsSelection             paramsType,
-                                                         const bspl_KnotsSelection              knotsType,
-                                                         core_ProgressEntry                     progress,
-                                                         core_PlotterEntry                      plotter)
+mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<t_xyz> >& points,
+                                                         const int                                deg_U,
+                                                         const int                                deg_V,
+                                                         const bspl_ParamsSelection               paramsType,
+                                                         const bspl_KnotsSelection                knotsType,
+                                                         core_ProgressEntry                       progress,
+                                                         core_PlotterEntry                        plotter)
 : core_OPERATOR(progress, plotter)
 {
   this->Init(points, deg_U, deg_V, paramsType, knotsType);
@@ -75,15 +75,15 @@ mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std:
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
-                                                         const int                              deg_U,
-                                                         const int                              deg_V,
-                                                         const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                                                         const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-                                                         const bspl_ParamsSelection             paramsType,
-                                                         const bspl_KnotsSelection              knotsType,
-                                                         core_ProgressEntry                     progress,
-                                                         core_PlotterEntry                      plotter)
+mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<t_xyz> >& points,
+                                                         const int                                deg_U,
+                                                         const int                                deg_V,
+                                                         const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                                                         const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                                                         const bspl_ParamsSelection               paramsType,
+                                                         const bspl_KnotsSelection                knotsType,
+                                                         core_ProgressEntry                       progress,
+                                                         core_PlotterEntry                        plotter)
 : core_OPERATOR(progress, plotter)
 {
   this->Init(points, deg_U, deg_V,
@@ -93,17 +93,17 @@ mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std:
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<xyz> >& points,
-                                                         const int                              deg_U,
-                                                         const int                              deg_V,
-                                                         const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                                                         const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-                                                         const ptr<geom_VectorField>&           derivs_isoV_start_D2,
-                                                         const ptr<geom_VectorField>&           derivs_isoV_end_D2,
-                                                         const bspl_ParamsSelection             paramsType,
-                                                         const bspl_KnotsSelection              knotsType,
-                                                         core_ProgressEntry                     progress,
-                                                         core_PlotterEntry                      plotter)
+mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std::vector<t_xyz> >& points,
+                                                         const int                                deg_U,
+                                                         const int                                deg_V,
+                                                         const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                                                         const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                                                         const t_ptr<geom_VectorField>&           derivs_isoV_start_D2,
+                                                         const t_ptr<geom_VectorField>&           derivs_isoV_end_D2,
+                                                         const bspl_ParamsSelection               paramsType,
+                                                         const bspl_KnotsSelection                knotsType,
+                                                         core_ProgressEntry                       progress,
+                                                         core_PlotterEntry                        plotter)
 : core_OPERATOR(progress, plotter)
 {
   this->Init(points, deg_U, deg_V,
@@ -114,11 +114,11 @@ mobius::geom_InterpolateSurface::geom_InterpolateSurface(const std::vector< std:
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >& points,
-                                           const int                              deg_U,
-                                           const int                              deg_V,
-                                           const bspl_ParamsSelection             paramsType,
-                                           const bspl_KnotsSelection              knotsType)
+void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<t_xyz> >& points,
+                                           const int                                deg_U,
+                                           const int                                deg_V,
+                                           const bspl_ParamsSelection               paramsType,
+                                           const bspl_KnotsSelection                knotsType)
 {
   m_points     = points;
   m_iDeg_U     = deg_U;
@@ -130,13 +130,13 @@ void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >& points,
-                                           const int                              deg_U,
-                                           const int                              deg_V,
-                                           const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                                           const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-                                           const bspl_ParamsSelection             paramsType,
-                                           const bspl_KnotsSelection              knotsType)
+void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<t_xyz> >& points,
+                                           const int                                deg_U,
+                                           const int                                deg_V,
+                                           const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                                           const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                                           const bspl_ParamsSelection               paramsType,
+                                           const bspl_KnotsSelection                knotsType)
 {
   m_points               = points;
   m_iDeg_U               = deg_U;
@@ -150,15 +150,15 @@ void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<xyz> >& points,
-                                           const int                              deg_U,
-                                           const int                              deg_V,
-                                           const ptr<geom_VectorField>&           derivs_isoV_start_D1,
-                                           const ptr<geom_VectorField>&           derivs_isoV_end_D1,
-                                           const ptr<geom_VectorField>&           derivs_isoV_start_D2,
-                                           const ptr<geom_VectorField>&           derivs_isoV_end_D2,
-                                           const bspl_ParamsSelection             paramsType,
-                                           const bspl_KnotsSelection              knotsType)
+void mobius::geom_InterpolateSurface::Init(const std::vector< std::vector<t_xyz> >& points,
+                                           const int                                deg_U,
+                                           const int                                deg_V,
+                                           const t_ptr<geom_VectorField>&           derivs_isoV_start_D1,
+                                           const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
+                                           const t_ptr<geom_VectorField>&           derivs_isoV_start_D2,
+                                           const t_ptr<geom_VectorField>&           derivs_isoV_end_D2,
+                                           const bspl_ParamsSelection               paramsType,
+                                           const bspl_KnotsSelection                knotsType)
 {
   m_points               = points;
   m_iDeg_U               = deg_U;
@@ -333,17 +333,17 @@ bool mobius::geom_InterpolateSurface::Perform()
   for ( int l = 0; l <= m; ++l )
   {
     // Populate reper points for fixed V values
-    std::vector<xyz> iso_V_poles;
+    std::vector<t_xyz> iso_V_poles;
     for ( int k = 0; k <= n; ++k )
       iso_V_poles.push_back(m_points[k][l]);
 
-    xyz D1_start = hasDerivs_isoV_start_D1 ? m_derivs_isoV_start_D1->GetVector(l) : xyz();
-    xyz D1_end   = hasDerivs_isoV_end_D1   ? m_derivs_isoV_end_D1->GetVector(l)   : xyz();
-    xyz D2_start = hasDerivs_isoV_start_D2 ? m_derivs_isoV_start_D2->GetVector(l) : xyz();
-    xyz D2_end   = hasDerivs_isoV_end_D2   ? m_derivs_isoV_end_D2->GetVector(l)   : xyz();
+    t_xyz D1_start = hasDerivs_isoV_start_D1 ? m_derivs_isoV_start_D1->GetVector(l) : t_xyz();
+    t_xyz D1_end   = hasDerivs_isoV_end_D1   ? m_derivs_isoV_end_D1->GetVector(l)   : t_xyz();
+    t_xyz D2_start = hasDerivs_isoV_start_D2 ? m_derivs_isoV_start_D2->GetVector(l) : t_xyz();
+    t_xyz D2_end   = hasDerivs_isoV_end_D2   ? m_derivs_isoV_end_D2->GetVector(l)   : t_xyz();
 
     // Interpolate over these cross-sections only
-    ptr<bcurve> iso_V;
+    t_ptr<t_bcurve> iso_V;
     if ( !geom_InterpolateCurve::Interp(iso_V_poles, n, m_iDeg_U, params_U, U, r,
                                         hasDerivs_isoV_start_D1,
                                         hasDerivs_isoV_end_D1,
@@ -366,7 +366,7 @@ bool mobius::geom_InterpolateSurface::Perform()
    * ------------------------------------------ */
 
   // Poles of interpolant
-  std::vector< std::vector<xyz> > final_poles;
+  std::vector< std::vector<t_xyz> > final_poles;
 
   // Interpolate by new repers
   ReperU_Curves.clear();
@@ -380,15 +380,15 @@ bool mobius::geom_InterpolateSurface::Perform()
   {
     // Populate reper points: we use the control points of V-isocurves
     // as reper points now
-    std::vector<xyz> R_poles;
+    std::vector<t_xyz> R_poles;
     for ( int l = 0; l <= m; ++l )
       R_poles.push_back(IsoV_Curves[l]->GetPoles()[k]);
 
     // Interpolate again
-    ptr<bcurve> R_interp;
+    t_ptr<t_bcurve> R_interp;
     if ( !geom_InterpolateCurve::Interp(R_poles, m, m_iDeg_V, params_V, V, s,
                                         false, false, false, false,
-                                        xyz(), xyz(), xyz(), xyz(),
+                                        t_xyz(), t_xyz(), t_xyz(), t_xyz(),
                                         R_interp) )
     {
       m_errCode = ErrCode_CannotInterpolateIsoU;
@@ -397,7 +397,7 @@ bool mobius::geom_InterpolateSurface::Perform()
     ReperU_Curves.push_back(R_interp);
 
     // Poles in V column of the resulting grid
-    std::vector<xyz> V_column_poles;
+    std::vector<t_xyz> V_column_poles;
     for ( int p = 0; p <= m; ++p )
       V_column_poles.push_back(R_interp->GetPoles()[p]);
 
@@ -409,10 +409,10 @@ bool mobius::geom_InterpolateSurface::Perform()
    *  Construct interpolant
    * ----------------------- */
 
-  m_surface = new bsurf(final_poles,
-                        U, V,
-                        r + 1, s + 1,
-                        m_iDeg_U, m_iDeg_V);
+  m_surface = new t_bsurf(final_poles,
+                          U, V,
+                          r + 1, s + 1,
+                          m_iDeg_U, m_iDeg_V);
 
   return true;
 }

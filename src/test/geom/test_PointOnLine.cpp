@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 22 May 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2014-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -41,9 +41,9 @@ mobius::outcome
   mobius::test_PointOnLine::test1(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(1, 0, 0);
-  xyz P(2, 0, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(1, 0, 0);
+  t_xyz P(2, 0, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, true);
@@ -56,9 +56,9 @@ mobius::outcome
   mobius::test_PointOnLine::test2(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(1, 0, 0);
-  xyz P(-2, 0, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(1, 0, 0);
+  t_xyz P(-2, 0, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, true);
@@ -71,9 +71,9 @@ mobius::outcome
   mobius::test_PointOnLine::test3(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(1, 0, 0);
-  xyz P(1, 1, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(1, 0, 0);
+  t_xyz P(1, 1, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, false);
@@ -86,9 +86,9 @@ mobius::outcome
   mobius::test_PointOnLine::test4(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(0, 1, 0);
-  xyz P(-0.1, 0, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(0, 1, 0);
+  t_xyz P(-0.1, 0, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, false);
@@ -101,9 +101,9 @@ mobius::outcome
   mobius::test_PointOnLine::test5(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(0, 1, 0);
-  xyz P(-0.001, 0, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(0, 1, 0);
+  t_xyz P(-0.001, 0, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, true);
@@ -116,9 +116,9 @@ mobius::outcome
   mobius::test_PointOnLine::test6(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(0, 1, 0);
-  xyz P(0, 1, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(0, 1, 0);
+  t_xyz P(0, 1, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, true);
@@ -131,9 +131,9 @@ mobius::outcome
   mobius::test_PointOnLine::test7(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(0, 1, 0);
-  xyz P(0, 0, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(0, 1, 0);
+  t_xyz P(0, 0, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, true);
@@ -146,9 +146,9 @@ mobius::outcome
   mobius::test_PointOnLine::test8(const int funcID)
 {
   // Line & point properties
-  xyz O(0, 0, 0);
-  xyz Dir(0, 1, 0);
-  xyz P(0.005, 100, 0);
+  t_xyz O(0, 0, 0);
+  t_xyz Dir(0, 1, 0);
+  t_xyz P(0.005, 100, 0);
 
   // Perform test
   return doTest(funcID, O, Dir, P, 1.0e-2, true);
@@ -168,9 +168,9 @@ mobius::outcome
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
   mobius::test_PointOnLine::doTest(const int    funcID,
-                                   const xyz&   LineOri,
-                                   const xyz&   LineDir,
-                                   const xyz&   P,
+                                   const t_xyz& LineOri,
+                                   const t_xyz& LineDir,
+                                   const t_xyz& P,
                                    const double classiPrec,
                                    const bool   resultRef)
 {

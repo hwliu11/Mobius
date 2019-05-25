@@ -56,12 +56,12 @@ public:
   //! \param[in] lambda  fairing coefficent.
   //! \param[in] alloc   shared memory allocator.
   mobiusGeom_EXPORT
-    geom_FairBSurfBl(const ptr<bsurf>&                       surface,
-                     const int                               coord,
-                     const int                               l,
-                     const std::vector< ptr<geom_BSurfNk> >& Nk,
-                     const double                            lambda,
-                     ptr<alloc2d>                            alloc);
+    geom_FairBSurfBl(const t_ptr<t_bsurf>&                     surface,
+                     const int                                 coord,
+                     const int                                 l,
+                     const std::vector< t_ptr<geom_BSurfNk> >& Nk,
+                     const double                              lambda,
+                     t_ptr<t_alloc2d>                          alloc);
 
 public:
 
@@ -87,11 +87,11 @@ private:
 
 protected:
 
-  int                                     m_iL;      //!< Index of basis function.
-  const std::vector< ptr<geom_BSurfNk> >& m_Nk;      //!< Evaluators of basis functions.
-  ptr<bsurf>                              m_surface; //!< Surface in question.
-  int                                     m_iCoord;  //!< Coordinate in question.
-  ptr<alloc2d>                            m_alloc;   //!< Shared memory allocator.
+  int                                       m_iL;      //!< Index of basis function.
+  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk;      //!< Evaluators of basis functions.
+  t_ptr<t_bsurf>                            m_surface; //!< Surface in question.
+  int                                       m_iCoord;  //!< Coordinate in question.
+  t_ptr<t_alloc2d>                          m_alloc;   //!< Shared memory allocator.
 
 };
 

@@ -78,12 +78,12 @@ public:
 
   mobiusGeom_EXPORT virtual void
     Eval(const double p,
-         xyz&         C) const override;
+         t_xyz&       C) const override;
 
   //! \todo NYI Eval_D1() method.
   virtual void
     Eval_D1(const double,
-            xyz&) const override {}
+            t_xyz&) const override {}
 
 private:
 

@@ -45,12 +45,12 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBSurfBl::geom_FairBSurfBl(const ptr<bsurf>&                       surface,
-                                           const int                               coord,
-                                           const int                               l,
-                                           const std::vector< ptr<geom_BSurfNk> >& Nk,
-                                           const double                            lambda,
-                                           ptr<alloc2d>                            alloc)
+mobius::geom_FairBSurfBl::geom_FairBSurfBl(const t_ptr<t_bsurf>&                     surface,
+                                           const int                                 coord,
+                                           const int                                 l,
+                                           const std::vector< t_ptr<geom_BSurfNk> >& Nk,
+                                           const double                              lambda,
+                                           t_ptr<t_alloc2d>                          alloc)
 : geom_FairBSurfCoeff (lambda),
   m_surface           (surface),
   m_iCoord            (coord),
@@ -64,7 +64,7 @@ mobius::geom_FairBSurfBl::geom_FairBSurfBl(const ptr<bsurf>&                    
 double mobius::geom_FairBSurfBl::Eval(const double u, const double v) const
 {
   // Evaluate B-surface.
-  xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dUV, d2S_dV2;
+  t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dUV, d2S_dV2;
   m_surface->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV,
                      m_alloc,
                      memBlockSurf_BSplineSurfEvalD2U,
@@ -76,9 +76,9 @@ double mobius::geom_FairBSurfBl::Eval(const double u, const double v) const
   m_Nk[m_iL]->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
 
   // Calculate result.
-  const xyz res = d2S_dU2 * d2Nl_dU2 * m_fLambda
-                + d2S_dUV * d2Nl_dUV * m_fLambda * 2.
-                + d2S_dV2 * d2Nl_dV2 * m_fLambda;
+  const t_xyz res = d2S_dU2 * d2Nl_dU2 * m_fLambda
+                  + d2S_dUV * d2Nl_dUV * m_fLambda * 2.
+                  + d2S_dV2 * d2Nl_dV2 * m_fLambda;
   //
   const double res_proj = res.Coord(m_iCoord);
 

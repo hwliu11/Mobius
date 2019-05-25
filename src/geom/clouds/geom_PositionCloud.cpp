@@ -41,7 +41,7 @@ mobius::geom_PositionCloud::geom_PositionCloud() : geom_PointCloud()
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<xyz>& pts) : geom_PointCloud()
+mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<t_xyz>& pts) : geom_PointCloud()
 {
   this->SetPoints(pts);
 }
@@ -51,7 +51,7 @@ mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<xyz>& pts) : ge
 mobius::geom_PositionCloud::geom_PositionCloud(const std::vector<double>& coords)
 {
   for ( size_t k = 0; k < coords.size() - 2; k += 3 )
-    m_cloud.push_back( xyz(coords[k], coords[k+1], coords[k+2]) );
+    m_cloud.push_back( t_xyz(coords[k], coords[k+1], coords[k+2]) );
 }
 
 //-----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ void mobius::geom_PositionCloud::GetBounds(double& xMin, double& xMax,
   // Iterate over the points to calculate bounds
   for ( int p = 0; p < (int) m_cloud.size(); ++p )
   {
-    const xyz&   P = m_cloud.at(p);
+    const t_xyz& P = m_cloud.at(p);
     const double x = P.X(),
                  y = P.Y(),
                  z = P.Z();
@@ -102,7 +102,7 @@ void mobius::geom_PositionCloud::GetBounds(double& xMin, double& xMax,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_PositionCloud::AddPoint(const xyz& point)
+void mobius::geom_PositionCloud::AddPoint(const t_xyz& point)
 {
   m_cloud.push_back(point);
 }
@@ -113,7 +113,7 @@ void mobius::geom_PositionCloud::AddPoint(const double x,
                                           const double y,
                                           const double z)
 {
-  this->AddPoint( xyz(x, y, z) );
+  this->AddPoint( t_xyz(x, y, z) );
 }
 
 //-----------------------------------------------------------------------------
@@ -125,7 +125,8 @@ int mobius::geom_PositionCloud::GetNumberOfPoints() const
 
 //-----------------------------------------------------------------------------
 
-const mobius::xyz& mobius::geom_PositionCloud::GetPoint(const int idx) const
+const mobius::t_xyz&
+  mobius::geom_PositionCloud::GetPoint(const int idx) const
 {
   return m_cloud.at(idx);
 }
@@ -137,7 +138,7 @@ void mobius::geom_PositionCloud::GetPoint(const int idx,
                                           double&   y,
                                           double&   z) const
 {
-  const xyz& pt = this->GetPoint(idx);
+  const t_xyz& pt = this->GetPoint(idx);
   //
   x = pt.X();
   y = pt.Y();
@@ -146,14 +147,15 @@ void mobius::geom_PositionCloud::GetPoint(const int idx,
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_PositionCloud::SetPoints(const std::vector<xyz>& cloud)
+void mobius::geom_PositionCloud::SetPoints(const std::vector<t_xyz>& cloud)
 {
   m_cloud = cloud;
 }
 
 //-----------------------------------------------------------------------------
 
-const std::vector<mobius::xyz>& mobius::geom_PositionCloud::GetPoints() const
+const std::vector<mobius::t_xyz>&
+  mobius::geom_PositionCloud::GetPoints() const
 {
   return m_cloud;
 }

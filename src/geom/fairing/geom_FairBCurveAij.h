@@ -59,7 +59,7 @@ public:
                        const int                  i,
                        const int                  j,
                        const double               lambda,
-                       ptr<alloc2d>               alloc);
+                       t_ptr<t_alloc2d>           alloc);
 
 public:
 
@@ -79,7 +79,7 @@ protected:
   int                        m_iDegree; //!< Degree of the spline function.
   int                        m_iIndex1; //!< 0-based index 1.
   int                        m_iIndex2; //!< 0-based index 2.
-  ptr<alloc2d>               m_alloc;   //!< Allocator with reserved memory blocks.
+  t_ptr<t_alloc2d>           m_alloc;   //!< Allocator with reserved memory blocks.
 
 };
 

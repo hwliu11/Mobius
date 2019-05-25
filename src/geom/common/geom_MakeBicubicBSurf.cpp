@@ -45,22 +45,22 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_MakeBicubicBSurf::geom_MakeBicubicBSurf(const xyz&         S00,
-                                                     const xyz&         S01,
-                                                     const xyz&         S10,
-                                                     const xyz&         S11,
-                                                     const xyz&         dS_du00,
-                                                     const xyz&         dS_du01,
-                                                     const xyz&         dS_du10,
-                                                     const xyz&         dS_du11,
-                                                     const xyz&         dS_dv00,
-                                                     const xyz&         dS_dv01,
-                                                     const xyz&         dS_dv10,
-                                                     const xyz&         dS_dv11,
-                                                     const xyz&         d2S_dudv00,
-                                                     const xyz&         d2S_dudv01,
-                                                     const xyz&         d2S_dudv10,
-                                                     const xyz&         d2S_dudv11,
+mobius::geom_MakeBicubicBSurf::geom_MakeBicubicBSurf(const t_xyz&       S00,
+                                                     const t_xyz&       S01,
+                                                     const t_xyz&       S10,
+                                                     const t_xyz&       S11,
+                                                     const t_xyz&       dS_du00,
+                                                     const t_xyz&       dS_du01,
+                                                     const t_xyz&       dS_du10,
+                                                     const t_xyz&       dS_du11,
+                                                     const t_xyz&       dS_dv00,
+                                                     const t_xyz&       dS_dv01,
+                                                     const t_xyz&       dS_dv10,
+                                                     const t_xyz&       dS_dv11,
+                                                     const t_xyz&       d2S_dudv00,
+                                                     const t_xyz&       d2S_dudv01,
+                                                     const t_xyz&       d2S_dudv10,
+                                                     const t_xyz&       d2S_dudv11,
                                                      core_ProgressEntry progress,
                                                      core_PlotterEntry  plotter)
 : core_OPERATOR (progress, plotter),
@@ -441,23 +441,23 @@ bool mobius::geom_MakeBicubicBSurf::Perform()
   std::cout << "Constructing result..." << std::endl;
 
   // Prepare poles.
-  std::vector< std::vector<xyz> > poles = { { xyz(), xyz(), xyz(), xyz() },
-                                            { xyz(), xyz(), xyz(), xyz() },
-                                            { xyz(), xyz(), xyz(), xyz() },
-                                            { xyz(), xyz(), xyz(), xyz() } };
+  std::vector< std::vector<t_xyz> > poles = { { t_xyz(), t_xyz(), t_xyz(), t_xyz() },
+                                              { t_xyz(), t_xyz(), t_xyz(), t_xyz() },
+                                              { t_xyz(), t_xyz(), t_xyz(), t_xyz() },
+                                              { t_xyz(), t_xyz(), t_xyz(), t_xyz() } };
   //
   for ( int k = 0; k < dim; ++k )
   {
     int i, j;
     bspl::PairIndicesFromSerial(k, 4, i, j);
 
-    xyz P( eigen_X_mx(k, 0), eigen_X_mx(k, 1), eigen_X_mx(k, 2) );
+    t_xyz P( eigen_X_mx(k, 0), eigen_X_mx(k, 1), eigen_X_mx(k, 2) );
     //
     poles[i][j] = P;
   }
 
   // Construct a surface.
-  m_surf = new bsurf(poles, U, V, p, q);
+  m_surf = new t_bsurf(poles, U, V, p, q);
 
   return true;
 }

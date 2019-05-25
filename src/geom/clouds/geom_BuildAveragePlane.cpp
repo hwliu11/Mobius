@@ -48,13 +48,13 @@ mobius::geom_BuildAveragePlane::geom_BuildAveragePlane(core_ProgressEntry progre
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_BuildAveragePlane::Build(const ptr<pcloud>& points,
-                                           ptr<plane>&        result) const
+bool mobius::geom_BuildAveragePlane::Build(const t_ptr<t_pcloud>& points,
+                                           t_ptr<t_plane>&        result) const
 {
   // Compute eigen vectors of a covariance matrix for the point cloud.
   core_SolveCovarianceEigens solver;
   //
-  xyz C, Dx, Dy, Dz;
+  t_xyz C, Dx, Dy, Dz;
   if ( !solver(points->GetPoints(), C, Dx, Dy, Dz) )
   {
     m_progress.SendLogMessage(MobiusErr(Normal) << "Failed to compute eigen vectors of a covariance matrix.");
@@ -62,6 +62,6 @@ bool mobius::geom_BuildAveragePlane::Build(const ptr<pcloud>& points,
   }
 
   // Build plane.
-  result = new plane(C, Dx, Dy);
+  result = new t_plane(C, Dx, Dy);
   return true;
 }

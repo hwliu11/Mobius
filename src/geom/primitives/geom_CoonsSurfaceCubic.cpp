@@ -36,18 +36,18 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_CoonsSurfaceCubic::geom_CoonsSurfaceCubic(const ptr<curve>& Su0,
-                                                       const ptr<curve>& Su1,
-                                                       const ptr<curve>& S0v,
-                                                       const ptr<curve>& S1v,
-                                                       const ptr<curve>& dSu0_dv,
-                                                       const ptr<curve>& dSu1_dv,
-                                                       const ptr<curve>& dS0v_du,
-                                                       const ptr<curve>& dS1v_du,
-                                                       const xyz&        d2S_dudv00,
-                                                       const xyz&        d2S_dudv01,
-                                                       const xyz&        d2S_dudv10,
-                                                       const xyz&        d2S_dudv11)
+mobius::geom_CoonsSurfaceCubic::geom_CoonsSurfaceCubic(const t_ptr<t_curve>& Su0,
+                                                       const t_ptr<t_curve>& Su1,
+                                                       const t_ptr<t_curve>& S0v,
+                                                       const t_ptr<t_curve>& S1v,
+                                                       const t_ptr<t_curve>& dSu0_dv,
+                                                       const t_ptr<t_curve>& dSu1_dv,
+                                                       const t_ptr<t_curve>& dS0v_du,
+                                                       const t_ptr<t_curve>& dS1v_du,
+                                                       const t_xyz&          d2S_dudv00,
+                                                       const t_xyz&          d2S_dudv01,
+                                                       const t_xyz&          d2S_dudv10,
+                                                       const t_xyz&          d2S_dudv11)
 : geom_Surface (),
   m_Su0        (Su0),
   m_Su1        (Su1),
@@ -154,10 +154,10 @@ double mobius::geom_CoonsSurfaceCubic::GetMaxParameter_V() const
 
 void mobius::geom_CoonsSurfaceCubic::Eval(const double u,
                                           const double v,
-                                          xyz&         S) const
+                                          t_xyz&       S) const
 {
   // Compute Boolean sum.
-  xyz P1S, P2S, P12S, PS;
+  t_xyz P1S, P2S, P12S, PS;
   //
   this->Eval_P1S  (u, v, P1S);
   this->Eval_P2S  (u, v, P2S);
@@ -179,14 +179,14 @@ void mobius::geom_CoonsSurfaceCubic::Eval(const double u,
 
 void mobius::geom_CoonsSurfaceCubic::Eval_D1(const double u,
                                              const double v,
-                                             xyz&         dU,
-                                             xyz&         dV) const
+                                             t_xyz&       dU,
+                                             t_xyz&       dV) const
 {
   // Compute derivative of the Boolean sum.
-  xyz P1S_D1u,  P1S_D1v,
-      P2S_D1u,  P2S_D1v,
-      P12S_D1u, P12S_D1v,
-      PS_D1u,   PS_D1v;
+  t_xyz P1S_D1u,  P1S_D1v,
+        P2S_D1u,  P2S_D1v,
+        P12S_D1u, P12S_D1v,
+        PS_D1u,   PS_D1v;
   //
   this->Eval_D1_P1S  (u, v, P1S_D1u,  P1S_D1v);
   this->Eval_D1_P2S  (u, v, P2S_D1u,  P2S_D1v);
@@ -221,7 +221,7 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1(const double u,
 
 void mobius::geom_CoonsSurfaceCubic::Eval_P1S(const double u,
                                               const double v,
-                                              xyz&         S) const
+                                              t_xyz&       S) const
 {
   bspl_HermiteLaw a0(0);
   bspl_HermiteLaw a1(1);
@@ -238,7 +238,7 @@ void mobius::geom_CoonsSurfaceCubic::Eval_P1S(const double u,
 
 void mobius::geom_CoonsSurfaceCubic::Eval_P2S(const double u,
                                               const double v,
-                                              xyz&         S) const
+                                              t_xyz&       S) const
 {
   bspl_HermiteLaw a0(0);
   bspl_HermiteLaw a1(1);
@@ -255,7 +255,7 @@ void mobius::geom_CoonsSurfaceCubic::Eval_P2S(const double u,
 
 void mobius::geom_CoonsSurfaceCubic::Eval_P12S(const double u,
                                                const double v,
-                                               xyz&         S) const
+                                               t_xyz&       S) const
 {
   // Compute Hermite polynomials.
   bspl_HermiteLaw a0(0);
@@ -268,15 +268,15 @@ void mobius::geom_CoonsSurfaceCubic::Eval_P12S(const double u,
   const double b0u = b0.Eval(u);
   const double b1u = b1.Eval(u);
 
-  const xyz row0 = this->evalS12Row(0, v);
-  const xyz row1 = this->evalS12Row(1, v);
-  const xyz row2 = this->evalS12Row(2, v);
-  const xyz row3 = this->evalS12Row(3, v);
+  const t_xyz row0 = this->evalS12Row(0, v);
+  const t_xyz row1 = this->evalS12Row(1, v);
+  const t_xyz row2 = this->evalS12Row(2, v);
+  const t_xyz row3 = this->evalS12Row(3, v);
   //
-  const xyz S1 = row0*a0u;
-  const xyz S2 = row1*a1u;
-  const xyz S3 = row2*b0u;
-  const xyz S4 = row3*b1u;
+  const t_xyz S1 = row0*a0u;
+  const t_xyz S2 = row1*a1u;
+  const t_xyz S3 = row2*b0u;
+  const t_xyz S4 = row3*b1u;
 
   S = S1 + S2 + S3 + S4;
 }
@@ -285,8 +285,8 @@ void mobius::geom_CoonsSurfaceCubic::Eval_P12S(const double u,
 
 void mobius::geom_CoonsSurfaceCubic::Eval_D1_P1S(const double u,
                                                  const double v,
-                                                 xyz&         dU,
-                                                 xyz&         dV) const
+                                                 t_xyz&       dU,
+                                                 t_xyz&       dV) const
 {
   // Compute Hermite polynomials.
   bspl_HermiteLaw a0(0);
@@ -300,13 +300,13 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1_P1S(const double u,
   const double B1 = b1.Eval(v);
 
   // Compute derivatives of constraints.
-  const xyz dS1 = m_Su0->D1(u);
-  const xyz dS2 = m_Su1->D1(u);
-  const xyz dS3 = m_dSu0_dv->D1(u);
-  const xyz dS4 = m_dSu1_dv->D1(u);
+  const t_xyz dS1 = m_Su0->D1(u);
+  const t_xyz dS2 = m_Su1->D1(u);
+  const t_xyz dS3 = m_dSu0_dv->D1(u);
+  const t_xyz dS4 = m_dSu1_dv->D1(u);
 
-  xyz dP1S_dU = A0*dS1 + A1*dS2 + B0*dS3 + B1*dS4;
-  xyz dP1S_dV = xyz(); // todo nyi
+  t_xyz dP1S_dU = A0*dS1 + A1*dS2 + B0*dS3 + B1*dS4;
+  t_xyz dP1S_dV = t_xyz(); // todo nyi
 
   dU = dP1S_dU;
   dV = dP1S_dV;
@@ -316,8 +316,8 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1_P1S(const double u,
 
 void mobius::geom_CoonsSurfaceCubic::Eval_D1_P2S(const double u,
                                                  const double v,
-                                                 xyz&         dU,
-                                                 xyz&         dV) const
+                                                 t_xyz&       dU,
+                                                 t_xyz&       dV) const
 {
   // Compute derivatives of Hermite polynomials.
   bspl_HermiteLaw a0(0);
@@ -331,13 +331,13 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1_P2S(const double u,
   const double dB1 = b1.Eval_D1(u);
 
   // Compute constraints.
-  const xyz S1 = m_S0v->D0(v);
-  const xyz S2 = m_S1v->D0(v);
-  const xyz S3 = m_dS0v_du->D0(v);
-  const xyz S4 = m_dS1v_du->D0(v);
+  const t_xyz S1 = m_S0v->D0(v);
+  const t_xyz S2 = m_S1v->D0(v);
+  const t_xyz S3 = m_dS0v_du->D0(v);
+  const t_xyz S4 = m_dS1v_du->D0(v);
 
-  xyz dP2S_dU = dA0*S1 + dA1*S2 + dB0*S3 + dB1*S4;
-  xyz dP2S_dV = xyz(); // todo nyi
+  t_xyz dP2S_dU = dA0*S1 + dA1*S2 + dB0*S3 + dB1*S4;
+  t_xyz dP2S_dV = t_xyz(); // todo nyi
 
   dU = dP2S_dU;
   dV = dP2S_dV;
@@ -347,8 +347,8 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1_P2S(const double u,
 
 void mobius::geom_CoonsSurfaceCubic::Eval_D1_P12S(const double u,
                                                   const double v,
-                                                  xyz&         dU,
-                                                  xyz&         dV) const
+                                                  t_xyz&       dU,
+                                                  t_xyz&       dV) const
 {
   // Compute derivatives of Hermite polynomials.
   bspl_HermiteLaw a0(0);
@@ -361,24 +361,24 @@ void mobius::geom_CoonsSurfaceCubic::Eval_D1_P12S(const double u,
   const double dB0 = b0.Eval_D1(u);
   const double dB1 = b1.Eval_D1(u);
 
-  const xyz row0 = this->evalS12Row(0, v);
-  const xyz row1 = this->evalS12Row(1, v);
-  const xyz row2 = this->evalS12Row(2, v);
-  const xyz row3 = this->evalS12Row(3, v);
+  const t_xyz row0 = this->evalS12Row(0, v);
+  const t_xyz row1 = this->evalS12Row(1, v);
+  const t_xyz row2 = this->evalS12Row(2, v);
+  const t_xyz row3 = this->evalS12Row(3, v);
 
-  xyz S1 = dA0*row0;
-  xyz S2 = dA1*row1;
-  xyz S3 = dB0*row2;
-  xyz S4 = dB1*row3;
+  t_xyz S1 = dA0*row0;
+  t_xyz S2 = dA1*row1;
+  t_xyz S3 = dB0*row2;
+  t_xyz S4 = dB1*row3;
 
   dU = S1 + S2 + S3 + S4;
-  dV = xyz(); // TODO nyi
+  dV = t_xyz(); // TODO nyi
 }
 
 //-----------------------------------------------------------------------------
 
-mobius::xyz mobius::geom_CoonsSurfaceCubic::evalS12Row(const int    row,
-                                                       const double v) const
+mobius::t_xyz mobius::geom_CoonsSurfaceCubic::evalS12Row(const int    row,
+                                                         const double v) const
 {
   bspl_HermiteLaw a0(0);
   bspl_HermiteLaw a1(1);
@@ -390,7 +390,7 @@ mobius::xyz mobius::geom_CoonsSurfaceCubic::evalS12Row(const int    row,
   const double b0v = b0.Eval(v);
   const double b1v = b1.Eval(v);
 
-  xyz res;
+  t_xyz res;
   switch ( row )
   {
     case 0:

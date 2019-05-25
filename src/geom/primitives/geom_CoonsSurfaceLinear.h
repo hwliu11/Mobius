@@ -46,14 +46,14 @@ class geom_CoonsSurfaceLinear : public geom_Surface
 public:
 
   mobiusGeom_EXPORT
-    geom_CoonsSurfaceLinear(const ptr<curve>& c0,
-                            const ptr<curve>& c1,
-                            const ptr<curve>& b0,
-                            const ptr<curve>& b1,
-                            const xyz&        p00,
-                            const xyz&        p01,
-                            const xyz&        p10,
-                            const xyz&        p11);
+    geom_CoonsSurfaceLinear(const t_ptr<t_curve>& c0,
+                            const t_ptr<t_curve>& c1,
+                            const t_ptr<t_curve>& b0,
+                            const t_ptr<t_curve>& b1,
+                            const t_xyz&          p00,
+                            const t_xyz&          p01,
+                            const t_xyz&          p10,
+                            const t_xyz&          p11);
 
   mobiusGeom_EXPORT virtual
     ~geom_CoonsSurfaceLinear();
@@ -106,14 +106,14 @@ public:
 
 private:
 
-  ptr<curve> m_c0;  //!< Rail curve c0.
-  ptr<curve> m_c1;  //!< Rail curve c1.
-  ptr<curve> m_b0;  //!< Rail curve b0.
-  ptr<curve> m_b1;  //!< Rail curve b1.
-  xyz        m_p00; //!< Corner point p00.
-  xyz        m_p01; //!< Corner point p01.
-  xyz        m_p10; //!< Corner point p10.
-  xyz        m_p11; //!< Corner point p11.
+  t_ptr<t_curve> m_c0;  //!< Rail curve c0.
+  t_ptr<t_curve> m_c1;  //!< Rail curve c1.
+  t_ptr<t_curve> m_b0;  //!< Rail curve b0.
+  t_ptr<t_curve> m_b1;  //!< Rail curve b1.
+  t_xyz          m_p00; //!< Corner point p00.
+  t_xyz          m_p01; //!< Corner point p01.
+  t_xyz          m_p10; //!< Corner point p10.
+  t_xyz          m_p11; //!< Corner point p11.
 
 };
 

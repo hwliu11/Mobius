@@ -62,7 +62,7 @@ mobius::outcome
   outcome res( DescriptionFn(), funcID );
 
   // Access common facilities.
-  ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
   // File to read.
   std::string
@@ -70,7 +70,7 @@ mobius::outcome
              + filename_points_001;
 
   // Load points.
-  ptr<pcloud> pts = new pcloud;
+  t_ptr<t_pcloud> pts = new t_pcloud;
   //
   if ( !pts->Load(filename) )
   {
@@ -79,7 +79,7 @@ mobius::outcome
     return res.failure();
   }
 
-  ptr<plane> pln;
+  t_ptr<t_plane> pln;
 
   // Build average plane.
   geom_BuildAveragePlane planeAlgo(cf->ProgressNotifier);
@@ -91,11 +91,11 @@ mobius::outcome
   }
 
   // Verify the result.
-  const xyz& O  = pln->GetOrigin();
-  const xyz& Du = pln->GetD1();
-  const xyz& Dv = pln->GetD2();
+  const t_xyz& O  = pln->GetOrigin();
+  const t_xyz& Du = pln->GetD1();
+  const t_xyz& Dv = pln->GetD2();
   //
-  if ( ( O - xyz(2.227936853640657, -6.8177788487915576, -16.700410247411867) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( O - t_xyz(2.227936853640657, -6.8177788487915576, -16.700410247411867) ).Modulus() > core_Precision::Resolution3D() )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Origin of average plane (%1, %2, %3) is not "
                                                               "equal to the expected point."
@@ -103,7 +103,7 @@ mobius::outcome
     return res.failure();
   }
   //
-  if ( ( Du - xyz(0.14808864587487339, 0.9588368801111562, 0.24228411070817429) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Du - t_xyz(0.14808864587487339, 0.9588368801111562, 0.24228411070817429) ).Modulus() > core_Precision::Resolution3D() )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Du of average plane (%1, %2, %3) is not "
                                                               "equal to the expected vector."
@@ -111,7 +111,7 @@ mobius::outcome
     return res.failure();
   }
   //
-  if ( ( Dv - xyz(-0.98763330976881147, 0.13062879033747227, 0.08669812322116055) ).Modulus() > core_Precision::Resolution3D() )
+  if ( ( Dv - t_xyz(-0.98763330976881147, 0.13062879033747227, 0.08669812322116055) ).Modulus() > core_Precision::Resolution3D() )
   {
     cf->ProgressNotifier.SendLogMessage( MobiusErr(Normal) << "Dv of average plane (%1, %2, %3) is not "
                                                               "equal to the expected vector."

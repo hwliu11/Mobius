@@ -53,10 +53,10 @@ public:
   //! \param[in] lambda fairing coefficent.
   //! \param[in] Nk     evaluators for functions \f$N_k(u,v)\f$ and \f$N_l(u,v)\f$.
   mobiusGeom_EXPORT
-    geom_FairBSurfAkl(const int                               k,
-                      const int                               l,
-                      const double                            lambda,
-                      const std::vector< ptr<geom_BSurfNk> >& Nk);
+    geom_FairBSurfAkl(const int                                 k,
+                      const int                                 l,
+                      const double                              lambda,
+                      const std::vector< t_ptr<geom_BSurfNk> >& Nk);
 
 public:
 
@@ -93,9 +93,9 @@ private:
 
 protected:
 
-  int                                     m_iK; //!< K index.
-  int                                     m_iL; //!< L index.
-  const std::vector< ptr<geom_BSurfNk> >& m_Nk; //!< Pre-computed basis functions.
+  int                                       m_iK; //!< K index.
+  int                                       m_iL; //!< L index.
+  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk; //!< Pre-computed basis functions.
 
 };
 
