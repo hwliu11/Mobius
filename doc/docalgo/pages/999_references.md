@@ -8,3 +8,5 @@ References {#references}
 -# \anchor botsch2002 Botsch, M., Steinberg, S., Bischoff, S., and Kobbelt, L. 2002. OpenMesh &mdash; a generic and efficient polygon mesh data structure. OpenSG Symposium.
 
 -# \anchor piegl-tiller-1995 Piegl, L. and Tiller, W. 1995. The NURBS Book. Springer Berlin Heidelberg, Berlin, Heidelberg.
+
+-# \anchor selimovic-2006 Selimovic, I. 2006. Improved algorithms for the projection of points on NURBS curves and surfaces. Computer Aided Geometric Design 23, 5, 439-445.
