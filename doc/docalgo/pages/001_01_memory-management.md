@@ -1,11 +1,20 @@
 Memory management {#memmgt}
 ===========================
 
-Fundamental algorithms in _mobiusBSpl_ and _mobiusGeom_ libraries often work with a dynamically allocated memory (heap).
-Intensive computations tend to have hotspots in memory allocation/deallocation instructions which slow down the entire performance
-of the algorithms. To fix that generic problem, software libraries often implement custom memory management patterns.
-Following the idea to minimize heap allocations and reuse the already allocated memory blocks as much as possible, we have
-developed a couple of well-working yet straightforward tools.
+ The fundamental algorithms for working with basis spline functions
+ (see _mobiusBSpl_ and _mobiusGeom_) often deal
+ with a dynamically allocated memory (heap), because the dimensions of the data
+ blocks are not always known at compile time. The inefficiency of the heap
+ allocations and deallocations may remain unnoticed unless the user runs
+ intensive computations which employ thousands of such operations. In such
+ computations, the memory allocation/deallocation tend to be the hotspot.
+ To fix that generic inefficiency, software libraries often implement custom
+ memory management patterns. Following the idea to minimize heap allocations
+ and reuse the already allocated memory blocks as much as possible, we have
+ developed a couple of well-working yet straightforward tools. To put it
+ generally, you may allocate a "memory arena" which is simply a heap region
+ permitting reading and writing various objects without a need to request
+ new memory or release the occupied one.
 
 In Mobius, the memory-critical routines, such as B-spline or geometry evaluators provide an interface to pass externally-defined memory allocators.
 The allocators are implemented in classes mobius::core_HeapAlloc and mobius::core_HeapAlloc2D. The instances of both classes allocate
