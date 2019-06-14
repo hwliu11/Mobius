@@ -154,9 +154,13 @@ public:
     Copy() const;
 
   mobiusGeom_EXPORT bool
-    InvertPoint(const t_xyz& P,
-                t_uv&        params,
-                const double prec = 1.0e-6) const;
+    InvertPoint(const t_xyz&     P,
+                t_uv&            params,
+                const double     prec             = 1.0e-6,
+                t_ptr<t_alloc2d> alloc            = NULL,
+                const int        memBlockResultU  = -1,
+                const int        memBlockResultV  = -1,
+                const int        memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT bool
     InsertKnot_U(const double u,

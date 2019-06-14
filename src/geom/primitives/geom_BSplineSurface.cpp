@@ -102,11 +102,25 @@ namespace BSplSurfProj
   public:
 
     //! Ctor accepting the B-surface and the point to invert.
-    //! \param[in] S surface in question.
-    //! \param[in] P point to invert.
+    //! \param[in] S                surface in question.
+    //! \param[in] P                point to invert.
+    //! \param[in] alloc            memory arena.
+    //! \param[in] memBlockResultU  index of the memory block to reuse.
+    //! \param[in] memBlockResultV  index of the memory block to reuse.
+    //! \param[in] memBlockInternal index of the memory block to reuse.
     func_base(const core_Ptr<t_bsurf>& S,
-              const t_xyz&             P)
-    : core_TwovariateFuncWithGradient(), m_S(S), m_P(P)
+              const t_xyz&             P,
+              t_ptr<t_alloc2d>         alloc            = NULL,
+              const int                memBlockResultU  = -1,
+              const int                memBlockResultV  = -1,
+              const int                memBlockInternal = -1)
+    : core_TwovariateFuncWithGradient (),
+      m_S                             (S),
+      m_P                             (P),
+      m_alloc                         (alloc),
+      m_iMemBlockResultU              (memBlockResultU),
+      m_iMemBlockResultV              (memBlockResultV),
+      m_iMemBlockInternal             (memBlockInternal)
     {}
 
   protected:
@@ -123,6 +137,11 @@ namespace BSplSurfProj
 
     core_Ptr<t_bsurf> m_S; //!< Surface in question.
     t_xyz             m_P; //!< Point to invert.
+
+    t_ptr<t_alloc2d> m_alloc;             //!< Memory arena.
+    int              m_iMemBlockResultU;  //!< Index of the memory block to reuse.
+    int              m_iMemBlockResultV;  //!< Index of the memory block to reuse.
+    int              m_iMemBlockInternal; //!< Index of the memory block to reuse.
   };
 
   class func_f : public func_base
@@ -130,11 +149,20 @@ namespace BSplSurfProj
   public:
 
     //! Ctor accepting the B-surface and the point to invert.
-    //! \param[in] S surface in question.
-    //! \param[in] P point to invert.
+    //! \param[in] S                surface in question.
+    //! \param[in] P                point to invert.
+    //! \param[in] alloc            memory arena.
+    //! \param[in] memBlockResultU  index of the memory block to reuse.
+    //! \param[in] memBlockResultV  index of the memory block to reuse.
+    //! \param[in] memBlockInternal index of the memory block to reuse.
     func_f(const core_Ptr<t_bsurf>& S,
-           const t_xyz&             P)
-    : func_base(S, P)
+           const t_xyz&             P,
+           t_ptr<t_alloc2d>         alloc            = NULL,
+           const int                memBlockResultU  = -1,
+           const int                memBlockResultV  = -1,
+           const int                memBlockInternal = -1)
+    //
+    : func_base(S, P, alloc, memBlockResultU, memBlockResultV, memBlockInternal)
     {}
 
   public:
@@ -174,7 +202,8 @@ namespace BSplSurfProj
 
       // Evaluate dS/dU.
       t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
-      m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
+      m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV,
+                   m_alloc, m_iMemBlockResultU, m_iMemBlockResultV, m_iMemBlockInternal);
 
       // Evaluate F.
       F = r.Dot(dS_dU);
@@ -192,11 +221,20 @@ namespace BSplSurfProj
   public:
 
     //! Ctor accepting the B-surface and the point to invert.
-    //! \param[in] S surface in question.
-    //! \param[in] P point to invert.
+    //! \param[in] S                surface in question.
+    //! \param[in] P                point to invert.
+    //! \param[in] alloc            memory arena.
+    //! \param[in] memBlockResultU  index of the memory block to reuse.
+    //! \param[in] memBlockResultV  index of the memory block to reuse.
+    //! \param[in] memBlockInternal index of the memory block to reuse.
     func_g(const core_Ptr<t_bsurf>& S,
-           const t_xyz&             P)
-    : func_base(S, P)
+           const t_xyz&             P,
+           t_ptr<t_alloc2d>         alloc            = NULL,
+           const int                memBlockResultU  = -1,
+           const int                memBlockResultV  = -1,
+           const int                memBlockInternal = -1)
+    //
+    : func_base(S, P, alloc, memBlockResultU, memBlockResultV, memBlockInternal)
     {}
 
   public:
@@ -236,7 +274,8 @@ namespace BSplSurfProj
 
       // Evaluate dS/dU.
       t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV;
-      m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV);
+      m_S->Eval_D2(u, v, S, dS_dU, dS_dV, d2S_dU2, d2S_dV2, d2S_dUV,
+                   m_alloc, m_iMemBlockResultU, m_iMemBlockResultV, m_iMemBlockInternal);
 
       // Evaluate F.
       G = r.Dot(dS_dV);
@@ -271,8 +310,8 @@ namespace BSplSurfProj
               const double                                     umax,
               const double                                     vmin,
               const double                                     vmax,
-              core_ProgressEntry                               progress = NULL,
-              core_PlotterEntry                                plotter  = NULL)
+              core_ProgressEntry                               progress         = NULL,
+              core_PlotterEntry                                plotter          = NULL)
     //
     : core_Newton2x2 (f, g, umin, umax, vmin, vmax, progress, plotter),
       m_S            (S),
@@ -762,13 +801,20 @@ mobius::t_ptr<mobius::t_bsurf> mobius::geom_BSplineSurface::Copy() const
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_BSplineSurface::InvertPoint(const t_xyz& P,
-                                              t_uv&        params,
-                                              const double prec) const
+bool mobius::geom_BSplineSurface::InvertPoint(const t_xyz&     P,
+                                              t_uv&            params,
+                                              const double     prec,
+                                              t_ptr<t_alloc2d> alloc,
+                                              const int        memBlockResultU,
+                                              const int        memBlockResultV,
+                                              const int        memBlockInternal) const
 {
   // Create objective functions.
-  core_Ptr<core_TwovariateFuncWithGradient> f = new BSplSurfProj::func_f(this, P);
-  core_Ptr<core_TwovariateFuncWithGradient> g = new BSplSurfProj::func_g(this, P);
+  core_Ptr<core_TwovariateFuncWithGradient>
+    f = new BSplSurfProj::func_f(this, P, alloc, memBlockResultU, memBlockResultV, memBlockInternal);
+  //
+  core_Ptr<core_TwovariateFuncWithGradient>
+    g = new BSplSurfProj::func_g(this, P, alloc, memBlockResultU, memBlockResultV, memBlockInternal);
 
   // Get domain bounds to limit search.
   const double uMin = this->GetMinParameter_U();
