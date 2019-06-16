@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2018
+// Created on: 16 June 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,59 +28,86 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairBCurveAij_HeaderFile
-#define geom_FairBCurveAij_HeaderFile
+#ifndef geom_ApproxBSurf_HeaderFile
+#define geom_ApproxBSurf_HeaderFile
 
 // Geometry includes
-#include <mobius/geom_FairBCurveCoeff.h>
+#include <mobius/geom_BSplineSurface.h>
+#include <mobius/geom_BSurfNk.h>
+#include <mobius/geom_PositionCloud.h>
 
 // Core includes
-#include <mobius/core_HeapAlloc.h>
+#include <mobius/core_OPERATOR.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Univariate function to interface fairing coefficients A_{i,j}.
-class geom_FairBCurveAij : public geom_FairBCurveCoeff
+//! Approximation algorithm for B-spline surfaces from unstructured
+//! point clouds.
+class geom_ApproxBSurf : public core_OPERATOR
 {
 public:
 
-  //! ctor.
-  //! \param[in] U      knot vector.
-  //! \param[in] p      B-spline degree.
-  //! \param[in] i      0-based index 1.
-  //! \param[in] j      0-based index 2.
-  //! \param[in] lambda fairing coefficent.
-  //! \param[in] alloc  shared memory allocator.
+  //! Ctor.
+  //! \param[in] points    points to approximate.
+  //! \param[in] uDegree   desired U degree.
+  //! \param[in] vDegree   desired V degree.
+  //! \param[in] numPolesU number of poles in U direction (do not mix up with
+  //!                      "fixed-U direction" which is a "V direction".
+  //! \param[in] numPolesV number of poles in V direction.
+  //! \param[in] progress  progress notifier.
+  //! \param[in] plotter   imperative plotter.
   mobiusGeom_EXPORT
-    geom_FairBCurveAij(const std::vector<double>& U,
-                       const int                  p,
-                       const int                  i,
-                       const int                  j,
-                       const double               lambda,
-                       t_ptr<t_alloc2d>           alloc);
+    geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
+                     const int              uDegree,
+                     const int              vDegree,
+                     const int              numPolesU,
+                     const int              numPolesV,
+                     core_ProgressEntry     progress,
+                     core_PlotterEntry      plotter);
 
 public:
 
-  //! Evaluates function.
-  //! \param[in] u parameter `u` on the curve being faired.
-  //! \return value.
-  mobiusGeom_EXPORT virtual double
-    Eval(const double u) const;
+  //! Performs approximation.
+  //! \return true in case of success, false -- otherwise.
+  mobiusGeom_EXPORT bool
+    Perform();
+
+public:
+
+  //! \return resulting surface.
+  const t_ptr<t_bsurf>& GetResult() const
+  {
+    return m_resultSurf;
+  }
 
 private:
 
-  geom_FairBCurveAij() = delete;
-  void operator=(const geom_FairBCurveAij&) = delete;
+  void prepareNk(t_ptr<t_alloc2d> alloc);
 
 protected:
 
-  const std::vector<double>& m_U;       //!< Knot vector ("flat" knots).
-  int                        m_iDegree; //!< Degree of the spline function.
-  int                        m_iIndex1; //!< 0-based index 1.
-  int                        m_iIndex2; //!< 0-based index 2.
-  t_ptr<t_alloc2d>           m_alloc;   //!< Allocator with reserved memory blocks.
+  //! Points to approximate.
+  t_ptr<t_pcloud> m_inputPoints;
+
+  //! Approximated surface.
+  t_ptr<t_bsurf> m_resultSurf;
+
+  //! U degree.
+  int m_iDegreeU;
+
+  //! V degree.
+  int m_iDegreeV;
+
+  //! Number of poles in U direction.
+  int m_iNumPolesU;
+
+  //! Number of poles in V direction.
+  int m_iNumPolesV;
+
+  //! Evaluators of \f$N_k(u,v)\f$ functions.
+  std::vector< t_ptr<geom_BSurfNk> > m_Nk;
 
 };
 

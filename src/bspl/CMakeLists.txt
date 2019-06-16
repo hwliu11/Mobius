@@ -65,6 +65,7 @@ set (laws_CPP_FILES
 set (parameterization_H_FILES 
   parameterization/bspl_KnotsSelection.h
   parameterization/bspl_KnotsAverage.h
+  parameterization/bspl_KnotsUniform.h
   parameterization/bspl_ParamsSelection.h
   parameterization/bspl_ParamsCentripetal.h
   parameterization/bspl_ParamsChordLength.h

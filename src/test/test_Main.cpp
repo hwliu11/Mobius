@@ -48,6 +48,7 @@
 #include <mobius/test_UnifyKnots.h>
 #include <mobius/test_InterpolateCurve.h>
 #include <mobius/test_KnotsAverage.h>
+#include <mobius/test_KnotsUniform.h>
 #include <mobius/test_Line3D.h>
 #include <mobius/test_MakeBicubicBSurf.h>
 #include <mobius/test_ParamsCentripetal.h>
@@ -99,6 +100,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers>     (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset>       (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsUniform>       (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal>  (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength>  (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform>      (cf->ProgressNotifier) );

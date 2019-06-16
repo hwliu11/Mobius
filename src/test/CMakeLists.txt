@@ -29,6 +29,7 @@ set (bspl_H_FILES
   bspl/test_InsKnot.h
   bspl/test_KnotMultiset.h
   bspl/test_KnotsAverage.h
+  bspl/test_KnotsUniform.h
   bspl/test_N.h
   bspl/test_ParamsCentripetal.h
   bspl/test_ParamsChordLength.h
@@ -44,6 +45,7 @@ set (bspl_CPP_FILES
   bspl/test_InsKnot.cpp
   bspl/test_KnotMultiset.cpp
   bspl/test_KnotsAverage.cpp
+  bspl/test_KnotsUniform.cpp
   bspl/test_N.cpp
   bspl/test_ParamsCentripetal.cpp
   bspl/test_ParamsChordLength.cpp

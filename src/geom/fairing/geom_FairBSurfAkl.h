@@ -42,7 +42,7 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Univariate function to interface fairing coefficients A_{k,l}.
+//! Twovariate function to interface fairing coefficients A_{k,l}.
 class geom_FairBSurfAkl : public geom_FairBSurfCoeff
 {
 public:
@@ -61,6 +61,8 @@ public:
 public:
 
   //! Evaluates function.
+  //! \param[in] u first argument as `u` coordinate from `(u,v)` pair.
+  //! \param[in] v second argument as `v` coordinate from `(u,v)` pair.
   //! \return value.
   mobiusGeom_EXPORT virtual double
     Eval(const double u, const double v) const;

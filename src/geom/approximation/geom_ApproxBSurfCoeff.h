@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 04 November 2013
+// Created on: 16 June 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,58 +28,26 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_KnotsAverage_HeaderFile
-#define test_KnotsAverage_HeaderFile
+#ifndef geom_ApproxBSurfCoeff_HeaderFile
+#define geom_ApproxBSurfCoeff_HeaderFile
 
-// Tests includes
-#include <mobius/test_CaseIDs.h>
+// Geom includes
+#include <mobius/geom.h>
 
-// testEngine includes
-#include <mobius/testEngine_TestCase.h>
-
-// core includes
-#include <mobius/core.h>
+// Core includes
+#include <mobius/core_TwovariateFunc.h>
 
 namespace mobius {
 
-//! Unit test for averaging technique of knots selection.
-class test_KnotsAverage : public testEngine_TestCase
+//! \ingroup MOBIUS_GEOM
+//!
+//! Base class for surface approximation coefficients.
+class geom_ApproxBSurfCoeff : public core_TwovariateFunc
 {
 public:
 
-  //! Returns Test Case ID.
-  //! \return ID of the Test Case.
-  static int ID()
-  {
-    return CaseID_BSpl_KnotsAverage;
-  }
-
-  //! Returns filename for the description.
-  //! \return filename for the description of the Test Case.
-  static std::string DescriptionFn()
-  {
-    return "test_KnotsAverage";
-  }
-
-  //! Returns Test Case description directory.
-  //! \return description directory for the Test Case.
-  static std::string DescriptionDir()
-  {
-    return "BSpl";
-  }
-
-  //! Returns pointers to the Test Functions to launch.
-  //! \param functions [out] output collection of pointers.
-  static void Functions(MobiusTestFunctions& functions)
-  {
-    functions << &testCase1_noDerivativeConstraints
-              << &testCase1_endDerivativeConstraints;
-  }
-
-private:
-
-  static outcome testCase1_noDerivativeConstraints(const int funcID);
-  static outcome testCase1_endDerivativeConstraints(const int funcID);
+  //! Ctor.
+  geom_ApproxBSurfCoeff() : core_TwovariateFunc() {}
 
 };
 

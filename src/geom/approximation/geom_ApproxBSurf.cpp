@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 04 November 2013
+// Created on: 16 June 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,61 +28,48 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_KnotsAverage_HeaderFile
-#define test_KnotsAverage_HeaderFile
+// Own include
+#include <mobius/geom_ApproxBSurf.h>
 
-// Tests includes
-#include <mobius/test_CaseIDs.h>
+//-----------------------------------------------------------------------------
 
-// testEngine includes
-#include <mobius/testEngine_TestCase.h>
-
-// core includes
-#include <mobius/core.h>
-
-namespace mobius {
-
-//! Unit test for averaging technique of knots selection.
-class test_KnotsAverage : public testEngine_TestCase
+mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
+                                           const int              uDegree,
+                                           const int              vDegree,
+                                           const int              numPolesU,
+                                           const int              numPolesV,
+                                           core_ProgressEntry     progress,
+                                           core_PlotterEntry      plotter)
+: core_OPERATOR(progress, plotter)
 {
-public:
+  m_inputPoints = points;
+  m_iDegreeU    = uDegree;
+  m_iDegreeV    = vDegree;
+  m_iNumPolesU  = numPolesU;
+  m_iNumPolesV  = numPolesV;
+}
 
-  //! Returns Test Case ID.
-  //! \return ID of the Test Case.
-  static int ID()
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_ApproxBSurf::Perform()
+{
+  // TODO: NYI
+
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::geom_ApproxBSurf::prepareNk(t_ptr<t_alloc2d> alloc)
+{
+  const int nPoles = m_iNumPolesU*m_iNumPolesV;
+
+  for ( int k = 0; k < nPoles; ++k )
   {
-    return CaseID_BSpl_KnotsAverage;
+    //// Prepare evaluator for N_k(u,v).
+    //t_ptr<geom_BSurfNk>
+    //  Nk = new geom_BSurfNk(m_inputSurf, k, alloc);
+    ////
+    //m_Nk.push_back(Nk);
   }
-
-  //! Returns filename for the description.
-  //! \return filename for the description of the Test Case.
-  static std::string DescriptionFn()
-  {
-    return "test_KnotsAverage";
-  }
-
-  //! Returns Test Case description directory.
-  //! \return description directory for the Test Case.
-  static std::string DescriptionDir()
-  {
-    return "BSpl";
-  }
-
-  //! Returns pointers to the Test Functions to launch.
-  //! \param functions [out] output collection of pointers.
-  static void Functions(MobiusTestFunctions& functions)
-  {
-    functions << &testCase1_noDerivativeConstraints
-              << &testCase1_endDerivativeConstraints;
-  }
-
-private:
-
-  static outcome testCase1_noDerivativeConstraints(const int funcID);
-  static outcome testCase1_endDerivativeConstraints(const int funcID);
-
-};
-
-};
-
-#endif
+}

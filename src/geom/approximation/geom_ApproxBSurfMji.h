@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 20 August 2018
+// Created on: 16 June 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2018-present, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,40 +28,30 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairBSurfBl_HeaderFile
-#define geom_FairBSurfBl_HeaderFile
+#ifndef geom_ApproxBSurfMji_HeaderFile
+#define geom_ApproxBSurfMji_HeaderFile
 
-// Geom includes
-#include <mobius/geom_BSplineSurface.h>
+// Geometry includes
+#include <mobius/geom_ApproxBSurfCoeff.h>
 #include <mobius/geom_BSurfNk.h>
-#include <mobius/geom_FairBSurfCoeff.h>
-
-// Core includes
-#include <mobius/core_HeapAlloc.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface fairing rhs coefficients B_l.
-class geom_FairBSurfBl : public geom_FairBSurfCoeff
+//! Twovariate function to interface approximation coefficients M_{j,i}.
+class geom_ApproxBSurfMji : public geom_ApproxBSurfCoeff
 {
 public:
 
-  //! ctor.
-  //! \param[in] surface B-spline surface in question (the one to fair).
-  //! \param[in] coord   index of coordinate to use (0 for X, 1 for Y, and 2 for Z).
-  //! \param[in] l       0-based index.
-  //! \param[in] Nk      evaluators for functions \f$N_l(u,v)\f$.
-  //! \param[in] lambda  fairing coefficent.
-  //! \param[in] alloc   shared memory allocator.
+  //! Ctor.
+  //! \param[in] j  0-based index 1.
+  //! \param[in] i  0-based index 2.
+  //! \param[in] Nk evaluators for functions \f$N_j(u,v)\f$ and \f$N_i(u,v)\f$.
   mobiusGeom_EXPORT
-    geom_FairBSurfBl(const t_ptr<t_bsurf>&                     surface,
-                     const int                                 coord,
-                     const int                                 l,
-                     const std::vector< t_ptr<geom_BSurfNk> >& Nk,
-                     const double                              lambda,
-                     t_ptr<t_alloc2d>                          alloc);
+    geom_ApproxBSurfMji(const int                                 j,
+                        const int                                 i,
+                        const std::vector< t_ptr<geom_BSurfNk> >& Nk);
 
 public:
 
@@ -72,28 +62,16 @@ public:
   mobiusGeom_EXPORT virtual double
     Eval(const double u, const double v) const;
 
-public:
-
-  //! Returns the indices of knot spans whether the function \f$N_k(u,v)\f$
-  //! is not zero. See for example P2.1 at p. 55 in "The NURBS Book".
-  virtual void GetSupportSpans(int& ifirst, int& ilast,
-                               int& jfirst, int& jlast) const
-  {
-    m_Nk[m_iL]->GetSupportSpans(ifirst, ilast, jfirst, jlast);
-  }
-
 private:
 
-  geom_FairBSurfBl() = delete;
-  void operator=(const geom_FairBSurfBl&) = delete;
+  geom_ApproxBSurfMji() = delete;
+  void operator=(const geom_ApproxBSurfMji&) = delete;
 
 protected:
 
-  int                                       m_iL;      //!< Index of basis function.
-  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk;      //!< Evaluators of basis functions.
-  t_ptr<t_bsurf>                            m_surface; //!< Surface in question.
-  int                                       m_iCoord;  //!< Coordinate in question.
-  t_ptr<t_alloc2d>                          m_alloc;   //!< Shared memory allocator.
+  int                                       m_iJ; //!< J index.
+  int                                       m_iI; //!< I index.
+  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk; //!< Pre-computed basis functions.
 
 };
 

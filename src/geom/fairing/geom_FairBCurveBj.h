@@ -63,6 +63,7 @@ public:
 public:
 
   //! Evaluates function.
+  //! \param[in] u parameter `u` on the curve being faired.
   //! \return value.
   mobiusGeom_EXPORT virtual double
     Eval(const double u) const;

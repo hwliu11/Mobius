@@ -133,7 +133,8 @@ bool mobius::geom_FairBSurf::Perform()
   const int                  p = m_inputSurf->GetDegree_U();
   const int                  q = m_inputSurf->GetDegree_V();
 
-  // Prepare reusable memory blocks for running sub-routines efficiently.
+  // Prepare memory arena (reusable memory blocks for running sub-routines
+  // efficiently).
   t_ptr<t_alloc2d> sharedAlloc = new t_alloc2d;
   //
   sharedAlloc->Allocate(3, p + 1, true); // memBlockSurf_EffectiveNDersUResult

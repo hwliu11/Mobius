@@ -53,6 +53,7 @@ enum test_CaseID
   CaseID_BSpl_FindSpan,
   CaseID_BSpl_KnotMultiset,
   CaseID_BSpl_KnotsAverage,
+  CaseID_BSpl_KnotsUniform,
   CaseID_BSpl_N,
   CaseID_BSpl_ParamsCentripetal,
   CaseID_BSpl_ParamsChordLength,

@@ -15,6 +15,22 @@ set (CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# Approximation
+#------------------------------------------------------------------------------
+
+set (approximation_H_FILES
+  approximation/geom_ApproxBSurf.h
+  approximation/geom_ApproxBSurfBi.h
+  approximation/geom_ApproxBSurfCoeff.h
+  approximation/geom_ApproxBSurfMji.h
+)
+set (approximation_CPP_FILES
+  approximation/geom_ApproxBSurf.cpp
+  approximation/geom_ApproxBSurfBi.cpp
+  approximation/geom_ApproxBSurfMji.cpp
+)
+
+#------------------------------------------------------------------------------
 # Classifiers
 #------------------------------------------------------------------------------
 
@@ -168,6 +184,14 @@ foreach (FILE ${CPP_FILES})
   source_group ("Source Files" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${approximation_H_FILES})
+  source_group ("Header Files\\Approximation" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${approximation_CPP_FILES})
+  source_group ("Source Files\\Approximation" FILES "${FILE}")
+endforeach (FILE)
+
 foreach (FILE ${classifiers_H_FILES})
   source_group ("Header Files\\Classifiers" FILES "${FILE}")
 endforeach (FILE)
@@ -224,6 +248,7 @@ endif()
 
 add_library (mobiusGeom SHARED
   ${H_FILES}               ${CPP_FILES}
+  ${approximation_H_FILES} ${approximation_CPP_FILES}
   ${classifiers_H_FILES}   ${classifiers_CPP_FILES}
   ${common_H_FILES}        ${common_CPP_FILES}
   ${fairing_H_FILES}       ${fairing_CPP_FILES}
@@ -265,6 +290,7 @@ install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMP
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusGeom.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 
 install (FILES ${H_FILES}               DESTINATION include/mobius)
+install (FILES ${approximation_H_FILES} DESTINATION include/mobius)
 install (FILES ${classifiers_H_FILES}   DESTINATION include/mobius)
 install (FILES ${common_H_FILES}        DESTINATION include/mobius)
 install (FILES ${fairing_H_FILES}       DESTINATION include/mobius)
