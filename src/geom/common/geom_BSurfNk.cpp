@@ -43,6 +43,89 @@
 
 //-----------------------------------------------------------------------------
 
+void mobius::geom_BSurfNk::Eval(const double u,
+                                const double v,
+                                double&      N)
+{
+  t_cell askedCell(t_uv(u, v), 1e-4);
+
+  // Return cached values.
+  if ( m_cells.find(askedCell) != m_cells.end() )
+  {
+    const t_values& cache = m_cells[askedCell];
+    //
+    N = cache.N;
+
+    return;
+  }
+
+  t_ptr<t_alloc2d> localAlloc;
+
+  const int orderU = m_Ni.p + 1;
+  const int orderV = m_Nj.q + 1;
+  double    Ni     = 0.0;
+  double    Nj     = 0.0;
+
+  // Find span and index of the first non-vanishing spline.
+  bspl_FindSpan FindSpanU(m_Ni.U, m_Ni.p),
+                FindSpanV(m_Nj.V, m_Nj.q);
+  //
+  int basisIndexU = 0, basisIndexV = 0;
+  int Iu          = FindSpanU(u, basisIndexU);
+  int Iv          = FindSpanV(v, basisIndexV);
+
+  // Prepare matrices (transposed vectors in that case as we do not calculate
+  // derivatives here).
+  double** dNi, **dNj;
+  //
+  if ( m_alloc.IsNull() )
+  {
+    localAlloc = new t_alloc2d;
+    dNi = localAlloc->Allocate(1, orderU, true);
+    dNj = localAlloc->Allocate(1, orderV, true);
+  }
+  else
+  {
+    dNi = m_alloc->Access(memBlockSurf_EffectiveNDersUResult).Ptr;
+    dNj = m_alloc->Access(memBlockSurf_EffectiveNDersVResult).Ptr;
+  }
+
+  // Evaluate both functions: one for u and another for v.
+  bspl_EffectiveNDers EvalNu(m_alloc, memBlockSurf_EffectiveNDersUInternal),
+                      EvalNv(m_alloc, memBlockSurf_EffectiveNDersVInternal);
+  //
+  EvalNu(u, m_Ni.U, m_Ni.p, Iu, 0, dNi);
+  EvalNv(v, m_Nj.V, m_Nj.q, Iv, 0, dNj);
+
+  // Take value of N_i.
+  if ( (m_Ni.i >= basisIndexU) && (m_Ni.i < basisIndexU + orderU) )
+  {
+    Ni = dNi[0][m_Ni.i - basisIndexU];
+  }
+
+  // Take value of N_j.
+  if ( (m_Nj.j >= basisIndexV) && (m_Nj.j < basisIndexV + orderV) )
+  {
+    Nj = dNj[0][m_Nj.j - basisIndexV];
+  }
+
+  // Calculate results.
+  N = Ni*Nj;
+
+  // Cache.
+  t_values cache;
+  cache.N       = N;
+  cache.dN_dU   = 0.;
+  cache.dN_dV   = 0.;
+  cache.d2N_dU2 = 0.;
+  cache.d2N_dUV = 0.;
+  cache.d2N_dV2 = 0.;
+  //
+  m_cells[askedCell] = cache;
+}
+
+//-----------------------------------------------------------------------------
+
 void mobius::geom_BSurfNk::Eval_D2(const double u,
                                    const double v,
                                    double&      N,

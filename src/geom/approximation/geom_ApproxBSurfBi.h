@@ -38,27 +38,36 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface approximation rhs coefficients B_i.
+//! Twovariate function to interface approximation rhs coefficients \f$B_i\f$.
 class geom_ApproxBSurfBi : public geom_ApproxBSurfCoeff
 {
 public:
 
   //! Ctor.
+  //! \param[in] i   0-based index of the row in the matrix.
+  //! \param[in] pts data points being approximated.
+  //! \param[in] UVs parameterization of the input data points `pts`.
+  //! \param[in] Nk  prepared evaluators for the basis functions.
   mobiusGeom_EXPORT
-    geom_ApproxBSurfBi();
+    geom_ApproxBSurfBi(const int                                 i,
+                       const std::vector<t_xyz>&                 pts,
+                       const std::vector<t_uv>&                  UVs,
+                       const std::vector< t_ptr<geom_BSurfNk> >& Nk);
 
 public:
 
-  //! Evaluates function.
-  //! \param[in] u first argument as `u` coordinate from `(u,v)` pair.
-  //! \param[in] v second argument as `v` coordinate from `(u,v)` pair.
-  //! \return value.
-  mobiusGeom_EXPORT virtual double
-    Eval(const double u, const double v) const;
+  //! \copydoc geom_ApproxBSurfCoeff::Eval()
+  virtual double Eval(const int coord) = 0;
 
 private:
 
+  geom_ApproxBSurfBi() = delete;
   void operator=(const geom_ApproxBSurfBi&) = delete;
+
+protected:
+
+  int                       m_iI; //!< I index.
+  const std::vector<t_xyz>& m_R;  //!< Points to approximate.
 
 };
 

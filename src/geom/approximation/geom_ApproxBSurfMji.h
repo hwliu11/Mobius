@@ -33,34 +33,42 @@
 
 // Geometry includes
 #include <mobius/geom_ApproxBSurfCoeff.h>
-#include <mobius/geom_BSurfNk.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface approximation coefficients M_{j,i}.
+//! Twovariate function to interface approximation coefficients \f$M_{j,i}\f$.
 class geom_ApproxBSurfMji : public geom_ApproxBSurfCoeff
 {
 public:
 
   //! Ctor.
-  //! \param[in] j  0-based index 1.
-  //! \param[in] i  0-based index 2.
-  //! \param[in] Nk evaluators for functions \f$N_j(u,v)\f$ and \f$N_i(u,v)\f$.
+  //! \param[in] j   0-based index 1.
+  //! \param[in] i   0-based index 2.
+  //! \param[in] UVs parameterization of the data points to approximate.
+  //! \param[in] Nk  evaluators for functions \f$N_j(u,v)\f$ and \f$N_i(u,v)\f$.
   mobiusGeom_EXPORT
     geom_ApproxBSurfMji(const int                                 j,
                         const int                                 i,
+                        const std::vector<t_uv>&                  UVs,
                         const std::vector< t_ptr<geom_BSurfNk> >& Nk);
 
 public:
 
-  //! Evaluates function.
-  //! \param[in] u first argument as `u` coordinate from `(u,v)` pair.
-  //! \param[in] v second argument as `v` coordinate from `(u,v)` pair.
-  //! \return value.
+  //! \copydoc geom_ApproxBSurfCoeff::Eval()
   mobiusGeom_EXPORT virtual double
-    Eval(const double u, const double v) const;
+    Eval(const int coord);
+
+protected:
+
+  //! Evaluates product of \f$N_j(u,v) N_i(u,v)\f$ in the given
+  //! parameter's pair \f$(u,v)\f$.
+  //! \param[in] u first parameter.
+  //! \param[in] v second parameter.
+  //! \return evaluation result.
+  mobiusGeom_EXPORT double
+    eval_Nj_Ni(const double u, const double v);
 
 private:
 
@@ -69,9 +77,8 @@ private:
 
 protected:
 
-  int                                       m_iJ; //!< J index.
-  int                                       m_iI; //!< I index.
-  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk; //!< Pre-computed basis functions.
+  int m_iJ; //!< J index.
+  int m_iI; //!< I index.
 
 };
 

@@ -42,7 +42,7 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Univariate function to interface fairing rhs coefficients B_j.
+//! Univariate function to interface fairing rhs coefficients \f$B_j\f$.
 class geom_FairBCurveBj : public geom_FairBCurveCoeff
 {
 public:

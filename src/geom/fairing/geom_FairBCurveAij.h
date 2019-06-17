@@ -41,7 +41,7 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Univariate function to interface fairing coefficients A_{i,j}.
+//! Univariate function to interface fairing coefficients \f$A_{i,j}\f$.
 class geom_FairBCurveAij : public geom_FairBCurveCoeff
 {
 public:

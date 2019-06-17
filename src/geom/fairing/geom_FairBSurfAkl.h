@@ -42,7 +42,7 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface fairing coefficients A_{k,l}.
+//! Twovariate function to interface fairing coefficients \f$A_{k,l}\f$.
 class geom_FairBSurfAkl : public geom_FairBSurfCoeff
 {
 public:

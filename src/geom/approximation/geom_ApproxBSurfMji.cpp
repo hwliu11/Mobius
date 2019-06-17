@@ -30,3 +30,48 @@
 
 // Own include
 #include <mobius/geom_ApproxBSurfMji.h>
+
+//-----------------------------------------------------------------------------
+
+mobius::geom_ApproxBSurfMji::geom_ApproxBSurfMji(const int                                 j,
+                                                 const int                                 i,
+                                                 const std::vector<t_uv>&                  UVs,
+                                                 const std::vector< t_ptr<geom_BSurfNk> >& Nk)
+: geom_ApproxBSurfCoeff (UVs, Nk),
+  m_iJ                  (j),
+  m_iI                  (i)
+{}
+
+//-----------------------------------------------------------------------------
+
+double mobius::geom_ApproxBSurfMji::Eval(const int coord)
+{
+  // Sum products of N_i N_j for each data point.
+  double res = 0.;
+  for ( size_t k = 0; k < m_UVs.size(); ++k )
+  {
+    const double NjNi = this->eval_Nj_Ni( m_UVs[k].U(), m_UVs[k].V() );
+    //
+    res += NjNi;
+  }
+
+  return res;
+}
+
+//-----------------------------------------------------------------------------
+
+double mobius::geom_ApproxBSurfMji::eval_Nj_Ni(const double u, const double v)
+{
+  // Evaluate function N_j(u,v).
+  double Nj;
+  m_Nk[m_iJ]->Eval(u, v, Nj);
+
+  // Evaluate function N_i(u,v).
+  double Ni;
+  m_Nk[m_iI]->Eval(u, v, Ni);
+
+  // Calculate result.
+  const double res = Nj*Ni;
+  //
+  return res;
+}

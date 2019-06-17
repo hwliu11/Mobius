@@ -30,3 +30,36 @@
 
 // Own include
 #include <mobius/geom_ApproxBSurfBi.h>
+
+//-----------------------------------------------------------------------------
+
+mobius::geom_ApproxBSurfBi::geom_ApproxBSurfBi(const int                                 i,
+                                               const std::vector<t_xyz>&                 pts,
+                                               const std::vector<t_uv>&                  UVs,
+                                               const std::vector< t_ptr<geom_BSurfNk> >& Nk)
+: geom_ApproxBSurfCoeff (UVs, Nk),
+  m_iI                  (i),
+  m_R                   (pts)
+{}
+
+//-----------------------------------------------------------------------------
+
+double mobius::geom_ApproxBSurfBi::Eval(const int coord)
+{
+  // Sum products of R_k N_i for each data point.
+  double res = 0.;
+  for ( size_t k = 0; k < m_UVs.size(); ++k )
+  {
+    // Evaluate function N_i(u,v).
+    double Ni;
+    m_Nk[m_iI]->Eval(m_UVs[k].U(), m_UVs[k].V(), Ni);
+
+    // Get coordinate of interest.
+    const double r = m_R[k].Coord(coord);
+
+    // Sum.
+    res += r*Ni;
+  }
+
+  return res;
+}

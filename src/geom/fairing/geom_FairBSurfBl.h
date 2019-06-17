@@ -43,7 +43,7 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface fairing rhs coefficients B_l.
+//! Twovariate function to interface fairing rhs coefficients \f$B_l\f$.
 class geom_FairBSurfBl : public geom_FairBSurfCoeff
 {
 public:

@@ -32,22 +32,41 @@
 #define geom_ApproxBSurfCoeff_HeaderFile
 
 // Geom includes
-#include <mobius/geom.h>
+#include <mobius/geom_BSurfNk.h>
 
 // Core includes
-#include <mobius/core_TwovariateFunc.h>
+#include <mobius/core_Ptr.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
 //! Base class for surface approximation coefficients.
-class geom_ApproxBSurfCoeff : public core_TwovariateFunc
+class geom_ApproxBSurfCoeff : public core_OBJECT
 {
 public:
 
-  //! Ctor.
-  geom_ApproxBSurfCoeff() : core_TwovariateFunc() {}
+  //! Ctor accepting the parameterization of the data points.
+  //! \param[in] UVs parameterization of the data points.
+  //! \param[in] Nk  evaluators of basis functions.
+  geom_ApproxBSurfCoeff(const std::vector<t_uv>&                  UVs,
+                        const std::vector< t_ptr<geom_BSurfNk> >& Nk)
+  : core_OBJECT (),
+    m_UVs       (UVs),
+    m_Nk        (Nk)
+  {}
+
+public:
+
+  //! Evaluates the coefficient for the passed coordinate index.
+  //! \param[in] coord coordinate index (0 -- X, 1 -- Y, 2 -- Z).
+  //! \return evaluated coefficient.
+  virtual double Eval(const int coord) = 0;
+
+protected:
+
+  const std::vector<t_uv>&                  m_UVs; //!< Input parameterization.
+  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk;  //!< Pre-computed basis functions.
 
 };
 

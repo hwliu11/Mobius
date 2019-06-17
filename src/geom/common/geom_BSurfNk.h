@@ -114,6 +114,15 @@ public:
 
 public:
 
+  //! Evaluates function without derivatives.
+  //! \param[in]  u first parameter value.
+  //! \param[in]  v second parameter value.
+  //! \param[out] N computed function value.
+  mobiusGeom_EXPORT virtual void
+    Eval(const double u,
+         const double v,
+         double&      N);
+
   //! Evaluates function up to its second derivatives.
   //! \param[in]  u       first parameter value.
   //! \param[in]  v       second parameter value.
