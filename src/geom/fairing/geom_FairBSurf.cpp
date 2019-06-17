@@ -125,7 +125,9 @@ bool mobius::geom_FairBSurf::Perform()
   const int nPoles  = m_iNumPolesU*m_iNumPolesV;
   const int dim     = nPoles - nPinned;
 
+#if defined COUT_DEBUG
   std::cout << "Dimension: " << dim << std::endl;
+#endif
 
   // Prepare working variables.
   const std::vector<double>& U = m_inputSurf->GetKnots_U();
@@ -149,7 +151,9 @@ bool mobius::geom_FairBSurf::Perform()
   // requests to take advantage of caching.
   this->prepareNk(sharedAlloc);
 
+#if defined COUT_DEBUG
   std::cout << "Computing matrix A..." << std::endl;
+#endif
 
   // Mapping between row indices of the linear system and serial indices of
   // the perturbed control points.
@@ -180,14 +184,15 @@ bool mobius::geom_FairBSurf::Perform()
     rkMap[r] = k;
     r++;
 
+#if defined COUT_DEBUG
     std::cout << "A " << r << " done" << std::endl;
+#endif
   }
 
 #if defined COUT_DEBUG
   std::cout << "Here is the matrix A:\n" << eigen_A_mx << std::endl;
-#endif
-
   std::cout << "Computing matrix b..." << std::endl;
+#endif
 
   // Initialize vector of right hand side.
   Eigen::MatrixXd eigen_B_mx(dim, 3);
@@ -217,9 +222,8 @@ bool mobius::geom_FairBSurf::Perform()
 
 #if defined COUT_DEBUG
   std::cout << "Here is the matrix B:\n" << eigen_B_mx << std::endl;
-#endif
-
   std::cout << "Solving linear system..." << std::endl;
+#endif
 
   // Solve.
   Eigen::ColPivHouseholderQR<Eigen::MatrixXd> QR(eigen_A_mx);
@@ -227,9 +231,8 @@ bool mobius::geom_FairBSurf::Perform()
 
 #if defined COUT_DEBUG
   std::cout << "Here is the matrix X (solution):\n" << eigen_X_mx << std::endl;
-#endif
-
   std::cout << "Constructing result..." << std::endl;
+#endif
 
   // Prepare a copy of the surface to serve as a result.
   m_resultSurf = m_inputSurf->Copy();

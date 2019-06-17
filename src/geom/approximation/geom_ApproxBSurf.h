@@ -51,23 +51,21 @@ public:
 
   //! Ctor.
   //! \param[in] points    points to approximate.
-  //! \param[in] uDegree   desired U degree.
-  //! \param[in] vDegree   desired V degree.
-  //! \param[in] numPolesU number of poles in U direction (do not mix up with
-  //!                      "fixed-U direction" which is a "V direction".
-  //! \param[in] numPolesV number of poles in V direction.
   //! \param[in] progress  progress notifier.
   //! \param[in] plotter   imperative plotter.
   mobiusGeom_EXPORT
     geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
-                     const int              uDegree,
-                     const int              vDegree,
-                     const int              numPolesU,
-                     const int              numPolesV,
                      core_ProgressEntry     progress,
                      core_PlotterEntry      plotter);
 
 public:
+
+  //! Sets initial surface. The initial surface is a B-surface which principally
+  //! follows the shape of a point cloud, i.e., each point can be inverted to
+  //! that surface unambiguously.
+  //! \param[in] initSurf initial surface to set.
+  mobiusGeom_EXPORT void
+    InitSurface(const t_ptr<t_bsurf>& initSurf);
 
   //! Performs approximation.
   //! \return true in case of success, false -- otherwise.
@@ -91,29 +89,17 @@ protected:
   //! Points to approximate.
   t_ptr<t_pcloud> m_inputPoints;
 
-  //! Approximated surface.
-  t_ptr<t_bsurf> m_resultSurf;
-
-  //! U degree.
-  int m_iDegreeU;
-
-  //! V degree.
-  int m_iDegreeV;
-
-  //! Number of poles in U direction.
-  int m_iNumPolesU;
-
-  //! Number of poles in V direction.
-  int m_iNumPolesV;
-
-  //! U knot vector.
-  std::vector<double> m_U;
-
-  //! V knot vector.
-  std::vector<double> m_V;
+  //! Initial surface for point cloud parameterization.
+  t_ptr<t_bsurf> m_initSurf;
 
   //! Evaluators of \f$N_k(u,v)\f$ functions.
   std::vector< t_ptr<geom_BSurfNk> > m_Nk;
+
+  //! Parameterization of input points.
+  std::vector<t_uv> m_UVs;
+
+  //! Approximated surface.
+  t_ptr<t_bsurf> m_resultSurf;
 
 };
 

@@ -72,6 +72,7 @@ set (core_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (geom_H_FILES
+  geom/test_ApproxSurf.h
   geom/test_BSplineCurve.h
   geom/test_BSplineSurface.h
   geom/test_FairCurve.h
@@ -85,6 +86,7 @@ set (geom_H_FILES
 )
 
 set (geom_CPP_FILES
+  geom/test_ApproxSurf.cpp
   geom/test_BSplineCurve.cpp
   geom/test_BSplineSurface.cpp
   geom/test_FairCurve.cpp

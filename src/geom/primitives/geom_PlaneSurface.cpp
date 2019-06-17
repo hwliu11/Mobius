@@ -31,15 +31,21 @@
 // Own include
 #include <mobius/geom_PlaneSurface.h>
 
+// BSpl includes
+#include <mobius/bspl_KnotsUniform.h>
+
+// Core includes
+#include <mobius/core_Precision.h>
+
 //-----------------------------------------------------------------------------
 
 mobius::geom_PlaneSurface::geom_PlaneSurface()
 //
 : geom_Surface ( ),
-  m_fUMin      ( -DBL_MAX ),
-  m_fUMax      (  DBL_MAX ),
-  m_fVMin      ( -DBL_MAX ),
-  m_fVMax      (  DBL_MAX ),
+  m_fUMin      ( -core_Precision::Infinity() ),
+  m_fUMax      (  core_Precision::Infinity() ),
+  m_fVMin      ( -core_Precision::Infinity() ),
+  m_fVMax      (  core_Precision::Infinity() ),
   m_D1         ( 1., 0., 0. ),
   m_D2         ( 0., 1., 0. )
 {}
@@ -51,10 +57,10 @@ mobius::geom_PlaneSurface::geom_PlaneSurface(const t_xyz& O,
                                              const t_xyz& D2)
 //
 : geom_Surface ( ),
-  m_fUMin      ( -DBL_MAX ),
-  m_fUMax      (  DBL_MAX ),
-  m_fVMin      ( -DBL_MAX ),
-  m_fVMax      (  DBL_MAX ),
+  m_fUMin      ( -core_Precision::Infinity() ),
+  m_fUMax      (  core_Precision::Infinity() ),
+  m_fVMin      ( -core_Precision::Infinity() ),
+  m_fVMax      (  core_Precision::Infinity() ),
   m_origin     ( O ),
   m_D1         ( D1 ),
   m_D2         ( D2 )
@@ -145,4 +151,43 @@ mobius::t_ptr<mobius::geom_Line>
   t_ptr<geom_Line> line = new geom_Line(isoOrigin, m_D1);
 
   return line;
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::t_ptr<mobius::t_bsurf>
+  mobius::geom_PlaneSurface::ToBSurface(const int degU, const int degV) const
+{
+  if ( core_Precision::IsInfinite(m_fUMin) || core_Precision::IsInfinite(m_fUMax) ||
+       core_Precision::IsInfinite(m_fVMin) || core_Precision::IsInfinite(m_fVMax) )
+    return NULL; // Cannot convert infinite surface.
+
+  /* We agree that there are 2 poles in each direction. */
+
+  int r, s;
+  std::vector<double> U, V;
+
+  // Prepare U knots.
+  if ( bspl_KnotsUniform::Calculate(1, degU, r, U) != bspl_KnotsUniform::ErrCode_NoError )
+    return NULL;
+
+  // Prepare V knots.
+  if ( bspl_KnotsUniform::Calculate(1, degV, s, V) != bspl_KnotsUniform::ErrCode_NoError )
+    return NULL;
+
+  // Evaluate poles.
+  t_xyz P00, P01, P10, P11;
+  //
+  this->Eval(m_fUMin, m_fVMin, P00);
+  this->Eval(m_fUMin, m_fVMax, P01);
+  this->Eval(m_fUMax, m_fVMin, P10);
+  this->Eval(m_fUMax, m_fVMax, P11);
+
+  std::vector< std::vector<t_xyz> > poles = { {P00, P01},
+                                              {P10, P11} };
+
+  // Construct B-surface.
+  t_ptr<t_bsurf> res = new t_bsurf(poles, U, V, degU, degV);
+  //
+  return res;
 }

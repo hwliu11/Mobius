@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 17 June 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,62 +28,58 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+// Own include
+#include <mobius/test_ApproxSurf.h>
 
-// Tests includes
-#include <mobius/test.h>
+// Test includes
+#include <mobius/test_CommonFacilities.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// Geom includes
+#include <mobius/geom_ApproxBSurf.h>
+#include <mobius/geom_BuildAveragePlane.h>
+
+// Standard includes
+#include <fstream>
+
+//-----------------------------------------------------------------------------
+
+// Filenames are specified relatively to MOBIUS_TEST_DATA environment variable.
+#define filename_points_001 "points/sampled-surf_01.xyz"
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 001.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_ApproxSurf::testApprox01(const int funcID)
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+  outcome res( DescriptionFn(), funcID );
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  // Access common facilities.
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filename_points_001;
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_KnotsUniform,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
+  // Read point cloud.
+  t_ptr<t_pcloud> pts = new t_pcloud;
+  //
+  if ( !pts->Load(filename) )
+    return res.failure();
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  // Build average plane.
+  t_ptr<t_plane> averagePln;
+  //
+  geom_BuildAveragePlane planeAlgo;
+  //
+  if ( !planeAlgo.Build(pts, averagePln) )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Cannot build average plane.");
+    return res.failure();
+  }
 
-  CaseID_Geom_ApproxSurf,
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_PositionCloud,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-  CaseID_Geom_SkinSurface,
-  CaseID_Geom_MakeBicubicBSurf,
-
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
-
-  CaseID_Poly_Mesh
-
-};
-
-#endif
+  return res.success();
+}

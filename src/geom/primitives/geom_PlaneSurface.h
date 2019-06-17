@@ -32,6 +32,7 @@
 #define geom_PlaneSurface_HeaderFile
 
 // Geometry includes
+#include <mobius/geom_BSplineSurface.h>
 #include <mobius/geom_Line.h>
 #include <mobius/geom_Surface.h>
 
@@ -125,6 +126,15 @@ public:
   //! \return isoparametric curve.
   mobiusGeom_EXPORT t_ptr<t_line>
     Iso_V(const double v) const;
+
+  //! Converts this plane to a B-surface with the given U and V degrees.
+  //! To limit the surface, the stored \f$u_{min}\f$, \f$u_{max}\f$ and
+  //! \f$v_{min}\f$, \f$v_{max}\f$ boundaries are used.
+  //! \param[in] degU U degree.
+  //! \param[in] degV V degree.
+  //! \return B-surface equivalent of this plane.
+  mobiusGeom_EXPORT t_ptr<t_bsurf>
+    ToBSurface(const int degU, const int degV) const;
 
 public:
 

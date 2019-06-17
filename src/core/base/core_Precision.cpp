@@ -49,3 +49,17 @@ double mobius::core_Precision::Resolution2D()
 {
   return 1.0e-8;
 }
+
+//! \return infinite value.
+double mobius::core_Precision::Infinity()
+{
+  return 1.e+100;
+}
+
+//! Checks whether the passed value is infinite.
+//! \param[in] val value to check.
+//! \return true/false.
+bool mobius::core_Precision::IsInfinite(const double val)
+{
+  return fabs(val) >= Infinity();
+}

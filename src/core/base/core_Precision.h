@@ -52,6 +52,18 @@ public:
   mobiusCore_EXPORT static double
     Resolution2D();
 
+  mobiusCore_EXPORT static double
+    Infinity();
+
+  mobiusCore_EXPORT static double
+    NegativeInfinity();
+
+  mobiusCore_EXPORT static double
+    PositiveInfinity();
+
+  mobiusCore_EXPORT static bool
+    IsInfinite(const double val);
+
 };
 
 };
