@@ -56,8 +56,11 @@ public:
 
 public:
 
-  //! \copydoc geom_ApproxBSurfCoeff::Eval()
-  virtual double Eval(const int coord) = 0;
+  //! Evaluates the coefficient for the passed coordinate index.
+  //! \param[in] coord coordinate index (0 -- X, 1 -- Y, 2 -- Z).
+  //! \return evaluated coefficient.
+  mobiusGeom_EXPORT double
+    Eval(const int coord);
 
 private:
 

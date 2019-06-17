@@ -44,7 +44,7 @@ mobius::geom_ApproxBSurfMji::geom_ApproxBSurfMji(const int                      
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_ApproxBSurfMji::Eval(const int coord)
+double mobius::geom_ApproxBSurfMji::Eval()
 {
   // Sum products of N_i N_j for each data point.
   double res = 0.;

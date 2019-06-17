@@ -106,6 +106,12 @@ protected:
   //! Number of poles in V direction.
   int m_iNumPolesV;
 
+  //! U knot vector.
+  std::vector<double> m_U;
+
+  //! V knot vector.
+  std::vector<double> m_V;
+
   //! Evaluators of \f$N_k(u,v)\f$ functions.
   std::vector< t_ptr<geom_BSurfNk> > m_Nk;
 

@@ -56,9 +56,10 @@ public:
 
 public:
 
-  //! \copydoc geom_ApproxBSurfCoeff::Eval()
-  mobiusGeom_EXPORT virtual double
-    Eval(const int coord);
+  //! Evaluates coefficient.
+  //! \return calculated value.
+  mobiusGeom_EXPORT double
+    Eval();
 
 protected:
 

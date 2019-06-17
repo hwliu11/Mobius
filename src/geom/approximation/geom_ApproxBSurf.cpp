@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/geom_ApproxBSurf.h>
 
+// BSpl includes
+#include <mobius/bspl_KnotsUniform.h>
+
 //-----------------------------------------------------------------------------
 
 mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
@@ -53,6 +56,26 @@ mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
 
 bool mobius::geom_ApproxBSurf::Perform()
 {
+  t_ptr<t_alloc2d> alloc = new t_alloc2d;
+
+  // Prepare twovariate basis functions.
+  this->prepareNk(alloc);
+
+  // Prepare knot vectors.
+  int r, s;
+  //
+  if ( bspl_KnotsUniform::Calculate(m_iNumPolesU - 1, m_iDegreeU, r, m_U) != bspl_KnotsUniform::ErrCode_NoError )
+  {
+    m_progress.SendLogMessage(MobiusErr(Normal) << "Cannot compute knot vector U.");
+    return false;
+  }
+  //
+  if ( bspl_KnotsUniform::Calculate(m_iNumPolesV - 1, m_iDegreeV, s, m_V) != bspl_KnotsUniform::ErrCode_NoError )
+  {
+    m_progress.SendLogMessage(MobiusErr(Normal) << "Cannot compute knot vector V.");
+    return false;
+  }
+
   // TODO: NYI
 
   return false;
@@ -66,10 +89,10 @@ void mobius::geom_ApproxBSurf::prepareNk(t_ptr<t_alloc2d> alloc)
 
   for ( int k = 0; k < nPoles; ++k )
   {
-    //// Prepare evaluator for N_k(u,v).
-    //t_ptr<geom_BSurfNk>
-    //  Nk = new geom_BSurfNk(m_inputSurf, k, alloc);
-    ////
-    //m_Nk.push_back(Nk);
+    // Prepare evaluator for N_k(u,v).
+    t_ptr<geom_BSurfNk>
+      Nk = new geom_BSurfNk(m_U, m_iDegreeU, m_V, m_iDegreeV, k, m_iNumPolesV - 1, alloc);
+    //
+    m_Nk.push_back(Nk);
   }
 }

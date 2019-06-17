@@ -56,12 +56,10 @@ public:
     m_Nk        (Nk)
   {}
 
-public:
+private:
 
-  //! Evaluates the coefficient for the passed coordinate index.
-  //! \param[in] coord coordinate index (0 -- X, 1 -- Y, 2 -- Z).
-  //! \return evaluated coefficient.
-  virtual double Eval(const int coord) = 0;
+  geom_ApproxBSurfCoeff() = delete;
+  void operator=(const geom_ApproxBSurfCoeff&) = delete;
 
 protected:
 
