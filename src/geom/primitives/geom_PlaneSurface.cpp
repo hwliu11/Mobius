@@ -162,29 +162,70 @@ mobius::t_ptr<mobius::t_bsurf>
        core_Precision::IsInfinite(m_fVMin) || core_Precision::IsInfinite(m_fVMax) )
     return NULL; // Cannot convert infinite surface.
 
-  /* We agree that there are 2 poles in each direction. */
-
   int r, s;
   std::vector<double> U, V;
 
   // Prepare U knots.
-  if ( bspl_KnotsUniform::Calculate(1, degU, r, U) != bspl_KnotsUniform::ErrCode_NoError )
+  const int nu = degU;
+  if ( bspl_KnotsUniform::Calculate(nu, degU, r, U) != bspl_KnotsUniform::ErrCode_NoError )
     return NULL;
 
   // Prepare V knots.
-  if ( bspl_KnotsUniform::Calculate(1, degV, s, V) != bspl_KnotsUniform::ErrCode_NoError )
+  const int nv = degV;
+  if ( bspl_KnotsUniform::Calculate(nv, degV, s, V) != bspl_KnotsUniform::ErrCode_NoError )
     return NULL;
 
-  // Evaluate poles.
-  t_xyz P00, P01, P10, P11;
+  // Evaluate (u,v) coordinates for poles.
+  std::vector<double> uValues, vValues;
   //
-  this->Eval(m_fUMin, m_fVMin, P00);
-  this->Eval(m_fUMin, m_fVMax, P01);
-  this->Eval(m_fUMax, m_fVMin, P10);
-  this->Eval(m_fUMax, m_fVMax, P11);
+  const double uDelta = (m_fUMax - m_fUMin) / nu;
+  const double vDelta = (m_fVMax - m_fVMin) / nv;
+  //
+  double nextU = m_fUMin, nextV = m_fVMin;
+  bool   uStop = false,   vStop = false;
+  //
+  while ( !uStop )
+  {
+    if ( fabs(nextU - m_fUMax) < 1.e-4 )
+    {
+      nextU = m_fUMax;
+      uStop = true;
+    }
+    //
+    uValues.push_back(nextU);
 
-  std::vector< std::vector<t_xyz> > poles = { {P00, P01},
-                                              {P10, P11} };
+    nextU += uDelta;
+  }
+  //
+  while ( !vStop )
+  {
+    if ( fabs(nextV - m_fVMax) < 1.e-4 )
+    {
+      nextV = m_fVMax;
+      vStop = true;
+    }
+    //
+    vValues.push_back(nextV);
+
+    nextV += vDelta;
+  }
+
+  // Evaluate poles.
+  std::vector< std::vector<t_xyz> > poles;
+  //
+  for ( size_t i = 0; i < uValues.size(); ++i )
+  {
+    std::vector<t_xyz> uIsoPoles;
+    for ( size_t j = 0; j < vValues.size(); ++j )
+    {
+      t_xyz P;
+      this->Eval(uValues[i], vValues[j], P);
+      //
+      uIsoPoles.push_back(P);
+    }
+
+    poles.push_back(uIsoPoles);
+  }
 
   // Construct B-surface.
   t_ptr<t_bsurf> res = new t_bsurf(poles, U, V, degU, degV);

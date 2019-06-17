@@ -397,7 +397,7 @@ void mobius::geom_SectionLine::Split(const t_ptr<geom_SectionLine>& source,
                                      t_ptr<geom_SectionLine>&       slice_after,
                                      bool&                          splitting_done)
 {
-  const size_t n_pts = source->Pts->GetNumberOfPoints();
+  const int n_pts = source->Pts->GetNumberOfPoints();
 
   // Check if the passed point lies on a border
   if ( idx == 0 || idx == n_pts - 1 )
