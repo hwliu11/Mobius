@@ -127,6 +127,13 @@ public:
   mobiusGeom_EXPORT t_ptr<t_line>
     Iso_V(const double v) const;
 
+  //! Inverts the passed point to plane surface.
+  //! \param[in]  P      point to invert.
+  //! \param[out] params inversion result.
+  mobiusGeom_EXPORT void
+    InvertPoint(const t_xyz& P,
+                t_uv&        params) const;
+
   //! Converts this plane to a B-surface with the given U and V degrees.
   //! To limit the surface, the stored \f$u_{min}\f$, \f$u_{max}\f$ and
   //! \f$v_{min}\f$, \f$v_{max}\f$ boundaries are used.

@@ -155,6 +155,19 @@ mobius::t_ptr<mobius::geom_Line>
 
 //-----------------------------------------------------------------------------
 
+void mobius::geom_PlaneSurface::InvertPoint(const t_xyz& P,
+                                            t_uv&        params) const
+{
+  t_xyz        vec = (P - m_origin);
+  const double u   = vec.Dot(m_D1);
+  const double v   = vec.Dot(m_D2);
+
+  params.SetU(u);
+  params.SetV(v);
+}
+
+//-----------------------------------------------------------------------------
+
 mobius::t_ptr<mobius::t_bsurf>
   mobius::geom_PlaneSurface::ToBSurface(const int degU, const int degV) const
 {

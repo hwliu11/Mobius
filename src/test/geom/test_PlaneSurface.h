@@ -73,12 +73,16 @@ public:
   static void Functions(MobiusTestFunctions& functions)
   {
     functions << &toBSurf01
-              ;
+              << &invertPoint01
+              << &invertPoint02
+              ; // Put semicolon here for convenient adding new functions above ;)
   }
 
 private:
 
-  static outcome toBSurf01 (const int funcID);
+  static outcome toBSurf01     (const int funcID);
+  static outcome invertPoint01 (const int funcID);
+  static outcome invertPoint02 (const int funcID);
 };
 
 };
