@@ -33,6 +33,7 @@
 
 // Geom includes
 #include <mobius/geom_ApproxBSurfCoeff.h>
+#include <mobius/geom_PositionCloud.h>
 
 namespace mobius {
 
@@ -50,7 +51,7 @@ public:
   //! \param[in] Nk  prepared evaluators for the basis functions.
   mobiusGeom_EXPORT
     geom_ApproxBSurfBi(const int                                 i,
-                       const std::vector<t_xyz>&                 pts,
+                       const t_ptr<t_pcloud>&                    pts,
                        const std::vector<t_uv>&                  UVs,
                        const std::vector< t_ptr<geom_BSurfNk> >& Nk);
 
@@ -69,8 +70,8 @@ private:
 
 protected:
 
-  int                       m_iI; //!< I index.
-  const std::vector<t_xyz>& m_R;  //!< Points to approximate.
+  int                    m_iI; //!< I index.
+  const t_ptr<t_pcloud>& m_R;  //!< Points to approximate.
 
 };
 

@@ -74,7 +74,7 @@ bool
                           core_Precision::Resolution2D(),
                           core_Precision::Resolution3D() ) )
   {
-    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Skinned surface deviates to much "
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Skinned surface deviates too much "
                                                              "from the expected surface.");
     return false;
   }

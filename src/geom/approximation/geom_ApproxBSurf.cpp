@@ -34,6 +34,8 @@
 // Geom includes
 #include <mobius/geom_ApproxBSurfBi.h>
 #include <mobius/geom_ApproxBSurfMji.h>
+#include <mobius/geom_BuildAveragePlane.h>
+#include <mobius/geom_PlaneSurface.h>
 
 // BSpl includes
 #include <mobius/bspl_KnotsUniform.h>
@@ -58,11 +60,26 @@ mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
 : core_OPERATOR(progress, plotter)
 {
   m_inputPoints = points;
+  m_iDegreeU = m_iDegreeV = 0; // Will be initialized from the initial surface.
 }
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_ApproxBSurf::InitSurface(const t_ptr<t_bsurf>& initSurf)
+mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
+                                           const int              uDegree,
+                                           const int              vDegree,
+                                           core_ProgressEntry     progress,
+                                           core_PlotterEntry      plotter)
+: core_OPERATOR(progress, plotter)
+{
+  m_inputPoints = points;
+  m_iDegreeU    = uDegree;
+  m_iDegreeV    = vDegree;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::geom_ApproxBSurf::SetInitSurface(const t_ptr<t_bsurf>& initSurf)
 {
   m_initSurf = initSurf;
 }
@@ -71,30 +88,35 @@ void mobius::geom_ApproxBSurf::InitSurface(const t_ptr<t_bsurf>& initSurf)
 
 bool mobius::geom_ApproxBSurf::Perform()
 {
-  /* =================
-   *  Contract checks
-   * ================= */
-
-  if ( m_initSurf.IsNull() )
-  {
-    m_progress.SendLogMessage(MobiusErr(Normal) << "Initial surface is null.");
-    return false;
-  }
-
   /* ===================
    *  Preparation stage
    * =================== */
+
+  // Initial surface.
+  if ( m_initSurf.IsNull() )
+  {
+    m_progress.SendLogMessage(MobiusNotice(Normal) << "Initial surface is null: initializing.");
+
+    if ( !this->initializeSurf() )
+    {
+      m_progress.SendLogMessage(MobiusWarn(Normal) << "Failed to initialize surface.");
+      return false;
+    }
+  }
 
   // Main properties.
   const int                  numPolesU = int( m_initSurf->GetPoles().size() );
   const int                  numPolesV = int( m_initSurf->GetPoles()[0].size() );
   const int                  nPoles    = numPolesU*numPolesV;
-  const std::vector<double>& U         = m_initSurf->GetKnots_U();
-  const std::vector<double>& V         = m_initSurf->GetKnots_V();
   const int                  p         = m_initSurf->GetDegree_U();
   const int                  q         = m_initSurf->GetDegree_V();
 
   t_ptr<t_alloc2d> alloc = new t_alloc2d;
+  //
+  alloc->Allocate(3, p + 1, true); // memBlockSurf_EffectiveNDersUResult
+  alloc->Allocate(3, q + 1, true); // memBlockSurf_EffectiveNDersVResult
+  alloc->Allocate(2, 3,     true); // memBlockSurf_EffectiveNDersUInternal
+  alloc->Allocate(2, 3,     true); // memBlockSurf_EffectiveNDersVInternal
 
   // Prepare twovariate basis functions.
   this->prepareNk(alloc);
@@ -103,7 +125,7 @@ bool mobius::geom_ApproxBSurf::Perform()
    *  Parameterize data points using the initial surface
    * ==================================================== */
 
-  // Prepare memory arena for point imversion.
+  // Prepare memory arena for point inversion.
   t_ptr<t_alloc2d> piAlloc = new t_alloc2d;
   //
   const int memBlock_BSplineSurfEvalD2U      = 0;
@@ -177,13 +199,60 @@ bool mobius::geom_ApproxBSurf::Perform()
   std::cout << "Computing matrix b..." << std::endl;
 #endif
 
-  // TODO: NYI
+  // Initialize vector of right hand side.
+  Eigen::MatrixXd eigen_B_mx(dim, 3);
+  r = 0;
+  for ( int k = 0; k < nPoles; ++k )
+  {
+    geom_ApproxBSurfBi rhs(k, m_inputPoints, m_UVs, m_Nk);
+
+    // Compute integrals.
+    const double val_x = rhs.Eval(0);
+    const double val_y = rhs.Eval(1);
+    const double val_z = rhs.Eval(2);
+    //
+    eigen_B_mx(r, 0) = val_x;
+    eigen_B_mx(r, 1) = val_y;
+    eigen_B_mx(r, 2) = val_z;
+    //
+    r++;
+  }
+
+#if defined COUT_DEBUG
+  std::cout << "Here is the matrix B:\n" << eigen_B_mx << std::endl;
+  std::cout << "Solving linear system..." << std::endl;
+#endif
 
   /* ==============================================
    *  Solve linear system and construct the result
    * ============================================== */
 
-  return false;
+  // Solve.
+  Eigen::ColPivHouseholderQR<Eigen::MatrixXd> QR(eigen_A_mx);
+  Eigen::MatrixXd eigen_X_mx = QR.solve(eigen_B_mx);
+
+#if defined COUT_DEBUG
+  std::cout << "Here is the matrix X (solution):\n" << eigen_X_mx << std::endl;
+  std::cout << "Constructing result..." << std::endl;
+#endif
+
+  // Prepare a copy of the surface to serve as a result.
+  m_resultSurf = m_initSurf->Copy();
+
+  // Set new coordinates for poles.
+  const std::vector< std::vector<t_xyz> >& poles = m_resultSurf->GetPoles();
+  //
+  for ( int k = 0; k < dim; ++k )
+  {
+    int i, j;
+    this->GetIJ(k, i, j);
+
+    t_xyz D = t_xyz( eigen_X_mx(k, 0), eigen_X_mx(k, 1), eigen_X_mx(k, 2) );
+    //
+    m_resultSurf->SetPole(i, j, D);
+  }
+
+  return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -203,4 +272,29 @@ void mobius::geom_ApproxBSurf::prepareNk(t_ptr<t_alloc2d> alloc)
     //
     m_Nk.push_back(Nk);
   }
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_ApproxBSurf::initializeSurf()
+{
+  // Build average plane.
+  t_ptr<t_plane> averagePln;
+  //
+  geom_BuildAveragePlane planeAlgo;
+  //
+  if ( !planeAlgo.Build(m_inputPoints, averagePln) )
+  {
+    m_progress.SendLogMessage(MobiusWarn(Normal) << "Cannot build average plane.");
+    return false;
+  }
+
+  // Project point cloud to plane to determine the parametric bounds.
+  averagePln->TrimByPoints(m_inputPoints);
+
+  // Convert plane to B-surf.
+  m_initSurf = averagePln->ToBSurface(m_iDegreeU ? m_iDegreeU : 3,
+                                      m_iDegreeV ? m_iDegreeV : 3);
+
+  return true;
 }

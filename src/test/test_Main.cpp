@@ -125,7 +125,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairSurf>           (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_SkinSurface>        (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ApproxSurf>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ApproxSurf>         (cf->ProgressNotifier) );
 
   // Poly group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Mesh>               (cf->ProgressNotifier) );

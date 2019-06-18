@@ -50,13 +50,26 @@ class geom_ApproxBSurf : public core_OPERATOR
 public:
 
   //! Ctor.
-  //! \param[in] points    points to approximate.
-  //! \param[in] progress  progress notifier.
-  //! \param[in] plotter   imperative plotter.
+  //! \param[in] points   points to approximate.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
     geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
-                     core_ProgressEntry     progress,
-                     core_PlotterEntry      plotter);
+                     core_ProgressEntry     progress = NULL,
+                     core_PlotterEntry      plotter  = NULL);
+
+  //! Ctor accepting the desired degrees.
+  //! \param[in] points   points to approximate.
+  //! \param[in] uDegree  U degree.
+  //! \param[in] vDegree  V degree.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
+  mobiusGeom_EXPORT
+    geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
+                     const int              uDegree,
+                     const int              vDegree,
+                     core_ProgressEntry     progress = NULL,
+                     core_PlotterEntry      plotter  = NULL);
 
 public:
 
@@ -65,7 +78,7 @@ public:
   //! that surface unambiguously.
   //! \param[in] initSurf initial surface to set.
   mobiusGeom_EXPORT void
-    InitSurface(const t_ptr<t_bsurf>& initSurf);
+    SetInitSurface(const t_ptr<t_bsurf>& initSurf);
 
   //! Performs approximation.
   //! \return true in case of success, false -- otherwise.
@@ -73,6 +86,15 @@ public:
     Perform();
 
 public:
+
+  //! Converts serial index of an element to its grid indices (i,j).
+  //! \param[in]  k 0-based serial index of element.
+  //! \param[out] i 0-based index of the corresponding row.
+  //! \param[out] j 0-based index of the corresponding column.
+  void GetIJ(const int k, int& i, int& j) const
+  {
+    bspl::PairIndicesFromSerial(k, m_initSurf->GetNumOfPoles_V(), i, j);
+  }
 
   //! \return resulting surface.
   const t_ptr<t_bsurf>& GetResult() const
@@ -84,6 +106,8 @@ private:
 
   void prepareNk(t_ptr<t_alloc2d> alloc);
 
+  bool initializeSurf();
+
 protected:
 
   //! Points to approximate.
@@ -91,6 +115,12 @@ protected:
 
   //! Initial surface for point cloud parameterization.
   t_ptr<t_bsurf> m_initSurf;
+
+  //! U degree.
+  int m_iDegreeU;
+
+  //! V degree.
+  int m_iDegreeV;
 
   //! Evaluators of \f$N_k(u,v)\f$ functions.
   std::vector< t_ptr<geom_BSurfNk> > m_Nk;

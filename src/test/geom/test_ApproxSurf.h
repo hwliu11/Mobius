@@ -75,7 +75,14 @@ public:
 
 private:
 
-  static outcome testApprox01 (const int funcID);
+  static bool runtest(const std::string& shortFilename,
+                      const int          uDegree,
+                      const int          vDegree,
+                      const std::string& refJson);
+
+private:
+
+  static outcome testApprox01(const int funcID);
 
 };
 

@@ -34,7 +34,7 @@
 //-----------------------------------------------------------------------------
 
 mobius::geom_ApproxBSurfBi::geom_ApproxBSurfBi(const int                                 i,
-                                               const std::vector<t_xyz>&                 pts,
+                                               const t_ptr<t_pcloud>&                    pts,
                                                const std::vector<t_uv>&                  UVs,
                                                const std::vector< t_ptr<geom_BSurfNk> >& Nk)
 : geom_ApproxBSurfCoeff (UVs, Nk),
@@ -55,7 +55,7 @@ double mobius::geom_ApproxBSurfBi::Eval(const int coord)
     m_Nk[m_iI]->Eval(m_UVs[k].U(), m_UVs[k].V(), Ni);
 
     // Get coordinate of interest.
-    const double r = m_R[k].Coord(coord);
+    const double r = m_R->GetPoint(k).Coord(coord);
 
     // Sum.
     res += r*Ni;
