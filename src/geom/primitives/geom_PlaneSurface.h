@@ -34,6 +34,7 @@
 // Geometry includes
 #include <mobius/geom_BSplineSurface.h>
 #include <mobius/geom_Line.h>
+#include <mobius/geom_PositionCloud.h>
 #include <mobius/geom_Surface.h>
 
 namespace mobius {
@@ -142,6 +143,13 @@ public:
   //! \return B-surface equivalent of this plane.
   mobiusGeom_EXPORT t_ptr<t_bsurf>
     ToBSurface(const int degU, const int degV) const;
+
+  //! Initializes the stored \f$u_{min}\f$, \f$u_{max}\f$ and
+  //! \f$v_{min}\f$, \f$v_{max}\f$ limits by inverting the given
+  //! point cloud `pts` to the plane.
+  //! \param[in] pts points to trim the plane with.
+  mobiusGeom_EXPORT void
+    TrimByPoints(const t_ptr<t_pcloud>& pts);
 
 public:
 

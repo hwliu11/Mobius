@@ -245,3 +245,38 @@ mobius::t_ptr<mobius::t_bsurf>
   //
   return res;
 }
+
+//-----------------------------------------------------------------------------
+
+void mobius::geom_PlaneSurface::TrimByPoints(const t_ptr<t_pcloud>& pts)
+{
+  double uMin =  core_Precision::Infinity();
+  double uMax = -core_Precision::Infinity();
+  double vMin =  core_Precision::Infinity();
+  double vMax = -core_Precision::Infinity();
+
+  // Invert each point.
+  for ( int k = 0; k < pts->GetNumberOfPoints(); ++k )
+  {
+    const t_xyz& P = pts->GetPoint(k);
+
+    // Invert.
+    t_uv uv;
+    this->InvertPoint(P, uv);
+
+    if ( uv.U() < uMin )
+      uMin = uv.U();
+    if ( uv.U() > uMax )
+      uMax = uv.U();
+    if ( uv.V() < vMin )
+      vMin = uv.V();
+    if ( uv.V() > vMax )
+      vMax = uv.V();
+  }
+
+  // Set limits.
+  m_fUMin = uMin;
+  m_fUMax = uMax;
+  m_fVMin = vMin;
+  m_fVMax = vMax;
+}
