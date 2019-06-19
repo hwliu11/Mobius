@@ -47,7 +47,7 @@
 
 //-----------------------------------------------------------------------------
 
-#define COUT_DEBUG
+#undef COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
@@ -105,11 +105,11 @@ bool mobius::geom_ApproxBSurf::Perform()
   }
 
   // Main properties.
-  const int                  numPolesU = int( m_initSurf->GetPoles().size() );
-  const int                  numPolesV = int( m_initSurf->GetPoles()[0].size() );
-  const int                  nPoles    = numPolesU*numPolesV;
-  const int                  p         = m_initSurf->GetDegree_U();
-  const int                  q         = m_initSurf->GetDegree_V();
+  const int numPolesU = int( m_initSurf->GetPoles().size() );
+  const int numPolesV = int( m_initSurf->GetPoles()[0].size() );
+  const int nPoles    = numPolesU*numPolesV;
+  const int p         = m_initSurf->GetDegree_U();
+  const int q         = m_initSurf->GetDegree_V();
 
   t_ptr<t_alloc2d> alloc = new t_alloc2d;
   //
@@ -173,7 +173,7 @@ bool mobius::geom_ApproxBSurf::Perform()
 
   // Initialize matrix of left-hand-side coefficients.
   int r = 0;
-  Eigen::MatrixXd eigen_A_mx(dim, dim);
+  Eigen::MatrixXd eigen_M_mx(dim, dim);
   for ( int i = 0; i < nPoles; ++i )
   {
     // Fill upper triangle and populate the matrix symmetrically.
@@ -184,18 +184,20 @@ bool mobius::geom_ApproxBSurf::Perform()
 
       // Compute coefficient.
       const double val = M_ji_func.Eval();
-      eigen_A_mx(r, c) = eigen_A_mx(c, r) = val;
+      eigen_M_mx(r, c) = eigen_M_mx(c, r) = val;
       c++;
     }
     r++;
 
 #if defined COUT_DEBUG
-    std::cout << "A " << r << " done" << std::endl;
+    std::cout << "M " << r << " done" << std::endl;
 #endif
   }
 
+  std::cout << "\t>>> det(M) = " << eigen_M_mx.determinant() << std::endl;
+
 #if defined COUT_DEBUG
-  std::cout << "Here is the matrix A:\n" << eigen_A_mx << std::endl;
+  std::cout << "Here is the matrix M:\n" << eigen_M_mx << std::endl;
   std::cout << "Computing matrix b..." << std::endl;
 #endif
 
@@ -228,7 +230,7 @@ bool mobius::geom_ApproxBSurf::Perform()
    * ============================================== */
 
   // Solve.
-  Eigen::ColPivHouseholderQR<Eigen::MatrixXd> QR(eigen_A_mx);
+  Eigen::ColPivHouseholderQR<Eigen::MatrixXd> QR(eigen_M_mx);
   Eigen::MatrixXd eigen_X_mx = QR.solve(eigen_B_mx);
 
 #if defined COUT_DEBUG
@@ -240,8 +242,6 @@ bool mobius::geom_ApproxBSurf::Perform()
   m_resultSurf = m_initSurf->Copy();
 
   // Set new coordinates for poles.
-  const std::vector< std::vector<t_xyz> >& poles = m_resultSurf->GetPoles();
-  //
   for ( int k = 0; k < dim; ++k )
   {
     int i, j;
