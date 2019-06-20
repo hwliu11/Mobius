@@ -43,10 +43,36 @@
 
 //-----------------------------------------------------------------------------
 
+#undef COUT_DEBUG
+#if defined COUT_DEBUG
+  #pragma message("===== warning: COUT_DEBUG is enabled")
+#endif
+
+//-----------------------------------------------------------------------------
+
 void mobius::geom_BSurfNk::Eval(const double u,
                                 const double v,
                                 double&      N)
 {
+  // According to the local support property of B-spline basis functions
+  // (see for example P2.1 at p. 55 in "The NURBS Book"), not all spans
+  // are effective.
+  int iFirst = 0, iLast = int( m_Ni.U.size() - 1 ), // Global range.
+      jFirst = 0, jLast = int( m_Nj.V.size() - 1 ); // Global range.
+  //
+  this->GetSupportSpans(iFirst, iLast, jFirst, jLast);
+  //
+  if ( u < m_Ni.U[iFirst] || u > m_Ni.U[iLast] ||
+       v < m_Nj.V[jFirst] || v > m_Nj.V[jLast] )
+  {
+#if defined COUT_DEBUG
+    std::cout << "N is 0 (out of support)." << std::endl;
+#endif
+
+    N = 0.0;
+    return;
+  }
+
   t_cell askedCell(t_uv(u, v), 1e-4);
 
   // Return cached values.

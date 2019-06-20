@@ -33,6 +33,10 @@ set (base_H_FILES
   base/core_TwovariateFuncWithGradient.h
   base/core_UnivariateFunc.h
   base/core_Vars.h
+  base/NCollection_BaseAllocator.hxx
+  base/NCollection_BaseMap.hxx
+  base/NCollection_ListNode.hxx
+  base/NCollection_Map.hxx
 )
 set (base_CPP_FILES
   base/core_IAlgorithm.cpp
@@ -41,6 +45,8 @@ set (base_CPP_FILES
   base/core_OPERATOR.cpp
   base/core_Precision.cpp
   base/core_Ptr.cpp
+  base/NCollection_BaseAllocator.cxx
+  base/NCollection_BaseMap.cxx
 )
 
 #------------------------------------------------------------------------------

@@ -174,7 +174,7 @@ protected:
         // correspondingly for the value of INT_MAX. If the value of index is
         // less than INT_MIN, it is increased correspondingly for the absolute
         // value of INT_MIN.
-        indices[k] = long((val > INT_MAX - 1) ? fmod(val, (double) INT_MAX)  : (val < INT_MIN + 1) ? fmod(val, (double) INT_MIN) : val);
+        indices[k] = long((val > INT_MAX - 1) ? fmod(val, (double) INT_MAX) : (val < INT_MIN + 1) ? fmod(val, (double) INT_MIN) : val);
       }
     }
 

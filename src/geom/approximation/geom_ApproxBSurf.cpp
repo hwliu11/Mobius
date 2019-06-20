@@ -170,8 +170,9 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
 
   const int dim = nPoles;
 
-#if defined COUT_DEBUG
   std::cout << "Dimension: " << dim << std::endl;
+
+#if defined COUT_DEBUG
   std::cout << "Computing matrix M..." << std::endl;
 #endif
 
