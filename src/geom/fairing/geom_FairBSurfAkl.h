@@ -42,21 +42,48 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface fairing coefficients \f$A_{k,l}\f$.
+//! Twovariate function to interface fairing coefficients \f$A_{k,l}\f$. These
+//! coefficients are used to compose the matrix for the linear system in such
+//! algorithms as surface fairing (mobius::geom_FairBSurf) and surface
+//! approximation from scattered points (mobius::geom_ApproxBSurf). According
+//! to the paper
+//!
+//! [Kallay, M. 1993. Constrained Optimization in Surface Design.
+//!  Proceedings of Modeling in Computer Graphics. Springer-Verlag.]
+//!
+//! the coefficients are formulated as follows:
+//!
+//! \f[ A_{k,l} = \sum_iE_i \int\int{\lambda \frac{\partial^2{N_k}}{\partial{u}^{2-i}\partial{v}^{i}} \frac{\partial^2{N_l}}{\partial{u}^{2-i}\partial{v}^{i}} + N_k N_l du dv} \f]
+//!
+//! You may refer to the original paper by M. Kallay for the conventions. Here,
+//! we only draw your attention to the fact that \f$A_{k,l}\f$ coefficients
+//! are composed of two terms. The second term \f$N_k N_l\f$ is due to the
+//! original formulation of the constrained optimization problem which employs
+//! deviation \f$(\textbf{s}-\textbf{s}_0)\f$ between the optimized surface
+//! \f$\textbf{s}\f$ and the original surface \f$\textbf{s}_0\f$. If, however,
+//! the smoothing terms are employed in a least squares formulation
+//! (see mobius::geom_ApproxBSurf), only the first term of \f$A_{k,l}\f$ should
+//! be used.
 class geom_FairBSurfAkl : public geom_FairBSurfCoeff
 {
 public:
 
-  //! ctor.
-  //! \param[in] k      0-based index 1.
-  //! \param[in] l      0-based index 2.
-  //! \param[in] lambda fairing coefficent.
-  //! \param[in] Nk     evaluators for functions \f$N_k(u,v)\f$ and \f$N_l(u,v)\f$.
+  //! Ctor.
+  //! \param[in] k           0-based index 1.
+  //! \param[in] l           0-based index 2.
+  //! \param[in] lambda      fairing coefficent.
+  //! \param[in] Nk          evaluators for functions \f$N_k(u,v)\f$ and
+  //!                        \f$N_l(u,v)\f$.
+  //! \param[in] pureFairing indicates whether the coefficients are used in
+  //!                        pure fairing formulation. If not, additional
+  //!                        term induced by squared deviation functional
+  //!                        will be used.
   mobiusGeom_EXPORT
     geom_FairBSurfAkl(const int                                 k,
                       const int                                 l,
                       const double                              lambda,
-                      const std::vector< t_ptr<geom_BSurfNk> >& Nk);
+                      const std::vector< t_ptr<geom_BSurfNk> >& Nk,
+                      const bool                                pureFairing);
 
 public:
 
@@ -95,9 +122,17 @@ private:
 
 protected:
 
-  int                                       m_iK; //!< K index.
-  int                                       m_iL; //!< L index.
-  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk; //!< Pre-computed basis functions.
+  //! K index.
+  int m_iK;
+
+  //! L index.
+  int m_iL;
+
+  //! Pre-computed basis functions.
+  const std::vector< t_ptr<geom_BSurfNk> >& m_Nk;
+
+  //! Indicates whether the deviation term should be excluded.
+  bool m_bPureFairing;
 
 };
 

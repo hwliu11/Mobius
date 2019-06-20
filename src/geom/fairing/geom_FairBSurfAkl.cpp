@@ -48,11 +48,13 @@
 mobius::geom_FairBSurfAkl::geom_FairBSurfAkl(const int                                 k,
                                              const int                                 l,
                                              const double                              lambda,
-                                             const std::vector< t_ptr<geom_BSurfNk> >& Nk)
+                                             const std::vector< t_ptr<geom_BSurfNk> >& Nk,
+                                             const bool                                pureFairing)
 : geom_FairBSurfCoeff (lambda),
   m_iK                (k),
   m_iL                (l),
-  m_Nk                (Nk)
+  m_Nk                (Nk),
+  m_bPureFairing      (pureFairing)
 {}
 
 //-----------------------------------------------------------------------------
@@ -68,10 +70,13 @@ double mobius::geom_FairBSurfAkl::Eval(const double u, const double v) const
   m_Nk[m_iL]->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
 
   // Calculate result.
-  const double res =     m_fLambda * d2Nk_dU2 * d2Nl_dU2
-                   + 2 * m_fLambda * d2Nk_dUV * d2Nl_dUV
-                   +     m_fLambda * d2Nk_dV2 * d2Nl_dV2
-                   +     Nk*Nl;
+  double res =     m_fLambda * d2Nk_dU2 * d2Nl_dU2
+             + 2 * m_fLambda * d2Nk_dUV * d2Nl_dUV
+             +     m_fLambda * d2Nk_dV2 * d2Nl_dV2;
+
+  if ( !m_bPureFairing )
+    res += Nk*Nl; // Add term induced by surface deviation in the 
+                  // constrained surface optimization formulation.
 
   return res;
 }

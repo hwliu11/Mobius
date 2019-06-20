@@ -35,6 +35,7 @@
 #include <mobius/geom.h>
 
 // Core includes
+#include <mobius/core_Integral.h>
 #include <mobius/core_TwovariateFunc.h>
 
 namespace mobius {
@@ -72,6 +73,49 @@ public:
 
   virtual void GetSupportSpans(int& ifirst, int& ilast,
                                int& jfirst, int& jlast) const = 0;
+
+public:
+
+  //! Convenience function to integrate by knot spans.
+  double Integral(const std::vector<double>& U,
+                  const std::vector<double>& V,
+                  const int                  p,
+                  const int                  q)
+  {
+    const int NUM_GAUSS_PT_U = max(p, 3);
+    const int NUM_GAUSS_PT_V = max(q, 3);
+
+    // According to the local support property of B-spline basis functions
+    // (see for example P2.1 at p. 55 in "The NURBS Book"), not all spans
+    // are effective.
+    int iFirst = 0, iLast = int( U.size() - 1 ), // Global range.
+        jFirst = 0, jLast = int( V.size() - 1 ); // Global range.
+    //
+    this->GetSupportSpans(iFirst, iLast, jFirst, jLast);
+
+    // Integrate in each span individually for better accuracy.
+    double result = 0;
+    for ( size_t i = iFirst; i < iLast; ++i )
+    {
+      if ( U[i] == U[i+1] ) continue; // Skip multiple knots.
+
+      for ( size_t j = jFirst; j < jLast; ++j )
+      {
+        if ( V[j] == V[j+1] ) continue; // Skip multiple knots.
+
+        // Gauss integration in each knot span.
+        const double
+          gaussVal = core_Integral::gauss::Compute(this,
+                                                   U[i], U[i+1],
+                                                   V[j], V[j+1],
+                                                   NUM_GAUSS_PT_U, NUM_GAUSS_PT_V);
+        //
+        result += gaussVal;
+      }
+    }
+
+    return result;
+  }
 
 protected:
 

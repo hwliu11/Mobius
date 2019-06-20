@@ -44,17 +44,26 @@ namespace mobius {
 //! \ingroup MOBIUS_GEOM
 //!
 //! Approximation algorithm for B-spline surfaces from unstructured
-//! point clouds.
+//! point clouds. This algorithm implements a well-known approach to
+//! surface fitting based on minimization of the following aggregated
+//! functional:
+//!
+//! \f[ F = \sum_k{\left( \textbf{s}(u,v) - \textbf{R}_k \right)^2} + \lambda \int \int \left( \textbf{s}_{uu}^2 + 2 \textbf{s}_{uv}^2 + \textbf{s}_{vv}^2 \right) du dv \f]
+//!
+//! You may find more details in the paper
+//!
+//! [Weiss, V., Andor, L., Renner, G., and Varady, T. 2002. Advanced surface fitting techniques. Computer Aided Geometric Design 19, 19-42.]
 class geom_ApproxBSurf : public core_OPERATOR
 {
 public:
 
-  //! Ctor.
+  //! Ctor accepting the initial B-surface.
   //! \param[in] points   points to approximate.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
     geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
+                     const t_ptr<t_bsurf>&  initSurf,
                      core_ProgressEntry     progress = NULL,
                      core_PlotterEntry      plotter  = NULL);
 
@@ -81,9 +90,10 @@ public:
     SetInitSurface(const t_ptr<t_bsurf>& initSurf);
 
   //! Performs approximation.
+  //! \param[in] lambda fairing coefficient.
   //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT bool
-    Perform();
+    Perform(const double lambda);
 
 public:
 

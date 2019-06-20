@@ -147,9 +147,12 @@ public:
   //! Initializes the stored \f$u_{min}\f$, \f$u_{max}\f$ and
   //! \f$v_{min}\f$, \f$v_{max}\f$ limits by inverting the given
   //! point cloud `pts` to the plane.
-  //! \param[in] pts points to trim the plane with.
+  //! \param[in] pts         points to trim the plane with.
+  //! \param[in] enlargePerc amount of percents to enlarge the plane in all
+  //!                        parameteric directions (0 is the default value).
   mobiusGeom_EXPORT void
-    TrimByPoints(const t_ptr<t_pcloud>& pts);
+    TrimByPoints(const t_ptr<t_pcloud>& pts,
+                 const double           enlargePerc = 0.);
 
 public:
 

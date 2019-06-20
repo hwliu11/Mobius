@@ -37,6 +37,9 @@
 // TestEngine includes
 #include <mobius/testEngine_TestCase.h>
 
+// Geom includes
+#include <mobius/geom_BSplineSurface.h>
+
 namespace mobius {
 
 //! Test functions for surface approximation.
@@ -70,19 +73,26 @@ public:
   static void Functions(MobiusTestFunctions& functions)
   {
     functions << &testApprox01
+              << &testApprox02
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
 private:
 
-  static bool runtest(const std::string& shortFilename,
-                      const int          uDegree,
-                      const int          vDegree,
-                      const std::string& refJson);
+  static std::string jsonFromFile(const std::string& shortFilename);
+
+  static bool runtest(const std::string&    shortFilename,
+                      const bool            hasInitSurf,
+                      const t_ptr<t_bsurf>& initSurf,
+                      const int             uDegree,
+                      const int             vDegree,
+                      const double          lambda,
+                      const t_ptr<t_bsurf>& refSurf);
 
 private:
 
   static outcome testApprox01(const int funcID);
+  static outcome testApprox02(const int funcID);
 
 };
 

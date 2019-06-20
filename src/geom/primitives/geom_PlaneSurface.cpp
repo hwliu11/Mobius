@@ -248,7 +248,8 @@ mobius::t_ptr<mobius::t_bsurf>
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_PlaneSurface::TrimByPoints(const t_ptr<t_pcloud>& pts)
+void mobius::geom_PlaneSurface::TrimByPoints(const t_ptr<t_pcloud>& pts,
+                                             const double           enlargePerc)
 {
   double uMin =  core_Precision::Infinity();
   double uMax = -core_Precision::Infinity();
@@ -274,9 +275,12 @@ void mobius::geom_PlaneSurface::TrimByPoints(const t_ptr<t_pcloud>& pts)
       vMax = uv.V();
   }
 
+  const double uEnlarge = fabs(uMax - uMin)*enlargePerc/100.;
+  const double vEnlarge = fabs(vMax - vMin)*enlargePerc/100.;
+
   // Set limits.
-  m_fUMin = uMin;
-  m_fUMax = uMax;
-  m_fVMin = vMin;
-  m_fVMax = vMax;
+  m_fUMin = uMin - uEnlarge;
+  m_fUMax = uMax + uEnlarge;
+  m_fVMin = vMin - vEnlarge;
+  m_fVMax = vMax + vEnlarge;
 }

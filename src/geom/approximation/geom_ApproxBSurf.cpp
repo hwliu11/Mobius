@@ -35,10 +35,8 @@
 #include <mobius/geom_ApproxBSurfBi.h>
 #include <mobius/geom_ApproxBSurfMji.h>
 #include <mobius/geom_BuildAveragePlane.h>
+#include <mobius/geom_FairBSurfAkl.h>
 #include <mobius/geom_PlaneSurface.h>
-
-// BSpl includes
-#include <mobius/bspl_KnotsUniform.h>
 
 // Eigen includes
 #pragma warning(disable : 4701 4702)
@@ -55,12 +53,16 @@
 //-----------------------------------------------------------------------------
 
 mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
+                                           const t_ptr<t_bsurf>&  initSurf,
                                            core_ProgressEntry     progress,
                                            core_PlotterEntry      plotter)
 : core_OPERATOR(progress, plotter)
 {
   m_inputPoints = points;
   m_iDegreeU = m_iDegreeV = 0; // Will be initialized from the initial surface.
+
+  // Set initial surface.
+  this->SetInitSurface(initSurf);
 }
 
 //-----------------------------------------------------------------------------
@@ -86,7 +88,7 @@ void mobius::geom_ApproxBSurf::SetInitSurface(const t_ptr<t_bsurf>& initSurf)
 
 //-----------------------------------------------------------------------------
 
-bool mobius::geom_ApproxBSurf::Perform()
+bool mobius::geom_ApproxBSurf::Perform(const double lambda)
 {
   /* ===================
    *  Preparation stage
@@ -105,11 +107,13 @@ bool mobius::geom_ApproxBSurf::Perform()
   }
 
   // Main properties.
-  const int numPolesU = int( m_initSurf->GetPoles().size() );
-  const int numPolesV = int( m_initSurf->GetPoles()[0].size() );
-  const int nPoles    = numPolesU*numPolesV;
-  const int p         = m_initSurf->GetDegree_U();
-  const int q         = m_initSurf->GetDegree_V();
+  const int numPolesU          = int( m_initSurf->GetPoles().size() );
+  const int numPolesV          = int( m_initSurf->GetPoles()[0].size() );
+  const int nPoles             = numPolesU*numPolesV;
+  const int p                  = m_initSurf->GetDegree_U();
+  const int q                  = m_initSurf->GetDegree_V();
+  const std::vector<double>& U = m_initSurf->GetKnots_U();
+  const std::vector<double>& V = m_initSurf->GetKnots_V();
 
   t_ptr<t_alloc2d> alloc = new t_alloc2d;
   //
@@ -192,6 +196,36 @@ bool mobius::geom_ApproxBSurf::Perform()
 #if defined COUT_DEBUG
     std::cout << "M " << r << " done" << std::endl;
 #endif
+  }
+
+  // Add fairing terms.
+  if ( lambda > 0 )
+  {
+    // Initialize matrix of fairing coefficients.
+    r = 0;
+    Eigen::MatrixXd eigen_F_mx(dim, dim);
+    for ( int i = 0; i < nPoles; ++i )
+    {
+      // Fill upper triangle and populate the matrix symmetrically.
+      int c = r;
+      for ( int j = i; j < nPoles; ++j )
+      {
+        geom_FairBSurfAkl A_kl_func(i, j, lambda, m_Nk, true);
+
+        // Compute integral.
+        const double val = A_kl_func.Integral(U, V, p, q);
+        eigen_F_mx(r, c) = eigen_F_mx(c, r) = val;
+        c++;
+      }
+      r++;
+
+#if defined COUT_DEBUG
+      std::cout << "A " << r << " done" << std::endl;
+#endif
+    }
+
+    // Sum two matrices.
+    eigen_M_mx += eigen_F_mx;
   }
 
   std::cout << "\t>>> det(M) = " << eigen_M_mx.determinant() << std::endl;

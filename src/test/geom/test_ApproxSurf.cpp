@@ -48,13 +48,32 @@
 
 // Filenames are specified relatively to MOBIUS_TEST_DATA environment variable.
 #define filename_points_001 "points/sampled-surf_01.xyz"
+#define filename_points_002 "points/interior-nodes_03.xyz"
+//
+#define filename_bsurf_test02_initial "bsurf/bsurf_test02_initial.json"
+#define filename_bsurf_test02_final "bsurf/bsurf_test02_final.json"
 
 //-----------------------------------------------------------------------------
 
-bool mobius::test_ApproxSurf::runtest(const std::string& shortFilename,
-                                      const int          uDegree,
-                                      const int          vDegree,
-                                      const std::string& refJson)
+std::string mobius::test_ApproxSurf::jsonFromFile(const std::string& shortFilename)
+{
+  std::ifstream FILE(   core::str::slashed( core::env::MobiusTestData() )
+                      + shortFilename );
+  std::stringstream buffer;
+  buffer << FILE.rdbuf();
+
+  return buffer.str();
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::test_ApproxSurf::runtest(const std::string&    shortFilename,
+                                      const bool            hasInitSurf,
+                                      const t_ptr<t_bsurf>& initSurf,
+                                      const int             uDegree,
+                                      const int             vDegree,
+                                      const double          lambda,
+                                      const t_ptr<t_bsurf>& refSurf)
 {
   // Access common facilities.
   t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -81,40 +100,53 @@ bool mobius::test_ApproxSurf::runtest(const std::string& shortFilename,
    *  Approximate
    * ============= */
 
-  // Prepare approximation tool.
-  geom_ApproxBSurf approx(pts, uDegree, vDegree, cf->ProgressNotifier);
+  t_ptr<t_bsurf> finalSurf;
 
-  // Perform.
-  if ( !approx.Perform() )
+  if ( !hasInitSurf )
   {
-    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Approximation failed.");
-    return false;
-  }
+    // Prepare approximation tool.
+    geom_ApproxBSurf approx(pts, uDegree, vDegree, cf->ProgressNotifier);
 
-  // Get result.
-  const t_ptr<t_bsurf>& surfRes = approx.GetResult();
+    // Perform.
+    if ( !approx.Perform(lambda) )
+    {
+      cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Approximation failed.");
+      return false;
+    }
+
+    // Get result.
+    finalSurf = approx.GetResult();
+  }
+  else
+  {
+    // Prepare approximation tool.
+    geom_ApproxBSurf approx(pts, initSurf, cf->ProgressNotifier);
+
+    // Perform.
+    if ( !approx.Perform(lambda) )
+    {
+      cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Approximation failed.");
+      return false;
+    }
+
+    // Get result.
+    finalSurf = approx.GetResult();
+  }
 
   /* ================================
    *  Compare with reference surface
    * ================================ */
 
-  // Construct reference B-surface.
-  core_Ptr<t_bsurf> surfRef = t_bsurf::Instance(refJson);
-  //
-  if ( surfRef.IsNull() )
-  {
-    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Reference JSON is invalid.");
-    return false;
-  }
-
   // Compare the constructed surface with the reference one.
-  if ( !t_bsurf::Compare( surfRes,
-                          surfRef,
-                          core_Precision::Resolution2D(),
-                          core_Precision::Resolution3D() ) )
+  if ( !t_bsurf::Compare(finalSurf, refSurf, 1.0e-3, 1.0e-3) )
   {
     cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Approximated surface deviates too much "
                                                              "from the expected surface.");
+    //
+    std::cout << ">>>" << std::endl;
+    std::cout << finalSurf->DumpJSON().c_str() << std::endl;
+    std::cout << "<<<" << std::endl;
+    //
     return false;
   }
 
@@ -167,7 +199,33 @@ mobius::outcome
     }\
   }";
 
-  if ( !runtest(filename_points_001, 3, 3, json) )
+  const double lambda = 0.;
+
+  if ( !runtest( filename_points_001, false, NULL, 3, 3, lambda, t_bsurf::Instance(json) ) )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario 002.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_ApproxSurf::testApprox02(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Construct initial surface.
+  t_ptr<t_bsurf> initSurf = t_bsurf::Instance( jsonFromFile(filename_bsurf_test02_initial) );
+
+  // Construct reference surface.
+  t_ptr<t_bsurf> refSurf = t_bsurf::Instance( jsonFromFile(filename_bsurf_test02_final) );
+
+  const double lambda = 0.001;
+
+  if ( !runtest(filename_points_002, true, initSurf, 0, 0, lambda, refSurf) )
     return res.failure();
 
   return res.success();
