@@ -171,21 +171,18 @@ endif()
 # Folders
 #-------------------------------------------------------------------------------
 
-################################################################################
 set_property(TARGET mobiusCore       PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusPoly       PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusBSpl       PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusGeom       PROPERTY FOLDER Kernel)
-#set_property(TARGET mobiusAPI           PROPERTY FOLDER Kernel)
-################################################################################
 set_property(TARGET mobiusCascade    PROPERTY FOLDER Services)
-################################################################################
 set_property(TARGET mobiusTestEngine PROPERTY FOLDER Tests)
 set_property(TARGET mobiusTest       PROPERTY FOLDER Tests)
-################################################################################
-#set_property(TARGET docalgo          PROPERTY FOLDER Documentation)
-#set_property(TARGET docapi           PROPERTY FOLDER Documentation)
-################################################################################
+
+if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}")
+  set_property(TARGET docalgo PROPERTY FOLDER Documentation)
+  set_property(TARGET docapi  PROPERTY FOLDER Documentation)
+endif()
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 

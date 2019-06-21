@@ -60,12 +60,9 @@ mobius::geom_FairBSurf::geom_FairBSurf(const t_ptr<t_bsurf>& surface,
                                        const double          lambda,
                                        core_ProgressEntry    progress,
                                        core_PlotterEntry     plotter)
-: core_OPERATOR(progress, plotter)
+: geom_OptimizeBSurfBase(surface, progress, plotter)
 {
-  m_inputSurf  = surface;
-  m_fLambda    = lambda;
-  m_iNumPolesU = int( surface->GetPoles().size() );
-  m_iNumPolesV = int( surface->GetPoles()[0].size() );
+  m_fLambda = lambda;
 }
 
 //-----------------------------------------------------------------------------
@@ -83,10 +80,10 @@ bool mobius::geom_FairBSurf::Perform()
 #endif
 
   // Prepare working variables.
-  const std::vector<double>& U = m_inputSurf->GetKnots_U();
-  const std::vector<double>& V = m_inputSurf->GetKnots_V();
-  const int                  p = m_inputSurf->GetDegree_U();
-  const int                  q = m_inputSurf->GetDegree_V();
+  const std::vector<double>& U = m_initSurf->GetKnots_U();
+  const std::vector<double>& V = m_initSurf->GetKnots_V();
+  const int                  p = m_initSurf->GetDegree_U();
+  const int                  q = m_initSurf->GetDegree_V();
 
   // Prepare memory arena (reusable memory blocks for running sub-routines
   // efficiently).
@@ -102,7 +99,11 @@ bool mobius::geom_FairBSurf::Perform()
 
   // Prepare N_k(u,v) evaluators which will be shared in all integration
   // requests to take advantage of caching.
-  this->prepareNk(sharedAlloc);
+  if ( !this->prepareNk(sharedAlloc) )
+  {
+    m_progress.SendLogMessage(MobiusErr(Normal) << "Failed to prepare basis N_k functions.");
+    return false;
+  }
 
 #if defined COUT_DEBUG
   std::cout << "Computing matrix A..." << std::endl;
@@ -155,11 +156,9 @@ bool mobius::geom_FairBSurf::Perform()
     if ( this->IsPinned(k) )
       continue;
 
-    geom_FairBSurfBl rhs_x(m_inputSurf, 0, k, m_Nk, m_fLambda, sharedAlloc);
-    //
-    geom_FairBSurfBl rhs_y(m_inputSurf, 1, k, m_Nk, m_fLambda, sharedAlloc);
-    //
-    geom_FairBSurfBl rhs_z(m_inputSurf, 2, k, m_Nk, m_fLambda, sharedAlloc);
+    geom_FairBSurfBl rhs_x(m_initSurf, 0, k, m_Nk, m_fLambda, sharedAlloc);
+    geom_FairBSurfBl rhs_y(m_initSurf, 1, k, m_Nk, m_fLambda, sharedAlloc);
+    geom_FairBSurfBl rhs_z(m_initSurf, 2, k, m_Nk, m_fLambda, sharedAlloc);
 
     // Compute integrals.
     const double val_x = rhs_x.Integral(U, V, p, q);
@@ -188,7 +187,7 @@ bool mobius::geom_FairBSurf::Perform()
 #endif
 
   // Prepare a copy of the surface to serve as a result.
-  m_resultSurf = m_inputSurf->Copy();
+  m_resultSurf = m_initSurf->Copy();
 
   // Apply perturbations to poles.
   const std::vector< std::vector<t_xyz> >& poles = m_resultSurf->GetPoles();
@@ -208,20 +207,4 @@ bool mobius::geom_FairBSurf::Perform()
   m_plotter.REDRAW_SURFACE("faired", m_resultSurf, MobiusColor_Green);
 
   return true;
-}
-
-//-----------------------------------------------------------------------------
-
-void mobius::geom_FairBSurf::prepareNk(t_ptr<t_alloc2d> alloc)
-{
-  const int nPoles = m_iNumPolesU*m_iNumPolesV;
-
-  for ( int k = 0; k < nPoles; ++k )
-  {
-    // Prepare evaluator for N_k(u,v).
-    t_ptr<geom_BSurfNk>
-      Nk = new geom_BSurfNk(m_inputSurf, k, alloc);
-    //
-    m_Nk.push_back(Nk);
-  }
 }

@@ -32,12 +32,8 @@
 #define geom_ApproxBSurf_HeaderFile
 
 // Geometry includes
-#include <mobius/geom_BSplineSurface.h>
-#include <mobius/geom_BSurfNk.h>
+#include <mobius/geom_OptimizeBSurfBase.h>
 #include <mobius/geom_PositionCloud.h>
-
-// Core includes
-#include <mobius/core_OPERATOR.h>
 
 namespace mobius {
 
@@ -53,7 +49,7 @@ namespace mobius {
 //! You may find more details in the paper
 //!
 //! [Weiss, V., Andor, L., Renner, G., and Varady, T. 2002. Advanced surface fitting techniques. Computer Aided Geometric Design 19, 19-42.]
-class geom_ApproxBSurf : public core_OPERATOR
+class geom_ApproxBSurf : public geom_OptimizeBSurfBase
 {
 public:
 
@@ -82,39 +78,13 @@ public:
 
 public:
 
-  //! Sets initial surface. The initial surface is a B-surface which principally
-  //! follows the shape of a point cloud, i.e., each point can be inverted to
-  //! that surface unambiguously.
-  //! \param[in] initSurf initial surface to set.
-  mobiusGeom_EXPORT void
-    SetInitSurface(const t_ptr<t_bsurf>& initSurf);
-
   //! Performs approximation.
   //! \param[in] lambda fairing coefficient.
   //! \return true in case of success, false -- otherwise.
   mobiusGeom_EXPORT bool
     Perform(const double lambda);
 
-public:
-
-  //! Converts serial index of an element to its grid indices (i,j).
-  //! \param[in]  k 0-based serial index of element.
-  //! \param[out] i 0-based index of the corresponding row.
-  //! \param[out] j 0-based index of the corresponding column.
-  void GetIJ(const int k, int& i, int& j) const
-  {
-    bspl::PairIndicesFromSerial(k, m_initSurf->GetNumOfPoles_V(), i, j);
-  }
-
-  //! \return resulting surface.
-  const t_ptr<t_bsurf>& GetResult() const
-  {
-    return m_resultSurf;
-  }
-
 private:
-
-  void prepareNk(t_ptr<t_alloc2d> alloc);
 
   bool initializeSurf();
 
@@ -123,23 +93,14 @@ protected:
   //! Points to approximate.
   t_ptr<t_pcloud> m_inputPoints;
 
-  //! Initial surface for point cloud parameterization.
-  t_ptr<t_bsurf> m_initSurf;
+  //! Parameterization of input points.
+  std::vector<t_uv> m_UVs;
 
   //! U degree.
   int m_iDegreeU;
 
   //! V degree.
   int m_iDegreeV;
-
-  //! Evaluators of \f$N_k(u,v)\f$ functions.
-  std::vector< t_ptr<geom_BSurfNk> > m_Nk;
-
-  //! Parameterization of input points.
-  std::vector<t_uv> m_UVs;
-
-  //! Approximated surface.
-  t_ptr<t_bsurf> m_resultSurf;
 
 };
 

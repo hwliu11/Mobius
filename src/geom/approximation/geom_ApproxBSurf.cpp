@@ -56,13 +56,10 @@ mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
                                            const t_ptr<t_bsurf>&  initSurf,
                                            core_ProgressEntry     progress,
                                            core_PlotterEntry      plotter)
-: core_OPERATOR(progress, plotter)
+: geom_OptimizeBSurfBase(initSurf, progress, plotter)
 {
   m_inputPoints = points;
   m_iDegreeU = m_iDegreeV = 0; // Will be initialized from the initial surface.
-
-  // Set initial surface.
-  this->SetInitSurface(initSurf);
 }
 
 //-----------------------------------------------------------------------------
@@ -72,18 +69,11 @@ mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
                                            const int              vDegree,
                                            core_ProgressEntry     progress,
                                            core_PlotterEntry      plotter)
-: core_OPERATOR(progress, plotter)
+: geom_OptimizeBSurfBase(progress, plotter)
 {
   m_inputPoints = points;
   m_iDegreeU    = uDegree;
   m_iDegreeV    = vDegree;
-}
-
-//-----------------------------------------------------------------------------
-
-void mobius::geom_ApproxBSurf::SetInitSurface(const t_ptr<t_bsurf>& initSurf)
-{
-  m_initSurf = initSurf;
 }
 
 //-----------------------------------------------------------------------------
@@ -107,13 +97,14 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   }
 
   // Main properties.
-  const int numPolesU          = int( m_initSurf->GetPoles().size() );
-  const int numPolesV          = int( m_initSurf->GetPoles()[0].size() );
-  const int nPoles             = numPolesU*numPolesV;
-  const int p                  = m_initSurf->GetDegree_U();
-  const int q                  = m_initSurf->GetDegree_V();
-  const std::vector<double>& U = m_initSurf->GetKnots_U();
-  const std::vector<double>& V = m_initSurf->GetKnots_V();
+  const int numPolesU                = int( m_initSurf->GetPoles().size() );
+  const int numPolesV                = int( m_initSurf->GetPoles()[0].size() );
+  const int nPoles                   = numPolesU*numPolesV;
+  const int p                        = m_initSurf->GetDegree_U();
+  const int q                        = m_initSurf->GetDegree_V();
+  const std::vector<double>& U       = m_initSurf->GetKnots_U();
+  const std::vector<double>& V       = m_initSurf->GetKnots_V();
+  const int                  nPinned = this->GetNumPinnedPoles();
 
   t_ptr<t_alloc2d> alloc = new t_alloc2d;
   //
@@ -123,7 +114,11 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   alloc->Allocate(2, 3,     true); // memBlockSurf_EffectiveNDersVInternal
 
   // Prepare twovariate basis functions.
-  this->prepareNk(alloc);
+  if ( !this->prepareNk(alloc) )
+  {
+    m_progress.SendLogMessage(MobiusErr(Normal) << "Failed to prepare basis N_k functions.");
+    return false;
+  }
 
   /* ====================================================
    *  Parameterize data points using the initial surface
@@ -292,25 +287,6 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_ApproxBSurf::prepareNk(t_ptr<t_alloc2d> alloc)
-{
-  const int numPolesU = int( m_initSurf->GetPoles().size() );
-  const int numPolesV = int( m_initSurf->GetPoles()[0].size() );
-  const int nPoles    = numPolesU*numPolesV;
-
-  // Initialize basis functions.
-  for ( int k = 0; k < nPoles; ++k )
-  {
-    // Prepare evaluator for N_k(u,v).
-    t_ptr<geom_BSurfNk>
-      Nk = new geom_BSurfNk(m_initSurf, k, alloc);
-    //
-    m_Nk.push_back(Nk);
-  }
-}
-
-//-----------------------------------------------------------------------------
-
 bool mobius::geom_ApproxBSurf::initializeSurf()
 {
   // Build average plane.
@@ -328,8 +304,11 @@ bool mobius::geom_ApproxBSurf::initializeSurf()
   averagePln->TrimByPoints(m_inputPoints);
 
   // Convert plane to B-surf.
-  m_initSurf = averagePln->ToBSurface(m_iDegreeU ? m_iDegreeU : 3,
-                                      m_iDegreeV ? m_iDegreeV : 3);
+  t_ptr<t_bsurf> initSurf = averagePln->ToBSurface(m_iDegreeU ? m_iDegreeU : 3,
+                                                   m_iDegreeV ? m_iDegreeV : 3);
+
+  // Initialize surface.
+  this->SetInitSurface(initSurf);
 
   return true;
 }

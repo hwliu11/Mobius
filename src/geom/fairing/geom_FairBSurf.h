@@ -32,17 +32,7 @@
 #define geom_FairBSurf_HeaderFile
 
 // Geometry includes
-#include <mobius/geom_BSplineSurface.h>
-#include <mobius/geom_BSurfNk.h>
-
-// BSpl includes
-#include <mobius/bspl.h>
-
-// Core includes
-#include <mobius/core_OPERATOR.h>
-
-// Standard includes
-#include <set>
+#include <mobius/geom_OptimizeBSurfBase.h>
 
 namespace mobius {
 
@@ -52,7 +42,7 @@ namespace mobius {
 //!
 //! [M. Kallay, Constrained optimization in surface design, in: Modeling in
 //!  Computer Graphics, Springer Berlin Heidelberg, 1993, pp. 85-93.]
-class geom_FairBSurf : public core_OPERATOR
+class geom_FairBSurf : public geom_OptimizeBSurfBase
 {
 public:
 
@@ -74,89 +64,10 @@ public:
   mobiusGeom_EXPORT bool
     Perform();
 
-public:
-
-  //! \return resulting surface.
-  const t_ptr<t_bsurf>& GetResult() const
-  {
-    return m_resultSurf;
-  }
-
-  //! Converts (i,j) indices to serial index.
-  //! \param[in] i 0-based index of row.
-  //! \param[in] j 0-based index of column.
-  //! \return 0-based serial index of (i,j)-th element.
-  int GetK(const int i, const int j) const
-  {
-    return bspl::SerialIndexFromPair(i, j, m_iNumPolesV);
-  }
-
-  //! Converts serial index of an element to its grid indices (i,j).
-  //! \param[in]  k 0-based serial index of element.
-  //! \param[out] i 0-based index of the corresponding row.
-  //! \param[out] j 0-based index of the corresponding column.
-  void GetIJ(const int k, int& i, int& j) const
-  {
-    bspl::PairIndicesFromSerial(k, m_iNumPolesV, i, j);
-  }
-
-  //! Checks whether the pole with the passed serial index is pinned or not.
-  //! \param[in] k 0-based serial index to check.
-  //! \return true/false.
-  bool IsPinned(const int k)
-  {
-    return m_pinnedPoles.find(k) != m_pinnedPoles.end();
-  }
-
-  //! Checks whether the pole with the passed (i,j) indices is pinned or not.
-  //! \param[in] i 0-based index of row.
-  //! \param[in] j 0-based index of column.
-  //! \return true/false.
-  bool IsPinned(const int i, const int j)
-  {
-    return this->IsPinned( this->GetK(i, j) );
-  }
-
-  //! Add index of pinned pole.
-  //! \param[in] i 0-based index of row.
-  //! \param[in] j 0-based index of column.
-  void AddPinnedPole(const int i, const int j)
-  {
-    m_pinnedPoles.insert( this->GetK(i, j) );
-  }
-
-  //! \return number of pinned poles.
-  int GetNumPinnedPoles()
-  {
-    return int( m_pinnedPoles.size() );
-  }
-
-private:
-
-  void prepareNk(t_ptr<t_alloc2d> alloc);
-
 protected:
-
-  //! Surface to fair.
-  t_ptr<t_bsurf> m_inputSurf;
-
-  //! Result of fairing.
-  t_ptr<t_bsurf> m_resultSurf;
 
   //! Fairing coefficient.
   double m_fLambda;
-
-  //! Number of poles in U direction.
-  int m_iNumPolesU;
-
-  //! Number of poles in V direction (used to compute serial indices of poles).
-  int m_iNumPolesV;
-
-  //! Serial indices of control points to pin.
-  std::set<int> m_pinnedPoles;
-
-  //! Evaluators of \f$N_k(u,v)\f$ functions.
-  std::vector< t_ptr<geom_BSurfNk> > m_Nk;
 
 };
 

@@ -86,6 +86,7 @@ set (interpolation_CPP_FILES
 set (common_H_FILES
   common/geom_BSurfNk.h
   common/geom_MakeBicubicBSurf.h
+  common/geom_OptimizeBSurfBase.h
   common/geom_UnifyBCurves.h
 )
 set (common_CPP_FILES
