@@ -43,6 +43,9 @@
 #include <Eigen/Dense>
 #pragma warning(default : 4701 4702)
 
+// Standard includes
+#include <map>
+
 //-----------------------------------------------------------------------------
 
 #undef COUT_DEBUG
@@ -97,14 +100,15 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   }
 
   // Main properties.
-  const int numPolesU                = int( m_initSurf->GetPoles().size() );
-  const int numPolesV                = int( m_initSurf->GetPoles()[0].size() );
-  const int nPoles                   = numPolesU*numPolesV;
-  const int p                        = m_initSurf->GetDegree_U();
-  const int q                        = m_initSurf->GetDegree_V();
-  const std::vector<double>& U       = m_initSurf->GetKnots_U();
-  const std::vector<double>& V       = m_initSurf->GetKnots_V();
-  const int                  nPinned = this->GetNumPinnedPoles();
+  const int                  p         = m_initSurf->GetDegree_U();
+  const int                  q         = m_initSurf->GetDegree_V();
+  const std::vector<double>& U         = m_initSurf->GetKnots_U();
+  const std::vector<double>& V         = m_initSurf->GetKnots_V();
+  const int                  numPolesU = int( m_initSurf->GetPoles().size() );
+  const int                  numPolesV = int( m_initSurf->GetPoles()[0].size() );
+  const int                  nPoles    = numPolesU*numPolesV;
+  const int                  nPinned   = this->GetNumPinnedPoles();
+  const int                  dim       = nPoles - nPinned;
 
   t_ptr<t_alloc2d> alloc = new t_alloc2d;
   //
@@ -163,23 +167,31 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
    *  Prepare linear system to solve
    * ================================ */
 
-  const int dim = nPoles;
-
   std::cout << "Dimension: " << dim << std::endl;
 
 #if defined COUT_DEBUG
   std::cout << "Computing matrix M..." << std::endl;
 #endif
 
+  // Mapping between row indices of the linear system and serial indices of
+  // the corresponding control points.
+  std::map<int, int> rkMap;
+
   // Initialize matrix of left-hand-side coefficients.
   int r = 0;
   Eigen::MatrixXd eigen_M_mx(dim, dim);
   for ( int i = 0; i < nPoles; ++i )
   {
+    if ( this->IsPinned(i) )
+      continue;
+
     // Fill upper triangle and populate the matrix symmetrically.
     int c = r;
     for ( int j = i; j < nPoles; ++j )
     {
+      if ( this->IsPinned(j) )
+        continue;
+
       geom_ApproxBSurfMji M_ji_func(j, i, m_UVs, m_Nk);
 
       // Compute coefficient.
@@ -187,6 +199,7 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
       eigen_M_mx(r, c) = eigen_M_mx(c, r) = val;
       c++;
     }
+    rkMap[r] = i;
     r++;
 
 #if defined COUT_DEBUG
@@ -202,10 +215,16 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
     Eigen::MatrixXd eigen_F_mx(dim, dim);
     for ( int i = 0; i < nPoles; ++i )
     {
+      if ( this->IsPinned(i) )
+        continue;
+
       // Fill upper triangle and populate the matrix symmetrically.
       int c = r;
       for ( int j = i; j < nPoles; ++j )
       {
+        if ( this->IsPinned(j) )
+          continue;
+
         geom_FairBSurfAkl A_kl_func(i, j, lambda, m_Nk, true);
 
         // Compute integral.
@@ -236,6 +255,9 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   r = 0;
   for ( int k = 0; k < nPoles; ++k )
   {
+    if ( this->IsPinned(k) )
+      continue;
+
     geom_ApproxBSurfBi rhs(k, m_inputPoints, m_UVs, m_Nk);
 
     // Compute integrals.
@@ -272,12 +294,13 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   m_resultSurf = m_initSurf->Copy();
 
   // Set new coordinates for poles.
-  for ( int k = 0; k < dim; ++k )
+  for ( int r = 0; r < dim; ++r )
   {
+    int k = rkMap[r];
     int i, j;
     this->GetIJ(k, i, j);
 
-    t_xyz D = t_xyz( eigen_X_mx(k, 0), eigen_X_mx(k, 1), eigen_X_mx(k, 2) );
+    t_xyz D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
     //
     m_resultSurf->SetPole(i, j, D);
   }
@@ -301,7 +324,7 @@ bool mobius::geom_ApproxBSurf::initializeSurf()
   }
 
   // Project point cloud to plane to determine the parametric bounds.
-  averagePln->TrimByPoints(m_inputPoints);
+  averagePln->TrimByPoints(m_inputPoints, 10);
 
   // Convert plane to B-surf.
   t_ptr<t_bsurf> initSurf = averagePln->ToBSurface(m_iDegreeU ? m_iDegreeU : 3,
