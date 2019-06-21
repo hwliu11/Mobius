@@ -42,6 +42,10 @@ namespace mobius {
 //!
 //! [M. Kallay, Constrained optimization in surface design, in: Modeling in
 //!  Computer Graphics, Springer Berlin Heidelberg, 1993, pp. 85-93.]
+//!
+//! If pin-point constraints are specified, the corresponding equations
+//! are excluded from the system (hence the dimension of the problem is
+//! reduced).
 class geom_FairBSurf : public geom_OptimizeBSurfBase
 {
 public:

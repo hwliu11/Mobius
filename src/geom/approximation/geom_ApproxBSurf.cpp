@@ -108,7 +108,7 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   const int                  numPolesV = int( m_initSurf->GetPoles()[0].size() );
   const int                  nPoles    = numPolesU*numPolesV;
   const int                  nPinned   = this->GetNumPinnedPoles();
-  const int                  dim       = nPoles - nPinned;
+  const int                  dim       = nPoles;
 
   t_ptr<t_alloc2d> alloc = new t_alloc2d;
   //
@@ -173,25 +173,15 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   std::cout << "Computing matrix M..." << std::endl;
 #endif
 
-  // Mapping between row indices of the linear system and serial indices of
-  // the corresponding control points.
-  std::map<int, int> rkMap;
-
   // Initialize matrix of left-hand-side coefficients.
   int r = 0;
   Eigen::MatrixXd eigen_M_mx(dim, dim);
   for ( int i = 0; i < nPoles; ++i )
   {
-    if ( this->IsPinned(i) )
-      continue;
-
     // Fill upper triangle and populate the matrix symmetrically.
     int c = r;
     for ( int j = i; j < nPoles; ++j )
     {
-      if ( this->IsPinned(j) )
-        continue;
-
       geom_ApproxBSurfMji M_ji_func(j, i, m_UVs, m_Nk);
 
       // Compute coefficient.
@@ -199,7 +189,6 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
       eigen_M_mx(r, c) = eigen_M_mx(c, r) = val;
       c++;
     }
-    rkMap[r] = i;
     r++;
 
 #if defined COUT_DEBUG
@@ -215,16 +204,10 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
     Eigen::MatrixXd eigen_F_mx(dim, dim);
     for ( int i = 0; i < nPoles; ++i )
     {
-      if ( this->IsPinned(i) )
-        continue;
-
       // Fill upper triangle and populate the matrix symmetrically.
       int c = r;
       for ( int j = i; j < nPoles; ++j )
       {
-        if ( this->IsPinned(j) )
-          continue;
-
         geom_FairBSurfAkl A_kl_func(i, j, lambda, m_Nk, true);
 
         // Compute integral.
@@ -255,9 +238,6 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   r = 0;
   for ( int k = 0; k < nPoles; ++k )
   {
-    if ( this->IsPinned(k) )
-      continue;
-
     geom_ApproxBSurfBi rhs(k, m_inputPoints, m_UVs, m_Nk);
 
     // Compute integrals.
@@ -296,13 +276,15 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   // Set new coordinates for poles.
   for ( int r = 0; r < dim; ++r )
   {
-    int k = rkMap[r];
     int i, j;
-    this->GetIJ(k, i, j);
+    this->GetIJ(r, i, j);
 
-    t_xyz D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
-    //
-    m_resultSurf->SetPole(i, j, D);
+    if ( !this->IsPinned(r) )
+    {
+      t_xyz D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
+      //
+      m_resultSurf->SetPole(i, j, D);
+    }
   }
 
   return true;

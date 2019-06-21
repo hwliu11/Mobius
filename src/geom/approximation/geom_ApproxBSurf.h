@@ -49,6 +49,17 @@ namespace mobius {
 //! You may find more details in the paper
 //!
 //! [Weiss, V., Andor, L., Renner, G., and Varady, T. 2002. Advanced surface fitting techniques. Computer Aided Geometric Design 19, 19-42.]
+//!
+//! The algorithm allows for specification of pin-point constraints. These
+//! constraints do not change anything in the algorithm (the dimension of
+//! the matrix is not reduced), but the final surface is constructed with
+//! simply the same poles as were pinned in the initial surface (i.e., the
+//! new coordinates computed by the algorithm are simply ignored). It is
+//! necessary to include the pinned points to the matrix of linear equations
+//! as otherwise the final surface may expose significant oscillations because
+//! the neighborhood of the pinned points remains unconstrained (e.g.,
+//! parameterization of the surface can happen to be very fast near the
+//! pinned corners, and the result will become oscillatory).
 class geom_ApproxBSurf : public geom_OptimizeBSurfBase
 {
 public:
