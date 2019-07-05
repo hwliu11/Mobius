@@ -180,6 +180,13 @@ set_property(TARGET mobiusTestEngine PROPERTY FOLDER Tests)
 set_property(TARGET mobiusTest       PROPERTY FOLDER Tests)
 
 if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}")
+  # Path to the logo.
+  set (DOXYGEN_LOGO "${CMAKE_SOURCE_DIR}/doc/imgs/doxy_logo.png")
+
+  # Version of the library.
+  string(TIMESTAMP VERSION_WITH_TIMESTAMP "%d%m%y")
+  set (VERSION_WITH_TIMESTAMP "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_WITH_TIMESTAMP}")
+
   set_property(TARGET docalgo PROPERTY FOLDER Documentation)
   set_property(TARGET docapi  PROPERTY FOLDER Documentation)
 endif()

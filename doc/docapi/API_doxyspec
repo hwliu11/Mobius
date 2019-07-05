@@ -2,6 +2,8 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME     = "Mobius API"
+PROJECT_LOGO     = @DOXYGEN_LOGO@ 
+PROJECT_NUMBER   = @VERSION_WITH_TIMESTAMP@ 
 OUTPUT_DIRECTORY = @DOXYGEN_API_GENERATED@
 CREATE_SUBDIRS   = NO # We experience problems with HTML otherwise
 OUTPUT_LANGUAGE  = English

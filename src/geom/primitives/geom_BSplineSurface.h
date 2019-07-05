@@ -218,6 +218,17 @@ public:
     return m_poles[i][j];
   }
 
+  //! Returns non-const reference to a pole with the given indices. Use this
+  //! method to modify poles directly.
+  //! \param[in] i zero-based row index.
+  //! \param[in] j zero-based column index.
+  //! \return reference to pole.
+  t_xyz& ChangePole(const int i,
+                    const int j)
+  {
+    return m_poles[i][j];
+  }
+
   //! Sets new coordinates for a pole.
   //! \param[in] i   zero-based row index.
   //! \param[in] j   zero-based column index.

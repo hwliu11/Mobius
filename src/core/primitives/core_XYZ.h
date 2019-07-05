@@ -144,6 +144,16 @@ public:
     m_fZ = z;
   }
 
+  //! Sets all coordinates of this class equal to the coordinates of the
+  //! passed triple.
+  //! \param[in] other other triple.
+  void SetXYZ(const core_XYZ& other)
+  {
+    m_fX = other.m_fX;
+    m_fY = other.m_fY;
+    m_fZ = other.m_fZ;
+  }
+
   //! Returns coordinate by its 0-based index.
   //! \param idx [in] 0 for X, 1 for Y, 2 for Z.
   //! \return requested coordinate.

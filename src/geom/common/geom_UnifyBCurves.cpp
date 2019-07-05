@@ -113,7 +113,7 @@ bool mobius::geom_UnifyBCurves::Perform()
       m_curves[c]->ReparameterizeLinear(0.0, 1.0);
 
       // Get knots.
-      std::vector<double> U = m_curves[c]->GetKnots();
+      const std::vector<double>& U = m_curves[c]->GetKnots();
       U_all.push_back(U);
 
 #if defined COUT_DEBUG
