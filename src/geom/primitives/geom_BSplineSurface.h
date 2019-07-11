@@ -284,6 +284,26 @@ public:
     return (int) m_V.size();
   }
 
+  //! \return number of interior knots in U direction.
+  int GetNumOfInteriorKnots_U() const
+  {
+    int res = 0;
+    for ( size_t k = m_iDegU + 1; k < m_U.size() - m_iDegU - 1; ++k )
+      res++;
+
+    return res;
+  }
+
+  //! \return number of interior knots in V direction.
+  int GetNumOfInteriorKnots_V() const
+  {
+    int res = 0;
+    for ( size_t k = m_iDegV + 1; k < m_V.size() - m_iDegV - 1; ++k )
+      res++;
+
+    return res;
+  }
+
   //! Returns the number of poles in U direction.
   //! \return number of poles.
   int GetNumOfPoles_U() const

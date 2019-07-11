@@ -55,7 +55,7 @@ double mobius::geom_ApproxBSurfBi::Eval(const int coord)
     m_Nk[m_iI]->Eval(m_UVs[k].U(), m_UVs[k].V(), Ni);
 
     // Get coordinate of interest.
-    const double r = m_R->GetPoint(k).Coord(coord);
+    const double r = m_R->GetPoint( int(k) ).Coord(coord);
 
     // Sum.
     res += r*Ni;
