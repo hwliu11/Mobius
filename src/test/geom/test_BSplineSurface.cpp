@@ -2126,3 +2126,110 @@ mobius::outcome mobius::test_BSplineSurface::invertPoint06(const int funcID)
 
   return res.success();
 }
+
+//-----------------------------------------------------------------------------
+
+//! Finds max-length span for a B-surface.
+//!
+//! \param[in] funcID function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_BSplineSurface::findMaxSpan01(const int funcID)
+{
+    outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  /* =======================
+   *  Prepare input surface
+   * ======================= */
+
+  // JSON definition.
+  std::string json =
+  "{\
+    entity: surface,\
+    type: b-surface,\
+    continuity: C2,\
+    domain: {\
+        U_min: 0,\
+        U_max: 1,\
+        V_min: 0,\
+        V_max: 1\
+    },\
+    flags: {\
+        is_U_rational: 0,\
+        is_V_rational: 0,\
+        is_U_periodic: 0,\
+        is_V_periodic: 0,\
+        is_U_closed: 0,\
+        is_V_closed: 0\
+    },\
+    properties: {\
+        U_degree: 3,\
+        V_degree: 1,\
+        U_knots: [0, 0, 0, 0, 0.41551883124182798, 0.59974028777161115, 1, 1, 1, 1],\
+        V_knots: [0, 0, 1, 1],\
+        num_poles_in_U_axis: 6,\
+        num_poles_in_V_axis: 2,\
+        poles: {\
+            u0: [[241.87747035573125, 62.485923112593042, 0], [307.49011857707512, 49.837701768719491, 0]],\
+            u1: [[245.29391602546553, 57.035146252318057, 0], [306.57174310419981, 45.021517271473421, 0]],\
+            u2: [[250.62433050286035, 49.413132207145885, 25], [303.8174241480333, 37.906450425886014, 0]],\
+            u3: [[260.43129359394032, 37.406082628166004, -22], [295.65540308364263, 29.098297811030434, -30]],\
+            u4: [[266.65853554251112, 30.811365428505532, 0], [288.81855843279288, 26.561552469297354, 0]],\
+            u5: [[271.12648221343875, 26.517543665952715, 0], [284.16996047430831, 25.727029831960614, 0]]\
+        }\
+    }\
+  }";
+
+  // Construct B-surface.
+  core_Ptr<t_bsurf> surf = t_bsurf::Instance(json);
+  //
+  if ( surf.IsNull() )
+    return res.failure();
+
+  /* ==============
+   *  Perform test
+   * ============== */
+
+  int span_U     = surf->FindMaxSpan_U();
+  int span_V     = surf->FindMaxSpan_V();
+  int span_U_ref = 3;
+  int span_V_ref = 1;
+
+  if ( span_U != span_U_ref )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected U span index (%1 while expected %2)."
+                                                          << span_U << span_U_ref);
+    return res.failure();
+  }
+
+  if ( span_V != span_V_ref )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected V span index (%1 while expected %2)."
+                                                          << span_V << span_V_ref);
+    return res.failure();
+  }
+
+  /* =================================================
+   *  Insert knot to the max span and do another test
+   * ================================================= */
+
+  if ( !surf->InsertKnot_U(0.1) )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Cannot insert knot.");
+    return res.failure();
+  }
+
+  span_U     = surf->FindMaxSpan_U();
+  span_U_ref = 6;
+  
+  if ( span_U != span_U_ref )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "Unexpected U span index (%1 while expected %2)."
+                                                          << span_U << span_U_ref);
+    return res.failure();
+  }
+
+  return res.success();
+}

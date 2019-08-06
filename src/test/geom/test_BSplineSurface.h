@@ -94,6 +94,7 @@ public:
               << &invertPoint04
               << &invertPoint05
               << &invertPoint06
+              << &findMaxSpan01
               ;
   }
 
@@ -121,6 +122,7 @@ private:
   static outcome invertPoint04   (const int funcID);
   static outcome invertPoint05   (const int funcID);
   static outcome invertPoint06   (const int funcID);
+  static outcome findMaxSpan01   (const int funcID);
 
 };
 

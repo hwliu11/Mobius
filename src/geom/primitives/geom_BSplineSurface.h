@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 07 February 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2014-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -176,6 +176,16 @@ public:
   mobiusGeom_EXPORT t_ptr<geom_BSplineCurve>
     Iso_V(const double v) const;
 
+  //! Finds max knot span in U direction of the surface.
+  //! \return 0-based knot span index.
+  mobiusGeom_EXPORT int
+    FindMaxSpan_U() const;
+
+  //! Finds max knot span in V direction of the surface.
+  //! \return 0-based knot span index.
+  mobiusGeom_EXPORT int
+    FindMaxSpan_V() const;
+
   /*mobiusGeom_EXPORT core_XYZ
     NormUnit(const double u,
              const double v) const;*/
@@ -345,6 +355,12 @@ private:
             const std::vector<double>&               V,
             const int                                p,
             const int                                q);
+
+  //! Finds the zero-based index of a knot span (in either U or V direction)
+  //! which has the max length.
+  //! \param[in] isU pass true if you are interested in U direction.
+  //! \return zero-based span index.
+  int findMaxSpan(const bool isU) const;
 
 private:
 

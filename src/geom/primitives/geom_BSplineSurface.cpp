@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Created on: 07 February 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2014-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -45,6 +45,9 @@
 #include <mobius/bspl_EffectiveNDers.h>
 #include <mobius/bspl_FindSpan.h>
 #include <mobius/bspl_InsKnot.h>
+
+// Standard includes
+#include <algorithm>
 
 //-----------------------------------------------------------------------------
 
@@ -1087,6 +1090,20 @@ mobius::t_ptr<mobius::t_bcurve>
 
 //-----------------------------------------------------------------------------
 
+int mobius::geom_BSplineSurface::FindMaxSpan_U() const
+{
+  return this->findMaxSpan(true);
+}
+
+//-----------------------------------------------------------------------------
+
+int mobius::geom_BSplineSurface::FindMaxSpan_V() const
+{
+  return this->findMaxSpan(false);
+}
+
+//-----------------------------------------------------------------------------
+
 double mobius::geom_BSplineSurface::ComputeBendingEnergy() const
 {
   geom_ThinPlateEnergies func(this);
@@ -1182,4 +1199,30 @@ void mobius::geom_BSplineSurface::init(const std::vector< std::vector<t_xyz> >& 
   m_V     = V;
   m_iDegU = p;
   m_iDegV = q;
+}
+
+//-----------------------------------------------------------------------------
+
+int mobius::geom_BSplineSurface::findMaxSpan(const bool isU) const
+{
+  const std::vector<double>& X = isU ? m_U : m_V;
+
+  // Collect all spans.
+  std::vector<int>    indices;
+  std::vector<double> lengths;
+  //
+  for ( int i = 1; i < int( X.size() ); ++i )
+  {
+    indices.push_back(i-1);
+    lengths.push_back(X[i] - X[i-1]);
+  }
+
+  // Sort by length.
+  std::sort( indices.begin(), indices.end(),
+             [&](const int a, const int b)
+             {
+               return lengths[a] > lengths[b];
+             } );
+
+  return indices[0];
 }
