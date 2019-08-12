@@ -365,7 +365,7 @@ namespace mobius {
 //!
 //! After applying formula [5], we obtain the following matrix:
 //!
-//!    |tx'| = | (q0^2 + qx^2 - qy^2 - qz^2) (-2*q0*qx + 2*qx*qy)        (2*q0*qy + 2*qx*qz)         | |tx|
+//!    |tx'| = | (q0^2 + qx^2 - qy^2 - qz^2) (-2*q0*qz + 2*qx*qy)        (2*q0*qy + 2*qx*qz)         | |tx|
 //!    |ty'| = | (2*q0*qz + 2*qx*qy)         (q0^2 - qx^2 + qy^2 - qz^2) (-2*q0*qx + 2*qy*qz)        | |ty|
 //!    |tz'| = | (-2*q0*qy + 2*qx*qz)        (2*q0*qx + 2*qy*qz)         (q0^2 - qx^2 - qy^2 + qz^2) | |tz|
 class core_Quaternion
