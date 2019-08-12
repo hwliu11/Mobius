@@ -205,6 +205,14 @@ public:
     return m_poles[poleIdx];
   }
 
+  //! Returns non-const reference to a pole by its zero-based index.
+  //! \param[in] poleIdx zero-based pole index.
+  //! \return pole.
+  t_xyz& ChangePole(const int poleIdx)
+  {
+    return m_poles[poleIdx];
+  }
+
   //! Sets new coordinates for a pole.
   //! \param[in] poleIdx zero-based pole index.
   //! \param[in] xyz     pole coordinates to set.
