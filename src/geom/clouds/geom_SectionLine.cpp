@@ -413,7 +413,7 @@ void mobius::geom_SectionLine::Split(const t_ptr<geom_SectionLine>& source,
 
   // Construct slice after the point
   slice_after = new geom_SectionLine(source->ID, new t_pcloud);
-  for ( int p = idx; p < n_pts; ++p )
+  for ( int p = int(idx); p < n_pts; ++p )
     slice_after->Pts->AddPoint( source->Pts->GetPoint(p) );
 
   // Ok

@@ -169,60 +169,80 @@ struct poly_QuadHandle : public poly_BaseHandle
 
 namespace std {
 
+//! Hasher for base handle.
 template <>
 struct hash<mobius::poly_BaseHandle>
 {
   typedef mobius::poly_BaseHandle argument_type;
   typedef std::size_t             result_type;
 
+  //! Returns index of a handle for hashing.
+  //! \param[in] h handle.
+  //! \return index.
   std::size_t operator()(const mobius::poly_BaseHandle& h) const
   {
     return h.GetIdx();
   }
 };
 
+//! Hasher for vertex handle.
 template <>
 struct hash<mobius::poly_VertexHandle>
 {
   typedef mobius::poly_VertexHandle argument_type;
   typedef std::size_t               result_type;
 
+  //! Returns index of a handle for hashing.
+  //! \param[in] h handle.
+  //! \return index.
   std::size_t operator()(const mobius::poly_VertexHandle& h) const
   {
     return h.GetIdx();
   }
 };
 
+//! Hasher for edge handle.
 template <>
 struct hash<mobius::poly_EdgeHandle>
 {
   typedef mobius::poly_EdgeHandle argument_type;
   typedef std::size_t             result_type;
-  
+
+  //! Returns index of a handle for hashing.
+  //! \param[in] h handle.
+  //! \return index.
   std::size_t operator()(const mobius::poly_EdgeHandle& h) const
   {
     return h.GetIdx();
   }
 };
 
+//! Hasher for triangle handle.
 template <>
 struct hash<mobius::poly_TriangleHandle>
 {
   typedef mobius::poly_TriangleHandle argument_type;
   typedef std::size_t                 result_type;
-  
+
+  //! Returns index of a handle for hashing.
+  //! \param[in] h handle.
+  //! \return index.
   std::size_t operator()(const mobius::poly_TriangleHandle& h) const
   {
     return h.GetIdx();
   }
 };
 
+//! Hasher for quad handle.
 template <>
 struct hash<mobius::poly_QuadHandle>
 {
   typedef mobius::poly_QuadHandle argument_type;
   typedef std::size_t             result_type;
-  
+
+  //! Returns index of a handle for hashing.
+  //! \param[in] h handle.
+  //! \return index.
   std::size_t operator()(const mobius::poly_QuadHandle& h) const
   {
     return h.GetIdx();

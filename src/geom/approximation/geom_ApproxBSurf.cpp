@@ -107,7 +107,6 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   const int                  numPolesU = int( m_initSurf->GetPoles().size() );
   const int                  numPolesV = int( m_initSurf->GetPoles()[0].size() );
   const int                  nPoles    = numPolesU*numPolesV;
-  const int                  nPinned   = this->GetNumPinnedPoles();
   const int                  dim       = nPoles;
 
   t_ptr<t_alloc2d> alloc = new t_alloc2d;
