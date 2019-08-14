@@ -402,7 +402,7 @@ public:
                 const double    angle);
 
   mobiusCore_EXPORT void
-    Matrix3x3(double (&mx)[3][3]) const;
+    AsMatrix3x3(double (&mx)[3][3]) const;
 
   mobiusCore_EXPORT double
     Q0() const;
@@ -418,6 +418,13 @@ public:
 
   mobiusCore_EXPORT bool
     AsVector(core_XYZ& XYZ) const;
+
+  mobiusCore_EXPORT void
+    AsRodrigues(core_XYZ& lambda) const;
+
+  mobiusCore_EXPORT void
+    FromRodriguesToMatrix3x3(const core_XYZ& lambda,
+                             double          (&mx)[3][3]) const;
 
 public:
 

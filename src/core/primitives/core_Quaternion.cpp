@@ -114,7 +114,7 @@ void mobius::core_Quaternion::SetRotation(const core_XYZ& axis,
 //! </pre>
 //!
 //! \param mx [out] output matrix.
-void mobius::core_Quaternion::Matrix3x3(double (&mx)[3][3]) const
+void mobius::core_Quaternion::AsMatrix3x3(double (&mx)[3][3]) const
 {
   mx[0][0] =  q0*q0 + qx*qx - qy*qy - qz*qz;
   mx[0][1] = -2*q0*qz + 2*qx*qy;
@@ -170,6 +170,46 @@ bool mobius::core_Quaternion::AsVector(core_XYZ& XYZ) const
   XYZ.SetY(qy);
   XYZ.SetZ(qz);
   return true;
+}
+
+//! Converts this quaternion to the Rodrigues form, i.e., the rotation angle
+//! will be encoded as a modulus of the rotation axis.
+//! \param lambda [out] Rodrigues representation of the quaternion.
+void mobius::core_Quaternion::AsRodrigues(core_XYZ& lambda) const
+{
+  const double angle     = 2.*acos(q0);
+  const double sinAngle2 = sin(angle/2.);
+  const double tanAngle2 = tan(angle/2.);
+
+  // Axis of rotation.
+  core_XYZ omega(qx / sinAngle2, qy / sinAngle2, qz / sinAngle2);
+
+  // Compute the Rodrgiues vector.
+  lambda = tanAngle2*omega;
+}
+
+//! Converts Rodrigues representation of rotation to matrix form,
+//! \param[in]  lambda Rodrigues vector.
+//! \param[out] mx     rotation matrix 3x3.
+void mobius::core_Quaternion::FromRodriguesToMatrix3x3(const core_XYZ& lambda,
+                                                       double          (&mx)[3][3]) const
+{
+  const double lx = lambda.X();
+  const double ly = lambda.Y();
+  const double lz = lambda.Z();
+  const double K  = 1. / (1 + lx*lx + ly*ly + lz*lz);
+
+  mx[0][0] = 1 + lx*lx - ly*ly - lz*lz;
+  mx[0][1] = 2*lx*ly - 2*lz;
+  mx[0][2] = 2*lx*lz + 2*ly;
+  //
+  mx[1][0] = 2*lx*ly + 2*lz;
+  mx[1][1] = 1 - lx*lx + ly*ly - lz*lz;
+  mx[1][2] = 2*ly*lz - 2*lx;
+  //
+  mx[2][0] = 2*lx*lz - 2*ly;
+  mx[2][1] = 2*ly*lz + 2*lx;
+  mx[2][2] = 1 - lx*lx - ly*ly + lz*lz;
 }
 
 //! Adds the passed quaternion to this one.
