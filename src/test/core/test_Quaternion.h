@@ -81,21 +81,33 @@ public:
               << &cross_product
               << &invert
               << &conjugate
-              << &to_matrix;
+              << &to_matrix
+              << &to_rodrigues01
+              << &to_rodrigues02
+    ;
   }
 
 private:
 
-  static outcome create        (const int funcID);
-  static outcome add           (const int funcID);
-  static outcome subtract      (const int funcID);
-  static outcome product_qn    (const int funcID);
-  static outcome product_scalar(const int funcID);
-  static outcome dot_product   (const int funcID);
-  static outcome cross_product (const int funcID);
-  static outcome invert        (const int funcID);
-  static outcome conjugate     (const int funcID);
-  static outcome to_matrix     (const int funcID);
+  static outcome testRodrigues(const core_XYZ& axis,
+                               const double    angleRad,
+                               const core_XYZ& lambdaRef,
+                               const int       funcID);
+
+private:
+
+  static outcome create         (const int funcID);
+  static outcome add            (const int funcID);
+  static outcome subtract       (const int funcID);
+  static outcome product_qn     (const int funcID);
+  static outcome product_scalar (const int funcID);
+  static outcome dot_product    (const int funcID);
+  static outcome cross_product  (const int funcID);
+  static outcome invert         (const int funcID);
+  static outcome conjugate      (const int funcID);
+  static outcome to_matrix      (const int funcID);
+  static outcome to_rodrigues01 (const int funcID);
+  static outcome to_rodrigues02 (const int funcID);
 
 };
 

@@ -402,6 +402,9 @@ public:
                 const double    angle);
 
   mobiusCore_EXPORT void
+    SetRotationFromRodrigues(const core_XYZ& lambda);
+
+  mobiusCore_EXPORT void
     AsMatrix3x3(double (&mx)[3][3]) const;
 
   mobiusCore_EXPORT double
@@ -427,6 +430,10 @@ public:
                              double          (&mx)[3][3]) const;
 
 public:
+
+  mobiusCore_EXPORT bool
+    IsEqual(const core_Quaternion& Qn,
+            const double           prec) const;
 
   mobiusCore_EXPORT core_Quaternion
     operator+(const core_Quaternion& Qn) const;

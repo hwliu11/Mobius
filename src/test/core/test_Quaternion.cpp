@@ -39,6 +39,50 @@
 
 //-----------------------------------------------------------------------------
 
+mobius::outcome
+  mobius::test_Quaternion::testRodrigues(const core_XYZ& axis,
+                                         const double    angleRad,
+                                         const core_XYZ& lambdaRef,
+                                         const int       funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Prepare test quaternion.
+  core_Quaternion Q(axis, angleRad);
+
+  // Convert to Rodrigues vector.
+  core_XYZ lambda;
+  Q.AsRodrigues(lambda);
+
+  // Convert back for verification.
+  core_Quaternion QRef;
+  QRef.SetRotationFromRodrigues(lambda);
+  //
+  if ( !Q.IsEqual(QRef, 1.e-6) )
+    return res.failure();
+
+  // Verify lambda.
+  if ( (lambda - lambdaRef).Modulus() > 1.0e-6 )
+    return res.failure();
+
+  // Convert quaternion to a rotation matrix, then convert the obtained
+  // Rodrigues vector to a rotation matrix, then compare the obtained matrices:
+  // they should be equal.
+  double mxQn[3][3], mxRodrigues[3][3];
+  Q.AsMatrix3x3(mxQn);
+  Q.FromRodriguesToMatrix3x3(lambda, mxRodrigues);
+
+  // Verify.
+  for ( int r = 0; r < 3; ++r )
+    for ( int c = 0; c < 3; ++c )
+      if ( fabs(mxQn[r][c] - mxRodrigues[r][c]) > 1.0e-6 )
+        return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
@@ -508,7 +552,7 @@ mobius::outcome
 
   // Calculate
   double mx[3][3], m_ref[3][3];
-  Q.Matrix3x3(mx);
+  Q.AsMatrix3x3(mx);
 
   m_ref[0][0] =  0.866025;
   m_ref[0][1] = -0.500000;
@@ -533,4 +577,32 @@ mobius::outcome
         return res.failure();
 
   return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests conversion to Rodrigues form.
+//! \param funcID [in] ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Quaternion::to_rodrigues01(const int funcID)
+{
+  return testRodrigues( core_XYZ::OZ(),
+                        30*M_PI/180,
+                        core_XYZ(0., 0., 0.26794919243112270),
+                        funcID );
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests conversion to Rodrigues form.
+//! \param funcID [in] ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Quaternion::to_rodrigues02(const int funcID)
+{
+  return testRodrigues( core_XYZ(1., 0.5, 0.25),
+                        60*M_PI/180,
+                        core_XYZ(0.50395263067896956, 0.25197631533948478, 0.12598815766974239),
+                        funcID );
 }

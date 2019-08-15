@@ -105,6 +105,21 @@ void mobius::core_Quaternion::SetRotation(const core_XYZ& axis,
   qz = sn*A.Z();
 }
 
+//! Initializes this quaternion from the passed Rodrigues vector.
+//! \param[in] lambda Rodrigues vector.
+void mobius::core_Quaternion::SetRotationFromRodrigues(const core_XYZ& lambda)
+{
+  const double angle = 2.*atan( lambda.Modulus() );
+  core_XYZ     w     = lambda.Normalized();
+  const double cn    = cos(angle/2.);
+  const double sn    = sin(angle/2.);
+
+  q0 = cn;
+  qx = sn*w.X();
+  qy = sn*w.Y();
+  qz = sn*w.Z();
+}
+
 //! Converts this quaternion to 3x3 matrix of rotation:
 //!
 //! <pre>
@@ -199,17 +214,17 @@ void mobius::core_Quaternion::FromRodriguesToMatrix3x3(const core_XYZ& lambda,
   const double lz = lambda.Z();
   const double K  = 1. / (1 + lx*lx + ly*ly + lz*lz);
 
-  mx[0][0] = 1 + lx*lx - ly*ly - lz*lz;
-  mx[0][1] = 2*lx*ly - 2*lz;
-  mx[0][2] = 2*lx*lz + 2*ly;
+  mx[0][0] = K*(1 + lx*lx - ly*ly - lz*lz);
+  mx[0][1] = K*(2*lx*ly - 2*lz);
+  mx[0][2] = K*(2*lx*lz + 2*ly);
   //
-  mx[1][0] = 2*lx*ly + 2*lz;
-  mx[1][1] = 1 - lx*lx + ly*ly - lz*lz;
-  mx[1][2] = 2*ly*lz - 2*lx;
+  mx[1][0] = K*(2*lx*ly + 2*lz);
+  mx[1][1] = K*(1 - lx*lx + ly*ly - lz*lz);
+  mx[1][2] = K*(2*ly*lz - 2*lx);
   //
-  mx[2][0] = 2*lx*lz - 2*ly;
-  mx[2][1] = 2*ly*lz + 2*lx;
-  mx[2][2] = 1 - lx*lx - ly*ly + lz*lz;
+  mx[2][0] = K*(2*lx*lz - 2*ly);
+  mx[2][1] = K*(2*ly*lz + 2*lx);
+  mx[2][2] = K*(1 - lx*lx - ly*ly + lz*lz);
 }
 
 //! Adds the passed quaternion to this one.
@@ -224,6 +239,28 @@ mobius::core_Quaternion
   Res.qy = qy + Qn.qy;
   Res.qz = qz + Qn.qz;
   return Res;
+}
+
+//! Compares this quaternion with the passed one.
+//! \param[in] Qn   quaternion to compare with.
+//! \param[in] prec comparison precision.
+//! \return true/false.
+bool mobius::core_Quaternion::IsEqual(const core_Quaternion& Qn,
+                                      const double           prec) const
+{
+  if ( fabs(q0 - Qn.q0) > prec )
+    return false;
+
+  if ( fabs(qx - Qn.qx) > prec )
+    return false;
+
+  if ( fabs(qy - Qn.qy) > prec )
+    return false;
+
+  if ( fabs(qz - Qn.qz) > prec )
+    return false;
+
+  return true;
 }
 
 //! Subtracts the passed quaternion from this one.
