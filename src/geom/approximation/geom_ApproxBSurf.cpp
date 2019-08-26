@@ -32,8 +32,8 @@
 #include <mobius/geom_ApproxBSurf.h>
 
 // Geom includes
-#include <mobius/geom_ApproxBSurfBi.h>
-#include <mobius/geom_ApproxBSurfMji.h>
+#include <mobius/geom_ApproxBSurfBj.h>
+#include <mobius/geom_ApproxBSurfMij.h>
 #include <mobius/geom_BuildAveragePlane.h>
 #include <mobius/geom_FairBSurfAkl.h>
 #include <mobius/geom_PlaneSurface.h>
@@ -174,18 +174,18 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
 
   // Initialize matrix of left-hand-side coefficients.
   int r = 0;
-  Eigen::MatrixXd eigen_M_mx(dim, dim);
+  Eigen::MatrixXd eigen_M1_mx(dim, dim);
   for ( int i = 0; i < nPoles; ++i )
   {
     // Fill upper triangle and populate the matrix symmetrically.
     int c = r;
     for ( int j = i; j < nPoles; ++j )
     {
-      geom_ApproxBSurfMji M_ji_func(j, i, m_UVs, m_Nk);
+      geom_ApproxBSurfMij M_ij_func(i, j, m_UVs, m_Nk);
 
       // Compute coefficient.
-      const double val = M_ji_func.Eval();
-      eigen_M_mx(r, c) = eigen_M_mx(c, r) = val;
+      const double val = M_ij_func.Eval();
+      eigen_M1_mx(r, c) = eigen_M1_mx(c, r) = val;
       c++;
     }
     r++;
@@ -195,23 +195,27 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
 #endif
   }
 
+  Eigen::MatrixXd eigen_M_mx(dim, dim);
+  //
+  eigen_M_mx = eigen_M1_mx;
+
   // Add fairing terms.
   if ( lambda > 0 )
   {
     // Initialize matrix of fairing coefficients.
     r = 0;
-    Eigen::MatrixXd eigen_F_mx(dim, dim);
+    Eigen::MatrixXd eigen_M2_mx(dim, dim);
     for ( int i = 0; i < nPoles; ++i )
     {
       // Fill upper triangle and populate the matrix symmetrically.
       int c = r;
       for ( int j = i; j < nPoles; ++j )
       {
-        geom_FairBSurfAkl A_kl_func(i, j, lambda, m_Nk, true);
+        geom_FairBSurfAkl A_ij_func(i, j, lambda, m_Nk, true);
 
         // Compute integral.
-        const double val = A_kl_func.Integral(U, V, p, q);
-        eigen_F_mx(r, c) = eigen_F_mx(c, r) = val;
+        const double val = A_ij_func.Integral(U, V, p, q);
+        eigen_M2_mx(r, c) = eigen_M2_mx(c, r) = val;
         c++;
       }
       r++;
@@ -222,7 +226,7 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
     }
 
     // Sum two matrices.
-    eigen_M_mx += eigen_F_mx;
+    eigen_M_mx += eigen_M2_mx;
   }
 
   std::cout << "\t>>> det(M) = " << eigen_M_mx.determinant() << std::endl;
@@ -237,7 +241,7 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   r = 0;
   for ( int k = 0; k < nPoles; ++k )
   {
-    geom_ApproxBSurfBi rhs(k, m_inputPoints, m_UVs, m_Nk);
+    geom_ApproxBSurfBj rhs(k, m_inputPoints, m_UVs, m_Nk);
 
     // Compute integrals.
     const double val_x = rhs.Eval(0);

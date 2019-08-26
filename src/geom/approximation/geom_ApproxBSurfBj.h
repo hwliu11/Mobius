@@ -28,50 +28,53 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-// Own include
-#include <mobius/geom_ApproxBSurfMji.h>
+#ifndef geom_ApproxBSurfBj_HeaderFile
+#define geom_ApproxBSurfBj_HeaderFile
 
-//-----------------------------------------------------------------------------
+// Geom includes
+#include <mobius/geom_ApproxBSurfCoeff.h>
+#include <mobius/geom_PositionCloud.h>
 
-mobius::geom_ApproxBSurfMji::geom_ApproxBSurfMji(const int                                 j,
-                                                 const int                                 i,
-                                                 const std::vector<t_uv>&                  UVs,
-                                                 const std::vector< t_ptr<geom_BSurfNk> >& Nk)
-: geom_ApproxBSurfCoeff (UVs, Nk),
-  m_iJ                  (j),
-  m_iI                  (i)
-{}
+namespace mobius {
 
-//-----------------------------------------------------------------------------
-
-double mobius::geom_ApproxBSurfMji::Eval()
+//! \ingroup MOBIUS_GEOM
+//!
+//! Twovariate function to interface approximation rhs coefficients \f$B_j\f$.
+class geom_ApproxBSurfBj : public geom_ApproxBSurfCoeff
 {
-  // Sum products of N_i N_j for each data point.
-  double res = 0.;
-  for ( size_t k = 0; k < m_UVs.size(); ++k )
-  {
-    const double NjNi = this->eval_Nj_Ni( m_UVs[k].U(), m_UVs[k].V() );
-    //
-    res += NjNi;
-  }
+public:
 
-  return res;
-}
+  //! Ctor.
+  //! \param[in] j   0-based index of the row in the matrix.
+  //! \param[in] pts data points being approximated.
+  //! \param[in] UVs parameterization of the input data points `pts`.
+  //! \param[in] Nk  prepared evaluators for the basis functions.
+  mobiusGeom_EXPORT
+    geom_ApproxBSurfBj(const int                                 j,
+                       const t_ptr<t_pcloud>&                    pts,
+                       const std::vector<t_uv>&                  UVs,
+                       const std::vector< t_ptr<geom_BSurfNk> >& Nk);
 
-//-----------------------------------------------------------------------------
+public:
 
-double mobius::geom_ApproxBSurfMji::eval_Nj_Ni(const double u, const double v)
-{
-  // Evaluate function N_j(u,v).
-  double Nj;
-  m_Nk[m_iJ]->Eval(u, v, Nj);
+  //! Evaluates the coefficient for the passed coordinate index.
+  //! \param[in] coord coordinate index (0 -- X, 1 -- Y, 2 -- Z).
+  //! \return evaluated coefficient.
+  mobiusGeom_EXPORT double
+    Eval(const int coord);
 
-  // Evaluate function N_i(u,v).
-  double Ni;
-  m_Nk[m_iI]->Eval(u, v, Ni);
+private:
 
-  // Calculate result.
-  const double res = Nj*Ni;
-  //
-  return res;
-}
+  geom_ApproxBSurfBj() = delete;
+  void operator=(const geom_ApproxBSurfBj&) = delete;
+
+protected:
+
+  int                    m_iJ; //!< J index.
+  const t_ptr<t_pcloud>& m_R;  //!< Points to approximate.
+
+};
+
+};
+
+#endif

@@ -20,14 +20,14 @@ set (CPP_FILES
 
 set (approximation_H_FILES
   approximation/geom_ApproxBSurf.h
-  approximation/geom_ApproxBSurfBi.h
+  approximation/geom_ApproxBSurfBj.h
   approximation/geom_ApproxBSurfCoeff.h
-  approximation/geom_ApproxBSurfMji.h
+  approximation/geom_ApproxBSurfMij.h
 )
 set (approximation_CPP_FILES
   approximation/geom_ApproxBSurf.cpp
-  approximation/geom_ApproxBSurfBi.cpp
-  approximation/geom_ApproxBSurfMji.cpp
+  approximation/geom_ApproxBSurfBj.cpp
+  approximation/geom_ApproxBSurfMij.cpp
 )
 
 #------------------------------------------------------------------------------

@@ -28,61 +28,38 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_ApproxBSurfMji_HeaderFile
-#define geom_ApproxBSurfMji_HeaderFile
+// Own include
+#include <mobius/geom_ApproxBSurfBj.h>
 
-// Geometry includes
-#include <mobius/geom_ApproxBSurfCoeff.h>
+//-----------------------------------------------------------------------------
 
-namespace mobius {
+mobius::geom_ApproxBSurfBj::geom_ApproxBSurfBj(const int                                 j,
+                                               const t_ptr<t_pcloud>&                    pts,
+                                               const std::vector<t_uv>&                  UVs,
+                                               const std::vector< t_ptr<geom_BSurfNk> >& Nk)
+: geom_ApproxBSurfCoeff (UVs, Nk),
+  m_iJ                  (j),
+  m_R                   (pts)
+{}
 
-//! \ingroup MOBIUS_GEOM
-//!
-//! Twovariate function to interface approximation coefficients \f$M_{j,i}\f$.
-class geom_ApproxBSurfMji : public geom_ApproxBSurfCoeff
+//-----------------------------------------------------------------------------
+
+double mobius::geom_ApproxBSurfBj::Eval(const int coord)
 {
-public:
+  // Sum products of R_k N_j for each data point.
+  double res = 0.;
+  for ( size_t k = 0; k < m_UVs.size(); ++k )
+  {
+    // Evaluate function N_i(u,v).
+    double Nj;
+    m_Nk[m_iJ]->Eval(m_UVs[k].U(), m_UVs[k].V(), Nj);
 
-  //! Ctor.
-  //! \param[in] j   0-based index 1.
-  //! \param[in] i   0-based index 2.
-  //! \param[in] UVs parameterization of the data points to approximate.
-  //! \param[in] Nk  evaluators for functions \f$N_j(u,v)\f$ and \f$N_i(u,v)\f$.
-  mobiusGeom_EXPORT
-    geom_ApproxBSurfMji(const int                                 j,
-                        const int                                 i,
-                        const std::vector<t_uv>&                  UVs,
-                        const std::vector< t_ptr<geom_BSurfNk> >& Nk);
+    // Get coordinate of interest.
+    const double r = m_R->GetPoint( int(k) ).Coord(coord);
 
-public:
+    // Sum.
+    res += r*Nj;
+  }
 
-  //! Evaluates coefficient.
-  //! \return calculated value.
-  mobiusGeom_EXPORT double
-    Eval();
-
-protected:
-
-  //! Evaluates product of \f$N_j(u,v) N_i(u,v)\f$ in the given
-  //! parameter's pair \f$(u,v)\f$.
-  //! \param[in] u first parameter.
-  //! \param[in] v second parameter.
-  //! \return evaluation result.
-  mobiusGeom_EXPORT double
-    eval_Nj_Ni(const double u, const double v);
-
-private:
-
-  geom_ApproxBSurfMji() = delete;
-  void operator=(const geom_ApproxBSurfMji&) = delete;
-
-protected:
-
-  int m_iJ; //!< J index.
-  int m_iI; //!< I index.
-
-};
-
-};
-
-#endif
+  return res;
+}
