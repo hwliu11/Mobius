@@ -10,6 +10,7 @@ set (H_FILES
   poly_Handles.h
   poly_Mesh.h
   poly_Quad.h
+  poly_ReadOBJ.h
   poly_ReadPLY.h
   poly_ReadSTL.h
   poly_Triangle.h
@@ -19,6 +20,7 @@ set (CPP_FILES
   poly_Edge.cpp
   poly_Mesh.cpp
   poly_Quad.cpp
+  poly_ReadOBJ.cpp
   poly_ReadPLY.cpp
   poly_ReadSTL.cpp
   poly_Triangle.cpp
