@@ -32,7 +32,7 @@
 #include <mobius/geom_ApproxBSurf.h>
 
 // Geom includes
-#include <mobius/geom_ApproxBSurfBj.h>
+#include <mobius/geom_ApproxBSurfBi.h>
 #include <mobius/geom_ApproxBSurfMij.h>
 #include <mobius/geom_BuildAveragePlane.h>
 #include <mobius/geom_FairBSurfAkl.h>
@@ -241,7 +241,7 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   r = 0;
   for ( int k = 0; k < nPoles; ++k )
   {
-    geom_ApproxBSurfBj rhs(k, m_inputPoints, m_UVs, m_Nk);
+    geom_ApproxBSurfBi rhs(k, m_inputPoints, m_UVs, m_Nk);
 
     // Compute integrals.
     const double val_x = rhs.Eval(0);

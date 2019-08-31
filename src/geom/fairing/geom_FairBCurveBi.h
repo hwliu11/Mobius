@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 16 June 2019
+// Created on: 03 March 2018
 //-----------------------------------------------------------------------------
-// Copyright (c) 2019-present, Sergey Slyadnev
+// Copyright (c) 2018, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,50 +28,57 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_ApproxBSurfBj_HeaderFile
-#define geom_ApproxBSurfBj_HeaderFile
+#ifndef geom_FairBCurveBi_HeaderFile
+#define geom_FairBCurveBi_HeaderFile
 
-// Geom includes
-#include <mobius/geom_ApproxBSurfCoeff.h>
-#include <mobius/geom_PositionCloud.h>
+// Geometry includes
+#include <mobius/geom_BSplineCurve.h>
+#include <mobius/geom_FairBCurveCoeff.h>
+
+// Core includes
+#include <mobius/core_HeapAlloc.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface approximation rhs coefficients \f$B_j\f$.
-class geom_ApproxBSurfBj : public geom_ApproxBSurfCoeff
+//! Univariate function to interface fairing rhs coefficients \f$B_i\f$.
+class geom_FairBCurveBi : public geom_FairBCurveCoeff
 {
 public:
 
-  //! Ctor.
-  //! \param[in] j   0-based index of the row in the matrix.
-  //! \param[in] pts data points being approximated.
-  //! \param[in] UVs parameterization of the input data points `pts`.
-  //! \param[in] Nk  prepared evaluators for the basis functions.
+  //! ctor.
+  //! \param[in] curve  B-spline curve in question (the one to fair).
+  //! \param[in] coord  index of coordinate to use (0 for X, 1 for Y, and 2 for Z).
+  //! \param[in] i      0-based index of the B-spline function.
+  //! \param[in] lambda fairing coefficent.
+  //! \param[in] alloc  shared memory allocator.
   mobiusGeom_EXPORT
-    geom_ApproxBSurfBj(const int                                 j,
-                       const t_ptr<t_pcloud>&                    pts,
-                       const std::vector<t_uv>&                  UVs,
-                       const std::vector< t_ptr<geom_BSurfNk> >& Nk);
+    geom_FairBCurveBi(const t_ptr<t_bcurve>& curve,
+                      const int              coord,
+                      const int              i,
+                      const double           lambda,
+                      t_ptr<t_alloc2d>       alloc);
 
 public:
 
-  //! Evaluates the coefficient for the passed coordinate index.
-  //! \param[in] coord coordinate index (0 -- X, 1 -- Y, 2 -- Z).
-  //! \return evaluated coefficient.
-  mobiusGeom_EXPORT double
-    Eval(const int coord);
+  //! Evaluates function.
+  //! \param[in] u parameter `u` on the curve being faired.
+  //! \return value.
+  mobiusGeom_EXPORT virtual double
+    Eval(const double u) const;
 
 private:
 
-  geom_ApproxBSurfBj() = delete;
-  void operator=(const geom_ApproxBSurfBj&) = delete;
+  geom_FairBCurveBi() = delete;
+  void operator=(const geom_FairBCurveBi&) = delete;
 
 protected:
 
-  int                    m_iJ; //!< J index.
-  const t_ptr<t_pcloud>& m_R;  //!< Points to approximate.
+  t_ptr<t_bcurve>  m_curve;  //!< Curve in question.
+  int              m_iCoord; //!< Coordinate in question.
+  int              m_iIndex; //!< 0-based index of the spline function.
+  t_ptr<t_alloc2d> m_alloc;  //!< Shared memory allocator.
 
 };
 

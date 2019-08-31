@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/geom_FairBSurfBl.h>
+#include <mobius/geom_FairBSurfBk.h>
 
 // Geom includes
 #include <mobius/geom_FairingMemBlocks.h>
@@ -45,23 +45,23 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBSurfBl::geom_FairBSurfBl(const t_ptr<t_bsurf>&                     surface,
+mobius::geom_FairBSurfBk::geom_FairBSurfBk(const t_ptr<t_bsurf>&                     surface,
                                            const int                                 coord,
-                                           const int                                 l,
+                                           const int                                 k,
                                            const std::vector< t_ptr<geom_BSurfNk> >& Nk,
                                            const double                              lambda,
                                            t_ptr<t_alloc2d>                          alloc)
 : geom_FairBSurfCoeff (lambda),
   m_surface           (surface),
   m_iCoord            (coord),
-  m_iL                (l),
+  m_iK                (k),
   m_Nk                (Nk),
   m_alloc             (alloc)
 {}
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_FairBSurfBl::Eval(const double u, const double v) const
+double mobius::geom_FairBSurfBk::Eval(const double u, const double v) const
 {
   // Evaluate B-surface.
   t_xyz S, dS_dU, dS_dV, d2S_dU2, d2S_dUV, d2S_dV2;
@@ -73,7 +73,7 @@ double mobius::geom_FairBSurfBl::Eval(const double u, const double v) const
 
   // Evaluate function N_l(u,v).
   double Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2;
-  m_Nk[m_iL]->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
+  m_Nk[m_iK]->Eval_D2(u, v, Nl, dNl_dU, dNl_dV, d2Nl_dU2, d2Nl_dUV, d2Nl_dV2);
 
   // Calculate result.
   const t_xyz res = d2S_dU2 * d2Nl_dU2 * m_fLambda

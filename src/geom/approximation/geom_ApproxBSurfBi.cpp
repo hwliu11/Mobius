@@ -29,36 +29,36 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/geom_ApproxBSurfBj.h>
+#include <mobius/geom_ApproxBSurfBi.h>
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_ApproxBSurfBj::geom_ApproxBSurfBj(const int                                 j,
+mobius::geom_ApproxBSurfBi::geom_ApproxBSurfBi(const int                                 i,
                                                const t_ptr<t_pcloud>&                    pts,
                                                const std::vector<t_uv>&                  UVs,
                                                const std::vector< t_ptr<geom_BSurfNk> >& Nk)
 : geom_ApproxBSurfCoeff (UVs, Nk),
-  m_iJ                  (j),
+  m_iI                  (i),
   m_R                   (pts)
 {}
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_ApproxBSurfBj::Eval(const int coord)
+double mobius::geom_ApproxBSurfBi::Eval(const int coord)
 {
-  // Sum products of R_k N_j for each data point.
+  // Sum products of R_k N_i for each data point.
   double res = 0.;
   for ( size_t k = 0; k < m_UVs.size(); ++k )
   {
     // Evaluate function N_i(u,v).
-    double Nj;
-    m_Nk[m_iJ]->Eval(m_UVs[k].U(), m_UVs[k].V(), Nj);
+    double Ni;
+    m_Nk[m_iI]->Eval(m_UVs[k].U(), m_UVs[k].V(), Ni);
 
     // Get coordinate of interest.
     const double r = m_R->GetPoint( int(k) ).Coord(coord);
 
     // Sum.
-    res += r*Nj;
+    res += r*Ni;
   }
 
   return res;

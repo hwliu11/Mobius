@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_FairBSurfBl_HeaderFile
-#define geom_FairBSurfBl_HeaderFile
+#ifndef geom_FairBSurfBk_HeaderFile
+#define geom_FairBSurfBk_HeaderFile
 
 // Geom includes
 #include <mobius/geom_BSplineSurface.h>
@@ -43,22 +43,22 @@ namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
 //!
-//! Twovariate function to interface fairing rhs coefficients \f$B_l\f$.
-class geom_FairBSurfBl : public geom_FairBSurfCoeff
+//! Twovariate function to interface fairing rhs coefficients \f$B_k\f$.
+class geom_FairBSurfBk : public geom_FairBSurfCoeff
 {
 public:
 
-  //! ctor.
+  //! Ctor.
   //! \param[in] surface B-spline surface in question (the one to fair).
   //! \param[in] coord   index of coordinate to use (0 for X, 1 for Y, and 2 for Z).
-  //! \param[in] l       0-based index.
-  //! \param[in] Nk      evaluators for functions \f$N_l(u,v)\f$.
+  //! \param[in] k       0-based index.
+  //! \param[in] Nk      evaluators for functions \f$N_k(u,v)\f$.
   //! \param[in] lambda  fairing coefficent.
   //! \param[in] alloc   shared memory allocator.
   mobiusGeom_EXPORT
-    geom_FairBSurfBl(const t_ptr<t_bsurf>&                     surface,
+    geom_FairBSurfBk(const t_ptr<t_bsurf>&                     surface,
                      const int                                 coord,
-                     const int                                 l,
+                     const int                                 k,
                      const std::vector< t_ptr<geom_BSurfNk> >& Nk,
                      const double                              lambda,
                      t_ptr<t_alloc2d>                          alloc);
@@ -79,17 +79,17 @@ public:
   virtual void GetSupportSpans(int& ifirst, int& ilast,
                                int& jfirst, int& jlast) const
   {
-    m_Nk[m_iL]->GetSupportSpans(ifirst, ilast, jfirst, jlast);
+    m_Nk[m_iK]->GetSupportSpans(ifirst, ilast, jfirst, jlast);
   }
 
 private:
 
-  geom_FairBSurfBl() = delete;
-  void operator=(const geom_FairBSurfBl&) = delete;
+  geom_FairBSurfBk() = delete;
+  void operator=(const geom_FairBSurfBk&) = delete;
 
 protected:
 
-  int                                       m_iL;      //!< Index of basis function.
+  int                                       m_iK;      //!< Index of basis function.
   const std::vector< t_ptr<geom_BSurfNk> >& m_Nk;      //!< Evaluators of basis functions.
   t_ptr<t_bsurf>                            m_surface; //!< Surface in question.
   int                                       m_iCoord;  //!< Coordinate in question.

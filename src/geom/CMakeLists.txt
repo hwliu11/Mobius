@@ -20,13 +20,13 @@ set (CPP_FILES
 
 set (approximation_H_FILES
   approximation/geom_ApproxBSurf.h
-  approximation/geom_ApproxBSurfBj.h
+  approximation/geom_ApproxBSurfBi.h
   approximation/geom_ApproxBSurfCoeff.h
   approximation/geom_ApproxBSurfMij.h
 )
 set (approximation_CPP_FILES
   approximation/geom_ApproxBSurf.cpp
-  approximation/geom_ApproxBSurfBj.cpp
+  approximation/geom_ApproxBSurfBi.cpp
   approximation/geom_ApproxBSurfMij.cpp
 )
 
@@ -102,21 +102,21 @@ set (common_CPP_FILES
 set (fairing_H_FILES
   fairing/geom_FairBCurve.h
   fairing/geom_FairBCurveAij.h
-  fairing/geom_FairBCurveBj.h
+  fairing/geom_FairBCurveBi.h
   fairing/geom_FairBCurveCoeff.h
   fairing/geom_FairBSurf.h
   fairing/geom_FairBSurfAkl.h
-  fairing/geom_FairBSurfBl.h
+  fairing/geom_FairBSurfBk.h
   fairing/geom_FairBSurfCoeff.h
   fairing/geom_FairingMemBlocks.h
 )
 set (fairing_CPP_FILES
   fairing/geom_FairBCurve.cpp
   fairing/geom_FairBCurveAij.cpp
-  fairing/geom_FairBCurveBj.cpp
+  fairing/geom_FairBCurveBi.cpp
   fairing/geom_FairBSurf.cpp
   fairing/geom_FairBSurfAkl.cpp
-  fairing/geom_FairBSurfBl.cpp
+  fairing/geom_FairBSurfBk.cpp
 )
 
 #------------------------------------------------------------------------------

@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <mobius/geom_FairBCurveBj.h>
+#include <mobius/geom_FairBCurveBi.h>
 
 // Geom includes
 #include <mobius/geom_FairingMemBlocks.h>
@@ -45,21 +45,21 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_FairBCurveBj::geom_FairBCurveBj(const t_ptr<t_bcurve>& curve,
+mobius::geom_FairBCurveBi::geom_FairBCurveBi(const t_ptr<t_bcurve>& curve,
                                              const int              coord,
-                                             const int              j,
+                                             const int              i,
                                              const double           lambda,
                                              t_ptr<t_alloc2d>       alloc)
 : geom_FairBCurveCoeff (lambda),
   m_curve              (curve),
   m_iCoord             (coord),
-  m_iIndex             (j),
+  m_iIndex             (i),
   m_alloc              (alloc)
 {}
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_FairBCurveBj::Eval(const double u) const
+double mobius::geom_FairBCurveBi::Eval(const double u) const
 {
   t_ptr<t_alloc2d> localAlloc;
 

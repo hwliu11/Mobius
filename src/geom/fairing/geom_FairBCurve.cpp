@@ -33,7 +33,7 @@
 
 // Geom includes
 #include <mobius/geom_FairBCurveAij.h>
-#include <mobius/geom_FairBCurveBj.h>
+#include <mobius/geom_FairBCurveBi.h>
 
 // Core includes
 #include <mobius/core_Integral.h>
@@ -126,19 +126,19 @@ bool mobius::geom_FairBCurve::Perform()
   Eigen::MatrixXd eigen_B_mx(dim, 3);
   for ( int r = 0; r < dim; ++r )
   {
-    geom_FairBCurveBj rhs_x(m_inputCurve,
+    geom_FairBCurveBi rhs_x(m_inputCurve,
                             0,
                             r + NUM_CONSTRAINED_POLES_LEADING,
                             m_fLambda,
                             sharedAlloc);
     //
-    geom_FairBCurveBj rhs_y(m_inputCurve,
+    geom_FairBCurveBi rhs_y(m_inputCurve,
                             1,
                             r + NUM_CONSTRAINED_POLES_LEADING,
                             m_fLambda,
                             sharedAlloc);
     //
-    geom_FairBCurveBj rhs_z(m_inputCurve,
+    geom_FairBCurveBi rhs_z(m_inputCurve,
                             2,
                             r + NUM_CONSTRAINED_POLES_LEADING,
                             m_fLambda,

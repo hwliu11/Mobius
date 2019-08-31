@@ -33,7 +33,7 @@
 
 // Geom includes
 #include <mobius/geom_FairBSurfAkl.h>
-#include <mobius/geom_FairBSurfBl.h>
+#include <mobius/geom_FairBSurfBk.h>
 
 // Core includes
 #include <mobius/core_Integral.h>
@@ -156,9 +156,9 @@ bool mobius::geom_FairBSurf::Perform()
     if ( this->IsPinned(k) )
       continue;
 
-    geom_FairBSurfBl rhs_x(m_initSurf, 0, k, m_Nk, m_fLambda, sharedAlloc);
-    geom_FairBSurfBl rhs_y(m_initSurf, 1, k, m_Nk, m_fLambda, sharedAlloc);
-    geom_FairBSurfBl rhs_z(m_initSurf, 2, k, m_Nk, m_fLambda, sharedAlloc);
+    geom_FairBSurfBk rhs_x(m_initSurf, 0, k, m_Nk, m_fLambda, sharedAlloc);
+    geom_FairBSurfBk rhs_y(m_initSurf, 1, k, m_Nk, m_fLambda, sharedAlloc);
+    geom_FairBSurfBk rhs_z(m_initSurf, 2, k, m_Nk, m_fLambda, sharedAlloc);
 
     // Compute integrals.
     const double val_x = rhs_x.Integral(U, V, p, q);
