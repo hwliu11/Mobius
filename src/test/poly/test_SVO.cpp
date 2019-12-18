@@ -69,14 +69,14 @@ mobius::outcome
        1 |  1 |  1 |  7
      ----+----+----+---- */
 
-  const int idFor_000 = poly_SVO::GetCornerID(0, 0, 0);
-  const int idFor_001 = poly_SVO::GetCornerID(0, 0, 1);
-  const int idFor_010 = poly_SVO::GetCornerID(0, 1, 0);
-  const int idFor_011 = poly_SVO::GetCornerID(0, 1, 1);
-  const int idFor_100 = poly_SVO::GetCornerID(1, 0, 0);
-  const int idFor_101 = poly_SVO::GetCornerID(1, 0, 1);
-  const int idFor_110 = poly_SVO::GetCornerID(1, 1, 0);
-  const int idFor_111 = poly_SVO::GetCornerID(1, 1, 1);
+  const size_t idFor_000 = poly_SVO::GetCornerID(0, 0, 0);
+  const size_t idFor_001 = poly_SVO::GetCornerID(0, 0, 1);
+  const size_t idFor_010 = poly_SVO::GetCornerID(0, 1, 0);
+  const size_t idFor_011 = poly_SVO::GetCornerID(0, 1, 1);
+  const size_t idFor_100 = poly_SVO::GetCornerID(1, 0, 0);
+  const size_t idFor_101 = poly_SVO::GetCornerID(1, 0, 1);
+  const size_t idFor_110 = poly_SVO::GetCornerID(1, 1, 0);
+  const size_t idFor_111 = poly_SVO::GetCornerID(1, 1, 1);
 
   cf->ProgressNotifier.SendLogMessage(MobiusInfo(Normal) << "SVO corner id for location (0, 0, 0) = %1." << idFor_000);
   cf->ProgressNotifier.SendLogMessage(MobiusInfo(Normal) << "SVO corner id for location (0, 0, 1) = %1." << idFor_001);
@@ -127,7 +127,7 @@ mobius::outcome
   // Access common facilities.
   t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
-  const double locations[8][3] =
+  const size_t locations[8][3] =
   {
     {0, 0, 0},
     {1, 0, 0},
@@ -139,7 +139,7 @@ mobius::outcome
     {1, 1, 1}
   };
 
-  for ( int id = 0; id < 8; ++id )
+  for ( size_t id = 0; id < 8; ++id )
   {
     size_t nx, ny, nz;
     //

@@ -97,4 +97,6 @@ bool mobius::poly_DistanceField::Build(const double                    resolutio
    * ================== */
 
   // TODO: NYI
+
+  return false;
 }

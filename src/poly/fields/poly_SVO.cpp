@@ -246,15 +246,13 @@ double mobius::poly_SVO::Eval(const t_xyz& P) const
                                  0.5*( pNode->m_cornerMin.Z() + pNode->m_cornerMax.Z() ) };
 
       // Find ID of the octant containing the point of interest.
-      int octantId = 0;
-      //
       for ( size_t dim = 0; dim < 3; ++dim )
       {
-        int subID = 0;
+        size_t subID = 0;
         //
         if ( PP[dim] > center[dim] )
         {
-          subID |= 1 << dim;
+          subID |= 1i64 << dim;
         }
 
         pNode = pNode->GetChild(subID);
