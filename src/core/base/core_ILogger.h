@@ -295,6 +295,23 @@ public:
   //! Pushes the passed value to the logging stream.
   //! \param[in] val value to stream.
   //! \return this instance for further streaming.
+  core_MsgStream& operator<<(const size_t val)
+  {
+    if ( m_bIsDummy )
+      return *this;
+
+    if ( !m_bIsMsgInitialized )
+      throw core_excMsgInit();
+
+    t_ptr<core_VarInt> var = new core_VarInt( int(val) );
+    m_args.push_back(var);
+
+    return *this;
+  }
+
+  //! Pushes the passed value to the logging stream.
+  //! \param[in] val value to stream.
+  //! \return this instance for further streaming.
   core_MsgStream& operator<<(const double val)
   {
     if ( m_bIsDummy )

@@ -107,10 +107,12 @@ set (geom_CPP_FILES
 
 set (poly_H_FILES
   poly/test_Mesh.h
+  poly/test_SVO.h
 )
 
 set (poly_CPP_FILES
   poly/test_Mesh.cpp
+  poly/test_SVO.cpp
 )
 
 #------------------------------------------------------------------------------

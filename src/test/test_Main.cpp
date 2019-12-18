@@ -60,6 +60,7 @@
 #include <mobius/test_PositionCloud.h>
 #include <mobius/test_Quaternion.h>
 #include <mobius/test_SkinSurface.h>
+#include <mobius/test_SVO.h>
 
 // testEngine includes
 #include <mobius/testEngine_Launcher.h>
@@ -129,6 +130,7 @@ int main(int /*argc*/, char* /*argv[]*/)
 
   // Poly group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Mesh>               (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_SVO>                (cf->ProgressNotifier) );
 
   // Launcher of entire test suite.
   testEngine_Launcher Launcher;

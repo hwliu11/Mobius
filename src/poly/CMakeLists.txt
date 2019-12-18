@@ -28,6 +28,22 @@ set (CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# Fields
+#------------------------------------------------------------------------------
+
+set (fields_H_FILES
+  fields/poly_ImplicitFunc.h
+  fields/poly_DistanceField.h
+  fields/poly_DistanceFunc.h
+  fields/poly_SVO.h
+)
+set (fields_CPP_FILES
+  fields/poly_DistanceField.cpp
+  fields/poly_DistanceFunc.cpp
+  fields/poly_SVO.cpp
+)
+
+#------------------------------------------------------------------------------
 
 list (APPEND MOBIUS_MODULES poly)
 set (MOBIUS_MODULES ${MOBIUS_MODULES} PARENT_SCOPE)
@@ -47,13 +63,24 @@ foreach (FILE ${CPP_FILES})
   source_group ("Source Files" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${fields_H_FILES})
+  source_group ("Header Files\\Fields" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${fields_CPP_FILES})
+  source_group ("Source Files\\Fields" FILES "${FILE}")
+endforeach (FILE)
+
 include_directories(${poly_include_dir_loc} ${core_include_dir} ${3RDPARTY_EIGEN_DIR})
 
 if (USE_ADOLC)
   include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
 endif()
 
-add_library (mobiusPoly SHARED ${H_FILES} ${CPP_FILES})
+add_library (mobiusPoly SHARED
+  ${H_FILES}        ${CPP_FILES}
+  ${fields_H_FILES} ${fields_CPP_FILES}
+)
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 
@@ -88,4 +115,5 @@ install (TARGETS mobiusPoly
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusPoly.pdb DESTINATION bind CONFIGURATIONS Debug)
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusPoly.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 
-install (FILES ${H_FILES} DESTINATION include/mobius)
+install (FILES ${H_FILES}        DESTINATION include/mobius)
+install (FILES ${fields_H_FILES} DESTINATION include/mobius)

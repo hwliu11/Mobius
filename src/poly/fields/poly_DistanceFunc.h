@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 12 December 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,63 +28,41 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef poly_DistanceFunc_HeaderFile
+#define poly_DistanceFunc_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// Poly includes
+#include <mobius/poly_ImplicitFunc.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+namespace mobius {
+
+//! \ingroup MOBIUS_POLY
+//!
+//! Distance function.
+class poly_DistanceFunc : public poly_ImplicitFunc
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  //! Type of distance to measure.
+  enum Mode
+  {
+    Mode_Signed = 0, //!< Signed distance.
+    Mode_Unsigned    //!< Unsigned distance.
+  };
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_KnotsUniform,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
+  //! Ctor.
+  //! \param[in] mode signed/unsigned.
+  mobiusPoly_EXPORT
+    poly_DistanceFunc(const Mode mode);
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+protected:
 
-  CaseID_Geom_ApproxSurf,
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_PositionCloud,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_PlaneSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-  CaseID_Geom_SkinSurface,
-  CaseID_Geom_MakeBicubicBSurf,
+  //! Type of distance.
+  Mode m_mode;
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
-
-  CaseID_Poly_Mesh,
-  CaseID_Poly_SVO
+};
 
 };
 

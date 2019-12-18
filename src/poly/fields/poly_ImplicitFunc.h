@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 11 December (*) 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,63 +28,64 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef poly_ImplicitFunc_HeaderFile
+#define poly_ImplicitFunc_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// Poly includes
+#include <mobius/poly.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// Core includes
+#include <mobius/core_TrivariateFunc.h>
+#include <mobius/core_XYZ.h>
+
+namespace mobius {
+
+//! \ingroup MOBIUS_POLY
+//!
+//! Base class for implicit functions.
+class poly_ImplicitFunc : public core_TrivariateFunc
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  //! Default ctor.
+  poly_ImplicitFunc()
+  //
+  : core_TrivariateFunc (),
+    m_domainMin         (-DBL_MAX, -DBL_MAX, -DBL_MAX),
+    m_domainMax         ( DBL_MAX,  DBL_MAX,  DBL_MAX)
+  {}
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+  //! Ctor which accepts the bounded region where the function is defined.
+  //! \param[in] domainMin lower bound of the function domain.
+  //! \param[in] domainMax upper bound of the function domain.
+  poly_ImplicitFunc(const t_xyz& domainMin,
+                    const t_xyz& domainMax)
+  //
+  : core_TrivariateFunc (),
+    m_domainMin         (domainMin),
+    m_domainMax         (domainMax)
+  {}
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_KnotsUniform,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
+public:
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  //! \return lower bound of the function domain.
+  const t_xyz& GetDomainMin() const
+  {
+    return m_domainMin;
+  }
 
-  CaseID_Geom_ApproxSurf,
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_PositionCloud,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_PlaneSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-  CaseID_Geom_SkinSurface,
-  CaseID_Geom_MakeBicubicBSurf,
+  //! \return upper bound of the function domain.
+  const t_xyz& GetDomainMax() const
+  {
+    return m_domainMax;
+  }
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
+protected:
 
-  CaseID_Poly_Mesh,
-  CaseID_Poly_SVO
+  t_xyz m_domainMin; //!< Min bound of the three-dimensional domain.
+  t_xyz m_domainMax; //!< Max bound of the three-dimensional domain.
+
+};
 
 };
 

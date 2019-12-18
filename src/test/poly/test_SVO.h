@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 10 December 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,63 +28,61 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef test_SVO_HeaderFile
+#define test_SVO_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// Test includes
+#include <mobius/test_CaseIDs.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// TestEngine includes
+#include <mobius/testEngine_TestCase.h>
+
+// Poly includes
+#include <mobius/poly_SVO.h>
+
+namespace mobius {
+
+//! Test functions for SVO data structure (octree).
+class test_SVO : public testEngine_TestCase
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  //! Returns Test Case ID.
+  //! \return ID of the Test Case.
+  static int ID()
+  {
+    return CaseID_Poly_SVO;
+  }
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+  //! Returns filename for the description.
+  //! \return filename for the description of the Test Case.
+  static std::string DescriptionFn()
+  {
+    return "test_SVO";
+  }
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_KnotsUniform,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
+  //! Returns Test Case description directory.
+  //! \return description directory for the Test Case.
+  static std::string DescriptionDir()
+  {
+    return "structure";
+  }
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  //! Returns pointers to the Test Functions to launch.
+  //! \param[out] functions output collection of pointers.
+  static void Functions(MobiusTestFunctions& functions)
+  {
+    functions << &testGetCornerID
+              << &testGetCornerLocation
+    ; // Put semicolon here for convenient adding new functions above ;)
+  }
 
-  CaseID_Geom_ApproxSurf,
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_PositionCloud,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_PlaneSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-  CaseID_Geom_SkinSurface,
-  CaseID_Geom_MakeBicubicBSurf,
+private:
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
+  static outcome testGetCornerID       (const int funcID);
+  static outcome testGetCornerLocation (const int funcID);
 
-  CaseID_Poly_Mesh,
-  CaseID_Poly_SVO
+};
 
 };
 

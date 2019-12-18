@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 12 December 2019
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2019-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,63 +28,57 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+#ifndef poly_DistanceField_HeaderFile
+#define poly_DistanceField_HeaderFile
 
-// Tests includes
-#include <mobius/test.h>
+// Poly includes
+#include <mobius/poly_DistanceFunc.h>
+#include <mobius/poly_SVO.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+// Core includes
+#include <mobius/core_IProgressNotifier.h>
+#include <mobius/core_IPlotter.h>
+
+namespace mobius {
+
+//! \ingroup MOBIUS_POLY
+//!
+//! Distance field represented by voxelization and its associated implicit
+//! function to calculate the distance values.
+class poly_DistanceField : public core_OBJECT
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+public:
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
+  //! Ctor.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
+  mobiusPoly_EXPORT
+    poly_DistanceField(core_ProgressEntry progress,
+                       core_PlotterEntry  plotter);
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+  //! Dtor. Destroys the octree if it is initialized.
+  mobiusPoly_EXPORT virtual
+    ~poly_DistanceField();
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_KnotsUniform,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
+public:
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  //! Builds distance field with the specified spatial resolution for the
+  //! passed distance function.
+  //! \param[in] resolution target resolution (determines voxel size).
+  //! \param[in] func       driving function.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    Build(const double                    resolution,
+          const t_ptr<poly_DistanceFunc>& func);
 
-  CaseID_Geom_ApproxSurf,
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_PositionCloud,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_PlaneSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-  CaseID_Geom_SkinSurface,
-  CaseID_Geom_MakeBicubicBSurf,
+protected:
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
+  poly_SVO* m_pRoot; //!< Root voxel.
 
-  CaseID_Poly_Mesh,
-  CaseID_Poly_SVO
+  core_ProgressEntry m_progress; //!< Progress notifier.
+  core_PlotterEntry  m_plotter;  //!< Imperative plotter.
+
+};
 
 };
 
