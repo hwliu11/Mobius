@@ -177,6 +177,12 @@ public:
     SetScalar(const size_t id,
               const double s);
 
+  //! Returns the scalar value associated with the passed corner ID.
+  //! \param[in] id ID of the corner in range [0,7].
+  //! \return scalar value.
+  mobiusPoly_EXPORT double
+    GetScalar(const size_t id) const;
+
   //! Returns true if this SVO node has no children.
   //! \return true/false.
   mobiusPoly_EXPORT bool
@@ -210,6 +216,63 @@ public:
   //! \return interpolated field value.
   mobiusPoly_EXPORT double
     Eval(const t_xyz& P) const;
+
+  //! Calculates the memory occupied by the SVO hierarchy starting from this
+  //! node in bytes.
+  //! \param[out] numNodes num of corner points.
+  //! \return memory in bytes.
+  mobiusPoly_EXPORT unsigned long long
+    GetMemoryInBytes(int& numNodes) const;
+
+public:
+
+  //! \return corner point P0 (the notation is the same as for VTK_VOXEL).
+  const t_xyz& GetP0() const
+  {
+    return m_cornerMin;
+  }
+
+  //! \return corner point P1 (the notation is the same as for VTK_VOXEL).
+  t_xyz GetP1() const
+  {
+    return t_xyz( m_cornerMax.X(), m_cornerMin.Y(), m_cornerMin.Z() );
+  }
+
+  //! \return corner point P2 (the notation is the same as for VTK_VOXEL).
+  t_xyz GetP2() const
+  {
+    return t_xyz( m_cornerMin.X(), m_cornerMax.Y(), m_cornerMin.Z() );
+  }
+
+  //! \return corner point P3 (the notation is the same as for VTK_VOXEL).
+  t_xyz GetP3() const
+  {
+    return t_xyz( m_cornerMax.X(), m_cornerMax.Y(), m_cornerMin.Z() );
+  }
+
+  //! \return corner point P4 (the notation is the same as for VTK_VOXEL).
+  t_xyz GetP4() const
+  {
+    return t_xyz( m_cornerMin.X(), m_cornerMin.Y(), m_cornerMax.Z() );
+  }
+
+  //! \return corner point P5 (the notation is the same as for VTK_VOXEL).
+  t_xyz GetP5() const
+  {
+    return t_xyz( m_cornerMax.X(), m_cornerMin.Y(), m_cornerMax.Z() );
+  }
+
+  //! \return corner point P6 (the notation is the same as for VTK_VOXEL).
+  t_xyz GetP6() const
+  {
+    return t_xyz( m_cornerMin.X(), m_cornerMax.Y(), m_cornerMax.Z() );
+  }
+
+  //! \return corner point P7 (the notation is the same as for VTK_VOXEL).
+  const t_xyz& GetP7() const
+  {
+    return m_cornerMax;
+  }
 
 protected:
 

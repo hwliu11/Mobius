@@ -135,6 +135,16 @@ void mobius::poly_SVO::SetScalar(const size_t id,
 
 //-----------------------------------------------------------------------------
 
+double mobius::poly_SVO::GetScalar(const size_t id) const
+{
+  if ( !IsValidCornerId(id) )
+    return DBL_MAX;
+
+  return m_scalars[id];
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_SVO::IsLeaf() const
 {
   return (m_pChildren == nullptr);
@@ -259,4 +269,27 @@ double mobius::poly_SVO::Eval(const t_xyz& P) const
       }
     }
   }
+}
+
+//-----------------------------------------------------------------------------
+
+unsigned long long
+  mobius::poly_SVO::GetMemoryInBytes(int& numNodes) const
+{
+  unsigned long long bytes = 0;
+  if ( this->IsLeaf() )
+  {
+    bytes += sizeof(poly_SVO);
+  }
+  else
+  {
+    for ( size_t subID = 0; subID < 8; ++subID )
+    {
+      bytes += m_pChildren[subID]->GetMemoryInBytes(numNodes);
+    }
+
+    numNodes += 8;
+  }
+
+  return bytes;
 }

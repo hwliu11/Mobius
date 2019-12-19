@@ -53,8 +53,8 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusPoly_EXPORT
-    poly_DistanceField(core_ProgressEntry progress,
-                       core_PlotterEntry  plotter);
+    poly_DistanceField(core_ProgressEntry progress = NULL,
+                       core_PlotterEntry  plotter  = NULL);
 
   //! Dtor. Destroys the octree if it is initialized.
   mobiusPoly_EXPORT virtual
@@ -70,6 +70,14 @@ public:
   mobiusPoly_EXPORT bool
     Build(const double                    resolution,
           const t_ptr<poly_DistanceFunc>& func);
+
+public:
+
+  //! \return root SVO node.
+  poly_SVO* GetRoot()
+  {
+    return m_pRoot;
+  }
 
 protected:
 
