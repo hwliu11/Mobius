@@ -35,11 +35,13 @@ set (fields_H_FILES
   fields/poly_ImplicitFunc.h
   fields/poly_DistanceField.h
   fields/poly_DistanceFunc.h
+  fields/poly_MarchingCubes.h
   fields/poly_SVO.h
 )
 set (fields_CPP_FILES
   fields/poly_DistanceField.cpp
   fields/poly_DistanceFunc.cpp
+  fields/poly_MarchingCubes.cpp
   fields/poly_SVO.cpp
 )
 
