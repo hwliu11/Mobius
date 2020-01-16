@@ -55,7 +55,7 @@ foreach (FILE ${CPP_FILES})
   source_group ("Source Files" FILES "${FILE}")
 endforeach (FILE)
 
-include_directories(${cascade_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${3RDPARTY_OCCT_INCLUDE_DIR})
+include_directories(SYSTEM ${cascade_include_dir_loc} ${core_include_dir} ${bspl_include_dir} ${geom_include_dir} ${3RDPARTY_OCCT_INCLUDE_DIR})
 
 if (USE_ADOLC)
   include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
