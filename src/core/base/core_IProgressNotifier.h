@@ -185,7 +185,7 @@ public:
 //! \ingroup MOBIUS_CORE
 //!
 //! Convenient way to work with Progress Notifier. This class is mostly
-//! useful due to its NULL-safe approach to working with the underlying
+//! useful due to its nullptr-safe approach to working with the underlying
 //! Progress Notifier.
 class core_ProgressEntry
 {
@@ -195,7 +195,7 @@ public:
   core_ProgressEntry() {}
 
   //! Dummy conversion constructor.
-  core_ProgressEntry(int) {}
+  core_ProgressEntry(std::nullptr_t) {}
 
   //! Copy ctor.
   //! \param[in] entry progress entry to copy.

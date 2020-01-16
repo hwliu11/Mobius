@@ -68,7 +68,7 @@ public:
   {
     std::map< int, ptr<vector_field> >::iterator it = D1.find(sct_ID);
     if ( it == D1.end() )
-      return NULL;
+      return nullptr;
 
     return it->second;
   }
@@ -77,7 +77,7 @@ public:
   {
     std::map< int, ptr<vector_field> >::iterator it = D2.find(sct_ID);
     if ( it == D2.end() )
-      return NULL;
+      return nullptr;
 
     return it->second;
   }

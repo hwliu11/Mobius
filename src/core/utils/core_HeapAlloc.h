@@ -61,7 +61,7 @@ public:
   //! Raw pointer with size.
   struct THeapPtr
   {
-    THeapPtr() : Ptr(NULL), Num(0) {} //!< Default constructor.
+    THeapPtr() : Ptr(nullptr), Num(0) {} //!< Default constructor.
 
     ElemType* Ptr; //!< Pointer to the allocated memory.
     size_t    Num; //!< Number of elements.
@@ -121,7 +121,7 @@ public:
     {
       THeapPtr& HeapPtr = m_ptrVector.at(i);
       delete[] HeapPtr.Ptr;
-      HeapPtr.Ptr = NULL;
+      HeapPtr.Ptr = nullptr;
       HeapPtr.Num = 0;
     }
   }
@@ -150,7 +150,7 @@ public:
   //! Raw pointer with size.
   struct THeapBlock
   {
-    THeapBlock() : Ptr(NULL), NumRows(0), NumCols(0) {} //!< Default ctor.
+    THeapBlock() : Ptr(nullptr), NumRows(0), NumCols(0) {} //!< Default ctor.
 
     ElemType** Ptr;     //!< Pointer to the allocated heap memory.
     int        NumRows; //!< Number of rows.
@@ -216,12 +216,12 @@ public:
       for ( int j = 0; j < HeapBlock.NumRows; ++j )
       {
         delete[] HeapBlock.Ptr[j];
-        HeapBlock.Ptr[j] = NULL;
+        HeapBlock.Ptr[j] = nullptr;
       }
       HeapBlock.NumRows = 0;
       HeapBlock.NumCols = 0;
       delete[] HeapBlock.Ptr;
-      HeapBlock.Ptr = NULL;
+      HeapBlock.Ptr = nullptr;
     }
   }
 

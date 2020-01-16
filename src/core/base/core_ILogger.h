@@ -122,7 +122,7 @@ struct core_Msg
            const core_MsgSeverity       severity,
            const std::string&           msgKey,
            const core_MsgArguments&     arguments = core_MsgArguments(),
-           const t_ptr<core_TimeStamp>& timeStamp = NULL)
+           const t_ptr<core_TimeStamp>& timeStamp = nullptr)
   : Priority  (priority),
     Severity  (severity),
     MsgKey    (msgKey),
@@ -150,25 +150,25 @@ public:
     SendInfo(const std::string&           msgKey,
              const core_MsgPriority       priority  = MsgPriority_Normal,
              const core_MsgArguments&     arguments = core_MsgArguments(),
-             const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+             const t_ptr<core_TimeStamp>& timeStamp = nullptr) = 0;
 
   virtual void
     SendNotice(const std::string&           msgKey,
                const core_MsgPriority       priority  = MsgPriority_Normal,
                const core_MsgArguments&     arguments = core_MsgArguments(),
-               const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+               const t_ptr<core_TimeStamp>& timeStamp = nullptr) = 0;
 
   virtual void
     SendWarning(const std::string&           msgKey,
                 const core_MsgPriority       priority  = MsgPriority_Normal,
                 const core_MsgArguments&     arguments = core_MsgArguments(),
-                const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+                const t_ptr<core_TimeStamp>& timeStamp = nullptr) = 0;
 
   virtual void
     SendError(const std::string&           msgKey,
               const core_MsgPriority       priority  = MsgPriority_Normal,
               const core_MsgArguments&     arguments = core_MsgArguments(),
-              const t_ptr<core_TimeStamp>& timeStamp = NULL) = 0;
+              const t_ptr<core_TimeStamp>& timeStamp = nullptr) = 0;
 
 public:
 
@@ -242,7 +242,7 @@ public:
   //! \return Log Message.
   operator core_Msg()
   {
-    return core_Msg(m_priority, m_severity, m_msg, m_args, NULL);
+    return core_Msg(m_priority, m_severity, m_msg, m_args, nullptr);
   }
 
   //! Pushes the passed string to the logging stream.

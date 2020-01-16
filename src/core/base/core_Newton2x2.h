@@ -68,8 +68,8 @@ public:
                  const double                                     umax,
                  const double                                     vmin,
                  const double                                     vmax,
-                 core_ProgressEntry                               progress = NULL,
-                 core_PlotterEntry                                plotter  = NULL)
+                 core_ProgressEntry                               progress = nullptr,
+                 core_PlotterEntry                                plotter  = nullptr)
   //
   : core_IAlgorithm (progress, plotter),
     m_f             (f),

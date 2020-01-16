@@ -191,7 +191,7 @@ public:
     EndHeader();
 
   mobiusTestEngine_EXPORT THAT
-    StartBody(const testEngine_ReportStyle& style = NULL);
+    StartBody(const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartBody(const std::string& className);
@@ -200,7 +200,7 @@ public:
     EndBody();
 
   mobiusTestEngine_EXPORT THAT
-    StartTable(const testEngine_ReportStyle& style = NULL);
+    StartTable(const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartTable(const std::string& className);
@@ -209,7 +209,7 @@ public:
     EndTable();
 
   mobiusTestEngine_EXPORT THAT
-    StartTableRow(const testEngine_ReportStyle& style = 0);
+    StartTableRow(const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartTableRow(const std::string& className);
@@ -218,14 +218,14 @@ public:
     EndTableRow();
 
   mobiusTestEngine_EXPORT THAT
-    StartTableCell(const testEngine_ReportStyle& style = 0);
+    StartTableCell(const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartTableCell(const std::string& className);
 
   mobiusTestEngine_EXPORT THAT
     StartColSpanTableCell(const int colSpan = 1,
-                          const testEngine_ReportStyle& theStyle = 0);
+                          const testEngine_ReportStyle& theStyle = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartColSpanTableCell(const int colSpan,
@@ -233,7 +233,7 @@ public:
 
   mobiusTestEngine_EXPORT THAT
     StartColSpanTableHCell(const int colSpan = 1,
-                           const testEngine_ReportStyle& style = 0);
+                           const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartColSpanTableHCell(const int colSpan,
@@ -241,7 +241,7 @@ public:
 
   mobiusTestEngine_EXPORT THAT
     StartRowSpanTableCell(const int rowSpan = 1,
-                          const testEngine_ReportStyle& style = 0);
+                          const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartRowSpanTableCell(const int rowSpan,
@@ -249,7 +249,7 @@ public:
 
   mobiusTestEngine_EXPORT THAT
     StartRowSpanTableHCell(const int rowSpan = 1,
-                           const testEngine_ReportStyle& style = 0);
+                           const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartRowSpanTableHCell(const int rowSpan,
@@ -259,7 +259,7 @@ public:
     EndTableCell();
 
   mobiusTestEngine_EXPORT THAT
-    StartTableHCell(const testEngine_ReportStyle& style = 0);
+    StartTableHCell(const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartTableHCell(const std::string& className);
@@ -268,7 +268,7 @@ public:
     EndTableHCell();
 
   mobiusTestEngine_EXPORT THAT
-    StartParagraph(const testEngine_ReportStyle& style = 0);
+    StartParagraph(const testEngine_ReportStyle& style = nullptr);
 
   mobiusTestEngine_EXPORT THAT
     StartParagraph(const std::string& className);

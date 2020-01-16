@@ -143,7 +143,7 @@ mobius::t_ptr<mobius::geom_SectionLine>
     if ( m_cloud[s]->ID == ID )
       return m_cloud[s];
   }
-  return NULL;
+  return nullptr;
 }
 
 //! Accessor for points.

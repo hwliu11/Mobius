@@ -44,8 +44,8 @@ static inline double GetWallClockTime ()
   struct timeval tv;
   // use time of first call as base for computing total time,
   // to avoid loss of precision due to big values of tv_sec (counted since 1970)
-  static time_t startSec = (gettimeofday (&tv, NULL) ? 0 : tv.tv_sec);
-  return gettimeofday (&tv, NULL) ? 0. : (tv.tv_sec - startSec) + 0.000001 * tv.tv_usec;
+  static time_t startSec = (gettimeofday (&tv, nullptr) ? 0 : tv.tv_sec);
+  return gettimeofday (&tv, nullptr) ? 0. : (tv.tv_sec - startSec) + 0.000001 * tv.tv_usec;
 }
 
 #else

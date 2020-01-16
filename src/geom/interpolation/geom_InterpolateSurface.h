@@ -80,8 +80,8 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateSurface(core_ProgressEntry progress = NULL,
-                            core_PlotterEntry  plotter  = NULL);
+    geom_InterpolateSurface(core_ProgressEntry progress = nullptr,
+                            core_PlotterEntry  plotter  = nullptr);
 
   //! Complete constructor. Initializes the interpolation tool with a set
   //! of reper points and other properties which are necessary in order to
@@ -103,8 +103,8 @@ public:
                             const int                                deg_V,
                             const bspl_ParamsSelection               paramsType,
                             const bspl_KnotsSelection                knotsType,
-                            core_ProgressEntry                       progress = NULL,
-                            core_PlotterEntry                        plotter  = NULL);
+                            core_ProgressEntry                       progress = nullptr,
+                            core_PlotterEntry                        plotter  = nullptr);
 
   //! Complete constructor. Initializes the interpolation tool with a set
   //! of reper points and other properties which are necessary in order to
@@ -130,8 +130,8 @@ public:
                             const t_ptr<geom_VectorField>&           derivs_isoV_end_D1,
                             const bspl_ParamsSelection               paramsType,
                             const bspl_KnotsSelection                knotsType,
-                            core_ProgressEntry                       progress = NULL,
-                            core_PlotterEntry                        plotter  = NULL);
+                            core_ProgressEntry                       progress = nullptr,
+                            core_PlotterEntry                        plotter  = nullptr);
 
   //! Complete constructor. Initializes the interpolation tool with a set
   //! of reper points and other properties which are necessary in order to
@@ -161,8 +161,8 @@ public:
                             const t_ptr<geom_VectorField>&           derivs_isoV_end_D2,
                             const bspl_ParamsSelection               paramsType,
                             const bspl_KnotsSelection                knotsType,
-                            core_ProgressEntry                       progress = NULL,
-                            core_PlotterEntry                        plotter  = NULL);
+                            core_ProgressEntry                       progress = nullptr,
+                            core_PlotterEntry                        plotter  = nullptr);
 
 public:
 

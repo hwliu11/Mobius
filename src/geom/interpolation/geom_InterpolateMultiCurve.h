@@ -65,8 +65,8 @@ public:
     geom_InterpolateMultiCurve(const int                  deg,
                                const bspl_ParamsSelection paramsType,
                                const bspl_KnotsSelection  knotsType,
-                               core_ProgressEntry         progress = NULL,
-                               core_PlotterEntry          plotter  = NULL);
+                               core_ProgressEntry         progress = nullptr,
+                               core_PlotterEntry          plotter  = nullptr);
 
 public:
 

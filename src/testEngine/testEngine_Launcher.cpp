@@ -300,13 +300,15 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
     fullDirName = core::str::slashed( core::env::MobiusTestDumping() ) + dirName;
 
   // TODO: for Windows only (!!!)
+#ifdef _WIN32
   // Create directory
-  if ( !CreateDirectory(fullDirName.c_str(), NULL) )
+  if ( !CreateDirectory(fullDirName.c_str(), nullptr) )
   {
     if ( out )
       *out << "\tFailed to create directory: " << fullDirName.c_str() << "\n";
     return false;
   }
+#endif
 
   // Filename for HTML report
   std::string

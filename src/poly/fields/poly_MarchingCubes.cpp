@@ -64,7 +64,7 @@ const int aiCubeEdgeFlags[256] =
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_MarchingCubes::poly_MarchingCubes() : core_OPERATOR(NULL, NULL)
+mobius::poly_MarchingCubes::poly_MarchingCubes() : core_OPERATOR(nullptr, nullptr)
 {}
 
 //-----------------------------------------------------------------------------

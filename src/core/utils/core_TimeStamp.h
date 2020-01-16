@@ -76,7 +76,7 @@ public:
   ~core_TimeStamp()
   {}
 
-  //! Checks whether this timestamp is NULL (not initialized).
+  //! Checks whether this timestamp is nullptr (not initialized).
   //! \return true/false.
   bool IsOrigin()
   {

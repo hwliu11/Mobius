@@ -292,7 +292,7 @@ bool mobius::geom_InterpolateSurface::Perform()
    *  Choose interpolant knots
    * -------------------------- */
 
-  double *U = NULL, *V = NULL;
+  double *U = nullptr, *V = nullptr;
 
   const int r = bspl::M(n, m_iDeg_U)
               + (hasDerivs_isoV_start_D1 ? 1 : 0) + (hasDerivs_isoV_end_D1 ? 1 : 0)

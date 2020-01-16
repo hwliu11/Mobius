@@ -49,8 +49,8 @@ public:
   //! Ctor.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
-  poly_ReadOBJ(core_ProgressEntry progress = NULL,
-               core_PlotterEntry  plotter  = NULL) : core_IAlgorithm(progress, plotter) {}
+  poly_ReadOBJ(core_ProgressEntry progress = nullptr,
+               core_PlotterEntry  plotter  = nullptr) : core_IAlgorithm(progress, plotter) {}
 
 public:
 

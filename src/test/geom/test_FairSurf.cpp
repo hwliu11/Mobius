@@ -103,7 +103,7 @@ mobius::outcome
   if ( surf.IsNull() )
     return res.failure();
 
-  geom_FairBSurf F(surf, 0.0, NULL, NULL);
+  geom_FairBSurf F(surf, 0.0, nullptr, nullptr);
 
   // Test 1.
   {
@@ -247,7 +247,7 @@ mobius::outcome
                                                           << surf->ComputeBendingEnergy() );
 
   // Perform fairing.
-  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+  geom_FairBSurf F(surf, 1.0, nullptr, nullptr);
   //
   F.AddPinnedPole(0, 0);
   //
@@ -350,7 +350,7 @@ mobius::outcome
                                                           << surf->ComputeBendingEnergy() );
 
   // Perform fairing.
-  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+  geom_FairBSurf F(surf, 1.0, nullptr, nullptr);
   //
   if ( !F.Perform() )
     return res.failure();
@@ -424,7 +424,7 @@ mobius::outcome
                                                           << surf->ComputeBendingEnergy() );
 
   // Perform fairing.
-  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+  geom_FairBSurf F(surf, 1.0, nullptr, nullptr);
   //
   if ( !F.Perform() )
     return res.failure();
@@ -498,7 +498,7 @@ mobius::outcome
                                                           << surf->ComputeBendingEnergy() );
 
   // Prepare fairing tool.
-  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+  geom_FairBSurf F(surf, 1.0, nullptr, nullptr);
 
   // Constraint borders.
   const int nPolesU = int( surf->GetPoles().size() );
@@ -589,7 +589,7 @@ mobius::outcome
                                                           << surf->ComputeBendingEnergy() );
 
   // Prepare fairing tool.
-  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+  geom_FairBSurf F(surf, 1.0, nullptr, nullptr);
 
   // Perform fairing.
   if ( !F.Perform() )
@@ -664,7 +664,7 @@ mobius::outcome
                                                           << surf->ComputeBendingEnergy() );
 
   // Prepare fairing tool.
-  geom_FairBSurf F(surf, 1.0, NULL, NULL);
+  geom_FairBSurf F(surf, 1.0, nullptr, nullptr);
 
   // Perform fairing.
   if ( !F.Perform() )

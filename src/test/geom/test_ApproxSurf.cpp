@@ -203,7 +203,7 @@ mobius::outcome
 
   const double lambda = 0.;
 
-  if ( !runtest( filename_points_001, false, NULL, 3, 3, lambda, t_bsurf::Instance(json) ) )
+  if ( !runtest( filename_points_001, false, nullptr, 3, 3, lambda, t_bsurf::Instance(json) ) )
     return res.failure();
 
   return res.success();
@@ -281,7 +281,7 @@ mobius::outcome
 
   const double lambda = 0.001;
 
-  if ( !runtest( filename_points_001, false, NULL, 3, 3, lambda, t_bsurf::Instance(json) ) )
+  if ( !runtest( filename_points_001, false, nullptr, 3, 3, lambda, t_bsurf::Instance(json) ) )
     return res.failure();
 
   return res.success();
@@ -337,7 +337,7 @@ mobius::outcome
 
   const double lambda = 0.001;
 
-  if ( !runtest( filename_points_003, false, NULL, 5, 5, lambda, t_bsurf::Instance(json) ) )
+  if ( !runtest( filename_points_003, false, nullptr, 5, 5, lambda, t_bsurf::Instance(json) ) )
     return res.failure();
 
   return res.success();
@@ -391,7 +391,7 @@ mobius::outcome
 
   const double lambda = 0.001;
 
-  if ( !runtest( filename_points_004, false, NULL, 3, 3, lambda, t_bsurf::Instance(json) ) )
+  if ( !runtest( filename_points_004, false, nullptr, 3, 3, lambda, t_bsurf::Instance(json) ) )
     return res.failure();
 
   return res.success();

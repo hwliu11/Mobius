@@ -101,7 +101,7 @@ bool mobius::geom_MakeBicubicBSurf::Perform()
   std::vector<geom_BSurfNk> Nk;
   //
   for ( int k = 0; k < dim; ++k )
-    Nk.push_back( geom_BSurfNk(U, p, V, q, k, 3, NULL) );
+    Nk.push_back( geom_BSurfNk(U, p, V, q, k, 3, nullptr) );
 
   // Row 0.
   {

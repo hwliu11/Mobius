@@ -68,7 +68,7 @@ public:
   //! Ctor.
   //! \param[in] alloc    two-dimensional allocator.
   //! \param[in] memBlock index of a memory block to reuse.
-  bspl_EffectiveNDers(t_ptr<t_alloc2d> alloc    = NULL,
+  bspl_EffectiveNDers(t_ptr<t_alloc2d> alloc    = nullptr,
                       const int        memBlock = -1)
   {
     m_pAlloc    = alloc;

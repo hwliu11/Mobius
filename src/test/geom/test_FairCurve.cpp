@@ -68,7 +68,7 @@ mobius::outcome
   for ( int i = 0; i < 4; ++i )
   {
     // Fair.
-    geom_FairBCurve fairingTool(crv, lambdas[i], cf->ProgressNotifier, NULL);
+    geom_FairBCurve fairingTool(crv, lambdas[i], cf->ProgressNotifier, nullptr);
     //
     if ( !fairingTool.Perform() )
     {

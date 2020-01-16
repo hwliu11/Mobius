@@ -106,7 +106,7 @@ public:
     Eval_Dk(const double     u,
             const int        k,
             t_xyz&           dkC,
-            t_ptr<t_alloc2d> alloc            = NULL,
+            t_ptr<t_alloc2d> alloc            = nullptr,
             const int        memBlockResult   = -1,
             const int        memBlockInternal = -1) const;
 
@@ -115,7 +115,7 @@ public:
             const double     u,
             const int        k,
             t_xyz&           dkC,
-            t_ptr<t_alloc2d> alloc            = NULL,
+            t_ptr<t_alloc2d> alloc            = nullptr,
             const int        memBlockInternal = -1) const;
 
   mobiusGeom_EXPORT virtual double
@@ -151,7 +151,7 @@ public:
     RefineKnots(const std::vector<double>& X);
 
   mobiusGeom_EXPORT bool
-    Split(const double                           u,
+    Split(const double                             u,
           std::vector< t_ptr<geom_BSplineCurve> >& slices) const;
 
   mobiusGeom_EXPORT void

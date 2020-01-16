@@ -140,7 +140,7 @@ public:
             t_xyz&           d2U,
             t_xyz&           d2V,
             t_xyz&           d2UV,
-            t_ptr<t_alloc2d> alloc            = NULL,
+            t_ptr<t_alloc2d> alloc            = nullptr,
             const int        memBlockResultU  = -1,
             const int        memBlockResultV  = -1,
             const int        memBlockInternal = -1) const;
@@ -157,7 +157,7 @@ public:
     InvertPoint(const t_xyz&     P,
                 t_uv&            params,
                 const double     prec             = 1.0e-6,
-                t_ptr<t_alloc2d> alloc            = NULL,
+                t_ptr<t_alloc2d> alloc            = nullptr,
                 const int        memBlockResultU  = -1,
                 const int        memBlockResultV  = -1,
                 const int        memBlockInternal = -1) const;

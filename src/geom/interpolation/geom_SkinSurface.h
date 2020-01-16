@@ -83,8 +83,8 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_SkinSurface(core_ProgressEntry progress = NULL,
-                     core_PlotterEntry  plotter  = NULL);
+    geom_SkinSurface(core_ProgressEntry progress = nullptr,
+                     core_PlotterEntry  plotter  = nullptr);
 
   //! Complete constructor. Initializes the interpolation tool with a set
   //! of curves to skin the surface through.
@@ -97,8 +97,8 @@ public:
     geom_SkinSurface(const std::vector< t_ptr<t_bcurve> >& curves,
                      const int                             deg_V,
                      const bool                            unifyCurves,
-                     core_ProgressEntry                    progress = NULL,
-                     core_PlotterEntry                     plotter  = NULL);
+                     core_ProgressEntry                    progress = nullptr,
+                     core_PlotterEntry                     plotter  = nullptr);
 
 public:
 

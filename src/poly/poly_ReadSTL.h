@@ -53,9 +53,9 @@ public:
   //! Ctor.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
-  poly_ReadSTL(core_ProgressEntry progress = NULL,
-               core_PlotterEntry  plotter  = NULL) : core_IAlgorithm (progress, plotter),
-                                                     m_bMergeNodes   (true)
+  poly_ReadSTL(core_ProgressEntry progress = nullptr,
+               core_PlotterEntry  plotter  = nullptr) : core_IAlgorithm (progress, plotter),
+                                                        m_bMergeNodes   (true)
   {}
 
 public:

@@ -178,7 +178,7 @@ public:
   double SetCoord(const int        idx,
                   const double val)
   {
-    double* coord = NULL;
+    double* coord = nullptr;
 
     if ( idx == 0 )
       coord = &m_fX;

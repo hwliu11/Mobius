@@ -53,8 +53,8 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusPoly_EXPORT
-    poly_DistanceField(core_ProgressEntry progress = NULL,
-                       core_PlotterEntry  plotter  = NULL);
+    poly_DistanceField(core_ProgressEntry progress = nullptr,
+                       core_PlotterEntry  plotter  = nullptr);
 
   //! Dtor. Destroys the octree if it is initialized.
   mobiusPoly_EXPORT virtual

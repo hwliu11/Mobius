@@ -191,7 +191,7 @@ mobius::core_Ptr<mobius::geom_BSplineCurve>
 {
   core_Ptr<t_bcurve> result;
   if ( !geom_JSON(json).ExtractBCurve(result) )
-    return NULL;
+    return nullptr;
 
   return result;
 }

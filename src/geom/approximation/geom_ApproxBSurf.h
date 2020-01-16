@@ -71,8 +71,8 @@ public:
   mobiusGeom_EXPORT
     geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
                      const t_ptr<t_bsurf>&  initSurf,
-                     core_ProgressEntry     progress = NULL,
-                     core_PlotterEntry      plotter  = NULL);
+                     core_ProgressEntry     progress = nullptr,
+                     core_PlotterEntry      plotter  = nullptr);
 
   //! Ctor accepting the desired degrees.
   //! \param[in] points   points to approximate.
@@ -84,8 +84,8 @@ public:
     geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
                      const int              uDegree,
                      const int              vDegree,
-                     core_ProgressEntry     progress = NULL,
-                     core_PlotterEntry      plotter  = NULL);
+                     core_ProgressEntry     progress = nullptr,
+                     core_PlotterEntry      plotter  = nullptr);
 
 public:
 

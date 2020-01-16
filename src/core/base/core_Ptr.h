@@ -48,13 +48,19 @@ public:
   //! Default constructor.
   core_Ptr<SharedType>()
   {
-    m_pRef = NULL;
+    m_pRef = nullptr;
   }
 
   //! Constructor accepting integer.
   core_Ptr<SharedType>(int)
   {
-    m_pRef = NULL;
+    m_pRef = nullptr;
+  }
+
+  //! Constructor accepting null pointer.
+  core_Ptr<SharedType>(std::nullptr_t)
+  {
+    m_pRef = nullptr;
   }
 
   //! Constructor accepting the raw reference to the target object to wrap with
@@ -79,7 +85,7 @@ public:
   //! \param theSmartRef [in] smart reference to the target object.
   core_Ptr<SharedType>(const core_Ptr<SharedType>& theSmartRef)
   {
-    m_pRef = NULL;
+    m_pRef = nullptr;
     this->operator=(theSmartRef);
   }
 
@@ -148,7 +154,7 @@ public:
   //! \return true/false.
   bool IsNull() const
   {
-    return m_pRef == NULL;
+    return m_pRef == nullptr;
   }
 
   //! Accessor for the wrapped pointer.
@@ -178,7 +184,7 @@ public:
   //! \return casted pointer.
   static core_Ptr<SharedType> DownCast(const core_Ptr<core_OBJECT>& theSmartRef)
   {
-    return core_Ptr<SharedType>( theSmartRef.IsNull() ? NULL : dynamic_cast<SharedType*>( theSmartRef.Access() ) );
+    return core_Ptr<SharedType>( theSmartRef.IsNull() ? nullptr : dynamic_cast<SharedType*>( theSmartRef.Access() ) );
   }
 
   //! Casts the passed pointer to the necessary type.
@@ -187,7 +193,7 @@ public:
   template <class OtherType>
   static core_Ptr<SharedType> DownCast(const core_Ptr<OtherType>& theSmartRef)
   {
-    return core_Ptr<SharedType>( theSmartRef.IsNull() ? NULL : dynamic_cast<SharedType*>( theSmartRef.Access() ) );
+    return core_Ptr<SharedType>( theSmartRef.IsNull() ? nullptr : dynamic_cast<SharedType*>( theSmartRef.Access() ) );
   }
 
 private:
@@ -209,7 +215,7 @@ private:
       if ( !m_pRef->NbRefs() )
       {
         delete m_pRef;
-        m_pRef = NULL;
+        m_pRef = nullptr;
       }
     }
   }

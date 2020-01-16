@@ -257,7 +257,7 @@ public:
   core_PlotterEntry() {}
 
   //! Dummy conversion constructor.
-  core_PlotterEntry(int) {}
+  core_PlotterEntry(std::nullptr_t) {}
 
   //! Constructor.
   //! \param iv [in] IV to wrap.

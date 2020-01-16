@@ -173,7 +173,7 @@ mobius::t_ptr<mobius::t_bsurf>
 {
   if ( core_Precision::IsInfinite(m_fUMin) || core_Precision::IsInfinite(m_fUMax) ||
        core_Precision::IsInfinite(m_fVMin) || core_Precision::IsInfinite(m_fVMax) )
-    return NULL; // Cannot convert infinite surface.
+    return nullptr; // Cannot convert infinite surface.
 
   int r, s;
   std::vector<double> U, V;
@@ -181,12 +181,12 @@ mobius::t_ptr<mobius::t_bsurf>
   // Prepare U knots.
   const int nu = degU;
   if ( bspl_KnotsUniform::Calculate(nu, degU, r, U) != bspl_KnotsUniform::ErrCode_NoError )
-    return NULL;
+    return nullptr;
 
   // Prepare V knots.
   const int nv = degV;
   if ( bspl_KnotsUniform::Calculate(nv, degV, s, V) != bspl_KnotsUniform::ErrCode_NoError )
-    return NULL;
+    return nullptr;
 
   // Evaluate (u,v) coordinates for poles.
   std::vector<double> uValues, vValues;

@@ -113,7 +113,7 @@ namespace BSplSurfProj
     //! \param[in] memBlockInternal index of the memory block to reuse.
     func_base(const core_Ptr<t_bsurf>& S,
               const t_xyz&             P,
-              t_ptr<t_alloc2d>         alloc            = NULL,
+              t_ptr<t_alloc2d>         alloc            = nullptr,
               const int                memBlockResultU  = -1,
               const int                memBlockResultV  = -1,
               const int                memBlockInternal = -1)
@@ -160,7 +160,7 @@ namespace BSplSurfProj
     //! \param[in] memBlockInternal index of the memory block to reuse.
     func_f(const core_Ptr<t_bsurf>& S,
            const t_xyz&             P,
-           t_ptr<t_alloc2d>         alloc            = NULL,
+           t_ptr<t_alloc2d>         alloc            = nullptr,
            const int                memBlockResultU  = -1,
            const int                memBlockResultV  = -1,
            const int                memBlockInternal = -1)
@@ -232,7 +232,7 @@ namespace BSplSurfProj
     //! \param[in] memBlockInternal index of the memory block to reuse.
     func_g(const core_Ptr<t_bsurf>& S,
            const t_xyz&             P,
-           t_ptr<t_alloc2d>         alloc            = NULL,
+           t_ptr<t_alloc2d>         alloc            = nullptr,
            const int                memBlockResultU  = -1,
            const int                memBlockResultV  = -1,
            const int                memBlockInternal = -1)
@@ -313,8 +313,8 @@ namespace BSplSurfProj
               const double                                     umax,
               const double                                     vmin,
               const double                                     vmax,
-              core_ProgressEntry                               progress         = NULL,
-              core_PlotterEntry                                plotter          = NULL)
+              core_ProgressEntry                               progress         = nullptr,
+              core_PlotterEntry                                plotter          = nullptr)
     //
     : core_Newton2x2 (f, g, umin, umax, vmin, vmax, progress, plotter),
       m_S            (S),
@@ -413,7 +413,7 @@ mobius::core_Ptr<mobius::geom_BSplineSurface>
 {
   core_Ptr<t_bsurf> result;
   if ( !geom_JSON(json).ExtractBSurface(result) )
-    return NULL;
+    return nullptr;
 
   return result;
 }
@@ -662,7 +662,7 @@ void mobius::geom_BSplineSurface::Eval_D1(const double u,
   double** dNv = localAlloc->Allocate(2, m_iDegV + 1, true);
 
   // Evaluate derivatives of B-spline basis functions
-  bspl_EffectiveNDers NDers(NULL, -1);
+  bspl_EffectiveNDers NDers(nullptr, -1);
   NDers(u, m_U, m_iDegU, span_u, 1, dNu);
   NDers(v, m_V, m_iDegV, span_v, 1, dNv);
 

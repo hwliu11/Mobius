@@ -243,7 +243,7 @@ public:
     operator<<(const t_ptr<testEngine_CaseLauncherAPI>& CaseLauncher);
 
   mobiusTestEngine_EXPORT bool
-    Launch(std::ostream* out = NULL) const;
+    Launch(std::ostream* out = nullptr) const;
 
 protected:
 

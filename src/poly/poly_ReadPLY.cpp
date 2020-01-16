@@ -84,7 +84,7 @@ bool mobius::poly_ReadPLY::Perform(const std::string& filename)
 
       if ( tokens.size() == 3 )
       {
-        int* iTarget = NULL;
+        int* iTarget = nullptr;
         if ( tokens[1] == "vertex" )
           iTarget = &nVertices;
         else if ( tokens[1] == "face" )
@@ -93,7 +93,7 @@ bool mobius::poly_ReadPLY::Perform(const std::string& filename)
         if ( iTarget )
         {
           *iTarget = atoi( tokens[2].c_str() );
-          iTarget = NULL;
+          iTarget  = nullptr;
         }
       }
     }

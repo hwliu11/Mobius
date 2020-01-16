@@ -118,7 +118,7 @@ mobius::outcome
              + filenameShort;
 
   // Prepare reader.
-  poly_ReadSTL reader(cf->ProgressNotifier, NULL);
+  poly_ReadSTL reader(cf->ProgressNotifier, nullptr);
 
   // Read STL.
   if ( !reader.Perform(filename) )
@@ -159,7 +159,7 @@ mobius::outcome
              + filenameShort;
 
   // Prepare reader.
-  poly_ReadPLY reader(cf->ProgressNotifier, NULL);
+  poly_ReadPLY reader(cf->ProgressNotifier, nullptr);
 
   // Read PLY.
   if ( !reader.Perform(filename) )

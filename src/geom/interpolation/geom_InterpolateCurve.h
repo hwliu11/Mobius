@@ -71,8 +71,8 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusGeom_EXPORT
-    geom_InterpolateCurve(core_ProgressEntry progress = NULL,
-                          core_PlotterEntry  plotter  = NULL);
+    geom_InterpolateCurve(core_ProgressEntry progress = nullptr,
+                          core_PlotterEntry  plotter  = nullptr);
 
   //! Complete ctor.
   //! \param[in] points     data points to interpolate.
@@ -88,8 +88,8 @@ public:
                           const int                  deg,
                           const bspl_ParamsSelection paramsType,
                           const bspl_KnotsSelection  knotsType,
-                          core_ProgressEntry         progress = NULL,
-                          core_PlotterEntry          plotter  = NULL);
+                          core_ProgressEntry         progress = nullptr,
+                          core_PlotterEntry          plotter  = nullptr);
 
   //! Complete constructor accepting the manually defined paraneters and
   //! knot vector.
@@ -108,8 +108,8 @@ public:
                           const int                 n,
                           double*                   pU,
                           const int                 m,
-                          core_ProgressEntry        progress = NULL,
-                          core_PlotterEntry         plotter  = NULL);
+                          core_ProgressEntry        progress = nullptr,
+                          core_PlotterEntry         plotter  = nullptr);
 
 public:
 

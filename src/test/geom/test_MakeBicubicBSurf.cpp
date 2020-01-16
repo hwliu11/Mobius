@@ -240,7 +240,7 @@ mobius::outcome
                                   dS_du00, dS_du01, dS_du10, dS_du11,
                                   dS_dv00, dS_dv01, dS_dv10, dS_dv11,
                                   d2S_dudv00, d2S_dudv01, d2S_dudv10, d2S_dudv11,
-                                  cf->ProgressNotifier, NULL);
+                                  cf->ProgressNotifier, nullptr);
   //
   if ( !mkBicubic.Perform() )
   {

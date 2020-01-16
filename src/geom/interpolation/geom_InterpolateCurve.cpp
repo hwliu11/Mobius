@@ -100,11 +100,11 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<t_xyz>&  points,
   m_points     = points;
   m_iDeg       = deg;
   m_paramsType = paramsType;
-  m_pParams    = NULL;
+  m_pParams    = nullptr;
   m_iNumParams = 0;
   m_knotsType  = knotsType;
   m_errCode    = ErrCode_NotDone;
-  m_pU         = NULL;
+  m_pU         = nullptr;
   m_iNumKnots  = 0;
 }
 
@@ -142,10 +142,10 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<t_xyz>&  points,
   m_Dn         = Dn;
   m_iDeg       = deg;
   m_paramsType = paramsType;
-  m_pParams    = NULL;
+  m_pParams    = nullptr;
   m_iNumParams = 0;
   m_knotsType  = knotsType;
-  m_pU         = NULL;
+  m_pU         = nullptr;
   m_iNumKnots  = 0;
   m_errCode    = ErrCode_NotDone;
 }
@@ -168,10 +168,10 @@ void mobius::geom_InterpolateCurve::Init(const std::vector<t_xyz>&  points,
   m_D2n        = D2n;
   m_iDeg       = deg;
   m_paramsType = paramsType;
-  m_pParams    = NULL;
+  m_pParams    = nullptr;
   m_iNumParams = 0;
   m_knotsType  = knotsType;
-  m_pU         = NULL;
+  m_pU         = nullptr;
   m_iNumKnots  = 0;
   m_errCode    = ErrCode_NotDone;
 }
@@ -190,7 +190,7 @@ bool mobius::geom_InterpolateCurve::Perform()
    * ------------------------------- */
 
   int     n      = 0;
-  double* params = NULL;
+  double* params = nullptr;
 
   // Now parameterize
   if ( m_paramsType == ParamsSelection_Uniform )
@@ -245,7 +245,7 @@ bool mobius::geom_InterpolateCurve::Perform()
    * -------------------------- */
 
   int     m = 0;
-  double* U = NULL;
+  double* U = nullptr;
 
   if ( m_knotsType == KnotsSelection_Average )
   {
