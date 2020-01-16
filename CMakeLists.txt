@@ -27,7 +27,7 @@ MOBIUS_RETRIEVE_VERSION(${CMAKE_SOURCE_DIR}/src/core/core.h VERSION_MAJOR VERSIO
 set (3RDPARTY_DIR "" CACHE PATH "The root directory for all 3-rd parties")
 
 if (NOT DEFINED ${3RDPARTY_DIR} AND ${3RDPARTY_DIR} STREQUAL "")
-  message (FATAL_ERROR "... root 3rdparty directory was not found")
+  message (FATAL_ERROR "... Root 3rdparty directory was not found.\nPlease, set 3RDPARTY_DIR variable.")
 endif()
 
 # OpenCascade is optional
@@ -36,14 +36,14 @@ set (USE_OPENCASCADE OFF CACHE BOOL "OpenCascade is optional. If turned on, conv
 # ADOLC is optional
 set (USE_ADOLC OFF CACHE BOOL "ADOL-C for algorithmic differentiation.")
 
+# Whether to generate documentation
+set (GENERATE_DOC OFF CACHE BOOL "Generate documentation from sources (with Doxygen).")
+
 # Eigen
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_Eigen.cmake)
 
 # OCCT
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_OCCT.cmake)
-
-# OCCT 3rdparty
-include (${CMAKE_SOURCE_DIR}/cmake/mobius_OCCT_3rdparty.cmake)
 
 # Doxygen for documentation
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_Doxygen.cmake)
@@ -54,7 +54,7 @@ include (${CMAKE_SOURCE_DIR}/cmake/mobius_Mathjax.cmake)
 # Graphviz for documentation
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_Graphviz.cmake)
 
-# adolc
+# ADOL-C for experimenting with algorithmic differentiation
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_adolc.cmake)
 
 set (3RDPARTY_DLL_PATH "${3RDPARTY_freetype_DLL_DIR};${3RDPARTY_freeimage_DLL_DIR};")
@@ -135,7 +135,6 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 # Documentation
 #-------------------------------------------------------------------------------
 
-set (GENERATE_DOC ON CACHE BOOL "Generate documentation")
 if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}")
   message(STATUS "... Collect dependencies for docapi")
   file(GLOB_RECURSE dep_sources "*.h" "*.cpp")
@@ -179,7 +178,7 @@ set_property(TARGET mobiusBSpl PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusGeom PROPERTY FOLDER Kernel)
 
 if (USE_OPENCASCADE)
-  set_property(TARGET mobiusCascade    PROPERTY FOLDER Services)
+  set_property(TARGET mobiusCascade PROPERTY FOLDER Services)
 endif()
 
 set_property(TARGET mobiusTestEngine PROPERTY FOLDER Tests)
