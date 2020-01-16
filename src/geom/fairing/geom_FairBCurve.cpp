@@ -205,14 +205,14 @@ bool mobius::geom_FairBCurve::Perform()
   const std::vector<t_xyz>& poles = m_resultCurve->GetPoles();
   int                       r     = 0;
   //
-  for ( int p = 0 + NUM_CONSTRAINED_POLES_LEADING;
-        p <= int( poles.size() ) - 1 - NUM_CONSTRAINED_POLES_TRAILING;
-        ++p, ++r )
+  for ( int pp = 0 + NUM_CONSTRAINED_POLES_LEADING;
+        pp <= int( poles.size() ) - 1 - NUM_CONSTRAINED_POLES_TRAILING;
+        ++pp, ++r )
   {
-    const t_xyz& P = poles[p];
+    const t_xyz& P = poles[pp];
     t_xyz        D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
     //
-    m_resultCurve->SetPole(p, P + D);
+    m_resultCurve->SetPole(pp, P + D);
   }
 
 #if defined COUT_DEBUG

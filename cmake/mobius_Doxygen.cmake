@@ -1,3 +1,8 @@
+if (NOT GENERATE_DOC)
+  MOBIUS_UNSET(DOXYGEN_EXE)
+  return()
+endif()
+
 message (STATUS "Processing Doxygen 3-rd party")
 
 MOBIUS_FIND_PRODUCT_DIR ("${3RDPARTY_DIR}" "doxygen" DOXYGEN_DIR)

@@ -51,7 +51,7 @@ mobius::poly_DistanceField::~poly_DistanceField()
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::Build(const double                    resolution,
+bool mobius::poly_DistanceField::Build(const double                    poly_NotUsed(resolution),
                                        const t_ptr<poly_DistanceFunc>& func)
 {
   if ( func.IsNull() )

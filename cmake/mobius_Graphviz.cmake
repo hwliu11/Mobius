@@ -1,3 +1,8 @@
+if (NOT GENERATE_DOC)
+  MOBIUS_UNSET(GRAPHVIZ_EXE)
+  return()
+endif()
+
 message (STATUS "Processing Graphviz 3-rd party")
 
 MOBIUS_FIND_PRODUCT_DIR ("${3RDPARTY_DIR}" "graphviz" GRAPHVIZ_DIR)

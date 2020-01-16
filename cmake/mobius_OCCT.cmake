@@ -1,3 +1,10 @@
+if (NOT USE_OPENCASCADE)
+  MOBIUS_UNSET_3RDPARTY("OCCT")
+  return()
+endif()
+
+add_definitions (-DUSE_OPENCASCADE)
+
 MOBIUS_THIRDPARTY_PRODUCT("OCCT" "" "Standard.hxx" "TKernel")
 
 message (STATUS "... OCCT Include dirs: ${3RDPARTY_OCCT_INCLUDE_DIR}")

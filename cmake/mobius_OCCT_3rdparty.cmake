@@ -1,11 +1,10 @@
-MOBIUS_THIRDPARTY_PRODUCT("tcl" "" "tcl.h" "tcl86")
-
-if (3RDPARTY_tcl_DIR AND NOT 3RDPARTY_tk_DIR)
-  if (EXISTS ${3RDPARTY_tcl_INCLUDE_DIR}/tk.h)
-    set (3RDPARTY_tk_DIR "${3RDPARTY_tcl_DIR}" CACHE PATH "The directory containing tk" FORCE)
-  endif()
+if (NOT USE_OPENCASCADE)
+  MOBIUS_UNSET_3RDPARTY("freeimage")
+  MOBIUS_UNSET_3RDPARTY("freeimageplus")
+  MOBIUS_UNSET_3RDPARTY("freetype")
+  MOBIUS_UNSET_3RDPARTY("tbb")
+  return()
 endif()
-MOBIUS_THIRDPARTY_PRODUCT("tk" "" "tk.h" "tk86")
 
 MOBIUS_THIRDPARTY_PRODUCT("freeimage" "" "FreeImage.h" "FreeImage")
 if (3RDPARTY_freeimage_DIR AND NOT 3RDPARTY_freeimageplus_DIR)

@@ -192,14 +192,14 @@ bool mobius::geom_FairBSurf::Perform()
   // Apply perturbations to poles.
   const std::vector< std::vector<t_xyz> >& poles = m_resultSurf->GetPoles();
   //
-  for ( int r = 0; r < dim; ++r )
+  for ( int rr = 0; rr < dim; ++rr )
   {
-    int k = rkMap[r];
+    int k = rkMap[rr];
     int i, j;
     this->GetIJ(k, i, j);
 
     const t_xyz& P = poles[i][j];
-    t_xyz        D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
+    t_xyz        D = t_xyz( eigen_X_mx(rr, 0), eigen_X_mx(rr, 1), eigen_X_mx(rr, 2) );
     //
     m_resultSurf->SetPole(i, j, P + D);
   }

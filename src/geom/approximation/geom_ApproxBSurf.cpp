@@ -277,14 +277,14 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   m_resultSurf = m_initSurf->Copy();
 
   // Set new coordinates for poles.
-  for ( int r = 0; r < dim; ++r )
+  for ( int rr = 0; rr < dim; ++rr )
   {
     int i, j;
-    this->GetIJ(r, i, j);
+    this->GetIJ(rr, i, j);
 
-    if ( !this->IsPinned(r) )
+    if ( !this->IsPinned(rr) )
     {
-      t_xyz D = t_xyz( eigen_X_mx(r, 0), eigen_X_mx(r, 1), eigen_X_mx(r, 2) );
+      t_xyz D = t_xyz( eigen_X_mx(rr, 0), eigen_X_mx(rr, 1), eigen_X_mx(rr, 2) );
       //
       m_resultSurf->SetPole(i, j, D);
     }

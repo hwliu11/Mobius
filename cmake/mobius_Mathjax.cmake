@@ -1,3 +1,8 @@
+if (NOT GENERATE_DOC)
+  MOBIUS_UNSET(MATHJAX_DIR)
+  return()
+endif()
+
 message (STATUS "Processing Mathjax 3-rd party")
 
 MOBIUS_FIND_PRODUCT_DIR ("${3RDPARTY_DIR}" "mathjax" MATHJAX_DIR)

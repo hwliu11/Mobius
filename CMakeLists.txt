@@ -30,6 +30,9 @@ if (NOT DEFINED ${3RDPARTY_DIR} AND ${3RDPARTY_DIR} STREQUAL "")
   message (FATAL_ERROR "... root 3rdparty directory was not found")
 endif()
 
+# OpenCascade is optional
+set (USE_OPENCASCADE OFF CACHE BOOL "OpenCascade is optional. If turned on, converters to OpenCascade are available.")
+
 # ADOLC is optional
 set (USE_ADOLC OFF CACHE BOOL "ADOL-C for algorithmic differentiation.")
 
@@ -54,19 +57,14 @@ include (${CMAKE_SOURCE_DIR}/cmake/mobius_Graphviz.cmake)
 # adolc
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_adolc.cmake)
 
-set (3RDPARTY_DLL_PATH "${3RDPARTY_tcl_DLL_DIR};\
-${3RDPARTY_tk_DLL_DIR};\
-${3RDPARTY_freetype_DLL_DIR};\
-${3RDPARTY_freeimage_DLL_DIR};")
-
+set (3RDPARTY_DLL_PATH "${3RDPARTY_freetype_DLL_DIR};${3RDPARTY_freeimage_DLL_DIR};")
 set (3RDPARTY_DLL_DEB_PATH "${3RDPARTY_DLL_PATH}")
 
 if (3RDPARTY_OCCT_DLL_DIR_DEBUG AND EXISTS "${3RDPARTY_OCCT_DLL_DIR_DEBUG}")
   set (3RDPARTY_DLL_DEB_PATH "${3RDPARTY_DLL_DEB_PATH};${3RDPARTY_OCCT_DLL_DIR_DEBUG}")
 endif()
 
-set (3RDPARTY_DLL_PATH "${3RDPARTY_DLL_PATH};\
-${3RDPARTY_OCCT_DLL_DIR};")
+set (3RDPARTY_DLL_PATH "${3RDPARTY_DLL_PATH};${3RDPARTY_OCCT_DLL_DIR};")
 
 #-------------------------------------------------------------------------------
 string (REGEX REPLACE ";" " " 3RDPARTY_NOT_INCLUDED "${3RDPARTY_NOT_INCLUDED}")
@@ -125,7 +123,11 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/poly)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/bspl)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/geom)
 #add_subdirectory(${CMAKE_SOURCE_DIR}/src/api)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/cascade)
+
+if (USE_OPENCASCADE)
+  add_subdirectory(${CMAKE_SOURCE_DIR}/src/cascade)
+endif()
+
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/testEngine)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 
@@ -171,11 +173,15 @@ endif()
 # Folders
 #-------------------------------------------------------------------------------
 
-set_property(TARGET mobiusCore       PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusPoly       PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusBSpl       PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusGeom       PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusCascade    PROPERTY FOLDER Services)
+set_property(TARGET mobiusCore PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusPoly PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusBSpl PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusGeom PROPERTY FOLDER Kernel)
+
+if (USE_OPENCASCADE)
+  set_property(TARGET mobiusCascade    PROPERTY FOLDER Services)
+endif()
+
 set_property(TARGET mobiusTestEngine PROPERTY FOLDER Tests)
 set_property(TARGET mobiusTest       PROPERTY FOLDER Tests)
 
