@@ -46,15 +46,13 @@
 #endif
 
 namespace mobius {
-namespace covariance {
-
-bool compare(const std::pair<double, int>& p1, const std::pair<double, int>& p2)
-{
-  return p1.first > p2.first;
+  namespace covariance {
+    bool compare(const std::pair<double, int>& p1, const std::pair<double, int>& p2)
+    {
+      return p1.first > p2.first;
+    }
+  }
 }
-
-};
-};
 
 //-----------------------------------------------------------------------------
 
@@ -100,7 +98,7 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<t_xyz>& pt
     }
   }
 
-  for ( int i = 0; i < nPts; ++i )
+  for ( int i = 0; i < int(nPts); ++i )
   {
     const t_xyz& p      = pts[i];
     t_xyz        p_dash = p - mu;

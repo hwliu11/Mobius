@@ -51,10 +51,7 @@ void mobius::core_OBJECT::IncRef()
 #if defined(WIN32) || defined(_WIN32)
   InterlockedIncrement(&m_iRefCount);
 #else
-  static tbb::spin_mutex MUTEX;
-  MUTEX.lock();
-  ++m_iRefCount;
-  MUTEX.unlock();
+  __sync_fetch_and_add(&m_iRefCount, 1);
 #endif
 }
 
@@ -67,10 +64,7 @@ void mobius::core_OBJECT::DecRef()
   LONG aRefCount = (LONG) m_iRefCount;
   m_iRefCount = (int) InterlockedDecrement(&aRefCount);
 #else
-  static tbb::spin_mutex MUTEX;
-  MUTEX.lock();
-  --m_iRefCount;
-  MUTEX.unlock();
+  __sync_fetch_and_sub(&m_iRefCount, 1);
 #endif
 }
 

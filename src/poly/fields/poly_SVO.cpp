@@ -262,7 +262,11 @@ double mobius::poly_SVO::Eval(const t_xyz& P) const
         //
         if ( PP[dim] > center[dim] )
         {
+#ifdef _WIN32
           subID |= 1i64 << dim;
+#else
+          subID |= 1ll << dim;
+#endif
         }
 
         pNode = pNode->GetChild(subID);

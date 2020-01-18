@@ -93,6 +93,6 @@ private:
 //! Convenience alias.
 typedef core_Axis t_axis;
 
-};
+}
 
 #endif

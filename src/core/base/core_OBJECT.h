@@ -96,6 +96,6 @@ private:
 //! shortcut for Mobius shared pointer.
 typedef core_OBJECT OBJECT;
 
-};
+}
 
 #endif

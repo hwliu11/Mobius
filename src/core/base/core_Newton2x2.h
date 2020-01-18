@@ -221,6 +221,6 @@ private:
 
 };
 
-};
+}
 
 #endif

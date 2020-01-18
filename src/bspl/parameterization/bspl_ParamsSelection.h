@@ -46,6 +46,6 @@ enum bspl_ParamsSelection
   ParamsSelection_Exponent       //!< Generalization of centripetal model.
 };
 
-};
+}
 
 #endif

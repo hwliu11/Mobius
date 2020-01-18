@@ -2005,7 +2005,7 @@ int mobius::core_Integral::gauss::GetPointsMax()
 void mobius::core_Integral::gauss::GetPoints(const int            n,
                                              std::vector<double>& points)
 {
-  if ( points.size() != n )
+  if ( int( points.size() ) != n )
     points.resize(n);
 
   int Som = 0;
@@ -2028,7 +2028,7 @@ void mobius::core_Integral::gauss::GetPoints(const int            n,
 void mobius::core_Integral::gauss::GetWeights(const int            n,
                                               std::vector<double>& weights)
 {
-  if ( weights.size() != n )
+  if ( int( weights.size() ) != n )
     weights.resize(n);
 
   int Som = 0;
@@ -2158,8 +2158,8 @@ namespace mobius
         int                  m_iOrder;
       };
     }
-  };
-};
+  }
+}
 
 //-----------------------------------------------------------------------------
 

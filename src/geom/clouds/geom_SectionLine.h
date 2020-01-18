@@ -139,6 +139,6 @@ protected:
 //! Handy shortcut for section line type name.
 typedef geom_SectionLine t_sline;
 
-};
+}
 
 #endif

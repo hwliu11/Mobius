@@ -150,6 +150,6 @@ protected:
 //! Handy shortcuts.
 typedef bspl_KnotMultiset t_knot_multiset;
 
-};
+}
 
 #endif

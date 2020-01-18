@@ -158,7 +158,7 @@ struct poly_QuadHandle : public poly_BaseHandle
   explicit poly_QuadHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
 };
 
-};
+}
 
 //-----------------------------------------------------------------------------
 // Hashers
@@ -249,6 +249,6 @@ struct hash<mobius::poly_QuadHandle>
   }
 };
 
-};
+}
 
 #endif

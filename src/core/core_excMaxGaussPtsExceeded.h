@@ -47,6 +47,6 @@ class core_excMaxGaussPtsExceeded : public std::exception
   }
 };
 
-};
+}
 
 #endif

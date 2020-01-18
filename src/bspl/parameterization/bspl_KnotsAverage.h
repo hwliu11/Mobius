@@ -148,11 +148,11 @@ public:
 
 private:
 
-  bspl_KnotsAverage() {}
-  bspl_KnotsAverage(const bspl_KnotsAverage&) {}
+  bspl_KnotsAverage() = delete;
+  bspl_KnotsAverage(const bspl_KnotsAverage&) = delete;
 
 };
 
-};
+}
 
 #endif

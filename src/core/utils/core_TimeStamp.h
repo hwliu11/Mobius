@@ -96,7 +96,7 @@ public:
   //! \return true/false.
   bool IsLess(const core_Ptr<core_TimeStamp>& Other) const
   {
-    return (Time < Other->Time) || (Time == Other->Time) && (Internal < Other->Internal);
+    return (Time < Other->Time) || ( (Time == Other->Time) && (Internal < Other->Internal) );
   }
 
   //! Checks whether this timestamp is less or equal to the passed one.
@@ -112,7 +112,7 @@ public:
   //! \return true/false.
   bool IsGreater(const core_Ptr<core_TimeStamp>& Other) const
   {
-    return (Time > Other->Time) || (Time == Other->Time) && (Internal > Other->Internal);
+    return (Time > Other->Time) || ( (Time == Other->Time) && (Internal > Other->Internal) );
   }
 
   //! Checks whether this timestamp is greater or equal to the passed one.
@@ -147,11 +147,13 @@ public:
   std::string ToString(const bool useInternal = true,
                        const bool isCompatible = false) const
   {
+    std::string res;
+
+#ifdef _WIN32
     char buf[26];
     ctime_s(buf, 26, &Time);
     buf[24] = '\0'; // Replace EOL [\n\0 --> \0\0]
 
-    std::string res;
     res += buf;
     if ( useInternal )
       res += ":: [" + core::str::to_string(Internal) + "]";
@@ -163,6 +165,11 @@ public:
       core::str::replace_all(res, "]", "");
       core::str::replace_all(res, " ", "_");
     }
+#else
+    std::stringstream ss;
+    ss << Time;
+    res = ss.str();
+#endif
 
     return res;
   }
@@ -202,6 +209,6 @@ public:
 
 };
 
-};
+}
 
 #endif

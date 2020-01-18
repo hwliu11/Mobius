@@ -247,16 +247,16 @@ namespace mobius {
 //! consideration. Then we will collate [5] with the obtained formula, and
 //! this way we will see, what is the role of {q} in such rotation.
 //!
-//! Let us take a look on the following illustration:
+//! Have a look on the following illustration:
 //!
 //!       w ^
 //!         |
 //!         |
 //!       C +----------------+ P
-//!        / \
-//!       /====\
-//!      /  a    \
-//!     /   |      \
+//!        /
+//!       /====
+//!      /  a
+//!     /   |
 //!    /    |       + T'
 //! T /     |      /
 //!  +      |     /
@@ -477,6 +477,6 @@ private:
 
 };
 
-};
+}
 
 #endif

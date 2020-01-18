@@ -37,6 +37,7 @@
 // Standard includes
 #include <algorithm>
 #include <cstdint>
+#include <cstring>
 #include <fstream>
 #include <limits>
 #include <math.h>
@@ -45,7 +46,11 @@
 //-----------------------------------------------------------------------------
 
 // Macro to get 64-bit position of the file from streampos.
-#define GETPOS(pos) pos.seekpos()
+#ifdef _WIN32
+  #define GETPOS(pos) pos.seekpos()
+#else
+  #define GETPOS(pos) ( (int64_t) pos )
+#endif
 
 //-----------------------------------------------------------------------------
 
@@ -246,7 +251,7 @@ bool mobius::poly_ReadSTL::isAscii(std::istream& stream)
 static inline bool str_starts_with (const char* pStr, const char* pWord, int n)
 {
   while ( isspace (*pStr) && *pStr != '\0' ) pStr++;
-  return !strncmp(pStr, pWord, n);
+  return !::strncmp(pStr, pWord, n);
 }
 
 //-----------------------------------------------------------------------------
@@ -302,7 +307,7 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
   {
     char facet[LINELEN], outer[LINELEN];
 
-    stream.getline(facet, (std::streamsize) min(LINELEN, endPos - GETPOS(stream.tellg()))); // "facet normal nx ny nz"
+    stream.getline(facet, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg()))); // "facet normal nx ny nz"
     //
     if ( str_starts_with(facet, "endsolid", 8) )
     {
@@ -310,7 +315,7 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
       break;
     }
 
-    stream.getline(outer, (std::streamsize) min(LINELEN, endPos - GETPOS(stream.tellg()))); // "outer loop"
+    stream.getline(outer, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg()))); // "outer loop"
     //
     if ( !str_starts_with(facet, "facet", 5) || !str_starts_with(outer, "outer", 5) )
     {
@@ -319,9 +324,9 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
       return false;
     }
 
-    stream.getline(line1, (std::streamsize) min(LINELEN, endPos - GETPOS(stream.tellg())));
-    stream.getline(line2, (std::streamsize) min(LINELEN, endPos - GETPOS(stream.tellg())));
-    stream.getline(line3, (std::streamsize) min(LINELEN, endPos - GETPOS(stream.tellg())));
+    stream.getline(line1, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg())));
+    stream.getline(line2, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg())));
+    stream.getline(line3, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg())));
 
     // Stop reading if eof is reached; note that well-formatted file never
     // ends by the vertex line.
@@ -404,7 +409,7 @@ bool mobius::poly_ReadSTL::readBinary(std::istream& stream)
     // Read more data.
     if ( nbFacesInBuffer <= 0 )
     {
-      nbFacesInBuffer = min(CHUNK_NBFACETS, nbFacets - nbFacetRead);
+      nbFacesInBuffer = std::min(CHUNK_NBFACETS, nbFacets - nbFacetRead);
 
       const std::streamsize dataToRead = nbFacesInBuffer * faceDataLen;
       //

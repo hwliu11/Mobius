@@ -31,9 +31,6 @@
 // Own include
 #include <mobius/core.h>
 
-// OS dependent
-#include <windows.h>
-
 #define BUFSIZE 1000
 
 //-----------------------------------------------------------------------------
@@ -44,7 +41,7 @@
 //! \return value of MOBIUS_TEST_DATA variable.
 std::string mobius::core::env::MobiusTestData()
 {
-  return GetVariable(MOBIUS_TEST_DATA);
+  return std::getenv(MOBIUS_TEST_DATA);
 }
 
 //-----------------------------------------------------------------------------
@@ -55,7 +52,7 @@ std::string mobius::core::env::MobiusTestData()
 //! \return value of MOBIUS_TEST_DUMPING variable.
 std::string mobius::core::env::MobiusTestDumping()
 {
-  return GetVariable(MOBIUS_TEST_DUMPING);
+  return std::getenv(MOBIUS_TEST_DUMPING);
 }
 
 //-----------------------------------------------------------------------------
@@ -66,7 +63,7 @@ std::string mobius::core::env::MobiusTestDumping()
 //! \return value of MOBIUS_TEST_DESCR variable.
 std::string mobius::core::env::MobiusTestDescr()
 {
-  return GetVariable(MOBIUS_TEST_DESCR);
+  return std::getenv(MOBIUS_TEST_DESCR);
 }
 
 //-----------------------------------------------------------------------------
@@ -77,9 +74,7 @@ std::string mobius::core::env::MobiusTestDescr()
 std::string
   mobius::core::env::GetVariable(const char* VarName)
 {
-  TCHAR chNewEnv[BUFSIZE];
-  GetEnvironmentVariable(VarName, chNewEnv, BUFSIZE);
-  return chNewEnv;
+  return std::getenv(VarName);
 }
 
 //-----------------------------------------------------------------------------

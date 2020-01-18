@@ -331,6 +331,6 @@ public:
 //! Collection of variables.
 typedef std::vector< t_ptr<core_VarBase> > core_Vars;
 
-};
+}
 
 #endif

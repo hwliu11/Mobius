@@ -115,6 +115,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

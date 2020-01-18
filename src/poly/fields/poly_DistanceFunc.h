@@ -64,6 +64,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

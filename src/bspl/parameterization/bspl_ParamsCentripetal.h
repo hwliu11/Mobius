@@ -339,11 +339,11 @@ public:
 
 private:
 
-  bspl_ParamsCentripetal() {}
-  bspl_ParamsCentripetal(const bspl_ParamsCentripetal&) {}
+  bspl_ParamsCentripetal() = delete;
+  bspl_ParamsCentripetal(const bspl_ParamsCentripetal&) = delete;
 
 };
 
-};
+}
 
 #endif

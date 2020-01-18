@@ -56,7 +56,7 @@ mobius::core_XYZ mobius::core_IsoTransform::Apply(const core_XYZ& coord) const
   core_Quaternion rotated_qn = m_Q*coord*m_Q.Conjugated();
 
   if ( !rotated_qn.AsVector(rotated_vec) )
-    throw std::exception("Quaternion does not specify rotation");
+    throw std::runtime_error("Quaternion does not specify rotation");
 
   // Translate
   core_XYZ transformed_vec = rotated_vec + m_T;

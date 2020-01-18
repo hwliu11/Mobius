@@ -102,17 +102,16 @@ struct core_Msg
   //! localization key.
   std::string MsgKey;
 
-  //! Timestamp.
-  t_ptr<core_TimeStamp> TimeStamp;
-
   //! Arguments for logging message.
   core_MsgArguments Arguments;
 
-  //! Default constructor.
-  core_Msg()
-  {}
+  //! Timestamp.
+  t_ptr<core_TimeStamp> TimeStamp;
 
-  //! Complete constructor.
+  //! Default ctor.
+  core_Msg() : Priority(MsgPriority_Normal), Severity(MsgSeverity_Information) {}
+
+  //! Complete ctor.
   //! \param[in] priority  message priority tag.
   //! \param[in] severity  message severity tag.
   //! \param[in] msgKey    message localization key.
@@ -412,6 +411,6 @@ private:
 
 };
 
-};
+}
 
 #endif

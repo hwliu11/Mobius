@@ -102,6 +102,6 @@ private:
 //! Handy shortcut.
 typedef geom_SectionCloud t_scloud;
 
-};
+}
 
 #endif

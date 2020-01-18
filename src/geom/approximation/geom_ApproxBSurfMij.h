@@ -83,6 +83,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

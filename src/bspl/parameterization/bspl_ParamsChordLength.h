@@ -374,11 +374,11 @@ public:
 
 private:
 
-  bspl_ParamsChordLength() {}
-  bspl_ParamsChordLength(const bspl_ParamsChordLength&) {}
+  bspl_ParamsChordLength() = delete;
+  bspl_ParamsChordLength(const bspl_ParamsChordLength&) = delete;
 
 };
 
-};
+}
 
 #endif

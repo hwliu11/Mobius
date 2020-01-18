@@ -292,6 +292,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

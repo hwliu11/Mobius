@@ -34,6 +34,9 @@
 // Core includes
 #include <mobius/core_ILogger.h>
 
+// Standard includes
+#include <climits>
+
 namespace mobius {
 
 //-----------------------------------------------------------------------------
@@ -386,6 +389,6 @@ private:
 
 };
 
-};
+}
 
 #endif

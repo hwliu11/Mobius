@@ -161,6 +161,6 @@ protected:
 //! Handy alias for double type.
 typedef geom_PositionCloud t_pcloud;
 
-};
+}
 
 #endif

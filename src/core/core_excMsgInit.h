@@ -48,6 +48,6 @@ class core_excMsgInit : public std::exception
   }
 };
 
-};
+}
 
 #endif

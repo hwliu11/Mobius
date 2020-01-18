@@ -34,6 +34,7 @@
 // STD includes
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <math.h>
 #include <sstream>
 #include <string>
@@ -210,10 +211,10 @@ namespace core
     {
       std::istringstream is(str);
       T result;
-      (is >> result) ? result : default_value;
+      is >> result;
       return result;
     }
-  };
+  }
 
   //! Hashers.
   namespace hasher
@@ -233,10 +234,10 @@ namespace core
     mobiusCore_EXPORT int
       HashCode(const double val,
                const int    upper);
-  };
+  }
 
-};
+}
 
-};
+}
 
 #endif

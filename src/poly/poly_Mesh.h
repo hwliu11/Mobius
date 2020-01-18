@@ -66,7 +66,7 @@ public:
                  poly_Vertex&            vertex)
   {
     const int idx = h.GetIdx();
-    if ( idx < 0 || idx > m_vertices.size() ) return false;
+    if ( idx < 0 || idx > int( m_vertices.size() ) ) return false;
     //
     vertex = m_vertices[idx];
     return true;
@@ -80,7 +80,7 @@ public:
                poly_Edge&            edge)
   {
     const int idx = h.GetIdx();
-    if ( idx < 0 || idx > m_edges.size() ) return false;
+    if ( idx < 0 || idx > int( m_edges.size() ) ) return false;
     //
     edge = m_edges[idx];
     return true;
@@ -94,7 +94,7 @@ public:
                    poly_Triangle&            triangle)
   {
     const int idx = h.GetIdx();
-    if ( idx < 0 || idx > m_triangles.size() ) return false;
+    if ( idx < 0 || idx > int( m_triangles.size() ) ) return false;
     //
     triangle = m_triangles[idx];
     return true;
@@ -108,7 +108,7 @@ public:
                poly_Quad&            quad)
   {
     const int idx = h.GetIdx();
-    if ( idx < 0 || idx > m_quads.size() ) return false;
+    if ( idx < 0 || idx > int( m_quads.size() ) ) return false;
     //
     quad = m_quads[idx];
     return true;
@@ -334,6 +334,6 @@ protected:
 //! Convenience shortcuts.
 typedef poly_Mesh t_mesh;
 
-};
+}
 
 #endif

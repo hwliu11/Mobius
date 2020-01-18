@@ -233,6 +233,6 @@ private:
 //! Shortcut for Mobius shared pointer.
 #define t_ptr core_Ptr
 
-};
+}
 
 #endif

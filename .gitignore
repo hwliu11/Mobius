@@ -38,3 +38,5 @@ Makefile*
 
 #
 /test/*.brep
+
+.vscode/settings.json

@@ -32,7 +32,7 @@
 #define core_MemChecker_h
 
 // OS includes
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include "windows.h"
 #include "psapi.h"
 #endif
@@ -41,7 +41,7 @@
                            MEASURING MEMORY
  ************************************************************************/
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 
 #define MOBIUS_MEMCHECK_COUNT_MIB(varname) \
   { \

@@ -103,6 +103,6 @@ private:
 
 };
 
-};
+}
 
 #endif

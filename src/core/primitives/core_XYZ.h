@@ -296,6 +296,6 @@ inline core_XYZ operator*(const double coeff, const core_XYZ& coords)
 //! Convenience alias.
 typedef core_XYZ t_xyz;
 
-};
+}
 
 #endif

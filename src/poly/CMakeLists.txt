@@ -99,19 +99,19 @@ target_link_libraries(mobiusPoly mobiusCore)
 install (TARGETS mobiusPoly
          RUNTIME DESTINATION bin COMPONENT Runtime
          CONFIGURATIONS Release
-         ARCHIVE DESTINATION lib COMPONENT Library
+         ARCHIVE DESTINATION lib LIBRARY DESTINATION lib COMPONENT Library
          CONFIGURATIONS Release)
 
 install (TARGETS mobiusPoly
          RUNTIME DESTINATION bini COMPONENT Runtime
          CONFIGURATIONS RelWithDebInfo
-         ARCHIVE DESTINATION libi COMPONENT Library
+         ARCHIVE DESTINATION libi LIBRARY DESTINATION libi COMPONENT Library
          CONFIGURATIONS RelWithDebInfo)
 
 install (TARGETS mobiusPoly
          RUNTIME DESTINATION bind COMPONENT Runtime
          CONFIGURATIONS Debug
-         ARCHIVE DESTINATION libd COMPONENT Library
+         ARCHIVE DESTINATION libd LIBRARY DESTINATION libd COMPONENT Library
          CONFIGURATIONS Debug)
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusPoly.pdb DESTINATION bind CONFIGURATIONS Debug)

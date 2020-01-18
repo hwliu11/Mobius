@@ -588,6 +588,6 @@ private:
 
 };
 
-};
+}
 
 #endif

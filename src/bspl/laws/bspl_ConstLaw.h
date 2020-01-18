@@ -57,6 +57,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

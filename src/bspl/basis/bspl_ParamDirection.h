@@ -46,6 +46,6 @@ enum bspl_ParamDirection
   ParamDirection_V          //!< V direction.
 };
 
-};
+}
 
 #endif

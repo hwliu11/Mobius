@@ -48,6 +48,6 @@ enum core_Continuity
   Continuity_CN      //!< CN.
 };
 
-};
+}
 
 #endif

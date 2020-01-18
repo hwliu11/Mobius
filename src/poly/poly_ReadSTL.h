@@ -144,6 +144,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

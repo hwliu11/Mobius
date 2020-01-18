@@ -146,8 +146,8 @@ namespace bspl
   mobiusBSpl_EXPORT void
     PairIndicesFromSerial(const int k, const int numCols, int& i, int& j);
 
-};
+}
 
-};
+}
 
 #endif

@@ -151,10 +151,10 @@ namespace core_Integral
               const int            orderX,
               const int            orderY);
 
-  };
+  }
 
-};
+}
 
-};
+}
 
 #endif

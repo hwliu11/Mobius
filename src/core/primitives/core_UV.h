@@ -205,6 +205,6 @@ typedef core_UV core_XY;
 //! Convenience alias.
 typedef core_XY t_xy;
 
-};
+}
 
 #endif

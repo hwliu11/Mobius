@@ -49,6 +49,6 @@ class bspl_excMaxDegreeViolation : public std::exception
   }
 };
 
-};
+}
 
 #endif

@@ -90,11 +90,11 @@ public:
 
 private:
 
-  bspl_ParamsUniform() {}
-  bspl_ParamsUniform(const bspl_ParamsUniform&) {}
+  bspl_ParamsUniform() = delete;
+  bspl_ParamsUniform(const bspl_ParamsUniform&) = delete;
 
 };
 
-};
+}
 
 #endif

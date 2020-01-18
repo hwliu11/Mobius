@@ -109,10 +109,10 @@ public:
     m_Nk[m_iL]->GetSupportSpans(Nl_supportArea[0], Nl_supportArea[1],
                                 Nl_supportArea[2], Nl_supportArea[3]);
 
-    ifirst = max(Nk_supportArea[0], Nl_supportArea[0]);
-    ilast  = min(Nk_supportArea[1], Nl_supportArea[1]);
-    jfirst = max(Nk_supportArea[2], Nl_supportArea[2]);
-    jlast  = min(Nk_supportArea[3], Nl_supportArea[3]);
+    ifirst = std::max(Nk_supportArea[0], Nl_supportArea[0]);
+    ilast  = std::min(Nk_supportArea[1], Nl_supportArea[1]);
+    jfirst = std::max(Nk_supportArea[2], Nl_supportArea[2]);
+    jlast  = std::min(Nk_supportArea[3], Nl_supportArea[3]);
   }
 
 private:
@@ -136,6 +136,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

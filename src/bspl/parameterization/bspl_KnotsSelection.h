@@ -44,6 +44,6 @@ enum bspl_KnotsSelection
   KnotsSelection_Average        //!< Averaging technique using p (degree) interpolant parameters.
 };
 
-};
+}
 
 #endif

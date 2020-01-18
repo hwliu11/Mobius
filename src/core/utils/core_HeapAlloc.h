@@ -37,6 +37,10 @@
 // STD includes
 #include <vector>
 
+#ifndef _WIN32
+  #include <string.h> // For the 'memset' below.
+#endif
+
 #undef COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
@@ -234,6 +238,6 @@ private:
 
 typedef core_HeapAlloc2D<double> t_alloc2d;
 
-};
+}
 
 #endif

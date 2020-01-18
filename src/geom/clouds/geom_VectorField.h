@@ -94,6 +94,6 @@ private:
 //! Handy shortcut.
 typedef geom_VectorField t_vector_field;
 
-};
+}
 
 #endif
