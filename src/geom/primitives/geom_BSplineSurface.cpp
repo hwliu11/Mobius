@@ -790,7 +790,7 @@ mobius::core_Continuity
   const core_Continuity
     vCont = geom_BSplineCurve::CheckContinuityByKnots(m_V, m_iDegV);
 
-  return min(uCont, vCont);
+  return std::min(uCont, vCont);
 }
 
 //-----------------------------------------------------------------------------

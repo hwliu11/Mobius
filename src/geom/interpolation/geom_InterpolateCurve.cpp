@@ -236,7 +236,7 @@ bool mobius::geom_InterpolateCurve::Perform()
     params = m_pParams;
   }
   else
-    throw std::exception("NYI parameterization type");
+    throw std::runtime_error("NYI parameterization type");
 
   // TODO: introduce other parameterization techniques
 
@@ -273,7 +273,7 @@ bool mobius::geom_InterpolateCurve::Perform()
     U = m_pU;
   }
   else
-    throw std::exception("NYI knots selection type");
+    throw std::runtime_error("NYI knots selection type");
 
   // TODO: introduce other parameterization techniques
 
@@ -315,7 +315,7 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<t_xyz>& points,
                                            t_ptr<t_bcurve>&          crv)
 {
   if ( has_start_deriv2 && !has_start_deriv || has_end_deriv2 && !has_end_deriv )
-    throw std::exception("Cannot handle D2 without D1"); // TODO: this limitation can be easily escaped
+    throw std::runtime_error("Cannot handle D2 without D1"); // TODO: this limitation can be easily escaped
 
   std::vector<double> U;
   for ( int i = 0; i <= m; ++i )

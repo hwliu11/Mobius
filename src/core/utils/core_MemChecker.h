@@ -58,4 +58,6 @@
 
 #endif
 
+#define MOBIUS_MEMCHECK_COUNT_MIB(varname)
+
 #endif

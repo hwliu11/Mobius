@@ -34,6 +34,9 @@
 // bspl includes
 #include <mobius/bspl_KnotsAverage.h>
 
+// Standard includes
+#include <cstring>
+
 //-----------------------------------------------------------------------------
 
 //! Test scenario 001.

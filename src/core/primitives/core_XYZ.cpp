@@ -72,14 +72,14 @@ mobius::core_XYZ mobius::core_XYZ::OZ()
 
 //! Returns modulus of the point's radius vector.
 //! \return modulus.
-inline double mobius::core_XYZ::Modulus() const
+double mobius::core_XYZ::Modulus() const
 {
   return sqrt( this->SquaredModulus() );
 }
 
 //! Returns squared modulus of the point's radius vector.
 //! \return squared modulus.
-inline double mobius::core_XYZ::SquaredModulus() const
+double mobius::core_XYZ::SquaredModulus() const
 {
   return m_fX*m_fX + m_fY*m_fY + m_fZ*m_fZ;
 }
@@ -87,13 +87,13 @@ inline double mobius::core_XYZ::SquaredModulus() const
 //! Multiplies copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return resulting point.
-inline mobius::core_XYZ mobius::core_XYZ::Multiplied(const double coeff) const
+mobius::core_XYZ mobius::core_XYZ::Multiplied(const double coeff) const
 {
   return this->operator*(coeff);
 }
 
 //! Normalizes point so that it gets unit length.
-inline void mobius::core_XYZ::Normalize()
+void mobius::core_XYZ::Normalize()
 {
   const double modulus = this->Modulus();
   m_fX /= modulus;
@@ -103,7 +103,7 @@ inline void mobius::core_XYZ::Normalize()
 
 //! Creates a normalized copy of this point.
 //! \return normalized copy.
-inline mobius::core_XYZ mobius::core_XYZ::Normalized() const
+mobius::core_XYZ mobius::core_XYZ::Normalized() const
 {
   core_XYZ C(m_fX, m_fY, m_fZ);
   C.Normalize();
@@ -113,7 +113,7 @@ inline mobius::core_XYZ mobius::core_XYZ::Normalized() const
 //! Calculates dot product between this and another vector.
 //! \param XYZ [in] another vector.
 //! \return dot product.
-inline double mobius::core_XYZ::Dot(const core_XYZ& XYZ) const
+double mobius::core_XYZ::Dot(const core_XYZ& XYZ) const
 {
   return m_fX*XYZ.m_fX + m_fY*XYZ.m_fY + m_fZ*XYZ.m_fZ;
 }
@@ -121,7 +121,7 @@ inline double mobius::core_XYZ::Dot(const core_XYZ& XYZ) const
 //! Calculates cross product between this and another vector.
 //! \param XYZ [in] another vector.
 //! \return cross product.
-inline mobius::core_XYZ mobius::core_XYZ::Cross(const core_XYZ& XYZ) const
+mobius::core_XYZ mobius::core_XYZ::Cross(const core_XYZ& XYZ) const
 {
   const double x = m_fY*XYZ.m_fZ - m_fZ*XYZ.m_fY;
   const double y = m_fZ*XYZ.m_fX - m_fX*XYZ.m_fZ;
@@ -133,7 +133,7 @@ inline mobius::core_XYZ mobius::core_XYZ::Cross(const core_XYZ& XYZ) const
 //! Calculates angle between two points.
 //! \param XYZ [in] another vector.
 //! \return angle in radians.
-inline double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
+double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
 {
   core_XYZ V1 = this->Normalized();
   core_XYZ V2 = XYZ.Normalized();
@@ -158,8 +158,8 @@ inline double mobius::core_XYZ::Angle(const core_XYZ& XYZ) const
 //! cross product `this ^ other` has the same orientation as `ref` relative
 //! to the plane defined by the vectors `this` and `other`. Otherwise, the
 //! angular value is negative.
-inline double mobius::core_XYZ::AngleWithRef(const core_XYZ& other,
-                                             const core_XYZ& ref) const
+double mobius::core_XYZ::AngleWithRef(const core_XYZ& other,
+                                      const core_XYZ& ref) const
 {
   core_XYZ XYZ = this->Cross(other).Normalized();
 
@@ -188,7 +188,7 @@ bool mobius::core_XYZ::operator==(const core_XYZ& XYZ) const
 //! Assignment operator.
 //! \param XYZ [in] point to copy into this one.
 //! \return this one.
-inline mobius::core_XYZ& mobius::core_XYZ::operator=(const core_XYZ& XYZ)
+mobius::core_XYZ& mobius::core_XYZ::operator=(const core_XYZ& XYZ)
 {
   m_fX = XYZ.m_fX;
   m_fY = XYZ.m_fY;
@@ -199,7 +199,7 @@ inline mobius::core_XYZ& mobius::core_XYZ::operator=(const core_XYZ& XYZ)
 //! Multiplies copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return resulting point.
-inline mobius::core_XYZ mobius::core_XYZ::operator*(const double coeff) const
+mobius::core_XYZ mobius::core_XYZ::operator*(const double coeff) const
 {
   core_XYZ XYZ_Copy(*this);
   XYZ_Copy *= coeff;
@@ -209,7 +209,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator*(const double coeff) const
 //! Multiplies this point by the passed scalar value.
 //! \param coeff [in] scalar value to multiply point by.
 //! \return this point multiplied by the passed scalar.
-inline mobius::core_XYZ mobius::core_XYZ::operator*=(const double coeff)
+mobius::core_XYZ mobius::core_XYZ::operator*=(const double coeff)
 {
   this->m_fX *= coeff;
   this->m_fY *= coeff;
@@ -221,7 +221,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator*=(const double coeff)
 //! passed argument.
 //! \param[in] XYZ argument triple.
 //! \return cross product.
-inline mobius::core_XYZ mobius::core_XYZ::operator^(const core_XYZ& XYZ) const
+mobius::core_XYZ mobius::core_XYZ::operator^(const core_XYZ& XYZ) const
 {
   return this->Cross(XYZ);
 }
@@ -229,7 +229,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator^(const core_XYZ& XYZ) const
 //! Divides copy of point by the passed scalar value.
 //! \param coeff [in] scalar value to divide point by.
 //! \return resulting point.
-inline mobius::core_XYZ mobius::core_XYZ::operator/(const double coeff) const
+mobius::core_XYZ mobius::core_XYZ::operator/(const double coeff) const
 {
   core_XYZ XYZ_Copy(*this);
   XYZ_Copy /= coeff;
@@ -239,7 +239,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator/(const double coeff) const
 //! Divides this point by the passed scalar value.
 //! \param coeff [in] scalar value to divide point by.
 //! \return this point multiplied by the passed scalar.
-inline mobius::core_XYZ mobius::core_XYZ::operator/=(const double coeff)
+mobius::core_XYZ mobius::core_XYZ::operator/=(const double coeff)
 {
   this->m_fX /= coeff;
   this->m_fY /= coeff;
@@ -250,7 +250,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator/=(const double coeff)
 //! Adds the passed point to the copy of this one.
 //! \param XYZ [in] point to add.
 //! \return result of addition.
-inline mobius::core_XYZ mobius::core_XYZ::operator+(const core_XYZ& XYZ) const
+mobius::core_XYZ mobius::core_XYZ::operator+(const core_XYZ& XYZ) const
 {
   core_XYZ XYZ_Copy(*this);
   XYZ_Copy += XYZ;
@@ -260,7 +260,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator+(const core_XYZ& XYZ) const
 //! Adds the passed point to this one.
 //! \param XYZ [in] point to add.
 //! \return result of addition.
-inline mobius::core_XYZ& mobius::core_XYZ::operator+=(const core_XYZ& XYZ)
+mobius::core_XYZ& mobius::core_XYZ::operator+=(const core_XYZ& XYZ)
 {
   this->m_fX += XYZ.m_fX;
   this->m_fY += XYZ.m_fY;
@@ -270,7 +270,7 @@ inline mobius::core_XYZ& mobius::core_XYZ::operator+=(const core_XYZ& XYZ)
 
 //! Inverts the copy of this point.
 //! \return result of inversion.
-inline mobius::core_XYZ mobius::core_XYZ::Invert() const
+mobius::core_XYZ mobius::core_XYZ::Invert() const
 {
   core_XYZ XYZ_Copy(*this);
   XYZ_Copy.m_fX = -this->m_fX;
@@ -282,7 +282,7 @@ inline mobius::core_XYZ mobius::core_XYZ::Invert() const
 //! Subtracts the passed point from the copy of this one.
 //! \param XYZ [in] point to subtract.
 //! \return result of subtraction.
-inline mobius::core_XYZ mobius::core_XYZ::operator-(const core_XYZ& XYZ) const
+mobius::core_XYZ mobius::core_XYZ::operator-(const core_XYZ& XYZ) const
 {
   return core_XYZ(this->m_fX - XYZ.m_fX, this->m_fY - XYZ.m_fY, this->m_fZ - XYZ.m_fZ);
 }
@@ -290,7 +290,7 @@ inline mobius::core_XYZ mobius::core_XYZ::operator-(const core_XYZ& XYZ) const
 //! Adds the passed point to this one.
 //! \param XYZ [in] point to add.
 //! \return result of subtraction.
-inline mobius::core_XYZ& mobius::core_XYZ::operator-=(const core_XYZ& XYZ)
+mobius::core_XYZ& mobius::core_XYZ::operator-=(const core_XYZ& XYZ)
 {
   return this->operator+=( XYZ.Invert() );
 }

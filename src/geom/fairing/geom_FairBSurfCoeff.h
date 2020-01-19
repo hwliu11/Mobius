@@ -82,8 +82,8 @@ public:
                   const int                  p,
                   const int                  q)
   {
-    const int NUM_GAUSS_PT_U = max(p, 3);
-    const int NUM_GAUSS_PT_V = max(q, 3);
+    const int NUM_GAUSS_PT_U = std::max(p, 3);
+    const int NUM_GAUSS_PT_V = std::max(q, 3);
 
     // According to the local support property of B-spline basis functions
     // (see for example P2.1 at p. 55 in "The NURBS Book"), not all spans

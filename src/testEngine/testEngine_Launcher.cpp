@@ -28,8 +28,10 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-// Windows includes
-#include <windows.h>
+#ifdef _WIN32
+  // Windows includes
+  #include <windows.h>
+#endif
 
 // Own include
 #include <mobius/testEngine_Launcher.h>

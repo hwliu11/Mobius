@@ -34,6 +34,9 @@
 // bspl includes
 #include <mobius/bspl_ParamsUniform.h>
 
+// Standard includes
+#include <cstring>
+
 //! Test scenario 001.
 //! \param funcID [in] ID of the Test Function.
 //! \return true in case of success, false -- otherwise.

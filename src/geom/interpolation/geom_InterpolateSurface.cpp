@@ -251,7 +251,7 @@ bool mobius::geom_InterpolateSurface::Perform()
 
   // Check if there are enough reper points
   if ( !bspl::Check(n, m_iDeg_U) || !bspl::Check(m, m_iDeg_V) )
-    throw std::exception("Poor collection of data points for the given degree(s)");
+    throw std::runtime_error("Poor collection of data points for the given degree(s)");
 
   // Allocate arrays for reper parameters
   double* params_U = Alloc.Allocate(n + 1, true);
@@ -284,7 +284,7 @@ bool mobius::geom_InterpolateSurface::Perform()
     }
   }
   else
-    throw std::exception("NYI parameterization type");
+    throw std::runtime_error("NYI parameterization type");
 
   // TODO: introduce other parameterization techniques
 
@@ -321,7 +321,7 @@ bool mobius::geom_InterpolateSurface::Perform()
     }
   }
   else
-    throw std::exception("NYI knots selection type");
+    throw std::runtime_error("NYI knots selection type");
 
   // TODO: introduce other parameterization techniques
 

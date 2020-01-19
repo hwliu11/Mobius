@@ -129,7 +129,10 @@ if (USE_OPENCASCADE)
 endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/testEngine)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
+
+if (WIN32)
+  add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
+endif()
 
 #-------------------------------------------------------------------------------
 # Documentation
@@ -182,7 +185,10 @@ if (USE_OPENCASCADE)
 endif()
 
 set_property(TARGET mobiusTestEngine PROPERTY FOLDER Tests)
-set_property(TARGET mobiusTest       PROPERTY FOLDER Tests)
+
+if (WIN32)
+  set_property(TARGET mobiusTest PROPERTY FOLDER Tests)
+endif()
 
 if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}")
   # Path to the logo.

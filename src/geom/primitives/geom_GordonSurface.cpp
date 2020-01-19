@@ -75,12 +75,12 @@ void mobius::geom_GordonSurface::GetBounds(double& xMin, double& xMax,
     double xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
     m_UCurves[i]->GetBounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
 
-    xMin = min(xMin, xMin_crv);
-    yMin = min(yMin, yMin_crv);
-    zMin = min(zMin, zMin_crv);
-    xMax = max(xMax, xMax_crv);
-    yMax = max(yMax, yMax_crv);
-    zMax = max(zMax, zMax_crv);
+    xMin = std::min(xMin, xMin_crv);
+    yMin = std::min(yMin, yMin_crv);
+    zMin = std::min(zMin, zMin_crv);
+    xMax = std::max(xMax, xMax_crv);
+    yMax = std::max(yMax, yMax_crv);
+    zMax = std::max(zMax, zMax_crv);
   }
 
   // V isos
@@ -89,12 +89,12 @@ void mobius::geom_GordonSurface::GetBounds(double& xMin, double& xMax,
     double xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv;
     m_VCurves[i]->GetBounds(xMin_crv, xMax_crv, yMin_crv, yMax_crv, zMin_crv, zMax_crv);
 
-    xMin = min(xMin, xMin_crv);
-    yMin = min(yMin, yMin_crv);
-    zMin = min(zMin, zMin_crv);
-    xMax = max(xMax, xMax_crv);
-    yMax = max(yMax, yMax_crv);
-    zMax = max(zMax, zMax_crv);
+    xMin = std::min(xMin, xMin_crv);
+    yMin = std::min(yMin, yMin_crv);
+    zMin = std::min(zMin, zMin_crv);
+    xMax = std::max(xMax, xMax_crv);
+    yMax = std::max(yMax, yMax_crv);
+    zMax = std::max(zMax, zMax_crv);
   }
 }
 
