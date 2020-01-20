@@ -241,10 +241,22 @@ public:
     return m_cornerMin;
   }
 
+  //! Sets new coordinates for the min corner point.
+  void SetCornerMin(const t_xyz& P)
+  {
+    m_cornerMin = P;
+  }
+
   //! \return max corner which is equal to P7 point.
   const t_xyz& GetCornerMax() const
   {
     return m_cornerMax;
+  }
+
+  //! Sets new coordinates for the max corner point.
+  void SetCornerMax(const t_xyz& P)
+  {
+    m_cornerMax = P;
   }
 
   //! \return corner point P0 (the notation is the same as for VTK_VOXEL).

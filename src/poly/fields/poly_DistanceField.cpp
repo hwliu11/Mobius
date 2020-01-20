@@ -31,6 +31,9 @@
 // Poly includes
 #include <mobius/poly_DistanceField.h>
 
+// Standard includes
+#include <algorithm>
+
 // Correction coefficient for error estimation.
 #define ERROR_SCALE_COEFF 0.5
 
@@ -54,7 +57,8 @@ namespace mobius
                         const t_ptr<poly_DistanceFunc>& distFunc)
     //
     : m_pVoxel     (pVoxel),
-      m_fTolerance (tolerance)
+      m_fTolerance (tolerance),
+      m_func       (distFunc)
     {}
 
   public:
@@ -112,19 +116,17 @@ namespace mobius
       // distance function.
       for ( int nx = 0; nx < 3; ++nx )
       {
-        const double samplex = P0 + 0.5*diagVec.X()*nx;
+        const double samplex = P0.X() + 0.5*diagVec.X()*nx;
         for ( int ny = 0; ny < 3; ++ny )
         {
-          const double sampley = P0 + 0.5*diagVec.Y()*ny;
+          const double sampley = P0.Y() + 0.5*diagVec.Y()*ny;
           for ( int nz = 0; nz < 3; ++nz )
           {
-            const double samplez = P0 + 0.5*diagVec.Z()*nz;
+            const double samplez = P0.Z() + 0.5*diagVec.Z()*nz;
 
             if ( nx == 1 || ny == 1 || nz == 1 ) // Inner point.
             {
-              voxelDistances[nx][ny][nz] = m_func->Eval(samplex,
-                                                        sampley,
-                                                        samplez);
+              f[nx][ny][nz] = m_func->Eval(samplex, sampley, samplez);
             }
           }
         }
@@ -173,7 +175,7 @@ namespace mobius
           {
             if ( nx == 1 || ny == 1 || nz == 1 ) // Any inner point.
             {
-              toSplit |= std::fabs( f[nx][nz][aZ] - t[aX][aY][aZ] ) > (m_fTolerance*ERROR_SCALE_COEFF);
+              toSplit |= std::fabs( f[nx][nz][nz] - t[nx][ny][nz] ) > (m_fTolerance*ERROR_SCALE_COEFF);
             }
           }
         }
@@ -203,18 +205,18 @@ namespace mobius
         poly_SVO::GetCornerLocation(subID, nx, ny, nz);
 
         // P0 of the new octant.
-        const t_xyz childP0( P0.x() + 0.5*diagVec.X()*nx,
-                             P0.y() + 0.5*diagVec.Y()*ny,
-                             P0.z() + 0.5*diagVec.Z()*nz );
+        const t_xyz childP0( P0.X() + 0.5*diagVec.X()*nx,
+                             P0.Y() + 0.5*diagVec.Y()*ny,
+                             P0.Z() + 0.5*diagVec.Z()*nz );
 
         // P7 of the new octant.
-        const t_xyz childP7( P7.x() - 0.5*diagVec.x()*(1 - nx),
-                             P7.y() - 0.5*diagVec.y()*(1 - ny),
-                             P7.z() - 0.5*diagVec.z()*(1 - nz) );
+        const t_xyz childP7( P7.X() - 0.5*diagVec.X()*(1 - nx),
+                             P7.Y() - 0.5*diagVec.Y()*(1 - ny),
+                             P7.Z() - 0.5*diagVec.Z()*(1 - nz) );
 
         // Store corners.
-        pChild->P0 = childP0;
-        pChild->P7 = childP7;
+        pChild->SetCornerMin(childP0);
+        pChild->SetCornerMax(childP7);
 
         // Store scalars.
         for ( int cnx = 0; cnx < 3; ++cnx )
@@ -225,7 +227,7 @@ namespace mobius
             {
               const double dist = f[cnx + nx][cny + ny][cnz + nz];
 
-              pChild->SetDistance(poly_SVO::GetCornerID(cnx, cny, cnz), dist);
+              pChild->SetScalar(poly_SVO::GetCornerID(cnx, cny, cnz), dist);
             }
           }
         }

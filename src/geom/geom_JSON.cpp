@@ -220,7 +220,7 @@ bool mobius::geom_JSON::ExtractBCurve(t_ptr<t_bcurve>& curve) const
 {
   // Extract degree.
   int p = 0;
-  if ( !this->ExtractNumericBlockForKey<int>("degree", p, 0) )
+  if ( !this->ExtractNumericBlockForKey<int>("degree", p) )
     return false;
 
   // Extract knot vector.
@@ -244,9 +244,9 @@ bool mobius::geom_JSON::ExtractBSurface(t_ptr<t_bsurf>& surface) const
 {
   // Extract degrees.
   int p = 0, q = 0;
-  if ( !this->ExtractNumericBlockForKey<int>("U_degree", p, 0) )
+  if ( !this->ExtractNumericBlockForKey<int>("U_degree", p) )
     return false;
-  if ( !this->ExtractNumericBlockForKey<int>("V_degree", q, 0) )
+  if ( !this->ExtractNumericBlockForKey<int>("V_degree", q) )
     return false;
 
   // Extract knot vectors.

@@ -202,12 +202,10 @@ namespace core
     }
 
     //! Converts the passed string to number.
-    //! \param str           [in] string to convert.
-    //! \param default_value [in] default value to use.
+    //! \param[in] str string to convert.
     //! \return string.
     template <typename T>
-    static T to_number(const std::string& str,
-                       const T            default_value = 0)
+    static T to_number(const std::string& str)
     {
       std::istringstream is(str);
       T result;

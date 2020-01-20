@@ -116,6 +116,7 @@ void mobius::core_Chronometer::GetThreadCPU(double& theUserSeconds,
 
 #else
 
+#define NOMINMAX
 #include <windows.h>
 
 //-----------------------------------------------------------------------------

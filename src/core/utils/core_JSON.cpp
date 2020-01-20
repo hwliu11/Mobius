@@ -203,9 +203,9 @@ bool mobius::core_JSON::ExtractVector3d(const std::string&  keyword,
     if ( coordChunks.size() != 3 )
       return false;
 
-    t_xyz P( core::str::to_number<double>(coordChunks[0], 0),
-             core::str::to_number<double>(coordChunks[1], 0),
-             core::str::to_number<double>(coordChunks[2], 0) );
+    t_xyz P( core::str::to_number<double>(coordChunks[0]),
+             core::str::to_number<double>(coordChunks[1]),
+             core::str::to_number<double>(coordChunks[2]) );
     //
     vector.push_back(P);
   }
@@ -241,9 +241,9 @@ bool mobius::core_JSON::ExtractGrid3d(const std::string&                 keyword
       if ( coordChunks.size() != 3 )
         continue;
 
-      t_xyz P( core::str::to_number<double>(coordChunks[0], 0),
-               core::str::to_number<double>(coordChunks[1], 0),
-               core::str::to_number<double>(coordChunks[2], 0) );
+      t_xyz P( core::str::to_number<double>(coordChunks[0]),
+               core::str::to_number<double>(coordChunks[1]),
+               core::str::to_number<double>(coordChunks[2]) );
       //
       row.push_back(P);
     }

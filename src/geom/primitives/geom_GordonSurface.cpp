@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/geom_GordonSurface.h>
 
+// Standard includes
+#include <algorithm>
+
 //! Constructs Gordon surface on the passed network of curves.
 //! \param U_curves [in] iso U curves.
 //! \param V_curves [in] iso V curves.

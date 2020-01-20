@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 #ifdef _WIN32
-  // Windows includes
+  #define NOMINMAX
   #include <windows.h>
 #endif
 

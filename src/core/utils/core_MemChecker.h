@@ -33,6 +33,7 @@
 
 // OS includes
 #ifdef _WIN32
+#define NOMINMAX
 #include "windows.h"
 #include "psapi.h"
 #endif
@@ -56,8 +57,10 @@
     Notifier->SendLogMessage(MobiusInfo(Normal) << "\tUsed memory (MiB): %1" << varname); \
   }
 
-#endif
+#else
 
 #define MOBIUS_MEMCHECK_COUNT_MIB(varname)
 
 #endif
+
+#endif // core_MemChecker

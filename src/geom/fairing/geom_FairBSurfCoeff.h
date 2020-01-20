@@ -38,6 +38,9 @@
 #include <mobius/core_Integral.h>
 #include <mobius/core_TwovariateFunc.h>
 
+// Standard includes
+#include <algorithm>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_GEOM
