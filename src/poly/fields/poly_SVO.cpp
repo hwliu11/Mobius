@@ -163,6 +163,16 @@ bool mobius::poly_SVO::Split()
 
 //-----------------------------------------------------------------------------
 
+void mobius::poly_SVO::SetChild(const size_t id, poly_SVO* pChild)
+{
+  if ( !m_pChildren || !IsValidCornerId(id) )
+    return nullptr;
+
+  return m_pChildren[id] = pChild;
+}
+
+//-----------------------------------------------------------------------------
+
 mobius::poly_SVO* mobius::poly_SVO::GetChild(const size_t id) const
 {
   if ( !m_pChildren || !IsValidCornerId(id) )

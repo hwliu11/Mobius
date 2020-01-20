@@ -193,6 +193,15 @@ public:
   mobiusPoly_EXPORT bool
     Split();
 
+  //! Sets the child SVO node for the octant having the given index in
+  //! range [0,7]. This method should be used after Split() invocation
+  //! to initialize the allocated pointers with the SVO structures constructed
+  //! separately.
+  //! \param[in] id     ID of the child to set.
+  //! \param[in] pChild raw pointer to the SVO node to set as a child.
+  mobiusPoly_EXPORT void
+    SetChild(const size_t id, poly_SVO* pChild);
+
   //! Returns the child SVO node by its index in range [0,7]. If there are
   //! no children in the current node, null pointer is returned.
   //! \param[in] id ID of the child.
@@ -225,6 +234,18 @@ public:
     GetMemoryInBytes(int& numNodes) const;
 
 public:
+
+  //! \return min corner which is equal to P0 point.
+  const t_xyz& GetCornerMin() const
+  {
+    return m_cornerMin;
+  }
+
+  //! \return max corner which is equal to P7 point.
+  const t_xyz& GetCornerMax() const
+  {
+    return m_cornerMax;
+  }
 
   //! \return corner point P0 (the notation is the same as for VTK_VOXEL).
   const t_xyz& GetP0() const
@@ -272,6 +293,12 @@ public:
   const t_xyz& GetP7() const
   {
     return m_cornerMax;
+  }
+
+  //! \return cell size as a distance between P0 and P7.
+  double GetCellSize() const
+  {
+    return (m_cornerMax - m_cornerMin).Modulus();
   }
 
 protected:
