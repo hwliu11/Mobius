@@ -175,22 +175,22 @@ set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 #------------------------------------------------------------------------------
 
 install (TARGETS mobiusCore
-         RUNTIME DESTINATION bin COMPONENT Runtime
          CONFIGURATIONS Release
-         ARCHIVE DESTINATION lib LIBRARY DESTINATION lib COMPONENT Library
-         CONFIGURATIONS Release)
+         RUNTIME DESTINATION bin COMPONENT Runtime
+         ARCHIVE DESTINATION lib COMPONENT Library
+         LIBRARY DESTINATION lib COMPONENT Library)
 
 install (TARGETS mobiusCore
-         RUNTIME DESTINATION bini COMPONENT Runtime
          CONFIGURATIONS RelWithDebInfo
-         ARCHIVE DESTINATION libi LIBRARY DESTINATION libi COMPONENT Library
-         CONFIGURATIONS RelWithDebInfo)
+         RUNTIME DESTINATION bini COMPONENT Runtime
+         ARCHIVE DESTINATION libi COMPONENT Library
+         LIBRARY DESTINATION libi COMPONENT Library)
 
 install (TARGETS mobiusCore
-         RUNTIME DESTINATION bind COMPONENT Runtime
          CONFIGURATIONS Debug
-         ARCHIVE DESTINATION libd LIBRARY DESTINATION libd COMPONENT Library
-         CONFIGURATIONS Debug)
+         RUNTIME DESTINATION bind COMPONENT Runtime
+         ARCHIVE DESTINATION libd COMPONENT Library
+         LIBRARY DESTINATION libd COMPONENT Library)
 
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusCore.pdb DESTINATION bind CONFIGURATIONS Debug)
 install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusCore.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)

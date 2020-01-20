@@ -202,34 +202,3 @@ add_custom_command(
 #------------------------------------------------------------------------------
 
 target_link_libraries(mobiusTest mobiusCore mobiusPoly mobiusBSpl mobiusGeom mobiusTestEngine)
-
-#------------------------------------------------------------------------------
-# Installation of Mobius as SDK
-#------------------------------------------------------------------------------
-
-install (TARGETS mobiusTest
-         RUNTIME DESTINATION bin COMPONENT Runtime
-         CONFIGURATIONS Release
-         ARCHIVE DESTINATION lib COMPONENT Library
-         CONFIGURATIONS Release)
-
-install (TARGETS mobiusTest
-         RUNTIME DESTINATION bini COMPONENT Runtime
-         CONFIGURATIONS RelWithDebInfo
-         ARCHIVE DESTINATION libi COMPONENT Library
-         CONFIGURATIONS RelWithDebInfo)
-
-install (TARGETS mobiusTest
-         RUNTIME DESTINATION bind COMPONENT Runtime
-         CONFIGURATIONS Debug
-         ARCHIVE DESTINATION libd COMPONENT Library
-         CONFIGURATIONS Debug)
-
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusTest.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusTest.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
-
-install (FILES ${H_FILES}      DESTINATION include/mobius)
-install (FILES ${bspl_H_FILES} DESTINATION include/mobius)
-install (FILES ${core_H_FILES} DESTINATION include/mobius)
-install (FILES ${geom_H_FILES} DESTINATION include/mobius)
-install (FILES ${poly_H_FILES} DESTINATION include/mobius)
