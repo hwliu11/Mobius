@@ -50,7 +50,10 @@ static inline double GetWallClockTime ()
 
 #else
 
-#define NOMINMAX
+#ifndef NOMINMAX
+  #define NOMINMAX
+#endif
+//
 #include <windows.h>
 
 //=======================================================================

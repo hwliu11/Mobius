@@ -32,8 +32,11 @@
 #define core_OBJECT_HeaderFile
 
 #if defined(WIN32) || defined(_WIN32)
-#define NOMINMAX
-#include <windows.h>
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
+  //
+  #include <windows.h>
 #endif
 
 // core includes

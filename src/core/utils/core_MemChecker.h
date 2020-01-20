@@ -33,9 +33,12 @@
 
 // OS includes
 #ifdef _WIN32
-#define NOMINMAX
-#include "windows.h"
-#include "psapi.h"
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
+  //
+  #include "windows.h"
+  #include "psapi.h"
 #endif
 
 /************************************************************************
