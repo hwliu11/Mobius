@@ -38,7 +38,9 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Distance function.
+//! Abstract distance function. The derived classes should implement one or
+//! another way of distance computation. It is recommended to use accelerating
+//! structures such as BVH for the fast distance computation.
 class poly_DistanceFunc : public poly_ImplicitFunc
 {
 public:
