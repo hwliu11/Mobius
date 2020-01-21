@@ -297,10 +297,7 @@ mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
 //-----------------------------------------------------------------------------
 
 mobius::poly_DistanceField::~poly_DistanceField()
-{
-  if ( m_pRoot )
-    delete m_pRoot; // Call SVO dtor which releases the octree recursively.
-}
+{}
 
 //-----------------------------------------------------------------------------
 

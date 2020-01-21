@@ -76,6 +76,14 @@ namespace mobius
   {
   public:
 
+    //! Converts Mobius 3D point to OpenCascade 3D XYZ tuple.
+    //! \param[in] coords point to convert.
+    //! \return converted point.
+    static gp_XYZ GetOpenCascadeXYZ(const t_xyz& coords)
+    {
+      return gp_XYZ( coords.X(), coords.Y(), coords.Z() );
+    }
+
     //! Converts Mobius 3D point to OpenCascade 3D point.
     //! \param[in] coords point to convert.
     //! \return converted point.

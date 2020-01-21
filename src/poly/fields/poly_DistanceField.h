@@ -56,7 +56,8 @@ public:
     poly_DistanceField(core_ProgressEntry progress = nullptr,
                        core_PlotterEntry  plotter  = nullptr);
 
-  //! Dtor. Destroys the octree if it is initialized.
+  //! Dtor.
+  //! CAUTION: this dtor does not destroy the octree.
   mobiusPoly_EXPORT virtual
     ~poly_DistanceField();
 
@@ -77,6 +78,24 @@ public:
   poly_SVO* GetRoot()
   {
     return m_pRoot;
+  }
+
+  //! Allows to set a new root node for the distance field. Use with
+  //! care as this setter does absolutely nothing in terms of memory
+  //! management.
+  //! \param[in] pRoot new root SVO node to set.
+  void SetRoot(poly_SVO* pRoot)
+  {
+    m_pRoot = pRoot;
+  }
+
+  //! Creates shallow copy of this distance field.
+  //! \return copy of the field pointing to the same octree.
+  t_ptr<poly_DistanceField> ShallowCopy() const
+  {
+    t_ptr<poly_DistanceField> res = new poly_DistanceField;
+    res->SetRoot(m_pRoot);
+    return res;
   }
 
 protected:
