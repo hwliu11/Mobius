@@ -33,9 +33,13 @@
 
 // Standard includes
 #include <algorithm>
+#include <memory>
 
 // Correction coefficient for error estimation.
 #define ERROR_SCALE_COEFF 0.5
+
+// Max SVO depth.
+#define MAX_SVO_DEPTH 32
 
 //-----------------------------------------------------------------------------
 
@@ -52,20 +56,45 @@ namespace mobius
     //!                      The min cell size should never be less than this
     //!                      tolerance.
     //! \param[in] distFunc  distance function.
+    //! \param[in] depth     current depth (pass 0 to start).
     poly_VoxelSplitTask(poly_SVO*                       pVoxel,
                         const double                    tolerance,
-                        const t_ptr<poly_DistanceFunc>& distFunc)
+                        const t_ptr<poly_DistanceFunc>& distFunc,
+                        const unsigned                  depth)
     //
     : m_pVoxel     (pVoxel),
       m_fTolerance (tolerance),
-      m_func       (distFunc)
+      m_func       (distFunc),
+      m_iDepth     (depth)
     {}
+
+    //! Dtor.
+    ~poly_VoxelSplitTask()
+    {}
+
+  public:
+
+    //! Creates another splitting task for the passed voxel. Other parameters,
+    //! such as the tolerance and te distance function are forwarded. The depth
+    //! is incremented,
+    //! \param[in] pVoxel voxel to process.
+    //! \return new task.
+    poly_VoxelSplitTask* deriveTask(poly_SVO* pVoxel)
+    {
+      return new poly_VoxelSplitTask(pVoxel, m_fTolerance, m_func, m_iDepth + 1);
+    }
 
   public:
 
     //! Splits (or not) the working voxel.
     void execute()
     {
+      if ( m_iDepth > MAX_SVO_DEPTH )
+      {
+        std::cout << "Warning: max SVO depth has been reached." << std::endl;
+        return;
+      }
+
       /* =============================================
        *  Get 27 distance probes for the current cell.
        * ============================================= */
@@ -123,10 +152,10 @@ namespace mobius
           for ( int nz = 0; nz < 3; ++nz )
           {
             const double samplez = P0.Z() + 0.5*diagVec.Z()*nz;
-
             if ( nx == 1 || ny == 1 || nz == 1 ) // Inner point.
             {
-              f[nx][ny][nz] = m_func->Eval(samplex, sampley, samplez);
+              const double dist = m_func->Eval(samplex, sampley, samplez);
+              f[nx][ny][nz] = dist;
             }
           }
         }
@@ -188,6 +217,10 @@ namespace mobius
        *  Split the current cell into 8 children.
        * ======================================== */
 
+      // Sub-tasks to split the child voxels. We use std::unique_ptr here
+      // to release the memory once the pointers go out of scope.
+      std::vector< std::unique_ptr<poly_VoxelSplitTask> > subTasks;
+
       if ( m_pVoxel->IsLeaf() )
       {
         m_pVoxel->Split(); // This only creates pointers.
@@ -200,6 +233,9 @@ namespace mobius
       for ( size_t subID = 0; subID < 8; ++subID )
       {
         poly_SVO* pChild = m_pVoxel->GetChild(subID);
+
+        // Create sub-task for splitting.
+        subTasks.emplace_back( this->deriveTask(pChild) );
 
         size_t nx, ny, nz;
         poly_SVO::GetCornerLocation(subID, nx, ny, nz);
@@ -219,11 +255,11 @@ namespace mobius
         pChild->SetCornerMax(childP7);
 
         // Store scalars.
-        for ( int cnx = 0; cnx < 3; ++cnx )
+        for ( int cnx = 0; cnx < 2; ++cnx )
         {
-          for ( int cny = 0; cny < 3; ++cny )
+          for ( int cny = 0; cny < 2; ++cny )
           {
-            for (int cnz = 0; cnz < 3; ++cnz )
+            for (int cnz = 0; cnz < 2; ++cnz )
             {
               const double dist = f[cnx + nx][cny + ny][cnz + nz];
 
@@ -233,6 +269,9 @@ namespace mobius
         }
       }
 
+      // Execute splitting sub-tasks on the child octants.
+      for ( size_t tt = 0; tt < subTasks.size(); ++tt )
+        subTasks[tt]->execute();
     }
 
   private:
@@ -240,6 +279,7 @@ namespace mobius
     poly_SVO*                m_pVoxel;     //!< Working SVO node.
     double                   m_fTolerance; //!< Tolerance to control the SVO fineness.
     t_ptr<poly_DistanceFunc> m_func;       //!< Distance function.
+    unsigned                 m_iDepth;     //!< Depth of the hierarchy.
 
   };
 }
@@ -264,7 +304,7 @@ mobius::poly_DistanceField::~poly_DistanceField()
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::Build(const double                    poly_NotUsed(resolution),
+bool mobius::poly_DistanceField::Build(const double                    resolution,
                                        const t_ptr<poly_DistanceFunc>& func)
 {
   if ( func.IsNull() )
@@ -286,13 +326,13 @@ bool mobius::poly_DistanceField::Build(const double                    poly_NotU
   // Create root SVO node and initialize it with the distance scalars.
   m_pRoot = new poly_SVO(cornerMin, cornerMax);
   //
-  for ( size_t nx = 0; nx < 1; ++nx )
+  for ( size_t nx = 0; nx < 2; ++nx )
   {
     const double x = ( (nx == 0) ? cornerMin.X() : cornerMax.X() );
-    for ( size_t ny = 0; ny < 1; ++ny )
+    for ( size_t ny = 0; ny < 2; ++ny )
     {
       const double y = ( (ny == 0) ? cornerMin.Y() : cornerMax.Y() );
-      for ( size_t nz = 0; nz < 1; ++nz )
+      for ( size_t nz = 0; nz < 2; ++nz )
       {
         const double z = ( (nz == 0) ? cornerMin.Z() : cornerMax.Z() );
 
@@ -309,7 +349,7 @@ bool mobius::poly_DistanceField::Build(const double                    poly_NotU
    *  Create hierarchy.
    * ================== */
 
-  // TODO: NYI
+  poly_VoxelSplitTask(m_pRoot, resolution, func, 0u).execute();
 
-  return false;
+  return true;
 }
