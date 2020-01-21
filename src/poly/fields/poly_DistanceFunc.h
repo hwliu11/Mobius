@@ -57,6 +57,14 @@ public:
   mobiusPoly_EXPORT
     poly_DistanceFunc(const Mode mode);
 
+public:
+
+  //! \return distance computation mode.
+  Mode GetMode() const
+  {
+    return m_mode;
+  }
+
 protected:
 
   //! Type of distance.
