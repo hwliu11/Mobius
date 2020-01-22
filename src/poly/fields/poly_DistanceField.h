@@ -49,6 +49,20 @@ class poly_DistanceField : public core_OBJECT
 {
 public:
 
+  //! Checks if the passed SVO node is completely inside of the initial shape.
+  //! \param[in] pNode SVO node to check.
+  //! \return true/false.
+  mobiusPoly_EXPORT static bool
+    IsIn(poly_SVO* pNode);
+
+  //! Checks if the passed SVO node is completely outside of the initial shape.
+  //! \param[in] pNode SVO node to check.
+  //! \return true/false.
+  mobiusPoly_EXPORT static bool
+    IsOut(poly_SVO* pNode);
+
+public:
+
   //! Ctor.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.

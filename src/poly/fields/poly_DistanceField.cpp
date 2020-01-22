@@ -286,6 +286,32 @@ namespace mobius
 
 //-----------------------------------------------------------------------------
 
+bool mobius::poly_DistanceField::IsIn(poly_SVO* pNode)
+{
+  for ( size_t k = 0; k < 8; ++k )
+  {
+    if ( pNode->GetScalar(k) > 0 )
+      return false;
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_DistanceField::IsOut(poly_SVO* pNode)
+{
+  for ( size_t k = 0; k < 8; ++k )
+  {
+    if ( pNode->GetScalar(k) < 0 )
+      return false;
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
 : core_OBJECT (),
