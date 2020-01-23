@@ -61,6 +61,13 @@ public:
   mobiusPoly_EXPORT static bool
     IsOut(poly_SVO* pNode);
 
+  //! Checks if the passed SVO node crosses zero isosurface level, i.e., it
+  //! captures the boundary of the initial shape.
+  //! \param[in] pNode SVO node to check.
+  //! \return true/false.
+  mobiusPoly_EXPORT static bool
+    IsZeroCrossing(poly_SVO* pNode);
+
 public:
 
   //! Ctor.

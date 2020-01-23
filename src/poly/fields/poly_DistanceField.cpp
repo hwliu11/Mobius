@@ -312,6 +312,29 @@ bool mobius::poly_DistanceField::IsOut(poly_SVO* pNode)
 
 //-----------------------------------------------------------------------------
 
+bool mobius::poly_DistanceField::IsZeroCrossing(poly_SVO* pNode)
+{
+  bool hasNegative = false, hasPositive = false;
+  for ( size_t k = 0; k < 8; ++k )
+  {
+    if ( !hasNegative && pNode->GetScalar(k) < 0 )
+    {
+      hasNegative = true;
+      continue;
+    }
+
+    if ( !hasPositive && pNode->GetScalar(k) > 0 )
+    {
+      hasPositive = true;
+      continue;
+    }
+  }
+
+  return hasNegative && hasPositive;
+}
+
+//-----------------------------------------------------------------------------
+
 mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
 : core_OBJECT (),

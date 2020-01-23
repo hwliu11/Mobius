@@ -64,10 +64,24 @@ const int aiCubeEdgeFlags[256] =
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_MarchingCubes::poly_MarchingCubes() : core_OPERATOR(nullptr, nullptr)
+mobius::poly_MarchingCubes::poly_MarchingCubes(const t_ptr<poly_ImplicitFunc>& func,
+                                               const double                    grain,
+                                               core_ProgressEntry              progress,
+                                               core_PlotterEntry               plotter)
+: core_OPERATOR (progress, plotter),
+  m_func        (func),
+  m_fGrain      (grain)
 {}
 
 //-----------------------------------------------------------------------------
 
 mobius::poly_MarchingCubes::~poly_MarchingCubes()
 {}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_MarchingCubes::Perform()
+{
+  // TODO: NYI
+  return false;
+}

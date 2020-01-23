@@ -32,7 +32,7 @@
 #define poly_MarchingCubes_HeaderFile
 
 // Poly includes
-#include <mobius/poly.h>
+#include <mobius/poly_ImplicitFunc.h>
 
 // Core includes
 #include <mobius/core_OPERATOR.h>
@@ -41,8 +41,8 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! This is the implementation of the classical marching cubes algorithm first
-//! introduced by W. Lorensen in
+//! This class provides implementation of the classical marching cubes
+//! algorithm introduced in the seminal paper by W. Lorensen
 //!
 //!  [Lorensen, W.E. and Cline, H.E. 1987. Marching cubes: A high resolution
 //!   3D surface construction algorithm. ACM SIGGRAPH Computer Graphics
@@ -55,9 +55,9 @@ namespace mobius {
 //!  [Bourke, P. 1994. Polygonising a scalar field.
 //!   URL: http://paulbourke.net/geometry/polygonise/].
 //!
-//! Our implementation is no different from the "standard" ones and it is
+//! Our implementation is no different from the "standard" ones. It is
 //! introduced here just to support the native data structures of the library,
-//! hence avoiding conversion.
+//! hence avoiding conversion between different mesh representations.
 //!
 //! The marching cubes algorithm combines simplicity with high speed since
 //! it works almost entirely on lookup tables. We use MC as a reconstruction
@@ -69,13 +69,31 @@ class poly_MarchingCubes : public core_OPERATOR
 {
 public:
 
-  //! Default ctor.
+  //! Ctor with initialization.
+  //! \param[in] func     implicit function defining the field.
+  //! \param[in] grain    grain value to discretize the space to get a regular grid.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
   mobiusPoly_EXPORT
-    poly_MarchingCubes();
+    poly_MarchingCubes(const t_ptr<poly_ImplicitFunc>& func,
+                       const double                    grain,
+                       core_ProgressEntry              progress = nullptr,
+                       core_PlotterEntry               plotter  = nullptr);
 
   //! Dtor.
   mobiusPoly_EXPORT virtual
     ~poly_MarchingCubes();
+
+public:
+
+  //! Performs polygonal approximation.
+  mobiusPoly_EXPORT bool
+    Perform();
+
+protected:
+
+  t_ptr<poly_ImplicitFunc> m_func;   //!< Implicit function representing the field.
+  double                   m_fGrain; //!< Space discretization grain.
 
 };
 
