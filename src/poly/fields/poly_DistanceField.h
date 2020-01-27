@@ -95,11 +95,13 @@ public:
 
   //! Builds distance field with the specified spatial resolution for the
   //! passed distance function.
-  //! \param[in] resolution target resolution (determines voxel size).
-  //! \param[in] func       driving function.
+  //! \param[in] minCellSize min allowed voxel size.
+  //! \param[in] precision   precision of implicit function approximation.
+  //! \param[in] func        driving function.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    Build(const double                    resolution,
+    Build(const double                    minCellSize,
+          const double                    precision,
           const t_ptr<poly_DistanceFunc>& func);
 
 public:
