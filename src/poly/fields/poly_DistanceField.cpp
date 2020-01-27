@@ -337,11 +337,25 @@ bool mobius::poly_DistanceField::IsZeroCrossing(poly_SVO* pNode)
 
 mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
-: core_OBJECT (),
-  m_pRoot     (nullptr),
-  m_progress  (progress),
-  m_plotter   (plotter)
+: poly_ImplicitFunc (),
+  m_pRoot           (nullptr),
+  m_progress        (progress),
+  m_plotter         (plotter)
 {}
+
+//-----------------------------------------------------------------------------
+
+mobius::poly_DistanceField::poly_DistanceField(poly_SVO*          octree,
+                                               core_ProgressEntry progress,
+                                               core_PlotterEntry  plotter)
+: poly_ImplicitFunc (),
+  m_pRoot           (octree),
+  m_progress        (progress),
+  m_plotter         (plotter)
+{
+  m_domainMin = m_pRoot->GetCornerMin();
+  m_domainMax = m_pRoot->GetCornerMax();
+}
 
 //-----------------------------------------------------------------------------
 
@@ -359,8 +373,8 @@ bool mobius::poly_DistanceField::Build(const double                    resolutio
     return false;
   }
 
-  const t_xyz& cornerMin = func->GetDomainMin();
-  const t_xyz& cornerMax = func->GetDomainMax();
+  m_domainMin = func->GetDomainMin();
+  m_domainMax = func->GetDomainMax();
 
   /* ==================
    *  Create root node.
@@ -370,17 +384,17 @@ bool mobius::poly_DistanceField::Build(const double                    resolutio
     delete m_pRoot; // Call SVO dtor which releases the octree recursively.
 
   // Create root SVO node and initialize it with the distance scalars.
-  m_pRoot = new poly_SVO(cornerMin, cornerMax);
+  m_pRoot = new poly_SVO(m_domainMin, m_domainMax);
   //
   for ( size_t nx = 0; nx < 2; ++nx )
   {
-    const double x = ( (nx == 0) ? cornerMin.X() : cornerMax.X() );
+    const double x = ( (nx == 0) ? m_domainMin.X() : m_domainMax.X() );
     for ( size_t ny = 0; ny < 2; ++ny )
     {
-      const double y = ( (ny == 0) ? cornerMin.Y() : cornerMax.Y() );
+      const double y = ( (ny == 0) ? m_domainMin.Y() : m_domainMax.Y() );
       for ( size_t nz = 0; nz < 2; ++nz )
       {
-        const double z = ( (nz == 0) ? cornerMin.Z() : cornerMax.Z() );
+        const double z = ( (nz == 0) ? m_domainMin.Z() : m_domainMax.Z() );
 
         // Evaluate distance.
         const double f = func->Eval(x, y, z);
@@ -398,4 +412,16 @@ bool mobius::poly_DistanceField::Build(const double                    resolutio
   poly_VoxelSplitTask(m_pRoot, resolution, func, 0u).execute();
 
   return true;
+}
+
+//-----------------------------------------------------------------------------
+
+double mobius::poly_DistanceField::Eval(const double x,
+                                        const double y,
+                                        const double z) const
+{
+  if ( m_pRoot != nullptr )
+    return m_pRoot->Eval( t_xyz(x, y, z) );
+
+  return DBL_MAX;
 }

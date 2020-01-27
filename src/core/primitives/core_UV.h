@@ -128,6 +128,12 @@ public:
     return 0;
   }
 
+  //! \return max components of the tuple.
+  double GetMaxComponent() const
+  {
+    return m_fU > m_fV ? m_fU : m_fV;
+  }
+
 public:
 
   mobiusCore_EXPORT double

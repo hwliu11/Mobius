@@ -32,10 +32,8 @@
 #define poly_MarchingCubes_HeaderFile
 
 // Poly includes
+#include <mobius/poly_GridTessellator.h>
 #include <mobius/poly_ImplicitFunc.h>
-
-// Core includes
-#include <mobius/core_OPERATOR.h>
 
 namespace mobius {
 
@@ -65,35 +63,57 @@ namespace mobius {
 //! used for creating a 3D contour of a mathematical scalar field. In this case,
 //! the function is known everywhere but is sampled at the vertices of a regular
 //! 3D grid.
-class poly_MarchingCubes : public core_OPERATOR
+class poly_MarchingCubes : public poly_GridTessellator
 {
 public:
 
   //! Ctor with initialization.
-  //! \param[in] func     implicit function defining the field.
-  //! \param[in] grain    grain value to discretize the space to get a regular grid.
-  //! \param[in] progress progress notifier.
-  //! \param[in] plotter  imperative plotter.
+  //! \param[in] func      implicit function defining the field.
+  //! \param[in] numSlices num of slices to discretize the space to get a regular grid.
+  //! \param[in] progress  progress notifier.
+  //! \param[in] plotter   imperative plotter.
   mobiusPoly_EXPORT
     poly_MarchingCubes(const t_ptr<poly_ImplicitFunc>& func,
-                       const double                    grain,
-                       core_ProgressEntry              progress = nullptr,
-                       core_PlotterEntry               plotter  = nullptr);
+                       const int                       numSlices = 128,
+                       core_ProgressEntry              progress  = nullptr,
+                       core_PlotterEntry               plotter   = nullptr);
 
   //! Dtor.
-  mobiusPoly_EXPORT virtual
-    ~poly_MarchingCubes();
+  virtual ~poly_MarchingCubes() = default;
 
-public:
+private:
 
-  //! Performs polygonal approximation.
-  mobiusPoly_EXPORT bool
-    Perform();
+  //! Performs marching cubes reconstruction.
+  //! \param[in] isoValue function level to polygonize.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT virtual bool
+    perform(const double isoValue);
+
+private:
+
+  //! Returns the Cartesian coordinates of the voxel corner for the passed
+  //! integer indices.
+  //! \param[in] nx 0-based index of the X coordinate of the corner.
+  //! \param[in] ny 0-based index of the Y coordinate of the corner.
+  //! \param[in] nz 0-based index of the Z coordinate of the corner.
+  //! \return coordinates of the corner.
+  t_xyz getVoxelCorner(const int nx, const int ny, const int nz) const;
+
+  //! Interpolates the intersection point between the given extremities
+  //! based on the passed scalar values.
+  //! \param[in] point1  first point.
+  //! \param[in] point2  second point.
+  //! \param[in] scalar1 first scalar.
+  //! \param[in] scalar2 second scalar.
+  //! \return interpolated point.
+  t_xyz interpVertex(const t_xyz& point1,
+                     const t_xyz& point2,
+                     const double scalar1,
+                     const double scalar2) const;
 
 protected:
 
-  t_ptr<poly_ImplicitFunc> m_func;   //!< Implicit function representing the field.
-  double                   m_fGrain; //!< Space discretization grain.
+  t_ptr<poly_ImplicitFunc> m_func; //!< Implicit function defining the field.
 
 };
 

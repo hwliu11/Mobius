@@ -215,7 +215,7 @@ double mobius::poly_SVO::Eval(const t_xyz& P) const
 
   for ( ;; )
   {
-    if ( this->IsLeaf() )
+    if ( pNode->IsLeaf() )
     {
       // Get coordinates of the box corners.
       const double x0 = pNode->m_cornerMin.X();
@@ -263,10 +263,10 @@ double mobius::poly_SVO::Eval(const t_xyz& P) const
                                  0.5*( pNode->m_cornerMin.Z() + pNode->m_cornerMax.Z() ) };
 
       // Find ID of the octant containing the point of interest.
+      size_t subID = 0;
+      //
       for ( size_t dim = 0; dim < 3; ++dim )
       {
-        size_t subID = 0;
-        //
         if ( PP[dim] > center[dim] )
         {
 #ifdef _WIN32
@@ -275,9 +275,9 @@ double mobius::poly_SVO::Eval(const t_xyz& P) const
           subID |= 1ll << dim;
 #endif
         }
-
-        pNode = pNode->GetChild(subID);
       }
+
+      pNode = pNode->GetChild(subID);
     }
   }
 }

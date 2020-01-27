@@ -175,7 +175,7 @@ public:
   //! passed value.
   //! \param idx [in] 0 for X, 1 for Y, 2 for Z.
   //! \param val [in] value to set.
-  double SetCoord(const int        idx,
+  double SetCoord(const int    idx,
                   const double val)
   {
     double* coord = nullptr;
@@ -194,13 +194,32 @@ public:
   }
 
   //! Returns true if this vector is zero.
-  //! \param tol3D [in] three-dimensional tolerance for comparison.
+  //! \param[in] tol3D three-dimensional tolerance for comparison.
   //! \return true/false.
-  bool IsOrigin(const double tol3D = 0) const
+  bool IsOrigin(const double tol3D = 0.) const
   {
     return ( fabs(m_fX) <= tol3D ) &&
            ( fabs(m_fY) <= tol3D ) &&
            ( fabs(m_fZ) <= tol3D );
+  }
+
+  //! Checks if this coordinate tuple is equal to the passed one.
+  //! \param[in] XYZ   other point to compare this one with.
+  //! \param[in] tol3D three-dimensional tolerance for comparison.
+  //! \return true in case of equality, false -- otherwise.
+  bool IsEqual(const core_XYZ& XYZ,
+               const double    tol3D = 0.) const
+  {
+    return ( fabs( m_fX - XYZ.X() ) <= tol3D ) &&
+           ( fabs( m_fY - XYZ.Y() ) <= tol3D ) &&
+           ( fabs( m_fZ - XYZ.Z() ) <= tol3D );
+  }
+
+  //! \return max components of the tuple.
+  double GetMaxComponent() const
+  {
+    return m_fX > m_fY ? (m_fX > m_fZ ? m_fX : m_fZ)
+                       : (m_fY > m_fZ ? m_fY : m_fZ);
   }
 
 public:

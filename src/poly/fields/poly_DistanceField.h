@@ -45,7 +45,7 @@ namespace mobius {
 //!
 //! Distance field represented by voxelization and its associated implicit
 //! function to calculate the distance values.
-class poly_DistanceField : public core_OBJECT
+class poly_DistanceField : public poly_ImplicitFunc
 {
 public:
 
@@ -77,6 +77,15 @@ public:
     poly_DistanceField(core_ProgressEntry progress = nullptr,
                        core_PlotterEntry  plotter  = nullptr);
 
+  //! Ctor with initialization.
+  //! \param[in] octree   octree to handle.
+  //! \param[in] progress progress notifier.
+  //! \param[in] plotter  imperative plotter.
+  mobiusPoly_EXPORT
+    poly_DistanceField(poly_SVO*          pRoot,
+                       core_ProgressEntry progress = nullptr,
+                       core_PlotterEntry  plotter  = nullptr);
+
   //! Dtor.
   //! CAUTION: this dtor does not destroy the octree.
   mobiusPoly_EXPORT virtual
@@ -92,6 +101,16 @@ public:
   mobiusPoly_EXPORT bool
     Build(const double                    resolution,
           const t_ptr<poly_DistanceFunc>& func);
+
+public:
+
+  //! Evaluates the distance field as a conventional trivariate function.
+  //! \param[in] x X coordinate of the argument point.
+  //! \param[in] y Y coordinate of the argument point.
+  //! \param[in] z Z coordinate of the argument point.
+  //! \return function value.
+  mobiusPoly_EXPORT virtual double
+    Eval(const double x, const double y, const double z) const;
 
 public:
 
