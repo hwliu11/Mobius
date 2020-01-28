@@ -276,7 +276,10 @@ namespace mobius
       }
 
       // Execute splitting sub-tasks on the child octants.
-      for ( size_t tt = 0; tt < subTasks.size(); ++tt )
+      const int nTasks = int( subTasks.size() );
+      //
+      #pragma omp parallel for schedule(dynamic)
+      for ( int tt = 0; tt < nTasks; ++tt )
         subTasks[tt]->execute();
     }
 
