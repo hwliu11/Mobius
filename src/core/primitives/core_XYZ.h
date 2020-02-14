@@ -215,6 +215,26 @@ public:
            ( fabs( m_fZ - XYZ.Z() ) <= tol3D );
   }
 
+  //! Compute component-wise minimum of two vectors.
+  //! \param[in] XYZ other tuple to compare this one with.
+  //! \return new tuple with min components.
+  core_XYZ CWiseMin(const core_XYZ& XYZ) const
+  {
+    return core_XYZ(m_fX < XYZ.m_fX ? m_fX : XYZ.m_fX,
+                    m_fY < XYZ.m_fY ? m_fY : XYZ.m_fY,
+                    m_fZ < XYZ.m_fZ ? m_fZ : XYZ.m_fZ);
+  }
+
+  //! Compute component-wise maximum of two vectors.
+  //! \param[in] XYZ other tuple to compare this one with.
+  //! \return new tuple with max components.
+  core_XYZ CWiseMax(const core_XYZ& XYZ) const
+  {
+    return core_XYZ(m_fX > XYZ.m_fX ? m_fX : XYZ.m_fX,
+                    m_fY > XYZ.m_fY ? m_fY : XYZ.m_fY,
+                    m_fZ > XYZ.m_fZ ? m_fZ : XYZ.m_fZ);
+  }
+
   //! \return max components of the tuple.
   double GetMaxComponent() const
   {

@@ -52,18 +52,22 @@ namespace mobius
     //! \param[in] minCellSize cell size value to control the splitting process.
     //!                        The min cell size should never be less than this
     //!                        value.
+    //! \param[in] maxCellSize max cell size to control voxelization of empty
+    //!                        space, i.e., inside and outside the shape.
     //! \param[in] precision   precision value to control how tigh should the
     //!                        voxelization be w.r.t. the implicit function.
     //! \param[in] distFunc    distance function.
     //! \param[in] depth       current depth (pass 0 to start).
     poly_VoxelSplitTask(poly_SVO*                       pVoxel,
                         const double                    minCellSize,
+                        const double                    maxCellSize,
                         const double                    precision,
                         const t_ptr<poly_DistanceFunc>& distFunc,
                         const unsigned                  depth)
     //
     : m_pVoxel       (pVoxel),
       m_fMinCellSize (minCellSize),
+      m_fMaxCellSize (maxCellSize),
       m_fPrecision   (precision),
       m_func         (distFunc),
       m_iDepth       (depth)
@@ -84,6 +88,7 @@ namespace mobius
     {
       return new poly_VoxelSplitTask(pVoxel,
                                      m_fMinCellSize,
+                                     m_fMaxCellSize,
                                      m_fPrecision,
                                      m_func,
                                      m_iDepth + 1);
@@ -138,13 +143,17 @@ namespace mobius
       t_xyz        diagVec  = P7 - P0;
       const double halfSize = 0.5*diagVec.Modulus();
       const double cellSize = std::max( fabs( diagVec.X() ), std::max( fabs( diagVec.Y() ), fabs( diagVec.Z() ) ) );
+      bool         toSplit  = (cellSize > m_fMaxCellSize);
 
       // Check stop criterion.
-      if ( cellSize < m_fMinCellSize || // Max resolution is reached.
-           minDistance > halfSize ) // No geometry inside.
-      //     maxDistance > 2.*halfSize ) // No geometry inside.
+      if ( cellSize < m_fMaxCellSize )
       {
-        return; // Halt the splitting process.
+        if ( cellSize < m_fMinCellSize || // Max resolution is reached.
+             minDistance > halfSize ) // No geometry inside.
+        //     maxDistance > 2.*halfSize ) // No geometry inside.
+        {
+          return; // Halt the splitting process.
+        }
       }
 
       // Add distances at intermediate nodes by evaluating the
@@ -201,7 +210,6 @@ namespace mobius
       // If the average distance is significantly greater than the fairly
       // computed distance, then the linear approximation is not sufficiently
       // precise. In such situation, the voxel should be split.
-      bool toSplit = false;
       for ( int nx = 0; nx < 3; ++nx )
       {
         for ( int ny = 0; ny < 3; ++ny )
@@ -216,7 +224,7 @@ namespace mobius
         }
       }
 
-      if ( !toSplit )
+      if ( (cellSize < m_fMaxCellSize) && !toSplit )
         return;
 
       /* ========================================
@@ -287,6 +295,7 @@ namespace mobius
 
     poly_SVO*                m_pVoxel;       //!< Working SVO node.
     double                   m_fMinCellSize; //!< Resolution to control the SVO fineness.
+    double                   m_fMaxCellSize; //!< Max cell size to control SVO resolution in empty space.
     double                   m_fPrecision;   //!< Precision of linear approximation.
     t_ptr<poly_DistanceFunc> m_func;         //!< Distance function.
     unsigned                 m_iDepth;       //!< Depth of the hierarchy.
@@ -349,6 +358,7 @@ mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
 : poly_ImplicitFunc (),
   m_pRoot           (nullptr),
+  m_fMaxCellSize    (DBL_MAX),
   m_progress        (progress),
   m_plotter         (plotter)
 {}
@@ -420,7 +430,7 @@ bool mobius::poly_DistanceField::Build(const double                    resolutio
    *  Create hierarchy.
    * ================== */
 
-  poly_VoxelSplitTask(m_pRoot, resolution, precision, func, 0u).execute();
+  poly_VoxelSplitTask(m_pRoot, resolution, m_fMaxCellSize, precision, func, 0u).execute();
 
   return true;
 }

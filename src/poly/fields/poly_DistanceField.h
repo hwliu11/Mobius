@@ -93,6 +93,22 @@ public:
 
 public:
 
+  //! \return max cell size to be used for finer voxelization of empty space,
+  //!         i.e., the regions inside and outside the shape.
+  double GetMaxCellSize() const
+  {
+    return m_fMaxCellSize;
+  }
+
+  //! Sets max cell size to be used for finer voxelization of empty space.
+  //! \param[in] cellSize grain size to set (in model units).
+  void SetMaxCellSize(const double cellSize)
+  {
+    m_fMaxCellSize = cellSize;
+  }
+
+public:
+
   //! Builds distance field with the specified spatial resolution for the
   //! passed distance function.
   //! \param[in] minCellSize min allowed voxel size.
@@ -142,10 +158,10 @@ public:
 
 protected:
 
-  poly_SVO* m_pRoot; //!< Root voxel.
-
-  core_ProgressEntry m_progress; //!< Progress notifier.
-  core_PlotterEntry  m_plotter;  //!< Imperative plotter.
+  poly_SVO*          m_pRoot;        //!< Root voxel.
+  double             m_fMaxCellSize; //!< Max cell size.
+  core_ProgressEntry m_progress;     //!< Progress notifier.
+  core_PlotterEntry  m_plotter;      //!< Imperative plotter.
 
 };
 

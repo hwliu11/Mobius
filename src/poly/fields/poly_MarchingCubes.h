@@ -67,6 +67,58 @@ class poly_MarchingCubes : public poly_GridTessellator
 {
 public:
 
+  //! Polygonizes a single voxel.
+  //! \param[in] P0       lower corner of a voxel.
+  //! \param[in] P7       upper corner of a voxel.
+  //! \param[in] func     implicit function to evaluate.
+  //! \param[in] isoValue function level to polygonize at.
+  //! \return piece of mesh.
+  mobiusPoly_EXPORT static t_ptr<mobius::poly_Mesh>
+    PolygonizeVoxel(const t_xyz&                    P0,
+                    const t_xyz&                    P7,
+                    const t_ptr<poly_ImplicitFunc>& func,
+                    const double                    isoValue);
+
+  //! Returns lookup index of a cube.
+  //! \param[in] voxelScalars eight scalars in the corners of a voxel.
+  //! \return topological situation as a lookup index.
+  mobiusPoly_EXPORT static int
+    GetCubeIndex(double voxelScalars[2][2][2]);
+
+  //! Returns the Cartesian coordinates of the voxel corner for the passed
+  //! integer indices.
+  //! \param[in] origin lower corner of a voxel.
+  //! \param[in] dx     slicing step in the OX direction.
+  //! \param[in] dy     slicing step in the OY direction.
+  //! \param[in] dz     slicing step in the OZ direction.
+  //! \param[in] nx     0-based index of the X coordinate of the corner.
+  //! \param[in] ny     0-based index of the Y coordinate of the corner.
+  //! \param[in] nz     0-based index of the Z coordinate of the corner.
+  //! \return coordinates of the corner.
+  mobiusPoly_EXPORT static t_xyz
+    GetVoxelCorner(const t_xyz& origin,
+                   const double dx,
+                   const double dy,
+                   const double dz,
+                   const int    nx,
+                   const int    ny,
+                   const int    nz);
+
+  //! Interpolates the intersection point between the given extremities
+  //! based on the passed scalar values.
+  //! \param[in] point1  first point.
+  //! \param[in] point2  second point.
+  //! \param[in] scalar1 first scalar.
+  //! \param[in] scalar2 second scalar.
+  //! \return interpolated point.
+  mobiusPoly_EXPORT static t_xyz
+    InterpVertex(const t_xyz& point1,
+                 const t_xyz& point2,
+                 const double scalar1,
+                 const double scalar2);
+
+public:
+
   //! Ctor with initialization.
   //! \param[in] func      implicit function defining the field.
   //! \param[in] numSlices num of slices to discretize the space to get a regular grid.
@@ -88,28 +140,6 @@ private:
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT virtual bool
     perform(const double isoValue);
-
-private:
-
-  //! Returns the Cartesian coordinates of the voxel corner for the passed
-  //! integer indices.
-  //! \param[in] nx 0-based index of the X coordinate of the corner.
-  //! \param[in] ny 0-based index of the Y coordinate of the corner.
-  //! \param[in] nz 0-based index of the Z coordinate of the corner.
-  //! \return coordinates of the corner.
-  t_xyz getVoxelCorner(const int nx, const int ny, const int nz) const;
-
-  //! Interpolates the intersection point between the given extremities
-  //! based on the passed scalar values.
-  //! \param[in] point1  first point.
-  //! \param[in] point2  second point.
-  //! \param[in] scalar1 first scalar.
-  //! \param[in] scalar2 second scalar.
-  //! \return interpolated point.
-  t_xyz interpVertex(const t_xyz& point1,
-                     const t_xyz& point2,
-                     const double scalar1,
-                     const double scalar2) const;
 
 protected:
 

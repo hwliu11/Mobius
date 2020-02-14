@@ -335,6 +335,216 @@ const int a2iTriangleConnectionTable[256][16] =
 
 //-----------------------------------------------------------------------------
 
+mobius::t_ptr<mobius::poly_Mesh>
+  mobius::poly_MarchingCubes::PolygonizeVoxel(const t_xyz&                    P0,
+                                              const t_xyz&                    P7,
+                                              const t_ptr<poly_ImplicitFunc>& func,
+                                              const double                    isoValue)
+{
+  t_ptr<poly_Mesh> result = new poly_Mesh;
+
+  t_xyz P1( P7.X(), P0.Y(), P0.Z() );
+  t_xyz P2( P0.X(), P7.Y(), P0.Z() );
+  t_xyz P3( P7.X(), P7.Y(), P0.Z() );
+  t_xyz P4( P0.X(), P0.Y(), P7.Z() );
+  t_xyz P5( P7.X(), P0.Y(), P7.Z() );
+  t_xyz P6( P0.X(), P7.Y(), P7.Z() );
+
+  // Initialize scalars at voxel corners.
+  double voxelScalars[2][2][2];
+  //
+  voxelScalars[0][0][0] = func->Eval( P0.X(), P0.Y(), P0.Z() ) - isoValue;
+  voxelScalars[1][0][0] = func->Eval( P1.X(), P1.Y(), P1.Z() ) - isoValue;
+  voxelScalars[0][1][0] = func->Eval( P2.X(), P2.Y(), P2.Z() ) - isoValue;
+  voxelScalars[1][1][0] = func->Eval( P3.X(), P3.Y(), P3.Z() ) - isoValue;
+  voxelScalars[0][0][1] = func->Eval( P4.X(), P4.Y(), P4.Z() ) - isoValue;
+  voxelScalars[1][0][1] = func->Eval( P5.X(), P5.Y(), P5.Z() ) - isoValue;
+  voxelScalars[0][1][1] = func->Eval( P6.X(), P6.Y(), P6.Z() ) - isoValue;
+  voxelScalars[1][1][1] = func->Eval( P7.X(), P7.Y(), P7.Z() ) - isoValue;
+
+  /* Determine the cube index for subsequent lookup */
+  const int cubeIndex = GetCubeIndex(voxelScalars);
+
+  /* Process intersection */
+  if ( aiCubeEdgeFlags[cubeIndex] == 0 )
+    return result;
+
+  /* Find vertices whether the surface intersects the cube */
+  t_xyz vertices[12];
+  //
+  if ( aiCubeEdgeFlags[cubeIndex] & 1 )
+  {
+    vertices[0] = InterpVertex( P0, P1,
+                                voxelScalars[0][0][0],
+                                voxelScalars[1][0][0] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 2 )
+  {
+    vertices[1] = InterpVertex( P1, P3,
+                                voxelScalars[1][0][0],
+                                voxelScalars[1][1][0] );
+    }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 4 )
+  {
+    vertices[2] = InterpVertex( P3, P2,
+                                voxelScalars[1][1][0],
+                                voxelScalars[0][1][0] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 8 )
+  {
+    vertices[3] = InterpVertex( P2, P0,
+                                voxelScalars[0][1][0],
+                                voxelScalars[0][0][0] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 16 )
+  {
+    vertices[4] = InterpVertex( P4, P5,
+                                voxelScalars[0][0][1],
+                                voxelScalars[1][0][1] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 32 )
+  {
+    vertices[5] = InterpVertex( P5, P7,
+                                voxelScalars[1][0][1],
+                                voxelScalars[1][1][1] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 64 )
+  {
+    vertices[6] = InterpVertex( P7, P6,
+                                voxelScalars[1][1][1],
+                                voxelScalars[0][1][1] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 128 )
+  {
+    vertices[7] = InterpVertex( P6, P4,
+                                voxelScalars[0][1][1],
+                                voxelScalars[0][0][1] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 256 )
+  {
+    vertices[8] = InterpVertex( P0, P4,
+                                voxelScalars[0][0][0],
+                                voxelScalars[0][0][1] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 512 )
+  {
+    vertices[9] = InterpVertex( P1, P5,
+                                voxelScalars[1][0][0],
+                                voxelScalars[1][0][1] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 1024 )
+  {
+    vertices[10] = InterpVertex( P3, P7,
+                                 voxelScalars[1][1][0],
+                                 voxelScalars[1][1][1] );
+  }
+
+  if ( aiCubeEdgeFlags[cubeIndex] & 2048 )
+  {
+    vertices[11] = InterpVertex( P2, P6,
+                                 voxelScalars[0][1][0],
+                                 voxelScalars[0][1][1] );
+  }
+
+  /* Build triangles */
+  const int* triIndices = a2iTriangleConnectionTable[cubeIndex];
+  for ( int tt = 0; triIndices[tt] != -1; tt += 3 )
+  {
+    std::vector<int> tri = {0, 0, 0, 0};
+    //
+    for ( int k = 0; k < 3; ++k )
+    {
+      const int    triId  = triIndices[tt + 2 - k];
+      const t_xyz& vertex = vertices[triId];
+
+      // Add vertex.
+      poly_VertexHandle hv = result->AddVertex(vertex);
+
+      tri[k] = hv.GetIdx();
+    }
+
+    // Add triangle.
+    result->AddTriangle( poly_VertexHandle(tri[0]),
+                         poly_VertexHandle(tri[1]),
+                         poly_VertexHandle(tri[2]) );
+  }
+
+  return result;
+}
+
+//-----------------------------------------------------------------------------
+
+int mobius::poly_MarchingCubes::GetCubeIndex(double voxelScalars[2][2][2])
+{
+  /* Determine the cube index for subsequent lookup */
+  int cubeIndex = 0;
+  //
+  if ( voxelScalars[0][0][0] < 0.0 )
+    cubeIndex |= 1;   // | <0000 0001>
+  //
+  if ( voxelScalars[1][0][0] < 0.0 )
+    cubeIndex |= 2;   // | <0000 0010>
+  //
+  if ( voxelScalars[1][1][0] < 0.0 )
+    cubeIndex |= 4;   // | <0000 0100>
+  //
+  if ( voxelScalars[0][1][0] < 0.0 )
+    cubeIndex |= 8;   // | <0000 1000>
+  //
+  if ( voxelScalars[0][0][1] < 0.0 )
+    cubeIndex |= 16;  // | <0001 0000>
+  //
+  if ( voxelScalars[1][0][1] < 0.0 )
+    cubeIndex |= 32;  // | <0010 0000>
+  //
+  if ( voxelScalars[1][1][1] < 0.0 )
+    cubeIndex |= 64;  // | <0100 0000>
+  //
+  if ( voxelScalars[0][1][1] < 0.0 )
+    cubeIndex |= 128; // | <1000 0000>
+
+  return cubeIndex;
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::t_xyz mobius::poly_MarchingCubes::GetVoxelCorner(const t_xyz& origin,
+                                                         const double dx,
+                                                         const double dy,
+                                                         const double dz,
+                                                         const int    nx,
+                                                         const int    ny,
+                                                         const int    nz)
+{
+  const double Px = origin.X() + dx*nx;
+  const double Py = origin.Y() + dy*ny;
+  const double Pz = origin.Z() + dz*nz;
+
+  return t_xyz(Px, Py, Pz);
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::t_xyz mobius::poly_MarchingCubes::InterpVertex(const t_xyz& point1,
+                                                       const t_xyz& point2,
+                                                       const double scalar1,
+                                                       const double scalar2)
+{
+  return point1 - (point2 - point1) * ( scalar1/(scalar2 - scalar1) );
+}
+
+//-----------------------------------------------------------------------------
+
 mobius::poly_MarchingCubes::poly_MarchingCubes(const t_ptr<poly_ImplicitFunc>& func,
                                                const int                       numSlices,
                                                core_ProgressEntry              progress,
@@ -369,7 +579,14 @@ bool mobius::poly_MarchingCubes::perform(const double isoValue)
           {
             for ( int nvx = 0; nvx < 2; ++nvx )
             {
-              const t_xyz  P = this->getVoxelCorner(nx + nvx, ny + nvy, nz + nvz);
+              const t_xyz P = GetVoxelCorner(m_Pmin,
+                                             m_fGrainX,
+                                             m_fGrainY,
+                                             m_fGrainZ,
+                                             nx + nvx,
+                                             ny + nvy,
+                                             nz + nvz);
+
               const double f = m_func->Eval( P.X(), P.Y(), P.Z() ) - isoValue;
 
               voxelScalars[nvx][nvy][nvz] = f;
@@ -378,31 +595,7 @@ bool mobius::poly_MarchingCubes::perform(const double isoValue)
         }
 
         /* Determine the cube index for subsequent lookup */
-        int cubeIndex = 0;
-        //
-        if ( voxelScalars[0][0][0] < 0.0 )
-          cubeIndex |= 1;   // | <0000 0001>
-        //
-        if ( voxelScalars[1][0][0] < 0.0 )
-          cubeIndex |= 2;   // | <0000 0010>
-        //
-        if ( voxelScalars[1][1][0] < 0.0 )
-          cubeIndex |= 4;   // | <0000 0100>
-        //
-        if ( voxelScalars[0][1][0] < 0.0 )
-          cubeIndex |= 8;   // | <0000 1000>
-        //
-        if ( voxelScalars[0][0][1] < 0.0 )
-          cubeIndex |= 16;  // | <0001 0000>
-        //
-        if ( voxelScalars[1][0][1] < 0.0 )
-          cubeIndex |= 32;  // | <0010 0000>
-        //
-        if ( voxelScalars[1][1][1] < 0.0 )
-          cubeIndex |= 64;  // | <0100 0000>
-        //
-        if ( voxelScalars[0][1][1] < 0.0 )
-          cubeIndex |= 128; // | <1000 0000>
+        const int cubeIndex = GetCubeIndex(voxelScalars);
 
         /* Process intersection */
         if ( aiCubeEdgeFlags[cubeIndex] != 0 )
@@ -412,98 +605,194 @@ bool mobius::poly_MarchingCubes::perform(const double isoValue)
           //
           if ( aiCubeEdgeFlags[cubeIndex] & 1 )
           {
-            vertices[0] = this->interpVertex( this->getVoxelCorner(nx + 0, ny + 0, nz + 0),
-                                              this->getVoxelCorner(nx + 1, ny + 0, nz + 0),
-                                              voxelScalars[0][0][0],
-                                              voxelScalars[1][0][0] );
+            vertices[0] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 0, nz + 0),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 0, nz + 0),
+                                        voxelScalars[0][0][0],
+                                        voxelScalars[1][0][0] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 2 )
           {
-            vertices[1] = this->interpVertex( this->getVoxelCorner(nx + 1, ny + 0, nz + 0),
-                                              this->getVoxelCorner(nx + 1, ny + 1, nz + 0),
-                                              voxelScalars[1][0][0],
-                                              voxelScalars[1][1][0] );
+            vertices[1] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 0, nz + 0),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 1, nz + 0),
+                                        voxelScalars[1][0][0],
+                                        voxelScalars[1][1][0] );
             }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 4 )
           {
-            vertices[2] = this->interpVertex( this->getVoxelCorner(nx + 1, ny + 1, nz + 0),
-                                              this->getVoxelCorner(nx + 0, ny + 1, nz + 0),
-                                              voxelScalars[1][1][0],
-                                              voxelScalars[0][1][0] );
+            vertices[2] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 1, nz + 0),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 1, nz + 0),
+                                        voxelScalars[1][1][0],
+                                        voxelScalars[0][1][0] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 8 )
           {
-            vertices[3] = this->interpVertex( this->getVoxelCorner(nx + 0, ny + 1, nz + 0),
-                                              this->getVoxelCorner(nx + 0, ny + 0, nz + 0),
-                                              voxelScalars[0][1][0],
-                                              voxelScalars[0][0][0] );
+            vertices[3] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 1, nz + 0),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 0, nz + 0),
+                                        voxelScalars[0][1][0],
+                                        voxelScalars[0][0][0] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 16 )
           {
-            vertices[4] = this->interpVertex( this->getVoxelCorner(nx + 0, ny + 0, nz + 1),
-                                              this->getVoxelCorner(nx + 1, ny + 0, nz + 1),
-                                              voxelScalars[0][0][1],
-                                              voxelScalars[1][0][1] );
+            vertices[4] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 0, nz + 1),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 0, nz + 1),
+                                        voxelScalars[0][0][1],
+                                        voxelScalars[1][0][1] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 32 )
           {
-            vertices[5] = this->interpVertex( this->getVoxelCorner(nx + 1, ny + 0, nz + 1),
-                                              this->getVoxelCorner(nx + 1, ny + 1, nz + 1),
-                                              voxelScalars[1][0][1],
-                                              voxelScalars[1][1][1] );
+            vertices[5] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 0, nz + 1),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 1, nz + 1),
+                                        voxelScalars[1][0][1],
+                                        voxelScalars[1][1][1] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 64 )
           {
-            vertices[6] = this->interpVertex( this->getVoxelCorner(nx + 1, ny + 1, nz + 1),
-                                              this->getVoxelCorner(nx + 0, ny + 1, nz + 1),
-                                              voxelScalars[1][1][1],
-                                              voxelScalars[0][1][1] );
+            vertices[6] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 1, nz + 1),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 1, nz + 1),
+                                        voxelScalars[1][1][1],
+                                        voxelScalars[0][1][1] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 128 )
           {
-            vertices[7] = this->interpVertex( this->getVoxelCorner(nx + 0, ny + 1, nz + 1),
-                                              this->getVoxelCorner(nx + 0, ny + 0, nz + 1),
-                                              voxelScalars[0][1][1],
-                                              voxelScalars[0][0][1] );
+            vertices[7] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 1, nz + 1),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 0, nz + 1),
+                                        voxelScalars[0][1][1],
+                                        voxelScalars[0][0][1] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 256 )
           {
-            vertices[8] = this->interpVertex( this->getVoxelCorner(nx + 0, ny + 0, nz + 0),
-                                              this->getVoxelCorner(nx + 0, ny + 0, nz + 1),
-                                              voxelScalars[0][0][0],
-                                              voxelScalars[0][0][1] );
+            vertices[8] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 0, nz + 0),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 0, ny + 0, nz + 1),
+                                        voxelScalars[0][0][0],
+                                        voxelScalars[0][0][1] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 512 )
           {
-            vertices[9] = this->interpVertex( this->getVoxelCorner(nx + 1, ny + 0, nz + 0),
-                                              this->getVoxelCorner(nx + 1, ny + 0, nz + 1),
-                                              voxelScalars[1][0][0],
-                                              voxelScalars[1][0][1] );
+            vertices[9] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 0, nz + 0),
+                                        GetVoxelCorner(m_Pmin,
+                                                       m_fGrainX,
+                                                       m_fGrainY,
+                                                       m_fGrainZ,
+                                                       nx + 1, ny + 0, nz + 1),
+                                        voxelScalars[1][0][0],
+                                        voxelScalars[1][0][1] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 1024 )
           {
-            vertices[10] = this->interpVertex( this->getVoxelCorner(nx + 1, ny + 1, nz + 0),
-                                               this->getVoxelCorner(nx + 1, ny + 1, nz + 1),
-                                               voxelScalars[1][1][0],
-                                               voxelScalars[1][1][1] );
+            vertices[10] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                        m_fGrainX,
+                                                        m_fGrainY,
+                                                        m_fGrainZ,
+                                                        nx + 1, ny + 1, nz + 0),
+                                         GetVoxelCorner(m_Pmin,
+                                                        m_fGrainX,
+                                                        m_fGrainY,
+                                                        m_fGrainZ,
+                                                        nx + 1, ny + 1, nz + 1),
+                                         voxelScalars[1][1][0],
+                                         voxelScalars[1][1][1] );
           }
 
           if ( aiCubeEdgeFlags[cubeIndex] & 2048 )
           {
-            vertices[11] = this->interpVertex( this->getVoxelCorner(nx + 0, ny + 1, nz + 0),
-                                               this->getVoxelCorner(nx + 0, ny + 1, nz + 1),
-                                               voxelScalars[0][1][0],
-                                               voxelScalars[0][1][1] );
+            vertices[11] = InterpVertex( GetVoxelCorner(m_Pmin,
+                                                        m_fGrainX,
+                                                        m_fGrainY,
+                                                        m_fGrainZ,
+                                                        nx + 0, ny + 1, nz + 0),
+                                         GetVoxelCorner(m_Pmin,
+                                                        m_fGrainX,
+                                                        m_fGrainY,
+                                                        m_fGrainZ,
+                                                        nx + 0, ny + 1, nz + 1),
+                                         voxelScalars[0][1][0],
+                                         voxelScalars[0][1][1] );
           }
 
           /* Build triangles */
@@ -542,27 +831,4 @@ bool mobius::poly_MarchingCubes::perform(const double isoValue)
   }
 
   return true;
-}
-
-//-----------------------------------------------------------------------------
-
-mobius::t_xyz mobius::poly_MarchingCubes::getVoxelCorner(const int nx,
-                                                         const int ny,
-                                                         const int nz) const
-{
-  const double Px = m_Pmin.X() + m_fGrainX*nx;
-  const double Py = m_Pmin.Y() + m_fGrainY*ny;
-  const double Pz = m_Pmin.Z() + m_fGrainZ*nz;
-
-  return t_xyz(Px, Py, Pz);
-}
-
-//-----------------------------------------------------------------------------
-
-mobius::t_xyz mobius::poly_MarchingCubes::interpVertex(const t_xyz& point1,
-                                                       const t_xyz& point2,
-                                                       const double scalar1,
-                                                       const double scalar2) const
-{
-  return point1 - (point2 - point1) * ( scalar1/(scalar2 - scalar1) );
 }
