@@ -116,6 +116,14 @@ namespace mobius
       return t_xyz( coords.X(), coords.Y(), coords.Z() );
     }
 
+    //! Converts OpenCascade 3D point to Mobius 3D point.
+    //! \param[in] coords point to convert.
+    //! \return converted point.
+    static t_xyz GetMobiusPnt(const gp_XYZ& coords)
+    {
+      return t_xyz( coords.X(), coords.Y(), coords.Z() );
+    }
+
     //! Converts OpenCascade 3D vector to Mobius 3D vector.
     //! \param[in] coords vector to convert.
     //! \return converted triple of coordinates.
@@ -128,6 +136,14 @@ namespace mobius
     //! \param[in] coords point to convert.
     //! \return converted point.
     static t_uv GetMobiusPnt2d(const gp_Pnt2d& coords)
+    {
+      return t_uv( coords.X(), coords.Y() );
+    }
+
+    //! Converts OpenCascade 2D point to Mobius 2D point.
+    //! \param[in] coords point to convert.
+    //! \return converted point.
+    static t_uv GetMobiusPnt2d(const gp_XY& coords)
     {
       return t_uv( coords.X(), coords.Y() );
     }
