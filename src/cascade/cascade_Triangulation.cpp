@@ -89,6 +89,9 @@ bool mobius::cascade_Triangulation::IsDone() const
 
 void mobius::cascade_Triangulation::convertToOpenCascade()
 {
+  if ( !m_mobiusMesh->GetNumVertices() || !m_mobiusMesh->GetNumTriangles() )
+    return;
+
   TColgp_Array1OfPnt    nodes     ( 1, m_mobiusMesh->GetNumVertices() );
   Poly_Array1OfTriangle triangles ( 1, m_mobiusMesh->GetNumTriangles() );
 

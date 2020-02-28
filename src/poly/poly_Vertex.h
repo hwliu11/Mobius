@@ -70,6 +70,9 @@ public:
   double Y() const { return m_coords.Y(); } //!< \return Y coordinate.
   double Z() const { return m_coords.Z(); } //!< \return Z coordinate.
 
+  //! Type conversion operator.
+  operator core_XYZ() const { return m_coords; }
+
 protected:
 
   core_XYZ m_coords; //!< Coordinates of the vertex.
