@@ -32,7 +32,7 @@
 #define poly_DistanceFunc_HeaderFile
 
 // Poly includes
-#include <mobius/poly_ImplicitFunc.h>
+#include <mobius/poly_RealFunc.h>
 
 namespace mobius {
 
@@ -41,7 +41,7 @@ namespace mobius {
 //! Abstract distance function. The derived classes should implement one or
 //! another way of distance computation. It is recommended to use accelerating
 //! structures such as BVH for the fast distance computation.
-class poly_DistanceFunc : public poly_ImplicitFunc
+class poly_DistanceFunc : public poly_RealFunc
 {
 public:
 

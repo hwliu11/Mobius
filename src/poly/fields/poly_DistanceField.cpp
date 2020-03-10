@@ -356,11 +356,11 @@ bool mobius::poly_DistanceField::IsZeroCrossing(poly_SVO* pNode)
 
 mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
-: poly_ImplicitFunc (),
-  m_pRoot           (nullptr),
-  m_fMaxCellSize    (DBL_MAX),
-  m_progress        (progress),
-  m_plotter         (plotter)
+: poly_RealFunc  (),
+  m_pRoot        (nullptr),
+  m_fMaxCellSize (DBL_MAX),
+  m_progress     (progress),
+  m_plotter      (plotter)
 {}
 
 //-----------------------------------------------------------------------------
@@ -368,10 +368,10 @@ mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
 mobius::poly_DistanceField::poly_DistanceField(poly_SVO*          octree,
                                                core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
-: poly_ImplicitFunc (),
-  m_pRoot           (octree),
-  m_progress        (progress),
-  m_plotter         (plotter)
+: poly_RealFunc (),
+  m_pRoot       (octree),
+  m_progress    (progress),
+  m_plotter     (plotter)
 {
   m_domainMin = m_pRoot->GetCornerMin();
   m_domainMax = m_pRoot->GetCornerMax();

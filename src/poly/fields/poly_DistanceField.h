@@ -45,7 +45,7 @@ namespace mobius {
 //!
 //! Distance field represented by voxelization and its associated implicit
 //! function to calculate the distance values.
-class poly_DistanceField : public poly_ImplicitFunc
+class poly_DistanceField : public poly_RealFunc
 {
 public:
 

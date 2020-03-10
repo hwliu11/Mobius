@@ -33,11 +33,11 @@ set (CPP_FILES
 
 set (fields_H_FILES
   fields/poly_BooleanFunc.h
-  fields/poly_ImplicitFunc.h
   fields/poly_DistanceField.h
   fields/poly_DistanceFunc.h
   fields/poly_GridTessellator.h
   fields/poly_MarchingCubes.h
+  fields/poly_RealFunc.h
   fields/poly_SVO.h
   fields/poly_Tessellator.h
 )

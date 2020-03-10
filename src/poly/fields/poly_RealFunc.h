@@ -42,13 +42,14 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Base class for implicit functions.
-class poly_ImplicitFunc : public core_TrivariateFunc
+//! Base class for real functions `f = f(x,y,z)` defined on
+//! rectangular domains.
+class poly_RealFunc : public core_TrivariateFunc
 {
 public:
 
   //! Default ctor.
-  poly_ImplicitFunc()
+  poly_RealFunc()
   //
   : core_TrivariateFunc (),
     m_domainMin         (-DBL_MAX, -DBL_MAX, -DBL_MAX),
@@ -58,8 +59,8 @@ public:
   //! Ctor which accepts the bounded region where the function is defined.
   //! \param[in] domainMin lower bound of the function domain.
   //! \param[in] domainMax upper bound of the function domain.
-  poly_ImplicitFunc(const t_xyz& domainMin,
-                    const t_xyz& domainMax)
+  poly_RealFunc(const t_xyz& domainMin,
+                const t_xyz& domainMax)
   //
   : core_TrivariateFunc (),
     m_domainMin         (domainMin),

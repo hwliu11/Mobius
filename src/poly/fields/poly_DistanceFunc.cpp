@@ -33,7 +33,7 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_DistanceFunc::poly_DistanceFunc(const Mode mode) : poly_ImplicitFunc()
+mobius::poly_DistanceFunc::poly_DistanceFunc(const Mode mode) : poly_RealFunc()
 {
   m_mode = mode;
 }
