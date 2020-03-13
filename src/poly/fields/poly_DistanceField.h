@@ -43,7 +43,7 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Distance field represented by voxelization and its associated implicit
+//! Distance field represented by voxelization and its associated real
 //! function to calculate the distance values.
 class poly_DistanceField : public poly_RealFunc
 {
@@ -93,30 +93,16 @@ public:
 
 public:
 
-  //! \return max cell size to be used for finer voxelization of empty space,
-  //!         i.e., the regions inside and outside the shape.
-  double GetMaxCellSize() const
-  {
-    return m_fMaxCellSize;
-  }
-
-  //! Sets max cell size to be used for finer voxelization of empty space.
-  //! \param[in] cellSize grain size to set (in model units).
-  void SetMaxCellSize(const double cellSize)
-  {
-    m_fMaxCellSize = cellSize;
-  }
-
-public:
-
   //! Builds distance field with the specified spatial resolution for the
   //! passed distance function.
   //! \param[in] minCellSize min allowed voxel size.
+  //! \param[in] maxCellSize max allowed voxel size.
   //! \param[in] precision   precision of implicit function approximation.
   //! \param[in] func        driving function.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
     Build(const double                    minCellSize,
+          const double                    maxCellSize,
           const double                    precision,
           const t_ptr<poly_DistanceFunc>& func);
 
@@ -158,10 +144,9 @@ public:
 
 protected:
 
-  poly_SVO*          m_pRoot;        //!< Root voxel.
-  double             m_fMaxCellSize; //!< Max cell size.
-  core_ProgressEntry m_progress;     //!< Progress notifier.
-  core_PlotterEntry  m_plotter;      //!< Imperative plotter.
+  poly_SVO*          m_pRoot;    //!< Root voxel.
+  core_ProgressEntry m_progress; //!< Progress notifier.
+  core_PlotterEntry  m_plotter;  //!< Imperative plotter.
 
 };
 

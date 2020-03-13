@@ -150,7 +150,6 @@ namespace mobius
       {
         if ( cellSize < m_fMinCellSize || // Max resolution is reached.
              minDistance > halfSize ) // No geometry inside.
-        //     maxDistance > 2.*halfSize ) // No geometry inside.
         {
           return; // Halt the splitting process.
         }
@@ -358,7 +357,6 @@ mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
 : poly_RealFunc  (),
   m_pRoot        (nullptr),
-  m_fMaxCellSize (DBL_MAX),
   m_progress     (progress),
   m_plotter      (plotter)
 {}
@@ -384,7 +382,8 @@ mobius::poly_DistanceField::~poly_DistanceField()
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::Build(const double                    resolution,
+bool mobius::poly_DistanceField::Build(const double                    minCellSize,
+                                       const double                    maxCellSize,
                                        const double                    precision,
                                        const t_ptr<poly_DistanceFunc>& func)
 {
@@ -430,7 +429,7 @@ bool mobius::poly_DistanceField::Build(const double                    resolutio
    *  Create hierarchy.
    * ================== */
 
-  poly_VoxelSplitTask(m_pRoot, resolution, m_fMaxCellSize, precision, func, 0u).execute();
+  poly_VoxelSplitTask(m_pRoot, minCellSize, maxCellSize, precision, func, 0u).execute();
 
   return true;
 }

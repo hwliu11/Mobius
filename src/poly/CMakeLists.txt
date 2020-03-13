@@ -40,6 +40,7 @@ set (fields_H_FILES
   fields/poly_RealFunc.h
   fields/poly_SVO.h
   fields/poly_Tessellator.h
+  fields/poly_UnionFunc.h
 )
 set (fields_CPP_FILES
   fields/poly_DistanceField.cpp
@@ -48,6 +49,7 @@ set (fields_CPP_FILES
   fields/poly_MarchingCubes.cpp
   fields/poly_SVO.cpp
   fields/poly_Tessellator.cpp
+  fields/poly_UnionFunc.cpp
 )
 
 #------------------------------------------------------------------------------

@@ -33,7 +33,7 @@
 
 // Poly includes
 #include <mobius/poly_GridTessellator.h>
-#include <mobius/poly_ImplicitFunc.h>
+#include <mobius/poly_RealFunc.h>
 
 namespace mobius {
 
@@ -74,10 +74,10 @@ public:
   //! \param[in] isoValue function level to polygonize at.
   //! \return piece of mesh.
   mobiusPoly_EXPORT static t_ptr<mobius::poly_Mesh>
-    PolygonizeVoxel(const t_xyz&                    P0,
-                    const t_xyz&                    P7,
-                    const t_ptr<poly_ImplicitFunc>& func,
-                    const double                    isoValue);
+    PolygonizeVoxel(const t_xyz&                P0,
+                    const t_xyz&                P7,
+                    const t_ptr<poly_RealFunc>& func,
+                    const double                isoValue);
 
   //! Returns lookup index of a cube.
   //! \param[in] voxelScalars eight scalars in the corners of a voxel.
@@ -125,10 +125,10 @@ public:
   //! \param[in] progress  progress notifier.
   //! \param[in] plotter   imperative plotter.
   mobiusPoly_EXPORT
-    poly_MarchingCubes(const t_ptr<poly_ImplicitFunc>& func,
-                       const int                       numSlices = 128,
-                       core_ProgressEntry              progress  = nullptr,
-                       core_PlotterEntry               plotter   = nullptr);
+    poly_MarchingCubes(const t_ptr<poly_RealFunc>& func,
+                       const int                   numSlices = 128,
+                       core_ProgressEntry          progress  = nullptr,
+                       core_PlotterEntry           plotter   = nullptr);
 
   //! Dtor.
   virtual ~poly_MarchingCubes() = default;
@@ -143,7 +143,7 @@ private:
 
 protected:
 
-  t_ptr<poly_ImplicitFunc> m_func; //!< Implicit function defining the field.
+  t_ptr<poly_RealFunc> m_func; //!< Implicit function defining the field.
 
 };
 

@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 28 February 2020
+// Created on: 13 March 2020
 //-----------------------------------------------------------------------------
 // Copyright (c) 2020-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,56 +28,37 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_BooleanFunc_HeaderFile
-#define poly_BooleanFunc_HeaderFile
-
 // Poly includes
-#include <mobius/poly_RealFunc.h>
+#include <mobius/poly_UnionFunc.h>
 
-// Core includes
-#include <mobius/core_Ptr.h>
+// Standard includes
+#include <algorithm>
 
-namespace mobius {
+//-----------------------------------------------------------------------------
 
-//! \ingroup MOBIUS_POLY
-//!
-//! Base class for Boolean functions, such as Union, Difference and Common.
-class poly_BooleanFunc : public poly_RealFunc
+mobius::poly_UnionFunc::poly_UnionFunc(const t_ptr<poly_RealFunc>& opLeft,
+                                       const t_ptr<poly_RealFunc>& opRight)
+//
+: poly_BooleanFunc(opLeft, opRight)
 {
-public:
+  const t_xyz& leftDomMin  = opLeft  ->GetDomainMin();
+  const t_xyz& leftDomMax  = opLeft  ->GetDomainMax();
+  const t_xyz& rightDomMin = opRight ->GetDomainMin();
+  const t_xyz& rightDomMax = opRight ->GetDomainMax();
 
-  //! Default ctor.
-  poly_BooleanFunc() : poly_RealFunc() {}
-
-  //! Ctor accepting the operand functions.
-  //! \param[in] opLeft  left operand function.
-  //! \param[in] opRight right operand function.
-  poly_BooleanFunc(const t_ptr<poly_RealFunc>& opLeft,
-                   const t_ptr<poly_RealFunc>& opRight)
-  //
-  : m_opLeft(opLeft), m_opRight(opRight) {}
-
-public:
-
-  //! \return left operand function.
-  const t_ptr<poly_RealFunc>& GetLeftOperand() const
-  {
-    return m_opLeft;
-  }
-
-  //! \return right operand function.
-  const t_ptr<poly_RealFunc>& GetRightOperand() const
-  {
-    return m_opRight;
-  }
-
-protected:
-
-  t_ptr<poly_RealFunc> m_opLeft;  //!< Left operand of the Boolean function.
-  t_ptr<poly_RealFunc> m_opRight; //!< Right operand of the Boolean function.
-
-};
-
+  // Define the extended domain of the union function.
+  m_domainMin = leftDomMin.CWiseMin(rightDomMin);
+  m_domainMax = leftDomMax.CWiseMax(rightDomMax);
 }
 
-#endif
+//-----------------------------------------------------------------------------
+
+double mobius::poly_UnionFunc::Eval(const double x,
+                                    const double y,
+                                    const double z) const
+{
+  const double l = m_opLeft ->Eval(x, y, z);
+  const double r = m_opRight->Eval(x, y, z);
+
+  return std::min(l, r);
+}

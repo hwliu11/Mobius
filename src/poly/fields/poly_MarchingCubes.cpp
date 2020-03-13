@@ -336,10 +336,10 @@ const int a2iTriangleConnectionTable[256][16] =
 //-----------------------------------------------------------------------------
 
 mobius::t_ptr<mobius::poly_Mesh>
-  mobius::poly_MarchingCubes::PolygonizeVoxel(const t_xyz&                    P0,
-                                              const t_xyz&                    P7,
-                                              const t_ptr<poly_ImplicitFunc>& func,
-                                              const double                    isoValue)
+  mobius::poly_MarchingCubes::PolygonizeVoxel(const t_xyz&                P0,
+                                              const t_xyz&                P7,
+                                              const t_ptr<poly_RealFunc>& func,
+                                              const double                isoValue)
 {
   t_ptr<poly_Mesh> result = new poly_Mesh;
 
@@ -545,10 +545,10 @@ mobius::t_xyz mobius::poly_MarchingCubes::InterpVertex(const t_xyz& point1,
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_MarchingCubes::poly_MarchingCubes(const t_ptr<poly_ImplicitFunc>& func,
-                                               const int                       numSlices,
-                                               core_ProgressEntry              progress,
-                                               core_PlotterEntry               plotter)
+mobius::poly_MarchingCubes::poly_MarchingCubes(const t_ptr<poly_RealFunc>& func,
+                                               const int                   numSlices,
+                                               core_ProgressEntry          progress,
+                                               core_PlotterEntry           plotter)
 : poly_GridTessellator(func->GetDomainMin(),
                        func->GetDomainMax(),
                        numSlices,

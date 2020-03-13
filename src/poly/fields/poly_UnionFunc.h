@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// Created on: 28 February 2020
+// Created on: 13 March 2020
 //-----------------------------------------------------------------------------
 // Copyright (c) 2020-present, Sergey Slyadnev
 // All rights reserved.
@@ -28,53 +28,38 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_BooleanFunc_HeaderFile
-#define poly_BooleanFunc_HeaderFile
+#ifndef poly_UnionFunc_HeaderFile
+#define poly_UnionFunc_HeaderFile
 
 // Poly includes
-#include <mobius/poly_RealFunc.h>
-
-// Core includes
-#include <mobius/core_Ptr.h>
+#include <mobius/poly_BooleanFunc.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Base class for Boolean functions, such as Union, Difference and Common.
-class poly_BooleanFunc : public poly_RealFunc
+//! Union function.
+class poly_UnionFunc : public poly_BooleanFunc
 {
 public:
-
-  //! Default ctor.
-  poly_BooleanFunc() : poly_RealFunc() {}
 
   //! Ctor accepting the operand functions.
   //! \param[in] opLeft  left operand function.
   //! \param[in] opRight right operand function.
-  poly_BooleanFunc(const t_ptr<poly_RealFunc>& opLeft,
-                   const t_ptr<poly_RealFunc>& opRight)
-  //
-  : m_opLeft(opLeft), m_opRight(opRight) {}
+  mobiusPoly_EXPORT
+    poly_UnionFunc(const t_ptr<poly_RealFunc>& opLeft,
+                   const t_ptr<poly_RealFunc>& opRight);
 
 public:
 
-  //! \return left operand function.
-  const t_ptr<poly_RealFunc>& GetLeftOperand() const
-  {
-    return m_opLeft;
-  }
-
-  //! \return right operand function.
-  const t_ptr<poly_RealFunc>& GetRightOperand() const
-  {
-    return m_opRight;
-  }
-
-protected:
-
-  t_ptr<poly_RealFunc> m_opLeft;  //!< Left operand of the Boolean function.
-  t_ptr<poly_RealFunc> m_opRight; //!< Right operand of the Boolean function.
+  //! Evaluates the union function in the given point of
+  //! the ambient space.
+  //! \param[in] x X coordinate of the point in question.
+  //! \param[in] y Y coordinate of the point in question.
+  //! \param[in] z Z coordinate of the point in question.
+  //! \return function value.
+  mobiusPoly_EXPORT virtual double
+    Eval(const double x, const double y, const double z) const;
 
 };
 
