@@ -58,12 +58,12 @@ namespace mobius
     //!                        voxelization be w.r.t. the implicit function.
     //! \param[in] distFunc    distance function.
     //! \param[in] depth       current depth (pass 0 to start).
-    poly_VoxelSplitTask(poly_SVO*                       pVoxel,
-                        const double                    minCellSize,
-                        const double                    maxCellSize,
-                        const double                    precision,
-                        const t_ptr<poly_DistanceFunc>& distFunc,
-                        const unsigned                  depth)
+    poly_VoxelSplitTask(poly_SVO*                   pVoxel,
+                        const double                minCellSize,
+                        const double                maxCellSize,
+                        const double                precision,
+                        const t_ptr<poly_RealFunc>& distFunc,
+                        const unsigned              depth)
     //
     : m_pVoxel       (pVoxel),
       m_fMinCellSize (minCellSize),
@@ -285,19 +285,19 @@ namespace mobius
       // Execute splitting sub-tasks on the child octants.
       const int nTasks = int( subTasks.size() );
       //
-      #pragma omp parallel for schedule(dynamic)
+      //#pragma omp parallel for schedule(dynamic)
       for ( int tt = 0; tt < nTasks; ++tt )
         subTasks[tt]->execute();
     }
 
   private:
 
-    poly_SVO*                m_pVoxel;       //!< Working SVO node.
-    double                   m_fMinCellSize; //!< Resolution to control the SVO fineness.
-    double                   m_fMaxCellSize; //!< Max cell size to control SVO resolution in empty space.
-    double                   m_fPrecision;   //!< Precision of linear approximation.
-    t_ptr<poly_DistanceFunc> m_func;         //!< Distance function.
-    unsigned                 m_iDepth;       //!< Depth of the hierarchy.
+    poly_SVO*            m_pVoxel;       //!< Working SVO node.
+    double               m_fMinCellSize; //!< Resolution to control the SVO fineness.
+    double               m_fMaxCellSize; //!< Max cell size to control SVO resolution in empty space.
+    double               m_fPrecision;   //!< Precision of linear approximation.
+    t_ptr<poly_RealFunc> m_func;         //!< Distance function.
+    unsigned             m_iDepth;       //!< Depth of the hierarchy.
 
   };
 }
@@ -382,10 +382,10 @@ mobius::poly_DistanceField::~poly_DistanceField()
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::Build(const double                    minCellSize,
-                                       const double                    maxCellSize,
-                                       const double                    precision,
-                                       const t_ptr<poly_DistanceFunc>& func)
+bool mobius::poly_DistanceField::Build(const double                minCellSize,
+                                       const double                maxCellSize,
+                                       const double                precision,
+                                       const t_ptr<poly_RealFunc>& func)
 {
   if ( func.IsNull() )
   {

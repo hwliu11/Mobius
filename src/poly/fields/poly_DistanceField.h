@@ -32,7 +32,7 @@
 #define poly_DistanceField_HeaderFile
 
 // Poly includes
-#include <mobius/poly_DistanceFunc.h>
+#include <mobius/poly_RealFunc.h>
 #include <mobius/poly_SVO.h>
 
 // Core includes
@@ -101,10 +101,10 @@ public:
   //! \param[in] func        driving function.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    Build(const double                    minCellSize,
-          const double                    maxCellSize,
-          const double                    precision,
-          const t_ptr<poly_DistanceFunc>& func);
+    Build(const double                minCellSize,
+          const double                maxCellSize,
+          const double                precision,
+          const t_ptr<poly_RealFunc>& func);
 
 public:
 
