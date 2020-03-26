@@ -94,16 +94,26 @@ public:
 public:
 
   //! Builds distance field with the specified spatial resolution for the
-  //! passed distance function.
+  //! passed distance function. The method accepts min and max cell sizes
+  //! to limit the voxelization granularity. The precision argument is
+  //! used to compare the real distance function with its linear approximation.
+  //! The adaptive distance field strives to capture the field's bevaior, so
+  //! any significant deviation of the distance from its linear approximation
+  //! leads to sub-splitting. The latter will not happen if the uniform
+  //! voxelization mode is requested.
+  //!
   //! \param[in] minCellSize min allowed voxel size.
   //! \param[in] maxCellSize max allowed voxel size.
   //! \param[in] precision   precision of implicit function approximation.
+  //! \param[in] isUniform   indicates whether the uniform (non-adaptive) voxelization
+  //!                        is requested.
   //! \param[in] func        driving function.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
     Build(const double                minCellSize,
           const double                maxCellSize,
           const double                precision,
+          const bool                  isUniform,
           const t_ptr<poly_RealFunc>& func);
 
 public:

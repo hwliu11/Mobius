@@ -40,6 +40,7 @@ set (fields_H_FILES
   fields/poly_GridTessellator.h
   fields/poly_MarchingCubes.h
   fields/poly_RealFunc.h
+  fields/poly_ScalarMembership.h
   fields/poly_SVO.h
   fields/poly_Tessellator.h
   fields/poly_UnionFunc.h

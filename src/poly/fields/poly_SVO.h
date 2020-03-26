@@ -32,7 +32,7 @@
 #define poly_SVO_HeaderFile
 
 // Poly includes
-#include <mobius/poly.h>
+#include <mobius/poly_ScalarMembership.h>
 
 // Core includes
 #include <mobius/core_XYZ.h>
@@ -188,6 +188,29 @@ public:
   mobiusPoly_EXPORT bool
     IsLeaf() const;
 
+  //! Gathers all leaves of the octree in the passed vector.
+  //! \param[out] leaves gathered collection of leaf SVO nodes.
+  //! \param[in]  sm     scalar membership to filter SVO nodes by
+  //!                    their associated scalar values.
+  mobiusPoly_EXPORT void
+    GetLeaves(std::vector<const poly_SVO*>& leaves,
+              const int                     sm = ScalarMembership_OnInOut) const;
+
+  //! Checks if all the scalars associated with this SVO node are negative.
+  //! \return true/false.
+  mobiusPoly_EXPORT bool
+    IsNegative() const;
+
+  //! Checks if all the scalars associated with this SVO node are positive.
+  //! \return true/false.
+  mobiusPoly_EXPORT bool
+    IsPositive() const;
+
+  //! Checks if the scalars associated with this SVO change sign.
+  //! \return true/false.
+  mobiusPoly_EXPORT bool
+    IsZeroCrossing() const;
+
   //! Splits this node down to 8 octants.
   //! \return false if this nodes already has children.
   mobiusPoly_EXPORT bool
@@ -312,6 +335,18 @@ public:
   {
     return (m_cornerMax - m_cornerMin).Modulus();
   }
+
+protected:
+
+  //! Recursively visits SVO nodes to add leaves to the passed output
+  //! collection.
+  //! \param[in]  pNode  SVO node to visit.
+  //! \param[in]  sm     scalar membership classifier.
+  //! \param[out] leaves collected leaves.
+  mobiusPoly_EXPORT void
+    getLeaves(const poly_SVO*               pNode,
+              const int                     sm,
+              std::vector<const poly_SVO*>& leaves) const;
 
 protected:
 

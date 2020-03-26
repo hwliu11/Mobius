@@ -56,12 +56,15 @@ namespace mobius
     //!                        space, i.e., inside and outside the shape.
     //! \param[in] precision   precision value to control how tigh should the
     //!                        voxelization be w.r.t. the implicit function.
+    //! \param[in] isUniform   indicates whether the voxelization being constructed
+    //!                        is adaptive or not.
     //! \param[in] distFunc    distance function.
     //! \param[in] depth       current depth (pass 0 to start).
     poly_VoxelSplitTask(poly_SVO*                   pVoxel,
                         const double                minCellSize,
                         const double                maxCellSize,
                         const double                precision,
+                        const bool                  isUniform,
                         const t_ptr<poly_RealFunc>& distFunc,
                         const unsigned              depth)
     //
@@ -69,6 +72,7 @@ namespace mobius
       m_fMinCellSize (minCellSize),
       m_fMaxCellSize (maxCellSize),
       m_fPrecision   (precision),
+      m_bUniform     (isUniform),
       m_func         (distFunc),
       m_iDepth       (depth)
     {}
@@ -90,6 +94,7 @@ namespace mobius
                                      m_fMinCellSize,
                                      m_fMaxCellSize,
                                      m_fPrecision,
+                                     m_bUniform,
                                      m_func,
                                      m_iDepth + 1);
     }
@@ -116,7 +121,7 @@ namespace mobius
                             { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} },
                             { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} } };
 
-      // Get distances which are already available at cell nodes.
+      // Fill the distances that are already available at cell nodes.
       for ( int nx = 0; nx < 2; ++nx )
       {
         for ( int ny = 0; ny < 2; ++ny )
@@ -142,14 +147,16 @@ namespace mobius
       const t_xyz& P7       = m_pVoxel->GetCornerMax();
       t_xyz        diagVec  = P7 - P0;
       const double halfSize = 0.5*diagVec.Modulus();
-      const double cellSize = std::max( fabs( diagVec.X() ), std::max( fabs( diagVec.Y() ), fabs( diagVec.Z() ) ) );
-      bool         toSplit  = (cellSize > m_fMaxCellSize);
+      const double cellSize = std::max( fabs( diagVec.X() ),
+                                        std::max( fabs( diagVec.Y() ),
+                                                  fabs( diagVec.Z() ) ) );
+      bool         toSplit;
 
       // Check stop criterion.
       if ( cellSize < m_fMaxCellSize )
       {
         if ( cellSize < m_fMinCellSize || // Max resolution is reached.
-             minDistance > halfSize ) // No geometry inside.
+             (!m_bUniform && minDistance > halfSize) ) // No geometry inside a voxel being constructed in adaptive way.
         {
           return; // Halt the splitting process.
         }
@@ -180,44 +187,51 @@ namespace mobius
        *  the current voxel will be split.
        * ============================================= */
 
-      // Distances at intermediate points to compare with the real distances
-      // computed above by the distance function.
-      double t[3][3][3] = { { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} },
-                            { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} },
-                            { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} } };
-
-      // Compute the test distances by averaging the corner ones.
-      for ( int i = 0; i < 3; i += 2 )
+      if ( m_bUniform )
       {
-        for ( int j = 0; j < 3; j += 2 )
-        {
-          t[1][i][j] = ( f[0][i][j] + f[2][i][j] )*0.5;
-          t[i][1][j] = ( f[i][0][j] + f[i][2][j] )*0.5;
-          t[i][j][1] = ( f[i][j][0] + f[i][j][2] )*0.5;
-        }
+        toSplit = true;
       }
-      //
-      for ( int i = 0; i < 3; i += 2 )
+      else
       {
-        t[i][1][1] = ( f[i][0][1] + f[i][2][1] )*0.5;
-        t[1][i][1] = ( f[0][i][1] + f[2][i][1] )*0.5;
-        t[1][1][i] = ( f[0][1][i] + f[2][1][i] )*0.5;
-      }
-      //
-      t[1][1][1] = ( f[0][1][1] + f[2][1][1] )*0.5;
+        // Interpolated Distances at intermediate points to compare with the real
+        // distances computed by the distance function.
+        double t[3][3][3] = { { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} },
+                              { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} },
+                              { {0, 0, 0}, {0, 0, 0}, {0, 0, 0} } };
 
-      // If the average distance is significantly greater than the fairly
-      // computed distance, then the linear approximation is not sufficiently
-      // precise. In such situation, the voxel should be split.
-      for ( int nx = 0; nx < 3; ++nx )
-      {
-        for ( int ny = 0; ny < 3; ++ny )
+        // Compute the test distances by averaging the corner ones.
+        for ( int i = 0; i < 3; i += 2 )
         {
-          for (int nz = 0; nz < 3; ++nz )
+          for ( int j = 0; j < 3; j += 2 )
           {
-            if ( nx == 1 || ny == 1 || nz == 1 ) // Any inner point.
+            t[1][i][j] = ( f[0][i][j] + f[2][i][j] )*0.5;
+            t[i][1][j] = ( f[i][0][j] + f[i][2][j] )*0.5;
+            t[i][j][1] = ( f[i][j][0] + f[i][j][2] )*0.5;
+          }
+        }
+        //
+        for ( int i = 0; i < 3; i += 2 )
+        {
+          t[i][1][1] = ( f[i][0][1] + f[i][2][1] )*0.5;
+          t[1][i][1] = ( f[0][i][1] + f[2][i][1] )*0.5;
+          t[1][1][i] = ( f[0][1][i] + f[2][1][i] )*0.5;
+        }
+        //
+        t[1][1][1] = ( f[0][1][1] + f[2][1][1] )*0.5;
+
+        // If the average distance is significantly greater than the fairly
+        // computed distance, then the linear approximation is not sufficiently
+        // precise. In such situation, the voxel should be split.
+        for ( int nx = 0; nx < 3; ++nx )
+        {
+          for ( int ny = 0; ny < 3; ++ny )
+          {
+            for ( int nz = 0; nz < 3; ++nz )
             {
-              toSplit |= std::fabs( f[nx][nz][nz] - t[nx][ny][nz] ) > m_fPrecision;
+              if ( nx == 1 || ny == 1 || nz == 1 ) // Any inner point.
+              {
+                toSplit |= ( std::fabs( f[nx][ny][nz] - t[nx][ny][nz] ) > m_fPrecision );
+              }
             }
           }
         }
@@ -251,7 +265,9 @@ namespace mobius
         subTasks.emplace_back( this->deriveTask(pChild) );
 
         size_t nx, ny, nz;
-        poly_SVO::GetCornerLocation(subID, nx, ny, nz);
+        nx = (subID >> 0) & 1;
+        ny = (subID >> 1) & 1;
+        nz = (subID >> 2) & 1;
 
         // P0 of the new octant.
         const t_xyz childP0( P0.X() + 0.5*diagVec.X()*nx,
@@ -272,7 +288,7 @@ namespace mobius
         {
           for ( int cny = 0; cny < 2; ++cny )
           {
-            for (int cnz = 0; cnz < 2; ++cnz )
+            for ( int cnz = 0; cnz < 2; ++cnz )
             {
               const double dist = f[cnx + nx][cny + ny][cnz + nz];
 
@@ -296,6 +312,7 @@ namespace mobius
     double               m_fMinCellSize; //!< Resolution to control the SVO fineness.
     double               m_fMaxCellSize; //!< Max cell size to control SVO resolution in empty space.
     double               m_fPrecision;   //!< Precision of linear approximation.
+    bool                 m_bUniform;     //!< Uniform/adaptive voxelization mode.
     t_ptr<poly_RealFunc> m_func;         //!< Distance function.
     unsigned             m_iDepth;       //!< Depth of the hierarchy.
 
@@ -306,49 +323,21 @@ namespace mobius
 
 bool mobius::poly_DistanceField::IsIn(poly_SVO* pNode)
 {
-  for ( size_t k = 0; k < 8; ++k )
-  {
-    if ( pNode->GetScalar(k) > 0 )
-      return false;
-  }
-
-  return true;
+  return pNode->IsNegative();
 }
 
 //-----------------------------------------------------------------------------
 
 bool mobius::poly_DistanceField::IsOut(poly_SVO* pNode)
 {
-  for ( size_t k = 0; k < 8; ++k )
-  {
-    if ( pNode->GetScalar(k) < 0 )
-      return false;
-  }
-
-  return true;
+  return pNode->IsPositive();
 }
 
 //-----------------------------------------------------------------------------
 
 bool mobius::poly_DistanceField::IsZeroCrossing(poly_SVO* pNode)
 {
-  bool hasNegative = false, hasPositive = false;
-  for ( size_t k = 0; k < 8; ++k )
-  {
-    if ( !hasNegative && pNode->GetScalar(k) < 0 )
-    {
-      hasNegative = true;
-      continue;
-    }
-
-    if ( !hasPositive && pNode->GetScalar(k) > 0 )
-    {
-      hasPositive = true;
-      continue;
-    }
-  }
-
-  return hasNegative && hasPositive;
+  return pNode->IsZeroCrossing();
 }
 
 //-----------------------------------------------------------------------------
@@ -385,6 +374,7 @@ mobius::poly_DistanceField::~poly_DistanceField()
 bool mobius::poly_DistanceField::Build(const double                minCellSize,
                                        const double                maxCellSize,
                                        const double                precision,
+                                       const bool                  isUniform,
                                        const t_ptr<poly_RealFunc>& func)
 {
   if ( func.IsNull() )
@@ -429,7 +419,13 @@ bool mobius::poly_DistanceField::Build(const double                minCellSize,
    *  Create hierarchy.
    * ================== */
 
-  poly_VoxelSplitTask(m_pRoot, minCellSize, maxCellSize, precision, func, 0u).execute();
+  poly_VoxelSplitTask(m_pRoot,
+                      minCellSize,
+                      maxCellSize,
+                      precision,
+                      isUniform,
+                      func,
+                      0u).execute();
 
   return true;
 }

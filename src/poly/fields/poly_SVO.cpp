@@ -152,6 +152,47 @@ bool mobius::poly_SVO::IsLeaf() const
 
 //-----------------------------------------------------------------------------
 
+void mobius::poly_SVO::GetLeaves(std::vector<const poly_SVO*>& leaves,
+                                 const int                     sm) const
+{
+  this->getLeaves(this, sm, leaves);
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_SVO::IsNegative() const
+{
+  for ( size_t k = 0; k < 8; ++k )
+  {
+    if ( this->GetScalar(k) > 0 )
+      return false;
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_SVO::IsPositive() const
+{
+  for ( size_t k = 0; k < 8; ++k )
+  {
+    if ( this->GetScalar(k) < 0 )
+      return false;
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_SVO::IsZeroCrossing() const
+{
+  return !this->IsNegative() && !this->IsPositive();
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_SVO::Split()
 {
   if ( m_pChildren )
@@ -303,4 +344,35 @@ unsigned long long
   }
 
   return bytes;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_SVO::getLeaves(const poly_SVO*               pNode,
+                                 const int                     sm,
+                                 std::vector<const poly_SVO*>& leaves) const
+{
+  if ( !pNode )
+    return;
+
+  if ( pNode->IsLeaf() )
+  {
+    const bool isOn  = pNode->IsZeroCrossing ();
+    const bool isIn  = pNode->IsNegative     ();
+    const bool isOut = pNode->IsPositive     ();
+
+    if ( isOn  && (sm & ScalarMembership_On) ||
+         isIn  && (sm & ScalarMembership_In) ||
+         isOut && (sm & ScalarMembership_Out) )
+    {
+      leaves.push_back(pNode);
+    }
+  }
+  else
+  {
+    for ( size_t k = 0; k < 8; ++k )
+    {
+      this->getLeaves(pNode->GetChild(k), sm, leaves);
+    }
+  }
 }
