@@ -240,6 +240,13 @@ public:
   mobiusPoly_EXPORT poly_SVO*
     FindChild(const std::vector<size_t>& path) const;
 
+  //! Returns the depth of the octree starting from the 0-th node. This method
+  //! consults the 0-th children only, so it is only applicable when your SVO
+  //! is complete (i.e., the voxelization is uniform).
+  //! \return depth through the 0-th nodes.
+  mobiusPoly_EXPORT unsigned
+    GetDepth0() const;
+
   //! For the passed `xyz` point, this method evaluates the scalar field which
   //! is defined in the current SVO node. For that, the method goes down by the
   //! SVO hierarchy until it reaches the leaf voxel containing the relevant

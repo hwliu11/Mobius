@@ -241,6 +241,25 @@ mobius::poly_SVO*
 
 //-----------------------------------------------------------------------------
 
+unsigned mobius::poly_SVO::GetDepth0() const
+{
+  unsigned        depth = 0;
+  const poly_SVO* pNext = this;
+  //
+  do
+  {
+    pNext = pNext->GetChild(0);
+    //
+    if ( pNext != nullptr )
+      depth++;
+  }
+  while ( pNext != nullptr );
+
+  return depth;
+}
+
+//-----------------------------------------------------------------------------
+
 double mobius::poly_SVO::Eval(const t_xyz& P) const
 {
   // Find the nearest point on the box by coordinates snapping.
