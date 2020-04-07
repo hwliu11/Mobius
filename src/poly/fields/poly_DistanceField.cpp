@@ -175,7 +175,13 @@ namespace mobius
             const double samplez = P0.Z() + 0.5*diagVec.Z()*nz;
             if ( nx == 1 || ny == 1 || nz == 1 ) // Inner point.
             {
-              const double dist = m_func->Eval(samplex, sampley, samplez);
+              double dist = 0.;
+
+              #pragma omp critical
+              {
+                dist = m_func->Eval(samplex, sampley, samplez);
+              }
+
               f[nx][ny][nz] = dist;
             }
           }
@@ -301,8 +307,9 @@ namespace mobius
       // Execute splitting sub-tasks on the child octants.
       const int nTasks = int( subTasks.size() );
       //
-      //#pragma omp parallel for schedule(dynamic)
-      for ( int tt = 0; tt < nTasks; ++tt )
+      int tt = 0;
+      #pragma omp parallel for private(tt) schedule(dynamic)
+      for ( tt = 0; tt < nTasks; ++tt )
         subTasks[tt]->execute();
     }
 
