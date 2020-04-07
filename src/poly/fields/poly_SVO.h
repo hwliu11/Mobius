@@ -152,8 +152,8 @@ public:
     poly_SVO(const t_xyz& cornerMin,
              const t_xyz& cornerMax);
 
-  //! Dtor.
-  mobiusPoly_EXPORT virtual
+  //! Dtor. It is not virtual to save 8 bytes of memory.
+  mobiusPoly_EXPORT
     ~poly_SVO();
 
 public:
@@ -357,8 +357,8 @@ protected:
 
 protected:
 
-  poly_SVO** m_pChildren;  //!< Child octree nodes.
-  double     m_scalars[8]; //!< Stored scalar values.
+  poly_SVO** m_pChildren;  //!< Child octree nodes (8 bytes).
+  double     m_scalars[8]; //!< Stored scalar values (64 bytes).
 
   /*
     NOTICE: we store the corner points of each cell for convenience. It is
@@ -368,6 +368,7 @@ protected:
             points as a part of cell definition outweights the memory overheads.
   */
 
+  /* 48 bytes for corners */
   t_xyz m_cornerMin;  //!< Min corner of the SVO box.
   t_xyz m_cornerMax;  //!< Max corner of the SVO box.
 
