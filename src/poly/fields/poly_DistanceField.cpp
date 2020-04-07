@@ -177,10 +177,11 @@ namespace mobius
             {
               double dist = 0.;
 
-              #pragma omp critical
-              {
-                dist = m_func->Eval(samplex, sampley, samplez);
-              }
+              // NOTE: enabling critical section for the function
+              //       evaluation would be an overkill (I got 4
+              //       times worse performance when enabled omp
+              //       critical section here).
+              dist = m_func->Eval(samplex, sampley, samplez);
 
               f[nx][ny][nz] = dist;
             }
