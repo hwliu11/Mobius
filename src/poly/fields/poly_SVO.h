@@ -251,10 +251,15 @@ public:
   //! is defined in the current SVO node. For that, the method goes down by the
   //! SVO hierarchy until it reaches the leaf voxel containing the relevant
   //! field values.
-  //! \param[in] P point of interest.
+  //! \param[in] P       point of interest.
+  //! \param[in] bndOnly indicates whether the scalar field should only be
+  //!                    evaluated for the zero-crossing nodes. If so, then
+  //!                    for the negative nodes, the value of -1 is returned;
+  //!                    for the positive nodes, the value of 1 is returned.
   //! \return interpolated field value.
   mobiusPoly_EXPORT double
-    Eval(const t_xyz& P) const;
+    Eval(const t_xyz& P,
+         const bool   bndOnly = false) const;
 
   //! Calculates the memory occupied by the SVO hierarchy starting from this
   //! node in bytes.

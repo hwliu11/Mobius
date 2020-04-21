@@ -260,7 +260,8 @@ unsigned mobius::poly_SVO::GetDepth0() const
 
 //-----------------------------------------------------------------------------
 
-double mobius::poly_SVO::Eval(const t_xyz& P) const
+double mobius::poly_SVO::Eval(const t_xyz& P,
+                              const bool   bndOnly) const
 {
   // Find the nearest point on the box by coordinates snapping.
   const double PP[3] = { std::min( std::max( P.X(), m_cornerMin.X() ), m_cornerMax.X() ),
@@ -277,6 +278,15 @@ double mobius::poly_SVO::Eval(const t_xyz& P) const
   {
     if ( pNode->IsLeaf() )
     {
+      if ( bndOnly )
+      {
+        if ( pNode->IsNegative() )
+          return -1.;
+
+        if ( pNode->IsPositive() )
+          return 1.;
+      }
+
       // Get coordinates of the box corners.
       const double x0 = pNode->m_cornerMin.X();
       const double y0 = pNode->m_cornerMin.Y();

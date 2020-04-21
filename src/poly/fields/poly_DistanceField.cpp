@@ -350,21 +350,25 @@ bool mobius::poly_DistanceField::IsZeroCrossing(poly_SVO* pNode)
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_DistanceField::poly_DistanceField(core_ProgressEntry progress,
+mobius::poly_DistanceField::poly_DistanceField(const bool         bndMode,
+                                               core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
-: poly_RealFunc  (),
-  m_pRoot        (nullptr),
-  m_progress     (progress),
-  m_plotter      (plotter)
+: poly_RealFunc (),
+  m_pRoot       (nullptr),
+  m_bBndMode    (bndMode),
+  m_progress    (progress),
+  m_plotter     (plotter)
 {}
 
 //-----------------------------------------------------------------------------
 
 mobius::poly_DistanceField::poly_DistanceField(poly_SVO*          octree,
+                                               const bool         bndMode,
                                                core_ProgressEntry progress,
                                                core_PlotterEntry  plotter)
 : poly_RealFunc (),
   m_pRoot       (octree),
+  m_bBndMode    (bndMode),
   m_progress    (progress),
   m_plotter     (plotter)
 {
@@ -445,7 +449,7 @@ double mobius::poly_DistanceField::Eval(const double x,
                                         const double z) const
 {
   if ( m_pRoot != nullptr )
-    return m_pRoot->Eval( t_xyz(x, y, z) );
+    return m_pRoot->Eval( t_xyz(x, y, z), m_bBndMode );
 
   return DBL_MAX;
 }

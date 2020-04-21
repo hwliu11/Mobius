@@ -71,18 +71,22 @@ public:
 public:
 
   //! Ctor.
+  //! \param[in] bndMode  boundary evaluation mode.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusPoly_EXPORT
-    poly_DistanceField(core_ProgressEntry progress = nullptr,
+    poly_DistanceField(const bool         bndMode  = false,
+                       core_ProgressEntry progress = nullptr,
                        core_PlotterEntry  plotter  = nullptr);
 
   //! Ctor with initialization.
-  //! \param[in] octree   octree to handle.
+  //! \param[in] pRoot    octree to handle.
+  //! \param[in] bndMode  boundary evaluation mode.
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusPoly_EXPORT
     poly_DistanceField(poly_SVO*          pRoot,
+                       const bool         bndMode  = false,
                        core_ProgressEntry progress = nullptr,
                        core_PlotterEntry  plotter  = nullptr);
 
@@ -143,6 +147,15 @@ public:
     m_pRoot = pRoot;
   }
 
+  //! Enables/disables the boundary evaluation mode. In this mode,
+  //! only the zero-crossing voxels are computed precisely. The inner
+  //! and the outer voxels are computed as -1 and +1 respectively.
+  //! \param[in] on the Boolean value to set.
+  void SetBoundaryEvaluationMode(const bool on)
+  {
+    m_bBndMode = on;
+  }
+
   //! Creates shallow copy of this distance field.
   //! \return copy of the field pointing to the same octree.
   t_ptr<poly_DistanceField> ShallowCopy() const
@@ -155,6 +168,7 @@ public:
 protected:
 
   poly_SVO*          m_pRoot;    //!< Root voxel.
+  bool               m_bBndMode; //!< Boundary evaluation mode.
   core_ProgressEntry m_progress; //!< Progress notifier.
   core_PlotterEntry  m_plotter;  //!< Imperative plotter.
 
