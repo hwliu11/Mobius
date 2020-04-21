@@ -32,6 +32,7 @@
 #define poly_Triangle_HeaderFile
 
 // Poly includes
+#include <mobius/poly_Attribute.h>
 #include <mobius/poly_Handles.h>
 
 // Core includes
@@ -75,9 +76,34 @@ public:
     hv2 = m_hVertices[2];
   }
 
+  //! \return attributes.
+  int GetAttributes() const
+  {
+    return m_iAttrs;
+  }
+
+  //! \return non-const reference to the attributes.
+  int& ChangeAttributes()
+  {
+    return m_iAttrs;
+  }
+
+  //! Flags this triangle as deleted.
+  void SetDeleted()
+  {
+    m_iAttrs |= Attribute_Deleted;
+  }
+
+  //! \return true if this triangle is marked as deleted.
+  bool IsDeleted() const
+  {
+    return (m_iAttrs & Attribute_Deleted) > 0;
+  }
+
 protected:
 
   poly_VertexHandle m_hVertices[3]; //!< Handles to the vertices.
+  int               m_iAttrs;       //!< Attributes.
 
 };
 

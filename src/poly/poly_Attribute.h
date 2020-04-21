@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 17 September 2018
+// Created on: 21 April 2020
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2020-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,59 +28,22 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-// Own include
-#include <mobius/poly_Mesh.h>
+#ifndef poly_Attribute_HeaderFile
+#define poly_Attribute_HeaderFile
 
-//-----------------------------------------------------------------------------
+// Poly includes
+#include <mobius/poly.h>
 
-mobius::poly_Mesh::poly_Mesh() : core_OBJECT()
-{}
+namespace mobius {
 
-//-----------------------------------------------------------------------------
-
-bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
-                                         poly_TriangleHandle&      t0,
-                                         poly_TriangleHandle&      t1,
-                                         poly_TriangleHandle&      t2)
+//! \ingroup MOBIUS_POLY
+//!
+//! Attributes associated with mesh elements.
+enum poly_Attribute
 {
-  // Get the triangle to split.
-  poly_Triangle t;
-  if ( !this->GetTriangle(ht, t) )
-    return false;
+  Attribute_Deleted = 0x001
+};
 
-  // Get vertices on the triangle to split.
-  poly_VertexHandle htv[3];
-  t.GetVertices(htv[0], htv[1], htv[2]);
-  //
-  t_xyz midPt;
-  poly_Vertex tv[3];
-  for ( size_t k = 0; k < 3; ++k )
-  {
-    this->GetVertex(htv[k], tv[k]);
-
-    midPt += tv[k];
-  }
-  //
-  midPt /= 3.0;
-
-  // Add midpoint vertex.
-  poly_VertexHandle hmv = this->AddVertex(midPt);
-
-  // Add new triangles.
-  t0 = this->AddTriangle(htv[0], htv[1], hmv);
-  t1 = this->AddTriangle(hmv, htv[1], htv[2]);
-  t2 = this->AddTriangle(htv[0], hmv, htv[2]);
-
-  // Remove the refined triangle.
-  if ( remove )
-    this->RemoveTriangle(ht);
-
-  return true;
 }
-//-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
-{
-  poly_TriangleHandle hrt[3];
-  return this->RefineByMidpoint(ht, hrt[0], hrt[1], hrt[2]);
-}
+#endif

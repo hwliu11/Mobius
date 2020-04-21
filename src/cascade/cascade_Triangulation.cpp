@@ -31,6 +31,10 @@
 // Own include
 #include <mobius/cascade_Triangulation.h>
 
+// OpenCascade includes
+#include <NCollection_DataMap.hxx>
+#include <Poly_CoherentTriangulation.hxx>
+
 //-----------------------------------------------------------------------------
 
 mobius::cascade_Triangulation::cascade_Triangulation(const t_ptr<poly_Mesh>& mobiusMesh)
@@ -92,42 +96,52 @@ void mobius::cascade_Triangulation::convertToOpenCascade()
   if ( !m_mobiusMesh->GetNumVertices() || !m_mobiusMesh->GetNumTriangles() )
     return;
 
-  TColgp_Array1OfPnt    nodes     ( 1, m_mobiusMesh->GetNumVertices() );
-  Poly_Array1OfTriangle triangles ( 1, m_mobiusMesh->GetNumTriangles() );
+  Handle(Poly_CoherentTriangulation) cohTris = new Poly_CoherentTriangulation;
+
+  NCollection_DataMap<int, int> nodes;
 
   // Populate array of nodes.
-  for ( int i = 1; i <= nodes.Length(); ++i )
+  for ( poly_Mesh::VertexIterator vit(m_mobiusMesh); vit.More(); vit.Next() )
   {
     // Get vertex of Mobius.
     poly_Vertex v;
-    poly_VertexHandle vh(i-1);
+    poly_VertexHandle hv = vit.Current();
     //
-    m_mobiusMesh->GetVertex(vh, v);
+    m_mobiusMesh->GetVertex(hv, v);
 
-    // Set node of OpenCascade.
-    nodes(i) = gp_Pnt( v.X(), v.Y(), v.Z() );
+    // Add node of OpenCascade.
+    const int occNodeId = cohTris->SetNode( gp_XYZ( v.X(), v.Y(), v.Z() ) );
+
+    // Register node mapping.
+    nodes.Bind( hv.GetIdx(), occNodeId );
   }
 
   // Populate array of triangles.
-  for ( int i = 1; i <= triangles.Length(); ++i )
+  int occIdx = 1;
+  for ( poly_Mesh::TriangleIterator tit(m_mobiusMesh); tit.More(); tit.Next() )
   {
     // Get triangle of Mobius.
     poly_Triangle t;
-    poly_TriangleHandle th(i-1);
+    poly_TriangleHandle th = tit.Current();
     //
     m_mobiusMesh->GetTriangle(th, t);
-    //
+
+    // Skip dead triangles.
+    if ( t.IsDeleted() )
+      continue;
+
+    // Get vertices.
     poly_VertexHandle vh0, vh1, vh2;
     t.GetVertices(vh0, vh1, vh2);
 
-    // Set triangle of OpenCascade.
-    triangles(i) = Poly_Triangle(vh0.GetIdx() + 1,
-                                 vh1.GetIdx() + 1,
-                                 vh2.GetIdx() + 1);
+    // Add triangle of OpenCascade.
+    cohTris->AddTriangle( nodes( vh0.GetIdx() ),
+                          nodes( vh1.GetIdx() ),
+                          nodes( vh2.GetIdx() ) );
   }
 
   // Construct triangulation.
-  m_occtMesh = new Poly_Triangulation(nodes, triangles);
+  m_occtMesh = cohTris->GetTriangulation();
 
   // Set done.
   m_bIsDone = true;

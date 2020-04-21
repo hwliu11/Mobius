@@ -34,6 +34,8 @@
 // Poly includes
 #include <mobius/poly.h>
 
+#define Mobius_InvalidHandleIndex -1
+
 namespace mobius {
 
 //-----------------------------------------------------------------------------
@@ -50,7 +52,7 @@ public:
   //! Ctor accepting the optional index.
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
-  explicit poly_BaseHandle(const int _idx = -1) : m_iIdx(_idx) {}
+  explicit poly_BaseHandle(const int _idx = Mobius_InvalidHandleIndex) : m_iIdx(_idx) {}
 
 public:
 
@@ -61,7 +63,7 @@ public:
   bool IsValid() const { return m_iIdx >= 0; }
 
   //! Invalidates this handle.
-  void Invalidate() { m_iIdx = -1; }
+  void Invalidate() { m_iIdx = Mobius_InvalidHandleIndex; }
 
   //! Compares this handle with the passed one.
   //! \param[in] _rhs another handle to compare this handle with.
@@ -116,7 +118,7 @@ struct poly_VertexHandle : public poly_BaseHandle
   //! Ctor accepting the optional index.
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
-  explicit poly_VertexHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
+  explicit poly_VertexHandle(const int _idx = Mobius_InvalidHandleIndex) : poly_BaseHandle(_idx) {}
 };
 
 //-----------------------------------------------------------------------------
@@ -129,7 +131,7 @@ struct poly_EdgeHandle : public poly_BaseHandle
   //! Ctor accepting the optional index.
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
-  explicit poly_EdgeHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
+  explicit poly_EdgeHandle(const int _idx = Mobius_InvalidHandleIndex) : poly_BaseHandle(_idx) {}
 };
 
 //-----------------------------------------------------------------------------
@@ -142,7 +144,7 @@ struct poly_TriangleHandle : public poly_BaseHandle
   //! Ctor accepting the optional index.
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
-  explicit poly_TriangleHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
+  explicit poly_TriangleHandle(const int _idx = Mobius_InvalidHandleIndex) : poly_BaseHandle(_idx) {}
 };
 
 //-----------------------------------------------------------------------------
@@ -155,7 +157,7 @@ struct poly_QuadHandle : public poly_BaseHandle
   //! Ctor accepting the optional index.
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
-  explicit poly_QuadHandle(const int _idx = -1) : poly_BaseHandle(_idx) {}
+  explicit poly_QuadHandle(const int _idx = Mobius_InvalidHandleIndex) : poly_BaseHandle(_idx) {}
 };
 
 }

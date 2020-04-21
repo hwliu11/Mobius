@@ -58,12 +58,32 @@ public:
 
 public:
 
+  //! Refines the triangle of interest by its midpoint.
+  //! \param[in]  ht  handle of the triangle to refine.
+  //! \param[out] ht0 handle of the first created triangle.
+  //! \param[out] ht1 handle of the second created triangle.
+  //! \param[out] ht2 handle of the third created triangle.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    RefineByMidpoint(const poly_TriangleHandle ht,
+                     poly_TriangleHandle&      ht0,
+                     poly_TriangleHandle&      ht1,
+                     poly_TriangleHandle&      ht2);
+
+  //! Refines the triangle of interest by its midpoint.
+  //! \param[in] ht handle of the triangle to refine.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    RefineByMidpoint(const poly_TriangleHandle ht);
+
+public:
+
   //! Returns vertex by its handle.
   //! \param[in]  h      handle of a vertex to access.
   //! \param[out] vertex vertex.
   //! \return false if there is no such vertex.
   bool GetVertex(const poly_VertexHandle h,
-                 poly_Vertex&            vertex)
+                 poly_Vertex&            vertex) const
   {
     const int idx = h.GetIdx();
     if ( idx < 0 || idx > int( m_vertices.size() ) ) return false;
@@ -77,7 +97,7 @@ public:
   //! \param[out] edge edge.
   //! \return false if there is no such edge.
   bool GetEdge(const poly_EdgeHandle h,
-               poly_Edge&            edge)
+               poly_Edge&            edge) const
   {
     const int idx = h.GetIdx();
     if ( idx < 0 || idx > int( m_edges.size() ) ) return false;
@@ -91,7 +111,7 @@ public:
   //! \param[out] triangle triangle.
   //! \return false if there is no such triangle.
   bool GetTriangle(const poly_TriangleHandle h,
-                   poly_Triangle&            triangle)
+                   poly_Triangle&            triangle) const
   {
     const int idx = h.GetIdx();
     if ( idx < 0 || idx > int( m_triangles.size() ) ) return false;
@@ -105,7 +125,7 @@ public:
   //! \param[out] quad quad.
   //! \return false if there is no such quad.
   bool GetQuad(const poly_QuadHandle h,
-               poly_Quad&            quad)
+               poly_Quad&            quad) const
   {
     const int idx = h.GetIdx();
     if ( idx < 0 || idx > int( m_quads.size() ) ) return false;
@@ -183,6 +203,18 @@ public:
     m_triangles.push_back( poly_Triangle(hV0, hV1, hV2) );
     poly_TriangleHandle hTriangle( int( m_triangles.size() ) - 1 );
     return hTriangle;
+  }
+
+  //! Removes the triangle with the given handle.
+  //! \param[in] h handle of the triangle to remove.
+  //! \return true in case of success, false -- otherwise.
+  bool RemoveTriangle(const poly_TriangleHandle h)
+  {
+    const int idx = h.GetIdx();
+    if ( idx < 0 || idx > int( m_triangles.size() ) ) return false;
+
+    m_triangles[idx].SetDeleted();
+    return true;
   }
 
   //! Creates a new invalid quad.

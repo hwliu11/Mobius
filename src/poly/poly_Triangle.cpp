@@ -36,6 +36,7 @@
 mobius::poly_Triangle::poly_Triangle()
 {
   m_hVertices[0] = m_hVertices[1] = m_hVertices[2] = poly_VertexHandle();
+  m_iAttrs = 0x0;
 }
 
 //-----------------------------------------------------------------------------
@@ -47,4 +48,5 @@ mobius::poly_Triangle::poly_Triangle(const poly_VertexHandle hv0,
   m_hVertices[0] = hv0;
   m_hVertices[1] = hv1;
   m_hVertices[2] = hv2;
+  m_iAttrs       = 0x0;
 }

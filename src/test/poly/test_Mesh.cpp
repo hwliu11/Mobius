@@ -299,3 +299,56 @@ mobius::outcome
                      filename_mesh_006,
                      1443, 0, 12, 1325);
 }
+
+//-----------------------------------------------------------------------------
+
+//! Tests midpoint refinement.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::refineTriangleByMidpoint(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+
+  // Add vertices.
+  poly_VertexHandle hv0 = mesh->AddVertex(0., 0., 0.);
+  poly_VertexHandle hv1 = mesh->AddVertex(1., 0., 0.);
+  poly_VertexHandle hv2 = mesh->AddVertex(0., 1., 0.);
+
+  // Add triangle.
+  poly_TriangleHandle ht = mesh->AddTriangle(hv0, hv1, hv2);
+
+  // Refine triangle.
+  if ( !mesh->RefineByMidpoint(ht) )
+  {
+    return res.failure();
+  }
+
+  // Validate the number of vertices.
+  if ( mesh->GetNumVertices() != 4 )
+  {
+    return res.failure();
+  }
+
+  // Validate the number of triangles: one "dead" is there.
+  if ( mesh->GetNumTriangles() != 4 )
+  {
+    return res.failure();
+  }
+
+  // Verify the "is deleted" flag.
+  poly_Triangle t;
+  if ( !mesh->GetTriangle(ht, t) )
+  {
+    return res.failure();
+  }
+  //
+  if ( !t.IsDeleted() )
+  {
+    return res.failure();
+  }
+
+  return res.success();
+}

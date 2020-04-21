@@ -79,6 +79,7 @@ public:
               << &testReadSTL04
               << &testReadPLY01
               << &testReadPLY02
+              << &refineTriangleByMidpoint
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -105,13 +106,14 @@ private:
 
 private:
 
-  static outcome testCreateVertex (const int funcID);
-  static outcome testReadSTL01    (const int funcID);
-  static outcome testReadSTL02    (const int funcID);
-  static outcome testReadSTL03    (const int funcID);
-  static outcome testReadSTL04    (const int funcID);
-  static outcome testReadPLY01    (const int funcID);
-  static outcome testReadPLY02    (const int funcID);
+  static outcome testCreateVertex         (const int funcID);
+  static outcome testReadSTL01            (const int funcID);
+  static outcome testReadSTL02            (const int funcID);
+  static outcome testReadSTL03            (const int funcID);
+  static outcome testReadSTL04            (const int funcID);
+  static outcome testReadPLY01            (const int funcID);
+  static outcome testReadPLY02            (const int funcID);
+  static outcome refineTriangleByMidpoint (const int funcID);
 
 };
 
