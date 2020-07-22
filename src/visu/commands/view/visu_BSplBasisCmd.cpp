@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 05 March 2015
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,69 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+// Own include
+#include <mobius/visu_BSplBasisCmd.h>
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// geom includes
+#include <mobius/geom_BSplineCurve.h>
 
-// STL includes
-#include <map>
-
-namespace mobius {
-
-//! \ingroup MOBIUS_GEOM
-//!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Executes command.
+//! \return true in case of success, false -- otherwise.
+bool mobius::visu_BSplBasisCmd::Execute()
 {
-public:
-
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
-
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
-
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
+  std::cout << this->Name() << std::endl;
+  if ( this->Argc() != 1 )
   {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
+    std::cout << "Error: degree or b-curve name expected" << std::endl;
+    return false;
   }
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
+  std::string name = this->Arg(0);
+  t_ptr<core_OBJECT> obj = this->CmdRepo()->Vars().FindVariable(name);
+
+  std::vector<double> U;
+  int nKnots = 0;
+  int deg    = 0;
+  //
+  if ( obj.IsNull() && core::str::is_number(name) )
   {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
+    deg = core::str::to_number<int>(name);
+    std::cout << "Degree is " << deg << std::endl;
+
+    nKnots = 2*(deg + 1);
+    U.reserve(nKnots);
+
+    for ( int k = 0; k < deg + 1; ++k )
+      U[k] = 0.0;
+    for ( int k = deg + 1; k < 2*(deg + 1); ++k )
+      U[k] = 1.0;
+  }
+  else if ( !obj.IsNull() )
+  {
+    t_ptr<t_bcurve> crv = t_ptr<t_bcurve>::DownCast(obj);
+    if ( crv.IsNull() )
+    {
+      std::cout << "Only b-curves are accepted in this command" << std::endl;
+      return false;
+    }
+
+    deg = crv->GetDegree();
+    std::cout << "Degree of your curve is " << deg << std::endl;
+
+    std::vector<double> U_vec = crv->GetKnots();
+    nKnots = (int) U_vec.size();
+  }
+  else
+  {
+    std::cout << "We have no idea what you mean when saying '" << name << "'..." << std::endl;
+    return false;
   }
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
+  t_ptr<visu_ActorBSplBasis>
+    Actor = new visu_ActorBSplBasis(U, deg);
 
-    return it->second;
-  }
+  this->Scene()->Add( Actor.Access() );
+  //this->Scene()->InstallAxes();
 
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
-
-    return it->second;
-  }
-
-};
-
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
-
-#endif
+  return true;
+}

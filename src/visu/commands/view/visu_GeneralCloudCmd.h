@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 09 June 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,79 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+#ifndef visu_GeneralCloudCmd_HeaderFile
+#define visu_GeneralCloudCmd_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// visu includes
+#include <mobius/visu_ActorPositionCloud.h>
+#include <mobius/visu_ViewCmd.h>
 
-// STL includes
-#include <map>
+// geom includes
+#include <mobius/geom_PositionCloud.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_VISU
 //!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Point cloud for general test case.
+class visu_GeneralCloudCmd : public visu_ViewCmd
 {
 public:
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  //! Constructor.
+  //! \param CmdRepo [in] command repo.
+  //! \param Picker [in] instance of Picker.
+  visu_GeneralCloudCmd(const t_ptr<visu_CommandRepo>& CmdRepo,
+                         const t_ptr<visu_Picker>& Picker)
+  : visu_ViewCmd(CmdRepo, Picker) {}
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+  //! Destructor.
+  virtual ~visu_GeneralCloudCmd() {}
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
+public:
+
+  //! Returns human-readable name of the command.
+  //! \return name.
+  inline virtual std::string Name() const
   {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
+    return "General test cloud";
   }
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
+public:
+
+  //! Executes command.
+  //! \return true in case of success, false -- otherwise.
+  virtual bool Execute()
   {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
-  }
+    std::cout << this->Name().c_str() << std::endl;
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
+    std::string qrFilename = "C:\\Work\\quaoar\\data\\point_clouds\\mcad\\anc101\\step5.t_xyz";
 
-    return it->second;
-  }
+    t_ptr<t_pcloud> CommonCloud = new t_pcloud;
+    if ( !CommonCloud->Load(qrFilename) )
+    {
+      std::cout << "Cannot read point cloud" << std::endl;
+      return false;
+    }
 
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
+    // Prepare Actor
+    visu_ColorRGB<GLubyte> color;
+    visu_ColorSelector::ColorByIndex_d( this->Arg<int>(1, 13), color );
+    t_ptr<visu_ActorPositionCloud> Actor = new visu_ActorPositionCloud(CommonCloud, color);
+    Actor->SetPointSize( (GLfloat) this->Arg<int>(0, 5) );
 
-    return it->second;
+    /* ================
+     *  Populate scene
+     * ================ */
+
+    this->Scene()->Add( Actor.Access() );
+    //this->Scene()->InstallAxes();
+
+    return true;
   }
 
 };
 
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
+}
 
 #endif

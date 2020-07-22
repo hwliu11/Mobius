@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 19 July 2013
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,89 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+#ifndef visu_Scene_HeaderFile
+#define visu_Scene_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
-
-// STL includes
-#include <map>
+// visu includes
+#include <mobius/visu_ActorCartesianAxes.h>
+#include <mobius/visu_Camera.h>
+#include <mobius/visu_UniqueName.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_VISU
 //!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Class representing OpenGL scene.
+class visu_Scene : public core_OBJECT
 {
 public:
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  mobiusVisu_EXPORT
+    visu_Scene();
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+  mobiusVisu_EXPORT
+    visu_Scene(const t_ptr<visu_Camera>& camera);
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
-  {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
-  }
+  mobiusVisu_EXPORT virtual
+    ~visu_Scene();
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
-  {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
-  }
+public:
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
+  mobiusVisu_EXPORT virtual void
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const;
 
-    return it->second;
-  }
+  mobiusVisu_EXPORT void
+    GL_Draw();
 
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
+  mobiusVisu_EXPORT void
+    Add(const t_ptr<visu_Actor>& actor,
+        const std::string& name = "");
 
-    return it->second;
-  }
+  mobiusVisu_EXPORT TActorVec
+    Actors() const;
+
+  mobiusVisu_EXPORT std::vector<std::string>
+    ActorNames() const;
+
+  mobiusVisu_EXPORT t_ptr<visu_Actor>
+    FindActor(const std::string& name) const;
+
+  mobiusVisu_EXPORT void
+    Clear();
+
+  mobiusVisu_EXPORT void
+    Clear(const std::string& actorName);
+
+  mobiusVisu_EXPORT void
+    InstallAxes();
+
+  mobiusVisu_EXPORT void
+    SetPickingRay(const t_ptr<visu_Actor>& actor);
+
+  mobiusVisu_EXPORT const t_ptr<visu_Camera>&
+    Camera() const;
+
+  mobiusVisu_EXPORT void
+    SetCamera(const t_ptr<visu_Camera>& camera);
+
+private:
+
+  //! Collection of Actors to draw.
+  TStringActorMap m_actors;
+
+  //! Axes Actor takes a special status in Scene.
+  t_ptr<visu_ActorCartesianAxes> m_axesActor;
+
+  //! Actor for picking ray.
+  t_ptr<visu_Actor> m_pickActor;
+
+  //! Camera.
+  t_ptr<visu_Camera> m_camera;
 
 };
 
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
+}
 
 #endif

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 02 September 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,76 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+#ifndef visu_DataPositionCloud_HeaderFile
+#define visu_DataPositionCloud_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// visu includes
+#include <mobius/visu_DataSet.h>
 
-// STL includes
-#include <map>
+// geom includes
+#include <mobius/geom_PositionCloud.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_VISU
 //!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Position cloud data.
+class visu_DataPositionCloud : public visu_DataSet
 {
 public:
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  mobiusVisu_EXPORT
+    visu_DataPositionCloud(const t_ptr<t_pcloud>& cloud = NULL);
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+  mobiusVisu_EXPORT virtual
+    ~visu_DataPositionCloud();
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
+public:
+
+  //! Sets geometric point cloud.
+  //! \param cloud [in] geometric position cloud to set for visualization.
+  void SetCloud(const t_ptr<t_pcloud>& cloud)
   {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
+    m_cloud = cloud;
   }
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
+  //! Returns geometric point cloud.
+  //! \return geometric position cloud.
+  const t_ptr<t_pcloud>& GetCloud() const
   {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
+    return m_cloud;
   }
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
+  //! Adds the passed point to the data set.
+  void AddPoint(const t_xyz& point)
   {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
+    if ( m_cloud.IsNull() )
+      m_cloud = new t_pcloud();
 
-    return it->second;
+    m_cloud->AddPoint(point);
   }
 
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
+public:
 
-    return it->second;
-  }
+  mobiusVisu_EXPORT virtual void
+    Join(const t_ptr<visu_DataSet>& data);
+
+  mobiusVisu_EXPORT virtual void
+    Clear();
+
+private:
+
+  void excludeRepetitions(const t_ptr<t_pcloud>& cloud_1,
+                          const t_ptr<t_pcloud>& cloud_2,
+                          std::vector<int>&    indices_to_keep);
+
+private:
+
+  //! Geometric point cloud to visualize.
+  t_ptr<t_pcloud> m_cloud;
 
 };
 
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
+}
 
 #endif

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 07 February 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,91 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+#ifndef visu_ActorBSplSurface_HeaderFile
+#define visu_ActorBSplSurface_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// visu includes
+#include <mobius/visu_ActorInsensitiveSurface.h>
 
-// STL includes
-#include <map>
+// geom includes
+#include <mobius/geom_BSplineSurface.h>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_VISU
 //!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Class representing OpenGL Actor dedicated to visualization of B-spline
+//! surfaces.
+class visu_ActorBSplSurface : public visu_ActorInsensitiveSurface
 {
 public:
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  mobiusVisu_EXPORT
+    visu_ActorBSplSurface(const t_ptr<t_bsurf>& Surf);
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+  mobiusVisu_EXPORT virtual
+    ~visu_ActorBSplSurface();
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
+public:
+
+  mobiusVisu_EXPORT virtual void
+    GL_Draw();
+
+public:
+
+  //! Enables curvature "combs" diagram in U directions.
+  //! \param on [in] true/false;
+  void SetHedgehog_U(const bool on)
   {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
+    m_bHedgehog_U = on;
   }
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
+  //! Enables curvature "combs" diagram in V directions.
+  //! \param on [in] true/false;
+  void SetHedgehog_V(const bool on)
   {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
+    m_bHedgehog_V = on;
   }
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
+  //! Enables/disables visualization of control polygon.
+  //! \param on [in] true/false;
+  void SetPoles(const bool on)
   {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
-
-    return it->second;
+    m_bNoPoly = !on;
   }
 
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
+protected:
 
-    return it->second;
-  }
+  mobiusVisu_EXPORT void
+    fillIsolineProps(const t_ptr<t_bcurve>&             Iso,
+                     std::vector< std::vector<t_xyz> >& Points,
+                     std::vector< std::vector<t_xyz> >& Curvatures);
+
+private:
+
+  //! U-isos.
+  std::vector< std::vector<t_xyz> > m_isoU;
+
+  //! Curvatures of U-isos.
+  std::vector< std::vector<t_xyz> > m_isoU_N;
+
+  //! V-isos.
+  std::vector< std::vector<t_xyz> > m_isoV;
+
+  //! Curvatures of V-isos.
+  std::vector< std::vector<t_xyz> > m_isoV_N;
+
+  //! Trigger for curvature "combs" diagram in U direction.
+  bool m_bHedgehog_U;
+
+  //! Trigger for curvature "combs" diagram in V direction.
+  bool m_bHedgehog_V;
+
+  //! Indicates whether to render the control polygon.
+  bool m_bNoPoly;
 
 };
 
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
+}
 
 #endif

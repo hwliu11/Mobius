@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 01 September 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,50 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+// Own include
+#include <mobius/visu_UniqueName.h>
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// STD includes
+#include <algorithm>
 
-// STL includes
-#include <map>
-
-namespace mobius {
-
-//! \ingroup MOBIUS_GEOM
-//!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Generates unique name trying to choose its numerical index by
+//! consulting the provided collection of already occupied names. If other
+//! names have some numerical indices at the ends, the maximal one is chosen
+//! and incremented. Otherwise, the generated name gets index 1.
+//! \param names_occupied [in] occupied names.
+//! \param base_name [in] base name.
+//! \return new unique name.
+std::string
+  mobius::visu_UniqueName::Generate(const std::vector<std::string>& names_occupied,
+                                    const std::string&              base_name)
 {
-public:
-
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
-
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
-
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
+  int idxMax = -INT_MAX;
+  const size_t numOccupied = names_occupied.size();
+  for ( size_t r = 0; r < numOccupied; ++r )
   {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
+    const std::string& nextOccupied = names_occupied[r];
+
+    // Split name by a predefined separator
+    std::vector<std::string> chunks;
+    core::str::split(nextOccupied, "_", chunks);
+
+    if ( chunks.size() < 2 )
+      continue; // We are searching for <name>_<index> format
+
+    // Get base name
+    std::string next_base_name;
+    core::str::join(chunks, next_base_name, 0, (int) (chunks.size() - 1));
+
+    if ( next_base_name != base_name )
+      continue; // Skip different names
+
+    // Extract next index
+    const int idx = core::str::to_number<int>(chunks[chunks.size() - 1]) + 1;
+    idxMax = std::max(idxMax, idx);
   }
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
-  {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
-  }
+  if ( idxMax == -INT_MAX )
+    idxMax = 1;
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
-
-    return it->second;
-  }
-
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
-
-    return it->second;
-  }
-
-};
-
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
-
-#endif
+  return base_name + "_" + core::str::to_string<int>(idxMax);
+}

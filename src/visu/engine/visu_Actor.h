@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 19 July 2013
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,75 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+#ifndef visu_Actor_HeaderFile
+#define visu_Actor_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// visu includes
+#include <mobius/visu_DataSet.h>
+
+// core includes
+#include <mobius/core_Ptr.h>
+
+// geom includes
+#include <mobius/geom_Line.h>
 
 // STL includes
 #include <map>
+#include <vector>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+//! \ingroup MOBIUS_VISU
 //!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Class representing OpenGL Actor rendered on Scene.
+class visu_Actor : public core_OBJECT
 {
 public:
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  mobiusVisu_EXPORT
+    visu_Actor();
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+  mobiusVisu_EXPORT virtual
+    ~visu_Actor();
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
-  {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
-  }
+public:
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
-  {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
-  }
+  virtual void
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const = 0;
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
+  virtual void
+    GL_Draw() = 0;
 
-    return it->second;
-  }
+public:
 
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
+  virtual t_ptr<visu_DataSet>
+    IntersectWithLine(const t_ptr<geom_Line>&) = 0;
 
-    return it->second;
-  }
+  virtual void
+    SetHiliData(const t_ptr<visu_DataSet>&) = 0;
+
+  virtual t_ptr<visu_DataSet>
+    GetHiliData() const = 0;
+
+  virtual void
+    ClearHiliData() = 0;
+
+  virtual void
+    GL_Hili() const = 0;
 
 };
 
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
+//! Collection of Actors.
+typedef std::vector< t_ptr<visu_Actor> > TActorVec;
 
-};
+//! Name-Actor pair.
+typedef std::pair< std::string, t_ptr<visu_Actor> > TStringActorPair;
+
+//! Hash table for Actors by names.
+typedef std::map< std::string, t_ptr<visu_Actor> > TStringActorMap;
+
+}
 
 #endif

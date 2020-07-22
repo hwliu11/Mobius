@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 30 April 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,43 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+// Own include
+#include <mobius/visu_CommandRepo.h>
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// visu includes
+#include <mobius/visu_BaseCmd.h>
 
-// STL includes
-#include <map>
-
-namespace mobius {
-
-//! \ingroup MOBIUS_GEOM
-//!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Registers command in repository.
+//! \param Name [in] name of the command.
+//! \param Command [in] command to register.
+void mobius::visu_CommandRepo::RegisterCommand(const std::string& Name,
+                                               const t_ptr<visu_BaseCmd>& Command)
 {
-public:
+  std::vector<std::string> commands;
+  core::str::split(Name, " ", commands);
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  for ( size_t i = 0; i < commands.size(); ++i )
+    __repo.insert( TRepoPair(commands[i], Command) );
+}
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+//! Attempts to find command in repository by the command's name.
+//! \param Name [in] name of the command to search for.
+//! \return pointer to the command if anything has been found. If not, the
+//!         resulting pointer is null.
+mobius::t_ptr<mobius::visu_BaseCmd>
+  mobius::visu_CommandRepo::FindCommand(const std::string& Name)
+{
+  TRepoMap::const_iterator cit = __repo.find(Name);
+  if ( cit == __repo.end() )
+    return NULL;
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
-  {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
-  }
+  return cit->second;
+}
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
-  {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
-  }
-
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
-
-    return it->second;
-  }
-
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
-
-    return it->second;
-  }
-
-};
-
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
-
-#endif
+//! Returns the entire collection of commands.
+//! \return map of commands.
+const mobius::visu_CommandRepo::TRepoMap&
+  mobius::visu_CommandRepo::Commands()
+{
+  return __repo;
+}

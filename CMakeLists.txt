@@ -142,6 +142,9 @@ if (WIN32)
   add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
 endif()
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/visu)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/visuApp)
+
 #-------------------------------------------------------------------------------
 # Documentation
 #-------------------------------------------------------------------------------
@@ -183,10 +186,12 @@ endif()
 # Folders
 #-------------------------------------------------------------------------------
 
-set_property(TARGET mobiusCore PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusPoly PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusBSpl PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusGeom PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusCore    PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusPoly    PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusBSpl    PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusGeom    PROPERTY FOLDER Kernel)
+set_property(TARGET mobiusVisu    PROPERTY FOLDER Visualization)
+set_property(TARGET mobiusVisuApp PROPERTY FOLDER Visualization)
 
 if (USE_OPENCASCADE)
   set_property(TARGET mobiusCascade PROPERTY FOLDER Services)

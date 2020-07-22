@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 21 May 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,34 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+// Own include
+#include <mobius/visu_Utils.h>
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
-
-// STL includes
-#include <map>
-
-namespace mobius {
-
-//! \ingroup MOBIUS_GEOM
-//!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Converts the passed Win coordinates to OpenGL world referential.
+//! \param mouseX [in] value on OX axis passing from left to right.
+//! \param mouseY [in] value on OY axis passing from top to bottom.
+//! \param X [out] resulting X value in World's referential.
+//! \param Y [out] resulting Y value in World's referential.
+//! \param Z [out] resulting Z value in World's referential.
+void mobius::visu_Utils::DisplayToWorld(const int mouseX, const int mouseY,
+                                        GLdouble& X, GLdouble& Y, GLdouble& Z)
 {
-public:
+  // Get transformations
+  GLdouble modelMatrix[16], projMatrix[16];
+  glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+  glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  // Get viewport properties
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+  GLfloat dWinx = (GLfloat) mouseX;
+  GLfloat dWiny = (GLfloat) viewport[3] - (GLfloat) mouseY; // OpenGL's OY axis passes from bottom to top
+  GLfloat dWinz;
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
-  {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
-  }
+  // Access Z (depth) value
+  glReadPixels(GLint(dWinx), GLint(dWiny), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &dWinz);
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
-  {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
-  }
-
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
-
-    return it->second;
-  }
-
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
-
-    return it->second;
-  }
-
-};
-
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
-
-#endif
+  // Convert
+  gluUnProject(dWinx, dWiny, dWinz, modelMatrix, projMatrix, viewport, &X, &Y, &Z);
+}

@@ -155,7 +155,7 @@ namespace mobius
       // Check stop criterion.
       if ( cellSize < m_fMaxCellSize )
       {
-        if ( cellSize < m_fMinCellSize || // Max resolution is reached.
+        if ( (cellSize < m_fMinCellSize) || // Max resolution is reached.
              (!m_bUniform && minDistance > halfSize) ) // No geometry inside a voxel being constructed in adaptive way.
         {
           return; // Halt the splitting process.

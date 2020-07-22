@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 03 March 2015
+// Created on: 30 April 2014
 //-----------------------------------------------------------------------------
-// Copyright (c) 2017, Sergey Slyadnev
+// Copyright (c) 2013-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,77 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef geom_SectionPatch_HeaderFile
-#define geom_SectionPatch_HeaderFile
+#ifndef visu_CommandRepo_HeaderFile
+#define visu_CommandRepo_HeaderFile
 
-// Geometry includes
-#include <mobius/geom_Surface.h>
-#include <mobius/geom_VectorField.h>
+// visu includes
+#include <mobius/visu_VarRepo.h>
 
-// STL includes
+// core includes
+#include <mobius/core_Ptr.h>
+
+// STD includes
 #include <map>
 
 namespace mobius {
 
-//! \ingroup MOBIUS_GEOM
+class visu_BaseCmd;
+
+//! \ingroup MOBIUS_VISU
 //!
-//! Surface and constraints.
-class geom_SectionPatch : public core_OBJECT
+//! Transient repository of commands against their names.
+class visu_CommandRepo : public core_OBJECT
 {
 public:
 
-  geom_SectionPatch() : core_OBJECT(), ID(-1) {}
+  visu_CommandRepo() : core_OBJECT() {}
+  ~visu_CommandRepo() {}
 
-  int                                    ID;   //!< ID of the patch.
-  std::map< int, t_ptr<t_vector_field> > D1;   //!< D1 by sections.
-  std::map< int, t_ptr<t_vector_field> > D2;   //!< D2 by sections.
-  t_ptr<geom_Surface>                    Surf; //!< Reconstructed surface.
+public:
 
-  void Add_D1(const int sct_ID, t_ptr<t_vector_field> D1_vectors)
+  //! Type shortcut for the pair used in repository map.
+  typedef std::pair< std::string, t_ptr<visu_BaseCmd> > TRepoPair;
+
+  //! Type shortcut for repository map.
+  typedef std::map< std::string, t_ptr<visu_BaseCmd> > TRepoMap;
+
+public:
+
+  mobiusVisu_EXPORT void
+    RegisterCommand(const std::string& Name,
+                    const t_ptr<visu_BaseCmd>& Command);
+
+  mobiusVisu_EXPORT t_ptr<visu_BaseCmd>
+    FindCommand(const std::string& Name);
+
+  mobiusVisu_EXPORT const TRepoMap&
+    Commands();
+
+public:
+
+  //! Accessor to the repository of variables.
+  //! \return variables repo.
+  inline visu_VarRepo& Vars()
   {
-    D1.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D1_vectors) );
+    return __varRepo;
   }
 
-  void Add_D2(const int sct_ID, t_ptr<t_vector_field> D2_vectors)
-  {
-    D2.insert( std::pair< int, t_ptr<t_vector_field> >(sct_ID, D2_vectors) );
-  }
+private:
 
-  t_ptr<t_vector_field> D1_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D1.find(sct_ID);
-    if ( it == D1.end() )
-      return nullptr;
+  visu_CommandRepo(const visu_CommandRepo&) {}
+  void operator=(const visu_CommandRepo&) {}
 
-    return it->second;
-  }
+private:
 
-  t_ptr<t_vector_field> D2_sct(const int sct_ID)
-  {
-    std::map< int, t_ptr<t_vector_field> >::iterator it = D2.find(sct_ID);
-    if ( it == D2.end() )
-      return nullptr;
+  //! Map of commands against their names.
+  TRepoMap __repo;
 
-    return it->second;
-  }
+  //! Variables associated with this repository of commands and
+  //! accessible in each stored command so.
+  visu_VarRepo __varRepo;
 
 };
 
-//! Handy shortcut for section patch type name.
-typedef geom_SectionPatch t_spatch;
-
-};
+}
 
 #endif
