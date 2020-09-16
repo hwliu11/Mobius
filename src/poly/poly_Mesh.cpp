@@ -112,8 +112,7 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
   t2 = this->AddTriangle(htv[0], hmv, htv[2]);
 
   // Remove the refined triangle.
-  if ( remove )
-    this->RemoveTriangle(ht);
+  this->RemoveTriangle(ht);
 
   return true;
 }

@@ -117,7 +117,6 @@ void mobius::cascade_Triangulation::convertToOpenCascade()
   }
 
   // Populate array of triangles.
-  int occIdx = 1;
   for ( poly_Mesh::TriangleIterator tit(m_mobiusMesh); tit.More(); tit.Next() )
   {
     // Get triangle of Mobius.

@@ -126,30 +126,30 @@ void mobius::visu_ActorMesh::GL_Draw()
 
 void mobius::visu_ActorMesh::drawShading() const
 {
-  if ( m_indices.IsNull() || m_points.empty() )
-    return;
-
-  __glEnableLighting();
-
-  // Activate and specify pointer to vertex array.
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer( 3, GL_FLOAT, 0, &m_points->Value( m_points->Lower() ) );
-
-  if ( !m_normals.IsNull() )
-  {
-    // Use normals only if they exists. Notice that without normals
-    // shading will be wrong.
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glNormalPointer( GL_FLOAT, 0, &m_normals->Value( m_normals->Lower() ) );
-  }
-
-  glDrawElements( GL_TRIANGLES, m_indices->Length(), GL_UNSIGNED_INT, &m_indices->Value( m_indices->Lower() ) );
-
-  // deactivate vertex arrays after drawing.
-  if( !m_normals.IsNull() )
-    glDisableClientState(GL_NORMAL_ARRAY);
-
-  glDisableClientState(GL_VERTEX_ARRAY);
-
-  __glDisableLighting();
+//  if ( m_indices.IsNull() || m_points.empty() )
+//    return;
+//
+//  __glEnableLighting();
+//
+//  // Activate and specify pointer to vertex array.
+//  glEnableClientState(GL_VERTEX_ARRAY);
+//  glVertexPointer( 3, GL_FLOAT, 0, &m_points->Value( m_points->Lower() ) );
+//
+//  if ( !m_normals.IsNull() )
+//  {
+//    // Use normals only if they exists. Notice that without normals
+//    // shading will be wrong.
+//    glEnableClientState(GL_NORMAL_ARRAY);
+//    glNormalPointer( GL_FLOAT, 0, &m_normals->Value( m_normals->Lower() ) );
+//  }
+//
+//  glDrawElements( GL_TRIANGLES, m_indices->Length(), GL_UNSIGNED_INT, &m_indices->Value( m_indices->Lower() ) );
+//
+//  // deactivate vertex arrays after drawing.
+//  if( !m_normals.IsNull() )
+//    glDisableClientState(GL_NORMAL_ARRAY);
+//
+//  glDisableClientState(GL_VERTEX_ARRAY);
+//
+//  __glDisableLighting();
 }

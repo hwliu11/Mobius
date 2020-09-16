@@ -288,7 +288,7 @@ set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 # Dependencies
 #------------------------------------------------------------------------------
 
-target_link_libraries(mobiusVisu mobiusCore mobiusBSpl mobiusGeom)
+target_link_libraries(mobiusVisu mobiusCore mobiusBSpl mobiusGeom mobiusPoly)
 
 #------------------------------------------------------------------------------
 # Installation of Mobius as SDK
