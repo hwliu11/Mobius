@@ -83,6 +83,8 @@ void RegisterConsoleCommands()
 //! \param Picker [in] Picker instance.
 void RegisterViewerCommands(const t_ptr<visu_Picker>& Picker)
 {
+  AppUtils::CmdRepo->RegisterCommand( "load-stl",                new visu_LoadStlCmd            (AppUtils::CmdRepo, Picker) );
+  //
   AppUtils::CmdRepo->RegisterCommand( "actors scene",            new visu_ActorsCmd             (AppUtils::CmdRepo, Picker) );
   AppUtils::CmdRepo->RegisterCommand( "interp01",                new visu_Interpc01Cmd          (AppUtils::CmdRepo, Picker) );
   AppUtils::CmdRepo->RegisterCommand( "interp02",                new visu_Interpc02Cmd          (AppUtils::CmdRepo, Picker) );

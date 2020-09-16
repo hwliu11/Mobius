@@ -65,6 +65,13 @@ set (actors_misc_CPP_FILES
   actors/misc/visu_ActorCartesianAxes.cpp
 )
 
+set (actors_poly_H_FILES
+  actors/poly/visu_ActorMesh.h
+)
+set (actors_poly_CPP_FILES
+  actors/poly/visu_ActorMesh.cpp
+)
+
 #------------------------------------------------------------------------------
 # Commands
 #------------------------------------------------------------------------------
@@ -107,6 +114,7 @@ set (commands_view_H_FILES
   commands/view/visu_InterpSectionsCmd.h
   commands/view/visu_InterpSurfCmd.h
   commands/view/visu_KleinBottleCmd.h
+  commands/view/visu_LoadSTLCmd.h
   commands/view/visu_PlanarCloudCmd.h
   commands/view/visu_PolesCmd.h
   commands/view/visu_RefineKnotsCmd.h
@@ -120,6 +128,7 @@ set (commands_view_CPP_FILES
   commands/view/visu_CreateSectionCmd.cpp
   commands/view/visu_InterpSectionsCmd.cpp
   commands/view/visu_InterpSurfCmd.cpp
+  commands/view/visu_LoadSTLCmd.cpp
 )
 
 #------------------------------------------------------------------------------
@@ -220,6 +229,14 @@ foreach (FILE ${actors_misc_CPP_FILES})
   source_group ("Source Files\\Actors\\Misc" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${actors_poly_H_FILES})
+  source_group ("Header Files\\Actors\\Poly" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${actors_poly_CPP_FILES})
+  source_group ("Source Files\\Actors\\Poly" FILES "${FILE}")
+endforeach (FILE)
+
 foreach (FILE ${commands_console_H_FILES})
   source_group ("Header Files\\Commands\\Console" FILES "${FILE}")
 endforeach (FILE)
@@ -259,6 +276,7 @@ add_library (mobiusVisu SHARED
   ${actors_bspl_H_FILES}      ${actors_bspl_CPP_FILES}
   ${actors_geom_H_FILES}      ${actors_geom_CPP_FILES}
   ${actors_misc_H_FILES}      ${actors_misc_CPP_FILES}
+  ${actors_poly_H_FILES}      ${actors_poly_CPP_FILES}
   ${commands_console_H_FILES} ${commands_console_CPP_FILES}
   ${commands_view_H_FILES}    ${commands_view_CPP_FILES}
   ${engine_H_FILES}           ${engine_CPP_FILES}
@@ -301,6 +319,7 @@ install (FILES ${H_FILES}                  DESTINATION include/mobius)
 install (FILES ${actors_bspl_H_FILES}      DESTINATION include/mobius)
 install (FILES ${actors_geom_H_FILES}      DESTINATION include/mobius)
 install (FILES ${actors_misc_H_FILES}      DESTINATION include/mobius)
+install (FILES ${actors_poly_H_FILES}      DESTINATION include/mobius)
 install (FILES ${commands_console_H_FILES} DESTINATION include/mobius)
 install (FILES ${commands_view_H_FILES}    DESTINATION include/mobius)
 install (FILES ${engine_H_FILES}           DESTINATION include/mobius)

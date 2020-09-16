@@ -58,6 +58,18 @@ public:
 
 public:
 
+  //! Calculates axis-aligned boundary box for the mesh.
+  //! \param[out] xMin min X.
+  //! \param[out] xMax max X.
+  //! \param[out] yMin min Y.
+  //! \param[out] yMax max Y.
+  //! \param[out] zMin min Z.
+  //! \param[out] zMax max Z.
+  mobiusPoly_EXPORT void
+    GetBounds(double& xMin, double& xMax,
+              double& yMin, double& yMax,
+              double& zMin, double& zMax) const;
+
   //! Refines the triangle of interest by its midpoint.
   //! \param[in]  ht  handle of the triangle to refine.
   //! \param[out] ht0 handle of the first created triangle.

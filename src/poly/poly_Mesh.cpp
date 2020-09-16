@@ -38,6 +38,46 @@ mobius::poly_Mesh::poly_Mesh() : core_OBJECT()
 
 //-----------------------------------------------------------------------------
 
+void mobius::poly_Mesh::GetBounds(double& xMin, double& xMax,
+                                  double& yMin, double& yMax,
+                                  double& zMin, double& zMax) const
+{
+  double x_min = DBL_MAX, x_max = -DBL_MAX;
+  double y_min = DBL_MAX, y_max = -DBL_MAX;
+  double z_min = DBL_MAX, z_max = -DBL_MAX;
+
+  for ( auto vit = m_vertices.cbegin(); vit != m_vertices.cend(); ++vit )
+  {
+    const poly_Vertex& V = *vit;
+    const double x = V.X(),
+                 y = V.Y(),
+                 z = V.Z();
+
+    if ( x > x_max )
+      x_max = x;
+    if ( x < x_min )
+      x_min = x;
+    if ( y > y_max )
+      y_max = y;
+    if ( y < y_min )
+      y_min = y;
+    if ( z > z_max )
+      z_max = z;
+    if ( z < z_min )
+      z_min = z;
+  }
+
+  // Set results.
+  xMin = x_min;
+  xMax = x_max;
+  yMin = y_min;
+  yMax = y_max;
+  zMin = z_min;
+  zMax = z_max;
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
                                          poly_TriangleHandle&      t0,
                                          poly_TriangleHandle&      t1,

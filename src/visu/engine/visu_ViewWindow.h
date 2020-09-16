@@ -115,14 +115,14 @@ public:
 
   //! Accessor for the Scene object.
   //! \return requested Scene instance.
-  inline const t_ptr<visu_Scene>& Scene() const
+  const t_ptr<visu_Scene>& Scene() const
   {
     return m_scene;
   }
 
   //! Accessor for the Picker object.
   //! \return requested Picker instance.
-  inline const t_ptr<visu_Picker>& Picker() const
+  const t_ptr<visu_Picker>& Picker() const
   {
     return m_picker;
   }

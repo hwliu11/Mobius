@@ -44,7 +44,7 @@
 // Some predefined commands
 //-----------------------------------------------------------------------------
 
-#define QR_CMD_PROMPT   "Quaoar> "
+#define QR_CMD_PROMPT   "Mobius> "
 #define QR_CMD_BUF_SIZE 255
 
 //-----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ bool mobius::visu_ConsoleWindow::Create()
   if ( AllocConsole() )
   {
     FILE *stream;
-    SetConsoleTitleA("Quaoar >>> Console");
+    SetConsoleTitleA("Mobius >>> Console");
     freopen_s(&stream, "CONIN$", "r", stdin);
     freopen_s(&stream, "CONOUT$", "wb", stdout);
     freopen_s(&stream, "CONOUT$", "wb", stderr);

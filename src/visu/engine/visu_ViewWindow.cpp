@@ -128,7 +128,7 @@ bool mobius::visu_ViewWindow::Create(const int theLeft,
 
   // Create window
   m_hWnd = CreateWindow("OpenGLClass",
-                        "View 3D",
+                        "Mobius >>> 3D",
                         WS_OVERLAPPEDWINDOW,
                         Rect.left, Rect.top, // Adjusted x, y positions
                         Rect.right - Rect.left, Rect.bottom - Rect.top, // Adjusted width and height
@@ -377,14 +377,14 @@ LRESULT WINAPI mobius::visu_ViewWindow::wndProcProxy(HWND   hwnd,
   if ( message == WM_CREATE )
   {
     // Save pointer to our class instance (sent on window create) to window storage
-    CREATESTRUCTW* aCreateStruct = (CREATESTRUCTW*) lparam;
-    SetWindowLongPtr(hwnd, int (GWLP_USERDATA), (LONG_PTR) aCreateStruct->lpCreateParams);
+    CREATESTRUCTW* pCreateStruct = (CREATESTRUCTW*) lparam;
+    SetWindowLongPtr(hwnd, int (GWLP_USERDATA), (LONG_PTR) pCreateStruct->lpCreateParams);
   }
 
   // Get pointer to our class instance
-  visu_ViewWindow* aThis = (visu_ViewWindow*) GetWindowLongPtr( hwnd, int (GWLP_USERDATA) );
-  return (aThis != NULL)? aThis->wndProc(hwnd, message, wparam, lparam)
-                        : DefWindowProc(hwnd, message, wparam, lparam);
+  visu_ViewWindow* pThis = (visu_ViewWindow*) GetWindowLongPtr( hwnd, int (GWLP_USERDATA) );
+  return (pThis != NULL)? pThis->wndProc(hwnd, message, wparam, lparam)
+                        : DefWindowProcW(hwnd, message, wparam, lparam);
 }
 
 //! Window procedure.
