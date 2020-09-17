@@ -52,12 +52,16 @@
 #include <mobius/geom_BSplineSurface.h>
 #include <mobius/geom_PlaneSurface.h>
 
+// Poly includes
+#include <mobius/poly_Mesh.h>
+
 // OpenCascade includes
 #include <Geom_BSplineCurve.hxx>
 #include <Geom_BSplineSurface.hxx>
 #include <Geom_Plane.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
+#include <Poly_Triangulation.hxx>
 
 //-----------------------------------------------------------------------------
 // DOXY group definition
@@ -183,6 +187,18 @@ namespace mobius
     //! \return Mobius surface.
     mobiusCascade_EXPORT static t_ptr<t_plane>
       GetMobiusPlane(const Handle(Geom_Plane)& surface);
+
+    //! Converts Mobius mesh to OpenCascade triangulation.
+    //! \param[in] mesh Mobius mesh to convert.
+    //! \return OpenCascade mesh.
+    mobiusCascade_EXPORT static Handle(Poly_Triangulation)
+      GetOpenCascadeMesh(const t_ptr<t_mesh>& mesh);
+
+    //! Converts OpenCascade triangulation to Mobius mesh.
+    //! \param[in] tris OpenCascade triangulation to convert.
+    //! \return Mobius mesh.
+    mobiusCascade_EXPORT static t_ptr<t_mesh>
+      GetMobiusMesh(const Handle(Poly_Triangulation)& tris);
 
   };
 };

@@ -34,6 +34,7 @@
 // Cascade includes
 #include <mobius/cascade_BSplineCurve.h>
 #include <mobius/cascade_BSplineSurface.h>
+#include <mobius/cascade_Triangulation.h>
 
 //-----------------------------------------------------------------------------
 
@@ -103,4 +104,28 @@ mobius::t_ptr<mobius::t_plane>
   t_xyz Dv = GetMobiusVec( ax3.YDirection() );
 
   return new t_plane(O, Du, Dv);
+}
+
+//-----------------------------------------------------------------------------
+
+Handle(Poly_Triangulation)
+  mobius::cascade::GetOpenCascadeMesh(const t_ptr<t_mesh>& mesh)
+{
+  // Convert to OpenCascade's mesh.
+  cascade_Triangulation converter(mesh);
+  converter.DirectConvert();
+  //
+  return converter.GetOpenCascadeTriangulation();
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::t_ptr<mobius::t_mesh>
+  mobius::cascade::GetMobiusMesh(const Handle(Poly_Triangulation)& tris)
+{
+  // Convert to Mobius' mesh.
+  cascade_Triangulation converter(tris);
+  converter.DirectConvert();
+  //
+  return converter.GetMobiusTriangulation();
 }

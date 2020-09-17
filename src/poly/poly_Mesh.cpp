@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/poly_Mesh.h>
 
+// Core includes
+#include <mobius/core_Precision.h>
+
 //-----------------------------------------------------------------------------
 
 mobius::poly_Mesh::poly_Mesh() : core_OBJECT()
@@ -122,4 +125,33 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
 {
   poly_TriangleHandle hrt[3];
   return this->RefineByMidpoint(ht, hrt[0], hrt[1], hrt[2]);
+}
+
+//-----------------------------------------------------------------------------
+
+bool
+  mobius::poly_Mesh::ComputeNormal(const poly_TriangleHandle ht,
+                                   t_xyz&                    norm) const
+{
+  // Get triangle by its handle.
+  poly_Triangle t;
+  if ( !this->GetTriangle(ht, t) )
+    return false;
+
+  // Get vertices on the triangle.
+  poly_VertexHandle htv[3];
+  t_xyz             tv[3];
+  //
+  t.GetVertices(htv[0], htv[1], htv[2]);
+  //
+  for ( size_t k = 0; k < 3; ++k )
+    this->GetVertex(htv[k], tv[k]);
+
+  // Compute norm.
+  norm = (tv[1] - tv[0])^(tv[2] - tv[0]);
+  //
+  if ( norm.Modulus() > core_Precision::Resolution3D() )
+    norm.Normalize();
+
+  return true;
 }

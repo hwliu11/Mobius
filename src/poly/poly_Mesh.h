@@ -88,6 +88,15 @@ public:
   mobiusPoly_EXPORT bool
     RefineByMidpoint(const poly_TriangleHandle ht);
 
+  //! Computes normal vector for the triangle in question.
+  //! \param[in]  ht   handle of the triangle in question.
+  //! \param[out] norm computed normal vector.
+  //! \return true if the normal vector was computed successfully,
+  //!         false -- otherwise.
+  mobiusPoly_EXPORT bool
+    ComputeNormal(const poly_TriangleHandle ht,
+                  t_xyz&                    norm) const;
+
 public:
 
   //! Returns vertex by its handle.
@@ -96,6 +105,20 @@ public:
   //! \return false if there is no such vertex.
   bool GetVertex(const poly_VertexHandle h,
                  poly_Vertex&            vertex) const
+  {
+    const int idx = h.GetIdx();
+    if ( idx < 0 || idx > int( m_vertices.size() ) ) return false;
+    //
+    vertex = m_vertices[idx];
+    return true;
+  }
+
+  //! Returns vertex by its handle as a coordinate triple.
+  //! \param[in]  h      handle of a vertex to access.
+  //! \param[out] vertex vertex.
+  //! \return false if there is no such vertex.
+  bool GetVertex(const poly_VertexHandle h,
+                 t_xyz&                  vertex) const
   {
     const int idx = h.GetIdx();
     if ( idx < 0 || idx > int( m_vertices.size() ) ) return false;
