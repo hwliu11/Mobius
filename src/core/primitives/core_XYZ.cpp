@@ -33,6 +33,7 @@
 
 // Standard includes
 #include <math.h>
+#include <set>
 
 //-----------------------------------------------------------------------------
 // Class-level API
@@ -64,6 +65,49 @@ mobius::core_XYZ mobius::core_XYZ::OY()
 mobius::core_XYZ mobius::core_XYZ::OZ()
 {
   return core_XYZ(0.0, 0.0, 1.0);
+}
+
+//! Checks if the passed collection of vectors span a single plane.
+//! \param[in] dirs the directions to check.
+//! \param[in] prec the precision value to use for computing angles
+//!                 and dot products.
+//! \return true/false.
+bool mobius::core_XYZ::AreSamePlane(const std::vector<core_XYZ>& dirs,
+                                    const double                 prec)
+{
+  if ( dirs.size() < 3 )
+    return true;
+
+  // Select planar "basis" to compute a reference norm.
+  core_XYZ N;
+  std::set<int> basis = {0};
+  //
+  for ( int k = 1; k < dirs.size(); ++k )
+  {
+    const double ang = dirs[k].Angle(dirs[0]);
+    //
+    if ( (fabs(ang) > prec) && (fabs(ang - M_PI) > prec) )
+    {
+      N = dirs[k]^dirs[0];
+      basis.insert(k);
+      break;
+    }
+  }
+
+  if ( N.Modulus() < prec )
+    return false; // No idea, hence false.
+
+  // Check all remaining directions w.r.t. the basis' norm.
+  for ( int k = 1; k < dirs.size(); ++k )
+  {
+    if ( basis.find(k) != basis.end() )
+      continue; // Skip already accounted vectors.
+
+    if ( fabs( dirs[k].Dot(N) ) > prec )
+      return false;
+  }
+
+  return true;
 }
 
 //-----------------------------------------------------------------------------

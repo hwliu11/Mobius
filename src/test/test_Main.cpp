@@ -61,6 +61,7 @@
 #include <mobius/test_Quaternion.h>
 #include <mobius/test_SkinSurface.h>
 #include <mobius/test_SVO.h>
+#include <mobius/test_XYZ.h>
 
 // testEngine includes
 #include <mobius/testEngine_Launcher.h>
@@ -113,6 +114,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   // Core group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral>           (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_XYZ>                (cf->ProgressNotifier) );
 
   // Geom group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve>   (cf->ProgressNotifier) );

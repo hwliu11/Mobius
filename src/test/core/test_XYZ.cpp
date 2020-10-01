@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 01 October 2020
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2020-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,65 +28,55 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+// Own include
+#include <mobius/test_XYZ.h>
 
-// Tests includes
-#include <mobius/test.h>
+// core includes
+#include <mobius/core_XYZ.h>
 
-//! IDs for Test Cases.
-enum test_CaseID
+//-----------------------------------------------------------------------------
+
+mobius::outcome
+  mobius::test_XYZ::are_same_plane(const int funcID)
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+  outcome res( DescriptionFn(), funcID );
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
-  CaseID_Core_XYZ,
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 0., 0.),
+                              t_xyz(0., 1., 0.),
+                              t_xyz(1., 1., 0.) };
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+    if ( !t_xyz::AreSamePlane(Vs) )
+      return res.failure();
+  }
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_KnotsUniform,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 0., 0.),
+                              t_xyz(0., 1., 0.),
+                              t_xyz(0., 0., 1.) };
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+    if ( t_xyz::AreSamePlane(Vs) )
+      return res.failure();
+  }
 
-  CaseID_Geom_ApproxSurf,
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_PositionCloud,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_PlaneSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-  CaseID_Geom_SkinSurface,
-  CaseID_Geom_MakeBicubicBSurf,
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 0., 0.),
+                              t_xyz(0., -1., 0.),
+                              t_xyz(0., 0., 1.) };
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
+    if ( t_xyz::AreSamePlane(Vs) )
+      return res.failure();
+  }
 
-  CaseID_Poly_Mesh,
-  CaseID_Poly_SVO
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1.06058e-16, 1, 0),
+                              t_xyz(-1.06058e-16, -1, 0),
+                              t_xyz(0.5, -5.30288e-17, 0.866025),
+                              t_xyz(-0.5, 5.30288e-17, -0.866025) };
 
-};
+    if ( !t_xyz::AreSamePlane(Vs) )
+      return res.failure();
+  }
 
-#endif
+  return res.success();
+}

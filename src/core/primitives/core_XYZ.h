@@ -32,7 +32,7 @@
 #define core_XYZ_HeaderFile
 
 // core includes
-#include <mobius/core.h>
+#include <mobius/core_Precision.h>
 
 // STL includes
 #include <float.h>
@@ -64,6 +64,10 @@ public:
 
   mobiusCore_EXPORT static core_XYZ
     OZ();
+
+  mobiusCore_EXPORT static bool
+    AreSamePlane(const std::vector<core_XYZ>& dirs,
+                 const double                 prec = core_Precision::Resolution3D());
 
 // Construction & destruction:
 public:

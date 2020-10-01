@@ -60,11 +60,13 @@ set (bspl_CPP_FILES
 set (core_H_FILES
   core/test_Integral.h
   core/test_Quaternion.h
+  core/test_XYZ.h
 )
 
 set (core_CPP_FILES
   core/test_Integral.cpp
   core/test_Quaternion.cpp
+  core/test_XYZ.cpp
 )
 
 #------------------------------------------------------------------------------
