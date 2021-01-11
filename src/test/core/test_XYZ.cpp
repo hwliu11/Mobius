@@ -80,3 +80,71 @@ mobius::outcome
 
   return res.success();
 }
+
+//-----------------------------------------------------------------------------
+
+mobius::outcome
+  mobius::test_XYZ::are_spanning_space(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 0., 0.),
+                              t_xyz(0., 1., 0.),
+                              t_xyz(1., 1., 0.) };
+
+    if ( t_xyz::AreSpanningWholeSpace(Vs) )
+      return res.failure();
+  }
+
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 0., 0.),
+                              t_xyz(0., 1., 0.),
+                              t_xyz(-1., 0., 0.) };
+
+    if ( t_xyz::AreSpanningWholeSpace(Vs) )
+      return res.failure();
+  }
+
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 0., 0.),
+                              t_xyz(0., 1., 0.),
+                              t_xyz(-1., 0., 0.),
+                              t_xyz(0., -1., 0.) };
+
+    if ( !t_xyz::AreSpanningWholeSpace(Vs) )
+      return res.failure();
+  }
+
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 1., 0.),
+                              t_xyz(-1., 1., 0.),
+                              t_xyz(1., -1., 0.),
+                              t_xyz(-1., -1., 0.) };
+
+    if ( !t_xyz::AreSpanningWholeSpace(Vs) )
+      return res.failure();
+  }
+
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 1., 0.),
+                              t_xyz(1., 0., 0.),
+                              t_xyz(1., -1., 0.),
+                              t_xyz(-1., -1., 0.) };
+
+    if ( t_xyz::AreSpanningWholeSpace(Vs) )
+      return res.failure();
+  }
+
+  {
+    std::vector<t_xyz> Vs = { t_xyz(1., 1., 0.),
+                              t_xyz(-1., 1., 0.),
+                              t_xyz(-1., -1., 0.),
+                              t_xyz(1., -1., 0.) };
+
+    if ( !t_xyz::AreSpanningWholeSpace(Vs) )
+      return res.failure();
+  }
+
+  return res.success();
+}

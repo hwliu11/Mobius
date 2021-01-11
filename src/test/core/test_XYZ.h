@@ -73,15 +73,17 @@ public:
   static void Functions(MobiusTestFunctions& functions)
   {
     functions << &are_same_plane
+              << &are_spanning_space
     ;
   }
 
 private:
 
-  static outcome are_same_plane(const int funcID);
+  static outcome are_same_plane     (const int funcID);
+  static outcome are_spanning_space (const int funcID);
 
 };
 
-};
+}
 
 #endif

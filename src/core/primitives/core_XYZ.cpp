@@ -110,6 +110,66 @@ bool mobius::core_XYZ::AreSamePlane(const std::vector<core_XYZ>& dirs,
   return true;
 }
 
+//! Checks if the passed collection of vectors span a whole
+//! space (i.e. not a halfspace).
+//! \param[in] dirs the directions to check.
+//! \param[in] prec the precision value to use for computing angles
+//!                 and dot products.
+//! \return true/false.
+bool mobius::core_XYZ::AreSpanningWholeSpace(const std::vector<core_XYZ>& dirs,
+                                             const double                 prec)
+{
+  if ( dirs.size() < 3 )
+    return false; // At least 3 vectors are needed to span the whole space.
+
+  // Select planar "basis" to compute a reference norm.
+  core_XYZ N;
+  //
+  for ( int k = 1; k < dirs.size(); ++k )
+  {
+    const double ang = dirs[k].Angle(dirs[0]);
+    //
+    if ( (fabs(ang) > prec) && (fabs(ang - M_PI) > prec) )
+    {
+      N = dirs[k]^dirs[0];
+      break;
+    }
+  }
+
+  if ( N.Modulus() < prec )
+    return false; // No idea, hence false.
+
+  // Select the mutually orthogonal vectors.
+  core_XYZ b1 = dirs[0];
+  core_XYZ b2 = N^b1;
+  core_XYZ b3 = b1.Reversed();
+  core_XYZ b4 = b2.Reversed();
+  //
+  core_XYZ basis[4] = {b1, b2, b3, b4};
+
+  // Check dot products.
+  for ( auto base : basis )
+  {
+    bool isSpanned = false;
+
+    for ( auto dir : dirs )
+    {
+      const double dot = dir.Dot(base);
+
+      if ( (fabs(dot) > prec) && (dot > 0) )
+      {
+        isSpanned = true;
+        break;
+      }
+    }
+
+    if ( !isSpanned )
+      return false;
+  }
+
+  return true;
+}
+
 //-----------------------------------------------------------------------------
 // Object-level API
 //-----------------------------------------------------------------------------
@@ -151,6 +211,23 @@ mobius::core_XYZ mobius::core_XYZ::Normalized() const
 {
   core_XYZ C(m_fX, m_fY, m_fZ);
   C.Normalize();
+  return C;
+}
+
+//! Reverses the coordinates.
+void mobius::core_XYZ::Reverse()
+{
+  m_fX = -m_fX;
+  m_fY = -m_fY;
+  m_fZ = -m_fZ;
+}
+
+//! Creates a reversed copy of this point.
+//! \return reversed copy.
+mobius::core_XYZ mobius::core_XYZ::Reversed() const
+{
+  core_XYZ C(m_fX, m_fY, m_fZ);
+  C.Reverse();
   return C;
 }
 

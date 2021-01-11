@@ -69,6 +69,10 @@ public:
     AreSamePlane(const std::vector<core_XYZ>& dirs,
                  const double                 prec = core_Precision::Resolution3D());
 
+  mobiusCore_EXPORT static bool
+    AreSpanningWholeSpace(const std::vector<core_XYZ>& dirs,
+                          const double                 prec = core_Precision::Resolution3D());
+
 // Construction & destruction:
 public:
 
@@ -262,6 +266,12 @@ public:
 
   mobiusCore_EXPORT core_XYZ
     Normalized() const;
+
+  mobiusCore_EXPORT void
+    Reverse();
+
+  mobiusCore_EXPORT core_XYZ
+    Reversed() const;
 
   mobiusCore_EXPORT double
     Dot(const core_XYZ& XYZ) const;
