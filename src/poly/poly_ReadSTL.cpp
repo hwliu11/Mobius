@@ -54,6 +54,24 @@
 
 //-----------------------------------------------------------------------------
 
+namespace
+{
+  // trim from end (in place)
+  static inline void rtrim(std::string &s) {
+      s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+          return !std::isspace(ch);
+      }).base(), s.end());
+  }
+  // trim from start (in place)
+  static inline void ltrim(std::string &s) {
+      s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+          return !std::isspace(ch);
+      }));
+  }
+}
+
+//-----------------------------------------------------------------------------
+
 namespace mobius
 {
   // For binary STL.
@@ -188,7 +206,7 @@ bool mobius::poly_ReadSTL::Perform(const std::string& filename)
   {
     if ( isAsciiFile )
     {
-      if ( !this->readAscii(buffer, endPos) )
+      if ( !this->readAscii(buffer) )
         break;
     }
     else
@@ -277,20 +295,8 @@ static bool ReadVertex(const char* pStr, double& x, double& y, double& z)
 
 #pragma warning(disable : 4127) // This is for "while (1)" below...
 
-bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
-                                     const std::streampos untilPos)
+bool mobius::poly_ReadSTL::readAscii(std::istream&  stream)
 {
-  // Use seekpos() to get true 64-bit offset to enable
-  // handling of large files (VS 2010 64-bit).
-  const int64_t startPos = GETPOS( stream.tellg() );
-
-  // Note: 1 is added to `untilPos` to be sure to read the last
-  // symbol (relevant for files without eol at the end).
-  const int64_t endPos = (untilPos > 0 ? 1 + GETPOS(untilPos) : INT64_MAX);
-
-  // Skip header "solid ..."
-  stream.ignore( (std::streamsize) (endPos - startPos), '\n' );
-  //
   if ( !stream )
   {
     m_progress.SendLogMessage(MobiusErr(Normal) << "Premature end of file.");
@@ -299,38 +305,54 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
 
   NodeMerger MergeTool(this);
 
-  const int64_t LINELEN = 1024;
-  int           nbLine  = 1;
-  char          line1[LINELEN], line2[LINELEN], line3[LINELEN];
+  int         nbLine  = 1;
+  std::string line1, line2, line3;
   //
   while ( 1 )
   {
-    char facet[LINELEN], outer[LINELEN];
+    std::string facet, outer;
 
-    stream.getline(facet, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg()))); // "facet normal nx ny nz"
+    std::getline(stream, facet); // "facet normal nx ny nz"
+    ::ltrim(facet);
+    ::rtrim(facet);
     //
-    if ( str_starts_with(facet, "endsolid", 8) )
+    if ( str_starts_with(facet.c_str(), "solid", 5) )
+    {
+      continue;
+    }
+    //
+    if ( str_starts_with(facet.c_str(), "endloop", 7) )
+    {
+      continue;
+    }
+    //
+    if ( str_starts_with(facet.c_str(), "endfacet", 8) )
+    {
+      continue;
+    }
+    //
+    if ( str_starts_with(facet.c_str(), "endsolid", 8) )
     {
       // End of STL code.
       break;
     }
 
-    stream.getline(outer, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg()))); // "outer loop"
+    std::getline(stream, outer); // "outer loop"
     //
-    if ( !str_starts_with(facet, "facet", 5) || !str_starts_with(outer, "outer", 5) )
+    if ( !str_starts_with(facet.c_str(), "facet", 5) || !str_starts_with(outer.c_str(), "outer", 5) )
     {
       m_progress.SendLogMessage(MobiusErr(Normal) << "Unexpected format of facet at line %1."
                                                   << (nbLine + 1));
       return false;
     }
 
-    stream.getline(line1, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg())));
-    stream.getline(line2, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg())));
-    stream.getline(line3, (std::streamsize) std::min(LINELEN, endPos - GETPOS(stream.tellg())));
+    std::getline(stream, line1);
+    std::getline(stream, line2);
+    std::getline(stream, line3);
 
     // Stop reading if eof is reached; note that well-formatted file never
     // ends by the vertex line.
-    if ( stream.eof() || GETPOS(stream.tellg()) >= endPos )
+    if ( stream.eof() )
       break;
 
     if ( !stream )
@@ -342,9 +364,9 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
 
     double x1, y1, z1, x2, y2, z2, x3, y3, z3;
     //
-    if ( !ReadVertex(line1, x1, y1, z1) ||
-         !ReadVertex(line2, x2, y2, z2) ||
-         !ReadVertex(line3, x3, y3, z3) )
+    if ( !ReadVertex(line1.c_str(), x1, y1, z1) ||
+         !ReadVertex(line2.c_str(), x2, y2, z2) ||
+         !ReadVertex(line3.c_str(), x3, y3, z3) )
     {
       m_progress.SendLogMessage(MobiusErr(Normal) << "Cannot read vertex coordinates at line %1."
                                                   << nbLine);
@@ -358,9 +380,6 @@ bool mobius::poly_ReadSTL::readAscii(std::istream&        stream,
     //
     if ( hv0 != hv1 && hv1 != hv2 && hv2 != hv0 )
       this->AddTriangle(hv0, hv1, hv2);
-
-    stream.ignore( (std::streamsize) ( endPos - GETPOS( stream.tellg() ) ), '\n' ); // Skip "endloop".
-    stream.ignore( (std::streamsize) ( endPos - GETPOS( stream.tellg() ) ), '\n' ); // Skip "endfacet".
 
     nbLine += 2;
   }

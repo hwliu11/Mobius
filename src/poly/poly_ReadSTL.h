@@ -125,17 +125,12 @@ protected:
   mobiusPoly_EXPORT bool
     readBinary(std::istream& stream);
 
-  //! Reads STL data from ASCII stream. The stream can be opened either in
-  //! binary or in ASCII mode. Stops at the position specified by `untilPos`
-  //! or when eof is reached or when keyword "endsolid" is found. Empty lines
-  //! are not supported and will lead to reading failure. If `untilPos` is
-  //! non-zero, reads not further than until the specified position.
+  //! Reads STL data from ASCII stream.
   //!
   //! \param[in] stream stream in question.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    readAscii(std::istream&        stream,
-              const std::streampos untilPos);
+    readAscii(std::istream& stream);
 
 protected:
 
