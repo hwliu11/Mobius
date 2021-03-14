@@ -315,42 +315,46 @@ void mobius::visu_ViewWindow::StartMessageLoop()
   MSG Msg;
   while ( !m_bQuit )
   {
-    if ( PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE) )
+    switch ( ::MsgWaitForMultipleObjectsEx(0, NULL, 12, QS_ALLINPUT, 0) )
     {
-      if ( Msg.message == WM_QUIT )
-        break;
-
-      TranslateMessage(&Msg);
-      DispatchMessage(&Msg);
-    }
-    // If there are no pending messages from OS to proceed with,
-    // we draw the scene
-    else
-    {
-      // Get next command from queue
-      const t_ptr<visu_BaseCmd>& LastCommand = m_queue->Last();
-
-      // Check if this command is for View Window
-      if ( !LastCommand.IsNull() )
+      case WAIT_OBJECT_0:
       {
-        // Check command type: we can proceed only with visualization ones
-        visu_ViewCmd* CmdPtr = dynamic_cast<visu_ViewCmd*>( LastCommand.Access() );
-        if ( CmdPtr )
+        while ( ::PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE) )
         {
-          // Execute command
-          if ( !LastCommand->Execute() )
-            visu_ConsoleWindow::DisplayMessage("Viewer", "Command failed!", false);
+          if ( Msg.message == WM_QUIT )
+            m_bQuit = true;// return;
 
-          // Pop command AFTER execution in order to assure that Console thread
-          // will contnue only after Viewer did its job. This is not really
-          // important but allows us to avoid stupid mix up in output messages
-          m_queue->Pop();
+          ::TranslateMessage(&Msg);
+          ::DispatchMessage(&Msg);
         }
       }
+      case WAIT_TIMEOUT:
+      {
+        // Get next command from queue
+        const t_ptr<visu_BaseCmd>& LastCommand = m_queue->Last();
 
-      // Draw using OpenGL: this region is the heart of our view. The most
-      // execution time is spent repeating this draw() function
-      this->draw();
+        // Check if this command is for View Window
+        if ( !LastCommand.IsNull() )
+        {
+          // Check command type: we can proceed only with visualization ones
+          visu_ViewCmd* CmdPtr = dynamic_cast<visu_ViewCmd*>( LastCommand.Access() );
+          if ( CmdPtr )
+          {
+            // Execute command
+            if ( !LastCommand->Execute() )
+              visu_ConsoleWindow::DisplayMessage("Viewer", "Command failed!", false);
+
+            // Pop command AFTER execution in order to assure that Console thread
+            // will contnue only after Viewer did its job. This is not really
+            // important but allows us to avoid stupid mix up in output messages
+            m_queue->Pop();
+          }
+        }
+
+        // Draw using OpenGL: this region is the heart of our view. The most
+        // execution time is spent repeating this draw() function
+        this->draw();
+      }
     }
   }
 }
