@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_ImplicitFunc_HeaderFile
-#define poly_ImplicitFunc_HeaderFile
+#ifndef poly_RealFunc_HeaderFile
+#define poly_RealFunc_HeaderFile
 
 // Poly includes
 #include <mobius/poly.h>

@@ -150,7 +150,7 @@ namespace mobius
       const double cellSize = std::max( fabs( diagVec.X() ),
                                         std::max( fabs( diagVec.Y() ),
                                                   fabs( diagVec.Z() ) ) );
-      bool         toSplit;
+      bool         toSplit  = false;
 
       // Check stop criterion.
       if ( cellSize < m_fMaxCellSize )
