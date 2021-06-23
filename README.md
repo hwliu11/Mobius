@@ -1,1 +1,1 @@
-mobius
+A small C++ library containing some NURBS-based geometric modeling algorithms and features I've been working on since 2013. Unlike Analysis Situs, this library does not rely on OpenCascade whatsoever, and is more oriented to low-level computations. Currently, I use it mostly for experimenting with different computational geometry approaches.
