@@ -6,8 +6,8 @@ project (mobiusPoly)
 
 set (H_FILES
   poly.h
-  poly_Attribute.h
   poly_Edge.h
+  poly_Flag.h
   poly_Handles.h
   poly_Mesh.h
   poly_Quad.h

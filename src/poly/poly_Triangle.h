@@ -32,7 +32,7 @@
 #define poly_Triangle_HeaderFile
 
 // Poly includes
-#include <mobius/poly_Attribute.h>
+#include <mobius/poly_Flag.h>
 #include <mobius/poly_Handles.h>
 
 // Core includes
@@ -61,6 +61,19 @@ public:
                   const poly_VertexHandle hv1,
                   const poly_VertexHandle hv2);
 
+  //! Ctor accepting the nodes of the triangle and the back reference to a CAD face.
+  //! The nodes should be enumerated in ccw order looking from the outside of the
+  //! surrounded solid.
+  //! \param[in] hv0 first vertex of the triangle.
+  //! \param[in] hv1 second vertex of the triangle.
+  //! \param[in] hv2 third vertex of the triangle.
+  //! \param[in] ref back reference to set.
+  mobiusPoly_EXPORT
+    poly_Triangle(const poly_VertexHandle hv0,
+                  const poly_VertexHandle hv1,
+                  const poly_VertexHandle hv2,
+                  const int               ref);
+
 public:
 
   //! Returns vertex handles defining the triangle.
@@ -76,34 +89,48 @@ public:
     hv2 = m_hVertices[2];
   }
 
-  //! \return attributes.
-  int GetAttributes() const
+  //! Sets the back reference to a CAD face (if any).
+  //! \param[in] faceRef the face reference to set.
+  void SetFaceRef(const int faceRef)
   {
-    return m_iAttrs;
+    m_iFaceRef = faceRef;
+  }
+
+  //! \returns the back reference to a CAD face (if any).
+  int GetFaceRef() const
+  {
+    return m_iFaceRef;
+  }
+
+  //! \return the associated flags.
+  int GetFlags() const
+  {
+    return m_iFlags;
   }
 
   //! \return non-const reference to the attributes.
   int& ChangeAttributes()
   {
-    return m_iAttrs;
+    return m_iFlags;
   }
 
   //! Flags this triangle as deleted.
   void SetDeleted()
   {
-    m_iAttrs |= Attribute_Deleted;
+    m_iFlags |= Flag_Deleted;
   }
 
   //! \return true if this triangle is marked as deleted.
   bool IsDeleted() const
   {
-    return (m_iAttrs & Attribute_Deleted) > 0;
+    return (m_iFlags & Flag_Deleted) > 0;
   }
 
 protected:
 
   poly_VertexHandle m_hVertices[3]; //!< Handles to the vertices.
-  int               m_iAttrs;       //!< Attributes.
+  int               m_iFlags;       //!< Flags.
+  int               m_iFaceRef;     //!< Back reference to the CAD face.
 
 };
 

@@ -44,7 +44,7 @@ namespace mobius {
 //!
 //! Base class for all handles used to address mesh elements. This class is
 //! intended to substitute raw indices which are less descriptive and more
-//! error-prone to operate.
+//! error-prone to operate with.
 class poly_BaseHandle
 {
 public:

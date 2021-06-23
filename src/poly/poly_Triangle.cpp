@@ -36,7 +36,8 @@
 mobius::poly_Triangle::poly_Triangle()
 {
   m_hVertices[0] = m_hVertices[1] = m_hVertices[2] = poly_VertexHandle();
-  m_iAttrs = 0x0;
+  m_iFlags   = Flag_None;
+  m_iFaceRef = Mobius_InvalidHandleIndex;
 }
 
 //-----------------------------------------------------------------------------
@@ -48,5 +49,20 @@ mobius::poly_Triangle::poly_Triangle(const poly_VertexHandle hv0,
   m_hVertices[0] = hv0;
   m_hVertices[1] = hv1;
   m_hVertices[2] = hv2;
-  m_iAttrs       = 0x0;
+  m_iFlags       = Flag_None;
+  m_iFaceRef     = Mobius_InvalidHandleIndex;
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::poly_Triangle::poly_Triangle(const poly_VertexHandle hv0,
+                                     const poly_VertexHandle hv1,
+                                     const poly_VertexHandle hv2,
+                                     const int               ref)
+{
+  m_hVertices[0] = hv0;
+  m_hVertices[1] = hv1;
+  m_hVertices[2] = hv2;
+  m_iFlags       = Flag_None;
+  m_iFaceRef     = ref;
 }

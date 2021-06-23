@@ -240,6 +240,22 @@ public:
     return hTriangle;
   }
 
+  //! Creates a new triangle with a back reference to a CAD face.
+  //! \param[in] hV0 1-st vertex.
+  //! \param[in] hV1 2-nd vertex.
+  //! \param[in] hV2 3-rd vertex.
+  //! \param[in] ref back-reference index.
+  //! \return handle of the just added triangle.
+  poly_TriangleHandle AddTriangle(const poly_VertexHandle hV0,
+                                  const poly_VertexHandle hV1,
+                                  const poly_VertexHandle hV2,
+                                  const int               ref)
+  {
+    m_triangles.push_back( poly_Triangle(hV0, hV1, hV2, ref) );
+    poly_TriangleHandle hTriangle( int( m_triangles.size() ) - 1 );
+    return hTriangle;
+  }
+
   //! Removes the triangle with the given handle.
   //! \param[in] h handle of the triangle to remove.
   //! \return true in case of success, false -- otherwise.
@@ -260,7 +276,7 @@ public:
     return this->AddQuad(inv, inv, inv, inv);
   }
 
-  //! Creates a new trianglquad.
+  //! Creates a new quad.
   //! \param[in] hV0 1-st vertex.
   //! \param[in] hV1 2-nd vertex.
   //! \param[in] hV2 3-rd vertex.

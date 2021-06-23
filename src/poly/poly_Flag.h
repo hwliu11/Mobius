@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_Attribute_HeaderFile
-#define poly_Attribute_HeaderFile
+#ifndef poly_Flag_HeaderFile
+#define poly_Flag_HeaderFile
 
 // Poly includes
 #include <mobius/poly.h>
@@ -38,10 +38,11 @@ namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Attributes associated with mesh elements.
-enum poly_Attribute
+//! Flags that might be associated with the mesh elements.
+enum poly_Flag
 {
-  Attribute_Deleted = 0x001
+  Flag_None    = 0x000,
+  Flag_Deleted = 0x001
 };
 
 }
