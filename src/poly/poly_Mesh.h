@@ -97,6 +97,21 @@ public:
     ComputeNormal(const poly_TriangleHandle ht,
                   t_xyz&                    norm) const;
 
+  //! Computes area for the passed triangle.
+  //! \param[in] ht handle of the triangle to compute the area for.
+  //! \return the computed area.
+  mobiusPoly_EXPORT double
+    ComputeArea(const poly_TriangleHandle ht) const;
+
+  //! Checks if the passed triangle is degenerated w.r.t. the given
+  //! precision value.
+  //! \param[in] ht   the triangle to check.
+  //! \param[in] prec the precision to use.
+  //! \return true/false.
+  mobiusPoly_EXPORT bool
+    IsDegenerated(const poly_TriangleHandle ht,
+                  const double              prec) const;
+
 public:
 
   //! Returns vertex by its handle.

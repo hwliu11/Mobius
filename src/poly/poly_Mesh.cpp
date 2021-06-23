@@ -110,9 +110,9 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
   poly_VertexHandle hmv = this->AddVertex(midPt);
 
   // Add new triangles.
-  t0 = this->AddTriangle(htv[0], htv[1], hmv);
-  t1 = this->AddTriangle(hmv, htv[1], htv[2]);
-  t2 = this->AddTriangle(htv[0], hmv, htv[2]);
+  t0 = this->AddTriangle( htv[0], htv[1], hmv,    t.GetFaceRef() );
+  t1 = this->AddTriangle( hmv,    htv[1], htv[2], t.GetFaceRef() );
+  t2 = this->AddTriangle( htv[0], hmv,    htv[2], t.GetFaceRef() );
 
   // Remove the refined triangle.
   this->RemoveTriangle(ht);
@@ -154,4 +154,28 @@ bool
     norm.Normalize();
 
   return true;
+}
+
+//-----------------------------------------------------------------------------
+
+double
+  mobius::poly_Mesh::ComputeArea(const poly_TriangleHandle ht) const
+{
+  // Get triangle by its handle.
+  poly_Triangle t;
+  if ( !this->GetTriangle(ht, t) )
+    return false;
+
+  // Get vertices on the triangle.
+  poly_VertexHandle htv[3];
+  t_xyz             tv[3];
+  //
+  t.GetVertices(htv[0], htv[1], htv[2]);
+  //
+  for ( size_t k = 0; k < 3; ++k )
+    this->GetVertex(htv[k], tv[k]);
+
+  // Compute area.
+  const double area = 0.5*( (tv[1] - tv[0])^(tv[2] - tv[0]) ).Modulus();
+  return area;
 }

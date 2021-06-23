@@ -1,6 +1,8 @@
 products
 debug
 release
+build
+install
 custom.bat
 win64/
 win32/
