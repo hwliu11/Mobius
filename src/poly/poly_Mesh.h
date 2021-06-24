@@ -103,6 +103,12 @@ public:
   mobiusPoly_EXPORT double
     ComputeArea(const poly_TriangleHandle ht) const;
 
+  //! Computes the max length for the edges of the passed triangle.
+  //! \param[in] ht handle of the triangle to compute the max length for.
+  //! \return the computed max length.
+  mobiusPoly_EXPORT double
+    ComputeMaxLen(const poly_TriangleHandle ht) const;
+
   //! Checks if the passed triangle is degenerated w.r.t. the given
   //! precision value.
   //! \param[in] ht   the triangle to check.
@@ -111,6 +117,14 @@ public:
   mobiusPoly_EXPORT bool
     IsDegenerated(const poly_TriangleHandle ht,
                   const double              prec) const;
+
+  //! Creates a submesh for the given triangle by subdividing it
+  //! at the center points.
+  //! WARNING: the resulting mesh is not conformal!
+  //! \param[in] ht the triangle to subdivide.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    Subdivide(const poly_TriangleHandle ht);
 
 public:
 

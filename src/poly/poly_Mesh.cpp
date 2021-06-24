@@ -179,3 +179,68 @@ double
   const double area = 0.5*( (tv[1] - tv[0])^(tv[2] - tv[0]) ).Modulus();
   return area;
 }
+
+//-----------------------------------------------------------------------------
+
+double
+  mobius::poly_Mesh::ComputeMaxLen(const poly_TriangleHandle ht) const
+{
+  // Get triangle by its handle.
+  poly_Triangle t;
+  if ( !this->GetTriangle(ht, t) )
+    return false;
+
+  // Get vertices on the triangle.
+  poly_VertexHandle htv[3];
+  t_xyz             tv[3];
+  //
+  t.GetVertices(htv[0], htv[1], htv[2]);
+  //
+  for ( size_t k = 0; k < 3; ++k )
+    this->GetVertex(htv[k], tv[k]);
+
+  // Compute max length.
+  const double maxLen = std::max( (tv[1] - tv[0]).Modulus(),
+                                   std::max( (tv[2] - tv[1]).Modulus(),
+                                             (tv[2] - tv[0]).Modulus() ) );
+  return maxLen;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
+{
+  // Get triangle by its handle.
+  poly_Triangle t;
+  if ( !this->GetTriangle(ht, t) )
+    return false;
+
+  // Get vertices on the triangle.
+  poly_VertexHandle htv[3];
+  t_xyz             tv[3];
+  //
+  t.GetVertices(htv[0], htv[1], htv[2]);
+  //
+  for ( size_t k = 0; k < 3; ++k )
+    this->GetVertex(htv[k], tv[k]);
+
+  // Prepare subdivision points.
+  t_xyz mv[3] = { (tv[0] + tv[1])*0.5,
+                  (tv[1] + tv[2])*0.5,
+                  (tv[2] + tv[0])*0.5 };
+  //
+  poly_VertexHandle hmv[3] = { this->AddVertex(mv[0]),
+                               this->AddVertex(mv[1]),
+                               this->AddVertex(mv[2]) };
+
+  // Add new triangles.
+  poly_TriangleHandle t0 = this->AddTriangle( htv[0], hmv[0], hmv[2], t.GetFaceRef() );
+  poly_TriangleHandle t1 = this->AddTriangle( hmv[0], htv[1], hmv[1], t.GetFaceRef() );
+  poly_TriangleHandle t2 = this->AddTriangle( hmv[1], htv[2], hmv[2], t.GetFaceRef() );
+  poly_TriangleHandle t3 = this->AddTriangle( hmv[0], hmv[1], hmv[2], t.GetFaceRef() );
+
+  // Remove the subdivided triangle.
+  this->RemoveTriangle(ht);
+
+  return true;
+}
