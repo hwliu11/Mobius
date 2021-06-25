@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 10 December 2019
+// Created on: 25 June 2021
 //-----------------------------------------------------------------------------
-// Copyright (c) 2019-present, Sergey Slyadnev
+// Copyright (c) 2021-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,18 +32,17 @@
 #define poly_SVO_HeaderFile
 
 // Poly includes
-#include <mobius/poly_ScalarMembership.h>
+#include <mobius/poly.h>
 
 // Core includes
-#include <mobius/core_XYZ.h>
+#include <mobius/core_UV.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! A single node in the Sparse Voxel Octree data structure. Each corner of
-//! the SVO node is associated with a scalar value.
-class poly_SVO
+//! A single node in our quadtree data structure.
+class poly_QuadtreeNode
 {
 public:
 
@@ -53,51 +52,41 @@ public:
   mobiusPoly_EXPORT static bool
     IsValidCornerId(const size_t id);
 
-  //! Returns the ID of one of the 8 cell corners. This ID is determined
-  //! by the passed locations of the corresponding `x`, `y` and `z` coordinates.
-  //! The passed arguments may have values 0 and 1, hence there are 8
-  //! combinations (8 corners).
+  //! Returns the ID of one of the 4 cell corners. This ID is determined
+  //! by the passed locations of the corresponding `x` and `y` coordinates.
+  //! The passed arguments may have values 0 and 1, hence there are 4
+  //! combinations (4 corners).
   //!
   //! The returned ID is derived with the following rule:
   //!
   //! \verbatim
-  //!  ID = nx | (ny << 1) | (nz << 2)
+  //!  ID = nx | (ny << 1)
   //! \endverbatim
   //!
   //! So it gives:
   //!
   //! \verbatim
-  //!  nx | ny | nz || id
-  //! ====+====+====++===
-  //!   0 |  0 |  0 || 0
-  //! ----+----+----++---
-  //!   1 |  0 |  0 || 1
-  //! ----+----+----++---
-  //!   0 |  1 |  0 || 2
-  //! ----+----+----++---
-  //!   1 |  1 |  0 || 3
-  //! ----+----+----++---
-  //!   0 |  0 |  1 || 4
-  //! ----+----+----++---
-  //!   1 |  0 |  1 || 5
-  //! ----+----+----++---
-  //!   0 |  1 |  1 || 6
-  //! ----+----+----++---
-  //!   1 |  1 |  1 || 7
-  //! ----+----+----++---
+  //!  nx | ny || id
+  //! ====+====++===
+  //!   0 |  0 || 0
+  //! ----+----++---
+  //!   1 |  0 || 1
+  //! ----+----++---
+  //!   0 |  1 || 2
+  //! ----+----++---
+  //!   1 |  1 || 3
+  //! ----+----++---
   //! \endverbatim
   //!
   //! \param[in] nx X location (0 for min, 1 for max).
   //! \param[in] ny Y location (0 for min, 1 for max).
-  //! \param[in] nz Z location (0 for min, 1 for max).
-  //! \return ID of the corner in range [0,7].
+  //! \return ID of the corner in range [0,3].
   mobiusPoly_EXPORT static size_t
     GetCornerID(const size_t nx,
-                const size_t ny,
-                const size_t nz);
+                const size_t ny);
 
-  //! Given the corner ID in range [0,7], this static function returns the
-  //! location of the corner in a cell (vertex for octant, octant for voxel).
+  //! Given the corner ID in range [0,3], this static function returns the
+  //! location of the corner in a cell.
   //!
   //! The location is derived with the following rule (opposite to the
   //! rule which is used to derive the ID by location):
@@ -105,113 +94,59 @@ public:
   //! \verbatim
   //!  nx = (id >> 0) & 1
   //!  ny = (id >> 1) & 1
-  //!  nz = (id >> 2) & 1
   //! \endverbatim
   //!
   //! \verbatim
-  //!  id || nx | ny | nz
-  //! ====++====+====+====
-  //!   0 ||  0 |  0 |  0
-  //! ----++----+----+----
-  //!   1 ||  1 |  0 |  0
-  //! ----++----+----+----
-  //!   2 ||  0 |  1 |  0
-  //! ----++----+----+----
-  //!   3 ||  1 |  1 |  0
-  //! ----++----+----+----
-  //!   4 ||  0 |  0 |  1
-  //! ----++----+----+----
-  //!   5 ||  1 |  0 |  1
-  //! ----++----+----+----
-  //!   6 ||  0 |  1 |  1
-  //! ----++----+----+----
-  //!   7 ||  1 |  1 |  1
-  //! ----++----+----+----
+  //!  id || nx | ny
+  //! ====++====+====
+  //!   0 ||  0 |  0
+  //! ----++----+----
+  //!   1 ||  1 |  0
+  //! ----++----+----
+  //!   2 ||  0 |  1
+  //! ----++----+----
+  //!   3 ||  1 |  1
+  //! ----++----+----
   //! \endverbatim
   //!
   //! \param[in]  id ID of the corner.
   //! \param[out] nx location along OX world axis.
   //! \param[out] ny location along OY world axis.
-  //! \param[out] nz location along OZ world axis.
   mobiusPoly_EXPORT static void
     GetCornerLocation(const size_t id,
                       size_t&      nx,
-                      size_t&      ny,
-                      size_t&      nz);
+                      size_t&      ny);
 
 public:
 
   //! Default ctor.
   mobiusPoly_EXPORT
-    poly_SVO();
+    poly_QuadtreeNode();
 
   //! Ctor accepting corners.
   //! \param[in] cornerMin min corner point.
   //! \param[in] cornerMax max corner point.
   mobiusPoly_EXPORT
-    poly_SVO(const t_xyz& cornerMin,
-             const t_xyz& cornerMax);
+    poly_QuadtreeNode(const t_uv& cornerMin,
+                      const t_uv& cornerMax);
 
   //! Dtor. It is not virtual to save 8 bytes of memory.
   mobiusPoly_EXPORT
-    ~poly_SVO();
+    ~poly_QuadtreeNode();
 
 public:
 
-  //! Releases the memory occupied by this SVO node with recursive treatment
+  //! Releases the memory occupied by this quadtree node with recursive treatment
   //! on children.
   mobiusPoly_EXPORT void
     Release();
 
-  //! Checks if the node is initialized with the scalar values. At construction
-  //! time, the SVO node gets infinity values as scalars. If these values have
-  //! not been changed later on, this method will return false.
-  //! \return true/false.
-  mobiusPoly_EXPORT bool
-    HasScalars();
-
-  //! Sets scalar value for the corner with the passed ID.
-  //! \param[in] id ID of the corner in range [0,7].
-  //! \param[in] s  scalar value to set.
-  mobiusPoly_EXPORT void
-    SetScalar(const size_t id,
-              const double s);
-
-  //! Returns the scalar value associated with the passed corner ID.
-  //! \param[in] id ID of the corner in range [0,7].
-  //! \return scalar value.
-  mobiusPoly_EXPORT double
-    GetScalar(const size_t id) const;
-
-  //! Returns true if this SVO node has no children.
+  //! Returns true if this quadtree node has no children.
   //! \return true/false.
   mobiusPoly_EXPORT bool
     IsLeaf() const;
 
-  //! Gathers all leaves of the octree in the passed vector.
-  //! \param[out] leaves gathered collection of leaf SVO nodes.
-  //! \param[in]  sm     scalar membership to filter SVO nodes by
-  //!                    their associated scalar values.
-  mobiusPoly_EXPORT void
-    GetLeaves(std::vector<const poly_SVO*>& leaves,
-              const int                     sm = ScalarMembership_OnInOut) const;
-
-  //! Checks if all the scalars associated with this SVO node are negative.
-  //! \return true/false.
-  mobiusPoly_EXPORT bool
-    IsNegative() const;
-
-  //! Checks if all the scalars associated with this SVO node are positive.
-  //! \return true/false.
-  mobiusPoly_EXPORT bool
-    IsPositive() const;
-
-  //! Checks if the scalars associated with this SVO change sign.
-  //! \return true/false.
-  mobiusPoly_EXPORT bool
-    IsZeroCrossing() const;
-
-  //! Splits this node down to 8 octants.
+  //! Splits this node into 4 cells.
   //! \return false if this nodes already has children.
   mobiusPoly_EXPORT bool
     Split();

@@ -63,6 +63,7 @@ set (blas_CPP_FILES
 
 set (primitives_H_FILES 
   primitives/core_Axis.h
+  primitives/core_BBox.h
   primitives/core_IsoTransform.h
   primitives/core_IsoTransformChain.h
   primitives/core_Quaternion.h
@@ -70,6 +71,7 @@ set (primitives_H_FILES
   primitives/core_XYZ.h
 )
 set (primitives_CPP_FILES 
+  primitives/core_BBox.cpp
   primitives/core_IsoTransform.cpp
   primitives/core_IsoTransformChain.cpp
   primitives/core_Quaternion.cpp

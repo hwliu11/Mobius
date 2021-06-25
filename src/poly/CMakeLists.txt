@@ -59,6 +59,29 @@ set (fields_CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# Grid
+#------------------------------------------------------------------------------
+
+set (grid_H_FILES
+  grid/poly_Quadtree.h
+)
+set (grid_CPP_FILES
+  grid/poly_Quadtree.cpp
+)
+
+#------------------------------------------------------------------------------
+# BVH
+#------------------------------------------------------------------------------
+
+set (bvh_H_FILES
+  bvh/poly_BVHNode.h
+  bvh/poly_HitInfo.h
+)
+set (bvh_CPP_FILES
+  bvh/poly_BVHNode.cpp
+)
+
+#------------------------------------------------------------------------------
 
 list (APPEND MOBIUS_MODULES poly)
 set (MOBIUS_MODULES ${MOBIUS_MODULES} PARENT_SCOPE)
@@ -86,6 +109,22 @@ foreach (FILE ${fields_CPP_FILES})
   source_group ("Source Files\\Fields" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${grid_H_FILES})
+  source_group ("Header Files\\Grid" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${grid_CPP_FILES})
+  source_group ("Source Files\\Grid" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${bvh_H_FILES})
+  source_group ("Header Files\\BVH" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${bvh_CPP_FILES})
+  source_group ("Source Files\\BVH" FILES "${FILE}")
+endforeach (FILE)
+
 include_directories(${poly_include_dir_loc} ${core_include_dir} ${3RDPARTY_EIGEN_DIR})
 
 if (USE_ADOLC)
@@ -95,6 +134,8 @@ endif()
 add_library (mobiusPoly SHARED
   ${H_FILES}        ${CPP_FILES}
   ${fields_H_FILES} ${fields_CPP_FILES}
+  ${grid_H_FILES}   ${grid_CPP_FILES}
+  ${bvh_H_FILES}    ${bvh_CPP_FILES}
 )
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
@@ -132,3 +173,5 @@ install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMP
 
 install (FILES ${H_FILES}        DESTINATION include/mobius)
 install (FILES ${fields_H_FILES} DESTINATION include/mobius)
+install (FILES ${grid_H_FILES}   DESTINATION include/mobius)
+install (FILES ${bvh_H_FILES}    DESTINATION include/mobius)
