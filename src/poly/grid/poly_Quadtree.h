@@ -136,152 +136,152 @@ public:
 
 public:
 
-  //! Releases the memory occupied by this quadtree node with recursive treatment
-  //! on children.
-  mobiusPoly_EXPORT void
-    Release();
+  ////! Releases the memory occupied by this quadtree node with recursive treatment
+  ////! on children.
+  //mobiusPoly_EXPORT void
+  //  Release();
 
-  //! Returns true if this quadtree node has no children.
-  //! \return true/false.
-  mobiusPoly_EXPORT bool
-    IsLeaf() const;
+  ////! Returns true if this quadtree node has no children.
+  ////! \return true/false.
+  //mobiusPoly_EXPORT bool
+  //  IsLeaf() const;
 
-  //! Splits this node into 4 cells.
-  //! \return false if this nodes already has children.
-  mobiusPoly_EXPORT bool
-    Split();
+  ////! Splits this node into 4 cells.
+  ////! \return false if this nodes already has children.
+  //mobiusPoly_EXPORT bool
+  //  Split();
 
-  //! Sets the child SVO node for the octant having the given index in
-  //! range [0,7]. This method should be used after Split() invocation
-  //! to initialize the allocated pointers with the SVO structures constructed
-  //! separately.
-  //! \param[in] id     ID of the child to set.
-  //! \param[in] pChild raw pointer to the SVO node to set as a child.
-  mobiusPoly_EXPORT void
-    SetChild(const size_t id, poly_SVO* pChild);
+  ////! Sets the child SVO node for the octant having the given index in
+  ////! range [0,7]. This method should be used after Split() invocation
+  ////! to initialize the allocated pointers with the SVO structures constructed
+  ////! separately.
+  ////! \param[in] id     ID of the child to set.
+  ////! \param[in] pChild raw pointer to the SVO node to set as a child.
+  //mobiusPoly_EXPORT void
+  //  SetChild(const size_t id, poly_SVO* pChild);
 
-  //! Returns the child SVO node by its index in range [0,7]. If there are
-  //! no children in the current node, null pointer is returned.
-  //! \param[in] id ID of the child.
-  //! \return pointer to the child node.
-  mobiusPoly_EXPORT poly_SVO*
-    GetChild(const size_t id) const;
+  ////! Returns the child SVO node by its index in range [0,7]. If there are
+  ////! no children in the current node, null pointer is returned.
+  ////! \param[in] id ID of the child.
+  ////! \return pointer to the child node.
+  //mobiusPoly_EXPORT poly_SVO*
+  //  GetChild(const size_t id) const;
 
-  //! Attempts to find a child SVO node by the specified path. If a node
-  //! corresponding to the given path is not accessible, null pointer is
-  //! returned.
-  //! \param[in] path ordered set of indices to access the node.
-  //! \return pointer to the requested node.
-  mobiusPoly_EXPORT poly_SVO*
-    FindChild(const std::vector<size_t>& path) const;
+  ////! Attempts to find a child SVO node by the specified path. If a node
+  ////! corresponding to the given path is not accessible, null pointer is
+  ////! returned.
+  ////! \param[in] path ordered set of indices to access the node.
+  ////! \return pointer to the requested node.
+  //mobiusPoly_EXPORT poly_SVO*
+  //  FindChild(const std::vector<size_t>& path) const;
 
-  //! Returns the depth of the octree starting from the 0-th node. This method
-  //! consults the 0-th children only, so it is only applicable when your SVO
-  //! is complete (i.e., the voxelization is uniform).
-  //! \return depth through the 0-th nodes.
-  mobiusPoly_EXPORT unsigned
-    GetDepth0() const;
+  ////! Returns the depth of the octree starting from the 0-th node. This method
+  ////! consults the 0-th children only, so it is only applicable when your SVO
+  ////! is complete (i.e., the voxelization is uniform).
+  ////! \return depth through the 0-th nodes.
+  //mobiusPoly_EXPORT unsigned
+  //  GetDepth0() const;
 
-  //! For the passed `xyz` point, this method evaluates the scalar field which
-  //! is defined in the current SVO node. For that, the method goes down by the
-  //! SVO hierarchy until it reaches the leaf voxel containing the relevant
-  //! field values.
-  //! \param[in] P       point of interest.
-  //! \param[in] bndOnly indicates whether the scalar field should only be
-  //!                    evaluated for the zero-crossing nodes. If so, then
-  //!                    for the negative nodes, the value of -1 is returned;
-  //!                    for the positive nodes, the value of 1 is returned.
-  //! \return interpolated field value.
-  mobiusPoly_EXPORT double
-    Eval(const t_xyz& P,
-         const bool   bndOnly = false) const;
+  ////! For the passed `xyz` point, this method evaluates the scalar field which
+  ////! is defined in the current SVO node. For that, the method goes down by the
+  ////! SVO hierarchy until it reaches the leaf voxel containing the relevant
+  ////! field values.
+  ////! \param[in] P       point of interest.
+  ////! \param[in] bndOnly indicates whether the scalar field should only be
+  ////!                    evaluated for the zero-crossing nodes. If so, then
+  ////!                    for the negative nodes, the value of -1 is returned;
+  ////!                    for the positive nodes, the value of 1 is returned.
+  ////! \return interpolated field value.
+  //mobiusPoly_EXPORT double
+  //  Eval(const t_xyz& P,
+  //       const bool   bndOnly = false) const;
 
-  //! Calculates the memory occupied by the SVO hierarchy starting from this
-  //! node in bytes.
-  //! \param[out] numNodes num of corner points.
-  //! \return memory in bytes.
-  mobiusPoly_EXPORT unsigned long long
-    GetMemoryInBytes(int& numNodes) const;
+  ////! Calculates the memory occupied by the SVO hierarchy starting from this
+  ////! node in bytes.
+  ////! \param[out] numNodes num of corner points.
+  ////! \return memory in bytes.
+  //mobiusPoly_EXPORT unsigned long long
+  //  GetMemoryInBytes(int& numNodes) const;
 
 public:
 
-  //! \return min corner which is equal to P0 point.
-  const t_xyz& GetCornerMin() const
-  {
-    return m_cornerMin;
-  }
+  ////! \return min corner which is equal to P0 point.
+  //const t_xyz& GetCornerMin() const
+  //{
+  //  return m_cornerMin;
+  //}
 
-  //! Sets new coordinates for the min corner point.
-  void SetCornerMin(const t_xyz& P)
-  {
-    m_cornerMin = P;
-  }
+  ////! Sets new coordinates for the min corner point.
+  //void SetCornerMin(const t_xyz& P)
+  //{
+  //  m_cornerMin = P;
+  //}
 
-  //! \return max corner which is equal to P7 point.
-  const t_xyz& GetCornerMax() const
-  {
-    return m_cornerMax;
-  }
+  ////! \return max corner which is equal to P7 point.
+  //const t_xyz& GetCornerMax() const
+  //{
+  //  return m_cornerMax;
+  //}
 
-  //! Sets new coordinates for the max corner point.
-  void SetCornerMax(const t_xyz& P)
-  {
-    m_cornerMax = P;
-  }
+  ////! Sets new coordinates for the max corner point.
+  //void SetCornerMax(const t_xyz& P)
+  //{
+  //  m_cornerMax = P;
+  //}
 
-  //! \return corner point P0 (the notation is the same as for VTK_VOXEL).
-  const t_xyz& GetP0() const
-  {
-    return m_cornerMin;
-  }
+  ////! \return corner point P0 (the notation is the same as for VTK_VOXEL).
+  //const t_xyz& GetP0() const
+  //{
+  //  return m_cornerMin;
+  //}
 
-  //! \return corner point P1 (the notation is the same as for VTK_VOXEL).
-  t_xyz GetP1() const
-  {
-    return t_xyz( m_cornerMax.X(), m_cornerMin.Y(), m_cornerMin.Z() );
-  }
+  ////! \return corner point P1 (the notation is the same as for VTK_VOXEL).
+  //t_xyz GetP1() const
+  //{
+  //  return t_xyz( m_cornerMax.X(), m_cornerMin.Y(), m_cornerMin.Z() );
+  //}
 
-  //! \return corner point P2 (the notation is the same as for VTK_VOXEL).
-  t_xyz GetP2() const
-  {
-    return t_xyz( m_cornerMin.X(), m_cornerMax.Y(), m_cornerMin.Z() );
-  }
+  ////! \return corner point P2 (the notation is the same as for VTK_VOXEL).
+  //t_xyz GetP2() const
+  //{
+  //  return t_xyz( m_cornerMin.X(), m_cornerMax.Y(), m_cornerMin.Z() );
+  //}
 
-  //! \return corner point P3 (the notation is the same as for VTK_VOXEL).
-  t_xyz GetP3() const
-  {
-    return t_xyz( m_cornerMax.X(), m_cornerMax.Y(), m_cornerMin.Z() );
-  }
+  ////! \return corner point P3 (the notation is the same as for VTK_VOXEL).
+  //t_xyz GetP3() const
+  //{
+  //  return t_xyz( m_cornerMax.X(), m_cornerMax.Y(), m_cornerMin.Z() );
+  //}
 
-  //! \return corner point P4 (the notation is the same as for VTK_VOXEL).
-  t_xyz GetP4() const
-  {
-    return t_xyz( m_cornerMin.X(), m_cornerMin.Y(), m_cornerMax.Z() );
-  }
+  ////! \return corner point P4 (the notation is the same as for VTK_VOXEL).
+  //t_xyz GetP4() const
+  //{
+  //  return t_xyz( m_cornerMin.X(), m_cornerMin.Y(), m_cornerMax.Z() );
+  //}
 
-  //! \return corner point P5 (the notation is the same as for VTK_VOXEL).
-  t_xyz GetP5() const
-  {
-    return t_xyz( m_cornerMax.X(), m_cornerMin.Y(), m_cornerMax.Z() );
-  }
+  ////! \return corner point P5 (the notation is the same as for VTK_VOXEL).
+  //t_xyz GetP5() const
+  //{
+  //  return t_xyz( m_cornerMax.X(), m_cornerMin.Y(), m_cornerMax.Z() );
+  //}
 
-  //! \return corner point P6 (the notation is the same as for VTK_VOXEL).
-  t_xyz GetP6() const
-  {
-    return t_xyz( m_cornerMin.X(), m_cornerMax.Y(), m_cornerMax.Z() );
-  }
+  ////! \return corner point P6 (the notation is the same as for VTK_VOXEL).
+  //t_xyz GetP6() const
+  //{
+  //  return t_xyz( m_cornerMin.X(), m_cornerMax.Y(), m_cornerMax.Z() );
+  //}
 
-  //! \return corner point P7 (the notation is the same as for VTK_VOXEL).
-  const t_xyz& GetP7() const
-  {
-    return m_cornerMax;
-  }
+  ////! \return corner point P7 (the notation is the same as for VTK_VOXEL).
+  //const t_xyz& GetP7() const
+  //{
+  //  return m_cornerMax;
+  //}
 
-  //! \return cell size as a distance between P0 and P7.
-  double GetCellSize() const
-  {
-    return (m_cornerMax - m_cornerMin).Modulus();
-  }
+  ////! \return cell size as a distance between P0 and P7.
+  //double GetCellSize() const
+  //{
+  //  return (m_cornerMax - m_cornerMin).Modulus();
+  //}
 
 protected:
 
@@ -290,27 +290,27 @@ protected:
   //! \param[in]  pNode  SVO node to visit.
   //! \param[in]  sm     scalar membership classifier.
   //! \param[out] leaves collected leaves.
-  mobiusPoly_EXPORT void
+  /*mobiusPoly_EXPORT void
     getLeaves(const poly_SVO*               pNode,
               const int                     sm,
-              std::vector<const poly_SVO*>& leaves) const;
+              std::vector<const poly_SVO*>& leaves) const;*/
 
 protected:
 
-  poly_SVO** m_pChildren;  //!< Child octree nodes (8 bytes).
-  double     m_scalars[8]; //!< Stored scalar values (64 bytes).
+  //poly_SVO** m_pChildren;  //!< Child octree nodes (8 bytes).
+  //double     m_scalars[8]; //!< Stored scalar values (64 bytes).
 
-  /*
-    NOTICE: we store the corner points of each cell for convenience. It is
-            not really necessary to have them here as the corners can be deduced
-            from the root node if we know its dimensions. At the same time,
-            we have found that the convenience of having the explicit corner
-            points as a part of cell definition outweights the memory overheads.
-  */
+  ///*
+  //  NOTICE: we store the corner points of each cell for convenience. It is
+  //          not really necessary to have them here as the corners can be deduced
+  //          from the root node if we know its dimensions. At the same time,
+  //          we have found that the convenience of having the explicit corner
+  //          points as a part of cell definition outweights the memory overheads.
+  //*/
 
-  /* 48 bytes for corners */
-  t_xyz m_cornerMin;  //!< Min corner of the SVO box.
-  t_xyz m_cornerMax;  //!< Max corner of the SVO box.
+  ///* 48 bytes for corners */
+  //t_xyz m_cornerMin;  //!< Min corner of the SVO box.
+  //t_xyz m_cornerMax;  //!< Max corner of the SVO box.
 
 };
 
