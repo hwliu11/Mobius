@@ -333,7 +333,7 @@ mobius::outcome
   }
 
   // Validate the number of triangles: one "dead" is there.
-  if ( mesh->GetNumTriangles() != 4 )
+  if ( mesh->GetNumTriangles(true) != 4 )
   {
     return res.failure();
   }
@@ -395,6 +395,83 @@ mobius::outcome
     if ( hts.size() != valences[eh.GetIdx()] )
       return res.failure();
   }
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests edge flipping.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::flipEdges01(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+
+  // Add vertices.
+  poly_VertexHandle hv_a = mesh->AddVertex(0., 0., 0.);
+  poly_VertexHandle hv_x = mesh->AddVertex(1., 0., 0.);
+  poly_VertexHandle hv_y = mesh->AddVertex(0., 1., 0.);
+  poly_VertexHandle hv_b = mesh->AddVertex(1., 1., 0.);
+
+  // Add triangle.
+  poly_TriangleHandle ht0 = mesh->AddTriangle(hv_a, hv_x, hv_y);
+  poly_TriangleHandle ht1 = mesh->AddTriangle(hv_x, hv_b, hv_y);
+
+  // Compute links.
+  mesh->ComputeEdges();
+
+  // Flip edges.
+  const int nbFlips = mesh->FlipEdges();
+  //
+  if ( nbFlips != 1 )
+    return res.failure();
+
+  // Check the number of triangles.
+  const int nbTris = mesh->GetNumTriangles();
+  //
+  if ( nbTris != 2 )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests edge flipping.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::flipEdges02(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+
+  // Add vertices.
+  poly_VertexHandle hv_a = mesh->AddVertex(-1.0, -1.0, 0.0);
+  poly_VertexHandle hv_x = mesh->AddVertex( 0.0,  0.0, 0.0);
+  poly_VertexHandle hv_y = mesh->AddVertex( 1.0,  0.0, 0.0);
+  poly_VertexHandle hv_b = mesh->AddVertex(-1.0,  1.0, 0.0);
+
+  // Add triangle.
+  poly_TriangleHandle ht0 = mesh->AddTriangle(hv_a, hv_x, hv_y);
+  poly_TriangleHandle ht1 = mesh->AddTriangle(hv_x, hv_b, hv_y);
+
+  // Compute links.
+  mesh->ComputeEdges();
+
+  // Get edge that is impossible to flip.
+  poly_EdgeHandle eh = mesh->FindEdge( poly_Edge(hv_x, hv_y) );
+  //
+  if ( eh.GetIdx() == Mobius_InvalidHandleIndex)
+    return res.failure();
+
+  if ( mesh->CanFlip(eh, 1./180.*M_PI) )
+    return res.failure();
 
   return res.success();
 }

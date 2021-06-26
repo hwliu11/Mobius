@@ -98,41 +98,41 @@ int main(int /*argc*/, char* /*argv[]*/)
   std::vector< core_Ptr<testEngine_CaseLauncherAPI> > CaseLaunchers;
 
   // BSpl group.
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan>           (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InsKnot>            (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN>         (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers>     (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset>       (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage>       (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsUniform>       (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal>  (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength>  (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform>      (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots>         (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Decompose>          (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FindSpan>           (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InsKnot>            (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveN>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_EffectiveNDers>     (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotMultiset>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsAverage>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_KnotsUniform>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsCentripetal>  (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsChordLength>  (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ParamsUniform>      (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_UnifyKnots>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Decompose>          (cf->ProgressNotifier) );
 
-  //// Core group.
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral>           (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion>         (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_XYZ>                (cf->ProgressNotifier) );
+  // Core group.
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral>           (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion>         (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_XYZ>                (cf->ProgressNotifier) );
 
-  //// Geom group.
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve>   (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D>             (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_MakeBicubicBSurf>   (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine>        (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PositionCloud>      (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve>       (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PlaneSurface>       (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairSurf>           (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_SkinSurface>        (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ApproxSurf>         (cf->ProgressNotifier) );
+  // Geom group.
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_InterpolateCurve>   (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Line3D>             (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_MakeBicubicBSurf>   (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PointOnLine>        (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PositionCloud>      (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineCurve>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_BSplineSurface>     (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_PlaneSurface>       (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairCurve>          (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_FairSurf>           (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_SkinSurface>        (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_ApproxSurf>         (cf->ProgressNotifier) );
 
   // Poly group.
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Mesh>               (cf->ProgressNotifier) );
-  //CaseLaunchers.push_back( new testEngine_CaseLauncher<test_SVO>                (cf->ProgressNotifier) );
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_SVO>                (cf->ProgressNotifier) );
 
   // Launcher of entire test suite.
   testEngine_Launcher Launcher;

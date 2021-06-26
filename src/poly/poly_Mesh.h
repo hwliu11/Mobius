@@ -41,6 +41,7 @@
 #include <mobius/core_Ptr.h>
 
 // Standard includes
+#include <math.h>
 #include <unordered_map>
 
 namespace mobius {
@@ -142,6 +143,41 @@ public:
   mobiusPoly_EXPORT bool
     GetTriangles(const poly_EdgeHandle             he,
                  std::vector<poly_TriangleHandle>& hts) const;
+
+  //! Checks if the passed edge can be flipped and returns the pair of
+  //! triangles to flip. The links should have been computed before you
+  //! call this method.
+  //! \param[in]  he         the edge to check.
+  //! \param[in]  normDevRad the allowed normal deviation (radians).
+  //! \param[out] ht0        the first triangle.
+  //! \param[out] ht1        the second triangle.
+  //! \return true/false.
+  mobiusPoly_EXPORT bool
+    CanFlip(const poly_EdgeHandle he,
+            const double          normDevRad,
+            poly_TriangleHandle&  ht0,
+            poly_TriangleHandle&  ht1) const;
+
+  //! Checks if the passed edge can be flipped. The links should have
+  //! been computed before you call this method.
+  //! \param[in] he         the edge to check.
+  //! \param[in] normDevRad the allowed normal deviation (radians).
+  //! \return true/false.
+  mobiusPoly_EXPORT bool
+    CanFlip(const poly_EdgeHandle he,
+            const double          normDevRad) const;
+
+  //! Flips all edges that allow flipping.
+  //! \param[in] normDevRad the allowed normal deviation (radians).
+  //! \return the number of flips done.
+  mobiusPoly_EXPORT int
+    FlipEdges(const double normDevRad = 1./180.*M_PI);
+
+  //! Finds the given edge in the precomputed links.
+  //! \param[in] e the edge to find.
+  //! \return the edge handle.
+  mobiusPoly_EXPORT poly_EdgeHandle
+    FindEdge(const poly_Edge& e) const;
 
 public:
 
@@ -350,10 +386,20 @@ public:
     return int( m_edges.size() );
   }
 
+  //! Returns the number of triangles.
+  //! \param[in] includeDeads whether to include dead ones.
   //! \return number of triangles.
-  int GetNumTriangles() const
+  int GetNumTriangles(const bool includeDeads = false) const
   {
-    return int( m_triangles.size() );
+    if ( includeDeads )
+      return int( m_triangles.size() );
+
+    int count = 0;
+    for ( const auto& tri : m_triangles )
+      if ( !tri.IsDeleted() )
+        count++;
+
+    return count;
   }
 
   //! \return number of quads.

@@ -81,6 +81,8 @@ public:
               << &testReadPLY02
               << &refineTriangleByMidpoint
               << &computeLinks
+              << &flipEdges01
+              << &flipEdges02
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -116,6 +118,8 @@ private:
   static outcome testReadPLY02            (const int funcID);
   static outcome refineTriangleByMidpoint (const int funcID);
   static outcome computeLinks             (const int funcID);
+  static outcome flipEdges01              (const int funcID);
+  static outcome flipEdges02              (const int funcID);
 
 };
 

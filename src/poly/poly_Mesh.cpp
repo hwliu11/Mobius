@@ -298,3 +298,185 @@ bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
   hts = linkIt->second;
   return true;
 }
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
+                                const double          normDevRad,
+                                poly_TriangleHandle&  ht0,
+                                poly_TriangleHandle&  ht1) const
+{
+  std::vector<poly_TriangleHandle> hts;
+  if ( !this->GetTriangles(he, hts) )
+    return false;
+
+  if ( hts.size() != 2 )
+    return false;
+
+  ht0 = hts[0];
+  ht1 = hts[1];
+
+  poly_Triangle t[2];
+  this->GetTriangle(ht0, t[0]);
+  this->GetTriangle(ht1, t[1]);
+  //
+  if ( t[0].IsDeleted() || t[1].IsDeleted() )
+    return false;
+
+  /* Check normal criterion. */
+
+  t_xyz norm[2];
+  this->ComputeNormal(ht0, norm[0]);
+  this->ComputeNormal(ht1, norm[1]);
+  //
+  if ( norm[0].Angle(norm[1]) > normDevRad )
+    return false;
+
+  /* Check angle criterion. */
+
+  // Get vertices of the edge.
+  poly_Edge e;
+  this->GetEdge(he, e);
+  //
+  poly_VertexHandle x, y;
+  e.GetVertices(x, y);
+
+  poly_VertexHandle t0_v[3], t1_v[3];
+  poly_VertexHandle a(Mobius_InvalidHandleIndex);
+  poly_VertexHandle b(Mobius_InvalidHandleIndex);
+  t[0].GetVertices(t0_v[0], t0_v[1], t0_v[2]);
+  t[1].GetVertices(t1_v[0], t1_v[1], t1_v[2]);
+
+  // Get opposite vertices `a` and `b`.
+  for ( int j = 0; j < 3; ++j )
+  {
+    if ( t0_v[j] == x || t0_v[j] == y )
+      continue;
+
+    a = t0_v[j];
+    break;
+  }
+  //
+  for ( int j = 0; j < 3; ++j )
+  {
+    if ( t1_v[j] == x || t1_v[j] == y )
+      continue;
+
+    b = t1_v[j];
+    break;
+  }
+  //
+  if ( a.GetIdx() == Mobius_InvalidHandleIndex )
+    return false;
+  //
+  if ( b.GetIdx() == Mobius_InvalidHandleIndex )
+    return false;
+
+  t_xyz a_coords, b_coords, x_coords, y_coords;
+  this->GetVertex(a, a_coords);
+  this->GetVertex(b, b_coords);
+  this->GetVertex(x, x_coords);
+  this->GetVertex(y, y_coords);
+
+  t_xyz bx = b_coords - x_coords;
+  t_xyz ax = a_coords - x_coords;
+  t_xyz xy = y_coords - x_coords;
+
+  if ( ax.Dot(xy) < 0 || bx.Dot(xy) < 0 )
+    return false;
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
+                                const double          normDevRad) const
+{
+  poly_TriangleHandle hts[2];
+  return this->CanFlip(he, normDevRad, hts[0], hts[1]);
+}
+
+//-----------------------------------------------------------------------------
+
+int mobius::poly_Mesh::FlipEdges(const double normDevRad)
+{
+  int nbFlips = 0;
+
+  for ( poly_Mesh::EdgeIterator eit(this); eit.More(); eit.Next() )
+  {
+    const poly_EdgeHandle eh = eit.Current();
+
+    poly_TriangleHandle hts[2];
+    if ( !this->CanFlip(eh, normDevRad, hts[0], hts[1]) )
+      continue;
+
+    // Get edge to flip.
+    poly_Edge e;
+    this->GetEdge(eh, e);
+
+    // Get vertices of the edge.
+    poly_VertexHandle x, y;
+    e.GetVertices(x, y);
+
+    // Get triangle to rotate.
+    poly_Triangle ts[2];
+    this->GetTriangle(hts[0], ts[0]);
+    this->GetTriangle(hts[1], ts[1]);
+
+    // Get vertices of the triangles.
+    poly_VertexHandle ts0_v[3], ts1_v[3];
+    poly_VertexHandle a(Mobius_InvalidHandleIndex);
+    poly_VertexHandle b(Mobius_InvalidHandleIndex);
+    ts[0].GetVertices(ts0_v[0], ts0_v[1], ts0_v[2]);
+    ts[1].GetVertices(ts1_v[0], ts1_v[1], ts1_v[2]);
+
+    // Get opposite vertices `a` and `b`.
+    for ( int j = 0; j < 3; ++j )
+    {
+      if ( ts0_v[j] == x || ts0_v[j] == y )
+        continue;
+
+      a = ts0_v[j];
+      break;
+    }
+    //
+    for ( int j = 0; j < 3; ++j )
+    {
+      if ( ts1_v[j] == x || ts1_v[j] == y )
+        continue;
+
+      b = ts1_v[j];
+      break;
+    }
+    //
+    if ( a.GetIdx() == Mobius_InvalidHandleIndex )
+      continue;
+    //
+    if ( b.GetIdx() == Mobius_InvalidHandleIndex )
+      continue;
+
+    this->AddTriangle( a, x, b, ts[0].GetFaceRef() );
+    this->AddTriangle( b, y, a, ts[1].GetFaceRef() );
+
+    // Remove triangles.
+    this->RemoveTriangle(hts[0]);
+    this->RemoveTriangle(hts[1]);
+    nbFlips++;
+  }
+
+  return nbFlips;
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::poly_EdgeHandle mobius::poly_Mesh::FindEdge(const poly_Edge& e) const
+{
+  for ( size_t eidx = 0; eidx < m_edges.size(); ++eidx )
+  {
+    if ( m_edges[eidx] == e )
+      return poly_EdgeHandle( int(eidx) );
+  }
+
+  return poly_EdgeHandle(Mobius_InvalidHandleIndex);
+}
