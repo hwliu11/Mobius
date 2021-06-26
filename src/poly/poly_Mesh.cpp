@@ -244,3 +244,57 @@ bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
 
   return true;
 }
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_Mesh::ComputeEdges()
+{
+  for ( TriangleIterator tit(this); tit.More(); tit.Next() )
+  {
+    poly_TriangleHandle th = tit.Current();
+    poly_Triangle       t;
+
+    this->GetTriangle(th, t);
+
+    poly_VertexHandle vh[3];
+    t.GetVertices(vh[0], vh[1], vh[2]);
+
+    // Compose the edges to check for.
+    poly_Edge edges[3] = { poly_Edge(vh[0], vh[1]),
+                           poly_Edge(vh[1], vh[2]),
+                           poly_Edge(vh[2], vh[0]) };
+
+    // Populate the map of links.
+    for ( int eidx = 0; eidx < 3; ++eidx )
+    {
+      auto linkIt = m_links.find(edges[eidx]);
+      //
+      if ( linkIt == m_links.end() )
+      {
+        m_links.insert( {edges[eidx], {th}} );
+        m_edges.push_back(edges[eidx]);
+      }
+      else
+      {
+        linkIt->second.push_back(th);
+      }
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
+                                     std::vector<poly_TriangleHandle>& hts) const
+{
+  poly_Edge e;
+  if ( !this->GetEdge(he, e) )
+    return false;
+
+  auto linkIt = m_links.find(e);
+  if ( linkIt == m_links.end() )
+    return false;
+
+  hts = linkIt->second;
+  return true;
+}

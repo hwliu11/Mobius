@@ -40,6 +40,9 @@
 // Core includes
 #include <mobius/core_Ptr.h>
 
+// Standard includes
+#include <unordered_map>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_POLY
@@ -125,6 +128,20 @@ public:
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
     Subdivide(const poly_TriangleHandle ht);
+
+  //! Computes connectivity information as a set of mesh links
+  //! married to the elements they share.
+  mobiusPoly_EXPORT void
+    ComputeEdges();
+
+  //! Returns handles of the triangles sharing the passed edge.
+  //! \param[in]  he  the edge handle to check.
+  //! \param[out] hts the output triangles.
+  //! \return false if the links were not computed or there is no
+  //!         edge with such a handle.
+  mobiusPoly_EXPORT bool
+    GetTriangles(const poly_EdgeHandle             he,
+                 std::vector<poly_TriangleHandle>& hts) const;
 
 public:
 
@@ -440,6 +457,9 @@ protected:
   std::vector<poly_Edge>     m_edges;     //!< List of edges.
   std::vector<poly_Triangle> m_triangles; //!< List of triangles.
   std::vector<poly_Quad>     m_quads;     //!< List of quads.
+
+  //! Edges-to-triangles map.
+  std::unordered_map< poly_Edge, std::vector<poly_TriangleHandle> > m_links;
 
 };
 

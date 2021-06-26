@@ -352,3 +352,49 @@ mobius::outcome
 
   return res.success();
 }
+
+//-----------------------------------------------------------------------------
+
+//! Tests the computation of links.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::computeLinks(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+
+  // Add vertices.
+  poly_VertexHandle hv0 = mesh->AddVertex(0., 0., 0.);
+  poly_VertexHandle hv1 = mesh->AddVertex(1., 0., 0.);
+  poly_VertexHandle hv2 = mesh->AddVertex(0., 1., 0.);
+  poly_VertexHandle hv3 = mesh->AddVertex(1., 1., 0.);
+
+  // Add triangle.
+  poly_TriangleHandle ht0 = mesh->AddTriangle(hv0, hv1, hv2);
+  poly_TriangleHandle ht1 = mesh->AddTriangle(hv2, hv1, hv3);
+
+  // Compute links.
+  mesh->ComputeEdges();
+
+  // One edge is shared.
+  if ( mesh->GetNumEdges() != 5 )
+    return res.failure();
+
+  // Get triangles.
+  std::vector<size_t> valences = {1, 2, 1, 1, 1};
+  for ( poly_Mesh::EdgeIterator eit(mesh); eit.More(); eit.Next() )
+  {
+    const poly_EdgeHandle eh = eit.Current();
+
+    std::vector<poly_TriangleHandle> hts;
+    if ( !mesh->GetTriangles(eh, hts) )
+      return res.failure();
+
+    if ( hts.size() != valences[eh.GetIdx()] )
+      return res.failure();
+  }
+
+  return res.success();
+}

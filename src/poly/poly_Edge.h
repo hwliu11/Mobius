@@ -54,9 +54,62 @@ public:
     poly_Edge(const poly_VertexHandle hv0,
               const poly_VertexHandle hv1);
 
+public:
+
+  //! Returns vertex handles defining the edge.
+  //! \param[out] hv0 1-st vertex.
+  //! \param[out] hv1 2-nd vertex.
+  void GetVertices(poly_VertexHandle& hv0,
+                   poly_VertexHandle& hv1) const
+  {
+    hv0 = m_hVertices[0];
+    hv1 = m_hVertices[1];
+  }
+
+  //! Compares this edge to the other.
+  bool operator==(const poly_Edge& other) const
+  {
+    return ( (m_hVertices[0] == other.m_hVertices[0]) && (m_hVertices[1] == other.m_hVertices[1]) ) ||
+           ( (m_hVertices[0] == other.m_hVertices[1]) && (m_hVertices[1] == other.m_hVertices[0]) );
+  }
+
 protected:
 
   poly_VertexHandle m_hVertices[2]; //!< Handles to the vertices.
+
+};
+
+}
+
+// Std includes.
+#include <functional>
+
+namespace std {
+
+//! Hasher for edge.
+template <>
+struct hash<mobius::poly_Edge>
+{
+  typedef mobius::poly_Edge argument_type;
+  typedef std::size_t       result_type;
+
+  //! Returns hash code of an edge for hashing.
+  //! \param[in] e edge to hash.
+  //! \return hash code.
+  std::size_t operator()(const mobius::poly_Edge& e) const
+  {
+    mobius::poly_VertexHandle vh[2];
+    e.GetVertices(vh[0], vh[1]);
+
+    const int upper = 1000;
+
+    int key = vh[0].GetIdx() + vh[1].GetIdx();
+    key += (key << 10);
+    key ^= (key >> 6);
+    key += (key << 3);
+    key ^= (key >> 11);
+    return (key & 0x7fffffff) % upper;
+  }
 
 };
 

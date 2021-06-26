@@ -82,7 +82,7 @@ public:
   //! \param[out] hv2 3-rd vertex.
   void GetVertices(poly_VertexHandle& hv0,
                    poly_VertexHandle& hv1,
-                   poly_VertexHandle& hv2)
+                   poly_VertexHandle& hv2) const
   {
     hv0 = m_hVertices[0];
     hv1 = m_hVertices[1];

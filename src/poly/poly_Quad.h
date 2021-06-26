@@ -72,7 +72,7 @@ public:
   void GetVertices(poly_VertexHandle& hv0,
                    poly_VertexHandle& hv1,
                    poly_VertexHandle& hv2,
-                   poly_VertexHandle& hv3)
+                   poly_VertexHandle& hv3) const
   {
     hv0 = m_hVertices[0];
     hv1 = m_hVertices[1];
