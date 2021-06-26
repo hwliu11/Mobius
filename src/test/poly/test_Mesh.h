@@ -83,6 +83,8 @@ public:
               << &computeLinks
               << &flipEdges01
               << &flipEdges02
+              << &flipEdges03
+              << &flipEdges04
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -93,6 +95,9 @@ private:
                                  const int               refNumEdges,
                                  const int               refNumTriangles,
                                  const int               refNumQuads);
+
+  static t_ptr<poly_Mesh>
+    readSTL(const char* filenameShort);
 
   static outcome testReadSTL(const int   funcID,
                              const char* filenameShort,
@@ -120,6 +125,8 @@ private:
   static outcome computeLinks             (const int funcID);
   static outcome flipEdges01              (const int funcID);
   static outcome flipEdges02              (const int funcID);
+  static outcome flipEdges03              (const int funcID);
+  static outcome flipEdges04              (const int funcID);
 
 };
 

@@ -147,31 +147,45 @@ public:
   //! Checks if the passed edge can be flipped and returns the pair of
   //! triangles to flip. The links should have been computed before you
   //! call this method.
-  //! \param[in]  he         the edge to check.
-  //! \param[in]  normDevRad the allowed normal deviation (radians).
-  //! \param[out] ht0        the first triangle.
-  //! \param[out] ht1        the second triangle.
+  //! \param[in]  he          the edge to check.
+  //! \param[in]  normDevRad  the allowed absolute normal deviation (radians).
+  //! \param[in]  planeDevRad the allowed in-plane deviation (radians).
+  //! \param[out] ht0         the first triangle.
+  //! \param[out] ht1         the second triangle.
+  //! \param[out] a           the opposite vertex on the first triangle.
+  //! \param[out] b           the opposite vertex on the second triangle.
+  //! \param[out] x           the first vertex on the edge to flip.
+  //! \param[out] y           the second vertex on the edge to flip.
   //! \return true/false.
   mobiusPoly_EXPORT bool
     CanFlip(const poly_EdgeHandle he,
             const double          normDevRad,
+            const double          planeDevRad,
             poly_TriangleHandle&  ht0,
-            poly_TriangleHandle&  ht1) const;
+            poly_TriangleHandle&  ht1,
+            poly_VertexHandle&    a,
+            poly_VertexHandle&    b,
+            poly_VertexHandle&    x,
+            poly_VertexHandle&    y) const;
 
   //! Checks if the passed edge can be flipped. The links should have
   //! been computed before you call this method.
-  //! \param[in] he         the edge to check.
-  //! \param[in] normDevRad the allowed normal deviation (radians).
+  //! \param[in] he          the edge to check.
+  //! \param[in] normDevRad  the allowed absolute normal deviation (radians).
+  //! \param[in] planeDevRad the allowed in-plane deviation (radians).
   //! \return true/false.
   mobiusPoly_EXPORT bool
     CanFlip(const poly_EdgeHandle he,
-            const double          normDevRad) const;
+            const double          normDevRad  = 1./180.*M_PI,
+            const double          planeDevRad = 15./180.*M_PI) const;
 
   //! Flips all edges that allow flipping.
-  //! \param[in] normDevRad the allowed normal deviation (radians).
+  //! \param[in] normDevRad  the allowed absolute normal deviation (radians).
+  //! \param[in] planeDevRad the allowed in-plane deviation (radians).
   //! \return the number of flips done.
   mobiusPoly_EXPORT int
-    FlipEdges(const double normDevRad = 1./180.*M_PI);
+    FlipEdges(const double normDevRad  = 1./180.*M_PI,
+              const double planeDevRad = 15./180.*M_PI);
 
   //! Finds the given edge in the precomputed links.
   //! \param[in] e the edge to find.

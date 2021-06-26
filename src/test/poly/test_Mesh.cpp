@@ -47,6 +47,7 @@
 #define filename_mesh_004 "mesh/mesh_004_binary.stl"
 #define filename_mesh_005 "mesh/plate-with-quads_001.ply"
 #define filename_mesh_006 "mesh/plate-with-quads_002.ply"
+#define filename_mesh_007 "mesh/mesh_flip-edge_01.stl"
 
 //-----------------------------------------------------------------------------
 
@@ -99,16 +100,9 @@ bool mobius::test_Mesh::verifyMeshContents(const t_ptr<poly_Mesh>& mesh,
 
 //-----------------------------------------------------------------------------
 
-//! Common function to test STL reader.
-mobius::outcome
-  mobius::test_Mesh::testReadSTL(const int   funcID,
-                                 const char* filenameShort,
-                                 const int   refNumVertices,
-                                 const int   refNumEdges,
-                                 const int   refNumTriangles)
+mobius::t_ptr<mobius::poly_Mesh>
+  mobius::test_Mesh::readSTL(const char* filenameShort)
 {
-  outcome res( DescriptionFn(), funcID );
-
   // Access common facilities.
   t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
 
@@ -124,11 +118,31 @@ mobius::outcome
   if ( !reader.Perform(filename) )
   {
     cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "STL reader returned false.");
-    return res.failure();
+    return nullptr;
   }
 
+  return reader.GetResult();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Common function to test STL reader.
+mobius::outcome
+  mobius::test_Mesh::testReadSTL(const int   funcID,
+                                 const char* filenameShort,
+                                 const int   refNumVertices,
+                                 const int   refNumEdges,
+                                 const int   refNumTriangles)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = readSTL(filenameShort);
+  //
+  if ( mesh.IsNull() )
+    return res.failure();
+
   // Verify.
-  const bool isOk = verifyMeshContents(reader.GetResult(),
+  const bool isOk = verifyMeshContents(mesh,
                                        refNumVertices,
                                        refNumEdges,
                                        refNumTriangles,
@@ -470,7 +484,69 @@ mobius::outcome
   if ( eh.GetIdx() == Mobius_InvalidHandleIndex)
     return res.failure();
 
-  if ( mesh->CanFlip(eh, 1./180.*M_PI) )
+  if ( mesh->CanFlip(eh) )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests edge flipping.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::flipEdges03(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+
+  // Add vertices so that two triangles lie on the same straight line.
+  poly_VertexHandle hv_a = mesh->AddVertex(-1.0, 0.0, 0.0);
+  poly_VertexHandle hv_x = mesh->AddVertex( 0.0, 0.0, 0.0);
+  poly_VertexHandle hv_y = mesh->AddVertex( 0.0, 1.0, 0.0);
+  poly_VertexHandle hv_b = mesh->AddVertex( 1.0, 0.0, 0.0);
+
+  // Add triangle.
+  poly_TriangleHandle ht0 = mesh->AddTriangle(hv_a, hv_x, hv_y);
+  poly_TriangleHandle ht1 = mesh->AddTriangle(hv_x, hv_b, hv_y);
+
+  // Compute links.
+  mesh->ComputeEdges();
+
+  // Get edge that is impossible to flip.
+  poly_EdgeHandle eh = mesh->FindEdge( poly_Edge(hv_x, hv_y) );
+  //
+  if ( eh.GetIdx() == Mobius_InvalidHandleIndex)
+    return res.failure();
+
+  if ( mesh->CanFlip(eh) )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests edge flipping.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::flipEdges04(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_007);
+  //
+  if ( mesh.IsNull() )
+    return res.failure();
+
+  // Flip all edges. The problematic one should have been skipped.
+  mesh->ComputeEdges();
+  const int nbFlips = mesh->FlipEdges();
+  //
+  if ( nbFlips )
     return res.failure();
 
   return res.success();

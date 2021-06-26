@@ -249,12 +249,20 @@ bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
 
 void mobius::poly_Mesh::ComputeEdges()
 {
+  // Clean up any existing links.
+  m_links.clear();
+  m_edges.clear();
+
+  // Cache new links.
   for ( TriangleIterator tit(this); tit.More(); tit.Next() )
   {
     poly_TriangleHandle th = tit.Current();
     poly_Triangle       t;
 
     this->GetTriangle(th, t);
+    //
+    if ( t.IsDeleted() )
+      continue;
 
     poly_VertexHandle vh[3];
     t.GetVertices(vh[0], vh[1], vh[2]);
@@ -303,9 +311,16 @@ bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
 
 bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
                                 const double          normDevRad,
+                                const double          planeDevRad,
                                 poly_TriangleHandle&  ht0,
-                                poly_TriangleHandle&  ht1) const
+                                poly_TriangleHandle&  ht1,
+                                poly_VertexHandle&    a,
+                                poly_VertexHandle&    b,
+                                poly_VertexHandle&    x,
+                                poly_VertexHandle&    y) const
 {
+  a = b = x = y =poly_VertexHandle(Mobius_InvalidHandleIndex);
+
   std::vector<poly_TriangleHandle> hts;
   if ( !this->GetTriangles(he, hts) )
     return false;
@@ -338,12 +353,9 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
   poly_Edge e;
   this->GetEdge(he, e);
   //
-  poly_VertexHandle x, y;
   e.GetVertices(x, y);
 
   poly_VertexHandle t0_v[3], t1_v[3];
-  poly_VertexHandle a(Mobius_InvalidHandleIndex);
-  poly_VertexHandle b(Mobius_InvalidHandleIndex);
   t[0].GetVertices(t0_v[0], t0_v[1], t0_v[2]);
   t[1].GetVertices(t1_v[0], t1_v[1], t1_v[2]);
 
@@ -378,11 +390,38 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
   this->GetVertex(x, x_coords);
   this->GetVertex(y, y_coords);
 
-  t_xyz bx = b_coords - x_coords;
-  t_xyz ax = a_coords - x_coords;
-  t_xyz xy = y_coords - x_coords;
+  // There's ambiguity how `x` and `y` are defined, so we
+  // do all possible tests here.
+  t_xyz bx = (b_coords - x_coords).Normalized();
+  t_xyz ax = (a_coords - x_coords).Normalized();
+  t_xyz xy = (y_coords - x_coords).Normalized();
+  t_xyz by = (b_coords - y_coords).Normalized();
+  t_xyz ay = (a_coords - y_coords).Normalized();
+  t_xyz yx = (x_coords - y_coords).Normalized();
 
-  if ( ax.Dot(xy) < 0 || bx.Dot(xy) < 0 )
+  const double adot1 = ax.Dot(xy);
+  const double bdot1 = bx.Dot(xy);
+  const double adot2 = ay.Dot(yx);
+  const double bdot2 = by.Dot(yx);
+
+  if ( adot1 < 0 || bdot1 < 0 || adot2 < 0 || bdot2 < 0 )
+    return false;
+
+  const double aang1 = std::acos(adot1);
+  const double bang1 = std::acos(bdot1);
+  const double aang2 = std::acos(adot2);
+  const double bang2 = std::acos(bdot2);
+  //
+  if ( std::abs(aang1 - M_PI/2) < planeDevRad )
+    return false;
+  //
+  if ( std::abs(bang1 - M_PI/2) < planeDevRad )
+    return false;
+  //
+  if ( std::abs(aang2 - M_PI/2) < planeDevRad )
+    return false;
+  //
+  if ( std::abs(bang2 - M_PI/2) < planeDevRad )
     return false;
 
   return true;
@@ -391,15 +430,19 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 //-----------------------------------------------------------------------------
 
 bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
-                                const double          normDevRad) const
+                                const double          normDevRad,
+                                const double          planeDevRad) const
 {
   poly_TriangleHandle hts[2];
-  return this->CanFlip(he, normDevRad, hts[0], hts[1]);
+  poly_VertexHandle a, b, x, y;
+  return this->CanFlip(he, normDevRad, planeDevRad,
+                       hts[0], hts[1], a, b, x, y);
 }
 
 //-----------------------------------------------------------------------------
 
-int mobius::poly_Mesh::FlipEdges(const double normDevRad)
+int mobius::poly_Mesh::FlipEdges(const double normDevRad,
+                                 const double planeDevRad)
 {
   int nbFlips = 0;
 
@@ -407,59 +450,23 @@ int mobius::poly_Mesh::FlipEdges(const double normDevRad)
   {
     const poly_EdgeHandle eh = eit.Current();
 
+    poly_VertexHandle a, b, x, y;
     poly_TriangleHandle hts[2];
-    if ( !this->CanFlip(eh, normDevRad, hts[0], hts[1]) )
+    //
+    if ( !this->CanFlip(eh, normDevRad, planeDevRad,
+                        hts[0], hts[1], a, b, x, y) )
       continue;
 
-    // Get edge to flip.
-    poly_Edge e;
-    this->GetEdge(eh, e);
-
-    // Get vertices of the edge.
-    poly_VertexHandle x, y;
-    e.GetVertices(x, y);
-
-    // Get triangle to rotate.
+    // Get triangles to rotate.
     poly_Triangle ts[2];
     this->GetTriangle(hts[0], ts[0]);
     this->GetTriangle(hts[1], ts[1]);
 
-    // Get vertices of the triangles.
-    poly_VertexHandle ts0_v[3], ts1_v[3];
-    poly_VertexHandle a(Mobius_InvalidHandleIndex);
-    poly_VertexHandle b(Mobius_InvalidHandleIndex);
-    ts[0].GetVertices(ts0_v[0], ts0_v[1], ts0_v[2]);
-    ts[1].GetVertices(ts1_v[0], ts1_v[1], ts1_v[2]);
-
-    // Get opposite vertices `a` and `b`.
-    for ( int j = 0; j < 3; ++j )
-    {
-      if ( ts0_v[j] == x || ts0_v[j] == y )
-        continue;
-
-      a = ts0_v[j];
-      break;
-    }
-    //
-    for ( int j = 0; j < 3; ++j )
-    {
-      if ( ts1_v[j] == x || ts1_v[j] == y )
-        continue;
-
-      b = ts1_v[j];
-      break;
-    }
-    //
-    if ( a.GetIdx() == Mobius_InvalidHandleIndex )
-      continue;
-    //
-    if ( b.GetIdx() == Mobius_InvalidHandleIndex )
-      continue;
-
+    // Add new (rotated) triangles.
     this->AddTriangle( a, x, b, ts[0].GetFaceRef() );
     this->AddTriangle( b, y, a, ts[1].GetFaceRef() );
 
-    // Remove triangles.
+    // Remove original triangles.
     this->RemoveTriangle(hts[0]);
     this->RemoveTriangle(hts[1]);
     nbFlips++;
