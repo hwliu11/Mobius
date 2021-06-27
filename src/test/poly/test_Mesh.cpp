@@ -48,6 +48,7 @@
 #define filename_mesh_005 "mesh/plate-with-quads_001.ply"
 #define filename_mesh_006 "mesh/plate-with-quads_002.ply"
 #define filename_mesh_007 "mesh/mesh_flip-edge_01.stl"
+#define filename_mesh_008 "mesh/mesh_flip-edge_02.stl"
 
 //-----------------------------------------------------------------------------
 
@@ -548,6 +549,50 @@ mobius::outcome
   //
   if ( nbFlips )
     return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests edge flipping.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::flipEdges05(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_008);
+  //
+  if ( mesh.IsNull() )
+    return res.failure();
+
+  t_xyz refNorm(0, 0, 1);
+
+  mesh->ComputeEdges();
+  mesh->FlipEdges();
+
+  for ( poly_Mesh::TriangleIterator tit(mesh); tit.More(); tit.Next() )
+  {
+    t_xyz currNorm;
+    mesh->ComputeNormal(tit.Current(), currNorm);
+
+    if ( currNorm.Angle(refNorm) > core_Precision::Resolution3D() )
+      return res.failure();
+  }
+
+  mesh->ComputeEdges();
+  mesh->FlipEdges();
+
+  for ( poly_Mesh::TriangleIterator tit(mesh); tit.More(); tit.Next() )
+  {
+    t_xyz currNorm;
+    mesh->ComputeNormal(tit.Current(), currNorm);
+
+    if ( currNorm.Angle(refNorm) > core_Precision::Resolution3D() )
+      return res.failure();
+  }
 
   return res.success();
 }

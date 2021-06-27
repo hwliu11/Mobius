@@ -35,7 +35,7 @@
 
 mobius::poly_Edge::poly_Edge()
 {
-  m_hVertices[0] = m_hVertices[1] = poly_VertexHandle();
+  hVertices[0] = hVertices[1] = poly_VertexHandle();
 }
 
 //-----------------------------------------------------------------------------
@@ -43,6 +43,6 @@ mobius::poly_Edge::poly_Edge()
 mobius::poly_Edge::poly_Edge(const poly_VertexHandle hv0,
                              const poly_VertexHandle hv1)
 {
-  m_hVertices[0] = hv0;
-  m_hVertices[1] = hv1;
+  hVertices[0] = hv0;
+  hVertices[1] = hv1;
 }

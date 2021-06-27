@@ -52,25 +52,25 @@ public:
   //! Ctor accepting the optional index.
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
-  explicit poly_BaseHandle(const int _idx = Mobius_InvalidHandleIndex) : m_iIdx(_idx) {}
+  explicit poly_BaseHandle(const int _idx = Mobius_InvalidHandleIndex) : iIdx(_idx) {}
 
 public:
 
   //! \return underlying index of this handle.
-  int GetIdx() const { return m_iIdx; }
+  int GetIdx() const { return iIdx; }
 
   //! The handle is valid iff the index is not negative.
-  bool IsValid() const { return m_iIdx >= 0; }
+  bool IsValid() const { return iIdx >= 0; }
 
   //! Invalidates this handle.
-  void Invalidate() { m_iIdx = Mobius_InvalidHandleIndex; }
+  void Invalidate() { iIdx = Mobius_InvalidHandleIndex; }
 
   //! Compares this handle with the passed one.
   //! \param[in] _rhs another handle to compare this handle with.
   //! \return true in case of equality, false -- otherwise.
   bool operator==(const poly_BaseHandle& _rhs) const
   {
-    return this->m_iIdx == _rhs.m_iIdx;
+    return this->iIdx == _rhs.iIdx;
   }
 
   //! Checks for inequality.
@@ -78,7 +78,7 @@ public:
   //! \return true in case of inequality, false -- otherwise.
   bool operator!=(const poly_BaseHandle& _rhs) const
   {
-    return this->m_iIdx != _rhs.m_iIdx;
+    return this->iIdx != _rhs.iIdx;
   }
 
   //! Checks if this handle is less than the passed one.
@@ -86,25 +86,25 @@ public:
   //! \return true if this handle is less than the passed one, false -- otherwise.
   bool operator<(const poly_BaseHandle& _rhs) const
   {
-    return this->m_iIdx < _rhs.m_iIdx;
+    return this->iIdx < _rhs.iIdx;
   }
 
 protected:
 
-  void increment() { ++m_iIdx; } //!< Increments the underlying index.
-  void decrement() { --m_iIdx; } //!< Decrements the underlying index.
+  void increment() { ++iIdx; } //!< Increments the underlying index.
+  void decrement() { --iIdx; } //!< Decrements the underlying index.
 
   //! Increments the underlying index by the passed value.
   //! \param[in] amount increment value to use.
-  void increment(const int amount) { m_iIdx += amount; }
+  void increment(const int amount) { iIdx += amount; }
 
   //! Decrements the underlying index by the passed value.
   //! \param[in] amount decrement value to use.
-  void decrement(const int amount) { m_iIdx -= amount; }
+  void decrement(const int amount) { iIdx -= amount; }
 
-private:
+public:
 
-  int m_iIdx; //!< 0-based index of the handle.
+  int iIdx; //!< 0-based index of the handle.
 
 };
 
@@ -132,6 +132,10 @@ struct poly_EdgeHandle : public poly_BaseHandle
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
   explicit poly_EdgeHandle(const int _idx = Mobius_InvalidHandleIndex) : poly_BaseHandle(_idx) {}
+
+  //! Ctor accepting the size_t index.
+  //! \param[in] _idx 0-based index to set for the handle.
+  explicit poly_EdgeHandle(const size_t _idx) : poly_BaseHandle( int(_idx) ) {}
 };
 
 //-----------------------------------------------------------------------------

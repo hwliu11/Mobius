@@ -85,6 +85,7 @@ public:
               << &flipEdges02
               << &flipEdges03
               << &flipEdges04
+              << &flipEdges05
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -127,6 +128,7 @@ private:
   static outcome flipEdges02              (const int funcID);
   static outcome flipEdges03              (const int funcID);
   static outcome flipEdges04              (const int funcID);
+  static outcome flipEdges05              (const int funcID);
 
 };
 

@@ -129,6 +129,28 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
+bool mobius::poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
+                                      const poly_VertexHandle hv1,
+                                      const poly_VertexHandle hv2,
+                                      t_xyz&                  norm) const
+{
+  t_xyz tv[3];
+  //
+  this->GetVertex(hv0, tv[0]);
+  this->GetVertex(hv1, tv[1]);
+  this->GetVertex(hv2, tv[2]);
+
+  // Compute norm.
+  norm = (tv[1] - tv[0])^(tv[2] - tv[0]);
+  //
+  if ( norm.Modulus() > core_Precision::Resolution3D() )
+    norm.Normalize();
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 bool
   mobius::poly_Mesh::ComputeNormal(const poly_TriangleHandle ht,
                                    t_xyz&                    norm) const
@@ -143,17 +165,8 @@ bool
   t_xyz             tv[3];
   //
   t.GetVertices(htv[0], htv[1], htv[2]);
-  //
-  for ( size_t k = 0; k < 3; ++k )
-    this->GetVertex(htv[k], tv[k]);
 
-  // Compute norm.
-  norm = (tv[1] - tv[0])^(tv[2] - tv[0]);
-  //
-  if ( norm.Modulus() > core_Precision::Resolution3D() )
-    norm.Normalize();
-
-  return true;
+  return this->ComputeNormal(htv[0], htv[1], htv[2], norm);
 }
 
 //-----------------------------------------------------------------------------
@@ -224,6 +237,11 @@ bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
   for ( size_t k = 0; k < 3; ++k )
     this->GetVertex(htv[k], tv[k]);
 
+  // Get triangle links.
+  /*poly_Edge e[3] = { poly_Edge(htv[0], htv[1]),
+                     poly_Edge(htv[1], htv[2]),
+                     poly_Edge(htv[2], htv[0]) };*/
+
   // Prepare subdivision points.
   t_xyz mv[3] = { (tv[0] + tv[1])*0.5,
                   (tv[1] + tv[2])*0.5,
@@ -250,8 +268,17 @@ bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
 void mobius::poly_Mesh::ComputeEdges()
 {
   // Clean up any existing links.
-  m_links.clear();
-  m_edges.clear();
+  this->ClearEdges();
+
+  // We keep the edge vertices sorted by their indices, so that we can
+  // benefit from fast hashing. The idea is to hash twice using the
+  // nested maps like
+  //
+  // <vertexHandle_0, <vertexHandle_1, edgeHandle_i>>
+  // <vertexHandle_0, <vertexHandle_2, edgeHandle_j>>
+  // ...
+  typedef std::unordered_map<poly_VertexHandle, poly_EdgeHandle> t_vheh;
+  std::unordered_map<poly_VertexHandle, t_vheh> visitedEdges;
 
   // Cache new links.
   for ( TriangleIterator tit(this); tit.More(); tit.Next() )
@@ -268,23 +295,45 @@ void mobius::poly_Mesh::ComputeEdges()
     t.GetVertices(vh[0], vh[1], vh[2]);
 
     // Compose the edges to check for.
-    poly_Edge edges[3] = { poly_Edge(vh[0], vh[1]),
-                           poly_Edge(vh[1], vh[2]),
-                           poly_Edge(vh[2], vh[0]) };
+    poly_Edge edges[3];
+
+    // Keep vertices sorted by index.
+    edges[0] = (vh[0].iIdx < vh[1].iIdx ? poly_Edge(vh[0], vh[1]) : poly_Edge(vh[1], vh[0]));
+    edges[1] = (vh[1].iIdx < vh[2].iIdx ? poly_Edge(vh[1], vh[2]) : poly_Edge(vh[2], vh[1]));
+    edges[2] = (vh[2].iIdx < vh[0].iIdx ? poly_Edge(vh[2], vh[0]) : poly_Edge(vh[0], vh[2]));
 
     // Populate the map of links.
     for ( int eidx = 0; eidx < 3; ++eidx )
     {
-      auto linkIt = m_links.find(edges[eidx]);
+      auto linkIt1 = visitedEdges.find(edges[eidx].hVertices[0]);
       //
-      if ( linkIt == m_links.end() )
+      if ( linkIt1 == visitedEdges.end() )
       {
-        m_links.insert( {edges[eidx], {th}} );
-        m_edges.push_back(edges[eidx]);
+        poly_EdgeHandle eh( m_links.size() );
+
+        t_vheh rec; rec.insert({edges[eidx].hVertices[1], eh});
+
+        visitedEdges.insert( {edges[eidx].hVertices[0], rec});
+        m_links     .insert    ( {eh, {th}} );
+        m_edges     .push_back (edges[eidx]);
       }
       else
       {
-        linkIt->second.push_back(th);
+        auto linkIt2 = linkIt1->second.find(edges[eidx].hVertices[1]);
+        //
+        if ( linkIt2 == linkIt1->second.end() )
+        {
+          poly_EdgeHandle eh( m_links.size() );
+
+          linkIt1->second.insert({edges[eidx].hVertices[1], eh});
+
+          m_links      .insert    ( {eh, {th}} );
+          m_edges      .push_back (edges[eidx]);
+        }
+        else
+        {
+          m_links.find(linkIt2->second)->second.push_back(th);
+        }
       }
     }
   }
@@ -292,14 +341,18 @@ void mobius::poly_Mesh::ComputeEdges()
 
 //-----------------------------------------------------------------------------
 
+void mobius::poly_Mesh::ClearEdges()
+{
+  m_links.clear();
+  m_edges.clear();
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
                                      std::vector<poly_TriangleHandle>& hts) const
 {
-  poly_Edge e;
-  if ( !this->GetEdge(he, e) )
-    return false;
-
-  auto linkIt = m_links.find(e);
+  auto linkIt = m_links.find(he);
   if ( linkIt == m_links.end() )
     return false;
 
@@ -317,9 +370,11 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
                                 poly_VertexHandle&    a,
                                 poly_VertexHandle&    b,
                                 poly_VertexHandle&    x,
-                                poly_VertexHandle&    y) const
+                                poly_VertexHandle&    y,
+                                t_xyz&                norm0,
+                                t_xyz&                norm1) const
 {
-  a = b = x = y =poly_VertexHandle(Mobius_InvalidHandleIndex);
+  a = b = x = y = poly_VertexHandle(Mobius_InvalidHandleIndex);
 
   std::vector<poly_TriangleHandle> hts;
   if ( !this->GetTriangles(he, hts) )
@@ -340,11 +395,10 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
   /* Check normal criterion. */
 
-  t_xyz norm[2];
-  this->ComputeNormal(ht0, norm[0]);
-  this->ComputeNormal(ht1, norm[1]);
+  this->ComputeNormal(ht0, norm0);
+  this->ComputeNormal(ht1, norm1);
   //
-  if ( norm[0].Angle(norm[1]) > normDevRad )
+  if ( norm0.Angle(norm1) > normDevRad )
     return false;
 
   /* Check angle criterion. */
@@ -353,7 +407,8 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
   poly_Edge e;
   this->GetEdge(he, e);
   //
-  e.GetVertices(x, y);
+  x = e.hVertices[0];
+  y = e.hVertices[1];
 
   poly_VertexHandle t0_v[3], t1_v[3];
   t[0].GetVertices(t0_v[0], t0_v[1], t0_v[2]);
@@ -434,9 +489,11 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
                                 const double          planeDevRad) const
 {
   poly_TriangleHandle hts[2];
-  poly_VertexHandle a, b, x, y;
+  poly_VertexHandle   a, b, x, y;
+  t_xyz               norm0, norm1;
+  //
   return this->CanFlip(he, normDevRad, planeDevRad,
-                       hts[0], hts[1], a, b, x, y);
+                       hts[0], hts[1], a, b, x, y, norm0, norm1);
 }
 
 //-----------------------------------------------------------------------------
@@ -450,11 +507,12 @@ int mobius::poly_Mesh::FlipEdges(const double normDevRad,
   {
     const poly_EdgeHandle eh = eit.Current();
 
-    poly_VertexHandle a, b, x, y;
+    poly_VertexHandle   a, b, x, y;
     poly_TriangleHandle hts[2];
+    t_xyz               norm0, norm1;
     //
     if ( !this->CanFlip(eh, normDevRad, planeDevRad,
-                        hts[0], hts[1], a, b, x, y) )
+                        hts[0], hts[1], a, b, x, y, norm0, norm1) )
       continue;
 
     // Get triangles to rotate.
@@ -462,15 +520,38 @@ int mobius::poly_Mesh::FlipEdges(const double normDevRad,
     this->GetTriangle(hts[0], ts[0]);
     this->GetTriangle(hts[1], ts[1]);
 
+    // Compute norms to preserve orientations.
+    t_xyz testN[2];
+    this->ComputeNormal(a, x, b, testN[0]);
+    this->ComputeNormal(b, y, a, testN[1]);
+
     // Add new (rotated) triangles.
-    this->AddTriangle( a, x, b, ts[0].GetFaceRef() );
-    this->AddTriangle( b, y, a, ts[1].GetFaceRef() );
+    if ( testN[0].Dot(norm0) > 0 )
+    {
+      this->AddTriangle( a, x, b, ts[0].GetFaceRef() );
+    }
+    else
+    {
+      this->AddTriangle( b, x, a, ts[0].GetFaceRef() );
+    }
+    //
+    if ( testN[1].Dot(norm1) > 0 )
+    {
+      this->AddTriangle( b, y, a, ts[1].GetFaceRef() );
+    }
+    else
+    {
+      this->AddTriangle( a, y, b, ts[1].GetFaceRef() );
+    }
 
     // Remove original triangles.
     this->RemoveTriangle(hts[0]);
     this->RemoveTriangle(hts[1]);
     nbFlips++;
   }
+
+  // Invalidate all existing links.
+  this->ClearEdges();
 
   return nbFlips;
 }

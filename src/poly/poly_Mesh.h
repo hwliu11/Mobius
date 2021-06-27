@@ -92,6 +92,19 @@ public:
   mobiusPoly_EXPORT bool
     RefineByMidpoint(const poly_TriangleHandle ht);
 
+  //! Computes normal vector for the passed triple of vertices.
+  //! \param[in]  hv0  the first vertex handle.
+  //! \param[in]  hv1  the second vertex handle.
+  //! \param[in]  hv2  the third vertex handle.
+  //! \param[out] norm the computed normal vector.
+  //! \return true if the normal vector was computed successfully,
+  //!         false -- otherwise.
+  mobiusPoly_EXPORT bool
+    ComputeNormal(const poly_VertexHandle hv0,
+                  const poly_VertexHandle hv1,
+                  const poly_VertexHandle hv2,
+                  t_xyz&                  norm) const;
+
   //! Computes normal vector for the triangle in question.
   //! \param[in]  ht   handle of the triangle in question.
   //! \param[out] norm computed normal vector.
@@ -135,6 +148,10 @@ public:
   mobiusPoly_EXPORT void
     ComputeEdges();
 
+  //! Cleans up the available edge info.
+  mobiusPoly_EXPORT void
+    ClearEdges();
+
   //! Returns handles of the triangles sharing the passed edge.
   //! \param[in]  he  the edge handle to check.
   //! \param[out] hts the output triangles.
@@ -156,6 +173,8 @@ public:
   //! \param[out] b           the opposite vertex on the second triangle.
   //! \param[out] x           the first vertex on the edge to flip.
   //! \param[out] y           the second vertex on the edge to flip.
+  //! \param[out] norm0       the normal vector for the first triangle.
+  //! \param[out] norm1       the normal vector for the second triangle.
   //! \return true/false.
   mobiusPoly_EXPORT bool
     CanFlip(const poly_EdgeHandle he,
@@ -166,7 +185,9 @@ public:
             poly_VertexHandle&    a,
             poly_VertexHandle&    b,
             poly_VertexHandle&    x,
-            poly_VertexHandle&    y) const;
+            poly_VertexHandle&    y,
+            t_xyz&                norm0,
+            t_xyz&                norm1) const;
 
   //! Checks if the passed edge can be flipped. The links should have
   //! been computed before you call this method.
@@ -519,7 +540,7 @@ protected:
   std::vector<poly_Quad>     m_quads;     //!< List of quads.
 
   //! Edges-to-triangles map.
-  std::unordered_map< poly_Edge, std::vector<poly_TriangleHandle> > m_links;
+  std::unordered_map< poly_EdgeHandle, std::vector<poly_TriangleHandle> > m_links;
 
 };
 
