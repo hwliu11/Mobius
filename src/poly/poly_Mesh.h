@@ -161,6 +161,15 @@ public:
     GetTriangles(const poly_EdgeHandle             he,
                  std::vector<poly_TriangleHandle>& hts) const;
 
+  //! Finds adjacent triangles for the given one.
+  //! \param[in]  ht the triangle in question.
+  //! \param[out] hts the output triangles.
+  //! \return false if the links were not computed or there is no
+  //!         triangle with such a handle.
+  mobiusPoly_EXPORT bool
+    FindAdjacent(const poly_TriangleHandle         ht,
+                 std::vector<poly_TriangleHandle>& hts) const;
+
   //! Checks if the passed edge can be flipped and returns the pair of
   //! triangles to flip. The links should have been computed before you
   //! call this method.

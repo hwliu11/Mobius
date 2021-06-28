@@ -49,6 +49,7 @@
 #define filename_mesh_006 "mesh/plate-with-quads_002.ply"
 #define filename_mesh_007 "mesh/mesh_flip-edge_01.stl"
 #define filename_mesh_008 "mesh/mesh_flip-edge_02.stl"
+#define filename_mesh_009 "mesh/mesh_005.stl"
 
 //-----------------------------------------------------------------------------
 
@@ -593,6 +594,33 @@ mobius::outcome
     if ( currNorm.Angle(refNorm) > core_Precision::Resolution3D() )
       return res.failure();
   }
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests finding adjacent triangles.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::findAdjacent(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_009);
+  //
+  if ( mesh.IsNull() )
+    return res.failure();
+
+  std::vector<poly_TriangleHandle> ths;
+
+  // Find adjacent triangles.
+  mesh->ComputeEdges();
+  mesh->FindAdjacent(poly_TriangleHandle(1), ths);
+  //
+  if ( ths.size() != 3 )
+    return res.failure();
 
   return res.success();
 }

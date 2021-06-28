@@ -362,6 +362,47 @@ bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
 
 //-----------------------------------------------------------------------------
 
+bool mobius::poly_Mesh::FindAdjacent(const poly_TriangleHandle         ht,
+                                     std::vector<poly_TriangleHandle>& hts) const
+{
+  poly_Triangle t;
+  this->GetTriangle(ht, t);
+
+  poly_VertexHandle hv[3];
+  t.GetVertices(hv[0], hv[1], hv[2]);
+
+  poly_Edge edges[3] = { poly_Edge(hv[0], hv[1]),
+                         poly_Edge(hv[1], hv[2]),
+                         poly_Edge(hv[2], hv[0]) };
+
+  poly_EdgeHandle hes[3] = { this->FindEdge(edges[0]),
+                             this->FindEdge(edges[1]),
+                             this->FindEdge(edges[2]) };
+  //
+  for ( int j = 0; j < 3; ++j )
+  {
+    if ( hes[j].iIdx == Mobius_InvalidHandleIndex )
+      return false;
+  }
+
+  // Find triangles by edges.
+  for ( int j = 0; j < 3; ++j )
+  {
+    std::vector<poly_TriangleHandle> edgeTris;
+
+    if ( !this->GetTriangles(hes[j], edgeTris) )
+      return false;
+
+    for ( const auto& eth : edgeTris )
+      if ( eth != ht )
+        hts.push_back(eth);
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
                                 const double          normDevRad,
                                 const double          planeDevRad,
