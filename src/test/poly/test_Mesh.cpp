@@ -50,6 +50,7 @@
 #define filename_mesh_007 "mesh/mesh_flip-edge_01.stl"
 #define filename_mesh_008 "mesh/mesh_flip-edge_02.stl"
 #define filename_mesh_009 "mesh/mesh_005.stl"
+#define filename_mesh_010 "mesh/mesh_006.stl"
 
 //-----------------------------------------------------------------------------
 
@@ -322,7 +323,7 @@ mobius::outcome
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_Mesh::refineTriangleByMidpoint(const int funcID)
+  mobius::test_Mesh::refineByMidpoint(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
@@ -617,10 +618,131 @@ mobius::outcome
 
   // Find adjacent triangles.
   mesh->ComputeEdges();
-  mesh->FindAdjacent(poly_TriangleHandle(1), ths);
+  mesh->FindAdjacentByEdges(poly_TriangleHandle(1), ths);
   //
   if ( ths.size() != 3 )
     return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests midedge refinement.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::refineByMidedges01(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+
+  // Add vertices.
+  poly_VertexHandle hv0 = mesh->AddVertex(0., 0., 0.);
+  poly_VertexHandle hv1 = mesh->AddVertex(1., 0., 0.);
+  poly_VertexHandle hv2 = mesh->AddVertex(0., 1., 0.);
+
+  // Add triangle.
+  poly_TriangleHandle ht = mesh->AddTriangle(hv0, hv1, hv2);
+
+  // Compute edges.
+  mesh->ComputeEdges();
+
+  // Refine triangle.
+  if ( !mesh->RefineByMidedges(ht) )
+  {
+    return res.failure();
+  }
+
+  // Validate the number of vertices.
+  if ( mesh->GetNumVertices() != 6 )
+  {
+    return res.failure();
+  }
+
+  // Validate the number of edges: 3 are "dead".
+  if ( mesh->GetNumEdges() != 12 )
+  {
+    return res.failure();
+  }
+
+  // Validate the number of triangles: one "dead" is there.
+  if ( mesh->GetNumTriangles(true) != 5 )
+  {
+    return res.failure();
+  }
+
+  // Verify the "is deleted" flag.
+  poly_Triangle t;
+  if ( !mesh->GetTriangle(ht, t) )
+  {
+    return res.failure();
+  }
+  //
+  if ( !t.IsDeleted() )
+  {
+    return res.failure();
+  }
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests midedge refinement.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::refineByMidedges02(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_010);
+  //
+  if ( mesh.IsNull() )
+    return res.failure();
+
+  // Compute edges.
+  mesh->ComputeEdges();
+
+  int numTris = mesh->GetNumTriangles();
+  //
+  for ( int idx = 0; idx < numTris; ++idx )
+  {
+    poly_TriangleHandle th(idx);
+    poly_Triangle       t;
+
+    // Get the next triangle to process.
+    mesh->GetTriangle(th, t);
+    //
+    if ( t.IsDeleted() )
+      continue;
+
+    // Refine triangles.
+    if ( !mesh->RefineByMidedges(th) )
+    {
+      return res.failure();
+    }
+  }
+
+  // Validate the number of vertices.
+  if ( mesh->GetNumVertices() != 11 )
+  {
+    return res.failure();
+  }
+
+  // Validate the number of edges.
+  if ( mesh->GetNumEdges() != 27 )
+  {
+    return res.failure();
+  }
+
+  // Validate the number of triangles.
+  if ( mesh->GetNumTriangles(true) != 15 )
+  {
+    return res.failure();
+  }
 
   return res.success();
 }

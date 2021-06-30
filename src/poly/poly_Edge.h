@@ -32,6 +32,7 @@
 #define poly_Edge_HeaderFile
 
 // Poly includes
+#include <mobius/poly_Flag.h>
 #include <mobius/poly_Handles.h>
 
 namespace mobius {
@@ -56,7 +57,31 @@ public:
 
 public:
 
-  //! Compares this edge to the other.
+  //! \return the associated flags.
+  int GetFlags() const
+  {
+    return m_iFlags;
+  }
+
+  //! \return non-const reference to the attributes.
+  int& ChangeFlags()
+  {
+    return m_iFlags;
+  }
+
+  //! Flags this edge as deleted.
+  void SetDeleted()
+  {
+    m_iFlags |= Flag_Deleted;
+  }
+
+  //! \return true if this edge is marked as deleted.
+  bool IsDeleted() const
+  {
+    return (m_iFlags & Flag_Deleted) > 0;
+  }
+
+  //! Compares this edge with another one.
   bool operator==(const poly_Edge& other) const
   {
     return ( (hVertices[0] == other.hVertices[0]) && (hVertices[1] == other.hVertices[1]) ) ||
@@ -66,6 +91,10 @@ public:
 public:
 
   poly_VertexHandle hVertices[2]; //!< Handles to the vertices.
+
+protected:
+
+  int m_iFlags; //!< Flags.
 
 };
 

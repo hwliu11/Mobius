@@ -79,14 +79,16 @@ public:
               << &testReadSTL04
               << &testReadPLY01
               << &testReadPLY02
-              << &refineTriangleByMidpoint
+              << &refineByMidpoint
               << &computeLinks
               << &flipEdges01
               << &flipEdges02
               << &flipEdges03
               << &flipEdges04
               << &flipEdges05
-              << &findAdjacent;
+              << &findAdjacent
+              << &refineByMidedges01
+              << &refineByMidedges02
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
@@ -116,21 +118,23 @@ private:
 
 private:
 
-  static outcome testCreateVertex         (const int funcID);
-  static outcome testReadSTL01            (const int funcID);
-  static outcome testReadSTL02            (const int funcID);
-  static outcome testReadSTL03            (const int funcID);
-  static outcome testReadSTL04            (const int funcID);
-  static outcome testReadPLY01            (const int funcID);
-  static outcome testReadPLY02            (const int funcID);
-  static outcome refineTriangleByMidpoint (const int funcID);
-  static outcome computeLinks             (const int funcID);
-  static outcome flipEdges01              (const int funcID);
-  static outcome flipEdges02              (const int funcID);
-  static outcome flipEdges03              (const int funcID);
-  static outcome flipEdges04              (const int funcID);
-  static outcome flipEdges05              (const int funcID);
-  static outcome findAdjacent             (const int funcID);
+  static outcome testCreateVertex   (const int funcID);
+  static outcome testReadSTL01      (const int funcID);
+  static outcome testReadSTL02      (const int funcID);
+  static outcome testReadSTL03      (const int funcID);
+  static outcome testReadSTL04      (const int funcID);
+  static outcome testReadPLY01      (const int funcID);
+  static outcome testReadPLY02      (const int funcID);
+  static outcome refineByMidpoint   (const int funcID);
+  static outcome computeLinks       (const int funcID);
+  static outcome flipEdges01        (const int funcID);
+  static outcome flipEdges02        (const int funcID);
+  static outcome flipEdges03        (const int funcID);
+  static outcome flipEdges04        (const int funcID);
+  static outcome flipEdges05        (const int funcID);
+  static outcome findAdjacent       (const int funcID);
+  static outcome refineByMidedges01 (const int funcID);
+  static outcome refineByMidedges02 (const int funcID);
 
 };
 

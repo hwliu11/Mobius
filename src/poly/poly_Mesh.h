@@ -43,6 +43,7 @@
 // Standard includes
 #include <math.h>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace mobius {
 
@@ -91,6 +92,29 @@ public:
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
     RefineByMidpoint(const poly_TriangleHandle ht);
+
+  //! Refines the passed triangle by midedge subdivision.
+  //! \param[in]  ht  handle of the triangle to refine.
+  //! \param[out] hts newly constructed triangles.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    RefineByMidedges(const poly_TriangleHandle         ht,
+                     std::vector<poly_TriangleHandle>& hts);
+
+  //! Refines the passed triangle by midedge subdivision.
+  //! \param[in] ht handle of the triangle to refine.
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    RefineByMidedges(const poly_TriangleHandle ht);
+
+  //! Returns the opposite vertex for the given edge on the
+  //! passed triangle.
+  //! \param[in] ht triangle handle.
+  //! \param[in] he edge handle.
+  //! \return the opposite vertex.
+  mobiusPoly_EXPORT poly_VertexHandle
+    GetOppositeVertex(const poly_TriangleHandle ht,
+                      const poly_EdgeHandle     he) const;
 
   //! Computes normal vector for the passed triple of vertices.
   //! \param[in]  hv0  the first vertex handle.
@@ -161,14 +185,37 @@ public:
     GetTriangles(const poly_EdgeHandle             he,
                  std::vector<poly_TriangleHandle>& hts) const;
 
+  //! Returns handles of the triangles sharing the passed edge.
+  //! \param[in]  he  the edge handle to check.
+  //! \param[out] hts the output triangles.
+  //! \return false if the links were not computed or there is no
+  //!         edge with such a handle.
+  mobiusPoly_EXPORT bool
+    GetTriangles(const poly_EdgeHandle                    he,
+                 std::unordered_set<poly_TriangleHandle>& hts) const;
+
   //! Finds adjacent triangles for the given one.
   //! \param[in]  ht the triangle in question.
   //! \param[out] hts the output triangles.
   //! \return false if the links were not computed or there is no
   //!         triangle with such a handle.
   mobiusPoly_EXPORT bool
-    FindAdjacent(const poly_TriangleHandle         ht,
+    FindAdjacentByEdges(const poly_TriangleHandle         ht,
+                        std::vector<poly_TriangleHandle>& hts) const;
+
+  //! Finds all triangles sharing the given vertex.
+  //! \param[in]  hv  the vertex in question.
+  //! \param[out] hts the found triangles.
+  mobiusPoly_EXPORT void
+    FindAdjacent(const poly_VertexHandle           hv,
                  std::vector<poly_TriangleHandle>& hts) const;
+
+  //! Finds adjacent triangles for the given one.
+  //! \param[in]  ht the triangle in question.
+  //! \param[out] hts the output triangles.
+  mobiusPoly_EXPORT void
+    FindAdjacentByVertices(const poly_TriangleHandle                ht,
+                           std::unordered_set<poly_TriangleHandle>& hts) const;
 
   //! Checks if the passed edge can be flipped and returns the pair of
   //! triangles to flip. The links should have been computed before you
@@ -222,6 +269,33 @@ public:
   //! \return the edge handle.
   mobiusPoly_EXPORT poly_EdgeHandle
     FindEdge(const poly_Edge& e) const;
+
+  //! Returns the common edge for the passed pair of triangles.
+  //! \param[in] ht0 the first triangle.
+  //! \param[in] ht1 the second triangle.
+  //! \return the handle for the common edge or invalid handle
+  //!         if there is no common edge.
+  mobiusPoly_EXPORT poly_EdgeHandle
+    FindEdge(const poly_TriangleHandle ht0,
+             const poly_TriangleHandle ht1) const;
+
+  //! Finds the vertex shared between the passed triangle and the
+  //! given (presumably dangling) edge.
+  //! \param[in]  ht   the triangle in question.
+  //! \param[in]  he   the edge that presumably shares a single vertex
+  //!                  the triangle `ht`.
+  //! \param[out] vidx the index of the common vertex in range [0,2].
+  //! \return the shared vertex or an invalid handle if there is no
+  //!         such a vertex.
+  mobiusPoly_EXPORT poly_VertexHandle
+    FindVertex(const poly_TriangleHandle ht,
+               const poly_EdgeHandle     he,
+               int&                      vidx) const;
+
+  //! Collapses the passed edge.
+  //! \param[in] he the edge to collapse.
+  mobiusPoly_EXPORT bool
+    CollapseEdge(const poly_EdgeHandle& he);
 
 public:
 
@@ -279,6 +353,15 @@ public:
     //
     triangle = m_triangles[idx];
     return true;
+  }
+
+  //! Returns non-const reference to a triangle by its handle.
+  //! You have to be sure that such a triangle exists.
+  //! \param[in] h handle of a triangle to access.
+  //! \return false if there is no such triangle.
+  poly_Triangle& ChangeTriangle(const poly_TriangleHandle h)
+  {
+    return m_triangles[h.iIdx];
   }
 
   //! Returns quad by its handle.
@@ -342,6 +425,27 @@ public:
     m_edges.push_back( poly_Edge(hStartV, hFinishV) );
     poly_EdgeHandle hEdge( int( m_edges.size() ) - 1 );
     return hEdge;
+  }
+
+  //! Adds the passed edge to the mesh.
+  //! \return handle of the just added edge.
+  poly_EdgeHandle AddEdge(const poly_Edge& edge)
+  {
+    m_edges.push_back(edge);
+    poly_EdgeHandle hEdge( int( m_edges.size() ) - 1 );
+    return hEdge;
+  }
+
+  //! Removes the edge with the given handle.
+  //! \param[in] h handle of the edge to remove.
+  //! \return true in case of success, false -- otherwise.
+  bool RemoveEdge(const poly_EdgeHandle h)
+  {
+    const int idx = h.GetIdx();
+    if ( idx < 0 || idx > int( m_edges.size() ) ) return false;
+
+    m_edges[idx].SetDeleted();
+    return true;
   }
 
   //! Creates a new invalid triangle.
@@ -540,6 +644,14 @@ public:
     poly_QuadHandle Current() const { return poly_QuadHandle( int(m_pos) ); }
 
   };
+
+protected:
+
+  //! Updates the existing link by exchanging `htOld` with `htNew`.
+  mobiusPoly_EXPORT void
+    updateLink(const poly_EdgeHandle     he,
+               const poly_TriangleHandle htOld,
+               const poly_TriangleHandle htNew);
 
 protected:
 

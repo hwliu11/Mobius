@@ -129,6 +129,232 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
+bool mobius::poly_Mesh::RefineByMidedges(const poly_TriangleHandle         ht,
+                                         std::vector<poly_TriangleHandle>& hts)
+{
+  // Get the triangle to refine.
+  poly_Triangle t;
+  if ( !this->GetTriangle(ht, t) )
+    return false;
+  //
+  if ( t.IsDeleted() )
+    return false;
+
+  // Get vertices on the triangle.
+  poly_VertexHandle hv[3];
+  t.GetVertices(hv[0], hv[1], hv[2]);
+
+  // Get the edges.
+  poly_Edge edges[3] = { poly_Edge(hv[0], hv[1]),
+                         poly_Edge(hv[1], hv[2]),
+                         poly_Edge(hv[2], hv[0]) };
+  //
+  poly_EdgeHandle hes[3] = { this->FindEdge(edges[0]),
+                             this->FindEdge(edges[1]),
+                             this->FindEdge(edges[2]) };
+  //
+  for ( int j = 0; j < 3; ++j )
+  {
+    if ( hes[j].iIdx == Mobius_InvalidHandleIndex )
+      return false;
+  }
+
+  // Get corners.
+  t_xyz v[3];
+  this->GetVertex(hv[0], v[0]);
+  this->GetVertex(hv[1], v[1]);
+  this->GetVertex(hv[2], v[2]);
+
+  // Build new vertices.
+  poly_VertexHandle hmv[3];
+  t_xyz             mv[3];
+  //
+  hmv[0] = this->AddVertex( 0.5*(v[0] + v[1]) );
+  hmv[1] = this->AddVertex( 0.5*(v[1] + v[2]) );
+  hmv[2] = this->AddVertex( 0.5*(v[2] + v[0]) );
+
+  std::unordered_map<poly_EdgeHandle, poly_VertexHandle> eSplits;
+  eSplits.insert({hes[0], hmv[0]});
+  eSplits.insert({hes[1], hmv[1]});
+  eSplits.insert({hes[2], hmv[2]});
+
+  // Build new triangles.
+  hts.push_back( this->AddTriangle( hv [0], hmv[0], hmv[2], t.GetFaceRef() ) );
+  hts.push_back( this->AddTriangle( hmv[0], hv [1], hmv[1], t.GetFaceRef() ) );
+  hts.push_back( this->AddTriangle( hmv[1], hv [2], hmv[2], t.GetFaceRef() ) );
+  hts.push_back( this->AddTriangle( hmv[0], hmv[1], hmv[2], t.GetFaceRef() ) );
+
+  // Add 9 newly created edges.
+  std::unordered_map<poly_Edge, std::pair<poly_TriangleHandle, poly_TriangleHandle>> newEdges;
+  //
+  newEdges.insert( { poly_Edge(hv [0], hmv[0]), { hts[0], poly_TriangleHandle() } } );
+  newEdges.insert( { poly_Edge(hmv[0], hmv[2]), { hts[0], hts[3]                } } );
+  newEdges.insert( { poly_Edge(hmv[2], hv [0]), { hts[0], poly_TriangleHandle() } } );
+  //
+  newEdges.insert( { poly_Edge(hmv[0], hv [1]), { hts[1], poly_TriangleHandle() } } );
+  newEdges.insert( { poly_Edge(hv [1], hmv[1]), { hts[1], poly_TriangleHandle() } } );
+  newEdges.insert( { poly_Edge(hmv[1], hmv[0]), { hts[1], hts[3]                } } );
+  //
+  newEdges.insert( { poly_Edge(hmv[1], hv [2]), { hts[2], poly_TriangleHandle() } } );
+  newEdges.insert( { poly_Edge(hv [2], hmv[2]), { hts[2], poly_TriangleHandle() } } );
+  newEdges.insert( { poly_Edge(hmv[2], hmv[1]), { hts[2], hts[3]                } } );
+
+  std::unordered_map<poly_TriangleHandle, poly_EdgeHandle> tris2Split;
+  for ( int j = 0; j < 3; ++j )
+  {
+    std::vector<poly_TriangleHandle> edgeTris;
+
+    if ( !this->GetTriangles(hes[j], edgeTris) )
+      return false;
+
+    for ( const auto& eth : edgeTris )
+      if ( eth != ht )
+        tris2Split.insert({eth, hes[j]});
+  }
+
+  // Split neighbor triangles.
+  for ( const auto& toSplit : tris2Split )
+  {
+    // Get common edge.
+    poly_Edge cmnEdge;
+    if ( !this->GetEdge(toSplit.second, cmnEdge) )
+      continue;
+
+    if ( cmnEdge.IsDeleted() )
+      continue;
+
+    // Get triangle to split.
+    poly_Triangle nextTri;
+    if ( !this->GetTriangle(toSplit.first, nextTri) )
+      continue;
+
+    // Compute the reference normal to control the splitting validity.
+    t_xyz refNorm;
+    this->ComputeNormal(toSplit.first, refNorm);
+
+    /* Find the opposite node. */
+
+    poly_VertexHandle
+      oppVh = this->GetOppositeVertex(toSplit.first, toSplit.second);
+    //
+    if ( !oppVh.IsValid() )
+      continue; // Skip triangle if we are not able to find its opposite node.
+
+    /* Split triangle */
+
+    poly_VertexHandle a = oppVh;
+    poly_VertexHandle b = cmnEdge.hVertices[0];
+    poly_VertexHandle c = eSplits[toSplit.second];
+    poly_VertexHandle d = cmnEdge.hVertices[1];
+
+    // Compute norms to preserve orientations.
+    t_xyz testN[2];
+    this->ComputeNormal(a, b, c, testN[0]);
+    this->ComputeNormal(a, c, d, testN[1]);
+
+    // Add new triangles.
+    poly_TriangleHandle thLeft, thRight;
+    //
+    if ( testN[0].Dot(refNorm) > 0 )
+    {
+      thLeft = this->AddTriangle( a, b, c, nextTri.GetFaceRef() );
+    }
+    else
+    {
+      thLeft = this->AddTriangle( a, c, b, nextTri.GetFaceRef() );
+    }
+    //
+    if ( testN[1].Dot(refNorm) > 0 )
+    {
+      thRight = this->AddTriangle( a, c, d, nextTri.GetFaceRef() );
+    }
+    else
+    {
+      thRight = this->AddTriangle( a, d, c, nextTri.GetFaceRef() );
+    }
+
+    // Update edges coming out of split.
+    newEdges[poly_Edge(b, c)].second = thLeft;
+    newEdges[poly_Edge(c, d)].second = thRight;
+    //
+    newEdges.insert( { poly_Edge(a, c), { thLeft, thRight } } );
+
+    // Update edges sharing the opposite vertex.
+    this->updateLink( this->FindEdge( poly_Edge(a, b) ), toSplit.first, thLeft);
+    this->updateLink( this->FindEdge( poly_Edge(a, d) ), toSplit.first, thRight);
+
+    /* Remove old triangle. */
+    this->RemoveTriangle(toSplit.first);
+  }
+
+  // Remove old triangle.
+  this->RemoveTriangle(ht);
+
+  // Erase old edges.
+  m_links.erase(hes[0]);
+  m_links.erase(hes[1]);
+  m_links.erase(hes[2]);
+  //
+  this->RemoveEdge(hes[0]);
+  this->RemoveEdge(hes[1]);
+  this->RemoveEdge(hes[2]);
+  //
+  for ( const auto& edge2Insert : newEdges )
+  {
+    const poly_EdgeHandle newEh = this->AddEdge(edge2Insert.first);
+
+    std::vector<poly_TriangleHandle> newTris;
+    //
+    if ( edge2Insert.second.first.IsValid() )
+      newTris.push_back(edge2Insert.second.first);
+    //
+    if ( edge2Insert.second.second.IsValid() )
+      newTris.push_back(edge2Insert.second.second);
+
+    m_links.insert({newEh, newTris});
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::RefineByMidedges(const poly_TriangleHandle ht)
+{
+  std::vector<poly_TriangleHandle> hts;
+  return this->RefineByMidedges(ht, hts);
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::poly_VertexHandle
+  mobius::poly_Mesh::GetOppositeVertex(const poly_TriangleHandle ht,
+                                       const poly_EdgeHandle     he) const
+{
+  poly_Edge edge;
+  if ( !this->GetEdge(he, edge) )
+    return poly_VertexHandle();
+
+  poly_Triangle nbrTri;
+  if ( !this->GetTriangle(ht, nbrTri) )
+    return poly_VertexHandle();
+
+  poly_VertexHandle vhs[3];
+  nbrTri.GetVertices(vhs[0], vhs[1], vhs[2]);
+
+  poly_VertexHandle oppVh;
+  for ( int vidx = 0; vidx < 3; ++vidx )
+    if ( (vhs[vidx] != edge.hVertices[0]) && (vhs[vidx] != edge.hVertices[1]) )
+      oppVh = vhs[vidx];
+
+  if ( !oppVh.IsValid() )
+    return poly_VertexHandle();
+
+  return oppVh;
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
                                       const poly_VertexHandle hv1,
                                       const poly_VertexHandle hv2,
@@ -362,8 +588,23 @@ bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::FindAdjacent(const poly_TriangleHandle         ht,
-                                     std::vector<poly_TriangleHandle>& hts) const
+bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle                    he,
+                                     std::unordered_set<poly_TriangleHandle>& hts) const
+{
+  auto linkIt = m_links.find(he);
+  if ( linkIt == m_links.end() )
+    return false;
+
+  for ( const auto& ht : linkIt->second )
+    hts.insert(ht);
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht,
+                                            std::vector<poly_TriangleHandle>& hts) const
 {
   poly_Triangle t;
   this->GetTriangle(ht, t);
@@ -399,6 +640,47 @@ bool mobius::poly_Mesh::FindAdjacent(const poly_TriangleHandle         ht,
   }
 
   return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle           hv,
+                                     std::vector<poly_TriangleHandle>& hts) const
+{
+  // TODO: rework for better optimization, e.g., store link to the triangles
+  //       right in the vertices.
+
+  for ( size_t tidx = 0; tidx < m_triangles.size(); ++tidx )
+  {
+    for ( int k = 0; k < 3; ++k )
+      if ( m_triangles[tidx].hVertices[k] == hv )
+      {
+        hts.push_back( poly_TriangleHandle( int(tidx) ) );
+      }
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle                ht,
+                                               std::unordered_set<poly_TriangleHandle>& hts) const
+{
+  // TODO: rework for better optimization, e.g., store link to the triangles
+  //       right in the vertices.
+
+  poly_Triangle t;
+  this->GetTriangle(ht, t);
+
+  for ( size_t tidx = 0; tidx < m_triangles.size(); ++tidx )
+  {
+    for ( int k = 0; k < 3; ++k )
+      if ( m_triangles[tidx].hVertices[k] == t.hVertices[0] ||
+           m_triangles[tidx].hVertices[k] == t.hVertices[1] ||
+           m_triangles[tidx].hVertices[k] == t.hVertices[2] )
+      {
+        hts.insert( poly_TriangleHandle( int(tidx) ) );
+      }
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -608,4 +890,147 @@ mobius::poly_EdgeHandle mobius::poly_Mesh::FindEdge(const poly_Edge& e) const
   }
 
   return poly_EdgeHandle(Mobius_InvalidHandleIndex);
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::poly_EdgeHandle
+  mobius::poly_Mesh::FindEdge(const poly_TriangleHandle ht0,
+                              const poly_TriangleHandle ht1) const
+{
+  poly_Triangle t0, t1;
+  //
+  if ( !this->GetTriangle(ht0, t0) )
+    return poly_EdgeHandle();
+  //
+  if ( !this->GetTriangle(ht1, t1) )
+    return poly_EdgeHandle();
+
+  poly_VertexHandle a, b, c, d, e, f;
+  t0.GetVertices(a, b, c);
+  t1.GetVertices(d, e, f);
+
+  // Get all edges.
+  poly_Edge t0_edges[3] = { poly_Edge(a, b), poly_Edge(b, c), poly_Edge(c, a) };
+  poly_Edge t1_edges[3] = { poly_Edge(d, e), poly_Edge(e, f), poly_Edge(f, d) };
+
+  for ( int i = 0; i < 3; ++i )
+    for ( int j = 0; j < 3; ++j )
+      if ( t0_edges[i] == t1_edges[j] )
+        return this->FindEdge(t0_edges[i]);
+
+  return poly_EdgeHandle();
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::poly_VertexHandle
+  mobius::poly_Mesh::FindVertex(const poly_TriangleHandle ht,
+                                const poly_EdgeHandle     he,
+                                int&                      vidx) const
+{
+  poly_Triangle t;
+  //
+  if ( !this->GetTriangle(ht, t) )
+    return poly_VertexHandle();
+
+  poly_Edge e;
+  //
+  if ( !this->GetEdge(he, e) )
+    return poly_VertexHandle();
+
+  for ( int i = 0; i < 3; ++i )
+    for ( int j = 0; j < 2; ++j )
+      if ( t.hVertices[i] == e.hVertices[j] )
+      {
+        vidx = i;
+        return t.hVertices[i];
+      }
+
+  return poly_VertexHandle();
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he)
+{
+  // Get triangles to remove.
+  std::unordered_set<poly_TriangleHandle> hts2Remove;
+  if ( !this->GetTriangles(he, hts2Remove) )
+    return false;
+
+  // Get edge to collapse.
+  poly_Edge e;
+  if ( !this->GetEdge(he, e) )
+    return false;
+
+  // Get new vertex position.
+  t_xyz V[2];
+  this->GetVertex(e.hVertices[0], V[0]);
+  this->GetVertex(e.hVertices[1], V[1]);
+  //
+  t_xyz Vm = (V[0] + V[1])*0.5;
+
+  // Add the new vertex.
+  const poly_VertexHandle hVm = this->AddVertex(Vm);
+
+  // Remove and modify triangles.
+  for ( const auto& ht2Remove : hts2Remove )
+  {
+    std::unordered_set<poly_TriangleHandle> ths2Edit;
+    this->FindAdjacentByVertices(ht2Remove, ths2Edit);
+
+    // Get the vertex to survive (the one opposite to the collapsed edge).
+    const poly_VertexHandle a = this->GetOppositeVertex(ht2Remove, he);
+
+    // Edit neighbor triangles.
+    for ( const auto& th2Edit : ths2Edit )
+    {
+      // Skip the triangles that are supposed to be removed.
+      if ( hts2Remove.find(th2Edit) != hts2Remove.end() )
+        continue;
+
+      poly_Triangle& t2Edit = this->ChangeTriangle(th2Edit);
+
+      int ci = -1;
+      const poly_VertexHandle c = this->FindVertex(th2Edit, he, ci);
+      //
+      if ( !c.IsValid() )
+        continue;
+
+      // Move vertex using the non-const reference to the triangle.
+      t2Edit.hVertices[ci] = hVm;
+    }
+
+    this->RemoveTriangle(ht2Remove);
+  }
+
+  // Remove edge.
+  this->RemoveEdge(he);
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_Mesh::updateLink(const poly_EdgeHandle     he,
+                                   const poly_TriangleHandle htOld,
+                                   const poly_TriangleHandle htNew)
+{
+  auto link = m_links.find(he);
+  //
+  if ( link == m_links.end() )
+    return; // No such link.
+
+  std::vector<poly_TriangleHandle> newTuple;
+  //
+  for ( const auto& ht : link->second )
+  {
+    if ( ht == htOld )
+      newTuple.push_back(htNew);
+    else
+      newTuple.push_back(ht);
+  }
+  //
+  m_links[he] = newTuple;
 }

@@ -84,9 +84,9 @@ public:
                    poly_VertexHandle& hv1,
                    poly_VertexHandle& hv2) const
   {
-    hv0 = m_hVertices[0];
-    hv1 = m_hVertices[1];
-    hv2 = m_hVertices[2];
+    hv0 = hVertices[0];
+    hv1 = hVertices[1];
+    hv2 = hVertices[2];
   }
 
   //! Sets the back reference to a CAD face (if any).
@@ -109,7 +109,7 @@ public:
   }
 
   //! \return non-const reference to the attributes.
-  int& ChangeAttributes()
+  int& ChangeFlags()
   {
     return m_iFlags;
   }
@@ -126,11 +126,14 @@ public:
     return (m_iFlags & Flag_Deleted) > 0;
   }
 
+public:
+
+  poly_VertexHandle hVertices[3]; //!< Handles to the vertices.
+
 protected:
 
-  poly_VertexHandle m_hVertices[3]; //!< Handles to the vertices.
-  int               m_iFlags;       //!< Flags.
-  int               m_iFaceRef;     //!< Back reference to the CAD face.
+  int m_iFlags;   //!< Flags.
+  int m_iFaceRef; //!< Back reference to the CAD face.
 
 };
 
