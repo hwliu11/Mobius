@@ -176,6 +176,12 @@ public:
   mobiusPoly_EXPORT void
     ClearEdges();
 
+  //! Returns the number of triangles sharing the passed edge.
+  //! \param[in] he the edge handle to check.
+  //! \return the number of triangles.
+  mobiusPoly_EXPORT int
+    CountTriangles(const poly_EdgeHandle he) const;
+
   //! Returns handles of the triangles sharing the passed edge.
   //! \param[in]  he  the edge handle to check.
   //! \param[out] hts the output triangles.
@@ -264,11 +270,20 @@ public:
     FlipEdges(const double normDevRad  = 1./180.*M_PI,
               const double planeDevRad = 15./180.*M_PI);
 
-  //! Finds the given edge in the precomputed links.
+  //! Finds the given edge in the collection of precomputed links.
   //! \param[in] e the edge to find.
   //! \return the edge handle.
   mobiusPoly_EXPORT poly_EdgeHandle
     FindEdge(const poly_Edge& e) const;
+
+  //! Finds an edge defined by the passed vertex handles (order does not matter)
+  //! in the collection of precomputed links.
+  //! \param[in] hv0 the first vertex of the edge to find.
+  //! \param[in] hv1 the second vertex of the edge to find.
+  //! \return the edge handle.
+  mobiusPoly_EXPORT poly_EdgeHandle
+    FindEdge(const poly_VertexHandle& hv0,
+             const poly_VertexHandle& hv1) const;
 
   //! Returns the common edge for the passed pair of triangles.
   //! \param[in] ht0 the first triangle.
@@ -293,9 +308,13 @@ public:
                int&                      vidx) const;
 
   //! Collapses the passed edge.
-  //! \param[in] he the edge to collapse.
+  //! \param[in] he          the edge to collapse.
+  //! \param[in] touchBorder the Boolean flag indicating whether edge collapse
+  //!                        is allowed to affect borders.
+  //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    CollapseEdge(const poly_EdgeHandle& he);
+    CollapseEdge(const poly_EdgeHandle& he,
+                 const bool             touchBorder = false);
 
 public:
 

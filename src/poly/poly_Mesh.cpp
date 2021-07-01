@@ -575,6 +575,17 @@ void mobius::poly_Mesh::ClearEdges()
 
 //-----------------------------------------------------------------------------
 
+int mobius::poly_Mesh::CountTriangles(const poly_EdgeHandle he) const
+{
+  auto linkIt = m_links.find(he);
+  if ( linkIt == m_links.end() )
+    return 0;
+
+  return int( linkIt->second.size() );
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
                                      std::vector<poly_TriangleHandle>& hts) const
 {
@@ -895,6 +906,15 @@ mobius::poly_EdgeHandle mobius::poly_Mesh::FindEdge(const poly_Edge& e) const
 //-----------------------------------------------------------------------------
 
 mobius::poly_EdgeHandle
+  mobius::poly_Mesh::FindEdge(const poly_VertexHandle& hv0,
+                              const poly_VertexHandle& hv1) const
+{
+  return this->FindEdge( poly_Edge(hv0, hv1) );
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::poly_EdgeHandle
   mobius::poly_Mesh::FindEdge(const poly_TriangleHandle ht0,
                               const poly_TriangleHandle ht1) const
 {
@@ -952,12 +972,16 @@ mobius::poly_VertexHandle
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he)
+bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
+                                     const bool             touchBorder)
 {
   // Get triangles to remove.
   std::unordered_set<poly_TriangleHandle> hts2Remove;
   if ( !this->GetTriangles(he, hts2Remove) )
     return false;
+
+  if ( !touchBorder && (hts2Remove.size() < 2) )
+    return false; // Collapsing a border edge distorts the mesh badly.
 
   // Get edge to collapse.
   poly_Edge e;
@@ -973,6 +997,36 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he)
 
   // Add the new vertex.
   const poly_VertexHandle hVm = this->AddVertex(Vm);
+
+  // If the border is restricted, we first check that edge collapse
+  // is not going to affect any border triangles.
+  //
+  // TODO: we can cache the adjacent triangles to now find them twice
+  //       as we have exactly the same iteration below.
+  if ( !touchBorder )
+  {
+    for ( const auto& ht2Remove : hts2Remove )
+    {
+      std::unordered_set<poly_TriangleHandle> ths2Check;
+      this->FindAdjacentByVertices(ht2Remove, ths2Check);
+
+      // Check neighbor triangles.
+      for ( const auto& th2Check : ths2Check )
+      {
+        poly_Triangle t2Check;
+        this->GetTriangle(th2Check, t2Check);
+
+        poly_EdgeHandle
+          eh2Check[3] = { this->FindEdge(t2Check.hVertices[0], t2Check.hVertices[1]),
+                          this->FindEdge(t2Check.hVertices[1], t2Check.hVertices[2]),
+                          this->FindEdge(t2Check.hVertices[2], t2Check.hVertices[0]) };
+
+        for ( int i = 0; i < 3; ++i )
+          if ( this->CountTriangles(eh2Check[i]) != 2 )
+            return false;
+      }
+    }
+  }
 
   // Remove and modify triangles.
   for ( const auto& ht2Remove : hts2Remove )
