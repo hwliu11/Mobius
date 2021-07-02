@@ -447,6 +447,83 @@ double
 
 //-----------------------------------------------------------------------------
 
+bool mobius::poly_Mesh::IsDegenerated(const t_xyz& v0,
+                                      const t_xyz& v1,
+                                      const t_xyz& v2,
+                                      const double prec) const
+{
+  t_xyz tv[3] = {v0, v1, v2};
+
+  // Degenerated side.
+  t_xyz vec01 = tv[1] - tv[0];
+  const double sqNorm01 = vec01.SquaredModulus();
+  if ( sqNorm01 <= prec )
+  {
+    return true;
+  }
+
+  // Degenerated side.
+  t_xyz vec02 = tv[2] - tv[0];
+  const double sqNorm02 = vec02.SquaredModulus();
+  if ( sqNorm02 <= prec )
+  {
+    return true;
+  }
+
+  // Degenerated side.
+  t_xyz vec12 = tv[2] - tv[1];
+  const double sqNorm12 = vec12.SquaredModulus();
+  if ( sqNorm12 <= prec )
+  {
+    return true;
+  }
+
+  /*const double a1 = vec01.Angle(vec02);
+  const double a2 = vec12.Angle(vec01);
+  const double a3 = vec02.Angle(vec12);*/
+
+  const double SP0102 = vec01 * vec02;
+  t_xyz vec = vec02 - (SP0102 / sqNorm01) * vec01;
+  if ( vec.SquaredModulus() <= prec )
+  {
+    return true;
+  }
+
+  vec = vec01 - (SP0102 / sqNorm02) * vec02;
+  if ( vec.SquaredModulus() <= prec )
+  {
+    return true;
+  }
+
+  vec = ((vec01 * vec12) / sqNorm12) * vec12 - vec01;
+
+  return (vec.SquaredModulus() <= prec);
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::poly_Mesh::IsDegenerated(const poly_TriangleHandle ht,
+                                      const double              prec) const
+{
+  // Get triangle by its handle.
+  poly_Triangle t;
+  if ( !this->GetTriangle(ht, t) )
+    return false;
+
+  // Get vertices on the triangle.
+  poly_VertexHandle htv[3];
+  t_xyz             tv[3];
+  //
+  t.GetVertices(htv[0], htv[1], htv[2]);
+  //
+  for ( size_t k = 0; k < 3; ++k )
+    this->GetVertex(htv[k], tv[k]);
+
+  return this->IsDegenerated(tv[0], tv[1], tv[2], prec);
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
 {
   // Get triangle by its handle.
@@ -973,14 +1050,16 @@ mobius::poly_VertexHandle
 //-----------------------------------------------------------------------------
 
 bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
-                                     const bool             touchBorder)
+                                     const bool             checkBorderOn,
+                                     const bool             checkDegenOn,
+                                     const double           prec)
 {
   // Get triangles to remove.
   std::unordered_set<poly_TriangleHandle> hts2Remove;
   if ( !this->GetTriangles(he, hts2Remove) )
     return false;
 
-  if ( !touchBorder && (hts2Remove.size() < 2) )
+  if ( checkBorderOn && (hts2Remove.size() < 2) )
     return false; // Collapsing a border edge distorts the mesh badly.
 
   // Get edge to collapse.
@@ -995,15 +1074,60 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
   //
   t_xyz Vm = (V[0] + V[1])*0.5;
 
-  // Add the new vertex.
-  const poly_VertexHandle hVm = this->AddVertex(Vm);
+  /* Check if edge collapse is not going to produce any degenerated triangles */
+  if ( checkDegenOn )
+  {
+    for ( const auto& ht2Remove : hts2Remove )
+    {
+      std::unordered_set<poly_TriangleHandle> ths2Edit;
+      this->FindAdjacentByVertices(ht2Remove, ths2Edit);
+
+      // Get the vertex to survive (the one opposite to the collapsed edge).
+      const poly_VertexHandle a = this->GetOppositeVertex(ht2Remove, he);
+
+      t_xyz Va;
+      this->GetVertex(a, Va);
+
+      // Check neighbor triangles.
+      for ( const auto& th2Check : ths2Edit )
+      {
+        // Skip the triangles that are supposed to be removed.
+        if ( hts2Remove.find(th2Check) != hts2Remove.end() )
+          continue;
+
+        poly_Triangle t2Check;
+        this->GetTriangle(th2Check, t2Check);
+
+        std::vector<t_xyz> t2CheckVerts;
+        int ci = -1;
+        const poly_VertexHandle c = this->FindVertex(th2Check, he, ci);
+        //
+        for ( int j = 0; j < 3; ++j )
+        {
+          if ( t2Check.hVertices[j] != c )
+          {
+            t_xyz Vj;
+            this->GetVertex(t2Check.hVertices[j], Vj);
+
+            t2CheckVerts.push_back(Vj);
+          }
+        }
+
+        // Virtually move `c` to `Vm` for testing.
+        t2CheckVerts.push_back(Vm);
+
+        if ( this->IsDegenerated(t2CheckVerts[0], t2CheckVerts[1], t2CheckVerts[2], prec) )
+          return false;
+      }
+    }
+  }
 
   // If the border is restricted, we first check that edge collapse
   // is not going to affect any border triangles.
   //
   // TODO: we can cache the adjacent triangles to now find them twice
   //       as we have exactly the same iteration below.
-  if ( !touchBorder )
+  if ( checkBorderOn )
   {
     for ( const auto& ht2Remove : hts2Remove )
     {
@@ -1027,6 +1151,13 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
       }
     }
   }
+
+  /* When here, we're sure we can modify the mesh, so let's insert vertices,
+     edit and remove triangles, etc.
+   */
+
+  // Add the new vertex.
+  const poly_VertexHandle hVm = this->AddVertex(Vm);
 
   // Remove and modify triangles.
   for ( const auto& ht2Remove : hts2Remove )

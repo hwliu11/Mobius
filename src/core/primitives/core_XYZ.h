@@ -300,6 +300,9 @@ public:
   mobiusCore_EXPORT core_XYZ
     operator*=(const double coeff);
 
+  mobiusCore_EXPORT double
+    operator*(const core_XYZ& XYZ) const;
+
   mobiusCore_EXPORT core_XYZ
     operator^(const core_XYZ& XYZ) const;
 

@@ -152,6 +152,19 @@ public:
 
   //! Checks if the passed triangle is degenerated w.r.t. the given
   //! precision value.
+  //! \param[in] v0   the 0-th vertex of the triangle to check.
+  //! \param[in] v1   the 1-st vertex of the triangle to check.
+  //! \param[in] v2   the 2-nd vertex of the triangle to check.
+  //! \param[in] prec the precision to use.
+  //! \return true/false.
+  mobiusPoly_EXPORT bool
+    IsDegenerated(const t_xyz& v0,
+                  const t_xyz& v1,
+                  const t_xyz& v2,
+                  const double prec) const;
+
+  //! Checks if the passed triangle is degenerated w.r.t. the given
+  //! precision value.
   //! \param[in] ht   the triangle to check.
   //! \param[in] prec the precision to use.
   //! \return true/false.
@@ -308,13 +321,19 @@ public:
                int&                      vidx) const;
 
   //! Collapses the passed edge.
-  //! \param[in] he          the edge to collapse.
-  //! \param[in] touchBorder the Boolean flag indicating whether edge collapse
-  //!                        is allowed to affect borders.
+  //! \param[in] he            the edge to collapse.
+  //! \param[in] checkBorderOn the Boolean flag indicating whether to check borders
+  //!                          on edge collapse.
+  //! \param[in] checkDegenOn  the Boolean flag indicating whether to check degeneracy
+  //!                          of the resulting triangles.
+  //! \param[in] prec          the precision to use for the degenracy check, if it is
+  //!                          enabled.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
     CollapseEdge(const poly_EdgeHandle& he,
-                 const bool             touchBorder = false);
+                 const bool             checkBorderOn = true,
+                 const bool             checkDegenOn  = true,
+                 const double           prec          = core_Precision::Resolution3D());
 
 public:
 

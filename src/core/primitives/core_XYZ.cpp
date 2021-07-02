@@ -338,6 +338,15 @@ mobius::core_XYZ mobius::core_XYZ::operator*=(const double coeff)
   return *this;
 }
 
+//! Computes the dot product between this triple of coordinates and the
+//! passed argument.
+//! \param[in] XYZ argument triple.
+//! \return dot product.
+double mobius::core_XYZ::operator*(const core_XYZ& XYZ) const
+{
+  return this->Dot(XYZ);
+}
+
 //! Computes the cross product between this triple of coordinates and the
 //! passed argument.
 //! \param[in] XYZ argument triple.
