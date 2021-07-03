@@ -144,6 +144,22 @@ public:
   mobiusPoly_EXPORT double
     ComputeArea(const poly_TriangleHandle ht) const;
 
+  //! Computes the min scaled Jacobian for the passed triangle.
+  //! \param[in] ht handle of the triangle to compute the metric for.
+  //! \return the computed scaled Jacobian.
+  mobiusPoly_EXPORT double
+    ComputeScaledJacobian(const poly_TriangleHandle ht) const;
+
+  //! Computes the min scaled Jacobian for the passed triangle nodes.
+  //! \param[in] v0 the 0-th vertex coordinates.
+  //! \param[in] v1 the 1-st vertex coordinates.
+  //! \param[in] v2 the 2-nd vertex coordinates.
+  //! \return the computed scaled Jacobian.
+  mobiusPoly_EXPORT double
+    ComputeScaledJacobian(const t_xyz& v0,
+                          const t_xyz& v1,
+                          const t_xyz& v2) const;
+
   //! Computes the max length for the edges of the passed triangle.
   //! \param[in] ht handle of the triangle to compute the max length for.
   //! \return the computed max length.

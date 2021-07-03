@@ -29,127 +29,142 @@
 //-----------------------------------------------------------------------------
 
 // Own include
-#include <cadpro/algoMesh_Jacobian.h>
+#include <mobius/poly_Jacobian.h>
 
 #undef COUT_DEBUG
 #if defined COUT_DEBUG
   #pragma message("===== warning: COUT_DEBUG is enabled")
 #endif
 
+using namespace mobius;
+
 //-----------------------------------------------------------------------------
 
-cadpro::algoMesh_Jacobian::algoMesh_Jacobian(const Handle(Poly_Triangulation)&       mesh,
-                                             const Handle(ActAPI_IProgressNotifier)& notifier,
-                                             const Handle(ActAPI_IPlotter)&          plotter)
-: ActAPI_IAlgorithm(notifier, plotter)
+bool poly_Jacobian::Compute(const t_xyz& P0,
+                            const t_xyz& P1,
+                            const t_xyz& P2,
+                            const int    zeroBasedNodeId,
+                            t_uv&        p0,
+                            t_uv&        p1,
+                            t_uv&        p2,
+                            double       J[][2],
+                            double&      J_det,
+                            double&      J_det_normalized)
+{
+  // Calculate link vectors.
+  const t_xyz L0 = P2 - P1;
+  const t_xyz L1 = P0 - P2;
+  const t_xyz L2 = P1 - P0;
+  //
+  const double L0_mod = L0.Modulus();
+  const double L1_mod = L1.Modulus();
+  const double L2_mod = L2.Modulus();
+
+  // Check degeneracy.
+  if ( L0_mod < core_Precision::Resolution3D() ||
+       L1_mod < core_Precision::Resolution3D() ||
+       L2_mod < core_Precision::Resolution3D() )
+  {
+    return false;
+  }
+
+  // Calculate u and v.
+  const double u = (L1_mod*L1_mod - L0_mod*L0_mod + L2_mod*L2_mod) / (2*L2_mod);
+  //
+  if ( L1_mod*L1_mod - u*u < 0 )
+    return false;
+  //
+  const double v = std::sqrt(L1_mod*L1_mod - u*u);
+
+  // Set Jacobian.
+  if ( zeroBasedNodeId == 0 )
+  {
+    J[0][0] = L2_mod;
+    J[0][1] = u;
+    J[1][0] = 0.0;
+    J[1][1] = v;
+  }
+  else if ( zeroBasedNodeId == 1 )
+  {
+    J[0][0] = u - L2_mod;
+    J[0][1] = -L2_mod;
+    J[1][0] = v;
+    J[1][1] = 0.0;
+  }
+  else if ( zeroBasedNodeId == 2 )
+  {
+    J[0][0] = -u;
+    J[0][1] = L2_mod - u;
+    J[1][0] = -v;
+    J[1][1] = -v;
+  }
+  else
+    return false;
+
+  // Map nodes to 2D.
+  p0 = t_uv(0.0,    0.0);
+  p1 = t_uv(L2_mod, 0.0);
+  p2 = t_uv(u,      v);
+
+  // Compute the determinant
+  J_det = J[0][0]*J[1][1] - J[0][1]*J[1][0];
+
+  const double Lmax_mod = std::max( L0_mod*L1_mod, std::max(L0_mod*L2_mod, L1_mod*L2_mod) );
+  J_det_normalized = 2*J_det/( Lmax_mod*std::sqrt(3) );
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+poly_Jacobian::poly_Jacobian(const t_ptr<poly_Mesh>& mesh)
 {
   m_mesh = mesh;
 }
 
 //-----------------------------------------------------------------------------
 
-bool cadpro::algoMesh_Jacobian::Compute(const int    oneBasedElemId,
-                                        const int    zeroBasedNodeId,
-                                        gp_XY&       p0,
-                                        gp_XY&       p1,
-                                        gp_XY&       p2,
-                                        math_Matrix& J,
-                                        double&      J_det,
-                                        double&      J_det_normalized) const
+bool poly_Jacobian::Compute(const poly_TriangleHandle ht,
+                            const int                 zeroBasedNodeId,
+                            t_uv&                     p0,
+                            t_uv&                     p1,
+                            t_uv&                     p2,
+                            double                    J[][2],
+                            double&                   J_det,
+                            double&                   J_det_normalized) const
 {
-  if ( !oneBasedElemId || m_mesh->NbTriangles() < oneBasedElemId)
+  if ( !ht.IsValid() )
     return false;
 
-  // Get element
-  const Poly_Triangle& elem = m_mesh->Triangle(oneBasedElemId);
+  // Get element.
+  poly_Triangle elem;
+  m_mesh->GetTriangle(ht, elem);
 
-  // Compute for element
+  // Compute for element.
   return this->Compute(elem, zeroBasedNodeId, p0, p1, p2, J, J_det, J_det_normalized);
 }
 
 //-----------------------------------------------------------------------------
 
-bool cadpro::algoMesh_Jacobian::Compute(const Poly_Triangle& elem,
-                                        const int            zeroBasedNodeId,
-                                        gp_XY&               p0,
-                                        gp_XY&               p1,
-                                        gp_XY&               p2,
-                                        math_Matrix&         J,
-                                        double&              J_det,
-                                        double&              J_det_normalized) const
+bool poly_Jacobian::Compute(const poly_Triangle& elem,
+                            const int            zeroBasedNodeId,
+                            t_uv&                p0,
+                            t_uv&                p1,
+                            t_uv&                p2,
+                            double               J[][2],
+                            double&              J_det,
+                            double&              J_det_normalized) const
 {
-  // Get nodes
-  int n0, n1, n2;
-  elem.Get(n0, n1, n2);
-
-  // Get nodes
-  const gp_Pnt& P0 = m_mesh->Node(n0);
-  const gp_Pnt& P1 = m_mesh->Node(n1);
-  const gp_Pnt& P2 = m_mesh->Node(n2);
-
-  // Calculate link vectors
-  const gp_Vec L0 = P2.XYZ() - P1.XYZ();
-  const gp_Vec L1 = P0.XYZ() - P2.XYZ();
-  const gp_Vec L2 = P1.XYZ() - P0.XYZ();
+  // Get nodes.
+  poly_VertexHandle n0, n1, n2;
+  elem.GetVertices(n0, n1, n2);
   //
-  const double L0mod = L0.Magnitude();
-  const double L1mod = L1.Magnitude();
-  const double L2mod = L2.Magnitude();
-
-  // Check degeneracy
-  if ( L0mod < RealEpsilon() ||
-       L1mod < RealEpsilon() ||
-       L2mod < RealEpsilon() )
-    return false;
-
-  // Calculate u and v
-  const double u = ( Square(L1mod) - Square(L0mod) + Square(L2mod) ) / (2*L2mod);
+  t_xyz P0, P1, P2;
   //
-  if (Square(L1mod) - Square(u) < 0)
-    return false;
-  //
-  const double v =  Sqrt(Square(L1mod) - Square(u));
+  m_mesh->GetVertex(n0, P0);
+  m_mesh->GetVertex(n1, P1);
+  m_mesh->GetVertex(n2, P2);
 
-  // Check if the passed matrix has capacity to store 2x2 grid
-  if ( J.ColNumber() < 2 || J.RowNumber() < 2 )
-    return false;
-
-  // Set Jacobian
-  if ( zeroBasedNodeId == 0 )
-  {
-    J( J.LowerRow(),     J.LowerCol() )     = L2mod;
-    J( J.LowerRow(),     J.LowerCol() + 1 ) = u;
-    J( J.LowerRow() + 1, J.LowerCol() )     = 0.0;
-    J( J.LowerRow() + 1, J.LowerCol() + 1 ) = v;
-  }
-  else if ( zeroBasedNodeId == 1 )
-  {
-    J( J.LowerRow(),     J.LowerCol() )     = u - L2mod;
-    J( J.LowerRow(),     J.LowerCol() + 1 ) = -L2mod;
-    J( J.LowerRow() + 1, J.LowerCol() )     = v;
-    J( J.LowerRow() + 1, J.LowerCol() + 1 ) = 0.0;
-  }
-  else if ( zeroBasedNodeId == 2 )
-  {
-    J( J.LowerRow(),     J.LowerCol() )     = -u;
-    J( J.LowerRow(),     J.LowerCol() + 1 ) = L2mod - u;
-    J( J.LowerRow() + 1, J.LowerCol() )     = -v;
-    J( J.LowerRow() + 1, J.LowerCol() + 1 ) = -v;
-  }
-  else
-    return false;
-
-  // Map nodes to 2D
-  p0 = gp_XY(0.0,   0.0);
-  p1 = gp_XY(L2mod, 0.0);
-  p2 = gp_XY(u,     v);
-
-  // Compute the determinant
-  J_det = J( J.LowerRow(), J.LowerCol()    )*J( J.LowerRow() + 1, J.LowerCol() + 1 )
-        - J( J.LowerRow(), J.LowerCol() + 1)*J( J.LowerRow() + 1, J.LowerCol()     );
-
-  const double LLmod = Max( L0mod*L1mod, Max(L0mod*L2mod, L1mod*L2mod) );
-  J_det_normalized = 2*J_det/( LLmod*Sqrt(3) );
-
-  return true;
+  return Compute(P0, P1, P2, zeroBasedNodeId,
+                 p0, p1, p2, J, J_det, J_det_normalized);
 }

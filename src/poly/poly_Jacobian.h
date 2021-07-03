@@ -34,79 +34,110 @@
 // poly includes
 #include <mobius/poly_Mesh.h>
 
+// core includes
+#include <mobius/core_UV.h>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_POLY
 //!
-//! Utility to analyze Jacobians of mesh elements.
+//! Utility to analyze Jacobians of mesh elements. See
+//!
+//!   [Stimpson et al(2007). The Verdict Geometric Quality Library]
+//!
+//! for the reference (chapter 4.9).
 class poly_Jacobian
 {
 public:
 
-  //! Ctor accepting mesh and diagnostic tools.
+  //! Computes scaled Jacobian
+  //! \param[in]  P0               the 0-th vertex coordinates.
+  //! \param[in]  P1               the 1-st vertex coordinates.
+  //! \param[in]  P2               the 2-nd vertex coordinates.
+  //! \param[in]  zeroBasedNodeId  the 0-based ID of the node where to compute the
+  //!                              Jacobian matrix.
+  //! \param[out] p0               the P0 mapped to 2D.
+  //! \param[out] p1               the P1 mapped to 2D.
+  //! \param[out] p2               the P2 mapped to 2D.
+  //! \param[out] J                the resulting Jacobian matrix 2x2.
+  //! \param[out] J_det            the determinant of the Jacobian matrix.
+  //! \param[out] J_det_normalized the normalized determinant.
   //!
-  //! \param mesh     [in] mesh to analyze.
-  //! \param notifier [in] progress notifier.
-  //! \param plotter  [in] imperative plotter.
-  algoMesh_EXPORT
-    algoMesh_Jacobian(const Handle(Poly_Triangulation)&       mesh,
-                      const Handle(ActAPI_IProgressNotifier)& notifier,
-                      const Handle(ActAPI_IPlotter)&          plotter);
+  //! \return true in case of success, false -- otherwise.
+  mobiusPoly_EXPORT static bool
+    Compute(const t_xyz& P0,
+            const t_xyz& P1,
+            const t_xyz& P2,
+            const int    zeroBasedNodeId,
+            t_uv&        p0,
+            t_uv&        p1,
+            t_uv&        p2,
+            double       J[][2],
+            double&      J_det,
+            double&      J_det_normalized);
 
 public:
 
-  //! Calculates Jacobian for the triangle with the given 1-based index.
+  //! Ctor accepting mesh and diagnostic tools.
   //!
-  //! \param oneBasedId       [in]  1-based ID of the mesh element to check.
-  //! \param zeroBasedNodeId  [in]  0-based ID of the node where to compute the
-  //!                               Jacobian matrix.
-  //! \param p0               [out] P0 mapped to 2D.
-  //! \param p1               [out] P1 mapped to 2D.
-  //! \param p2               [out] P2 mapped to 2D.
-  //! \param J                [out] resulting Jacobian matrix 2x2.
-  //! \param J_det            [out] determinant of the Jacobian matrix.
-  //! \param J_det_normalized [out] normalized determinant.
+  //! \param[in] mesh the mesh to analyze.
+  mobiusPoly_EXPORT
+    poly_Jacobian(const t_ptr<poly_Mesh>& mesh);
+
+public:
+
+  //! Calculates Jacobian for the triangle with the given handle.
+  //!
+  //! \param[in]  ht               the handle of the mesh element to check.
+  //! \param[in]  zeroBasedNodeId  the 0-based ID of the node where to compute the
+  //!                              Jacobian matrix.
+  //! \param[out] p0               the P0 mapped to 2D.
+  //! \param[out] p1               the P1 mapped to 2D.
+  //! \param[out] p2               the P2 mapped to 2D.
+  //! \param[out] J                the resulting Jacobian matrix 2x2.
+  //! \param[out] J_det            the determinant of the Jacobian matrix.
+  //! \param[out] J_det_normalized the normalized determinant.
   //!
   //! \return true in case of success, false -- otherwise.
-  algoMesh_EXPORT bool
-    Compute(const int    oneBasedElemId,
-            const int    zeroBasedNodeId,
-            gp_XY&       p0,
-            gp_XY&       p1,
-            gp_XY&       p2,
-            math_Matrix& J,
-            double&      J_det,
-            double&      J_det_normalized) const;
+  mobiusPoly_EXPORT bool
+    Compute(const poly_TriangleHandle ht,
+            const int                 zeroBasedNodeId,
+            t_uv&                     p0,
+            t_uv&                     p1,
+            t_uv&                     p2,
+            double                    J[][2],
+            double&                   J_det,
+            double&                   J_det_normalized) const;
 
   //! Calculates Jacobian for the given triangle.
   //!
-  //! \param elem             [in]  mesh element to check.
-  //! \param zeroBasedNodeId  [in]  0-based ID of the node where to compute the
-  //!                               Jacobian matrix.
-  //! \param p0               [out] P0 mapped to 2D.
-  //! \param p1               [out] P1 mapped to 2D.
-  //! \param p2               [out] P2 mapped to 2D.
-  //! \param J                [out] resulting Jacobian matrix 2x2.
-  //! \param J_det            [out] determinant of the Jacobian matrix.
-  //! \param J_det_normalized [out] normalized determinant.
+  //! \param[in]  elem             the mesh element to check.
+  //! \param[in]  zeroBasedNodeId  the 0-based ID of the node where to compute the
+  //!                              Jacobian matrix.
+  //! \param[out] p0               the P0 mapped to 2D.
+  //! \param[out] p1               the P1 mapped to 2D.
+  //! \param[out] p2               the P2 mapped to 2D.
+  //! \param[out] J                the resulting Jacobian matrix 2x2.
+  //! \param[out] J_det            the determinant of the Jacobian matrix.
+  //! \param[out] J_det_normalized the normalized determinant.
   //!
   //! \return true in case of success, false -- otherwise.
-  algoMesh_EXPORT bool
-    Compute(const Poly_Triangle& elem,
+  mobiusPoly_EXPORT bool
+    Compute(const poly_Triangle& elem,
             const int            zeroBasedNodeId,
-            gp_XY&               p0,
-            gp_XY&               p1,
-            gp_XY&               p2,
-            math_Matrix&         J,
+            t_uv&                p0,
+            t_uv&                p1,
+            t_uv&                p2,
+            double               J[][2],
             double&              J_det,
             double&              J_det_normalized) const;
 
 protected:
 
-  Handle(Poly_Triangulation) m_mesh; //!< Mesh to analyze.
+  t_ptr<poly_Mesh> m_mesh; //!< Mesh to analyze.
 
 };
 
-};
+}
 
 #endif

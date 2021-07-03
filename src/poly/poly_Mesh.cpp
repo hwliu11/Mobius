@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/poly_Mesh.h>
 
+// Poly includes
+#include <mobius/poly_Jacobian.h>
+
 // Core includes
 #include <mobius/core_Precision.h>
 
@@ -421,6 +424,51 @@ double
 
 //-----------------------------------------------------------------------------
 
+double mobius::poly_Mesh::ComputeScaledJacobian(const poly_TriangleHandle ht) const
+{
+  poly_Jacobian calc(this);
+
+  double res = DBL_MAX;
+  for ( int k = 0; k < 3; ++k )
+  {
+    t_uv   uv[3];
+    double J[2][2] = { {0, 0}, {0, 0} };
+    double J_det   = 0.;
+    double J_det_n = 0.;
+    //
+    calc.Compute(ht, k, uv[0], uv[1], uv[2], J, J_det, J_det_n);
+
+    res = std::min(res, J_det_n);
+  }
+
+  return res;
+}
+
+//-----------------------------------------------------------------------------
+
+double
+  mobius::poly_Mesh::ComputeScaledJacobian(const t_xyz& v0,
+                                           const t_xyz& v1,
+                                           const t_xyz& v2) const
+{
+  double res = DBL_MAX;
+  for ( int k = 0; k < 3; ++k )
+  {
+    t_uv   uv[3];
+    double J[2][2] = { {0, 0}, {0, 0} };
+    double J_det   = 0.;
+    double J_det_n = 0.;
+    //
+    poly_Jacobian::Compute(v0, v1, v2, k, uv[0], uv[1], uv[2], J, J_det, J_det_n);
+
+    res = std::min(res, J_det_n);
+  }
+
+  return res;
+}
+
+//-----------------------------------------------------------------------------
+
 double
   mobius::poly_Mesh::ComputeMaxLen(const poly_TriangleHandle ht) const
 {
@@ -785,6 +833,18 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
                                 t_xyz&                norm0,
                                 t_xyz&                norm1) const
 {
+  /*          a
+               o
+               | \
+               |  \
+               |   \
+             x o----o y
+                \   |
+                 \  |
+                  \ |
+                    o
+                     b
+  */
   a = b = x = y = poly_VertexHandle(Mobius_InvalidHandleIndex);
 
   std::vector<poly_TriangleHandle> hts;
@@ -793,6 +853,11 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
   if ( hts.size() != 2 )
     return false;
+
+  // Get scaled Jacobians to control the quality of the triangles
+  // on edge flip (we do not want to make it worse).
+  const double J_before[2] = { this->ComputeScaledJacobian(hts[0]),
+                               this->ComputeScaledJacobian(hts[1]) };
 
   ht0 = hts[0];
   ht1 = hts[1];
@@ -855,6 +920,13 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
   this->GetVertex(b, b_coords);
   this->GetVertex(x, x_coords);
   this->GetVertex(y, y_coords);
+
+  // Check scaled Jacobians after edge flip.
+  const double J_after[2] = { this->ComputeScaledJacobian(a_coords, x_coords, b_coords),
+                              this->ComputeScaledJacobian(a_coords, y_coords, b_coords) };
+  //
+  if ( std::min(J_after[0], J_after[1]) < std::min(J_before[0], J_before[1]) )
+    return false;
 
   // There's ambiguity how `x` and `y` are defined, so we
   // do all possible tests here.
