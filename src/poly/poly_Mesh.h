@@ -245,6 +245,17 @@ public:
     FindAdjacent(const poly_VertexHandle           hv,
                  std::vector<poly_TriangleHandle>& hts) const;
 
+  //! Finds all vertices adjacent to the given vertex.
+  //! \param[in]  hv         the vertex in question.
+  //! \param[out] hvs        the found neighbor vertices.
+  //! \param[out] isBoundary the Boolean flag indicating whether
+  //!                        the passed `hv` vertex is found to be
+  //!                        the boundary one.
+  mobiusPoly_EXPORT void
+    FindAdjacent(const poly_VertexHandle                hv,
+                 std::unordered_set<poly_VertexHandle>& hvs,
+                 bool&                                  isBoundary) const;
+
   //! Finds adjacent triangles for the given one.
   //! \param[in]  ht the triangle in question.
   //! \param[out] hts the output triangles.
@@ -351,6 +362,11 @@ public:
                  const bool             checkDegenOn  = true,
                  const double           prec          = core_Precision::Resolution3D());
 
+  //! Applies Laplacian smoothing to the mesh vertices.
+  //! \param[in] iter the number of smoothing steps.
+  mobiusPoly_EXPORT void
+    Smooth(const int iter = 1);
+
 public:
 
   //! Returns vertex by its handle.
@@ -379,6 +395,15 @@ public:
     //
     vertex = m_vertices[idx];
     return true;
+  }
+
+  //! Returns non-const reference to a vertex by its handle.
+  //! You have to be sure that such a vertex exists.
+  //! \param[in] h handle of a vertex to access.
+  //! \return non-const reference that you can use to edit.
+  poly_Vertex& ChangeVertex(const poly_VertexHandle h)
+  {
+    return m_vertices[h.iIdx];
   }
 
   //! Returns edge by its handle.
@@ -412,7 +437,7 @@ public:
   //! Returns non-const reference to a triangle by its handle.
   //! You have to be sure that such a triangle exists.
   //! \param[in] h handle of a triangle to access.
-  //! \return false if there is no such triangle.
+  //! \return non-const reference that you can use to edit.
   poly_Triangle& ChangeTriangle(const poly_TriangleHandle h)
   {
     return m_triangles[h.iIdx];

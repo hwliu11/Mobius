@@ -783,7 +783,7 @@ bool mobius::poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht
 void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle           hv,
                                      std::vector<poly_TriangleHandle>& hts) const
 {
-  // TODO: rework for better optimization, e.g., store link to the triangles
+  // TODO: rework for better performance, e.g., store link to the triangles
   //       right in the vertices.
 
   for ( size_t tidx = 0; tidx < m_triangles.size(); ++tidx )
@@ -792,6 +792,53 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle           hv,
       if ( m_triangles[tidx].hVertices[k] == hv )
       {
         hts.push_back( poly_TriangleHandle( int(tidx) ) );
+      }
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
+                                     std::unordered_set<poly_VertexHandle>& hvs,
+                                     bool&                                  isBoundary) const
+{
+  // TODO: rework for better performance, e.g., store link to the triangles
+  //       right in the vertices.
+
+  isBoundary = false;
+
+  // Take all triangles containing this vertex.
+  std::vector<poly_TriangleHandle> ths;
+  this->FindAdjacent(hv, ths);
+
+  // Add the neighbor triangles' vertices to the result.
+  for ( const auto& th : ths )
+  {
+    poly_Triangle t;
+    this->GetTriangle(th, t);
+
+    if ( t.IsDeleted() )
+      continue;
+
+    for ( int k = 0; k < 3; ++k )
+      if ( t.hVertices[k] != hv )
+      {
+        hvs.insert(t.hVertices[k]);
+
+        // Check if that's a boundary vertex.
+        if ( !isBoundary )
+        {
+          // TODO: check also by face IDs.
+
+          // Compose a link.
+          poly_EdgeHandle eh = this->FindEdge( poly_Edge(hv, t.hVertices[k]) );
+
+          // Check if that's a boundary link.
+          auto linkIt = m_links.find(eh);
+          //
+          if ( ( linkIt != m_links.end() ) && (linkIt->second.size() < 2) )
+            isBoundary = true;
+        }
       }
   }
 }
@@ -1266,6 +1313,55 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
   this->RemoveEdge(he);
 
   return true;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_Mesh::Smooth(const int iter)
+{
+  // Find adjacent vertices for each vertex.
+  std::unordered_map< poly_VertexHandle, std::unordered_set<poly_VertexHandle> > adj;
+  //
+  for ( VertexIterator vit(this); vit.More(); vit.Next() )
+  {
+    const poly_VertexHandle vh = vit.Current();
+
+    // Find neighbors.
+    bool isBoundary = false;
+    std::unordered_set<poly_VertexHandle> adjVerts;
+    this->FindAdjacent(vh, adjVerts, isBoundary);
+
+    if ( !isBoundary )
+      adj.insert({vh, adjVerts});
+  }
+
+  int it = 0;
+
+  // Move each vertex.
+  while ( it++ < iter )
+  {
+    for ( const auto& vTuple : adj )
+    {
+      t_xyz avrg;
+      int   num = 0;
+
+      // Get the average position.
+      for ( const auto& nvs : vTuple.second )
+      {
+        t_xyz coord;
+        this->GetVertex(nvs, coord);
+
+        avrg += coord;
+        ++num;
+      }
+
+      if ( !num )
+        continue;
+
+      avrg /= num;
+      this->ChangeVertex(vTuple.first).ChangeCoords() = avrg;
+    }
+  }
 }
 
 //-----------------------------------------------------------------------------

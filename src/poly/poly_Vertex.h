@@ -73,6 +73,12 @@ public:
   //! Type conversion operator.
   operator core_XYZ() const { return m_coords; }
 
+  //! \return non-const reference to the vertex coordinates.
+  core_XYZ& ChangeCoords()
+  {
+    return m_coords;
+  }
+
 protected:
 
   core_XYZ m_coords; //!< Coordinates of the vertex.
