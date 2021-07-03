@@ -9,6 +9,7 @@ set (H_FILES
   poly_Edge.h
   poly_Flag.h
   poly_Handles.h
+  poly_Jacobian.h
   poly_Mesh.h
   poly_Quad.h
   poly_ReadOBJ.h
@@ -19,6 +20,7 @@ set (H_FILES
 )
 set (CPP_FILES
   poly_Edge.cpp
+  poly_Jacobian.cpp
   poly_Mesh.cpp
   poly_Quad.cpp
   poly_ReadOBJ.cpp
