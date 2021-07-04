@@ -239,11 +239,14 @@ public:
                         std::vector<poly_TriangleHandle>& hts) const;
 
   //! Finds all triangles sharing the given vertex.
-  //! \param[in]  hv  the vertex in question.
-  //! \param[out] hts the found triangles.
+  //! \param[in]  hv     the vertex in question.
+  //! \param[out] hts    the found triangles.
+  //! \param[in]  domain the optional domain to keep only the
+  //!                    faces of interest.
   mobiusPoly_EXPORT void
     FindAdjacent(const poly_VertexHandle           hv,
-                 std::vector<poly_TriangleHandle>& hts) const;
+                 std::vector<poly_TriangleHandle>& hts,
+                 const std::unordered_set<int>&    domain = std::unordered_set<int>()) const;
 
   //! Finds all vertices adjacent to the given vertex.
   //! \param[in]  hv         the vertex in question.
@@ -251,10 +254,13 @@ public:
   //! \param[out] isBoundary the Boolean flag indicating whether
   //!                        the passed `hv` vertex is found to be
   //!                        the boundary one.
+  //! \param[in]  domain     the optional domain to keep only the
+  //!                        faces of interest.
   mobiusPoly_EXPORT void
     FindAdjacent(const poly_VertexHandle                hv,
                  std::unordered_set<poly_VertexHandle>& hvs,
-                 bool&                                  isBoundary) const;
+                 bool&                                  isBoundary,
+                 const std::unordered_set<int>&         domain = std::unordered_set<int>()) const;
 
   //! Finds adjacent triangles for the given one.
   //! \param[in]  ht the triangle in question.
@@ -363,9 +369,11 @@ public:
                  const double           prec          = core_Precision::Resolution3D());
 
   //! Applies Laplacian smoothing to the mesh vertices.
-  //! \param[in] iter the number of smoothing steps.
+  //! \param[in] iter   the number of smoothing steps.
+  //! \param[in] domain the optional face IDs to smooth.
   mobiusPoly_EXPORT void
-    Smooth(const int iter = 1);
+    Smooth(const int                      iter   = 1,
+           const std::unordered_set<int>& domain = std::unordered_set<int>());
 
 public:
 
