@@ -814,9 +814,12 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
 
   isBoundary = false;
 
-  // Take all triangles containing this vertex.
+  // Take all triangles containing this vertex. Do not pass the domain here as we want
+  // to take all triangles, including out-of-domain ones and then reason about the
+  // feature boundaries (of we filter out the out-of-domain triangles here, we won't
+  // be able to detect the boundary).
   std::vector<poly_TriangleHandle> ths;
-  this->FindAdjacent(hv, ths, domain);
+  this->FindAdjacent(hv, ths);
 
   // Adjacent face IDs.
   std::unordered_set<int> faceIDs;
