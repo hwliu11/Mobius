@@ -140,10 +140,9 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/testEngine)
 
 if (WIN32)
   add_subdirectory(${CMAKE_SOURCE_DIR}/src/test)
+  add_subdirectory(${CMAKE_SOURCE_DIR}/src/visu)
+  add_subdirectory(${CMAKE_SOURCE_DIR}/src/visuApp)
 endif()
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/visu)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/visuApp)
 
 #-------------------------------------------------------------------------------
 # Documentation
@@ -190,8 +189,6 @@ set_property(TARGET mobiusCore    PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusPoly    PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusBSpl    PROPERTY FOLDER Kernel)
 set_property(TARGET mobiusGeom    PROPERTY FOLDER Kernel)
-set_property(TARGET mobiusVisu    PROPERTY FOLDER Visualization)
-set_property(TARGET mobiusVisuApp PROPERTY FOLDER Visualization)
 
 if (USE_OPENCASCADE)
   set_property(TARGET mobiusCascade PROPERTY FOLDER Services)
@@ -200,7 +197,9 @@ endif()
 set_property(TARGET mobiusTestEngine PROPERTY FOLDER Tests)
 
 if (WIN32)
-  set_property(TARGET mobiusTest PROPERTY FOLDER Tests)
+  set_property(TARGET mobiusTest    PROPERTY FOLDER Tests)
+  set_property(TARGET mobiusVisu    PROPERTY FOLDER Visualization)
+  set_property(TARGET mobiusVisuApp PROPERTY FOLDER Visualization)
 endif()
 
 if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}")
