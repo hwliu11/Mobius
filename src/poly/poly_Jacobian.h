@@ -43,9 +43,14 @@ namespace mobius {
 //!
 //! Utility to analyze Jacobians of mesh elements. See
 //!
-//!   [Stimpson et al(2007). The Verdict Geometric Quality Library]
+//!   [Shivanna et al (2010). An Analytical Framework for Quadrilateral Surface Mesh Improvement with an Underlying Triangulated Surface Definition. International Meshing Roundtable, 335-350.]
+//!   [Stimpson et al (2007). The Verdict Geometric Quality Library, Ch. 4.9]
 //!
-//! for the reference (chapter 4.9).
+//! According to [Shivanna et al. 2010], the Jacobian of a triangle in 3D/physical space is a
+//! 3x2 matrix and that of a triangle in 2D/computational/parametric space is a 2x2 matrix.
+//! To calculate the quality metric of a triangle in 3D, the triangle is rigidly transformed
+//! so that all the nodes lie in a 2D plane. This transformation does not change the quality
+//! metric, as the determinant and the condition number of the Jacobian are orientation invariant.
 class poly_Jacobian
 {
 public:
