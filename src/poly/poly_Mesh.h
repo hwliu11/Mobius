@@ -671,9 +671,7 @@ public:
   public:
 
     bool More() const { return m_pos < m_mesh->m_vertices.size(); }
-
     void Next() { m_pos++; }
-
     poly_VertexHandle Current() const { return poly_VertexHandle( int(m_pos) ); }
 
   };
@@ -689,9 +687,7 @@ public:
   public:
 
     bool More() const { return m_pos < m_mesh->m_edges.size(); }
-
     void Next() { m_pos++; }
-
     poly_EdgeHandle Current() const { return poly_EdgeHandle( int(m_pos) ); }
 
   };
@@ -707,9 +703,7 @@ public:
   public:
 
     bool More() const { return m_pos < m_mesh->m_triangles.size(); }
-
     void Next() { m_pos++; }
-
     poly_TriangleHandle Current() const { return poly_TriangleHandle( int(m_pos) ); }
 
   };
@@ -725,9 +719,7 @@ public:
   public:
 
     bool More() const { return m_pos < m_mesh->m_quads.size(); }
-
     void Next() { m_pos++; }
-
     poly_QuadHandle Current() const { return poly_QuadHandle( int(m_pos) ); }
 
   };

@@ -91,7 +91,7 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
 {
   // Get the triangle to split.
   poly_Triangle t;
-  if ( !this->GetTriangle(ht, t) )
+  if ( !this->GetTriangle(ht, t) || t.IsDeleted() )
     return false;
 
   // Get vertices on the triangle to split.
