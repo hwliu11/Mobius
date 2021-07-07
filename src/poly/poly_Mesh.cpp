@@ -44,6 +44,21 @@ mobius::poly_Mesh::poly_Mesh() : core_OBJECT()
 
 //-----------------------------------------------------------------------------
 
+mobius::t_ptr<mobius::poly_Mesh> mobius::poly_Mesh::DeepCopy() const
+{
+  t_ptr<poly_Mesh> copy = new poly_Mesh;
+  //
+  copy->m_vertices  = this->m_vertices;
+  copy->m_edges     = this->m_edges;
+  copy->m_triangles = this->m_triangles;
+  copy->m_quads     = this->m_quads;
+  copy->m_links     = this->m_links;
+
+  return copy;
+}
+
+//-----------------------------------------------------------------------------
+
 void mobius::poly_Mesh::GetBounds(double& xMin, double& xMax,
                                   double& yMin, double& yMax,
                                   double& zMin, double& zMax) const
@@ -816,13 +831,16 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
 
   // Take all triangles containing this vertex. Do not pass the domain here as we want
   // to take all triangles, including out-of-domain ones and then reason about the
-  // feature boundaries (of we filter out the out-of-domain triangles here, we won't
+  // feature boundaries (if we filter out the out-of-domain triangles here, we won't
   // be able to detect the boundary).
   std::vector<poly_TriangleHandle> ths;
   this->FindAdjacent(hv, ths);
 
   // Adjacent face IDs.
   std::unordered_set<int> faceIDs;
+
+  // Vertices and their domains.
+  std::unordered_map<poly_VertexHandle, int> vDomains;
 
   // Add the neighbor triangles' vertices to the result.
   for ( const auto& th : ths )
@@ -839,7 +857,7 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
     {
       if ( t.hVertices[k] != hv )
       {
-        hvs.insert(t.hVertices[k]);
+        vDomains.insert({t.hVertices[k], t.GetFaceRef()});
 
         // Check if that's a boundary vertex.
         if ( !isBoundary )
@@ -859,6 +877,15 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
 
   if ( !isBoundary && (faceIDs.size() > 1) )
     isBoundary = true;
+
+  // Compose the result.
+  for ( const auto& tuple : vDomains )
+  {
+    if ( domain.empty() || domain.count(tuple.second) )
+    {
+      hvs.insert(tuple.first);
+    }
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -874,6 +901,9 @@ void mobius::poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle        
 
   for ( size_t tidx = 0; tidx < m_triangles.size(); ++tidx )
   {
+    if ( m_triangles[tidx].IsDeleted() )
+      continue;
+
     for ( int k = 0; k < 3; ++k )
       if ( m_triangles[tidx].hVertices[k] == t.hVertices[0] ||
            m_triangles[tidx].hVertices[k] == t.hVertices[1] ||
@@ -1046,6 +1076,62 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
 //-----------------------------------------------------------------------------
 
+bool mobius::poly_Mesh::FlipEdge(const poly_EdgeHandle he,
+                                 const double          normDevRad,
+                                 const double          planeDevRad)
+{
+  poly_VertexHandle   a, b, x, y;
+  poly_TriangleHandle hts[2];
+  t_xyz               norm0, norm1;
+  //
+  if ( !this->CanFlip(he, normDevRad, planeDevRad,
+                      hts[0], hts[1], a, b, x, y, norm0, norm1) )
+    return false;
+
+  // Get triangles to rotate.
+  poly_Triangle ts[2];
+  this->GetTriangle(hts[0], ts[0]);
+  this->GetTriangle(hts[1], ts[1]);
+
+  // Compute norms to preserve orientations.
+  t_xyz testN[2];
+  this->ComputeNormal(a, x, b, testN[0]);
+  this->ComputeNormal(b, y, a, testN[1]);
+
+  // Add new (rotated) triangles.
+  poly_TriangleHandle newHts[2];
+  //
+  if ( testN[0].Dot(norm0) > 0 )
+  {
+    newHts[0] = this->AddTriangle( a, x, b, ts[0].GetFaceRef() );
+  }
+  else
+  {
+    newHts[0] = this->AddTriangle( b, x, a, ts[0].GetFaceRef() );
+  }
+  //
+  if ( testN[1].Dot(norm1) > 0 )
+  {
+    newHts[1] = this->AddTriangle( b, y, a, ts[1].GetFaceRef() );
+  }
+  else
+  {
+    newHts[1] = this->AddTriangle( a, y, b, ts[1].GetFaceRef() );
+  }
+
+  // Remove original triangles.
+  this->RemoveTriangle(hts[0]);
+  this->RemoveTriangle(hts[1]);
+
+  // Update links.
+  this->updateLink(he, hts[0], newHts[0]);
+  this->updateLink(he, hts[1], newHts[1]);
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 int mobius::poly_Mesh::FlipEdges(const double normDevRad,
                                  const double planeDevRad)
 {
@@ -1055,47 +1141,8 @@ int mobius::poly_Mesh::FlipEdges(const double normDevRad,
   {
     const poly_EdgeHandle eh = eit.Current();
 
-    poly_VertexHandle   a, b, x, y;
-    poly_TriangleHandle hts[2];
-    t_xyz               norm0, norm1;
-    //
-    if ( !this->CanFlip(eh, normDevRad, planeDevRad,
-                        hts[0], hts[1], a, b, x, y, norm0, norm1) )
-      continue;
-
-    // Get triangles to rotate.
-    poly_Triangle ts[2];
-    this->GetTriangle(hts[0], ts[0]);
-    this->GetTriangle(hts[1], ts[1]);
-
-    // Compute norms to preserve orientations.
-    t_xyz testN[2];
-    this->ComputeNormal(a, x, b, testN[0]);
-    this->ComputeNormal(b, y, a, testN[1]);
-
-    // Add new (rotated) triangles.
-    if ( testN[0].Dot(norm0) > 0 )
-    {
-      this->AddTriangle( a, x, b, ts[0].GetFaceRef() );
-    }
-    else
-    {
-      this->AddTriangle( b, x, a, ts[0].GetFaceRef() );
-    }
-    //
-    if ( testN[1].Dot(norm1) > 0 )
-    {
-      this->AddTriangle( b, y, a, ts[1].GetFaceRef() );
-    }
-    else
-    {
-      this->AddTriangle( a, y, b, ts[1].GetFaceRef() );
-    }
-
-    // Remove original triangles.
-    this->RemoveTriangle(hts[0]);
-    this->RemoveTriangle(hts[1]);
-    nbFlips++;
+    if ( this->FlipEdge(eh, normDevRad, planeDevRad) )
+      nbFlips++;
   }
 
   // Invalidate all existing links.

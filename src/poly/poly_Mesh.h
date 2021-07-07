@@ -63,6 +63,11 @@ public:
 
 public:
 
+  //! Creates a deep copy of this mesh.
+  //! \return the mesh copy.
+  mobiusPoly_EXPORT t_ptr<poly_Mesh>
+    DeepCopy() const;
+
   //! Calculates axis-aligned boundary box for the mesh.
   //! \param[out] xMin min X.
   //! \param[out] xMax max X.
@@ -307,6 +312,16 @@ public:
     CanFlip(const poly_EdgeHandle he,
             const double          normDevRad  = 1./180.*M_PI,
             const double          planeDevRad = 15./180.*M_PI) const;
+
+  //! Flips the passed edge if it allows flipping.
+  //! \param[in] he          the edge to flip.
+  //! \param[in] normDevRad  the allowed absolute normal deviation (radians).
+  //! \param[in] planeDevRad the allowed in-plane deviation (radians).
+  //! \return true if the edge was flipped, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    FlipEdge(const poly_EdgeHandle he,
+             const double          normDevRad  = 1./180.*M_PI,
+             const double          planeDevRad = 15./180.*M_PI);
 
   //! Flips all edges that allow flipping.
   //! \param[in] normDevRad  the allowed absolute normal deviation (radians).
