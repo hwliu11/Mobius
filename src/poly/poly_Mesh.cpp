@@ -1361,6 +1361,9 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
 
       // Move vertex using the non-const reference to the triangle.
       t2Edit.hVertices[ci] = hVm;
+
+      // Add back reference to keep consistent adjacency.
+      this->ChangeVertex(hVm).AddTriangleRef(th2Edit);
     }
 
     this->RemoveTriangle(ht2Remove);
