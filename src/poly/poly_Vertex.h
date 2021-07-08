@@ -32,10 +32,14 @@
 #define poly_Vertex_HeaderFile
 
 // Poly includes
+#include <mobius/poly_Flag.h>
 #include <mobius/poly_Handles.h>
 
 // Core includes
 #include <mobius/core_XYZ.h>
+
+// STL includes
+#include <unordered_set>
 
 namespace mobius {
 
@@ -79,9 +83,69 @@ public:
     return m_coords;
   }
 
+  //! \return const reference to the stored triangle handles.
+  const std::unordered_set<poly_TriangleHandle>& GetTriangleRefs() const
+  {
+    return m_tris;
+  }
+
+  //! \return non-const reference to the stored triangle handles.
+  std::unordered_set<poly_TriangleHandle>& ChangeTriangleRefs()
+  {
+    return m_tris;
+  }
+
+  //! Adds another back reference to a triangle containing this vertex.
+  //! \param[in] ht the triangle to add as a back reference.
+  void AddTriangleRef(const poly_TriangleHandle ht)
+  {
+    m_tris.insert(ht);
+  }
+
+  //! Removes a back reference to a triangle containing this vertex.
+  //! \param[in] ht the triangle to remove.
+  void RemoveTriangleRef(const poly_TriangleHandle ht)
+  {
+    m_tris.erase(ht);
+  }
+
+  //! Checks if this vertex contains a back reference to the given triangle.
+  //! \param[in] ht the triangle to check.
+  //! \return true/false.
+  bool HasTriangleRef(const poly_TriangleHandle ht) const
+  {
+    return m_tris.find(ht) != m_tris.end();
+  }
+
+  //! \return the associated flags.
+  int GetFlags() const
+  {
+    return m_iFlags;
+  }
+
+  //! \return non-const reference to the associated flags.
+  int& ChangeFlags()
+  {
+    return m_iFlags;
+  }
+
+  //! Flags this vertex as deleted.
+  void SetDeleted()
+  {
+    m_iFlags |= Flag_Deleted;
+  }
+
+  //! \return true if this vertex is marked as deleted.
+  bool IsDeleted() const
+  {
+    return (m_iFlags & Flag_Deleted) > 0;
+  }
+
 protected:
 
-  core_XYZ m_coords; //!< Coordinates of the vertex.
+  int                                     m_iFlags; //!< Flags.
+  core_XYZ                                m_coords; //!< Coordinates of the vertex.
+  std::unordered_set<poly_TriangleHandle> m_tris;   //!< Back references to the owner triangles.
 
 };
 

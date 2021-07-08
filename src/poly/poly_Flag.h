@@ -41,8 +41,8 @@ namespace mobius {
 //! Flags that might be associated with the mesh elements.
 enum poly_Flag
 {
-  Flag_None    = 0x000,
-  Flag_Deleted = 0x001
+  Flag_None     = 0x000,
+  Flag_Deleted  = 0x001
 };
 
 }

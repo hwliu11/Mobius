@@ -127,14 +127,14 @@ bool mobius::poly_ReadPLY::Perform(const std::string& filename)
         int nNodes = atoi( tokens[0].c_str() );
 
         if ( nNodes == 3 )
-          m_mesh->AddTriangle( poly_VertexHandle(atoi( tokens[1].c_str() ) + 1),
-                               poly_VertexHandle(atoi( tokens[2].c_str() ) + 1),
-                               poly_VertexHandle(atoi( tokens[3].c_str() ) + 1) );
+          m_mesh->AddTriangle( poly_VertexHandle(atoi( tokens[1].c_str() )),
+                               poly_VertexHandle(atoi( tokens[2].c_str() )),
+                               poly_VertexHandle(atoi( tokens[3].c_str() )) );
         else if ( nNodes == 4 )
-          m_mesh->AddQuad( poly_VertexHandle(atoi( tokens[1].c_str() ) + 1),
-                           poly_VertexHandle(atoi( tokens[2].c_str() ) + 1),
-                           poly_VertexHandle(atoi( tokens[3].c_str() ) + 1),
-                           poly_VertexHandle(atoi( tokens[4].c_str() ) + 1) );
+          m_mesh->AddQuad( poly_VertexHandle(atoi( tokens[1].c_str() )),
+                           poly_VertexHandle(atoi( tokens[2].c_str() )),
+                           poly_VertexHandle(atoi( tokens[3].c_str() )),
+                           poly_VertexHandle(atoi( tokens[4].c_str() )) );
       }
     }
   } // Until EOF.

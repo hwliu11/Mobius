@@ -605,7 +605,7 @@ mobius::outcome
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
 mobius::outcome
-  mobius::test_Mesh::findAdjacent(const int funcID)
+  mobius::test_Mesh::findAdjacent01(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
@@ -621,6 +621,39 @@ mobius::outcome
   mesh->FindAdjacentByEdges(poly_TriangleHandle(1), ths);
   //
   if ( ths.size() != 3 )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests finding adjacent triangles.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::findAdjacent02(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+
+  // Add vertices so that two triangles lie on the same straight line.
+  poly_VertexHandle hv_a = mesh->AddVertex(-1.0, 0.0, 0.0);
+  poly_VertexHandle hv_x = mesh->AddVertex( 0.0, 0.0, 0.0);
+  poly_VertexHandle hv_y = mesh->AddVertex( 0.0, 1.0, 0.0);
+  poly_VertexHandle hv_b = mesh->AddVertex( 1.0, 0.0, 0.0);
+
+  // Add triangle.
+  poly_TriangleHandle ht0 = mesh->AddTriangle(hv_a, hv_x, hv_y);
+  poly_TriangleHandle ht1 = mesh->AddTriangle(hv_x, hv_b, hv_y);
+
+  std::unordered_set<poly_TriangleHandle> ths;
+
+  // Find adjacent triangles.
+  mesh->FindAdjacentByVertices(poly_TriangleHandle(1), ths);
+  //
+  if ( ths.size() != 2 )
     return res.failure();
 
   return res.success();

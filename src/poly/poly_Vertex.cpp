@@ -33,14 +33,15 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_Vertex::poly_Vertex()
+mobius::poly_Vertex::poly_Vertex() : m_iFlags(Flag_None)
 {
 }
 
 //-----------------------------------------------------------------------------
 
 mobius::poly_Vertex::poly_Vertex(const core_XYZ& coords)
-: m_coords(coords)
+: m_iFlags(Flag_None),
+  m_coords(coords)
 {}
 
 //-----------------------------------------------------------------------------
@@ -48,5 +49,6 @@ mobius::poly_Vertex::poly_Vertex(const core_XYZ& coords)
 mobius::poly_Vertex::poly_Vertex(const double x,
                                  const double y,
                                  const double z)
-: m_coords(x, y, z)
+: m_iFlags(Flag_None),
+  m_coords(x, y, z)
 {}

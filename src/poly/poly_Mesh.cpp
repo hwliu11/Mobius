@@ -795,25 +795,19 @@ bool mobius::poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle           hv,
-                                     std::vector<poly_TriangleHandle>& hts,
-                                     const std::unordered_set<int>&    domain) const
+void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                  hv,
+                                     std::unordered_set<poly_TriangleHandle>& hts,
+                                     const std::unordered_set<int>&           domain) const
 {
-  // TODO: rework for better performance, e.g., store link to the triangles
-  //       right in the vertices.
+  const std::unordered_set<poly_TriangleHandle>&
+    vertexTris = m_vertices[hv.iIdx].GetTriangleRefs();
 
-  for ( size_t tidx = 0; tidx < m_triangles.size(); ++tidx )
+  for ( const auto& vth : vertexTris )
   {
-    if ( !domain.empty() && ( domain.find( m_triangles[tidx].GetFaceRef() ) == domain.end() ) )
+    if ( !domain.empty() && ( domain.find( m_triangles[vth.iIdx].GetFaceRef() ) == domain.end() ) )
       continue; // Skip faces that are out of interest.
 
-    for ( int k = 0; k < 3; ++k )
-    {
-      if ( m_triangles[tidx].hVertices[k] == hv )
-      {
-        hts.push_back( poly_TriangleHandle( int(tidx) ) );
-      }
-    }
+    hts.insert(vth);
   }
 }
 
@@ -824,16 +818,13 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
                                      bool&                                  isBoundary,
                                      const std::unordered_set<int>&         domain) const
 {
-  // TODO: rework for better performance, e.g., store link to the triangles
-  //       right in the vertices.
-
   isBoundary = false;
 
   // Take all triangles containing this vertex. Do not pass the domain here as we want
   // to take all triangles, including out-of-domain ones and then reason about the
   // feature boundaries (if we filter out the out-of-domain triangles here, we won't
   // be able to detect the boundary).
-  std::vector<poly_TriangleHandle> ths;
+  std::unordered_set<poly_TriangleHandle> ths;
   this->FindAdjacent(hv, ths);
 
   // Adjacent face IDs.
@@ -893,25 +884,12 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
 void mobius::poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle                ht,
                                                std::unordered_set<poly_TriangleHandle>& hts) const
 {
-  // TODO: rework for better optimization, e.g., store link to the triangles
-  //       right in the vertices.
-
   poly_Triangle t;
   this->GetTriangle(ht, t);
 
-  for ( size_t tidx = 0; tidx < m_triangles.size(); ++tidx )
-  {
-    if ( m_triangles[tidx].IsDeleted() )
-      continue;
-
-    for ( int k = 0; k < 3; ++k )
-      if ( m_triangles[tidx].hVertices[k] == t.hVertices[0] ||
-           m_triangles[tidx].hVertices[k] == t.hVertices[1] ||
-           m_triangles[tidx].hVertices[k] == t.hVertices[2] )
-      {
-        hts.insert( poly_TriangleHandle( int(tidx) ) );
-      }
-  }
+  this->FindAdjacent(t.hVertices[0], hts);
+  this->FindAdjacent(t.hVertices[1], hts);
+  this->FindAdjacent(t.hVertices[2], hts);
 }
 
 //-----------------------------------------------------------------------------
@@ -1282,6 +1260,9 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
         poly_Triangle t2Check;
         this->GetTriangle(th2Check, t2Check);
 
+        if ( t2Check.IsDeleted() )
+          continue;
+
         std::vector<t_xyz> t2CheckVerts;
         int ci = -1;
         const poly_VertexHandle c = this->FindVertex(th2Check, he, ci);
@@ -1300,8 +1281,13 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
         // Virtually move `c` to `Vm` for testing.
         t2CheckVerts.push_back(Vm);
 
+        if ( t2CheckVerts.size() != 3 )
+          continue;
+
         if ( this->IsDegenerated(t2CheckVerts[0], t2CheckVerts[1], t2CheckVerts[2], prec) )
+        {
           return false;
+        }
       }
     }
   }
@@ -1324,14 +1310,20 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
         poly_Triangle t2Check;
         this->GetTriangle(th2Check, t2Check);
 
+        if ( t2Check.IsDeleted() )
+          continue;
+
         poly_EdgeHandle
           eh2Check[3] = { this->FindEdge(t2Check.hVertices[0], t2Check.hVertices[1]),
                           this->FindEdge(t2Check.hVertices[1], t2Check.hVertices[2]),
                           this->FindEdge(t2Check.hVertices[2], t2Check.hVertices[0]) };
 
         for ( int i = 0; i < 3; ++i )
-          if ( this->CountTriangles(eh2Check[i]) != 2 )
+        {
+          const int numEdgeTris = this->CountTriangles(eh2Check[i]);
+          if ( numEdgeTris != 2 )
             return false;
+        }
       }
     }
   }

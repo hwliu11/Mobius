@@ -249,9 +249,9 @@ public:
   //! \param[in]  domain the optional domain to keep only the
   //!                    faces of interest.
   mobiusPoly_EXPORT void
-    FindAdjacent(const poly_VertexHandle           hv,
-                 std::vector<poly_TriangleHandle>& hts,
-                 const std::unordered_set<int>&    domain = std::unordered_set<int>()) const;
+    FindAdjacent(const poly_VertexHandle                  hv,
+                 std::unordered_set<poly_TriangleHandle>& hts,
+                 const std::unordered_set<int>&           domain = std::unordered_set<int>()) const;
 
   //! Finds all vertices adjacent to the given vertex.
   //! \param[in]  hv         the vertex in question.
@@ -596,6 +596,12 @@ public:
   {
     m_triangles.push_back( poly_Triangle(hV0, hV1, hV2) );
     poly_TriangleHandle hTriangle( int( m_triangles.size() ) - 1 );
+
+    // Add back references to the vertices.
+    m_vertices[hV0.iIdx].AddTriangleRef(hTriangle);
+    m_vertices[hV1.iIdx].AddTriangleRef(hTriangle);
+    m_vertices[hV2.iIdx].AddTriangleRef(hTriangle);
+
     return hTriangle;
   }
 
@@ -612,6 +618,12 @@ public:
   {
     m_triangles.push_back( poly_Triangle(hV0, hV1, hV2, ref) );
     poly_TriangleHandle hTriangle( int( m_triangles.size() ) - 1 );
+
+    // Add back references to the vertices.
+    m_vertices[hV0.iIdx].AddTriangleRef(hTriangle);
+    m_vertices[hV1.iIdx].AddTriangleRef(hTriangle);
+    m_vertices[hV2.iIdx].AddTriangleRef(hTriangle);
+
     return hTriangle;
   }
 
