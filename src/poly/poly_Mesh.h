@@ -277,22 +277,31 @@ public:
   //! Checks if the passed edge can be flipped and returns the pair of
   //! triangles to flip. The links should have been computed before you
   //! call this method.
-  //! \param[in]  he          the edge to check.
-  //! \param[in]  normDevRad  the allowed absolute normal deviation (radians).
-  //! \param[in]  planeDevRad the allowed in-plane deviation (radians).
-  //! \param[out] ht0         the first triangle.
-  //! \param[out] ht1         the second triangle.
-  //! \param[out] a           the opposite vertex on the first triangle.
-  //! \param[out] b           the opposite vertex on the second triangle.
-  //! \param[out] x           the first vertex on the edge to flip.
-  //! \param[out] y           the second vertex on the edge to flip.
-  //! \param[out] norm0       the normal vector for the first triangle.
-  //! \param[out] norm1       the normal vector for the second triangle.
+  //! \param[in]  he            the edge to check.
+  //! \param[in]  normDevRad    the allowed absolute normal deviation (radians).
+  //! \param[in]  planeDevRad   the allowed in-plane deviation (radians).
+  //! \param[in]  checkJacobian the Boolean flag determining whether to check mesh
+  //!                           quality metric (scaled Jacobian) on edge flip to
+  //!                           ensure that flipping does not make the mesh worse.
+  //! \param[in]  checkWing     the Boolean flag indicating whether to check the projection
+  //!                           of the neighbor links to the edge supposed for flipping.
+  //!                           If the dot product is negative, that's a "wing-like" shape
+  //!                           that should not undergo edge flipping to avoid overlappings.
+  //! \param[out] ht0           the first triangle.
+  //! \param[out] ht1           the second triangle.
+  //! \param[out] a             the opposite vertex on the first triangle.
+  //! \param[out] b             the opposite vertex on the second triangle.
+  //! \param[out] x             the first vertex on the edge to flip.
+  //! \param[out] y             the second vertex on the edge to flip.
+  //! \param[out] norm0         the normal vector for the first triangle.
+  //! \param[out] norm1         the normal vector for the second triangle.
   //! \return true/false.
   mobiusPoly_EXPORT bool
     CanFlip(const poly_EdgeHandle he,
             const double          normDevRad,
             const double          planeDevRad,
+            const bool            checkJacobian,
+            const bool            checkWing,
             poly_TriangleHandle&  ht0,
             poly_TriangleHandle&  ht1,
             poly_VertexHandle&    a,
@@ -304,24 +313,42 @@ public:
 
   //! Checks if the passed edge can be flipped. The links should have
   //! been computed before you call this method.
-  //! \param[in] he          the edge to check.
-  //! \param[in] normDevRad  the allowed absolute normal deviation (radians).
-  //! \param[in] planeDevRad the allowed in-plane deviation (radians).
+  //! \param[in] he            the edge to check.
+  //! \param[in] normDevRad    the allowed absolute normal deviation (radians).
+  //! \param[in] planeDevRad   the allowed in-plane deviation (radians).
+  //! \param[in] checkJacobian the Boolean flag determining whether to check mesh
+  //!                          quality metric (scaled Jacobian) on edge flip to
+  //!                          ensure that flipping does not make the mesh worse.
+  //! \param[in] checkWing     the Boolean flag indicating whether to check the projection
+  //!                          of the neighbor links to the edge supposed for flipping.
+  //!                          If the dot product is negative, that's a "wing-like" shape
+  //!                          that should not undergo edge flipping to avoid overlappings.
   //! \return true/false.
   mobiusPoly_EXPORT bool
     CanFlip(const poly_EdgeHandle he,
-            const double          normDevRad  = 1./180.*M_PI,
-            const double          planeDevRad = 15./180.*M_PI) const;
+            const double          normDevRad    = 1./180.*M_PI,
+            const double          planeDevRad   = 15./180.*M_PI,
+            const bool            checkJacobian = true,
+            const bool            checkWing     = true) const;
 
   //! Flips the passed edge if it allows flipping.
-  //! \param[in] he          the edge to flip.
-  //! \param[in] normDevRad  the allowed absolute normal deviation (radians).
-  //! \param[in] planeDevRad the allowed in-plane deviation (radians).
+  //! \param[in] he            the edge to flip.
+  //! \param[in] normDevRad    the allowed absolute normal deviation (radians).
+  //! \param[in] planeDevRad   the allowed in-plane deviation (radians).
+  //! \param[in] checkJacobian the Boolean flag determining whether to check mesh
+  //!                          quality metric (scaled Jacobian) on edge flip to
+  //!                          ensure that flipping does not make the mesh worse.
+  //! \param[in] checkWing     the Boolean flag indicating whether to check the projection
+  //!                          of the neighbor links to the edge supposed for flipping.
+  //!                          If the dot product is negative, that's a "wing-like" shape
+  //!                          that should not undergo edge flipping to avoid overlappings.
   //! \return true if the edge was flipped, false -- otherwise.
   mobiusPoly_EXPORT bool
     FlipEdge(const poly_EdgeHandle he,
-             const double          normDevRad  = 1./180.*M_PI,
-             const double          planeDevRad = 15./180.*M_PI);
+             const double          normDevRad    = 1./180.*M_PI,
+             const double          planeDevRad   = 15./180.*M_PI,
+             const bool            checkJacobian = true,
+             const bool            checkWing     = true);
 
   //! Flips all edges that allow flipping.
   //! \param[in] normDevRad  the allowed absolute normal deviation (radians).

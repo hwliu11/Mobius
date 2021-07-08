@@ -919,6 +919,8 @@ void mobius::poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle        
 bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
                                 const double          normDevRad,
                                 const double          planeDevRad,
+                                const bool            checkJacobian,
+                                const bool            checkWing,
                                 poly_TriangleHandle&  ht0,
                                 poly_TriangleHandle&  ht1,
                                 poly_VertexHandle&    a,
@@ -951,8 +953,13 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
   // Get scaled Jacobians to control the quality of the triangles
   // on edge flip (we do not want to make it worse).
-  const double J_before[2] = { this->ComputeScaledJacobian(hts[0]),
-                               this->ComputeScaledJacobian(hts[1]) };
+  double J_before[2] = {0., 0.};
+  //
+  if ( checkJacobian )
+  {
+    J_before[0] = this->ComputeScaledJacobian(hts[0]);
+    J_before[1] = this->ComputeScaledJacobian(hts[1]);
+  }
 
   ht0 = hts[0];
   ht1 = hts[1];
@@ -1017,45 +1024,34 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
   this->GetVertex(y, y_coords);
 
   // Check scaled Jacobians after edge flip.
-  const double J_after[2] = { this->ComputeScaledJacobian(a_coords, x_coords, b_coords),
-                              this->ComputeScaledJacobian(a_coords, y_coords, b_coords) };
-  //
-  if ( std::min(J_after[0], J_after[1]) < std::min(J_before[0], J_before[1]) )
-    return false;
+  if ( checkJacobian )
+  {
+    const double J_after[2] = { this->ComputeScaledJacobian(a_coords, x_coords, b_coords),
+                                this->ComputeScaledJacobian(a_coords, y_coords, b_coords) };
+    //
+    if ( std::min(J_after[0], J_after[1]) < std::min(J_before[0], J_before[1]) )
+      return false;
+  }
 
-  // There's ambiguity how `x` and `y` are defined, so we
-  // do all possible tests here.
-  t_xyz bx = (b_coords - x_coords).Normalized();
-  t_xyz ax = (a_coords - x_coords).Normalized();
-  t_xyz xy = (y_coords - x_coords).Normalized();
-  t_xyz by = (b_coords - y_coords).Normalized();
-  t_xyz ay = (a_coords - y_coords).Normalized();
-  t_xyz yx = (x_coords - y_coords).Normalized();
+  if ( checkWing )
+  {
+    // There's ambiguity how `x` and `y` are defined, so we
+    // do all possible tests here.
+    t_xyz bx = (b_coords - x_coords).Normalized();
+    t_xyz ax = (a_coords - x_coords).Normalized();
+    t_xyz xy = (y_coords - x_coords).Normalized();
+    t_xyz by = (b_coords - y_coords).Normalized();
+    t_xyz ay = (a_coords - y_coords).Normalized();
+    t_xyz yx = (x_coords - y_coords).Normalized();
 
-  const double adot1 = ax.Dot(xy);
-  const double bdot1 = bx.Dot(xy);
-  const double adot2 = ay.Dot(yx);
-  const double bdot2 = by.Dot(yx);
+    const double adot1 = ax.Dot(xy);
+    const double bdot1 = bx.Dot(xy);
+    const double adot2 = ay.Dot(yx);
+    const double bdot2 = by.Dot(yx);
 
-  if ( adot1 < 0 || bdot1 < 0 || adot2 < 0 || bdot2 < 0 )
-    return false;
-
-  const double aang1 = std::acos(adot1);
-  const double bang1 = std::acos(bdot1);
-  const double aang2 = std::acos(adot2);
-  const double bang2 = std::acos(bdot2);
-  //
-  if ( std::abs(aang1 - M_PI/2) < planeDevRad )
-    return false;
-  //
-  if ( std::abs(bang1 - M_PI/2) < planeDevRad )
-    return false;
-  //
-  if ( std::abs(aang2 - M_PI/2) < planeDevRad )
-    return false;
-  //
-  if ( std::abs(bang2 - M_PI/2) < planeDevRad )
-    return false;
+    if ( adot1 < 0 || bdot1 < 0 || adot2 < 0 || bdot2 < 0 )
+      return false;
+  }
 
   return true;
 }
@@ -1064,13 +1060,15 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
 bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
                                 const double          normDevRad,
-                                const double          planeDevRad) const
+                                const double          planeDevRad,
+                                const bool            checkJacobian,
+                                const bool            checkWing) const
 {
   poly_TriangleHandle hts[2];
   poly_VertexHandle   a, b, x, y;
   t_xyz               norm0, norm1;
   //
-  return this->CanFlip(he, normDevRad, planeDevRad,
+  return this->CanFlip(he, normDevRad, planeDevRad, checkJacobian, checkWing,
                        hts[0], hts[1], a, b, x, y, norm0, norm1);
 }
 
@@ -1078,13 +1076,15 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
 bool mobius::poly_Mesh::FlipEdge(const poly_EdgeHandle he,
                                  const double          normDevRad,
-                                 const double          planeDevRad)
+                                 const double          planeDevRad,
+                                 const bool            checkJacobian,
+                                 const bool            checkWing)
 {
   poly_VertexHandle   a, b, x, y;
   poly_TriangleHandle hts[2];
   t_xyz               norm0, norm1;
   //
-  if ( !this->CanFlip(he, normDevRad, planeDevRad,
+  if ( !this->CanFlip(he, normDevRad, planeDevRad, checkJacobian, checkWing,
                       hts[0], hts[1], a, b, x, y, norm0, norm1) )
     return false;
 
