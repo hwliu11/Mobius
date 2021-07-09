@@ -1367,6 +1367,9 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle&         he,
     // Get the vertex to survive (the one opposite to the collapsed edge).
     const poly_VertexHandle a = this->GetOppositeVertex(ht2Remove, he);
 
+    // Add new edge.
+    const poly_EdgeHandle sharedEdgeHandle = this->AddEdge(a, hVm);
+
     // Edit neighbor triangles.
     for ( const auto& th2Edit : ths2Edit )
     {
@@ -1376,16 +1379,19 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle&         he,
 
       poly_Triangle& t2Edit = this->ChangeTriangle(th2Edit);
 
+      // Find a vertex `c` shared by a triangle to edit and the edge
+      // being collapsed. That is basically the vertex where the
+      // dangling edge `he` is attached to the target triangle.
       int ci = -1;
       const poly_VertexHandle c = this->FindVertex(th2Edit, he, ci);
       //
       if ( !c.IsValid() )
         continue;
 
-      // Move vertex using the non-const reference to the triangle.
+      // Move the vertex `c` using the non-const reference to the triangle.
       t2Edit.hVertices[ci] = hVm;
 
-      // Edit the edges.
+      // Edit the edges of the modified triangle.
       for ( int ei = 0; ei < 3; ++ei )
       {
         poly_Edge& e2Edit = m_edges[t2Edit.hEdges[ei].iIdx];
@@ -1399,25 +1405,26 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle&         he,
           if ( e2Edit.hVertices[0] == t2Remove.hVertices[k] )
           {
             numVertAffected++;
-            vi = (e2Edit.hVertices[0] == t2Remove.hVertices[k]) ? 0 : 1;
+            vi = 0;
           }
 
           if ( e2Edit.hVertices[1] == t2Remove.hVertices[k] )
           {
             numVertAffected++;
-            vi = (e2Edit.hVertices[0] == t2Remove.hVertices[k]) ? 0 : 1;
+            vi = 1;
           }
         }
 
-        if ( numVertAffected == 2 )
-        {
-          // Remove edge.
-          this->RemoveEdge(he);
-        }
-
+        // Edit edge.
         if ( numVertAffected == 1 )
         {
           e2Edit.hVertices[vi] = hVm;
+        }
+
+        // Substitute the edge with the shared one.
+        if ( numVertAffected == 2 )
+        {
+          t2Edit.hEdges[ei] = sharedEdgeHandle;
         }
       }
 
