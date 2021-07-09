@@ -681,7 +681,9 @@ void mobius::poly_Mesh::ComputeEdges()
 
         visitedEdges.insert( {edges[eidx].hVertices[0], rec});
         m_links     .insert    ( {eh, {th}} );
-        m_edges     .push_back (edges[eidx]);
+
+        // Add edge and keep a link in a triangle.
+        m_triangles[th.iIdx].hEdges[eidx] = this->AddEdge(edges[eidx]);
       }
       else
       {
@@ -693,12 +695,16 @@ void mobius::poly_Mesh::ComputeEdges()
 
           linkIt1->second.insert({edges[eidx].hVertices[1], eh});
 
-          m_links      .insert    ( {eh, {th}} );
-          m_edges      .push_back (edges[eidx]);
+          m_links.insert( {eh, {th}} );
+
+          // Add edge and keep a link in a triangle.
+          m_triangles[th.iIdx].hEdges[eidx] = this->AddEdge(edges[eidx]);
         }
         else
         {
           m_links.find(linkIt2->second)->second.push_back(th);
+
+          m_triangles[th.iIdx].hEdges[eidx] = linkIt2->second;
         }
       }
     }
@@ -1314,9 +1320,7 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
           continue;
 
         poly_EdgeHandle
-          eh2Check[3] = { this->FindEdge(t2Check.hVertices[0], t2Check.hVertices[1]),
-                          this->FindEdge(t2Check.hVertices[1], t2Check.hVertices[2]),
-                          this->FindEdge(t2Check.hVertices[2], t2Check.hVertices[0]) };
+          eh2Check[3] = { t2Check.hEdges[0], t2Check.hEdges[1], t2Check.hEdges[2] };
 
         for ( int i = 0; i < 3; ++i )
         {
@@ -1341,6 +1345,10 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
     std::unordered_set<poly_TriangleHandle> ths2Edit;
     this->FindAdjacentByVertices(ht2Remove, ths2Edit);
 
+    // Current triangle to remove.
+    poly_Triangle t2Remove;
+    this->GetTriangle(ht2Remove, t2Remove);
+
     // Get the vertex to survive (the one opposite to the collapsed edge).
     const poly_VertexHandle a = this->GetOppositeVertex(ht2Remove, he);
 
@@ -1362,8 +1370,46 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
       // Move vertex using the non-const reference to the triangle.
       t2Edit.hVertices[ci] = hVm;
 
+      // Edit the edges.
+      for ( int ei = 0; ei < 3; ++ei )
+      {
+        poly_Edge& e2Edit = m_edges[t2Edit.hEdges[ei].iIdx];
+
+        // Check if this edge is going to move.
+        int  vi              = -1;
+        int  numVertAffected = 0;
+        //
+        for ( int k = 0; k < 3; ++k )
+        {
+          if ( e2Edit.hVertices[0] == t2Remove.hVertices[k] )
+          {
+            numVertAffected++;
+            vi = (e2Edit.hVertices[0] == t2Remove.hVertices[k]) ? 0 : 1;
+          }
+
+          if ( e2Edit.hVertices[1] == t2Remove.hVertices[k] )
+          {
+            numVertAffected++;
+            vi = (e2Edit.hVertices[0] == t2Remove.hVertices[k]) ? 0 : 1;
+          }
+        }
+
+        if ( numVertAffected == 2 )
+        {
+          // Remove edge.
+          this->RemoveEdge(he);
+        }
+
+        if ( numVertAffected == 1 )
+        {
+          e2Edit.hVertices[vi] = hVm;
+        }
+      }
+
       // Add back reference to keep consistent adjacency.
-      this->ChangeVertex(hVm).AddTriangleRef(th2Edit);
+      this->ChangeVertex(hVm)           .AddTriangleRef(th2Edit);
+      this->ChangeVertex(e.hVertices[0]).SetDeleted();
+      this->ChangeVertex(e.hVertices[1]).SetDeleted();
     }
 
     this->RemoveTriangle(ht2Remove);

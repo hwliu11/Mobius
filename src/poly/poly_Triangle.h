@@ -129,6 +129,7 @@ public:
 public:
 
   poly_VertexHandle hVertices[3]; //!< Handles to the vertices.
+  poly_EdgeHandle   hEdges[3];    //!< Handkes to the edges.
 
 protected:
 
