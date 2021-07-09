@@ -403,12 +403,15 @@ public:
   //!                          of the resulting triangles.
   //! \param[in] prec          the precision to use for the degenracy check, if it is
   //!                          enabled.
+  //! \param[in] domain        the optional CAD domain (a set of face IDs) to restrict
+  //!                          edge collapse in.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    CollapseEdge(const poly_EdgeHandle& he,
-                 const bool             checkBorderOn = true,
-                 const bool             checkDegenOn  = true,
-                 const double           prec          = core_Precision::Resolution3D());
+    CollapseEdge(const poly_EdgeHandle&         he,
+                 const bool                     checkBorderOn = true,
+                 const bool                     checkDegenOn  = true,
+                 const double                   prec          = core_Precision::Resolution3D(),
+                 const std::unordered_set<int>& domain        = std::unordered_set<int>());
 
   //! Applies Laplacian smoothing to the mesh vertices.
   //! \param[in] iter   the number of smoothing steps.

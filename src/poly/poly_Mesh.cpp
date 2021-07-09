@@ -1217,10 +1217,11 @@ mobius::poly_VertexHandle
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
-                                     const bool             checkBorderOn,
-                                     const bool             checkDegenOn,
-                                     const double           prec)
+bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle&         he,
+                                     const bool                     checkBorderOn,
+                                     const bool                     checkDegenOn,
+                                     const double                   prec,
+                                     const std::unordered_set<int>& domain)
 {
   // Get triangles to remove.
   std::unordered_set<poly_TriangleHandle> hts2Remove;
@@ -1305,6 +1306,9 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
   //       as we have exactly the same iteration below.
   if ( checkBorderOn )
   {
+    // Adjacent face IDs.
+    std::unordered_set<int> faceIDs;
+
     for ( const auto& ht2Remove : hts2Remove )
     {
       std::unordered_set<poly_TriangleHandle> ths2Check;
@@ -1319,6 +1323,14 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
         if ( t2Check.IsDeleted() )
           continue;
 
+        // Check domain.
+        if ( !domain.empty() && ( domain.find( t2Check.GetFaceRef() ) == domain.end() ) )
+          return false; // Do not allow collapsing an edge that would
+                        // affect out-of-domain elements.
+
+        // Remember face ID to check that we're not going to affect multiple faces.
+        faceIDs.insert( t2Check.GetFaceRef() );
+
         poly_EdgeHandle
           eh2Check[3] = { t2Check.hEdges[0], t2Check.hEdges[1], t2Check.hEdges[2] };
 
@@ -1330,6 +1342,9 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle& he,
         }
       }
     }
+
+    if ( faceIDs.size() > 1 )
+      return false; // Edge collapse is not a cross-patch operation.
   }
 
   /* When here, we're sure we can modify the mesh, so let's insert vertices,
