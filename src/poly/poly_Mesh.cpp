@@ -859,14 +859,24 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
         // Check if that's a boundary vertex.
         if ( !isBoundary )
         {
-          // Compose a link.
-          poly_EdgeHandle eh = this->FindEdge( poly_Edge(hv, t.hVertices[k]) );
+          poly_EdgeHandle eh;
+          for ( int j = 0; j < 3; ++j )
+          {
+            const poly_Edge& eCandidate = m_edges[t.hEdges[j].iIdx];
 
-          // Check if that's a boundary link.
-          auto linkIt = m_links.find(eh);
-          //
-          if ( ( linkIt != m_links.end() ) && (linkIt->second.size() < 2) )
-            isBoundary = true;
+            if ( (eCandidate.hVertices[0] == hv) && (eCandidate.hVertices[1] == t.hVertices[k]) ||
+                 (eCandidate.hVertices[1] == hv) && (eCandidate.hVertices[0] == t.hVertices[k]) )
+              eh = t.hEdges[j];
+          }
+
+          if ( eh.IsValid() )
+          {
+            // Check if that's a boundary link.
+            auto linkIt = m_links.find(eh);
+            //
+            if ( ( linkIt != m_links.end() ) && (linkIt->second.size() < 2) )
+              isBoundary = true;
+          }
         }
       }
     }
@@ -1213,6 +1223,37 @@ mobius::poly_VertexHandle
       }
 
   return poly_VertexHandle();
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
+                                          std::vector<poly_TriangleHandle>& bndTris) const
+{
+  // Extract edges from the computed links.
+  for ( const auto& linkIt : m_links )
+  {
+    const poly_EdgeHandle                   he  = linkIt.first;
+    const std::vector<poly_TriangleHandle>& hts = linkIt.second;
+
+    // Keep alive triangles only.
+    std::vector<poly_TriangleHandle> alive;
+    //
+    for ( const auto& ht : hts )
+    {
+      if ( !m_triangles[hts[0].iIdx].IsDeleted() )
+        alive.push_back(ht);
+    }
+
+    if ( (alive.size() != 2) || (m_triangles[alive[0].iIdx].GetFaceRef() != m_triangles[alive[1].iIdx].GetFaceRef()) )
+    {
+      bndEdges.push_back(he);
+
+      // Add boundary triangles to the result.
+      for ( const auto& ht : alive )
+        bndTris.push_back(ht);
+    }
+  }
 }
 
 //-----------------------------------------------------------------------------

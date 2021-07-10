@@ -382,6 +382,15 @@ public:
     FindEdge(const poly_TriangleHandle ht0,
              const poly_TriangleHandle ht1) const;
 
+  //! Finds all boundary edges in the mesh. A boundary edge is an edge where
+  //! the triangles with different `face IDs` meet or an edge not having
+  //! exactly two owner triangles.
+  //! \param[out] bndEdges the extracted boundary edges.
+  //! \param[out] bndTris  the extracted boundary triangles.
+  mobiusPoly_EXPORT void
+    FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
+                      std::vector<poly_TriangleHandle>& bndTris) const;
+
   //! Finds the vertex shared between the passed triangle and the
   //! given (presumably dangling) edge.
   //! \param[in]  ht   the triangle in question.
