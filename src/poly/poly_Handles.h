@@ -34,6 +34,9 @@
 // Poly includes
 #include <mobius/poly.h>
 
+// Standard includes
+#include <cstddef>
+
 #define Mobius_InvalidHandleIndex -1
 
 namespace mobius {
