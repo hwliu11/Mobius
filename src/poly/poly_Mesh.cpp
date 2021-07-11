@@ -675,7 +675,7 @@ void mobius::poly_Mesh::ComputeEdges()
       //
       if ( linkIt1 == visitedEdges.end() )
       {
-        poly_EdgeHandle eh( m_links.size() );
+        poly_EdgeHandle eh( int( m_links.size() ) );
 
         t_vheh rec; rec.insert({edges[eidx].hVertices[1], eh});
 
@@ -691,7 +691,7 @@ void mobius::poly_Mesh::ComputeEdges()
         //
         if ( linkIt2 == linkIt1->second.end() )
         {
-          poly_EdgeHandle eh( m_links.size() );
+          poly_EdgeHandle eh( int( m_links.size() ) );
 
           linkIt1->second.insert({edges[eidx].hVertices[1], eh});
 

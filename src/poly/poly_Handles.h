@@ -34,9 +34,6 @@
 // Poly includes
 #include <mobius/poly.h>
 
-// Standard includes
-#include <cstddef>
-
 #define Mobius_InvalidHandleIndex -1
 
 namespace mobius {
@@ -135,10 +132,6 @@ struct poly_EdgeHandle : public poly_BaseHandle
   //! \param[in] _idx 0-based index to set for the handle. Use "-1" to
   //!                 invalidate the handle.
   explicit poly_EdgeHandle(const int _idx = Mobius_InvalidHandleIndex) : poly_BaseHandle(_idx) {}
-
-  //! Ctor accepting the size_t index.
-  //! \param[in] _idx 0-based index to set for the handle.
-  explicit poly_EdgeHandle(const size_t _idx) : poly_BaseHandle( int(_idx) ) {}
 };
 
 //-----------------------------------------------------------------------------
