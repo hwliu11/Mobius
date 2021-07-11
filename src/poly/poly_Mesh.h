@@ -259,13 +259,24 @@ public:
   //! \param[out] isBoundary the Boolean flag indicating whether
   //!                        the passed `hv` vertex is found to be
   //!                        the boundary one.
+  //! \param[out] faceRefs   the surrounding face refs.
   //! \param[in]  domain     the optional domain to keep only the
   //!                        faces of interest.
   mobiusPoly_EXPORT void
     FindAdjacent(const poly_VertexHandle                hv,
                  std::unordered_set<poly_VertexHandle>& hvs,
                  bool&                                  isBoundary,
-                 const std::unordered_set<int>&         domain = std::unordered_set<int>()) const;
+                 std::unordered_set<int>&               faceRefs,
+                 const std::unordered_set<int>&         domain) const;
+
+  //! Finds adjacent triangles for the given edge.
+  //! \param[in]  he  the edge in question.
+  //! \param[out] hts the output triangles.
+  //! \return false if adjacency information is not available or if the
+  //!         passed edge handle is invalid.
+  mobiusPoly_EXPORT bool
+    FindAdjacent(const poly_EdgeHandle             he,
+                 std::vector<poly_TriangleHandle>& hts) const;
 
   //! Finds adjacent triangles for the given one.
   //! \param[in]  ht the triangle in question.
@@ -416,11 +427,17 @@ public:
   //!                          edge collapse in.
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    CollapseEdge(const poly_EdgeHandle&         he,
+    CollapseEdge(const poly_EdgeHandle          he,
                  const bool                     checkBorderOn = true,
                  const bool                     checkDegenOn  = true,
                  const double                   prec          = core_Precision::Resolution3D(),
                  const std::unordered_set<int>& domain        = std::unordered_set<int>());
+
+  //! Splits the passed edge and refines its owner triangles.
+  //! \param[in] he the edge to split.
+  //! \return true in the case of success, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    SplitEdge(const poly_EdgeHandle  he);
 
   //! Applies Laplacian smoothing to the mesh vertices.
   //! \param[in] iter   the number of smoothing steps.
