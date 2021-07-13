@@ -12,7 +12,7 @@ set "JENKINS_3RDPARTIES=%~dp03rd-parties"
 
 set "MOBIUS_TEST_DUMPING=%~dp0cmake-build-dir"
 set "MOBIUS_TEST_DATA=%~dp0data"
-set "MOBIUS_TEST_SCRIPTS=%~dp0scripts"
+set "MOBIUS_TEST_DESCR=%~dp0src/test"
 rem set "ASI_TEST_DESCR=@ASI_TEST_DESCR@"
 
 setlocal enabledelayedexpansion
@@ -23,8 +23,8 @@ echo "MOBIUS_TEST_DUMPING=!MOBIUS_TEST_DUMPING!"
 set "MOBIUS_TEST_DATA=!MOBIUS_TEST_DATA:\=/!"
 echo "MOBIUS_TEST_DATA=!MOBIUS_TEST_DATA!"
 
-set "MOBIUS_TEST_SCRIPTS=!MOBIUS_TEST_SCRIPTS:\=/!"
-echo "MOBIUS_TEST_SCRIPTS=!MOBIUS_TEST_SCRIPTS!"
+set "MOBIUS_TEST_DESCR=!MOBIUS_TEST_DESCR:\=/!"
+echo "MOBIUS_TEST_DESCR=!MOBIUS_TEST_DESCR!"
 
 REM ===========================================================================
 REM Run tests
