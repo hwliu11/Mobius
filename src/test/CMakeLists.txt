@@ -204,3 +204,11 @@ add_custom_command(
 #------------------------------------------------------------------------------
 
 target_link_libraries(mobiusTest mobiusCore mobiusPoly mobiusBSpl mobiusGeom mobiusTestEngine)
+
+#------------------------------------------------------------------------------
+# Installation
+#------------------------------------------------------------------------------
+
+if (WIN32)
+  install (TARGETS mobiusTest RUNTIME DESTINATION bin COMPONENT Runtime)
+endif()
