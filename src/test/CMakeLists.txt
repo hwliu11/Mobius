@@ -192,12 +192,12 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/templates/setenv.bat
                ${mobiusTest_BINARY_DIR}/setenv.bat @ONLY)
 
 # Post-build event: run tests.
-add_custom_command(
-        TARGET mobiusTest
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E echo "Running unit tests."
-        COMMAND call ${mobiusTest_BINARY_DIR}/setenv.bat && $<TARGET_FILE:mobiusTest>
-    )
+#add_custom_command(
+#        TARGET mobiusTest
+#        POST_BUILD
+#        COMMAND ${CMAKE_COMMAND} -E echo "Running unit tests."
+#        COMMAND call ${mobiusTest_BINARY_DIR}/setenv.bat && $<TARGET_FILE:mobiusTest>
+#    )
 
 #------------------------------------------------------------------------------
 # Dependencies
