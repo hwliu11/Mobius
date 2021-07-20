@@ -82,7 +82,7 @@ bool mobius::core_XYZ::AreSamePlane(const std::vector<core_XYZ>& dirs,
   core_XYZ N;
   std::set<int> basis = {0};
   //
-  for ( int k = 1; k < dirs.size(); ++k )
+  for ( int k = 1; k < int( dirs.size() ); ++k )
   {
     const double ang = dirs[k].Angle(dirs[0]);
     //
@@ -98,7 +98,7 @@ bool mobius::core_XYZ::AreSamePlane(const std::vector<core_XYZ>& dirs,
     return false; // No idea, hence false.
 
   // Check all remaining directions w.r.t. the basis' norm.
-  for ( int k = 1; k < dirs.size(); ++k )
+  for ( int k = 1; k < int( dirs.size() ); ++k )
   {
     if ( basis.find(k) != basis.end() )
       continue; // Skip already accounted vectors.
@@ -125,7 +125,7 @@ bool mobius::core_XYZ::AreSpanningWholeSpace(const std::vector<core_XYZ>& dirs,
   // Select planar "basis" to compute a reference norm.
   core_XYZ N;
   //
-  for ( int k = 1; k < dirs.size(); ++k )
+  for ( int k = 1; k < int( dirs.size() ); ++k )
   {
     const double ang = dirs[k].Angle(dirs[0]);
     //
