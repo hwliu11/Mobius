@@ -37,14 +37,16 @@
 // Core includes
 #include <mobius/core_Precision.h>
 
+using namespace mobius;
+
 //-----------------------------------------------------------------------------
 
-mobius::poly_Mesh::poly_Mesh() : core_OBJECT()
+poly_Mesh::poly_Mesh() : core_OBJECT()
 {}
 
 //-----------------------------------------------------------------------------
 
-mobius::t_ptr<mobius::poly_Mesh> mobius::poly_Mesh::DeepCopy() const
+t_ptr<poly_Mesh> poly_Mesh::DeepCopy() const
 {
   t_ptr<poly_Mesh> copy = new poly_Mesh;
   //
@@ -59,9 +61,9 @@ mobius::t_ptr<mobius::poly_Mesh> mobius::poly_Mesh::DeepCopy() const
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::GetBounds(double& xMin, double& xMax,
-                                  double& yMin, double& yMax,
-                                  double& zMin, double& zMax) const
+void poly_Mesh::GetBounds(double& xMin, double& xMax,
+                          double& yMin, double& yMax,
+                          double& zMin, double& zMax) const
 {
   double x_min = DBL_MAX, x_max = -DBL_MAX;
   double y_min = DBL_MAX, y_max = -DBL_MAX;
@@ -99,10 +101,10 @@ void mobius::poly_Mesh::GetBounds(double& xMin, double& xMax,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
-                                         poly_TriangleHandle&      t0,
-                                         poly_TriangleHandle&      t1,
-                                         poly_TriangleHandle&      t2)
+bool poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
+                                 poly_TriangleHandle&      t0,
+                                 poly_TriangleHandle&      t1,
+                                 poly_TriangleHandle&      t2)
 {
   // Get the triangle to split.
   poly_Triangle t;
@@ -139,7 +141,7 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
 }
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
+bool poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
 {
   poly_TriangleHandle hrt[3];
   return this->RefineByMidpoint(ht, hrt[0], hrt[1], hrt[2]);
@@ -147,8 +149,8 @@ bool mobius::poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::RefineByMidedges(const poly_TriangleHandle         ht,
-                                         std::vector<poly_TriangleHandle>& hts)
+bool poly_Mesh::RefineByMidedges(const poly_TriangleHandle         ht,
+                                 std::vector<poly_TriangleHandle>& hts)
 {
   // Get the triangle to refine.
   poly_Triangle t;
@@ -337,7 +339,7 @@ bool mobius::poly_Mesh::RefineByMidedges(const poly_TriangleHandle         ht,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::RefineByMidedges(const poly_TriangleHandle ht)
+bool poly_Mesh::RefineByMidedges(const poly_TriangleHandle ht)
 {
   std::vector<poly_TriangleHandle> hts;
   return this->RefineByMidedges(ht, hts);
@@ -345,9 +347,9 @@ bool mobius::poly_Mesh::RefineByMidedges(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_VertexHandle
-  mobius::poly_Mesh::GetOppositeVertex(const poly_TriangleHandle ht,
-                                       const poly_EdgeHandle     he) const
+poly_VertexHandle
+  poly_Mesh::GetOppositeVertex(const poly_TriangleHandle ht,
+                               const poly_EdgeHandle     he) const
 {
   poly_Edge edge;
   if ( !this->GetEdge(he, edge) )
@@ -373,10 +375,10 @@ mobius::poly_VertexHandle
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
-                                      const poly_VertexHandle hv1,
-                                      const poly_VertexHandle hv2,
-                                      t_xyz&                  norm) const
+bool poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
+                              const poly_VertexHandle hv1,
+                              const poly_VertexHandle hv2,
+                              t_xyz&                  norm) const
 {
   t_xyz tv[3];
   //
@@ -396,8 +398,8 @@ bool mobius::poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
 //-----------------------------------------------------------------------------
 
 bool
-  mobius::poly_Mesh::ComputeNormal(const poly_TriangleHandle ht,
-                                   t_xyz&                    norm) const
+  poly_Mesh::ComputeNormal(const poly_TriangleHandle ht,
+                           t_xyz&                    norm) const
 {
   // Get triangle by its handle.
   poly_Triangle t;
@@ -416,7 +418,7 @@ bool
 //-----------------------------------------------------------------------------
 
 double
-  mobius::poly_Mesh::ComputeArea(const poly_TriangleHandle ht) const
+  poly_Mesh::ComputeArea(const poly_TriangleHandle ht) const
 {
   // Get triangle by its handle.
   poly_Triangle t;
@@ -439,7 +441,7 @@ double
 
 //-----------------------------------------------------------------------------
 
-double mobius::poly_Mesh::ComputeScaledJacobian(const poly_TriangleHandle ht) const
+double poly_Mesh::ComputeScaledJacobian(const poly_TriangleHandle ht) const
 {
   poly_Jacobian calc(this);
 
@@ -462,9 +464,9 @@ double mobius::poly_Mesh::ComputeScaledJacobian(const poly_TriangleHandle ht) co
 //-----------------------------------------------------------------------------
 
 double
-  mobius::poly_Mesh::ComputeScaledJacobian(const t_xyz& v0,
-                                           const t_xyz& v1,
-                                           const t_xyz& v2) const
+  poly_Mesh::ComputeScaledJacobian(const t_xyz& v0,
+                                   const t_xyz& v1,
+                                   const t_xyz& v2) const
 {
   double res = DBL_MAX;
   for ( int k = 0; k < 3; ++k )
@@ -485,7 +487,7 @@ double
 //-----------------------------------------------------------------------------
 
 double
-  mobius::poly_Mesh::ComputeMaxLen(const poly_TriangleHandle ht) const
+  poly_Mesh::ComputeMaxLen(const poly_TriangleHandle ht) const
 {
   // Get triangle by its handle.
   poly_Triangle t;
@@ -510,10 +512,10 @@ double
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::IsDegenerated(const t_xyz& v0,
-                                      const t_xyz& v1,
-                                      const t_xyz& v2,
-                                      const double prec) const
+bool poly_Mesh::IsDegenerated(const t_xyz& v0,
+                              const t_xyz& v1,
+                              const t_xyz& v2,
+                              const double prec) const
 {
   t_xyz tv[3] = {v0, v1, v2};
 
@@ -565,8 +567,8 @@ bool mobius::poly_Mesh::IsDegenerated(const t_xyz& v0,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::IsDegenerated(const poly_TriangleHandle ht,
-                                      const double              prec) const
+bool poly_Mesh::IsDegenerated(const poly_TriangleHandle ht,
+                              const double              prec) const
 {
   // Get triangle by its handle.
   poly_Triangle t;
@@ -587,7 +589,7 @@ bool mobius::poly_Mesh::IsDegenerated(const poly_TriangleHandle ht,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
+bool poly_Mesh::Subdivide(const poly_TriangleHandle ht)
 {
   // Get triangle by its handle.
   poly_Triangle t;
@@ -631,7 +633,7 @@ bool mobius::poly_Mesh::Subdivide(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::ComputeEdges()
+void poly_Mesh::ComputeEdges()
 {
   // Clean up any existing links.
   this->ClearEdges();
@@ -713,7 +715,7 @@ void mobius::poly_Mesh::ComputeEdges()
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::ClearEdges()
+void poly_Mesh::ClearEdges()
 {
   m_links.clear();
   m_edges.clear();
@@ -721,7 +723,7 @@ void mobius::poly_Mesh::ClearEdges()
 
 //-----------------------------------------------------------------------------
 
-int mobius::poly_Mesh::CountTriangles(const poly_EdgeHandle he) const
+int poly_Mesh::CountTriangles(const poly_EdgeHandle he) const
 {
   auto linkIt = m_links.find(he);
   if ( linkIt == m_links.end() )
@@ -732,8 +734,8 @@ int mobius::poly_Mesh::CountTriangles(const poly_EdgeHandle he) const
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
-                                     std::vector<poly_TriangleHandle>& hts) const
+bool poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
+                             std::vector<poly_TriangleHandle>& hts) const
 {
   auto linkIt = m_links.find(he);
   if ( linkIt == m_links.end() )
@@ -745,8 +747,8 @@ bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle                    he,
-                                     std::unordered_set<poly_TriangleHandle>& hts) const
+bool poly_Mesh::GetTriangles(const poly_EdgeHandle                    he,
+                             std::unordered_set<poly_TriangleHandle>& hts) const
 {
   auto linkIt = m_links.find(he);
   if ( linkIt == m_links.end() )
@@ -760,8 +762,8 @@ bool mobius::poly_Mesh::GetTriangles(const poly_EdgeHandle                    he
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht,
-                                            std::vector<poly_TriangleHandle>& hts) const
+bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht,
+                                    std::vector<poly_TriangleHandle>& hts) const
 {
   poly_Triangle t;
   this->GetTriangle(ht, t);
@@ -801,9 +803,9 @@ bool mobius::poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                  hv,
-                                     std::unordered_set<poly_TriangleHandle>& hts,
-                                     const std::unordered_set<int>&           domain) const
+void poly_Mesh::FindAdjacent(const poly_VertexHandle                  hv,
+                             std::unordered_set<poly_TriangleHandle>& hts,
+                             const std::unordered_set<int>&           domain) const
 {
   const std::unordered_set<poly_TriangleHandle>&
     vertexTris = m_vertices[hv.iIdx].GetTriangleRefs();
@@ -819,8 +821,8 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                  hv
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::FindAdjacent(const poly_EdgeHandle             he,
-                                     std::vector<poly_TriangleHandle>& hts) const
+bool poly_Mesh::FindAdjacent(const poly_EdgeHandle             he,
+                             std::vector<poly_TriangleHandle>& hts) const
 {
   if ( !he.IsValid() )
     return false;
@@ -836,11 +838,11 @@ bool mobius::poly_Mesh::FindAdjacent(const poly_EdgeHandle             he,
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
-                                     std::unordered_set<poly_VertexHandle>& hvs,
-                                     bool&                                  isBoundary,
-                                     std::unordered_set<int>&               faceRefs,
-                                     const std::unordered_set<int>&         domain) const
+void poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
+                             std::unordered_set<poly_VertexHandle>& hvs,
+                             bool&                                  isBoundary,
+                             std::unordered_set<int>&               faceRefs,
+                             const std::unordered_set<int>&         domain) const
 {
   isBoundary = false;
 
@@ -912,8 +914,8 @@ void mobius::poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle                ht,
-                                               std::unordered_set<poly_TriangleHandle>& hts) const
+void poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle                ht,
+                                       std::unordered_set<poly_TriangleHandle>& hts) const
 {
   poly_Triangle t;
   this->GetTriangle(ht, t);
@@ -925,19 +927,19 @@ void mobius::poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle        
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
-                                const double          normDevRad,
-                                const double          planeDevRad,
-                                const bool            checkJacobian,
-                                const bool            checkWing,
-                                poly_TriangleHandle&  ht0,
-                                poly_TriangleHandle&  ht1,
-                                poly_VertexHandle&    a,
-                                poly_VertexHandle&    b,
-                                poly_VertexHandle&    x,
-                                poly_VertexHandle&    y,
-                                t_xyz&                norm0,
-                                t_xyz&                norm1) const
+bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
+                        const double          normDevRad,
+                        const double          planeDevRad,
+                        const bool            checkJacobian,
+                        const bool            checkWing,
+                        poly_TriangleHandle&  ht0,
+                        poly_TriangleHandle&  ht1,
+                        poly_VertexHandle&    a,
+                        poly_VertexHandle&    b,
+                        poly_VertexHandle&    x,
+                        poly_VertexHandle&    y,
+                        t_xyz&                norm0,
+                        t_xyz&                norm1) const
 {
   /*          a
                o
@@ -1067,11 +1069,11 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
-                                const double          normDevRad,
-                                const double          planeDevRad,
-                                const bool            checkJacobian,
-                                const bool            checkWing) const
+bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
+                        const double          normDevRad,
+                        const double          planeDevRad,
+                        const bool            checkJacobian,
+                        const bool            checkWing) const
 {
   poly_TriangleHandle hts[2];
   poly_VertexHandle   a, b, x, y;
@@ -1083,11 +1085,11 @@ bool mobius::poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::FlipEdge(const poly_EdgeHandle he,
-                                 const double          normDevRad,
-                                 const double          planeDevRad,
-                                 const bool            checkJacobian,
-                                 const bool            checkWing)
+bool poly_Mesh::FlipEdge(const poly_EdgeHandle he,
+                         const double          normDevRad,
+                         const double          planeDevRad,
+                         const bool            checkJacobian,
+                         const bool            checkWing)
 {
   poly_VertexHandle   a, b, x, y;
   poly_TriangleHandle hts[2];
@@ -1141,8 +1143,8 @@ bool mobius::poly_Mesh::FlipEdge(const poly_EdgeHandle he,
 
 //-----------------------------------------------------------------------------
 
-int mobius::poly_Mesh::FlipEdges(const double normDevRad,
-                                 const double planeDevRad)
+int poly_Mesh::FlipEdges(const double normDevRad,
+                         const double planeDevRad)
 {
   int nbFlips = 0;
 
@@ -1162,7 +1164,7 @@ int mobius::poly_Mesh::FlipEdges(const double normDevRad,
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_EdgeHandle mobius::poly_Mesh::FindEdge(const poly_Edge& e) const
+poly_EdgeHandle poly_Mesh::FindEdge(const poly_Edge& e) const
 {
   for ( size_t eidx = 0; eidx < m_edges.size(); ++eidx )
   {
@@ -1175,18 +1177,18 @@ mobius::poly_EdgeHandle mobius::poly_Mesh::FindEdge(const poly_Edge& e) const
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_EdgeHandle
-  mobius::poly_Mesh::FindEdge(const poly_VertexHandle& hv0,
-                              const poly_VertexHandle& hv1) const
+poly_EdgeHandle
+  poly_Mesh::FindEdge(const poly_VertexHandle& hv0,
+                      const poly_VertexHandle& hv1) const
 {
   return this->FindEdge( poly_Edge(hv0, hv1) );
 }
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_EdgeHandle
-  mobius::poly_Mesh::FindEdge(const poly_TriangleHandle ht0,
-                              const poly_TriangleHandle ht1) const
+poly_EdgeHandle
+  poly_Mesh::FindEdge(const poly_TriangleHandle ht0,
+                      const poly_TriangleHandle ht1) const
 {
   poly_Triangle t0, t1;
   //
@@ -1214,10 +1216,10 @@ mobius::poly_EdgeHandle
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_VertexHandle
-  mobius::poly_Mesh::FindVertex(const poly_TriangleHandle ht,
-                                const poly_EdgeHandle     he,
-                                int&                      vidx) const
+poly_VertexHandle
+  poly_Mesh::FindVertex(const poly_TriangleHandle ht,
+                        const poly_EdgeHandle     he,
+                        int&                      vidx) const
 {
   poly_Triangle t;
   //
@@ -1242,8 +1244,8 @@ mobius::poly_VertexHandle
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
-                                          std::vector<poly_TriangleHandle>& bndTris) const
+void poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
+                                  std::vector<poly_TriangleHandle>& bndTris) const
 {
   // Extract edges from the computed links.
   for ( const auto& linkIt : m_links )
@@ -1273,11 +1275,11 @@ void mobius::poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndE
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
-                                     const bool                     checkBorderOn,
-                                     const bool                     checkDegenOn,
-                                     const double                   prec,
-                                     const std::unordered_set<int>& domain)
+bool poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
+                             const bool                     checkBorderOn,
+                             const bool                     checkDegenOn,
+                             const double                   prec,
+                             const std::unordered_set<int>& domain)
 {
   // Get triangles to remove.
   std::unordered_set<poly_TriangleHandle> hts2Remove;
@@ -1501,7 +1503,7 @@ bool mobius::poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_Mesh::SplitEdge(const poly_EdgeHandle he)
+bool poly_Mesh::SplitEdge(const poly_EdgeHandle he)
 {
   // Get the edge to split.
   poly_Edge e;
@@ -1656,8 +1658,8 @@ bool mobius::poly_Mesh::SplitEdge(const poly_EdgeHandle he)
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::Smooth(const int                      iter,
-                               const std::unordered_set<int>& domain)
+void poly_Mesh::Smooth(const int                      iter,
+                       const std::unordered_set<int>& domain)
 {
   // Find adjacent vertices for each vertex.
   std::unordered_map< poly_VertexHandle, std::unordered_set<poly_VertexHandle> > adj;
@@ -1708,9 +1710,9 @@ void mobius::poly_Mesh::Smooth(const int                      iter,
 
 //-----------------------------------------------------------------------------
 
-void mobius::poly_Mesh::updateLink(const poly_EdgeHandle     he,
-                                   const poly_TriangleHandle htOld,
-                                   const poly_TriangleHandle htNew)
+void poly_Mesh::updateLink(const poly_EdgeHandle     he,
+                           const poly_TriangleHandle htOld,
+                           const poly_TriangleHandle htNew)
 {
   auto link = m_links.find(he);
   //
