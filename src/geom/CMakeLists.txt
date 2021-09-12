@@ -166,6 +166,42 @@ set (primitives_CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# OCC tools
+#------------------------------------------------------------------------------
+
+set (occ_H_FILES
+  occ/Intf.hxx
+  occ/Intf_Array1OfLin.hxx
+  occ/Intf_Interference.hxx
+  occ/Intf_InterferencePolygon2d.hxx
+  occ/Intf_PIType.hxx
+  occ/Intf_Polygon2d.hxx
+  occ/Intf_SectionLine.hxx
+  occ/Intf_SectionPoint.hxx
+  occ/Intf_SeqOfSectionLine.hxx
+  occ/Intf_SeqOfSectionPoint.hxx
+  occ/Intf_SeqOfTangentZone.hxx
+  occ/Intf_TangentZone.hxx
+  occ/Intf_Tool.hxx
+  occ/Intf_Interference.lxx
+  occ/Intf_Polygon2d.lxx
+  occ/Intf_SectionLine.lxx
+  occ/Intf_SectionPoint.lxx
+  occ/Intf_TangentZone.lxx
+)
+set (occ_CPP_FILES
+  occ/Intf.cxx
+  occ/Intf_Interference.cxx
+  occ/Intf_InterferencePolygon2d.cxx
+  occ/Intf_Polygon2d.cxx
+  occ/Intf_SectionLine.cxx
+  occ/Intf_SectionPoint.cxx
+  occ/Intf_TangentZone.cxx
+  occ/Intf_Tool.cxx
+  occ/Intf_InterferencePolygonPolyhedron.gxx
+)
+
+#------------------------------------------------------------------------------
 
 list (APPEND MOBIUS_MODULES geom)
 set (MOBIUS_MODULES ${MOBIUS_MODULES} PARENT_SCOPE)
@@ -241,6 +277,14 @@ foreach (FILE ${primitives_CPP_FILES})
   source_group ("Source Files\\Primitives" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${occ_H_FILES})
+  source_group ("Header Files\\OpenCascade" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${occ_CPP_FILES})
+  source_group ("Source Files\\OpenCascade" FILES "${FILE}")
+endforeach (FILE)
+
 include_directories(${geom_include_dir_loc} ${core_include_dir} ${3RDPARTY_EIGEN_DIR})
 
 if (USE_ADOLC)
@@ -255,7 +299,9 @@ add_library (mobiusGeom SHARED
   ${fairing_H_FILES}       ${fairing_CPP_FILES}
   ${clouds_H_FILES}        ${clouds_CPP_FILES}
   ${interpolation_H_FILES} ${interpolation_CPP_FILES}
-  ${primitives_H_FILES}    ${primitives_CPP_FILES})
+  ${primitives_H_FILES}    ${primitives_CPP_FILES}
+  ${occ_H_FILES}           ${occ_CPP_FILES}
+)
 
 set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 
@@ -298,3 +344,4 @@ install (FILES ${fairing_H_FILES}       DESTINATION include/mobius)
 install (FILES ${clouds_H_FILES}        DESTINATION include/mobius)
 install (FILES ${interpolation_H_FILES} DESTINATION include/mobius)
 install (FILES ${primitives_H_FILES}    DESTINATION include/mobius)
+install (FILES ${occ_H_FILES}           DESTINATION include/mobius)
