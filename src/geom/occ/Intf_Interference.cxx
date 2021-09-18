@@ -14,14 +14,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-
-#include <gp_Pnt.hxx>
-#include <gp_Pnt2d.hxx>
+// Own include
 #include <mobius/Intf_Interference.hxx>
+
+// CAS.CADE includes
+#include <mobius/gp_Pnt.hxx>
+#include <mobius/gp_Pnt2d.hxx>
 #include <mobius/Intf_SectionLine.hxx>
 #include <mobius/Intf_SectionPoint.hxx>
 #include <mobius/Intf_TangentZone.hxx>
-#include <Standard_OutOfRange.hxx>
 
 //=======================================================================
 //function : Intf_Interference
@@ -32,7 +33,6 @@ Intf_Interference::Intf_Interference (const bool Self)
        Tolerance(0.0)
 {
 }
-
 
 //=======================================================================
 //function : SelfInterference
@@ -46,7 +46,6 @@ void Intf_Interference::SelfInterference (const bool Self)
   mySLines.Clear();
   myTZones.Clear();
 }
-
 
 //=======================================================================
 //function : Insert

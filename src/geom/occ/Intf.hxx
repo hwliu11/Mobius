@@ -26,9 +26,7 @@ class Intf_SectionPoint;
 class Intf_SectionLine;
 class Intf_TangentZone;
 class Intf_Interference;
-class Intf_Tool;
 class Intf_InterferencePolygon2d;
-class Intf_InterferencePolygonPolyhedron;
 
 //! Interference computation  between polygons, lines  and
 //! polyhedra with only  triangular  facets. These objects
@@ -38,20 +36,15 @@ class Intf
 {
 public:
 
-  //! Computes   the  interference between   two polygons in  2d.
-  //! Result : points of intersections and zones of tangence.
-  //! Computes the interference  between a polygon or  a straight
-  //! line and a polyhedron.   Points of intersection  and zones
-  //! of tangence.
-  //! Give the plane equation of the triangle <P1> <P2> <P3>.
+  //! Gives the plane equation of the triangle <P1> <P2> <P3>.
   mobiusGeom_EXPORT static void
     PlaneEquation(const gp_Pnt& P1,
                   const gp_Pnt& P2,
                   const gp_Pnt& P3,
                   gp_XYZ& NormalVector,
                   double& PolarDistance);
-  
-  //! Compute if the triangle <P1> <P2> <P3> contain <ThePnt>.
+
+  //! Computes if the triangle <P1> <P2> <P3> contain <ThePnt>.
   mobiusGeom_EXPORT static bool
     Contain(const gp_Pnt& P1, const gp_Pnt& P2, const gp_Pnt& P3, const gp_Pnt& ThePnt);
 
@@ -62,9 +55,7 @@ friend class Intf_SectionPoint;
 friend class Intf_SectionLine;
 friend class Intf_TangentZone;
 friend class Intf_Interference;
-friend class Intf_Tool;
 friend class Intf_InterferencePolygon2d;
-friend class Intf_InterferencePolygonPolyhedron;
 
 };
 

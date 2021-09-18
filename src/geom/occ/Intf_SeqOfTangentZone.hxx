@@ -18,7 +18,7 @@
 #define Intf_SeqOfTangentZone_HeaderFile
 
 #include <mobius/Intf_TangentZone.hxx>
-#include <NCollection_Sequence.hxx>
+#include <mobius/NCollection_Sequence.hxx>
 
 typedef NCollection_Sequence<Intf_TangentZone> Intf_SeqOfTangentZone;
 

@@ -18,7 +18,7 @@
 #define Intf_SeqOfSectionPoint_HeaderFile
 
 #include <mobius/Intf_SectionPoint.hxx>
-#include <NCollection_Sequence.hxx>
+#include <mobius/NCollection_Sequence.hxx>
 
 typedef NCollection_Sequence<Intf_SectionPoint> Intf_SeqOfSectionPoint;
 

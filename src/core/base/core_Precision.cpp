@@ -63,3 +63,9 @@ bool mobius::core_Precision::IsInfinite(const double val)
 {
   return fabs(val) >= Infinity();
 }
+
+//! \return min representable floating-point value.
+double mobius::core_Precision::RealSmall()
+{
+  return DBL_MIN;
+}

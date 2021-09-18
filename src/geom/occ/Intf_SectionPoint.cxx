@@ -15,8 +15,8 @@
 // commercial license or contractual agreement.
 
 
-#include <gp_Pnt.hxx>
-#include <gp_Pnt2d.hxx>
+#include <mobius/gp_Pnt.hxx>
+#include <mobius/gp_Pnt2d.hxx>
 #include <mobius/Intf_SectionPoint.hxx>
 
 #define DEBUG_INTFSECTIONPOINT 0

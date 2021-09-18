@@ -127,7 +127,7 @@ foreach (FILE ${bvh_CPP_FILES})
   source_group ("Source Files\\BVH" FILES "${FILE}")
 endforeach (FILE)
 
-include_directories(${poly_include_dir_loc} ${core_include_dir} ${3RDPARTY_EIGEN_DIR})
+include_directories(${poly_include_dir_loc} ${geom_include_dir} ${core_include_dir} ${3RDPARTY_EIGEN_DIR})
 
 if (USE_ADOLC)
   include_directories(${3RDPARTY_adolc_INCLUDE_DIR})
@@ -146,7 +146,7 @@ set (X_COMPILER_BITNESS "x${COMPILER_BITNESS}")
 # Dependencies
 #------------------------------------------------------------------------------
 
-target_link_libraries(mobiusPoly mobiusCore)
+target_link_libraries(mobiusPoly mobiusGeom mobiusCore)
 
 #------------------------------------------------------------------------------
 # Installation of Mobius as SDK

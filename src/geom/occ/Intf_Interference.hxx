@@ -18,6 +18,8 @@
 #define _Intf_Interference_HeaderFile
 
 #include <mobius/geom.h>
+
+// CAS.CADE includes
 #include <mobius/Intf_SeqOfSectionPoint.hxx>
 #include <mobius/Intf_SeqOfSectionLine.hxx>
 #include <mobius/Intf_SeqOfTangentZone.hxx>
@@ -26,7 +28,6 @@ class Standard_OutOfRange;
 class Intf_SectionPoint;
 class Intf_SectionLine;
 class Intf_TangentZone;
-
 
 //! Describes the   Interference  computation    result
 //! between polygon2d or polygon3d or polyhedron
@@ -108,10 +109,68 @@ private:
 };
 
 
-#include <mobius/Intf_Interference.lxx>
+//=======================================================================
+// Return the number of sections points in an interference.
+//=======================================================================
 
+inline int Intf_Interference::NbSectionPoints () const
+{
+  return mySPoins.Length();
+}
 
+//=======================================================================
+// Give the section point of range Index in the interference.
+//=======================================================================
 
+inline const Intf_SectionPoint& Intf_Interference::PntValue (const int Index) const
+{
+  return mySPoins(Index);
+}
 
+//=======================================================================
+// Return the number of sections lines in an interference.
+//=======================================================================
+
+inline int Intf_Interference::NbSectionLines () const
+{
+  return mySLines.Length();
+}
+
+//=======================================================================
+// Give the section line of range Index in the interference.
+//=======================================================================
+
+inline const Intf_SectionLine& Intf_Interference::LineValue (const int Index) const
+{
+  return mySLines(Index);
+}
+
+//=======================================================================
+// Return the number of sections TangentZones in an interference.
+//=======================================================================
+
+inline int Intf_Interference::NbTangentZones () const
+{
+  return myTZones.Length();
+}
+
+//=======================================================================
+// Give the tangentzone of range Index in the interference.
+//=======================================================================
+
+inline const Intf_TangentZone& Intf_Interference::ZoneValue (const int Index) const
+{
+  return myTZones(Index);
+}
+
+//=======================================================================
+//function : GetTolerance
+//purpose  : 
+//=======================================================================
+
+inline double Intf_Interference::GetTolerance () const
+{
+  return Tolerance;
+}
 
 #endif // _Intf_Interference_HeaderFile

@@ -14,20 +14,22 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-
-#include <gp_Pnt.hxx>
-#include <gp_XYZ.hxx>
+// Own include
 #include <mobius/Intf.hxx>
+
+// CAS.CADE includes
+#include <mobius/gp_Pnt.hxx>
+#include <mobius/gp_XYZ.hxx>
 
 //=======================================================================
 //function : PlaneEquation
 //purpose  : 
 //=======================================================================
-void Intf::PlaneEquation (const gp_Pnt&  P1,
-			  const gp_Pnt&  P2,
-			  const gp_Pnt&  P3,
-			  gp_XYZ&        NormalVector,
-			  double& PolarDistance)
+void Intf::PlaneEquation(const gp_Pnt& P1,
+                         const gp_Pnt& P2,
+                         const gp_Pnt& P3,
+                         gp_XYZ&       NormalVector,
+                         double&       PolarDistance)
 {
   gp_XYZ v1=P2.XYZ()-P1.XYZ();
   gp_XYZ v2=P3.XYZ()-P2.XYZ();
@@ -43,16 +45,15 @@ void Intf::PlaneEquation (const gp_Pnt&  P1,
   }
 }
 
-
 //=======================================================================
 //function : Contain
 //purpose  : 
 //=======================================================================
 
-bool Intf::Contain (const gp_Pnt&  P1,
-				const gp_Pnt&  P2,
-				const gp_Pnt&  P3,
-				const gp_Pnt& ThePnt)
+bool Intf::Contain(const gp_Pnt& P1,
+                   const gp_Pnt& P2,
+                   const gp_Pnt& P3,
+                   const gp_Pnt& ThePnt)
 {
   gp_XYZ v1=(P2.XYZ()-P1.XYZ())^(ThePnt.XYZ()-P1.XYZ());
   gp_XYZ v2=(P3.XYZ()-P2.XYZ())^(ThePnt.XYZ()-P2.XYZ());

@@ -14,10 +14,8 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-
 #include <mobius/Intf_SectionPoint.hxx>
 #include <mobius/Intf_TangentZone.hxx>
-#include <Standard_OutOfRange.hxx>
 
 #define  DEBUG_TANGENTZONE 0 
 //=======================================================================

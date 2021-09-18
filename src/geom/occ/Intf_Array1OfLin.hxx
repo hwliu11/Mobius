@@ -17,8 +17,8 @@
 #ifndef Intf_Array1OfLin_HeaderFile
 #define Intf_Array1OfLin_HeaderFile
 
-#include <gp_Lin.hxx>
-#include <NCollection_Array1.hxx>
+#include <mobius/gp_Lin.hxx>
+#include <mobius/NCollection_Array1.hxx>
 
 //! Describes  a set of Straight Lines  to  intersect with the Polyhedron.
 

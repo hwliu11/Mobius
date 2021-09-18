@@ -13,11 +13,7 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-
-#include <Bnd_Box2d.hxx>
-#include <gp_Pnt2d.hxx>
 #include <mobius/Intf_Polygon2d.hxx>
-#include <Standard_OutOfRange.hxx>
 
 //=======================================================================
 //function : Closed

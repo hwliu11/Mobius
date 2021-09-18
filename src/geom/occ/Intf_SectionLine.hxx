@@ -17,29 +17,17 @@
 #ifndef _Intf_SectionLine_HeaderFile
 #define _Intf_SectionLine_HeaderFile
 
-#include <Standard.hxx>
-#include <Standard_DefineAlloc.hxx>
-#include <Standard_Handle.hxx>
-
 #include <mobius/Intf_SeqOfSectionPoint.hxx>
-#include <bool.hxx>
-#include <int.hxx>
-class Standard_OutOfRange;
-class Intf_SectionPoint;
-
 
 //! Describe    a  polyline  of   intersection  between two
 //! polyhedra as a sequence of points of intersection.
-class Intf_SectionLine 
+class Intf_SectionLine
 {
 public:
 
-  DEFINE_STANDARD_ALLOC
-
-  
   //! Returns number of points in this SectionLine.
-    int NumberOfPoints() const;
-  
+  int NumberOfPoints() const;
+
   //! Gives the point of intersection of  address <Index>  in the
   //! SectionLine.
   mobiusGeom_EXPORT const Intf_SectionPoint& GetPoint (const int Index) const;
@@ -84,43 +72,29 @@ bool operator == (const Intf_SectionLine& Other) const
   
   //! Adds a point to the beginning of the SectionLine <me>.
   mobiusGeom_EXPORT void Prepend (const Intf_SectionPoint& Pi);
-  
+
   //! Concatenates a SectionLine  <LS>  at the  beginning  of the
   //! SectionLine <me>.
   mobiusGeom_EXPORT void Prepend (Intf_SectionLine& LS);
-  
+
   //! Reverses the order of the elements of the SectionLine.
   mobiusGeom_EXPORT void Reverse();
-  
+
   //! Closes the SectionLine.
   mobiusGeom_EXPORT void Close();
-  
+
   mobiusGeom_EXPORT void Dump (const int Indent) const;
 
-
-
-
-protected:
-
-
-
-
-
 private:
-
-
 
   Intf_SeqOfSectionPoint myPoints;
   bool closed;
 
-
 };
 
-
-#include <mobius/Intf_SectionLine.lxx>
-
-
-
-
+inline int Intf_SectionLine::NumberOfPoints() const
+{
+  return myPoints.Length();
+}
 
 #endif // _Intf_SectionLine_HeaderFile

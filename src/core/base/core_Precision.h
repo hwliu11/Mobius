@@ -64,6 +64,9 @@ public:
   mobiusCore_EXPORT static bool
     IsInfinite(const double val);
 
+  mobiusCore_EXPORT static double
+    RealSmall();
+
 };
 
 }

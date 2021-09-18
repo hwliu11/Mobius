@@ -15,18 +15,15 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-
-#include <Bnd_Box2d.hxx>
-#include <gp_Pnt2d.hxx>
+#include <mobius/Bnd_Box2d.hxx>
+#include <mobius/gp_Pnt2d.hxx>
 #include <mobius/Intf_InterferencePolygon2d.hxx>
 #include <mobius/Intf_Polygon2d.hxx>
 #include <mobius/Intf_SectionPoint.hxx>
 #include <mobius/Intf_SeqOfSectionPoint.hxx>
 #include <mobius/Intf_SeqOfTangentZone.hxx>
 #include <mobius/Intf_TangentZone.hxx>
-#include <Precision.hxx>
-#include <Standard_OutOfRange.hxx>
-#include <TColStd_ListOfInteger.hxx>
+#include <mobius/NCollection_List.hxx>
 
 // Angular precision (sinus) below that value two right segments
 // are considered as having a potential zone of tangency.
@@ -663,7 +660,7 @@ void Intf_InterferencePolygon2d::Intersect
     }
     myTZones.Append(TheTZ);
 #else 
-    TColStd_ListOfInteger LIndex;
+    NCollection_List<int> LIndex;
     for (int ltz=1; ltz<=nbtz; ltz++) {
       if (TheTZ.HasCommonRange(myTZones(ltz))) {
 	LIndex.Append(ltz);

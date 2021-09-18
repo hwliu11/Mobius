@@ -170,6 +170,31 @@ set (primitives_CPP_FILES
 #------------------------------------------------------------------------------
 
 set (occ_H_FILES
+  occ/Bnd_Box2d.hxx
+  occ/gp.hxx
+  occ/gp_Ax1.hxx
+  occ/gp_Ax2.hxx
+  occ/gp_Ax2d.hxx
+  occ/gp_Ax3.hxx
+  occ/gp_Dir.hxx
+  occ/gp_Dir2d.hxx
+  occ/gp_GTrsf.hxx
+  occ/gp_GTrsf2d.hxx
+  occ/gp_Lin2d.hxx
+  occ/gp_Mat.hxx
+  occ/gp_Mat2d.hxx
+  occ/gp_Pnt.hxx
+  occ/gp_Pnt2d.hxx
+  occ/gp_Quaternion.hxx
+  occ/gp_QuaternionNLerp.hxx
+  occ/gp_QuaternionSLerp.hxx
+  occ/gp_Trsf.hxx
+  occ/gp_Trsf2d.hxx
+  occ/gp_TrsfForm.hxx
+  occ/gp_Vec.hxx
+  occ/gp_Vec2d.hxx
+  occ/gp_XY.hxx
+  occ/gp_XYZ.hxx
   occ/Intf.hxx
   occ/Intf_Array1OfLin.hxx
   occ/Intf_Interference.hxx
@@ -178,18 +203,101 @@ set (occ_H_FILES
   occ/Intf_Polygon2d.hxx
   occ/Intf_SectionLine.hxx
   occ/Intf_SectionPoint.hxx
+  occ/Intf_TangentZone.hxx
   occ/Intf_SeqOfSectionLine.hxx
   occ/Intf_SeqOfSectionPoint.hxx
   occ/Intf_SeqOfTangentZone.hxx
-  occ/Intf_TangentZone.hxx
-  occ/Intf_Tool.hxx
-  occ/Intf_Interference.lxx
-  occ/Intf_Polygon2d.lxx
-  occ/Intf_SectionLine.lxx
-  occ/Intf_SectionPoint.lxx
-  occ/Intf_TangentZone.lxx
+  occ/NCollection_BaseAllocator.hxx
+  occ/NCollection_BaseList.hxx
+  occ/NCollection_BaseMap.hxx
+  occ/NCollection_BaseSequence.hxx
+  occ/NCollection_DataMap.hxx
+  occ/NCollection_DefaultHasher.hxx
+  occ/NCollection_DefineAlloc.hxx
+  occ/NCollection_IncAllocator.hxx
+  occ/NCollection_List.hxx
+  occ/NCollection_ListNode.hxx
+  occ/NCollection_Map.hxx
+  occ/NCollection_Sequence.hxx
+  occ/NCollection_Shared.hxx
+  occ/NCollection_StlIterator.hxx
+  occ/NCollection_TListIterator.hxx
+  occ/NCollection_TListNode.hxx
+  occ/NCollection_TypeDef.hxx
+  occ/Standard.hxx
+  occ/Standard_Address.hxx
+  occ/Standard_Assert.hxx
+  occ/Standard_Atomic.hxx
+  occ/Standard_Boolean.hxx
+  occ/Standard_Byte.hxx
+  occ/Standard_Character.hxx
+  occ/Standard_CLocaleSentry.hxx
+  occ/Standard_CString.hxx
+  occ/Standard_DefineAlloc.hxx
+  occ/Standard_DefineException.hxx
+  occ/Standard_DomainError.hxx
+  occ/Standard_ErrorHandler.hxx
+  occ/Standard_Failure.hxx
+  occ/Standard_Handle.hxx
+  occ/Standard_HandlerStatus.hxx
+  occ/Standard_Integer.hxx
+  occ/Standard_JmpBuf.hxx
+  occ/Standard_Macro.hxx
+  occ/Standard_math.hxx
+  occ/Standard_MMgrOpt.hxx
+  occ/Standard_MMgrRaw.hxx
+  occ/Standard_MMgrRoot.hxx
+  occ/Standard_MMgrTBBalloc.hxx
+  occ/Standard_Mutex.hxx
+  occ/Standard_NoMoreObject.hxx
+  occ/Standard_NoSuchObject.hxx
+  occ/Standard_NotImplemented.hxx
+  occ/Standard_NullObject.hxx
+  occ/Standard_NullValue.hxx
+  occ/Standard_NumericError.hxx
+  occ/Standard_OStream.hxx
+  occ/Standard_OutOfMemory.hxx
+  occ/Standard_OutOfRange.hxx
+  occ/Standard_PErrorHandler.hxx
+  occ/Standard_PrimitiveTypes.hxx
+  occ/Standard_ProgramError.hxx
+  occ/Standard_RangeError.hxx
+  occ/Standard_Real.hxx
+  occ/Standard_ShortReal.hxx
+  occ/Standard_Size.hxx
+  occ/Standard_Std.hxx
+  occ/Standard_SStream.hxx
+  occ/Standard_Stream.hxx
+  occ/Standard_ThreadId.hxx
+  occ/Standard_Transient.hxx
+  occ/Standard_Type.hxx
+  occ/Standard_TypeDef.hxx
+  occ/Standard_Values.hxx
+  occ/occMathDefs.hxx
 )
 set (occ_CPP_FILES
+  occ/Bnd_Box2d.cxx
+  occ/gp.cxx
+  occ/gp_Ax1.cxx
+  occ/gp_Ax2.cxx
+  occ/gp_Ax2d.cxx
+  occ/gp_Ax3.cxx
+  occ/gp_Dir.cxx
+  occ/gp_Dir2d.cxx
+  occ/gp_GTrsf.cxx
+  occ/gp_GTrsf2d.cxx
+  occ/gp_Lin2d.cxx
+  occ/gp_Mat.cxx
+  occ/gp_Mat2d.cxx
+  occ/gp_Pnt.cxx
+  occ/gp_Pnt2d.cxx
+  occ/gp_Quaternion.cxx
+  occ/gp_Trsf.cxx
+  occ/gp_Trsf2d.cxx
+  occ/gp_Vec.cxx
+  occ/gp_Vec2d.cxx
+  occ/gp_XY.cxx
+  occ/gp_XYZ.cxx
   occ/Intf.cxx
   occ/Intf_Interference.cxx
   occ/Intf_InterferencePolygon2d.cxx
@@ -197,8 +305,29 @@ set (occ_CPP_FILES
   occ/Intf_SectionLine.cxx
   occ/Intf_SectionPoint.cxx
   occ/Intf_TangentZone.cxx
-  occ/Intf_Tool.cxx
-  occ/Intf_InterferencePolygonPolyhedron.gxx
+  occ/NCollection_BaseAllocator.cxx
+  occ/NCollection_BaseList.cxx
+  occ/NCollection_BaseMap.cxx
+  occ/NCollection_BaseSequence.cxx
+  occ/NCollection_IncAllocator.cxx
+  occ/Standard.cxx
+  occ/Standard_CLocaleSentry.cxx
+  occ/Standard_CString.cxx
+  occ/Standard_ErrorHandler.cxx
+  occ/Standard_Failure.cxx
+  occ/Standard_OutOfMemory.cxx
+  occ/Standard_math.cxx
+  occ/Standard_Mutex.cxx
+  occ/Standard_MMgrOpt.cxx
+  occ/Standard_MMgrRaw.cxx
+  occ/Standard_MMgrRoot.cxx
+  occ/Standard_MMgrTBBalloc.cxx
+  occ/Standard_Real.cxx
+  occ/Standard_ShortReal.cxx
+  occ/Standard_StackTrace.cxx
+  occ/Standard_Strtod.cxx
+  occ/Standard_Transient.cxx
+  occ/Standard_Type.cxx
 )
 
 #------------------------------------------------------------------------------

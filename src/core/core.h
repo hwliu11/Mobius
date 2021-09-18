@@ -69,6 +69,24 @@
   #define mobiusCore_EXPORT
 #endif
 
+// If a function declared nodiscard or a function returning an enumeration or class declared
+// nodiscard by value is called from a discarded-value expression other than a cast to void,
+// the compiler is encouraged to issue a warning.
+#if defined(__has_cpp_attribute)
+  #if __has_cpp_attribute(nodiscard)
+    #define mobiusCore_NODISCARD [[nodiscard]]
+  #else
+    #define mobiusCore_NODISCARD
+  #endif
+#elif defined(__GNUC__) && ! defined(INTEL_COMPILER)
+  // According to available documentation, GCC-style __attribute__ ((warn_unused_result))
+  // should be available in GCC since version 3.4, and in CLang since 3.9;
+  // Intel compiler does not seem to support this
+  #define mobiusCore_NODISCARD __attribute__ ((warn_unused_result))
+#else
+  #define mobiusCore_NODISCARD
+#endif
+
 //-----------------------------------------------------------------------------
 // DOXY group definition
 //-----------------------------------------------------------------------------

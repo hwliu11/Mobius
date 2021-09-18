@@ -39,6 +39,91 @@
 
 using namespace mobius;
 
+// OpenCascade includes
+#include <mobius/Intf_InterferencePolygon2d.hxx>
+#include <mobius/Intf_Polygon2d.hxx>
+
+//-----------------------------------------------------------------------------
+
+namespace
+{
+
+//! The derived polygon class.
+class SimplePolygon : public Intf_Polygon2d
+{
+public:
+
+  //! Ctor with initializer list.
+  SimplePolygon(const std::initializer_list<std::pair<double, double>>& poles)
+  {
+    for ( const auto& P : poles )
+    {
+      gp_Pnt2d P2d(P.first, P.second);
+
+      m_poles.push_back( gp_Pnt2d(P.first, P.second) );
+
+      // One thing which is pretty inconvenient is the necessity to
+      // update the AABB of a polygon manually. If you forget doing that,
+      // the intersection check will return nothing.
+      myBox.Add(P2d);
+    }
+  }
+
+public:
+
+  //! Returns the tolerance of the polygon.
+  virtual double DeflectionOverEstimation() const
+  {
+    return Precision::Confusion();
+  }
+
+  //! Returns the number of segments in the polyline.
+  virtual int NbSegments() const
+  {
+    return int( m_poles.size() - 1 );
+  }
+
+  //! Returns the points of the segment <index> in the Polygon.
+  virtual void Segment(const int index, gp_Pnt2d& beg, gp_Pnt2d& end) const
+  {
+    beg = m_poles[index - 1];
+    end = m_poles[index];
+  }
+
+protected:
+ 
+  std::vector<gp_Pnt2d> m_poles;
+
+};
+
+bool FindIntersections(const poly_EdgeHandle   eh0,
+                       const poly_EdgeHandle   eh1,
+                       const t_ptr<poly_Mesh>& mesh)
+{
+  /*poly_Edge edges[2];
+  if ( !mesh->GetEdge(eh0, edges[0]) ) return false;
+  if ( !mesh->GetEdge(eh1, edges[1]) ) return false;
+
+  t_xyz edge0Vertices[2], edge1Vertices[2];
+  if ( !mesh->GetVertex(edges[0].hVertices[0], edge0Vertices[0]) ) return false;
+  if ( !mesh->GetVertex(edges[0].hVertices[1], edge0Vertices[1]) ) return false;
+  if ( !mesh->GetVertex(edges[1].hVertices[0], edge1Vertices[0]) ) return false;
+  if ( !mesh->GetVertex(edges[1].hVertices[1], edge1Vertices[1]) ) return false;
+
+  SimplePolygon poly1 = { {0.0, 0.0}, {1.0,  0.0}, {0.25, 0.75} };
+  SimplePolygon poly2 = { {0.5, 1.2}, {0.5, -1.0}, {1.0, 3.0} };
+
+  vout << poly1 << poly2;
+
+  Intf_InterferencePolygon2d algo(poly1, poly2);
+  const int numPts = algo.NbSectionPoints();*/
+
+  // TODO: NYI
+  return false;
+}
+
+} // Anonymous namespace
+
 //-----------------------------------------------------------------------------
 
 poly_Mesh::poly_Mesh() : core_OBJECT()

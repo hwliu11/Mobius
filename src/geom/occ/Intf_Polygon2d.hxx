@@ -16,11 +16,10 @@
 #ifndef _Intf_Polygon2d_HeaderFile
 #define _Intf_Polygon2d_HeaderFile
 
-#include <Bnd_Box2d.hxx>
-class Standard_OutOfRange;
+#include <mobius/Bnd_Box2d.hxx>
+
 class Bnd_Box2d;
 class gp_Pnt2d;
-
 
 //! Describes the necessary polygon information to compute
 //! the interferences.
@@ -50,11 +49,9 @@ public:
 
 };
 
-
-#include <mobius/Intf_Polygon2d.lxx>
-
-
-
-
+inline const Bnd_Box2d& Intf_Polygon2d::Bounding () const
+{
+  return myBox;
+}
 
 #endif // _Intf_Polygon2d_HeaderFile

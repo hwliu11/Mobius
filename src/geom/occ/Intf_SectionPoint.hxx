@@ -17,28 +17,19 @@
 #ifndef _Intf_SectionPoint_HeaderFile
 #define _Intf_SectionPoint_HeaderFile
 
-#include <Standard.hxx>
-#include <Standard_DefineAlloc.hxx>
-#include <Standard_Handle.hxx>
-
-#include <gp_Pnt.hxx>
+#include <mobius/gp_Pnt.hxx>
 #include <mobius/Intf_PIType.hxx>
-#include <int.hxx>
-#include <double.hxx>
-#include <bool.hxx>
+
 class gp_Pnt;
 class gp_Pnt2d;
 
 
 //! Describes an intersection  point between  polygons  and
-//! polyedra.
-class Intf_SectionPoint 
+//! polyhedra.
+class Intf_SectionPoint
 {
 public:
 
-  DEFINE_STANDARD_ALLOC
-
-  
   //! Returns the location of the SectionPoint.
   mobiusGeom_EXPORT const gp_Pnt& Pnt() const;
   
@@ -103,18 +94,7 @@ public:
   
   mobiusGeom_EXPORT void Dump (const int Indent) const;
 
-
-
-
-protected:
-
-
-
-
-
 private:
-
-
 
   gp_Pnt myPnt;
   Intf_PIType DimenObje;
@@ -127,14 +107,30 @@ private:
   double ParamTool;
   double Incide;
 
-
 };
 
 
-#include <mobius/Intf_SectionPoint.lxx>
+inline double Intf_SectionPoint::ParamOnFirst() const
+{return (IndexO2-1)+ParamObje;}
 
+inline double Intf_SectionPoint::ParamOnSecond() const
+{return (IndexT2-1)+ParamTool;}
 
+inline Intf_PIType Intf_SectionPoint::TypeOnFirst() const
+{return DimenObje;}
 
+inline Intf_PIType Intf_SectionPoint::TypeOnSecond() const
+{return DimenTool;}
 
+inline bool Intf_SectionPoint::IsEqual
+  (const Intf_SectionPoint& Other) const
+{
+  return (DimenObje==Other.DimenObje &&
+          IndexO1==Other.IndexO1 &&
+          IndexO2==Other.IndexO2 &&
+          DimenTool==Other.DimenTool &&
+          IndexT1==Other.IndexT1 &&
+          IndexT2==Other.IndexT2);
+}
 
 #endif // _Intf_SectionPoint_HeaderFile

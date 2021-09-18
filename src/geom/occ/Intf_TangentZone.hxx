@@ -17,17 +17,7 @@
 #ifndef _Intf_TangentZone_HeaderFile
 #define _Intf_TangentZone_HeaderFile
 
-#include <Standard.hxx>
-#include <Standard_DefineAlloc.hxx>
-#include <Standard_Handle.hxx>
-
 #include <mobius/Intf_SeqOfSectionPoint.hxx>
-#include <double.hxx>
-#include <int.hxx>
-#include <bool.hxx>
-class Standard_OutOfRange;
-class Intf_SectionPoint;
-
 
 //! Describes   a  zone  of  tangence  between  polygons  or
 //! polyhedra as a sequence of points of intersection.
@@ -35,9 +25,6 @@ class Intf_TangentZone
 {
 public:
 
-  DEFINE_STANDARD_ALLOC
-
-  
   //! Returns number of SectionPoint in this TangentZone.
     int NumberOfPoints() const;
   
@@ -102,18 +89,7 @@ bool operator == (const Intf_TangentZone& Other) const
   
   mobiusGeom_EXPORT void Dump (const int Indent) const;
 
-
-
-
-protected:
-
-
-
-
-
 private:
-
-
 
   Intf_SeqOfSectionPoint Result;
   double ParamOnFirstMin;
@@ -121,14 +97,40 @@ private:
   double ParamOnSecondMin;
   double ParamOnSecondMax;
 
-
 };
 
+//=======================================================================
+//function : NumberOfPoint
+//purpose  : Return the points number of the tangent zone.
+//=======================================================================
 
-#include <mobius/Intf_TangentZone.lxx>
+inline int Intf_TangentZone::NumberOfPoints() const
+{
+  return Result.Length();
+}
 
+//=======================================================================
+//function : ParamOnFirst
+//purpose  : 
+//=======================================================================
 
+inline void Intf_TangentZone::ParamOnFirst(double& paraMin,
+                                           double& paraMax) const
+{
+  paraMin = ParamOnFirstMin;
+  paraMax = ParamOnFirstMax;
+}
 
+//=======================================================================
+//function : ParamOnSecond
+//purpose  : 
+//=======================================================================
 
+inline void Intf_TangentZone::ParamOnSecond(double& paraMin,
+                                            double& paraMax) const
+{
+  paraMin = ParamOnSecondMin;
+  paraMax = ParamOnSecondMax;
+}
 
 #endif // _Intf_TangentZone_HeaderFile

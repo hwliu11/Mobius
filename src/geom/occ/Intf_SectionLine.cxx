@@ -17,7 +17,6 @@
 
 #include <mobius/Intf_SectionLine.hxx>
 #include <mobius/Intf_SectionPoint.hxx>
-#include <Standard_OutOfRange.hxx>
 
 //=======================================================================
 //function : Intf_SectionLine
