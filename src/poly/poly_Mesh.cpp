@@ -34,6 +34,9 @@
 // Poly includes
 #include <mobius/poly_Jacobian.h>
 
+// Geom includes
+#include <mobius/geom_PlaneSurface.h>
+
 // Core includes
 #include <mobius/core_Precision.h>
 
@@ -96,11 +99,16 @@ protected:
 
 };
 
-bool FindIntersections(const poly_EdgeHandle   eh0,
-                       const poly_EdgeHandle   eh1,
-                       const t_ptr<poly_Mesh>& mesh)
+} // Anonymous namespace
+
+//-----------------------------------------------------------------------------
+
+bool poly_Mesh::HasIntersections(const poly_EdgeHandle eh0,
+                                 const poly_EdgeHandle eh1,
+                                 const t_ptr<t_mesh>&  mesh,
+                                 const t_ptr<t_plane>& pln)
 {
-  /*poly_Edge edges[2];
+  poly_Edge edges[2];
   if ( !mesh->GetEdge(eh0, edges[0]) ) return false;
   if ( !mesh->GetEdge(eh1, edges[1]) ) return false;
 
@@ -110,23 +118,26 @@ bool FindIntersections(const poly_EdgeHandle   eh0,
   if ( !mesh->GetVertex(edges[1].hVertices[0], edge1Vertices[0]) ) return false;
   if ( !mesh->GetVertex(edges[1].hVertices[1], edge1Vertices[1]) ) return false;
 
-  SimplePolygon poly1 = { {0.0, 0.0}, {1.0,  0.0}, {0.25, 0.75} };
-  SimplePolygon poly2 = { {0.5, 1.2}, {0.5, -1.0}, {1.0, 3.0} };
+  t_uv edge0UVs[2], edge1UVs[2];
+  pln->InvertPoint(edge0Vertices[0], edge0UVs[0]);
+  pln->InvertPoint(edge0Vertices[1], edge0UVs[1]);
+  pln->InvertPoint(edge1Vertices[0], edge1UVs[0]);
+  pln->InvertPoint(edge1Vertices[1], edge1UVs[1]);
 
-  vout << poly1 << poly2;
+  SimplePolygon poly0 = { {edge0UVs[0].U(), edge0UVs[0].V()}, {edge0UVs[1].U(), edge0UVs[1].V()} };
+  SimplePolygon poly1 = { {edge1UVs[0].U(), edge1UVs[0].V()}, {edge1UVs[1].U(), edge1UVs[1].V()} };
 
-  Intf_InterferencePolygon2d algo(poly1, poly2);
-  const int numPts = algo.NbSectionPoints();*/
+  Intf_InterferencePolygon2d algo(poly0, poly1);
+  const int numPts = algo.NbSectionPoints();
 
-  // TODO: NYI
-  return false;
+  return numPts > 0;
 }
-
-} // Anonymous namespace
 
 //-----------------------------------------------------------------------------
 
-poly_Mesh::poly_Mesh() : core_OBJECT()
+poly_Mesh::poly_Mesh(core_ProgressEntry progress,
+                     core_PlotterEntry  plotter)
+: core_IAlgorithm(progress, plotter)
 {}
 
 //-----------------------------------------------------------------------------
@@ -1343,7 +1354,7 @@ void poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
     //
     for ( const auto& ht : hts )
     {
-      if ( !m_triangles[hts[0].iIdx].IsDeleted() )
+      if ( !m_triangles[ht.iIdx].IsDeleted() )
         alive.push_back(ht);
     }
 
@@ -1355,6 +1366,37 @@ void poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
       for ( const auto& ht : alive )
         bndTris.push_back(ht);
     }
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void poly_Mesh::FindDomainEdges(const int                     domainId,
+                                std::vector<poly_EdgeHandle>& innerEdges,
+                                std::vector<poly_EdgeHandle>& bndEdges) const
+{
+  // Extract edges from the computed links.
+  for ( const auto& linkIt : m_links )
+  {
+    const poly_EdgeHandle                   he  = linkIt.first;
+    const std::vector<poly_TriangleHandle>& hts = linkIt.second;
+
+    // Count the in-domain triangles.
+    int numDomainTris = 0;
+    //
+    for ( const auto& ht : hts )
+    {
+      if ( !m_triangles[ht.iIdx].IsDeleted() )
+        continue;
+
+      if ( m_triangles[ht.iIdx].GetFaceRef() == domainId )
+        numDomainTris++;
+    }
+
+    if ( numDomainTris == 1 )
+      bndEdges.push_back(he);
+    else if ( numDomainTris == 2 )
+      innerEdges.push_back(he);
   }
 }
 

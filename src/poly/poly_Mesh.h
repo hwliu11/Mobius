@@ -38,7 +38,7 @@
 #include <mobius/poly_Vertex.h>
 
 // Core includes
-#include <mobius/core_Ptr.h>
+#include <mobius/core_IAlgorithm.h>
 
 // Standard includes
 #include <math.h>
@@ -47,19 +47,30 @@
 
 namespace mobius {
 
+class geom_PlaneSurface;
+
 //! \ingroup MOBIUS_POLY
 //!
 //! Data structure representing surface triangulation.
 //!
 //! \sa mobius::poly_ReadSTL
-class poly_Mesh : public core_OBJECT
+class poly_Mesh : public core_IAlgorithm
 {
+public:
+
+  //! Checks for intersecting edges on a plane.
+  static bool HasIntersections(const poly_EdgeHandle eh0,
+                               const poly_EdgeHandle eh1,
+                               const t_ptr<t_mesh>&  mesh,
+                               const t_ptr<t_plane>& pln);
+
 // Construction & destruction:
 public:
 
-  //! Default ctor.
+  //! Default ctor with optional diagnostic tools.
   mobiusPoly_EXPORT
-    poly_Mesh();
+    poly_Mesh(core_ProgressEntry progress = nullptr,
+              core_PlotterEntry  plotter  = nullptr);
 
 public:
 
@@ -401,6 +412,15 @@ public:
   mobiusPoly_EXPORT void
     FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
                       std::vector<poly_TriangleHandle>& bndTris) const;
+
+  //! Returns all edges that belong to the specified domain.
+  //! \param[in]  domainId   the domain of interest.
+  //! \param[out] innerEdges the extracted inner edges.
+  //! \param[out] bndEdges   the extracted boundary edges.
+  mobiusPoly_EXPORT void
+    FindDomainEdges(const int                     domainId,
+                    std::vector<poly_EdgeHandle>& innerEdges,
+                    std::vector<poly_EdgeHandle>& bndEdges) const;
 
   //! Finds the vertex shared between the passed triangle and the
   //! given (presumably dangling) edge.
