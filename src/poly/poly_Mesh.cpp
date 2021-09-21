@@ -56,20 +56,18 @@ class SimplePolygon : public Intf_Polygon2d
 {
 public:
 
-  //! Ctor with initializer list.
-  SimplePolygon(const std::initializer_list<std::pair<double, double>>& poles)
+  //! Ctor.
+  SimplePolygon(const t_uv& pole0,
+                const t_uv& pole1)
   {
-    for ( const auto& P : poles )
-    {
-      gp_Pnt2d P2d(P.first, P.second);
+    m_pole0 = gp_Pnt2d( pole0.U(), pole0.V() );
+    m_pole1 = gp_Pnt2d( pole1.U(), pole1.V() );
 
-      m_poles.push_back( gp_Pnt2d(P.first, P.second) );
-
-      // One thing which is pretty inconvenient is the necessity to
-      // update the AABB of a polygon manually. If you forget doing that,
-      // the intersection check will return nothing.
-      myBox.Add(P2d);
-    }
+    // One thing which is pretty inconvenient is the necessity to
+    // update the AABB of a polygon manually. If you forget doing that,
+    // the intersection check will return nothing.
+    myBox.Add(m_pole0);
+    myBox.Add(m_pole1);
   }
 
 public:
@@ -83,19 +81,19 @@ public:
   //! Returns the number of segments in the polyline.
   virtual int NbSegments() const
   {
-    return int( m_poles.size() - 1 );
+    return 1;
   }
 
   //! Returns the points of the segment <index> in the Polygon.
-  virtual void Segment(const int index, gp_Pnt2d& beg, gp_Pnt2d& end) const
+  virtual void Segment(const int, gp_Pnt2d& beg, gp_Pnt2d& end) const
   {
-    beg = m_poles[index - 1];
-    end = m_poles[index];
+    beg = m_pole0;
+    end = m_pole1;
   }
 
 protected:
  
-  std::vector<gp_Pnt2d> m_poles;
+  gp_Pnt2d m_pole0, m_pole1;
 
 };
 
@@ -103,42 +101,102 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::HasIntersections(const poly_EdgeHandle eh0,
-                                 const poly_EdgeHandle eh1,
-                                 const t_ptr<t_mesh>&  mesh,
-                                 const t_ptr<t_plane>& pln)
-{
-  poly_Edge edges[2];
-  if ( !mesh->GetEdge(eh0, edges[0]) ) return false;
-  if ( !mesh->GetEdge(eh1, edges[1]) ) return false;
-
-  t_xyz edge0Vertices[2], edge1Vertices[2];
-  if ( !mesh->GetVertex(edges[0].hVertices[0], edge0Vertices[0]) ) return false;
-  if ( !mesh->GetVertex(edges[0].hVertices[1], edge0Vertices[1]) ) return false;
-  if ( !mesh->GetVertex(edges[1].hVertices[0], edge1Vertices[0]) ) return false;
-  if ( !mesh->GetVertex(edges[1].hVertices[1], edge1Vertices[1]) ) return false;
-
-  t_uv edge0UVs[2], edge1UVs[2];
-  pln->InvertPoint(edge0Vertices[0], edge0UVs[0]);
-  pln->InvertPoint(edge0Vertices[1], edge0UVs[1]);
-  pln->InvertPoint(edge1Vertices[0], edge1UVs[0]);
-  pln->InvertPoint(edge1Vertices[1], edge1UVs[1]);
-
-  SimplePolygon poly0 = { {edge0UVs[0].U(), edge0UVs[0].V()}, {edge0UVs[1].U(), edge0UVs[1].V()} };
-  SimplePolygon poly1 = { {edge1UVs[0].U(), edge1UVs[0].V()}, {edge1UVs[1].U(), edge1UVs[1].V()} };
-
-  Intf_InterferencePolygon2d algo(poly0, poly1);
-  const int numPts = algo.NbSectionPoints();
-
-  return numPts > 0;
-}
-
-//-----------------------------------------------------------------------------
-
 poly_Mesh::poly_Mesh(core_ProgressEntry progress,
                      core_PlotterEntry  plotter)
 : core_IAlgorithm(progress, plotter)
 {}
+
+//-----------------------------------------------------------------------------
+
+void poly_Mesh::SetSurfAdapter(const t_ptr<poly_SurfAdapter>& adt)
+{
+  m_surfAdt = adt;
+}
+
+//-----------------------------------------------------------------------------
+
+bool poly_Mesh::AreIntersecting(const int             tag,
+                                const poly_EdgeHandle eh0,
+                                const poly_EdgeHandle eh1) const
+{
+  if ( m_surfAdt.IsNull() )
+    return false; // The check is only possible with a CAD link.
+
+  poly_Edge edges[2];
+  if ( !this->GetEdge(eh0, edges[0]) ) return false;
+  if ( !this->GetEdge(eh1, edges[1]) ) return false;
+
+  t_xyz edge0Vertices[2], edge1Vertices[2];
+  if ( !this->GetVertex(edges[0].hVertices[0], edge0Vertices[0]) ) return false;
+  if ( !this->GetVertex(edges[0].hVertices[1], edge0Vertices[1]) ) return false;
+  if ( !this->GetVertex(edges[1].hVertices[0], edge1Vertices[0]) ) return false;
+  if ( !this->GetVertex(edges[1].hVertices[1], edge1Vertices[1]) ) return false;
+
+  t_uv edge0UVs[2], edge1UVs[2];
+  m_surfAdt->InvertPoint(tag, edge0Vertices[0], edge0UVs[0]);
+  m_surfAdt->InvertPoint(tag, edge0Vertices[1], edge0UVs[1]);
+  m_surfAdt->InvertPoint(tag, edge1Vertices[0], edge1UVs[0]);
+  m_surfAdt->InvertPoint(tag, edge1Vertices[1], edge1UVs[1]);
+
+  SimplePolygon poly0(edge0UVs[0], edge0UVs[1]);
+  SimplePolygon poly1(edge1UVs[0], edge1UVs[1]);
+
+  Intf_InterferencePolygon2d algo(poly0, poly1);
+  const int numPts = algo.NbSectionPoints();
+
+  int numInters = 0;
+  for ( int isol = 1; isol <= numPts; ++isol )
+  {
+    const double p[2] = { algo.PntValue(isol).ParamOnFirst(),
+                          algo.PntValue(isol).ParamOnSecond() };
+
+    if ( ( (p[0] > 0) && (p[0] < 1) ) || ( (p[1] > 0) && (p[1] < 1) ) )
+      numInters++;
+  }
+
+  return numInters > 0;
+}
+
+//-----------------------------------------------------------------------------
+
+bool poly_Mesh::AreIntersecting(const int                           tag,
+                                const std::vector<poly_EdgeHandle>& ehs0,
+                                const std::vector<poly_EdgeHandle>& ehs1) const
+{
+  bool hasInters = false;
+  for ( const auto he0 : ehs0 )
+  {
+    for ( const auto he1 : ehs1 )
+    {
+      if ( this->AreIntersecting(tag, he0, he1) )
+      {
+        hasInters = true;
+        break;
+      }
+    }
+
+    if ( hasInters )
+      break;
+  }
+
+  return hasInters;
+}
+
+//-----------------------------------------------------------------------------
+
+bool poly_Mesh::AreIntersecting(const std::unordered_set<int>& domain) const
+{
+  for ( auto tag : domain )
+  {
+    std::vector<poly_EdgeHandle> innerEhs, bndEhs;
+    this->FindDomainEdges(tag, innerEhs, bndEhs);
+
+    if ( this->AreIntersecting(tag, innerEhs, bndEhs) )
+      return true;
+  }
+
+  return false;
+}
 
 //-----------------------------------------------------------------------------
 
@@ -151,6 +209,7 @@ t_ptr<poly_Mesh> poly_Mesh::DeepCopy() const
   copy->m_triangles = this->m_triangles;
   copy->m_quads     = this->m_quads;
   copy->m_links     = this->m_links;
+  copy->m_surfAdt   = this->m_surfAdt;
 
   return copy;
 }
@@ -1386,7 +1445,7 @@ void poly_Mesh::FindDomainEdges(const int                     domainId,
     //
     for ( const auto& ht : hts )
     {
-      if ( !m_triangles[ht.iIdx].IsDeleted() )
+      if ( m_triangles[ht.iIdx].IsDeleted() )
         continue;
 
       if ( m_triangles[ht.iIdx].GetFaceRef() == domainId )
@@ -1785,9 +1844,12 @@ bool poly_Mesh::SplitEdge(const poly_EdgeHandle he)
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::Smooth(const int                      iter,
-                       const std::unordered_set<int>& domain)
+void poly_Mesh::Smooth(const int  iter,
+                       const int  tag,
+                       const bool checkInter)
 {
+  std::unordered_set<int> domain = {tag};
+
   // Find adjacent vertices for each vertex.
   std::unordered_map< poly_VertexHandle, std::unordered_set<poly_VertexHandle> > adj;
   //
@@ -1807,16 +1869,24 @@ void poly_Mesh::Smooth(const int                      iter,
   }
 
   int it = 0;
+  std::unordered_map<poly_VertexHandle, t_xyz> origCoordsMap;
 
   // Move each vertex.
   while ( it++ < iter )
   {
     for ( const auto& vTuple : adj )
     {
+      // Get the original coordinates.
+      t_xyz origCoords;
+      this->GetVertex(vTuple.first, origCoords);
+      //
+      if ( origCoordsMap.find(vTuple.first) == origCoordsMap.end() )
+        origCoordsMap.insert({vTuple.first, origCoords});
+
+      // Compute the new (average) position.
       t_xyz avrg;
       int   num = 0;
-
-      // Get the average position.
+      //
       for ( const auto& nvs : vTuple.second )
       {
         t_xyz coord;
@@ -1825,14 +1895,43 @@ void poly_Mesh::Smooth(const int                      iter,
         avrg += coord;
         ++num;
       }
-
+      //
       if ( !num )
         continue;
-
+      //
       avrg /= num;
+
+      // Move vertex.
       this->ChangeVertex(vTuple.first).ChangeCoords() = avrg;
     }
   }
+
+  // Check for possible intersections.
+  if ( checkInter )
+  {
+    // Get all edge handles for intersection test.
+    std::vector<poly_EdgeHandle> innerEdges, bndEdges;
+    //
+    if ( checkInter )
+      this->FindDomainEdges(tag, innerEdges, bndEdges);
+
+    if ( this->AreIntersecting(tag, innerEdges, bndEdges) )
+    {
+      // Restore the original positions.
+      for ( const auto& tuple : origCoordsMap )
+        this->ChangeVertex(tuple.first).ChangeCoords() = tuple.second;
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void poly_Mesh::Smooth(const int                      iter,
+                       const std::unordered_set<int>& domain,
+                       const bool                     checkInter)
+{
+  for ( auto tag : domain )
+    this->Smooth(iter, tag, checkInter);
 }
 
 //-----------------------------------------------------------------------------

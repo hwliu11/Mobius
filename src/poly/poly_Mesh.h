@@ -34,6 +34,7 @@
 // Poly includes
 #include <mobius/poly_Edge.h>
 #include <mobius/poly_Quad.h>
+#include <mobius/poly_SurfAdapter.h>
 #include <mobius/poly_Triangle.h>
 #include <mobius/poly_Vertex.h>
 
@@ -56,14 +57,6 @@ class geom_PlaneSurface;
 //! \sa mobius::poly_ReadSTL
 class poly_Mesh : public core_IAlgorithm
 {
-public:
-
-  //! Checks for intersecting edges on a plane.
-  static bool HasIntersections(const poly_EdgeHandle eh0,
-                               const poly_EdgeHandle eh1,
-                               const t_ptr<t_mesh>&  mesh,
-                               const t_ptr<t_plane>& pln);
-
 // Construction & destruction:
 public:
 
@@ -71,6 +64,43 @@ public:
   mobiusPoly_EXPORT
     poly_Mesh(core_ProgressEntry progress = nullptr,
               core_PlotterEntry  plotter  = nullptr);
+
+/* CAD link */
+public:
+
+  //! Sets CAD surface adapter to establish a reference from the
+  //! discrete surface to the smooth analytical surface (if any).
+  //! \param[in] adt the adapter to set.
+  mobiusPoly_EXPORT void
+    SetSurfAdapter(const t_ptr<poly_SurfAdapter>& adt);
+
+  //! Checks if the passed edges intersect in the parametric domain of
+  //! the corresponding surface.
+  //! \param[in] tag the domain ID.
+  //! \param[in] eh0 the first edge to check.
+  //! \param[in] eh1 the second edge to check.
+  //! \return true if the edges intersect, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    AreIntersecting(const int             tag,
+                    const poly_EdgeHandle eh0,
+                    const poly_EdgeHandle eh1) const;
+
+  //! Checks if the passed edges intersect in the parametric domain of
+  //! the corresponding surface.
+  //! \param[in] tag  the domain ID.
+  //! \param[in] ehs0 the first group of edges to check.
+  //! \param[in] ehs1 the second group of edges to check.
+  //! \return true if the edges intersect, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    AreIntersecting(const int                           tag,
+                    const std::vector<poly_EdgeHandle>& ehs0,
+                    const std::vector<poly_EdgeHandle>& ehs1) const;
+
+  //! Checks if the boundary and inner edges intersect in the passed domain.
+  //! \param[in] domain the domain to check.
+  //! \return true if the edges intersect, false -- otherwise.
+  mobiusPoly_EXPORT bool
+    AreIntersecting(const std::unordered_set<int>& domain) const;
 
 public:
 
@@ -457,14 +487,25 @@ public:
   //! \param[in] he the edge to split.
   //! \return true in the case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    SplitEdge(const poly_EdgeHandle  he);
+    SplitEdge(const poly_EdgeHandle he);
 
   //! Applies Laplacian smoothing to the mesh vertices.
-  //! \param[in] iter   the number of smoothing steps.
-  //! \param[in] domain the optional face IDs to smooth.
+  //! \param[in] iter       the number of smoothing steps.
+  //! \param[in] tag        the subdomain ID to smooth.
+  //! \param[in] checkInter the Boolean flag indicating whether to check for self-intersecting links.
   mobiusPoly_EXPORT void
-    Smooth(const int                      iter   = 1,
-           const std::unordered_set<int>& domain = std::unordered_set<int>());
+    Smooth(const int  iter,
+           const int  tag,
+           const bool checkInter);
+
+  //! Applies Laplacian smoothing to the mesh vertices.
+  //! \param[in] iter       the number of smoothing steps.
+  //! \param[in] domain     the optional face IDs to smooth.
+  //! \param[in] checkInter the Boolean flag indicating whether to check for self-intersecting links.
+  mobiusPoly_EXPORT void
+    Smooth(const int                      iter       = 1,
+           const std::unordered_set<int>& domain     = std::unordered_set<int>(),
+           const bool                     checkInter = false);
 
 public:
 
@@ -844,6 +885,9 @@ protected:
 
   //! Edges-to-triangles map.
   std::unordered_map< poly_EdgeHandle, std::vector<poly_TriangleHandle> > m_links;
+
+  //! CAD surface adapter.
+  t_ptr<poly_SurfAdapter> m_surfAdt;
 
 };
 

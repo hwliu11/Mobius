@@ -15,6 +15,7 @@ set (H_FILES
   poly_ReadOBJ.h
   poly_ReadPLY.h
   poly_ReadSTL.h
+  poly_SurfAdapter.h
   poly_Triangle.h
   poly_Vertex.h
 )
