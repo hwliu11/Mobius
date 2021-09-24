@@ -36,9 +36,11 @@
 #include <mobius/poly_Handles.h>
 
 // Core includes
+#include <mobius/core_UV.h>
 #include <mobius/core_XYZ.h>
 
 // STL includes
+#include <optional>
 #include <unordered_set>
 
 namespace mobius {
@@ -81,6 +83,12 @@ public:
   core_XYZ& ChangeCoords()
   {
     return m_coords;
+  }
+
+  //! \return non-const reference to the optionally cached UV values.
+  std::optional<core_UV>& ChangeUV()
+  {
+    return m_uv;
   }
 
   //! \return const reference to the stored triangle handles.
@@ -144,7 +152,8 @@ public:
 protected:
 
   int                                     m_iFlags; //!< Flags.
-  core_XYZ                                m_coords; //!< Coordinates of the vertex.
+  t_xyz                                   m_coords; //!< Coordinates of the vertex.
+  std::optional<t_uv>                     m_uv;     //!< Optional cached UV coordinates.
   std::unordered_set<poly_TriangleHandle> m_tris;   //!< Back references to the owner triangles.
 
 };

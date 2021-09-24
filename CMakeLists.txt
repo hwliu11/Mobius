@@ -3,6 +3,11 @@ cmake_minimum_required (VERSION 3.0.0 FATAL_ERROR)
 # Project name
 project (Mobius CXX)
 
+# Enable C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Install dir
 set (INSTALL_DIR "" CACHE PATH "Where to install" )
 set (CMAKE_INSTALL_PREFIX "${INSTALL_DIR}" CACHE INTERNAL "" FORCE )

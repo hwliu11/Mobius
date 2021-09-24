@@ -115,9 +115,9 @@ void poly_Mesh::SetSurfAdapter(const t_ptr<poly_SurfAdapter>& adt)
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::AreIntersecting(const int             tag,
-                                const poly_EdgeHandle eh0,
-                                const poly_EdgeHandle eh1) const
+bool poly_Mesh::AreSelfIntersecting(const int             tag,
+                                    const poly_EdgeHandle eh0,
+                                    const poly_EdgeHandle eh1) const
 {
   if ( m_surfAdt.IsNull() )
     return false; // The check is only possible with a CAD link.
@@ -159,16 +159,16 @@ bool poly_Mesh::AreIntersecting(const int             tag,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::AreIntersecting(const int                           tag,
-                                const std::vector<poly_EdgeHandle>& ehs0,
-                                const std::vector<poly_EdgeHandle>& ehs1) const
+bool poly_Mesh::AreSelfIntersecting(const int                           tag,
+                                    const std::vector<poly_EdgeHandle>& ehs0,
+                                    const std::vector<poly_EdgeHandle>& ehs1) const
 {
   bool hasInters = false;
   for ( const auto he0 : ehs0 )
   {
     for ( const auto he1 : ehs1 )
     {
-      if ( this->AreIntersecting(tag, he0, he1) )
+      if ( this->AreSelfIntersecting(tag, he0, he1) )
       {
         hasInters = true;
         break;
@@ -184,14 +184,14 @@ bool poly_Mesh::AreIntersecting(const int                           tag,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::AreIntersecting(const std::unordered_set<int>& domain) const
+bool poly_Mesh::AreSelfIntersecting(const std::unordered_set<int>& domain) const
 {
   for ( auto tag : domain )
   {
     std::vector<poly_EdgeHandle> innerEhs, bndEhs;
     this->FindDomainEdges(tag, innerEhs, bndEhs);
 
-    if ( this->AreIntersecting(tag, innerEhs, bndEhs) )
+    if ( this->AreSelfIntersecting(tag, innerEhs, bndEhs) )
       return true;
   }
 
@@ -1911,11 +1911,9 @@ void poly_Mesh::Smooth(const int  iter,
   {
     // Get all edge handles for intersection test.
     std::vector<poly_EdgeHandle> innerEdges, bndEdges;
-    //
-    if ( checkInter )
-      this->FindDomainEdges(tag, innerEdges, bndEdges);
+    this->FindDomainEdges(tag, innerEdges, bndEdges);
 
-    if ( this->AreIntersecting(tag, innerEdges, bndEdges) )
+    if ( this->AreSelfIntersecting(tag, innerEdges, bndEdges) )
     {
       // Restore the original positions.
       for ( const auto& tuple : origCoordsMap )

@@ -81,9 +81,9 @@ public:
   //! \param[in] eh1 the second edge to check.
   //! \return true if the edges intersect, false -- otherwise.
   mobiusPoly_EXPORT bool
-    AreIntersecting(const int             tag,
-                    const poly_EdgeHandle eh0,
-                    const poly_EdgeHandle eh1) const;
+    AreSelfIntersecting(const int             tag,
+                        const poly_EdgeHandle eh0,
+                        const poly_EdgeHandle eh1) const;
 
   //! Checks if the passed edges intersect in the parametric domain of
   //! the corresponding surface.
@@ -92,15 +92,15 @@ public:
   //! \param[in] ehs1 the second group of edges to check.
   //! \return true if the edges intersect, false -- otherwise.
   mobiusPoly_EXPORT bool
-    AreIntersecting(const int                           tag,
-                    const std::vector<poly_EdgeHandle>& ehs0,
-                    const std::vector<poly_EdgeHandle>& ehs1) const;
+    AreSelfIntersecting(const int                           tag,
+                        const std::vector<poly_EdgeHandle>& ehs0,
+                        const std::vector<poly_EdgeHandle>& ehs1) const;
 
   //! Checks if the boundary and inner edges intersect in the passed domain.
   //! \param[in] domain the domain to check.
   //! \return true if the edges intersect, false -- otherwise.
   mobiusPoly_EXPORT bool
-    AreIntersecting(const std::unordered_set<int>& domain) const;
+    AreSelfIntersecting(const std::unordered_set<int>& domain) const;
 
 public:
 
