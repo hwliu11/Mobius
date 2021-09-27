@@ -28,7 +28,11 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
+// Own include
 #include <mobius/core_Precision.h>
+
+// Standard includes
+#include <cfloat>
 
 //! Precision in 3D space to cover rounding errors.
 //! \return geometric precision to use in 3D.
