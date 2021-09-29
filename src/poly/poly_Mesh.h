@@ -65,6 +65,17 @@ public:
     poly_Mesh(core_ProgressEntry progress = nullptr,
               core_PlotterEntry  plotter  = nullptr);
 
+public:
+
+  //! Extracts a mesh region for the given triangle IDs `tids`.
+  //! Use this method to get a submesh of the existing mesh. The
+  //! constructed submesh is a deep copy.
+  //! \param[in] tids the IDs of the triangles to copy into the region
+  //!                 mesh being constructed.
+  //! \return the extracted region.
+  mobiusPoly_EXPORT t_ptr<poly_Mesh>
+    ExtractRegion(const std::unordered_set<int>& tids) const;
+
 /* CAD link */
 public:
 

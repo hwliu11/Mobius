@@ -108,6 +108,46 @@ poly_Mesh::poly_Mesh(core_ProgressEntry progress,
 
 //-----------------------------------------------------------------------------
 
+t_ptr<poly_Mesh>
+  poly_Mesh::ExtractRegion(const std::unordered_set<int>& tids) const
+{
+  t_ptr<poly_Mesh> region = new poly_Mesh;
+
+  for ( TriangleIterator tit(this); tit.More(); tit.Next() )
+  {
+    if ( tids.find(tit.Current().iIdx) == tids.end() )
+      continue;
+
+    // TODO: avoid duplicated vertices
+
+    poly_Triangle t;
+    this->GetTriangle(tit.Current(), t);
+
+    poly_VertexHandle hv0;
+    poly_VertexHandle hv1;
+    poly_VertexHandle hv2;
+    t.GetVertices(hv0, hv1, hv2);
+
+    poly_Vertex v0;
+    this->GetVertex(hv0, v0);
+    hv0 = region->AddVertex(v0);
+
+    poly_Vertex v1;
+    this->GetVertex(hv1, v1);
+    hv1 = region->AddVertex(v1);
+
+    poly_Vertex v2;
+    this->GetVertex(hv2, v2);
+    hv2 = region->AddVertex(v2);
+
+    region->AddTriangle(hv0, hv1, hv2);
+  }
+
+  return region;
+}
+
+//-----------------------------------------------------------------------------
+
 void poly_Mesh::SetSurfAdapter(const t_ptr<poly_SurfAdapter>& adt)
 {
   m_surfAdt = adt;
