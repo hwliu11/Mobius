@@ -27,6 +27,7 @@ set (base_H_FILES
   base/core_Newton2x2.h
   base/core_OBJECT.h
   base/core_OPERATOR.h
+  base/core_Optional.h
   base/core_Precision.h
   base/core_Ptr.h
   base/core_TrivariateFunc.h

@@ -38,9 +38,9 @@
 // Core includes
 #include <mobius/core_UV.h>
 #include <mobius/core_XYZ.h>
+#include <mobius/core_Optional.h>
 
 // STL includes
-#include <optional>
 #include <unordered_set>
 
 namespace mobius {
@@ -86,7 +86,7 @@ public:
   }
 
   //! \return non-const reference to the optionally cached UV values.
-  std::optional<core_UV>& ChangeUV()
+  tl::optional<core_UV>& ChangeUV()
   {
     return m_uv;
   }
@@ -153,7 +153,7 @@ protected:
 
   int                                     m_iFlags; //!< Flags.
   t_xyz                                   m_coords; //!< Coordinates of the vertex.
-  std::optional<t_uv>                     m_uv;     //!< Optional cached UV coordinates.
+  tl::optional<t_uv>                      m_uv;     //!< Optional cached UV coordinates.
   std::unordered_set<poly_TriangleHandle> m_tris;   //!< Back references to the owner triangles.
 
 };
