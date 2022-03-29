@@ -32,7 +32,7 @@
 #define poly_AdaptiveDistanceField_HeaderFile
 
 // Poly includes
-#include <mobius/poly_RealFunc.h>
+#include <mobius/poly_BaseDistanceField.h>
 #include <mobius/poly_SVO.h>
 
 // Core includes
@@ -45,26 +45,34 @@ namespace mobius {
 //!
 //! Distance field represented by voxelization and its associated real
 //! function to calculate the distance values.
-class poly_AdaptiveDistanceField : public poly_RealFunc
+class poly_AdaptiveDistanceField : public poly_BaseDistanceField
 {
 public:
 
   //! Ctor.
-  //! \param[in] bndMode  boundary evaluation mode.
-  //! \param[in] progress progress notifier.
-  //! \param[in] plotter  imperative plotter.
+  //! \param[in] isUniform indicates whether uniform voxelization is requested.
+  //! \param[in] precision distance field approximation precision.
+  //! \param[in] bndMode   boundary evaluation mode.
+  //! \param[in] progress  progress notifier.
+  //! \param[in] plotter   imperative plotter.
   mobiusPoly_EXPORT
-    poly_AdaptiveDistanceField(const bool         bndMode  = false,
+    poly_AdaptiveDistanceField(const double       precision,
+                               const bool         isUniform,
+                               const bool         bndMode  = false,
                                core_ProgressEntry progress = nullptr,
                                core_PlotterEntry  plotter  = nullptr);
 
   //! Ctor with initialization.
-  //! \param[in] pRoot    octree to handle.
-  //! \param[in] bndMode  boundary evaluation mode.
-  //! \param[in] progress progress notifier.
-  //! \param[in] plotter  imperative plotter.
+  //! \param[in] pRoot     octree to handle.
+  //! \param[in] isUniform indicates whether uniform voxelization is requested.
+  //! \param[in] precision distance field approximation precision.
+  //! \param[in] bndMode   boundary evaluation mode.
+  //! \param[in] progress  progress notifier.
+  //! \param[in] plotter   imperative plotter.
   mobiusPoly_EXPORT
     poly_AdaptiveDistanceField(poly_SVO*          pRoot,
+                               const double       precision,
+                               const bool         isUniform,
                                const bool         bndMode  = false,
                                core_ProgressEntry progress = nullptr,
                                core_PlotterEntry  plotter  = nullptr);
@@ -95,9 +103,8 @@ public:
   mobiusPoly_EXPORT bool
     Build(const double                minCellSize,
           const double                maxCellSize,
-          const double                precision,
-          const bool                  isUniform,
-          const t_ptr<poly_RealFunc>& func);
+          
+          const t_ptr<poly_RealFunc>& func) override;
 
 public:
 
@@ -112,7 +119,7 @@ public:
 public:
 
   //! \return root SVO node.
-  poly_SVO* GetRoot()
+  poly_SVO* GetRoot() override
   {
     return m_pRoot;
   }
@@ -139,17 +146,21 @@ public:
   //! \return copy of the field pointing to the same octree.
   t_ptr<poly_AdaptiveDistanceField> ShallowCopy() const
   {
-    t_ptr<poly_AdaptiveDistanceField> res = new poly_AdaptiveDistanceField;
+    t_ptr<poly_AdaptiveDistanceField>
+      res = new poly_AdaptiveDistanceField(m_fPrecision, m_bUniform);
+    //
     res->SetRoot(m_pRoot);
     return res;
   }
 
 protected:
 
-  poly_SVO*          m_pRoot;    //!< Root voxel.
-  bool               m_bBndMode; //!< Boundary evaluation mode.
-  core_ProgressEntry m_progress; //!< Progress notifier.
-  core_PlotterEntry  m_plotter;  //!< Imperative plotter.
+  poly_SVO*          m_pRoot;      //!< Root voxel.
+  double             m_fPrecision; //!< Distance field approximation precision.
+  bool               m_bUniform;   //!< Indicates whether uniform mode is enabled.
+  bool               m_bBndMode;   //!< Boundary evaluation mode.
+  core_ProgressEntry m_progress;   //!< Progress notifier.
+  core_PlotterEntry  m_plotter;    //!< Imperative plotter.
 
 };
 

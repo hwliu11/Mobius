@@ -329,27 +329,35 @@ namespace mobius
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_AdaptiveDistanceField::poly_AdaptiveDistanceField(const bool         bndMode,
+mobius::poly_AdaptiveDistanceField::poly_AdaptiveDistanceField(const double       precision,
+                                                               const bool         isUniform,
+                                                               const bool         bndMode,
                                                                core_ProgressEntry progress,
                                                                core_PlotterEntry  plotter)
-: poly_RealFunc (),
-  m_pRoot       (nullptr),
-  m_bBndMode    (bndMode),
-  m_progress    (progress),
-  m_plotter     (plotter)
+: poly_BaseDistanceField (),
+  m_pRoot                (nullptr),
+  m_fPrecision           (precision),
+  m_bUniform             (isUniform),
+  m_bBndMode             (bndMode),
+  m_progress             (progress),
+  m_plotter              (plotter)
 {}
 
 //-----------------------------------------------------------------------------
 
 mobius::poly_AdaptiveDistanceField::poly_AdaptiveDistanceField(poly_SVO*          octree,
+                                                               const double       precision,
+                                                               const bool         isUniform,
                                                                const bool         bndMode,
                                                                core_ProgressEntry progress,
                                                                core_PlotterEntry  plotter)
-: poly_RealFunc (),
-  m_pRoot       (octree),
-  m_bBndMode    (bndMode),
-  m_progress    (progress),
-  m_plotter     (plotter)
+: poly_BaseDistanceField (),
+  m_fPrecision           (precision),
+  m_bUniform             (isUniform),
+  m_pRoot                (octree),
+  m_bBndMode             (bndMode),
+  m_progress             (progress),
+  m_plotter              (plotter)
 {
   m_domainMin = m_pRoot->GetCornerMin();
   m_domainMax = m_pRoot->GetCornerMax();
@@ -364,8 +372,6 @@ mobius::poly_AdaptiveDistanceField::~poly_AdaptiveDistanceField()
 
 bool mobius::poly_AdaptiveDistanceField::Build(const double                minCellSize,
                                                const double                maxCellSize,
-                                               const double                precision,
-                                               const bool                  isUniform,
                                                const t_ptr<poly_RealFunc>& func)
 {
   if ( func.IsNull() )
@@ -413,8 +419,8 @@ bool mobius::poly_AdaptiveDistanceField::Build(const double                minCe
   poly_VoxelSplitTask(m_pRoot,
                       minCellSize,
                       maxCellSize,
-                      precision,
-                      isUniform,
+                      m_fPrecision,
+                      m_bUniform,
                       func,
                       0u).execute();
 

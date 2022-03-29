@@ -67,6 +67,16 @@ public:
   mobiusPoly_EXPORT static bool
     IsZeroCrossing(poly_SVO* pNode);
 
+public:
+
+  virtual bool
+    Build(const double                minCellSize,
+          const double                maxCellSize,
+          const t_ptr<poly_RealFunc>& func) = 0;
+
+  virtual poly_SVO*
+    GetRoot() = 0;
+
 };
 
 }
