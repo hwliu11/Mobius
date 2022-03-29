@@ -37,6 +37,7 @@ set (CPP_FILES
 
 set (fields_H_FILES
   fields/poly_AdaptiveDistanceField.h
+  fields/poly_BaseDistanceField.h
   fields/poly_BooleanFunc.h
   fields/poly_CommonFunc.h
   fields/poly_DifferenceFunc.h
@@ -51,6 +52,7 @@ set (fields_H_FILES
 )
 set (fields_CPP_FILES
   fields/poly_AdaptiveDistanceField.cpp
+  fields/poly_BaseDistanceField.cpp
   fields/poly_CommonFunc.cpp
   fields/poly_DifferenceFunc.cpp
   fields/poly_DistanceFunc.cpp

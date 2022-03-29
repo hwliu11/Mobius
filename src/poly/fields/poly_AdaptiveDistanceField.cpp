@@ -329,27 +329,6 @@ namespace mobius
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_AdaptiveDistanceField::IsIn(poly_SVO* pNode)
-{
-  return pNode->IsNegative();
-}
-
-//-----------------------------------------------------------------------------
-
-bool mobius::poly_AdaptiveDistanceField::IsOut(poly_SVO* pNode)
-{
-  return pNode->IsPositive();
-}
-
-//-----------------------------------------------------------------------------
-
-bool mobius::poly_AdaptiveDistanceField::IsZeroCrossing(poly_SVO* pNode)
-{
-  return pNode->IsZeroCrossing();
-}
-
-//-----------------------------------------------------------------------------
-
 mobius::poly_AdaptiveDistanceField::poly_AdaptiveDistanceField(const bool         bndMode,
                                                                core_ProgressEntry progress,
                                                                core_PlotterEntry  plotter)
