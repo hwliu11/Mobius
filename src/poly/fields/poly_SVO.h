@@ -37,6 +37,9 @@
 // Core includes
 #include <mobius/core_XYZ.h>
 
+// Standard includes
+#include <map>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_POLY
@@ -47,13 +50,39 @@ class poly_SVO
 {
 public:
 
+  //! Voxelization summary.
+  struct Summary
+  {
+    int                   membership; //!< Membership qualifier.
+    std::map<double, int> grains;     //!< Voxelization grains <size, count>.
+
+    Summary() : membership(0) {} //!< Default ctor.
+
+    //! Adds another cell to the summary.
+    //! \param[in] size the cell size.
+    mobiusPoly_EXPORT void
+      AddCell(const double size);
+
+    //! Dumps summary to the passed output stream.
+    //! \param[in,out] oss the target output stream.
+    mobiusPoly_EXPORT void
+      Dump(std::ostream& oss) const;
+
+    //! Dumps summary to the passed output stream in JSON format.
+    //! \param[in,out] oss the target output stream.
+    mobiusPoly_EXPORT void
+      DumpJSON(std::ostream& oss) const;
+  };
+
+public:
+
   //! Checks if the passed corner ID is valid.
   //! \param[in] id ID to check.
   //! \return true/false.
   mobiusPoly_EXPORT static bool
     IsValidCornerId(const size_t id);
 
-  //! Returns the ID of one of the 8 cell corners. This ID is determined
+  //! Returns the ID of one of the 8-th cell corners. This ID is determined
   //! by the passed locations of the corresponding `x`, `y` and `z` coordinates.
   //! The passed arguments may have values 0 and 1, hence there are 8
   //! combinations (8 corners).
@@ -268,6 +297,21 @@ public:
   mobiusPoly_EXPORT unsigned long long
     GetMemoryInBytes(int& numNodes) const;
 
+  //! Collects the voxelization information for the octree
+  //! starting from this SVO node. The outcome statistics
+  //! is available in the output `summary` argument. The
+  //! summary contains grains sizes and their quantities,
+  //! where sizes are taken as fractions of the occupied
+  //! space. E.g., for a domain `D=10x8x6`, a single split
+  //! would result in eight cells of `5x4x3` giving the grain
+  //! size of 1/2.
+  //!
+  //! \param[in]  sm      the membership classifier to filter SVO.
+  //! \param[out] summary the outcome summary structure.
+  mobiusPoly_EXPORT void
+    CollectSummary(const int sm,
+                   Summary&  summary) const;
+
 public:
 
   //! \return min corner which is equal to P0 point.
@@ -349,6 +393,20 @@ public:
   }
 
 protected:
+
+  //! Recursively visits SVO nodes to add leaves to the passed output
+  //! collection.
+  //! \param[in]     pNode  SVO node to visit.
+  //! \param[in]     sm     scalar membership classifier.
+  //! \param[out]    leaves collected leaves.
+  //! \param[out]    depths collected leaves' depths.
+  //! \param[in,out] depth  the currently reached depth.
+  mobiusPoly_EXPORT void
+    getLeaves(const poly_SVO*               pNode,
+              const int                     sm,
+              std::vector<const poly_SVO*>& leaves,
+              std::vector<long long>&       depths,
+              const long long               depth) const;
 
   //! Recursively visits SVO nodes to add leaves to the passed output
   //! collection.

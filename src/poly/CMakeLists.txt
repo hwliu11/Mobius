@@ -36,10 +36,10 @@ set (CPP_FILES
 #------------------------------------------------------------------------------
 
 set (fields_H_FILES
+  fields/poly_AdaptiveDistanceField.h
   fields/poly_BooleanFunc.h
   fields/poly_CommonFunc.h
   fields/poly_DifferenceFunc.h
-  fields/poly_DistanceField.h
   fields/poly_DistanceFunc.h
   fields/poly_GridTessellator.h
   fields/poly_MarchingCubes.h
@@ -50,9 +50,9 @@ set (fields_H_FILES
   fields/poly_UnionFunc.h
 )
 set (fields_CPP_FILES
+  fields/poly_AdaptiveDistanceField.cpp
   fields/poly_CommonFunc.cpp
   fields/poly_DifferenceFunc.cpp
-  fields/poly_DistanceField.cpp
   fields/poly_DistanceFunc.cpp
   fields/poly_GridTessellator.cpp
   fields/poly_MarchingCubes.cpp

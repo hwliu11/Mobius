@@ -28,8 +28,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef poly_DistanceField_HeaderFile
-#define poly_DistanceField_HeaderFile
+#ifndef poly_AdaptiveDistanceField_HeaderFile
+#define poly_AdaptiveDistanceField_HeaderFile
 
 // Poly includes
 #include <mobius/poly_RealFunc.h>
@@ -45,7 +45,7 @@ namespace mobius {
 //!
 //! Distance field represented by voxelization and its associated real
 //! function to calculate the distance values.
-class poly_DistanceField : public poly_RealFunc
+class poly_AdaptiveDistanceField : public poly_RealFunc
 {
 public:
 
@@ -75,9 +75,9 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusPoly_EXPORT
-    poly_DistanceField(const bool         bndMode  = false,
-                       core_ProgressEntry progress = nullptr,
-                       core_PlotterEntry  plotter  = nullptr);
+    poly_AdaptiveDistanceField(const bool         bndMode  = false,
+                               core_ProgressEntry progress = nullptr,
+                               core_PlotterEntry  plotter  = nullptr);
 
   //! Ctor with initialization.
   //! \param[in] pRoot    octree to handle.
@@ -85,15 +85,15 @@ public:
   //! \param[in] progress progress notifier.
   //! \param[in] plotter  imperative plotter.
   mobiusPoly_EXPORT
-    poly_DistanceField(poly_SVO*          pRoot,
-                       const bool         bndMode  = false,
-                       core_ProgressEntry progress = nullptr,
-                       core_PlotterEntry  plotter  = nullptr);
+    poly_AdaptiveDistanceField(poly_SVO*          pRoot,
+                               const bool         bndMode  = false,
+                               core_ProgressEntry progress = nullptr,
+                               core_PlotterEntry  plotter  = nullptr);
 
   //! Dtor.
   //! CAUTION: this dtor does not destroy the octree.
   mobiusPoly_EXPORT virtual
-    ~poly_DistanceField();
+    ~poly_AdaptiveDistanceField();
 
 public:
 
@@ -158,9 +158,9 @@ public:
 
   //! Creates shallow copy of this distance field.
   //! \return copy of the field pointing to the same octree.
-  t_ptr<poly_DistanceField> ShallowCopy() const
+  t_ptr<poly_AdaptiveDistanceField> ShallowCopy() const
   {
-    t_ptr<poly_DistanceField> res = new poly_DistanceField;
+    t_ptr<poly_AdaptiveDistanceField> res = new poly_AdaptiveDistanceField;
     res->SetRoot(m_pRoot);
     return res;
   }

@@ -37,6 +37,49 @@
 
 //-----------------------------------------------------------------------------
 
+void mobius::poly_SVO::Summary::AddCell(const double size)
+{
+  grains[size]++;
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_SVO::Summary::Dump(std::ostream& oss) const
+{
+  for ( const auto& grain : grains )
+  {
+    oss << "Grain " << grain.first << " : " << grain.second << "\n";
+  }
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_SVO::Summary::DumpJSON(std::ostream& oss) const
+{
+  oss << std::setprecision( std::numeric_limits<double>::max_digits10 );
+  oss << "{\n";
+
+  oss << "  \"" << poly_ScalarMembershipUtils::GetName( (poly_ScalarMembership) membership ) << "\": [\n";
+  //
+  int i = 0;
+  for ( const auto& grain : grains )
+  {
+    oss << "    {\n";
+    oss << "      \"" << PropName_Size  << "\": " << grain.first  << ",\n";
+    oss << "      \"" << PropName_Count << "\": " << grain.second <<  "\n";
+    oss << "    }";
+    //
+    if ( i++ < int(grains.size() - 1) )
+      oss << ",";
+    oss << "\n";
+  }
+  oss << "  ]\n";
+
+  oss << "}\n";
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::poly_SVO::IsValidCornerId(const size_t id)
 {
   return id >= 0 && id <= 7;
@@ -379,7 +422,9 @@ unsigned long long
 
 void mobius::poly_SVO::getLeaves(const poly_SVO*               pNode,
                                  const int                     sm,
-                                 std::vector<const poly_SVO*>& leaves) const
+                                 std::vector<const poly_SVO*>& leaves,
+                                 std::vector<long long>&       depths,
+                                 const long long               depth) const
 {
   if ( !pNode )
     return;
@@ -390,18 +435,54 @@ void mobius::poly_SVO::getLeaves(const poly_SVO*               pNode,
     const bool isIn  = pNode->IsNegative     ();
     const bool isOut = pNode->IsPositive     ();
 
-    if ( isOn  && (sm & ScalarMembership_On) ||
-         isIn  && (sm & ScalarMembership_In) ||
-         isOut && (sm & ScalarMembership_Out) )
+    if ( (isOn  && (sm & ScalarMembership_On)) ||
+         (isIn  && (sm & ScalarMembership_In)) ||
+         (isOut && (sm & ScalarMembership_Out)) )
     {
       leaves.push_back(pNode);
+      depths.push_back(depth);
     }
   }
   else
   {
     for ( size_t k = 0; k < 8; ++k )
     {
-      this->getLeaves(pNode->GetChild(k), sm, leaves);
+      this->getLeaves(pNode->GetChild(k), sm, leaves, depths, depth + 1);
     }
   }
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_SVO::getLeaves(const poly_SVO*               pNode,
+                                 const int                     sm,
+                                 std::vector<const poly_SVO*>& leaves) const
+{
+  std::vector<long long> depths;
+  long long              depth = 0;
+
+  this->getLeaves(pNode, sm, leaves, depths, depth);
+}
+
+//-----------------------------------------------------------------------------
+
+void mobius::poly_SVO::CollectSummary(const int sm,
+                                      Summary&  summary) const
+{
+  // Get leaves with their depths.
+  std::vector<const poly_SVO*> leaves;
+  std::vector<long long>       depths;
+  long long                    depth = 0;
+  //
+  this->getLeaves(this, sm, leaves, depths, depth);
+
+  // Add to the summary.
+  for ( auto d : depths )
+  {
+    summary.AddCell( 1./((long long) (1) << d) ); // 64 bits at least.
+  }
+
+  summary.membership = sm;
+
+  return;
 }

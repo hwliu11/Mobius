@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 // Poly includes
-#include <mobius/poly_DistanceField.h>
+#include <mobius/poly_AdaptiveDistanceField.h>
 
 // Standard includes
 #include <algorithm>
@@ -329,30 +329,30 @@ namespace mobius
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::IsIn(poly_SVO* pNode)
+bool mobius::poly_AdaptiveDistanceField::IsIn(poly_SVO* pNode)
 {
   return pNode->IsNegative();
 }
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::IsOut(poly_SVO* pNode)
+bool mobius::poly_AdaptiveDistanceField::IsOut(poly_SVO* pNode)
 {
   return pNode->IsPositive();
 }
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::IsZeroCrossing(poly_SVO* pNode)
+bool mobius::poly_AdaptiveDistanceField::IsZeroCrossing(poly_SVO* pNode)
 {
   return pNode->IsZeroCrossing();
 }
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_DistanceField::poly_DistanceField(const bool         bndMode,
-                                               core_ProgressEntry progress,
-                                               core_PlotterEntry  plotter)
+mobius::poly_AdaptiveDistanceField::poly_AdaptiveDistanceField(const bool         bndMode,
+                                                               core_ProgressEntry progress,
+                                                               core_PlotterEntry  plotter)
 : poly_RealFunc (),
   m_pRoot       (nullptr),
   m_bBndMode    (bndMode),
@@ -362,10 +362,10 @@ mobius::poly_DistanceField::poly_DistanceField(const bool         bndMode,
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_DistanceField::poly_DistanceField(poly_SVO*          octree,
-                                               const bool         bndMode,
-                                               core_ProgressEntry progress,
-                                               core_PlotterEntry  plotter)
+mobius::poly_AdaptiveDistanceField::poly_AdaptiveDistanceField(poly_SVO*          octree,
+                                                               const bool         bndMode,
+                                                               core_ProgressEntry progress,
+                                                               core_PlotterEntry  plotter)
 : poly_RealFunc (),
   m_pRoot       (octree),
   m_bBndMode    (bndMode),
@@ -378,16 +378,16 @@ mobius::poly_DistanceField::poly_DistanceField(poly_SVO*          octree,
 
 //-----------------------------------------------------------------------------
 
-mobius::poly_DistanceField::~poly_DistanceField()
+mobius::poly_AdaptiveDistanceField::~poly_AdaptiveDistanceField()
 {}
 
 //-----------------------------------------------------------------------------
 
-bool mobius::poly_DistanceField::Build(const double                minCellSize,
-                                       const double                maxCellSize,
-                                       const double                precision,
-                                       const bool                  isUniform,
-                                       const t_ptr<poly_RealFunc>& func)
+bool mobius::poly_AdaptiveDistanceField::Build(const double                minCellSize,
+                                               const double                maxCellSize,
+                                               const double                precision,
+                                               const bool                  isUniform,
+                                               const t_ptr<poly_RealFunc>& func)
 {
   if ( func.IsNull() )
   {
@@ -444,9 +444,9 @@ bool mobius::poly_DistanceField::Build(const double                minCellSize,
 
 //-----------------------------------------------------------------------------
 
-double mobius::poly_DistanceField::Eval(const double x,
-                                        const double y,
-                                        const double z) const
+double mobius::poly_AdaptiveDistanceField::Eval(const double x,
+                                                const double y,
+                                                const double z) const
 {
   if ( m_pRoot != nullptr )
     return m_pRoot->Eval( t_xyz(x, y, z), m_bBndMode );

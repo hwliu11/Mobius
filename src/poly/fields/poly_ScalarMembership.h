@@ -34,6 +34,15 @@
 // Poly includes
 #include <mobius/poly.h>
 
+#define PropName_Inside          "inside"
+#define PropName_On              "on"
+#define PropName_InsideOn        "insideOn"
+#define PropName_Outside         "outside"
+#define PropName_OutsideOn       "outsideOn"
+#define PropName_InsideOutsideOn "insideOutsideOn"
+#define PropName_Size            "size"
+#define PropName_Count           "count"
+
 namespace mobius {
 
 //! \ingroup MOBIUS_POLY
@@ -51,6 +60,31 @@ enum poly_ScalarMembership
   ScalarMembership_OnOut   = ScalarMembership_On | ScalarMembership_Out,
   ScalarMembership_OnInOut = ScalarMembership_On | ScalarMembership_In | ScalarMembership_Out
 };
+
+//! \ingroup MOBIUS_POLY
+//!
+//! Auxiliary functions for working with membership qualifiers.
+namespace poly_ScalarMembershipUtils
+{
+  //! Returns membership qualifier's name.
+  //! \param[in] mc the membership qualifier in question.
+  //! \return const char pointer to the membership qualifier's name.
+  inline const char* GetName(const poly_ScalarMembership mc)
+  {
+    switch ( mc )
+    {
+      case ScalarMembership_In:      return PropName_Inside;
+      case ScalarMembership_On:      return PropName_On;
+      case ScalarMembership_Out:     return PropName_Outside;
+      case ScalarMembership_OnIn:    return PropName_InsideOn;
+      case ScalarMembership_OnOut:   return PropName_OutsideOn;
+      case ScalarMembership_OnInOut: return PropName_InsideOutsideOn;
+      default: break;
+    }
+
+    return "Unknown";
+  }
+}
 
 }
 
