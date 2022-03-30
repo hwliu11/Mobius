@@ -35,6 +35,8 @@
 #include <algorithm>
 #include <cfloat>
 
+#define DefaultConfusion 1e-5
+
 //-----------------------------------------------------------------------------
 
 void mobius::poly_SVO::Summary::AddCell(const double size)
@@ -207,7 +209,9 @@ bool mobius::poly_SVO::IsNegative() const
 {
   for ( size_t k = 0; k < 8; ++k )
   {
-    if ( this->GetScalar(k) > 0 )
+    const double sc = this->GetScalar(k);
+
+    if ( (fabs(sc) > DefaultConfusion) && (sc > 0) )
       return false;
   }
 
@@ -220,7 +224,9 @@ bool mobius::poly_SVO::IsPositive() const
 {
   for ( size_t k = 0; k < 8; ++k )
   {
-    if ( this->GetScalar(k) < 0 )
+    const double sc = this->GetScalar(k);
+
+    if ( (fabs(sc) > DefaultConfusion) && (sc < 0) )
       return false;
   }
 
@@ -231,6 +237,16 @@ bool mobius::poly_SVO::IsPositive() const
 
 bool mobius::poly_SVO::IsZeroCrossing() const
 {
+  // Touches the boundary?
+  for ( size_t k = 0; k < 8; ++k )
+  {
+    const double sc = this->GetScalar(k);
+
+    if ( fabs(sc) < DefaultConfusion )
+      return true;
+  }
+
+  // Cross the boundary?
   return !this->IsNegative() && !this->IsPositive();
 }
 
