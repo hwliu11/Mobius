@@ -39,9 +39,11 @@
 #include <mobius/geom_PlaneSurface.h>
 
 // Eigen includes
-#pragma warning(disable : 4701 4702)
+#pragma warning(push, 0)
+#pragma warning(disable : 4702 4701)
 #include <Eigen/Dense>
-#pragma warning(default : 4701 4702)
+#pragma warning(default : 4702 4701)
+#pragma warning(pop)
 
 // Standard includes
 #include <map>

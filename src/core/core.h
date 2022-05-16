@@ -52,8 +52,9 @@
 
 #define _USE_MATH_DEFINES
 
-#define fmin(a, b) (((a) < (b)) ? (a) : (b))
-#define fmax(a, b) (((a) > (b)) ? (a) : (b))
+// The following defines would conflict with Eigen
+//#define fmin(a, b) (((a) < (b)) ? (a) : (b))
+//#define fmax(a, b) (((a) > (b)) ? (a) : (b))
 
 #define core_NotUsed(x) x
 
