@@ -225,6 +225,6 @@ protected:
 //! Convenience shortcut.
 typedef geom_PlaneSurface t_plane;
 
-};
+}
 
 #endif

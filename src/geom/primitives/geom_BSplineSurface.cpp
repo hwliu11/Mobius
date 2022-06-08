@@ -345,9 +345,9 @@ namespace BSplSurfProj
     core_Ptr<geom_BSplineSurface> m_S; //!< Surface in question.
     t_xyz                         m_P; //!< Last evaluated point.
   };
-};
+}
 
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -369,11 +369,11 @@ mobius::geom_BSplineSurface::geom_BSplineSurface(const std::vector< std::vector<
 : geom_Surface()
 {
   std::vector<double> Uvec;
-  for ( size_t i = 0; i < nU; ++i )
+  for ( size_t i = 0; (int)i < nU; ++i )
     Uvec.push_back(U[i]);
 
   std::vector<double> Vvec;
-  for ( size_t i = 0; i < nV; ++i )
+  for ( size_t i = 0; (int)i < nV; ++i )
     Vvec.push_back(V[i]);
 
   this->init(Poles, Uvec, Vvec, p, q);

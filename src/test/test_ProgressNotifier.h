@@ -179,6 +179,6 @@ private:
 
 };
 
-};
+}
 
 #endif

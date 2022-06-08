@@ -85,6 +85,6 @@ public:
 //! Convenience shortcut.
 typedef geom_Curve t_curve;
 
-};
+}
 
 #endif

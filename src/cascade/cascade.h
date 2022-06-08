@@ -201,6 +201,6 @@ namespace mobius
       GetMobiusMesh(const Handle(Poly_Triangulation)& tris);
 
   };
-};
+}
 
 #endif

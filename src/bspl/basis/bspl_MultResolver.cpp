@@ -51,7 +51,7 @@ void mobius::bspl_MultResolver::Resolve(const double u)
   int foundIdx = -1;
   t_knot_multiset::elem foundStruct;
   //
-  for ( int i = 0; i < Knots.size(); ++i )
+  for ( int i = 0; i < (int)Knots.size(); ++i )
   {
     const t_knot_multiset::elem& knotWithMult = Knots[i];
     if ( fabs(knotWithMult.u - u) < DBL_EPSILON )

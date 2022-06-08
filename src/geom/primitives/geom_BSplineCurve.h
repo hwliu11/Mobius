@@ -278,6 +278,6 @@ private:
 //! Convenience shortcut.
 typedef geom_BSplineCurve t_bcurve;
 
-};
+}
 
 #endif

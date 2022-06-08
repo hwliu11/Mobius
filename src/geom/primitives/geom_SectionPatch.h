@@ -87,6 +87,6 @@ public:
 //! Handy shortcut for section patch type name.
 typedef geom_SectionPatch t_spatch;
 
-};
+}
 
 #endif

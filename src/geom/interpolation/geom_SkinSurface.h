@@ -188,6 +188,6 @@ private:
 
 };
 
-};
+}
 
 #endif

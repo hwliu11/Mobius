@@ -140,7 +140,7 @@ void cascade_BSplineCurve_Eval::Evaluate(int* theDimension,
   }
 }
 
-};
+}
 
 //-----------------------------------------------------------------------------
 // Mobius-OCCT connector

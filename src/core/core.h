@@ -56,7 +56,7 @@
 //#define fmin(a, b) (((a) < (b)) ? (a) : (b))
 //#define fmax(a, b) (((a) > (b)) ? (a) : (b))
 
-#define core_NotUsed(x) x
+#define core_NotUsed(x)
 
 #define SLASH_STR "\\"
 

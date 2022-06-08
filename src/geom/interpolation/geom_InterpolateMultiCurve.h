@@ -106,6 +106,6 @@ private:
 
 };
 
-};
+}
 
 #endif

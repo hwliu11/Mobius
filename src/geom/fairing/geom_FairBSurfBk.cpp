@@ -52,10 +52,10 @@ mobius::geom_FairBSurfBk::geom_FairBSurfBk(const t_ptr<t_bsurf>&                
                                            const double                              lambda,
                                            t_ptr<t_alloc2d>                          alloc)
 : geom_FairBSurfCoeff (lambda),
-  m_surface           (surface),
-  m_iCoord            (coord),
   m_iK                (k),
   m_Nk                (Nk),
+  m_surface           (surface),
+  m_iCoord            (coord),
   m_alloc             (alloc)
 {}
 

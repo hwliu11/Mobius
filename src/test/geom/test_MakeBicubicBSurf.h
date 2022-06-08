@@ -137,6 +137,6 @@ private:
 
 };
 
-};
+}
 
 #endif

@@ -37,7 +37,7 @@
 // Common bspl includes
 #include <mobius/bspl_excMaxDegreeViolation.h>
 
-#define mobiusBSpl_NotUsed(x) x
+#define mobiusBSpl_NotUsed(x)
 
 #if defined _WIN32
   #if defined mobiusBSpl_EXPORTS

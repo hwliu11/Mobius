@@ -67,7 +67,7 @@ public:
 
   //! Sets fairing coefficient.
   //! \param[in] lambda fairing coefficient.
-  double SetLambda(const double lambda)
+  void SetLambda(const double lambda)
   {
     m_fLambda = lambda;
   }
@@ -98,11 +98,11 @@ public:
 
     // Integrate in each span individually for better accuracy.
     double result = 0;
-    for ( size_t i = iFirst; i < iLast; ++i )
+    for ( size_t i = iFirst; (int)i < iLast; ++i )
     {
       if ( U[i] == U[i+1] ) continue; // Skip multiple knots.
 
-      for ( size_t j = jFirst; j < jLast; ++j )
+      for ( size_t j = jFirst; (int)j < jLast; ++j )
       {
         if ( V[j] == V[j+1] ) continue; // Skip multiple knots.
 
@@ -126,6 +126,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

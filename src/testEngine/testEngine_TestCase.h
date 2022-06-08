@@ -330,6 +330,6 @@ private:
 
 };
 
-};
+}
 
 #endif

@@ -42,12 +42,12 @@
 mobius::geom_PlaneSurface::geom_PlaneSurface()
 //
 : geom_Surface ( ),
+  m_D1         ( 1., 0., 0. ),
+  m_D2         ( 0., 1., 0. ),
   m_fUMin      ( -core_Precision::Infinity() ),
   m_fUMax      (  core_Precision::Infinity() ),
   m_fVMin      ( -core_Precision::Infinity() ),
-  m_fVMax      (  core_Precision::Infinity() ),
-  m_D1         ( 1., 0., 0. ),
-  m_D2         ( 0., 1., 0. )
+  m_fVMax      (  core_Precision::Infinity() )
 {}
 
 //-----------------------------------------------------------------------------
@@ -57,13 +57,13 @@ mobius::geom_PlaneSurface::geom_PlaneSurface(const t_xyz& O,
                                              const t_xyz& D2)
 //
 : geom_Surface ( ),
+  m_origin     ( O ),
+  m_D1         ( D1 ),
+  m_D2         ( D2 ),
   m_fUMin      ( -core_Precision::Infinity() ),
   m_fUMax      (  core_Precision::Infinity() ),
   m_fVMin      ( -core_Precision::Infinity() ),
-  m_fVMax      (  core_Precision::Infinity() ),
-  m_origin     ( O ),
-  m_D1         ( D1 ),
-  m_D2         ( D2 )
+  m_fVMax      (  core_Precision::Infinity() )
 {}
 
 //-----------------------------------------------------------------------------

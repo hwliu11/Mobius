@@ -81,6 +81,6 @@ private:
   static outcome buildAveragePlane01 (const int funcID);
 };
 
-};
+}
 
 #endif

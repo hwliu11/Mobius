@@ -47,6 +47,6 @@ class geom_excBCurveCtor : public std::exception
   }
 };
 
-};
+}
 
 #endif

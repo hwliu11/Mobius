@@ -89,6 +89,6 @@ private:
 
 };
 
-};
+}
 
 #endif

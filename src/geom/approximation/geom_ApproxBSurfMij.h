@@ -78,8 +78,8 @@ private:
 
 protected:
 
-  int m_iJ; //!< J index.
   int m_iI; //!< I index.
+  int m_iJ; //!< J index.
 
 };
 

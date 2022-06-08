@@ -46,7 +46,7 @@ Handle(TColStd_HArray1OfReal)
   Handle(TColStd_HArray1OfReal)
     res = new TColStd_HArray1OfReal( 0, int( Knots.size() ) - 1 );
   //
-  for ( int i = 0; i < Knots.size(); ++i )
+  for ( int i = 0; i < (int)Knots.size(); ++i )
   {
     res->SetValue( i, Knots[i].u );
   }
@@ -62,7 +62,7 @@ Handle(TColStd_HArray1OfInteger)
   Handle(TColStd_HArray1OfInteger)
     res = new TColStd_HArray1OfInteger( 0, int( Knots.size() ) - 1 );
   //
-  for ( int i = 0; i < Knots.size(); ++i )
+  for ( int i = 0; i < (int)Knots.size(); ++i )
   {
     res->SetValue( i, Knots[i].m );
   }

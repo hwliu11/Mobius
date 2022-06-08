@@ -203,11 +203,9 @@ private:
   //! Callback on the next evaluation of the objective function.
   //! \param[in] u next u.
   //! \param[in] v next v.
-  virtual void onNextEvaluation(const double u, const double v)
-  {
-    core_NotUsed(u);
-    core_NotUsed(v);
-  }
+  virtual void onNextEvaluation(const double core_NotUsed(u),
+                                const double core_NotUsed(v))
+  {}
 
 private:
 

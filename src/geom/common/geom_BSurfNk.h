@@ -258,6 +258,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

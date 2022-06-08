@@ -54,6 +54,6 @@ enum geom_FairingMemBlockSurf
   memBlockSurf_BSplineSurfEvalInternal
 };
 
-};
+}
 
 #endif

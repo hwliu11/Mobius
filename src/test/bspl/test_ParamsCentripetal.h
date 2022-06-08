@@ -90,6 +90,6 @@ private:
 
 };
 
-};
+}
 
 #endif

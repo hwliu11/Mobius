@@ -400,7 +400,7 @@ void mobius::geom_SectionLine::Split(const t_ptr<geom_SectionLine>& source,
   const int n_pts = source->Pts->GetNumberOfPoints();
 
   // Check if the passed point lies on a border
-  if ( idx == 0 || idx == n_pts - 1 )
+  if ( idx == 0 || (int)idx == n_pts - 1 )
   {
     splitting_done = false;
     return;
@@ -408,7 +408,7 @@ void mobius::geom_SectionLine::Split(const t_ptr<geom_SectionLine>& source,
 
   // Construct slice before the point
   slice_before = new geom_SectionLine(source->ID, new t_pcloud);
-  for ( int p = 0; p <= idx; ++p )
+  for ( int p = 0; p <= (int)idx; ++p )
     slice_before->Pts->AddPoint( source->Pts->GetPoint(p) );
 
   // Construct slice after the point

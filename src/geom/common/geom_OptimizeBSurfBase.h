@@ -187,6 +187,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

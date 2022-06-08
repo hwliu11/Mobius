@@ -92,6 +92,6 @@ private:
 
 };
 
-};
+}
 
 #endif

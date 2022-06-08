@@ -227,6 +227,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

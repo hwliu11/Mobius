@@ -101,6 +101,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

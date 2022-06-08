@@ -133,9 +133,9 @@ double mobius::geom_GordonSurface::GetMaxParameter_V() const
 //! \param u [in] U parameter value to evaluate surface for.
 //! \param v [in] V parameter value to evaluate surface for.
 //! \param C [out] 3D point corresponding to the given parameter pair.
-void mobius::geom_GordonSurface::Eval(const double u,
-                                      const double v,
-                                      t_xyz&       C) const
+void mobius::geom_GordonSurface::Eval(const double geom_NotUsed(u),
+                                      const double geom_NotUsed(v),
+                                      t_xyz&       geom_NotUsed(C)) const
 {
   /*const int n = this->get_n();
   const int m = this->get_m();
@@ -240,9 +240,9 @@ double mobius::geom_GordonSurface::A_ks(const int k,
   return A;
 }
 
-double mobius::geom_GordonSurface::B_ks(const int k,
-                                        const int s,
-                                        const double t,
+double mobius::geom_GordonSurface::B_ks(const int                  k,
+                                        const int                  s,
+                                        const double               geom_NotUsed(t),
                                         const std::vector<double>& t_knots) const
 {
   double B = 1.0;
@@ -258,10 +258,10 @@ double mobius::geom_GordonSurface::B_ks(const int k,
   return B;
 }
 
-double mobius::geom_GordonSurface::DA_ks(const int k,
-                                         const int s,
-                                         const double t,
-                                         const std::vector<double>& t_knots) const
+double mobius::geom_GordonSurface::DA_ks(const int                  geom_NotUsed(k),
+                                         const int                  geom_NotUsed(s),
+                                         const double               geom_NotUsed(t),
+                                         const std::vector<double>& geom_NotUsed(t_knots)) const
 {
   /*double D = 1.0;
   for ( int i = 0; i <= s; ++i )

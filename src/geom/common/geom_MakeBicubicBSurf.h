@@ -128,6 +128,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

@@ -119,6 +119,6 @@ private:
 
 };
 
-};
+}
 
 #endif

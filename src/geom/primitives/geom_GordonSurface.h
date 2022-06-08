@@ -152,6 +152,6 @@ private:
 //! Convenience shortcut.
 typedef geom_GordonSurface t_gordon_surf;
 
-};
+}
 
 #endif

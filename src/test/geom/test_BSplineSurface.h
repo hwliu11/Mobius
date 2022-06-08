@@ -126,6 +126,6 @@ private:
 
 };
 
-};
+}
 
 #endif

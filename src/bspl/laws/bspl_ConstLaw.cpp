@@ -41,9 +41,7 @@ mobius::bspl_ConstLaw::bspl_ConstLaw(const double level)
 //! Evaluates law.
 //! \param u [in] parameter to evaluate law for.
 //! \return evaluated function.
-double mobius::bspl_ConstLaw::Eval(const double u) const
+double mobius::bspl_ConstLaw::Eval(const double mobiusBSpl_NotUsed(u)) const
 {
-  mobiusBSpl_NotUsed(u);
-
   return m_fLevel;
 }

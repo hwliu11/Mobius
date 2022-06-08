@@ -815,10 +815,10 @@ bool poly_Mesh::Subdivide(const poly_TriangleHandle ht)
                                this->AddVertex(mv[2]) };
 
   // Add new triangles.
-  poly_TriangleHandle t0 = this->AddTriangle( htv[0], hmv[0], hmv[2], t.GetFaceRef() );
-  poly_TriangleHandle t1 = this->AddTriangle( hmv[0], htv[1], hmv[1], t.GetFaceRef() );
-  poly_TriangleHandle t2 = this->AddTriangle( hmv[1], htv[2], hmv[2], t.GetFaceRef() );
-  poly_TriangleHandle t3 = this->AddTriangle( hmv[0], hmv[1], hmv[2], t.GetFaceRef() );
+  this->AddTriangle( htv[0], hmv[0], hmv[2], t.GetFaceRef() );
+  this->AddTriangle( hmv[0], htv[1], hmv[1], t.GetFaceRef() );
+  this->AddTriangle( hmv[1], htv[2], hmv[2], t.GetFaceRef() );
+  this->AddTriangle( hmv[0], hmv[1], hmv[2], t.GetFaceRef() );
 
   // Remove the subdivided triangle.
   this->RemoveTriangle(ht);
@@ -1076,8 +1076,8 @@ void poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
           {
             const poly_Edge& eCandidate = m_edges[t.hEdges[j].iIdx];
 
-            if ( (eCandidate.hVertices[0] == hv) && (eCandidate.hVertices[1] == t.hVertices[k]) ||
-                 (eCandidate.hVertices[1] == hv) && (eCandidate.hVertices[0] == t.hVertices[k]) )
+            if ( ((eCandidate.hVertices[0] == hv) && (eCandidate.hVertices[1] == t.hVertices[k])) ||
+                 ((eCandidate.hVertices[1] == hv) && (eCandidate.hVertices[0] == t.hVertices[k])) )
               eh = t.hEdges[j];
           }
 
@@ -1124,7 +1124,7 @@ void poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle                
 
 bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
                         const double          normDevRad,
-                        const double          planeDevRad,
+                        const double          poly_NotUsed(planeDevRad),
                         const bool            checkJacobian,
                         const bool            checkWing,
                         poly_TriangleHandle&  ht0,
@@ -1810,14 +1810,14 @@ bool poly_Mesh::SplitEdge(const poly_EdgeHandle he)
     {
       const poly_Edge& te = m_edges[t.hEdges[j].iIdx];
 
-      if ( (te.hVertices[0] == x)        && (te.hVertices[1] == hOppVert) ||
-           (te.hVertices[0] == hOppVert) && (te.hVertices[1] == x) )
+      if ( ((te.hVertices[0] == x)        && (te.hVertices[1] == hOppVert)) ||
+           ((te.hVertices[0] == hOppVert) && (te.hVertices[1] == x)) )
       {
         ex = t.hEdges[j];
       }
 
-      if ( (te.hVertices[0] == y)        && (te.hVertices[1] == hOppVert) ||
-           (te.hVertices[0] == hOppVert) && (te.hVertices[1] == y) )
+      if ( ((te.hVertices[0] == y)        && (te.hVertices[1] == hOppVert)) ||
+           ((te.hVertices[0] == hOppVert) && (te.hVertices[1] == y)) )
       {
         ey = t.hEdges[j];
       }

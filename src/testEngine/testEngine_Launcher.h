@@ -262,6 +262,6 @@ private:
 
 };
 
-};
+}
 
 #endif

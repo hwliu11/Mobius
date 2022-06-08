@@ -95,7 +95,7 @@ bool mobius::bspl_Decompose::operator()(const int                          n,
         if ( b < m )
         {
           // Enlarge output collection.
-          if ( Qw.size() <= nb + 1 )
+          if ( (int)Qw.size() <= nb + 1 )
           {
             Qw.push_back( std::vector<t_xyz>() );
             Qw[nb + 1].resize(p + 1);

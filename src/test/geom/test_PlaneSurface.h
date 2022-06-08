@@ -85,6 +85,6 @@ private:
   static outcome invertPoint02 (const int funcID);
 };
 
-};
+}
 
 #endif

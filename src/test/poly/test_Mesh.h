@@ -140,6 +140,6 @@ private:
 
 };
 
-};
+}
 
 #endif

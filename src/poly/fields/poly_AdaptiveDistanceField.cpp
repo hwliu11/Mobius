@@ -352,9 +352,9 @@ mobius::poly_AdaptiveDistanceField::poly_AdaptiveDistanceField(poly_SVO*        
                                                                core_ProgressEntry progress,
                                                                core_PlotterEntry  plotter)
 : poly_BaseDistanceField (),
+  m_pRoot                (octree),
   m_fPrecision           (precision),
   m_bUniform             (isUniform),
-  m_pRoot                (octree),
   m_bBndMode             (bndMode),
   m_progress             (progress),
   m_plotter              (plotter)

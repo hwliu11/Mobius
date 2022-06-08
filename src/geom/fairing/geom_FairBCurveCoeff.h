@@ -63,7 +63,7 @@ public:
 
   //! Sets fairing coefficient.
   //! \param[in] lambda fairing coefficient.
-  double SetLambda(const double lambda)
+  void SetLambda(const double lambda)
   {
     m_fLambda = lambda;
   }
@@ -74,6 +74,6 @@ protected:
 
 };
 
-};
+}
 
 #endif

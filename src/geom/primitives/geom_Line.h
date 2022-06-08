@@ -104,6 +104,6 @@ private:
 //! Convenience shortcut.
 typedef geom_Line t_line;
 
-};
+}
 
 #endif

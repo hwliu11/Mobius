@@ -47,6 +47,6 @@ class geom_excBSurfaceCtor : public std::exception
   }
 };
 
-};
+}
 
 #endif

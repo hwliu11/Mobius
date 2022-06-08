@@ -384,6 +384,6 @@ private:
 //! Convenience shortcut.
 typedef geom_BSplineSurface t_bsurf;
 
-};
+}
 
 #endif

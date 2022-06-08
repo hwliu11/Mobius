@@ -252,6 +252,6 @@ private:
   TProps m_props;
 };
 
-};
+}
 
 #endif
