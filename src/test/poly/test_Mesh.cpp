@@ -35,6 +35,7 @@
 #include <mobius/test_CommonFacilities.h>
 
 // Poly includes
+#include <mobius/poly_ReadOBJ.h>
 #include <mobius/poly_ReadPLY.h>
 #include <mobius/poly_ReadSTL.h>
 
@@ -51,6 +52,7 @@
 #define filename_mesh_008 "mesh/mesh_flip-edge_02.stl"
 #define filename_mesh_009 "mesh/mesh_005.stl"
 #define filename_mesh_010 "mesh/mesh_006.stl"
+#define filename_mesh_011 "mesh/grabcad_obj1.obj"
 
 //-----------------------------------------------------------------------------
 
@@ -197,6 +199,47 @@ mobius::outcome
 
 //-----------------------------------------------------------------------------
 
+//! Common function to test OBJ reader.
+mobius::outcome
+  mobius::test_Mesh::testReadOBJ(const int   funcID,
+                                 const char* filenameShort,
+                                 const int   refNumVertices,
+                                 const int   refNumEdges,
+                                 const int   refNumTriangles,
+                                 const int   refNumQuads)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Access common facilities.
+  t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
+
+  // File to read.
+  std::string
+    filename = core::str::slashed( core::env::MobiusTestData() )
+             + filenameShort;
+
+  // Prepare reader.
+  poly_ReadOBJ reader(cf->ProgressNotifier, nullptr);
+
+  // Read OBJ.
+  if ( !reader.Perform(filename) )
+  {
+    cf->ProgressNotifier.SendLogMessage(MobiusErr(Normal) << "OBJ reader returned false.");
+    return res.failure();
+  }
+
+  // Verify.
+  const bool isOk = verifyMeshContents(reader.GetResult(),
+                                       refNumVertices,
+                                       refNumEdges,
+                                       refNumTriangles,
+                                       refNumQuads);
+
+  return res.status(isOk);
+}
+
+//-----------------------------------------------------------------------------
+
 //! Test scenario 001.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
@@ -315,6 +358,19 @@ mobius::outcome
   return testReadPLY(funcID,
                      filename_mesh_006,
                      1443, 0, 12, 1325);
+}
+
+//-----------------------------------------------------------------------------
+
+//! Test scenario for reading OBJ.
+//! \param[in] funcID ID of the Test Function.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome
+  mobius::test_Mesh::testReadOBJ01(const int funcID)
+{
+  return testReadOBJ(funcID,
+                     filename_mesh_011,
+                     9989, 0, 176, 9648);
 }
 
 //-----------------------------------------------------------------------------

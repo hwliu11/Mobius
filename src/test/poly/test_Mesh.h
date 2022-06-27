@@ -79,6 +79,7 @@ public:
               << &testReadSTL04
               << &testReadPLY01
               << &testReadPLY02
+              << &testReadOBJ01
               << &refineByMidpoint
               << &computeLinks
               << &flipEdges01
@@ -117,6 +118,13 @@ private:
                              const int   refNumTriangles,
                              const int   refNumQuads);
 
+  static outcome testReadOBJ(const int   funcID,
+                             const char* filenameShort,
+                             const int   refNumVertices,
+                             const int   refNumEdges,
+                             const int   refNumTriangles,
+                             const int   refNumQuads);
+
 private:
 
   static outcome testCreateVertex   (const int funcID);
@@ -126,6 +134,7 @@ private:
   static outcome testReadSTL04      (const int funcID);
   static outcome testReadPLY01      (const int funcID);
   static outcome testReadPLY02      (const int funcID);
+  static outcome testReadOBJ01      (const int funcID);
   static outcome refineByMidpoint   (const int funcID);
   static outcome computeLinks       (const int funcID);
   static outcome flipEdges01        (const int funcID);
