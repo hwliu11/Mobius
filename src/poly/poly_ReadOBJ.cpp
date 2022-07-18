@@ -89,7 +89,7 @@ bool mobius::poly_ReadOBJ::Perform(const std::string& filename)
         std::vector<std::string> nodeTokens;
         core::str::split(tokens[k], "//", nodeTokens);
 
-        nodes.push_back( atoi( nodeTokens[0].c_str() ) );
+        nodes.push_back( atoi( nodeTokens[0].c_str() ) - 1 );
       }
 
       // Add element.
