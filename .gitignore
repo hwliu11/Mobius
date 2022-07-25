@@ -1,6 +1,9 @@
 products
 debug
 release
+cmake-build-debug
+cmake-build-release
+.idea
 build
 install
 custom.bat

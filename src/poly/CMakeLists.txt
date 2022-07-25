@@ -173,8 +173,10 @@ install (TARGETS mobiusPoly
          ARCHIVE DESTINATION libd COMPONENT Library
          LIBRARY DESTINATION libd COMPONENT Library)
 
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusPoly.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusPoly.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+if (MSVC)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusPoly.pdb DESTINATION bind CONFIGURATIONS Debug)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusPoly.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+endif()
 
 install (FILES ${H_FILES}        DESTINATION include/mobius)
 install (FILES ${fields_H_FILES} DESTINATION include/mobius)

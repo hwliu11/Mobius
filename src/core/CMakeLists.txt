@@ -62,7 +62,7 @@ set (blas_CPP_FILES
 # Primitives
 #------------------------------------------------------------------------------
 
-set (primitives_H_FILES 
+set (primitives_H_FILES
   primitives/core_Axis.h
   primitives/core_BBox.h
   primitives/core_IsoTransform.h
@@ -71,7 +71,7 @@ set (primitives_H_FILES
   primitives/core_UV.h
   primitives/core_XYZ.h
 )
-set (primitives_CPP_FILES 
+set (primitives_CPP_FILES
   primitives/core_BBox.cpp
   primitives/core_IsoTransform.cpp
   primitives/core_IsoTransformChain.cpp
@@ -84,7 +84,7 @@ set (primitives_CPP_FILES
 # Utilities
 #------------------------------------------------------------------------------
 
-set (utils_H_FILES 
+set (utils_H_FILES
   utils/core_Chronometer.h
   utils/core_FileDumper.h
   utils/core_HeapAlloc.h
@@ -94,7 +94,7 @@ set (utils_H_FILES
   utils/core_Timer.h
   utils/core_TimeStamp.h
 )
-set (utils_CPP_FILES 
+set (utils_CPP_FILES
   utils/core_Chronometer.cpp
   utils/core_FileDumper.cpp
   utils/core_HeapAlloc.cpp
@@ -165,7 +165,7 @@ if (USE_ADOLC)
 endif()
 
 add_library (mobiusCore SHARED
-  ${H_FILES}            ${CPP_FILES} 
+  ${H_FILES}            ${CPP_FILES}
   ${base_H_FILES}       ${base_CPP_FILES}
   ${blas_H_FILES}       ${blas_CPP_FILES}
   ${primitives_H_FILES} ${primitives_CPP_FILES}
@@ -195,8 +195,10 @@ install (TARGETS mobiusCore
          ARCHIVE DESTINATION libd COMPONENT Library
          LIBRARY DESTINATION libd COMPONENT Library)
 
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusCore.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusCore.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+if (MSVC)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusCore.pdb DESTINATION bind CONFIGURATIONS Debug)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusCore.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+endif()
 
 install (FILES ${H_FILES}            DESTINATION include/mobius)
 install (FILES ${base_H_FILES}       DESTINATION include/mobius)

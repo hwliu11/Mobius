@@ -462,8 +462,10 @@ install (TARGETS mobiusGeom
          ARCHIVE DESTINATION libd COMPONENT Library
          LIBRARY DESTINATION libd COMPONENT Library)
 
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusGeom.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusGeom.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+if (MSVC)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusGeom.pdb DESTINATION bind CONFIGURATIONS Debug)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusGeom.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+endif()
 
 install (FILES ${H_FILES}               DESTINATION include/mobius)
 install (FILES ${approximation_H_FILES} DESTINATION include/mobius)

@@ -30,7 +30,7 @@ set (basis_H_FILES
   basis/bspl_RefineKnots.h
   basis/bspl_UnifyKnots.h
 )
-set (basis_CPP_FILES 
+set (basis_CPP_FILES
   basis/bspl_Decompose.cpp
   basis/bspl_EffectiveN.cpp
   basis/bspl_EffectiveNDers.cpp
@@ -53,7 +53,7 @@ set (laws_H_FILES
   laws/bspl_HermiteLaw.h
   laws/bspl_ScalarLaw.h
 )
-set (laws_CPP_FILES 
+set (laws_CPP_FILES
   laws/bspl_ConstLaw.cpp
   laws/bspl_HermiteLaw.cpp
 )
@@ -62,7 +62,7 @@ set (laws_CPP_FILES
 # Parameterization
 #------------------------------------------------------------------------------
 
-set (parameterization_H_FILES 
+set (parameterization_H_FILES
   parameterization/bspl_KnotsSelection.h
   parameterization/bspl_KnotsAverage.h
   parameterization/bspl_KnotsUniform.h
@@ -71,7 +71,7 @@ set (parameterization_H_FILES
   parameterization/bspl_ParamsChordLength.h
   parameterization/bspl_ParamsUniform.h
 )
-set (parameterization_CPP_FILES 
+set (parameterization_CPP_FILES
   parameterization/bspl_KnotsAverage.cpp
   parameterization/bspl_ParamsCentripetal.cpp
   parameterization/bspl_ParamsChordLength.cpp
@@ -129,7 +129,7 @@ if (USE_ADOLC)
 endif()
 
 add_library (mobiusBSpl SHARED
-  ${H_FILES}                  ${CPP_FILES} 
+  ${H_FILES}                  ${CPP_FILES}
   ${basis_H_FILES}            ${basis_CPP_FILES}
   ${laws_H_FILES}             ${laws_CPP_FILES}
   ${parameterization_H_FILES} ${parameterization_CPP_FILES})
@@ -164,8 +164,10 @@ install (TARGETS mobiusBSpl
          ARCHIVE DESTINATION libd COMPONENT Library
          LIBRARY DESTINATION libd COMPONENT Library)
 
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusBSpl.pdb DESTINATION bind CONFIGURATIONS Debug)
-install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusBSpl.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+if (MSVC)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusBSpl.pdb DESTINATION bind CONFIGURATIONS Debug)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusBSpl.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
+endif()
 
 install (FILES ${H_FILES}                  DESTINATION include/mobius)
 install (FILES ${basis_H_FILES}            DESTINATION include/mobius)
