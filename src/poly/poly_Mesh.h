@@ -57,6 +57,18 @@ class geom_PlaneSurface;
 //! \sa mobius::poly_ReadSTL
 class poly_Mesh : public core_IAlgorithm
 {
+public:
+
+  //! Precision of Gauss cubature formulas.
+  enum PropsComputationDensity {
+    //! Values of volume and center of mass are exact for mesh,
+    //! while moments of inertia might have errors, depending of element size.
+    OnePoint,
+    //! Values of volume and center of mass are exact for mesh,
+    //! expressions for moments are polynomials of second order.
+    ThreePoints
+  };
+
 // Construction & destruction:
 public:
 
@@ -132,6 +144,26 @@ public:
               double& yMin, double& yMax,
               double& zMin, double& zMax) const;
 
+  //! Calculates barycenter.
+  //! \return the computed point.
+  mobiusPoly_EXPORT core_XYZ
+    ComputeCenter() const;
+
+  //! Computes general properties (volume and axes of inertia) for the mesh.
+  //! Calculation of volume properties is performed by numerical integration
+  //! over triangle surfaces using Gauss cubature formulas.
+  //! \param[in]  density             the precision of calculations.
+  //! \param[out] volume              the computed volume.
+  //! \param[out] firstAxisOfInertia  the first axis of inertia.
+  //! \param[out] secondAxisOfInertia the second axis of inertia.
+  //! \param[out] thirdAxisOfInertia  the third axis of inertia.
+  mobiusPoly_EXPORT void
+    ComputeProps(const PropsComputationDensity density,
+                 double&                       volume,
+                 core_XYZ&                     firstAxisOfInertia,
+                 core_XYZ&                     secondAxisOfInertia,
+                 core_XYZ&                     thirdAxisOfInertia) const;
+
   //! Refines the triangle of interest by its midpoint.
   //! \param[in]  ht  handle of the triangle to refine.
   //! \param[out] ht0 handle of the first created triangle.
@@ -186,6 +218,19 @@ public:
                   const poly_VertexHandle hv2,
                   t_xyz&                  norm) const;
 
+  //! Computes center for the passed triple of vertices.
+  //! \param[in]  hv0    the first vertex handle.
+  //! \param[in]  hv1    the second vertex handle.
+  //! \param[in]  hv2    the third vertex handle.
+  //! \param[out] center the computed center point.
+  //! \return true if the center point was computed successfully,
+  //!         false -- otherwise.
+  mobiusPoly_EXPORT bool
+    ComputeCenter(const poly_VertexHandle hv0,
+                  const poly_VertexHandle hv1,
+                  const poly_VertexHandle hv2,
+                  t_xyz&                  center) const;
+
   //! Computes normal vector for the triangle in question.
   //! \param[in]  ht   handle of the triangle in question.
   //! \param[out] norm computed normal vector.
@@ -194,6 +239,16 @@ public:
   mobiusPoly_EXPORT bool
     ComputeNormal(const poly_TriangleHandle ht,
                   t_xyz&                    norm) const;
+
+  //! Computes area for the passed triangle.
+  //! \param[in]  hv0  the first vertex handle.
+  //! \param[in]  hv1  the second vertex handle.
+  //! \param[in]  hv2  the third vertex handle.
+  //! \return the computed area.
+  mobiusPoly_EXPORT double
+    ComputeArea(const poly_VertexHandle hv0,
+                const poly_VertexHandle hv1,
+                const poly_VertexHandle hv2) const;
 
   //! Computes area for the passed triangle.
   //! \param[in] ht handle of the triangle to compute the area for.
@@ -886,6 +941,18 @@ protected:
     updateLink(const poly_EdgeHandle     he,
                const poly_TriangleHandle htOld,
                const poly_TriangleHandle htNew);
+
+private:
+
+  //! Internal method to compute intertia props from a volumetric element
+  //! enclosed by a surface mesh.
+  bool computePyramidProps(const poly_VertexHandle& hv0,
+                           const poly_VertexHandle& hv1,
+                           const poly_VertexHandle& hv2,
+                           const core_XYZ&          apex,
+                           double                   gProps[10],
+                           const int                nbPnts,
+                           const double*            pnts) const;
 
 protected:
 

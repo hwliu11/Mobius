@@ -171,23 +171,31 @@ set (primitives_CPP_FILES
 
 set (occ_H_FILES
   occ/Bnd_Box2d.hxx
+  occ/ElSLib.hxx
   occ/gp.hxx
   occ/gp_Ax1.hxx
   occ/gp_Ax2.hxx
   occ/gp_Ax2d.hxx
   occ/gp_Ax3.hxx
+  occ/gp_Circ.hxx
+  occ/gp_Cylinder.hxx
+  occ/gp_Cone.hxx
   occ/gp_Dir.hxx
   occ/gp_Dir2d.hxx
   occ/gp_GTrsf.hxx
   occ/gp_GTrsf2d.hxx
+  occ/gp_Lin.hxx
   occ/gp_Lin2d.hxx
   occ/gp_Mat.hxx
   occ/gp_Mat2d.hxx
   occ/gp_Pnt.hxx
+  occ/gp_Pln.hxx
   occ/gp_Pnt2d.hxx
   occ/gp_Quaternion.hxx
   occ/gp_QuaternionNLerp.hxx
   occ/gp_QuaternionSLerp.hxx
+  occ/gp_Sphere.hxx
+  occ/gp_Torus.hxx
   occ/gp_Trsf.hxx
   occ/gp_Trsf2d.hxx
   occ/gp_TrsfForm.hxx
@@ -277,21 +285,30 @@ set (occ_H_FILES
 )
 set (occ_CPP_FILES
   occ/Bnd_Box2d.cxx
+  occ/ElSLib.cxx
   occ/gp.cxx
   occ/gp_Ax1.cxx
   occ/gp_Ax2.cxx
   occ/gp_Ax2d.cxx
   occ/gp_Ax3.cxx
+  occ/gp_Circ.cxx
+  occ/gp_Circ.lxx
+  occ/gp_Cylinder.cxx
+  occ/gp_Cone.cxx
   occ/gp_Dir.cxx
   occ/gp_Dir2d.cxx
   occ/gp_GTrsf.cxx
   occ/gp_GTrsf2d.cxx
+  occ/gp_Lin.cxx
   occ/gp_Lin2d.cxx
   occ/gp_Mat.cxx
   occ/gp_Mat2d.cxx
+  occ/gp_Pln.cxx
   occ/gp_Pnt.cxx
   occ/gp_Pnt2d.cxx
   occ/gp_Quaternion.cxx
+  occ/gp_Sphere.cxx
+  occ/gp_Torus.cxx
   occ/gp_Trsf.cxx
   occ/gp_Trsf2d.cxx
   occ/gp_Vec.cxx

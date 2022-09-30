@@ -45,6 +45,8 @@ using namespace mobius;
 // OpenCascade includes
 #include <mobius/Intf_InterferencePolygon2d.hxx>
 #include <mobius/Intf_Polygon2d.hxx>
+#include <mobius/ElSLib.hxx>
+#include <mobius/gp_Ax3.hxx>
 
 //-----------------------------------------------------------------------------
 
@@ -292,6 +294,79 @@ void poly_Mesh::GetBounds(double& xMin, double& xMax,
   yMax = y_max;
   zMin = z_min;
   zMax = z_max;
+}
+
+//-----------------------------------------------------------------------------
+
+core_XYZ poly_Mesh::ComputeCenter() const
+{
+  core_XYZ center;
+  t_xyz    vertex;
+  int      vNum = 0;
+  //
+  for ( VertexIterator vIt(this); vIt.More(); vIt.Next() )
+  {
+    this->GetVertex(vIt.Current(), vertex);
+    center += vertex;
+    ++vNum;
+  }
+
+  if ( vNum > 1 )
+  {
+    center /= vNum;
+  }
+
+  return center;
+}
+
+//-----------------------------------------------------------------------------
+
+void poly_Mesh::ComputeProps(const PropsComputationDensity density,
+                             double&                       volume,
+                             core_XYZ&                     firstAxisOfInertia,
+                             core_XYZ&                     secondAxisOfInertia,
+                             core_XYZ&                     thirdAxisOfInertia) const
+{
+  // Gauss points for barycentric coordinates
+  static Standard_Real pntWg[] =
+  {
+    1. / 3., 1. / 3., 1. / 2., /* 1-point-based  */
+    1. / 6., 1. / 6., 1. / 6., /* 3-points-based */
+    2. / 3., 1. / 6., 1. / 6.,
+    1. / 6., 2. / 3., 1. / 6. 
+  };
+  //
+  int nbPoints = 1;
+  double* gaussPnts = &pntWg[0];
+  if ( density == PropsComputationDensity::ThreePoints )
+  {
+    nbPoints = 3;
+    gaussPnts = &pntWg[3];
+  }
+
+  // Array to store global properties
+  double gProps[10] = { 0., 0., 0., 0., 0., 0., 0., 0., 0., 0 };
+
+  core_XYZ polyCenter = this->ComputeCenter();
+
+  for ( TriangleIterator trIt(this); trIt.More(); trIt.Next() )
+  {
+    poly_Triangle triangle;
+    this->GetTriangle(trIt.Current(), triangle);
+
+    poly_VertexHandle hv0, hv1, hv2;
+    triangle.GetVertices(hv0, hv1, hv2);
+
+    this->computePyramidProps(hv0, hv1, hv2, polyCenter, gProps, nbPoints, gaussPnts);
+  }
+
+  // initialize output parameters
+  //
+  volume = gProps[0];
+  //
+  firstAxisOfInertia  = core_XYZ(gProps[1], gProps[2], gProps[3]);
+  secondAxisOfInertia = core_XYZ(gProps[4], gProps[5], gProps[6]);
+  thirdAxisOfInertia  = core_XYZ(gProps[7], gProps[8], gProps[9]);
 }
 
 //-----------------------------------------------------------------------------
@@ -570,10 +645,30 @@ poly_VertexHandle
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
-                              const poly_VertexHandle hv1,
-                              const poly_VertexHandle hv2,
-                              t_xyz&                  norm) const
+bool 
+  poly_Mesh::ComputeCenter(const poly_VertexHandle hv0,
+                           const poly_VertexHandle hv1,
+                           const poly_VertexHandle hv2,
+                           t_xyz&                  center) const
+{
+  t_xyz tv[3];
+  //
+  this->GetVertex(hv0, tv[0]);
+  this->GetVertex(hv1, tv[1]);
+  this->GetVertex(hv2, tv[2]);
+
+  center = (tv[0] + tv[1] + tv[2]) / 3;
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool 
+  poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
+                           const poly_VertexHandle hv1,
+                           const poly_VertexHandle hv2,
+                           t_xyz&                  norm) const
 {
   t_xyz tv[3];
   //
@@ -613,6 +708,24 @@ bool
 //-----------------------------------------------------------------------------
 
 double
+  poly_Mesh::ComputeArea(const poly_VertexHandle hv0,
+                         const poly_VertexHandle hv1,
+                         const poly_VertexHandle hv2) const
+{
+
+  t_xyz tv[3];
+  this->GetVertex(hv0, tv[0]);
+  this->GetVertex(hv1, tv[1]);
+  this->GetVertex(hv2, tv[2]);
+
+  // Compute area.
+  const double area = 0.5 * ((tv[1] - tv[0]) ^ (tv[2] - tv[0])).Modulus();
+  return area;
+}
+
+//-----------------------------------------------------------------------------
+
+double
   poly_Mesh::ComputeArea(const poly_TriangleHandle ht) const
 {
   // Get triangle by its handle.
@@ -622,16 +735,10 @@ double
 
   // Get vertices on the triangle.
   poly_VertexHandle htv[3];
-  t_xyz             tv[3];
   //
   t.GetVertices(htv[0], htv[1], htv[2]);
   //
-  for ( size_t k = 0; k < 3; ++k )
-    this->GetVertex(htv[k], tv[k]);
-
-  // Compute area.
-  const double area = 0.5*( (tv[1] - tv[0])^(tv[2] - tv[0]) ).Modulus();
-  return area;
+  return ComputeArea(htv[0], htv[1], htv[2]);
 }
 
 //-----------------------------------------------------------------------------
@@ -1994,4 +2101,88 @@ void poly_Mesh::updateLink(const poly_EdgeHandle     he,
   }
   //
   m_links[he] = newTuple;
+}
+
+//-----------------------------------------------------------------------------
+
+bool poly_Mesh::computePyramidProps(const poly_VertexHandle& hv0,
+                                    const poly_VertexHandle& hv1,
+                                    const poly_VertexHandle& hv2,
+                                    const core_XYZ&          apex,
+                                    double                   gProps[10],
+                                    const int                nbPnts,
+                                    const double*            pnts) const
+{
+  // Compute triangle area
+  double area = this->ComputeArea(hv0, hv1, hv2);
+  if (area <= 0.)
+    return false;
+
+  // Define plane and coordinates of triangle nodes on plane
+  t_xyz triNorm;
+  this->ComputeNormal(hv0, hv1, hv2, triNorm);
+
+  t_xyz triCenter;
+  this->ComputeCenter(hv0, hv1, hv2, triCenter);
+
+  gp_Dir triNormDir(triNorm.X(), triNorm.Y(), triNorm.Z());
+  gp_Ax3 posPln(gp_Pnt(triCenter.X(), triCenter.Y(), triCenter.Z()), triNormDir);
+
+  //Coordinates of nodes on plane
+  t_xyz tv[3];
+  //
+  this->GetVertex(hv0, tv[0]);
+  this->GetVertex(hv1, tv[1]);
+  this->GetVertex(hv2, tv[2]);
+
+  double x1, y1, x2, y2, x3, y3;
+  //
+  ElSLib::PlaneParameters(posPln, gp_Pnt(tv[0].X(), tv[0].Y(), tv[0].Z()), x1, y1);
+  ElSLib::PlaneParameters(posPln, gp_Pnt(tv[1].X(), tv[1].Y(), tv[1].Z()), x2, y2);
+  ElSLib::PlaneParameters(posPln, gp_Pnt(tv[2].X(), tv[2].Y(), tv[2].Z()), x3, y3);
+  //
+  const double det = 2. * area;
+  //
+  double l1, l2; //barycentriche coordinates
+  double x, y, z;
+  double w; //weigh
+  //
+  for ( int i = 0; i < nbPnts; ++i )
+  {
+    int index = 3 * i;
+    l1 = pnts[index];
+    l2 = pnts[index + 1];
+    w  = pnts[index + 2];
+    w  *= det;
+    x  = l1 * (x1 - x3) + l2 * (x2 - x3) + x3;
+    y  = l1 * (y1 - y3) + l2 * (y2 - y3) + y3;
+    gp_Pnt aP = ElSLib::PlaneValue(x, y, posPln);
+
+    x = aP.X() - apex.X();
+    y = aP.Y() - apex.Y();
+    z = aP.Z() - apex.Z();
+    //
+    double xn = triNormDir.X() * w;
+    double yn = triNormDir.Y() * w;
+    double zn = triNormDir.Z() * w;
+    double dv = x * xn + y * yn + z * zn;
+    //
+    gProps[0] += dv / 3.0;       // Volume
+    //    
+    gProps[1] += 0.25 * x * dv;  // Ix
+    gProps[2] += 0.25 * y * dv;  // Iy
+    gProps[3] += 0.25 * z * dv;  // Iz
+    dv *= 0.2;
+    gProps[7] -= x * y * dv;     // Ixy
+    gProps[8] -= x * z * dv;     // Ixz
+    gProps[9] -= y * z * dv;     // Iyz
+    x *= x;
+    y *= y;
+    z *= z;
+    gProps[4] += (y + z) * dv;   // Ixx
+    gProps[5] += (x + z) * dv;   // Iyy
+    gProps[6] += (x + y) * dv;   // Izz
+  }
+
+  return true;
 }
