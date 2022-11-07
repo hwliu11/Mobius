@@ -79,6 +79,11 @@ public:
 
 public:
 
+  //! Creates a deep copy of this mesh.
+  //! \return the mesh copy.
+  mobiusPoly_EXPORT t_ptr<poly_Mesh>
+    DeepCopy() const;
+
   //! Extracts a mesh region for the given triangle IDs `tids`.
   //! Use this method to get a submesh of the existing mesh. The
   //! constructed submesh is a deep copy.
@@ -87,6 +92,11 @@ public:
   //! \return the extracted region.
   mobiusPoly_EXPORT t_ptr<poly_Mesh>
     ExtractRegion(const std::unordered_set<int>& tids) const;
+
+  //! Copies other mesh into this.
+  //! \param[in] other the mesh to copy into this mesh
+  mobiusPoly_EXPORT void 
+    Merge(const t_ptr<poly_Mesh>& other);
 
 /* CAD link */
 public:
@@ -126,11 +136,6 @@ public:
     AreSelfIntersecting(const std::unordered_set<int>& domain) const;
 
 public:
-
-  //! Creates a deep copy of this mesh.
-  //! \return the mesh copy.
-  mobiusPoly_EXPORT t_ptr<poly_Mesh>
-    DeepCopy() const;
 
   //! Calculates axis-aligned boundary box for the mesh.
   //! \param[out] xMin min X.
