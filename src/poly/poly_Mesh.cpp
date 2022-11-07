@@ -115,12 +115,14 @@ t_ptr<poly_Mesh>
 {
   t_ptr<poly_Mesh> region = new poly_Mesh;
 
+  // keep matching of original vertex handles and their copies 
+  // to avoid vertex handles duplication in the region
+  std::unordered_map<poly_VertexHandle, poly_VertexHandle> ovh2rvh;
+
   for ( TriangleIterator tit(this); tit.More(); tit.Next() )
   {
     if ( tids.find(tit.Current().iIdx) == tids.end() )
       continue;
-
-    // TODO: avoid duplicated vertices
 
     poly_Triangle t;
     this->GetTriangle(tit.Current(), t);
@@ -130,22 +132,93 @@ t_ptr<poly_Mesh>
     poly_VertexHandle hv2;
     t.GetVertices(hv0, hv1, hv2);
 
-    poly_Vertex v0;
-    this->GetVertex(hv0, v0);
-    hv0 = region->AddVertex(v0);
+    // Use the exisiting copy of the original vertex handle instead of coping it once again.
+    //
+    // First vertex handle
+    auto& vhpair = ovh2rvh.find(hv0);
+    if (vhpair != ovh2rvh.cend())
+    {
+      // reuse the existing copy of the original vertex handle
+      hv0 = (*vhpair).second;
+    }
+    else
+    {
+      // add a new vertex as matching map does not contain it.
+      poly_Vertex v;
+      this->GetVertex(hv0, v);
+      poly_VertexHandle _hv = region->AddVertex(v);
 
-    poly_Vertex v1;
-    this->GetVertex(hv1, v1);
-    hv1 = region->AddVertex(v1);
+      ovh2rvh[hv0] = _hv;
+      hv0 = _hv;
+    }
 
-    poly_Vertex v2;
-    this->GetVertex(hv2, v2);
-    hv2 = region->AddVertex(v2);
+    // Second vertex handle
+    vhpair = ovh2rvh.find(hv1);
+    if (vhpair != ovh2rvh.cend())
+    {
+      // reuse the existing copy of the original vertex handle
+      hv1 = (*vhpair).second;
+    }
+    else
+    {
+      // add a new vertex as matching map does not contain it.
+      poly_Vertex v;
+      this->GetVertex(hv1, v);
+      poly_VertexHandle _hv = region->AddVertex(v);
 
-    region->AddTriangle(hv0, hv1, hv2);
+      ovh2rvh[hv1] = _hv;
+      hv1 = _hv;
+    }
+
+    // Third vertex handle
+    vhpair = ovh2rvh.find(hv2);
+    if (vhpair != ovh2rvh.cend())
+    {
+      // reuse the existing copy of the original vertex handle
+      hv2 = (*vhpair).second;
+    }
+    else
+    {
+      // add a new vertex if matching map does not contain it.
+      poly_Vertex v;
+      this->GetVertex(hv2, v);
+      poly_VertexHandle _hv = region->AddVertex(v);
+
+      ovh2rvh[hv2] = _hv;
+      hv2 = _hv;
+    }
+
+    region->AddTriangle(hv0, hv1, hv2, t.GetFaceRef());
   }
 
   return region;
+}
+
+//-----------------------------------------------------------------------------
+void poly_Mesh::Merge(const t_ptr<poly_Mesh>& other)
+{
+  for (poly_Mesh::TriangleIterator tit(other); tit.More(); tit.Next())
+  {
+    poly_Triangle t;
+    other->GetTriangle(tit.Current(), t);
+
+    poly_VertexHandle hv0;
+    poly_VertexHandle hv1;
+    poly_VertexHandle hv2;
+    t.GetVertices(hv0, hv1, hv2);
+
+    poly_Vertex v;
+    other->GetVertex(hv0, v);
+    hv0 = this->AddVertex(v);
+
+    other->GetVertex(hv1, v);
+    hv1 = this->AddVertex(v);
+
+    other->GetVertex(hv2, v);
+    hv2 = this->AddVertex(v);
+
+    this->AddTriangle(hv0, hv1, hv2);
+  }
 }
 
 //-----------------------------------------------------------------------------
