@@ -166,6 +166,7 @@ install (TARGETS mobiusBSpl
 
 if (MSVC)
   install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusBSpl.pdb DESTINATION bind CONFIGURATIONS Debug)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusBSpl.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 endif()
 
 install (FILES ${H_FILES}                  DESTINATION include/mobius)

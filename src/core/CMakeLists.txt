@@ -197,6 +197,7 @@ install (TARGETS mobiusCore
 
 if (MSVC)
   install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusCore.pdb DESTINATION bind CONFIGURATIONS Debug)
+  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusCore.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 endif()
 
 install (FILES ${H_FILES}            DESTINATION include/mobius)
