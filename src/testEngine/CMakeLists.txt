@@ -109,7 +109,6 @@ install (TARGETS mobiusTestEngine
 
 if (MSVC)
   install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bind/mobiusTestEngine.pdb DESTINATION bind CONFIGURATIONS Debug)
-  install (FILES ${PROJECT_BINARY_DIR}/../../${PLATFORM}${COMPILER_BITNESS}/${COMPILER}/bini/mobiusTestEngine.pdb DESTINATION bini CONFIGURATIONS RelWithDebInfo)
 endif()
 
 install (FILES ${H_FILES}           DESTINATION include/mobius)

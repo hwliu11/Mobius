@@ -209,6 +209,20 @@ target_link_libraries(mobiusTest mobiusCore mobiusPoly mobiusBSpl mobiusGeom mob
 # Installation
 #------------------------------------------------------------------------------
 
-if (WIN32)
-  install (TARGETS mobiusTest RUNTIME DESTINATION bin COMPONENT Runtime)
-endif()
+install (TARGETS mobiusTest
+         CONFIGURATIONS Release
+         RUNTIME DESTINATION bin COMPONENT Runtime
+         ARCHIVE DESTINATION lib COMPONENT Library
+         LIBRARY DESTINATION lib COMPONENT Library)
+
+install (TARGETS mobiusTest
+         CONFIGURATIONS RelWithDebInfo
+         RUNTIME DESTINATION bini COMPONENT Runtime
+         ARCHIVE DESTINATION libi COMPONENT Library
+         LIBRARY DESTINATION libi COMPONENT Library)
+
+install (TARGETS mobiusTest
+         CONFIGURATIONS Debug
+         RUNTIME DESTINATION bind COMPONENT Runtime
+         ARCHIVE DESTINATION libd COMPONENT Library
+         LIBRARY DESTINATION libd COMPONENT Library)

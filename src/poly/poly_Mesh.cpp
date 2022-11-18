@@ -135,7 +135,7 @@ t_ptr<poly_Mesh>
     // Use the exisiting copy of the original vertex handle instead of coping it once again.
     //
     // First vertex handle
-    auto& vhpair = ovh2rvh.find(hv0);
+    auto vhpair = ovh2rvh.find(hv0);
     if (vhpair != ovh2rvh.cend())
     {
       // reuse the existing copy of the original vertex handle
@@ -390,6 +390,20 @@ core_XYZ poly_Mesh::ComputeCenter() const
   }
 
   return center;
+}
+
+//-----------------------------------------------------------------------------
+
+double poly_Mesh::ComputeArea()
+{
+  double area = 0.;
+
+  for (TriangleIterator tit(this); tit.More(); tit.Next())
+  {
+    area += ComputeArea(tit.Current());
+  }
+
+  return area;
 }
 
 //-----------------------------------------------------------------------------
@@ -1140,6 +1154,20 @@ bool poly_Mesh::GetTriangles(const poly_EdgeHandle                    he,
 bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht,
                                     std::vector<poly_TriangleHandle>& hts) const
 {
+  std::unordered_set<poly_TriangleHandle> tset;
+  bool res = FindAdjacentByEdges(ht, tset);
+  for (const auto& eth : tset)
+  {
+    hts.push_back(eth);
+  }
+
+  return res;
+}
+
+//-----------------------------------------------------------------------------
+bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle                ht,
+                                    std::unordered_set<poly_TriangleHandle>& hts) const
+{
   poly_Triangle t;
   this->GetTriangle(ht, t);
 
@@ -1163,14 +1191,14 @@ bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht,
   // Find triangles by edges.
   for ( int j = 0; j < 3; ++j )
   {
-    std::vector<poly_TriangleHandle> edgeTris;
+    std::unordered_set<poly_TriangleHandle> edgeTris;
 
     if ( !this->GetTriangles(hes[j], edgeTris) )
       return false;
 
     for ( const auto& eth : edgeTris )
       if ( eth != ht )
-        hts.push_back(eth);
+        hts.insert(eth);
   }
 
   return true;

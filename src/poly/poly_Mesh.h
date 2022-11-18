@@ -154,6 +154,11 @@ public:
   mobiusPoly_EXPORT core_XYZ
     ComputeCenter() const;
 
+  //! Calculates area.
+  //! \return the computed area.
+  mobiusPoly_EXPORT double 
+    ComputeArea();
+
   //! Computes general properties (volume and axes of inertia) for the mesh.
   //! Calculation of volume properties is performed by numerical integration
   //! over triangle surfaces using Gauss cubature formulas.
@@ -354,6 +359,15 @@ public:
   mobiusPoly_EXPORT bool
     FindAdjacentByEdges(const poly_TriangleHandle         ht,
                         std::vector<poly_TriangleHandle>& hts) const;
+
+  //! Finds adjacent triangles for the given one.
+  //! \param[in]  ht the triangle in question.
+  //! \param[out] hts the output triangles.
+  //! \return false if the links were not computed or there is no
+  //!         triangle with such a handle.
+  mobiusPoly_EXPORT bool
+    FindAdjacentByEdges(const poly_TriangleHandle                ht,
+                        std::unordered_set<poly_TriangleHandle>& hts) const;
 
   //! Finds all triangles sharing the given vertex.
   //! \param[in]  hv     the vertex in question.
