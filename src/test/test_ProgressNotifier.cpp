@@ -84,7 +84,7 @@ void mobius::test_ProgressNotifier::SetMessageKey(const std::string& msgKey)
 
 //-----------------------------------------------------------------------------
 
-const std::string& mobius::test_ProgressNotifier::GetMessageKey() const
+std::string mobius::test_ProgressNotifier::GetMessageKey() const
 {
   return m_msgKey;
 }

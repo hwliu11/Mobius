@@ -63,6 +63,17 @@ set (clouds_CPP_FILES
 )
 
 #------------------------------------------------------------------------------
+# Interoperability
+#------------------------------------------------------------------------------
+
+set (interop_H_FILES
+  interop/geom_ReadAstra.h
+)
+set (interop_CPP_FILES
+  interop/geom_ReadAstra.cpp
+)
+
+#------------------------------------------------------------------------------
 # Interpolation
 #------------------------------------------------------------------------------
 
@@ -407,6 +418,14 @@ foreach (FILE ${clouds_CPP_FILES})
   source_group ("Source Files\\Points" FILES "${FILE}")
 endforeach (FILE)
 
+foreach (FILE ${interop_H_FILES})
+  source_group ("Header Files\\Interoperability" FILES "${FILE}")
+endforeach (FILE)
+
+foreach (FILE ${interop_CPP_FILES})
+  source_group ("Source Files\\Interoperability" FILES "${FILE}")
+endforeach (FILE)
+
 foreach (FILE ${interpolation_H_FILES})
   source_group ("Header Files\\Interpolation" FILES "${FILE}")
 endforeach (FILE)
@@ -444,6 +463,7 @@ add_library (mobiusGeom SHARED
   ${common_H_FILES}        ${common_CPP_FILES}
   ${fairing_H_FILES}       ${fairing_CPP_FILES}
   ${clouds_H_FILES}        ${clouds_CPP_FILES}
+  ${interop_H_FILES}       ${interop_CPP_FILES}
   ${interpolation_H_FILES} ${interpolation_CPP_FILES}
   ${primitives_H_FILES}    ${primitives_CPP_FILES}
   ${occ_H_FILES}           ${occ_CPP_FILES}
@@ -490,5 +510,6 @@ install (FILES ${classifiers_H_FILES}   DESTINATION include/mobius)
 install (FILES ${common_H_FILES}        DESTINATION include/mobius)
 install (FILES ${fairing_H_FILES}       DESTINATION include/mobius)
 install (FILES ${clouds_H_FILES}        DESTINATION include/mobius)
+install (FILES ${interop_H_FILES}       DESTINATION include/mobius)
 install (FILES ${interpolation_H_FILES} DESTINATION include/mobius)
 install (FILES ${primitives_H_FILES}    DESTINATION include/mobius)

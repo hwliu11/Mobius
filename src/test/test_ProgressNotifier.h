@@ -86,7 +86,7 @@ public:
 
   //! Returns message localization key.
   //! \return localization key.
-  virtual const std::string&
+  virtual std::string
     GetMessageKey() const override;
 
   //! Sets the job status.

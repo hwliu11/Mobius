@@ -50,7 +50,7 @@ enum core_ProgressStatus
   Progress_Running,       //!< Job is currently running.
   Progress_Succeeded,     //!< Job has been performed successfully.
   Progress_Failed,        //!< Job has been failed.
-  Progress_Cancelled      //!< Job has been requested for cancellation.
+  Progress_Canceled       //!< Job has been requested for cancellation.
 };
 
 //-----------------------------------------------------------------------------
@@ -113,7 +113,7 @@ public:
 
   //! Returns message localization key.
   //! \return localization key.
-  virtual const std::string&
+  virtual std::string
     GetMessageKey() const = 0;
 
   //! Sets the job status.
