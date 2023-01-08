@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/test_BSplineCurve.h>
 
+// bspl includes
+#include <mobius/bspl.h>
+
 // geom includes
 #include <mobius/geom_BSplineCurve.h>
 
@@ -323,7 +326,7 @@ mobius::outcome
 
 //-----------------------------------------------------------------------------
 
-mobius::outcome mobius::test_BSplineCurve::splitToBezier01(const int funcID)
+mobius::outcome mobius::test_BSplineCurve::splitToBezier(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
@@ -374,6 +377,53 @@ mobius::outcome mobius::test_BSplineCurve::splitToBezier01(const int funcID)
 
   // Validate the number of segments.
   if ( segments.size() != numSegmentsRef )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::outcome mobius::test_BSplineCurve::makeBezier(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Construct B-curve.
+  core_Ptr<t_bcurve>
+    curve = t_bcurve::MakeBezier( 0, 1,
+                                 {t_xyz(0., 0., 0.), t_xyz(1., 1., 0.), t_xyz(2., 1., 0.), t_xyz(3., 0., 0.)} );
+  //
+  if ( curve.IsNull() )
+    return res.failure();
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+mobius::outcome mobius::test_BSplineCurve::concatCompatible(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  // Construct B-curves.
+  core_Ptr<t_bcurve>
+    curves[2] = {
+      t_bcurve::MakeBezier( 0, 1,
+                           {t_xyz(0., 0., 0.), t_xyz(1., 1., 0.), t_xyz(2., 1., 0.), t_xyz(3., 0., 0.)} ),
+      t_bcurve::MakeBezier( 1, 2,
+                           {t_xyz(3., 0., 0.), t_xyz(4., 1., 0.), t_xyz(5., 1., 0.), t_xyz(6., 0., 0.)} )
+  };
+
+  // Concatenate.
+  if ( !curves[0]->ConcatenateCompatible(curves[1]) )
+    return res.failure();
+
+  const int n = curves[0]->GetNumOfPoles() - 1;
+  const int p = curves[0]->GetDegree();
+  const int m = curves[0]->GetNumOfKnots() - 1;
+
+  // Check validity.
+  if ( !bspl::Check(n, m, p) )
     return res.failure();
 
   return res.success();

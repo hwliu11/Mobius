@@ -77,7 +77,9 @@ public:
               << &evalOutDomainLeft
               << &evalJSON1
               << &evalJSON2
-              << &splitToBezier01
+              << &splitToBezier
+              << &makeBezier
+              << &concatCompatible
               ;
   }
 
@@ -88,7 +90,9 @@ private:
   static outcome evalOutDomainLeft  (const int funcID);
   static outcome evalJSON1          (const int funcID);
   static outcome evalJSON2          (const int funcID);
-  static outcome splitToBezier01    (const int funcID);
+  static outcome splitToBezier      (const int funcID);
+  static outcome makeBezier         (const int funcID);
+  static outcome concatCompatible   (const int funcID);
 
 };
 

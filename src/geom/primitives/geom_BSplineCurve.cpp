@@ -198,6 +198,29 @@ mobius::core_Ptr<mobius::geom_BSplineCurve>
 
 //-----------------------------------------------------------------------------
 
+mobius::core_Ptr<mobius::geom_BSplineCurve>
+  mobius::geom_BSplineCurve::MakeBezier(const double                      umin,
+                                        const double                      umax,
+                                        const std::vector<mobius::t_xyz>& poles)
+{
+  const int n = int( poles.size() ) - 1;
+  const int p = n; // For Bezier.
+
+  std::vector<double> U;
+  U.resize(2*p + 2);
+  //
+  for ( int i = 0; i <= p; ++i )
+    U[i] = umin;
+  //
+  for ( int i = p + 1; i <= 2*n + 1; ++i )
+    U[i] = umax;
+
+  t_ptr<t_bcurve> res = new t_bcurve(poles, U, p);
+  return res;
+}
+
+//-----------------------------------------------------------------------------
+
 //! Dumps this B-curve as JSON object.
 //! \return JSON string.
 std::string mobius::geom_BSplineCurve::DumpJSON() const
@@ -788,6 +811,38 @@ bool mobius::geom_BSplineCurve::SplitToBezier(std::vector< t_ptr<t_bcurve> >& se
     //
     segments.push_back(segment);
   }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+bool mobius::geom_BSplineCurve::ConcatenateCompatible(const t_ptr<t_bcurve>& other)
+{
+  if ( m_iDeg != other->m_iDeg )
+    return false;
+
+  if ( m_U.back() > other->m_U.front() )
+    return false;
+
+  // The first pole of the next segment is equal to the last pole of the
+  // previous segment.
+  const t_xyz& Pn = m_poles.back();
+  const t_xyz& Q0 = other->m_poles.front();
+  //
+  if ( (Pn - Q0).Modulus() > core_Precision::Resolution3D() )
+    return false;
+
+  // Remove last clamp of knots.
+  m_U.resize(m_U.size() - m_iDeg - 1);
+
+  // Add knots from the next segment.
+  for ( int j = 1; j < other->m_U.size(); ++j )
+    m_U.push_back(other->m_U[j]);
+
+  // Add poles of the next segment skipping the first one.
+  for ( int j = 1; j < other->m_poles.size(); ++j )
+    m_poles.push_back( other->m_poles[j] );
 
   return true;
 }

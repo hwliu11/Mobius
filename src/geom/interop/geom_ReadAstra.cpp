@@ -47,11 +47,85 @@ namespace {
   //! Curve DTO.
   struct t_curveData
   {
-    std::string name; //!< Curve name.
-    int         npts; //!< Number of points.
+    //! Curve point.
+    struct t_pt
+    {
+      double x, y, z, tx, ty, tz, u;
+      t_pt() : x(0.), y(0.), z(0.), tx(0.), ty(0.), tz(0.), u(0.) {}
+    };
+
+    std::string       name; //!< Curve name.
+    int               npts; //!< Number of points.
+    std::vector<t_pt> pts;  //!< Curve points.
 
     //! Default ctor.
     t_curveData() : npts(0) {}
+
+    //! Returns the number of segments.
+    int GetNbSegments() const
+    {
+      return npts - 1;
+    }
+
+    //! Adds a curve point from the passed tokens.
+    void AddPoint(const std::vector<std::string>& tokens)
+    {
+      t_pt pt;
+      pt.x  = core::str::to_number<double>(tokens[0]);
+      pt.y  = core::str::to_number<double>(tokens[1]);
+      pt.z  = core::str::to_number<double>(tokens[2]);
+      pt.tx = core::str::to_number<double>(tokens[3]);
+      pt.ty = core::str::to_number<double>(tokens[4]);
+      pt.tz = core::str::to_number<double>(tokens[5]);
+      pt.u  = core::str::to_number<double>(tokens[6]);
+      //
+      pts.push_back(pt);
+    }
+
+    //! Prepares polynomial segments.
+    void ToBezierSegments(std::vector< t_ptr<t_bcurve> >& segments) const
+    {
+      const int nseg = this->GetNbSegments();
+      //
+      for ( int s = 0; s < nseg; ++s )
+      {
+        const t_pt&  pL   = this->pts[s];
+        const t_pt&  pR   = this->pts[s + 1];
+        const double umin = pL.u;
+        const double umax = pR.u;
+
+        // Compute control points of the corresponding Bezier segment.
+        t_xyz P0 = t_xyz(pL.x, pL.y, pL.z);
+        t_xyz P3 = t_xyz(pR.x, pR.y, pR.z);
+        t_xyz P1 = P0 + (1./3.)*(umax - umin)*t_xyz(pL.tx, pL.ty, pL.tz);
+        t_xyz P2 = P3 - (1./3.)*(umax - umin)*t_xyz(pR.tx, pR.ty, pR.tz);
+
+        // Create Bezier segment.
+        t_ptr<t_bcurve> seg = t_bcurve::MakeBezier(umin, umax, {P0, P1, P2, P3});
+        //
+        segments.push_back(seg);
+      }
+    }
+
+    //! Converts curve data to a B-spline curve.
+    t_ptr<t_bcurve> ToBSplineCurve() const
+    {
+      // Convert to Bezier segments.
+      std::vector< t_ptr<t_bcurve> > segments;
+      //
+      this->ToBezierSegments(segments);
+
+      if ( segments.empty() )
+        return nullptr;
+
+      // Concatenate curves.
+      t_ptr<t_bcurve> res = segments[0];
+      //
+      for ( int i = 1; i < segments.size(); ++i )
+        res->ConcatenateCompatible(segments[i]);
+
+      return res;
+    }
   };
 
   //! Checks if the passed line tokens represent a curve.
@@ -89,9 +163,11 @@ bool geom_ReadAstra::Perform(const std::string& filename)
     Mode_Curve
   };
 
+  std::vector<t_curveData> curveDs;
+  t_curveData* pCurrentCurve = nullptr;
+
   // Loop over the file.
-  ::t_curveData curveData;
-  Mode          mode = Mode_Scan;
+  Mode mode = Mode_Scan;
   //
   while ( !FILE.eof() )
   {
@@ -108,18 +184,32 @@ bool geom_ReadAstra::Perform(const std::string& filename)
     if ( !tokens.size() )
       continue;
 
+    // Check if it's a curve.
+    t_curveData curveData;
+    //
     if ( ::IsCurve(tokens, curveData) )
     {
-      m_progress.SendLogMessage(MobiusInfo(Normal) << "Next curve is '%1'."
-                                                   << curveData.name);
+      m_progress.SendLogMessage(MobiusInfo(Normal) << "Next curve is '%1' with %2 points."
+                                                   << curveData.name << curveData.npts);
 
       mode = Mode_Curve;
+      curveDs.push_back(curveData);
+      pCurrentCurve = &curveDs.back();
       continue;
+    }
+
+    if ( mode == Mode_Curve )
+    {
+      pCurrentCurve->AddPoint(tokens);
     }
 
     // TODO: NYI
 
   } // Until EOF.
+
+  // Make curves.
+  for ( auto& cds : curveDs )
+    m_curves.push_back( cds.ToBSplineCurve() );
 
   FILE.close();
   return true;

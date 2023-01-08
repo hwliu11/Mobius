@@ -72,6 +72,16 @@ public:
   mobiusGeom_EXPORT static core_Ptr<geom_BSplineCurve>
     Instance(const std::string& json);
 
+  //! Constructs a B-spline curve for the given Bezier control points.
+  //! \param[in] umin  the first `u` value.
+  //! \param[in] umax  the last `u` value.
+  //! \param[in] poles the passed poles.
+  //! \return the constructed B-spline/Bezier curve.
+  mobiusGeom_EXPORT static core_Ptr<geom_BSplineCurve>
+    MakeBezier(const double              umin,
+               const double              umax,
+               const std::vector<t_xyz>& poles);
+
 public:
 
   mobiusGeom_EXPORT std::string
@@ -173,6 +183,14 @@ public:
   //!         of a B-curve).
   mobiusGeom_EXPORT bool
     SplitToBezier(std::vector< t_ptr<geom_BSplineCurve> >& segments) const;
+
+  //! Concatenates the passed B-spline curve with this one if both curves
+  //! are already compatible, i.e., they have the same degree and monotonically
+  //! increasing knots.
+  //! \param[in] other the curve to add to this one.
+  //! \return false if concatenation is not done, i.e., curves are not compatible.
+  mobiusGeom_EXPORT bool
+    ConcatenateCompatible(const t_ptr<geom_BSplineCurve>& other);
 
 public:
 
