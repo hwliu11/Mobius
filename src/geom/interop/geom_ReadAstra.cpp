@@ -200,7 +200,10 @@ bool geom_ReadAstra::Perform(const std::string& filename)
 
     if ( mode == Mode_Curve )
     {
-      pCurrentCurve->AddPoint(tokens);
+      if ( pCurrentCurve->pts.size() < pCurrentCurve->npts )
+        pCurrentCurve->AddPoint(tokens);
+      else
+        mode = Mode_Scan;
     }
 
     // TODO: NYI
