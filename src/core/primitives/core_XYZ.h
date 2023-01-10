@@ -327,6 +327,9 @@ public:
   mobiusCore_EXPORT core_XYZ&
     operator-=(const core_XYZ& XYZ);
 
+  mobiusCore_EXPORT void
+    Transform(const double (&mx)[3][3]);
+
 private:
 
   double m_fX; //!< X coordinate.

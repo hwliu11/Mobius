@@ -424,3 +424,16 @@ mobius::core_XYZ& mobius::core_XYZ::operator-=(const core_XYZ& XYZ)
 {
   return this->operator+=( XYZ.Invert() );
 }
+
+//! Transforms this point using the passed 3x3 transformation matrix.
+//! \param[in] mx the transformation to apply.
+void mobius::core_XYZ::Transform(const double (&mx)[3][3])
+{
+  const double x = mx[0][0]*m_fX + mx[0][1]*m_fY + mx[0][2]*m_fZ;
+  const double y = mx[1][0]*m_fX + mx[1][1]*m_fY + mx[1][2]*m_fZ;
+  const double z = mx[2][0]*m_fX + mx[2][1]*m_fY + mx[2][2]*m_fZ;
+
+  m_fX = x;
+  m_fY = y;
+  m_fZ = z;
+}

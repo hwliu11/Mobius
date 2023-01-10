@@ -51,7 +51,7 @@ public:
   //! \param CmdRepo [in] command repo.
   //! \param Picker  [in] instance of Picker.
   visu_SphereCmd(const t_ptr<visu_CommandRepo>& CmdRepo,
-                   const t_ptr<visu_Picker>&      Picker)
+                 const t_ptr<visu_Picker>&      Picker)
   : visu_ViewCmd(CmdRepo, Picker) {}
 
   //! Destructor.

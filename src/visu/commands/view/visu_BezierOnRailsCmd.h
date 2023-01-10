@@ -144,13 +144,13 @@ private:
     const int p = 2;
 
     const t_xyz Poles[] = { t_xyz( 0.0, 2.2, 0.0),
-                          t_xyz( 1.0, 2.0, 0.0),
-                          t_xyz( 3.0, 2.2, 0.0),
-                          t_xyz( 5.0, 1.9, 0.0),
-                          t_xyz( 8.0, 2.2, 0.0),
-                          t_xyz(10.0, 1.8, 0.0),
-                          t_xyz(11.0, 2.2, 0.0),
-                          t_xyz(14.0, 1.9, 0.0) };
+                            t_xyz( 1.0, 2.0, 0.0),
+                            t_xyz( 3.0, 2.2, 0.0),
+                            t_xyz( 5.0, 1.9, 0.0),
+                            t_xyz( 8.0, 2.2, 0.0),
+                            t_xyz(10.0, 1.8, 0.0),
+                            t_xyz(11.0, 2.2, 0.0),
+                            t_xyz(14.0, 1.9, 0.0) };
     //
     std::vector<t_xyz> PolesVector;
     for ( size_t i = 0; i < sizeof(Poles)/sizeof(t_xyz); ++i )
@@ -167,13 +167,13 @@ private:
     const int p = 3;
 
     const t_xyz Poles[] = { t_xyz( 0.0, -2.2, 0.0),
-                          t_xyz( 1.0, -2.0, 0.0),
-                          t_xyz( 3.0, -2.4, 0.0),
-                          t_xyz( 5.0, -1.9, 0.0),
-                          t_xyz( 8.0, -2.4, 0.0),
-                          t_xyz(10.0, -1.8, 0.0),
-                          t_xyz(11.0, -2.2, 0.0),
-                          t_xyz(14.0, -1.7, 0.0) };
+                            t_xyz( 1.0, -2.0, 0.0),
+                            t_xyz( 3.0, -2.4, 0.0),
+                            t_xyz( 5.0, -1.9, 0.0),
+                            t_xyz( 8.0, -2.4, 0.0),
+                            t_xyz(10.0, -1.8, 0.0),
+                            t_xyz(11.0, -2.2, 0.0),
+                            t_xyz(14.0, -1.7, 0.0) };
     //
     std::vector<t_xyz> PolesVector;
     for ( size_t i = 0; i < sizeof(Poles)/sizeof(t_xyz); ++i )
@@ -190,13 +190,13 @@ private:
     const int p = 2;
 
     const t_xyz Poles[] = { t_xyz( 0.0,  0.0, -2.0),
-                          t_xyz( 1.0,  0.1, -2.7),
-                          t_xyz( 3.0, -0.1, -2.2),
-                          t_xyz( 5.0, -0.1, -3.2),
-                          t_xyz( 8.0, -0.2, -3.1),
-                          t_xyz(10.0, -0.1, -2.0),
-                          t_xyz(11.0,  0.1, -3.2),
-                          t_xyz(14.0,  0.0, -2.0) };
+                            t_xyz( 1.0,  0.1, -2.7),
+                            t_xyz( 3.0, -0.1, -2.2),
+                            t_xyz( 5.0, -0.1, -3.2),
+                            t_xyz( 8.0, -0.2, -3.1),
+                            t_xyz(10.0, -0.1, -2.0),
+                            t_xyz(11.0,  0.1, -3.2),
+                            t_xyz(14.0,  0.0, -2.0) };
     //
     std::vector<t_xyz> PolesVector;
     for ( size_t i = 0; i < sizeof(Poles)/sizeof(t_xyz); ++i )

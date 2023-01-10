@@ -154,6 +154,7 @@ set (primitives_H_FILES
   primitives/geom_SectionPatch.h
   primitives/geom_SphereSurface.h
   primitives/geom_Surface.h
+  primitives/geom_SurfaceOfRevolution.h
 )
 set (primitives_CPP_FILES
   primitives/geom_BezierOnRailsSurface.cpp
@@ -174,6 +175,7 @@ set (primitives_CPP_FILES
   primitives/geom_PolyLine.cpp
   primitives/geom_SphereSurface.cpp
   primitives/geom_Surface.cpp
+  primitives/geom_SurfaceOfRevolution.cpp
 )
 
 #------------------------------------------------------------------------------

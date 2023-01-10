@@ -39,6 +39,7 @@ set (actors_geom_H_FILES
   actors/geom/visu_ActorSectionCloud.h
   actors/geom/visu_ActorSphereSurface.h
   actors/geom/visu_ActorSurface.h
+  actors/geom/visu_ActorSurfaceOfRevolution.h
   actors/geom/visu_ActorVectorField.h
   actors/geom/visu_DataPositionCloud.h
 )
@@ -54,6 +55,7 @@ set (actors_geom_CPP_FILES
   actors/geom/visu_ActorSectionCloud.cpp
   actors/geom/visu_ActorSphereSurface.cpp
   actors/geom/visu_ActorSurface.cpp
+  actors/geom/visu_ActorSurfaceOfRevolution.cpp
   actors/geom/visu_ActorVectorField.cpp
   actors/geom/visu_DataPositionCloud.cpp
 )
@@ -121,6 +123,7 @@ set (commands_view_H_FILES
   commands/view/visu_ReparamCmd.h
   commands/view/visu_SphereCmd.h
   commands/view/visu_SplitCurveCmd.h
+  commands/view/visu_SurfOfRevolCmd.h
   commands/view/visu_UnifyCmd.h
 )
 set (commands_view_CPP_FILES

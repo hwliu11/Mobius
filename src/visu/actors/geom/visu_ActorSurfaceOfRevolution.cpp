@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 15 December 2014
+// Created on: 11 January 2023
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2023-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,71 +28,43 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef visu_KleinBottleCmd_HeaderFile
-#define visu_KleinBottleCmd_HeaderFile
+// Own include
+#include <mobius/visu_ActorSurfaceOfRevolution.h>
 
-// visu includes
-#include <mobius/visu_ActorKleinBottle.h>
-#include <mobius/visu_ViewCmd.h>
+using namespace mobius;
 
-namespace mobius {
-
-//! \ingroup MOBIUS_VISU
-//!
-//! Command for construction of Klein bottle.
-class visu_KleinBottleCmd : public visu_ViewCmd
+//! Constructor.
+//! \param Surf [in] the surface to draw.
+visu_ActorSurfaceOfRevolution::visu_ActorSurfaceOfRevolution(const t_ptr<geom_SurfaceOfRevolution>& Surf)
+: visu_ActorInsensitiveSurface( Surf.Access() )
 {
-public:
-
-  //! Constructor.
-  //! \param CmdRepo [in] command repo.
-  //! \param Picker [in] instance of Picker.
-  visu_KleinBottleCmd(const t_ptr<visu_CommandRepo>& CmdRepo,
-                      const t_ptr<visu_Picker>& Picker)
-  : visu_ViewCmd(CmdRepo, Picker) {}
-
-  //! Destructor.
-  virtual ~visu_KleinBottleCmd() {}
-
-public:
-
-  //! Returns human-readable name of the command.
-  //! \return name.
-  inline virtual std::string Name() const
-  {
-    return "Klein Bottle";
-  }
-
-public:
-
-  //! Executes command.
-  //! \return true in case of success, false -- otherwise.
-  virtual bool Execute()
-  {
-    std::cout << this->Name().c_str() << std::endl;
-
-    /* ================
-     *  Create surface
-     * ================ */
-
-    // Create surface
-    t_ptr<geom_KleinBottle> surf = new geom_KleinBottle( this->Arg<double>(0, 1.0) );
-
-    // Create actor
-    t_ptr<visu_ActorKleinBottle> S_actor = new visu_ActorKleinBottle(surf);
-
-    /* ==============
-     *  Adjust scene
-     * ============== */
-
-    this->Scene()->Add( S_actor.Access() );
-    this->Scene()->InstallAxes();
-
-    return true;
-  }
-
-};
-
 }
 
-#endif
+//! Destructor.
+visu_ActorSurfaceOfRevolution::~visu_ActorSurfaceOfRevolution()
+{
+}
+
+//! Draws surface.
+void visu_ActorSurfaceOfRevolution::GL_Draw()
+{
+  t_ptr<geom_SurfaceOfRevolution> surf = t_ptr<geom_SurfaceOfRevolution>::DownCast(m_surf);
+
+  /* ==========================
+   *  Render points on surface
+   * ========================== */
+
+#pragma region Filling
+  glEnable(GL_POINT_SMOOTH);
+  glPointSize(1);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glEnableClientState(GL_VERTEX_ARRAY);
+      glVertexPointer(3, GL_FLOAT, 0, m_pFilling);
+      glDrawArrays(GL_POINTS, 0, m_iNumFillingPoints);
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+  glEnd();
+  glDisable(GL_POINT_SMOOTH);
+#pragma endregion
+}

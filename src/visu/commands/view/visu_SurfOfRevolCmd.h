@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 15 December 2014
+// Created on: 11 January 2023
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2023-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,34 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef visu_KleinBottleCmd_HeaderFile
-#define visu_KleinBottleCmd_HeaderFile
+#ifndef visu_SurfOfRevolCmd_HeaderFile
+#define visu_SurfOfRevolCmd_HeaderFile
 
 // visu includes
-#include <mobius/visu_ActorKleinBottle.h>
+#include <mobius/visu_ActorSurfaceOfRevolution.h>
 #include <mobius/visu_ViewCmd.h>
+
+// geom includes
+#include <mobius/geom_SurfaceOfRevolution.h>
 
 namespace mobius {
 
 //! \ingroup MOBIUS_VISU
 //!
-//! Command for construction of Klein bottle.
-class visu_KleinBottleCmd : public visu_ViewCmd
+//! Command for construction of surfaces of revolution.
+class visu_SurfOfRevolCmd : public visu_ViewCmd
 {
 public:
 
   //! Constructor.
   //! \param CmdRepo [in] command repo.
   //! \param Picker [in] instance of Picker.
-  visu_KleinBottleCmd(const t_ptr<visu_CommandRepo>& CmdRepo,
-                      const t_ptr<visu_Picker>& Picker)
+  visu_SurfOfRevolCmd(const t_ptr<visu_CommandRepo>& CmdRepo,
+                      const t_ptr<visu_Picker>&      Picker)
   : visu_ViewCmd(CmdRepo, Picker) {}
 
   //! Destructor.
-  virtual ~visu_KleinBottleCmd() {}
+  virtual ~visu_SurfOfRevolCmd() {}
 
 public:
 
@@ -60,7 +63,7 @@ public:
   //! \return name.
   inline virtual std::string Name() const
   {
-    return "Klein Bottle";
+    return "Surface of revolution";
   }
 
 public:
@@ -71,24 +74,50 @@ public:
   {
     std::cout << this->Name().c_str() << std::endl;
 
-    /* ================
-     *  Create surface
-     * ================ */
+    // generatrix
+    t_ptr<t_bcurve> c = this->curve();
+    //
+    t_ptr<visu_ActorBSplCurve>
+      c_actor = new visu_ActorBSplCurve(c,
+                                        visu_ColorRGB<GLubyte>(255, 0, 0),
+                                        false,
+                                        true);
 
-    // Create surface
-    t_ptr<geom_KleinBottle> surf = new geom_KleinBottle( this->Arg<double>(0, 1.0) );
+    // surface of revolution
+    t_ptr<t_surfRevol> surf = new t_surfRevol(c, t_axis( t_xyz::O(), t_xyz::OX() ) );
+    //
+    t_ptr<visu_ActorSurfaceOfRevolution>
+      surf_actor = new visu_ActorSurfaceOfRevolution(surf);
 
-    // Create actor
-    t_ptr<visu_ActorKleinBottle> S_actor = new visu_ActorKleinBottle(surf);
-
-    /* ==============
-     *  Adjust scene
-     * ============== */
-
-    this->Scene()->Add( S_actor.Access() );
-    this->Scene()->InstallAxes();
+    this->Scene()->Add( c_actor.Access() );
+    this->Scene()->Add( surf_actor.Access() );
 
     return true;
+  }
+
+private:
+
+  //! Constructs c(u).
+  //! \return constructed curve.
+  t_ptr<t_bcurve> curve() const
+  {
+    const double U[] = {0, 0, 0, 1, 2, 2.5, 3, 4, 5, 5, 5};
+    const int p = 2;
+
+    const t_xyz Poles[] = { t_xyz( 0.0, 5.2, 0.0),
+                            t_xyz( 1.0, 2.0, 0.0),
+                            t_xyz( 3.0, 2.2, 0.0),
+                            t_xyz( 5.0, 0.2, 0.0),
+                            t_xyz( 8.0, 2.2, 0.0),
+                            t_xyz(10.0, 1.8, 0.0),
+                            t_xyz(11.0, 2.2, 0.0),
+                            t_xyz(14.0, 7.9, 0.0) };
+    //
+    std::vector<t_xyz> PolesVector;
+    for ( size_t i = 0; i < sizeof(Poles)/sizeof(t_xyz); ++i )
+      PolesVector.push_back(Poles[i]);
+
+    return new t_bcurve(PolesVector, U, sizeof(U)/sizeof(double), p);
   }
 
 };

@@ -49,6 +49,7 @@
 #include <mobius/visu_ReparamCmd.h>
 #include <mobius/visu_SphereCmd.h>
 #include <mobius/visu_SplitCurveCmd.h>
+#include <mobius/visu_SurfOfRevolCmd.h>
 #include <mobius/visu_UnifyCmd.h>
 
 // STD includes
@@ -110,6 +111,7 @@ void RegisterViewerCommands(const t_ptr<visu_Picker>& Picker)
   AppUtils::CmdRepo->RegisterCommand( "create_section",          new visu_CreateSectionCmd      (AppUtils::CmdRepo, Picker) );
   AppUtils::CmdRepo->RegisterCommand( "reparam",                 new visu_ReparamCmd            (AppUtils::CmdRepo, Picker) );
   AppUtils::CmdRepo->RegisterCommand( "unify",                   new visu_UnifyCmd              (AppUtils::CmdRepo, Picker) );
+  AppUtils::CmdRepo->RegisterCommand( "revol",                   new visu_SurfOfRevolCmd        (AppUtils::CmdRepo, Picker) );
 }
 
 //-----------------------------------------------------------------------------
