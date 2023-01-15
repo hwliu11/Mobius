@@ -74,6 +74,20 @@ public:
   mobiusGeom_EXPORT static core_Ptr<geom_BSplineSurface>
     Instance(const std::string& json);
 
+  //! Constructs a B-spline surface for the given Bezier control points.
+  //! \param[in] umin  the first `u` value.
+  //! \param[in] umax  the last `u` value.
+  //! \param[in] umin  the first `v` value.
+  //! \param[in] umax  the last `v` value.
+  //! \param[in] poles the passed poles.
+  //! \return the constructed B-spline/Bezier surface.
+  mobiusGeom_EXPORT static core_Ptr<geom_BSplineSurface>
+    MakeBezier(const double                             umin,
+               const double                             umax,
+               const double                             vmin,
+               const double                             vmax,
+               const std::vector< std::vector<t_xyz> >& poles);
+
   //! Compares two passed B-surfaces with the prescribed tolerances.
   //! \param[in] F     first surface to compare.
   //! \param[in] G     second surface to compare.

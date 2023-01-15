@@ -420,6 +420,44 @@ mobius::core_Ptr<mobius::geom_BSplineSurface>
 
 //-----------------------------------------------------------------------------
 
+mobius::core_Ptr<mobius::geom_BSplineSurface>
+  mobius::geom_BSplineSurface::MakeBezier(const double                             umin,
+                                          const double                             umax,
+                                          const double                             vmin,
+                                          const double                             vmax,
+                                          const std::vector< std::vector<t_xyz> >& poles)
+{
+  const int nu = int( poles.size() ) - 1;
+  const int nv = int( poles.front().size() ) - 1;
+  const int p  = nu; // For Bezier.
+  const int q  = nv; // For Bezier.
+
+  // U knots.
+  std::vector<double> U;
+  U.resize(2*p + 2);
+  //
+  for ( int i = 0; i <= p; ++i )
+    U[i] = umin;
+  //
+  for ( int i = p + 1; i <= 2*nu + 1; ++i )
+    U[i] = umax;
+
+  // V knots.
+  std::vector<double> V;
+  V.resize(2*q + 2);
+  //
+  for ( int i = 0; i <= q; ++i )
+    V[i] = vmin;
+  //
+  for ( int i = q + 1; i <= 2*nv + 1; ++i )
+    V[i] = vmax;
+
+  t_ptr<t_bsurf> res = new t_bsurf(poles, U, V, p, q);
+  return res;
+}
+
+//-----------------------------------------------------------------------------
+
 bool mobius::geom_BSplineSurface::Compare(const t_ptr<t_bsurf>& F,
                                           const t_ptr<t_bsurf>& G,
                                           const double          tol2d,

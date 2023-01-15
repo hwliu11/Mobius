@@ -52,8 +52,9 @@ namespace {
     //! Curve point.
     struct t_pt
     {
-      double x, y, z, tx, ty, tz, u;
-      t_pt() : x(0.), y(0.), z(0.), tx(0.), ty(0.), tz(0.), u(0.) {}
+      t_xyz  P, Pt;
+      double u;
+      t_pt() : u(0.) {}
     };
 
     std::string       name; //!< Curve name.
@@ -73,13 +74,13 @@ namespace {
     void AddPoint(const std::vector<std::string>& tokens)
     {
       t_pt pt;
-      pt.x  = core::str::to_number<double>(tokens[0]);
-      pt.y  = core::str::to_number<double>(tokens[1]);
-      pt.z  = core::str::to_number<double>(tokens[2]);
-      pt.tx = core::str::to_number<double>(tokens[3]);
-      pt.ty = core::str::to_number<double>(tokens[4]);
-      pt.tz = core::str::to_number<double>(tokens[5]);
-      pt.u  = core::str::to_number<double>(tokens[6]);
+      pt.P .SetX ( core::str::to_number<double>(tokens[0]) );
+      pt.P .SetY ( core::str::to_number<double>(tokens[1]) );
+      pt.P .SetZ ( core::str::to_number<double>(tokens[2]) );
+      pt.Pt.SetX ( core::str::to_number<double>(tokens[3]) );
+      pt.Pt.SetY ( core::str::to_number<double>(tokens[4]) );
+      pt.Pt.SetZ ( core::str::to_number<double>(tokens[5]) );
+      pt.u = core::str::to_number<double>(tokens[6]);
       //
       pts.push_back(pt);
     }
@@ -97,10 +98,10 @@ namespace {
         const double umax = pR.u;
 
         // Compute control points of the corresponding Bezier segment.
-        t_xyz P0 = t_xyz(pL.x, pL.y, pL.z);
-        t_xyz P3 = t_xyz(pR.x, pR.y, pR.z);
-        t_xyz P1 = P0 + (1./3.)*(umax - umin)*t_xyz(pL.tx, pL.ty, pL.tz);
-        t_xyz P2 = P3 - (1./3.)*(umax - umin)*t_xyz(pR.tx, pR.ty, pR.tz);
+        t_xyz P0 = pL.P;
+        t_xyz P3 = pR.P;
+        t_xyz P1 = P0 + (1./3.)*(umax - umin)*pL.Pt;
+        t_xyz P2 = P3 - (1./3.)*(umax - umin)*pR.Pt;
 
         // Create Bezier segment.
         t_ptr<t_bcurve> seg = t_bcurve::MakeBezier(umin, umax, {P0, P1, P2, P3});
@@ -138,19 +139,13 @@ namespace {
     //! Surface point.
     struct t_pt
     {
-      double x, y, z, Pu_x, Pu_y, Pu_z, Pv_x, Pv_y, Pv_z, Puv_x, Puv_y, Puv_z, u, v;
-
-      //! Default ctor.
-      t_pt() : x     (0.), y     (0.), z     (0.),
-               Pu_x  (0.), Pu_y  (0.), Pu_z  (0.),
-               Pv_x  (0.), Pv_y  (0.), Pv_z  (0.),
-               Puv_x (0.), Puv_y (0.), Puv_z (0.),
-               u     (0.), v     (0.)
-      {}
+      t_xyz  P, Pu, Pv, Puv;
+      double u, v;
+      t_pt() : u(0.), v(0.) {}
     };
 
     //! Ctor.
-    t_surfData() : ptSerial(0) {}
+    t_surfData() : nptsU(0), nptsV(0), ptSerial(0) {}
 
     //! Adds a surface point from the passed tokens.
     void AddPoint(const std::vector<std::string>& tokens)
@@ -161,53 +156,89 @@ namespace {
       const int i = (this->ptSerial - 1) % this->nptsU;
 
       t_pt pt;
-      pt.x     = core::str::to_number<double>(tokens[0]);
-      pt.y     = core::str::to_number<double>(tokens[1]);
-      pt.z     = core::str::to_number<double>(tokens[2]);
-      pt.Pu_x  = core::str::to_number<double>(tokens[3]);
-      pt.Pu_y  = core::str::to_number<double>(tokens[4]);
-      pt.Pu_z  = core::str::to_number<double>(tokens[5]);
-      pt.Pv_x  = core::str::to_number<double>(tokens[6]);
-      pt.Pv_y  = core::str::to_number<double>(tokens[7]);
-      pt.Pv_z  = core::str::to_number<double>(tokens[8]);
-      pt.Puv_x = core::str::to_number<double>(tokens[9]);
-      pt.Puv_y = core::str::to_number<double>(tokens[10]);
-      pt.Puv_z = core::str::to_number<double>(tokens[11]);
-      pt.u     = core::str::to_number<double>(tokens[12]);
-      pt.v     = core::str::to_number<double>(tokens[13]);
+      pt.P.SetX   ( core::str::to_number<double>(tokens[0]) );
+      pt.P.SetY   ( core::str::to_number<double>(tokens[1]) );
+      pt.P.SetZ   ( core::str::to_number<double>(tokens[2]) );
+      pt.Pu.SetX  ( core::str::to_number<double>(tokens[3]) );
+      pt.Pu.SetY  ( core::str::to_number<double>(tokens[4]) );
+      pt.Pu.SetZ  ( core::str::to_number<double>(tokens[5]) );
+      pt.Pv.SetX  ( core::str::to_number<double>(tokens[6]) );
+      pt.Pv.SetY  ( core::str::to_number<double>(tokens[7]) );
+      pt.Pv.SetZ  ( core::str::to_number<double>(tokens[8]) );
+      pt.Puv.SetX ( core::str::to_number<double>(tokens[9]) );
+      pt.Puv.SetY ( core::str::to_number<double>(tokens[10]) );
+      pt.Puv.SetZ ( core::str::to_number<double>(tokens[11]) );
+      pt.u = core::str::to_number<double>(tokens[12]);
+      pt.v = core::str::to_number<double>(tokens[13]);
 
       this->pts[i][j] = pt;
     }
 
-     //! Prepares polynomial patches.
+    //! Prepares polynomial patches.
     void ToBezierPatches(std::vector< t_ptr<t_bsurf> >& tiles) const
     {
-      /*const int numUisos = this->nptsU;
-      const int numVisos = this->nptsV;
-
-      for ( int j = 0; j < numVisos - 1; ++j )
+      for ( int j = 0; j < this->nptsV - 1; ++j )
       {
-        for ( int i = 0; i < numUisos - 1; ++i )
+        for ( int i = 0; i < this->nptsU - 1; ++i )
         {
-          const t_pt& P1 = this->pts[j + numUisos*i]
-          const int serialIdx = Astra_SurfPointSize*(iPoint + (numUisos)*jPoint);
+          const double umin = this->pts[i]  [j]  .u;
+          const double umax = this->pts[i+1][j]  .u;
+          const double vmin = this->pts[i]  [j]  .v;
+          const double vmax = this->pts[i]  [j+1].v;
+
+          t_xyz P00 = this->pts[i][j].P;
+
+          t_xyz P10 = P00 + (1/3)*(umax-umin)*this->pts[i][j].Pu;
+          t_xyz P01 = P00 + (1/3)*(vmax-vmin)*this->pts[i][j].Pv;
+          t_xyz P11 = P10 + P01 - P00 + (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i][j].Puv;
+
+          t_xyz P30 = this->pts[i+1][j].P;
+          t_xyz P20 = P30 - (1/3)*(umax-umin)*this->pts[i+1][j].Pu;
+          t_xyz P31 = P30 + (1/3)*(vmax-vmin)*this->pts[i+1][j].Pv;
+          t_xyz P21 = P20 + P31 - P30 - (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i+1][j].Puv;
+
+          t_xyz P03 = this->pts[i][j+1].P;
+          t_xyz P13 = P03 + (1/3)*(umax-umin)*this->pts[i][j+1].Pu;
+          t_xyz P02 = P03 - (1/3)*(vmax-vmin)*this->pts[i][j+1].Pv;
+          t_xyz P12 = P13 + P02 - P03 - (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i][j+1].Puv;
+
+          t_xyz P33 = this->pts[i+1][j+1].P;
+          t_xyz P23 = P33 - (1/3)*(umax-umin)*this->pts[i+1][j+1].Pu;
+          t_xyz P32 = P33 - (1/3)*(vmax-vmin)*this->pts[i+1][j+1].Pv;
+          t_xyz P22 = P23 + P32 - P33 + (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i+1][j+1].Puv;
+
+          std::vector< std::vector<t_xyz> >
+            bzPoints = { {P00, P10, P20, P30},
+                         {P01, P11, P21, P31},
+                         {P02, P12, P22, P32},
+                         {P03, P13, P23, P33} };
+
+          t_ptr<t_bsurf> tile = t_bsurf::MakeBezier(umin, umax, vmin, vmax, bzPoints);
+          //
+          tiles.push_back(tile);
         }
-      }*/
-      // TODO: NYI
+      }
     }
 
     //! Converts surface data to a B-spline surface.
-    t_ptr<t_bsurf> ToBSplineSurface() const
+    t_ptr<t_bsurf> ToBSplineSurface()
     {
+      // Convert to Bezier patches.
+      this->ToBezierPatches(bzPatches);
+
+      if ( bzPatches.empty() )
+        return nullptr;
+
       // TODO: NYI
       return nullptr;
     }
 
-    std::string                      name;     //!< Surface name.
-    int                              nptsU;    //!< Number of points in the U direction.
-    int                              nptsV;    //!< Number of points in the V direction.
-    std::vector< std::vector<t_pt> > pts;      //!< Surface points in a grid.
-    int                              ptSerial; //!< Serial index of a point.
+    std::string                      name;      //!< Surface name.
+    int                              nptsU;     //!< Number of points in the U direction.
+    int                              nptsV;     //!< Number of points in the V direction.
+    std::vector< std::vector<t_pt> > pts;       //!< Surface points in a grid.
+    int                              ptSerial;  //!< Serial index of a point.
+    std::vector< t_ptr<t_bsurf> >    bzPatches; //!< All paving Bezier patches.
   };
 
   //! Checks if the passed line tokens represent a curve.
@@ -351,11 +382,19 @@ bool geom_ReadAstra::Perform(const std::string& filename)
 
   // Make curves.
   for ( auto& cds : curveDs )
+  {
     m_curves.push_back( cds.ToBSplineCurve() );
+  }
 
   // Make surface.
   for ( auto& sds : surfDs )
-    m_surfaces.push_back( sds.ToBSplineSurface() );
+  {
+    sds.ToBSplineSurface();
+    for ( const auto& bz : sds.bzPatches )
+      m_surfaces.push_back(bz);
+
+    //m_surfaces.push_back( sds.ToBSplineSurface() );
+  }
 
   FILE.close();
   return true;
