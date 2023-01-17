@@ -33,6 +33,7 @@
 
 // Standard includes
 #include <fstream>
+#include <iterator>
 
 using namespace mobius;
 
