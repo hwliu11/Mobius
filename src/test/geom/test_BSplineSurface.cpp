@@ -38,6 +38,9 @@
 #include <mobius/core_FileDumper.h>
 #include <mobius/core_Precision.h>
 
+// BSpl includes
+#include <mobius/bspl.h>
+
 // Geom includes
 #include <mobius/geom_BSplineSurface.h>
 
@@ -2230,6 +2233,44 @@ mobius::outcome mobius::test_BSplineSurface::findMaxSpan01(const int funcID)
                                                           << span_U << span_U_ref);
     return res.failure();
   }
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Concatenates compatible surface patches.
+//!
+//! \param[in] funcID function ID.
+//! \return true in case of success, false -- otherwise.
+mobius::outcome mobius::test_BSplineSurface::concatCompatible(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  t_ptr<t_bsurf>
+    S00 = t_bsurf::MakeBezier(0, 1, 0, 1, { {t_xyz(0, 0, 0), t_xyz(0, 1, 0)}, // u = const
+                                            {t_xyz(1, 0, 0), t_xyz(1, 1, 0)} }); // u = const
+  t_ptr<t_bsurf>
+    S10 = t_bsurf::MakeBezier(0, 1, 1, 2, { {t_xyz(0, 1, 0), t_xyz(0, 2, 0)}, // u = const
+                                            {t_xyz(1, 1, 0), t_xyz(1, 2, 0)} }); // u = const
+  t_ptr<t_bsurf>
+    S20 = t_bsurf::MakeBezier(0, 1, 2, 3, { {t_xyz(0, 2, 0), t_xyz(0, 3, 0)}, // u = const
+                                            {t_xyz(1, 2, 0), t_xyz(1, 3, 0)} }); // u = const
+
+  S00->ConcatenateCompatible(S10, false);
+  S00->ConcatenateCompatible(S20, false);
+
+  const int numPoles_U = S00->GetNumOfPoles_U();
+  const int numPoles_V = S00->GetNumOfPoles_V();
+  const int numKnots_U = S00->GetNumOfKnots_U();
+  const int numKnots_V = S00->GetNumOfKnots_V();
+
+  // Check relation between m, n and p.
+  if ( !bspl::Check( numPoles_U - 1, numKnots_U - 1, S00->GetDegree_U() ) )
+    throw res.failure();
+  //
+  if ( !bspl::Check( numPoles_V - 1, numKnots_V - 1, S00->GetDegree_V() ) )
+    throw res.failure();
 
   return res.success();
 }

@@ -95,34 +95,36 @@ public:
               << &invertPoint05
               << &invertPoint06
               << &findMaxSpan01
+              << &concatCompatible
               ;
   }
 
 private:
 
-  static outcome evalInDomain    (const int funcID);
-  static outcome evalOutDomain   (const int funcID);
-  static outcome evalJSON1       (const int funcID);
-  static outcome evalJSON2       (const int funcID);
-  static outcome evalD1InDomain  (const int funcID);
-  static outcome evalD1OutDomain (const int funcID);
-  static outcome evalD2InDomain  (const int funcID);
-  static outcome evalD2OutDomain (const int funcID);
-  static outcome computeEnergy01 (const int funcID);
-  static outcome computeEnergy02 (const int funcID);
-  static outcome computeEnergy03 (const int funcID);
-  static outcome computeEnergy04 (const int funcID);
-  static outcome computeEnergy05 (const int funcID);
-  static outcome computeEnergy06 (const int funcID);
-  static outcome insertKnot01    (const int funcID);
-  static outcome exchangeUV01    (const int funcID);
-  static outcome invertPoint01   (const int funcID);
-  static outcome invertPoint02   (const int funcID);
-  static outcome invertPoint03   (const int funcID);
-  static outcome invertPoint04   (const int funcID);
-  static outcome invertPoint05   (const int funcID);
-  static outcome invertPoint06   (const int funcID);
-  static outcome findMaxSpan01   (const int funcID);
+  static outcome evalInDomain     (const int funcID);
+  static outcome evalOutDomain    (const int funcID);
+  static outcome evalJSON1        (const int funcID);
+  static outcome evalJSON2        (const int funcID);
+  static outcome evalD1InDomain   (const int funcID);
+  static outcome evalD1OutDomain  (const int funcID);
+  static outcome evalD2InDomain   (const int funcID);
+  static outcome evalD2OutDomain  (const int funcID);
+  static outcome computeEnergy01  (const int funcID);
+  static outcome computeEnergy02  (const int funcID);
+  static outcome computeEnergy03  (const int funcID);
+  static outcome computeEnergy04  (const int funcID);
+  static outcome computeEnergy05  (const int funcID);
+  static outcome computeEnergy06  (const int funcID);
+  static outcome insertKnot01     (const int funcID);
+  static outcome exchangeUV01     (const int funcID);
+  static outcome invertPoint01    (const int funcID);
+  static outcome invertPoint02    (const int funcID);
+  static outcome invertPoint03    (const int funcID);
+  static outcome invertPoint04    (const int funcID);
+  static outcome invertPoint05    (const int funcID);
+  static outcome invertPoint06    (const int funcID);
+  static outcome findMaxSpan01    (const int funcID);
+  static outcome concatCompatible (const int funcID);
 
 };
 

@@ -176,10 +176,12 @@ namespace {
     }
 
     //! Prepares polynomial patches.
-    void ToBezierPatches(std::vector< t_ptr<t_bsurf> >& tiles) const
+    void ToBezierPatches(std::vector< std::vector< t_ptr<t_bsurf> > >& tiles) const
     {
       for ( int j = 0; j < this->nptsV - 1; ++j )
       {
+        std::vector< t_ptr<t_bsurf> > row;
+
         for ( int i = 0; i < this->nptsU - 1; ++i )
         {
           const double umin = this->pts[i]  [j]  .u;
@@ -208,16 +210,23 @@ namespace {
           t_xyz P32 = P33 - (1/3)*(vmax-vmin)*this->pts[i+1][j+1].Pv;
           t_xyz P22 = P23 + P32 - P33 + (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i+1][j+1].Puv;
 
+            /*{P00, P10, P20, P30},
+              {P01, P11, P21, P31},
+              {P02, P12, P22, P32},
+              {P03, P13, P23, P33}*/
+
           std::vector< std::vector<t_xyz> >
-            bzPoints = { {P00, P10, P20, P30},
-                         {P01, P11, P21, P31},
-                         {P02, P12, P22, P32},
-                         {P03, P13, P23, P33} };
+            bzPoints = { {P00, P01, P02, P03},
+                         {P10, P11, P12, P13},
+                         {P20, P21, P22, P23},
+                         {P30, P31, P32, P33} };
 
           t_ptr<t_bsurf> tile = t_bsurf::MakeBezier(umin, umax, vmin, vmax, bzPoints);
           //
-          tiles.push_back(tile);
+          row.push_back(tile);
         }
+
+        tiles.push_back(row);
       }
     }
 
@@ -230,16 +239,38 @@ namespace {
       if ( bzPatches.empty() )
         return nullptr;
 
-      // TODO: NYI
-      return nullptr;
+      const size_t nRows = bzPatches[0].size();
+      const size_t nCols = bzPatches.size();
+
+      // Concatenate patches along U direction.
+      for ( int i = 0; i < nCols; ++i )
+      {
+        t_ptr<t_bsurf> res = bzPatches[i][0];
+        //
+        for ( size_t j = 1; j < nRows; ++j )
+          res->ConcatenateCompatible(bzPatches[i][j], true);
+        //
+        splRows.push_back(res);
+      }
+
+      // Concatenate patches along V direction.
+      t_ptr<t_bsurf> res = splRows[0];
+      //
+      for ( int i = 1; i < nCols; ++i )
+      {
+        res->ConcatenateCompatible(splRows[i], false);
+      }
+
+      return res;
     }
 
-    std::string                      name;      //!< Surface name.
-    int                              nptsU;     //!< Number of points in the U direction.
-    int                              nptsV;     //!< Number of points in the V direction.
-    std::vector< std::vector<t_pt> > pts;       //!< Surface points in a grid.
-    int                              ptSerial;  //!< Serial index of a point.
-    std::vector< t_ptr<t_bsurf> >    bzPatches; //!< All paving Bezier patches.
+    std::string                                  name;      //!< Surface name.
+    int                                          nptsU;     //!< Number of points in the U direction.
+    int                                          nptsV;     //!< Number of points in the V direction.
+    std::vector< std::vector<t_pt> >             pts;       //!< Surface points in a grid.
+    int                                          ptSerial;  //!< Serial index of a point.
+    std::vector< std::vector< t_ptr<t_bsurf> > > bzPatches; //!< All paving Bezier patches.
+    std::vector< t_ptr<t_bsurf> >                splRows;   //!< Spline rows after concatenation along U.
   };
 
   //! Checks if the passed line tokens represent a curve.
@@ -390,11 +421,16 @@ bool geom_ReadAstra::Perform(const std::string& filename)
   // Make surface.
   for ( auto& sds : surfDs )
   {
-    sds.ToBSplineSurface();
-    for ( const auto& bz : sds.bzPatches )
-      m_surfaces.push_back(bz);
+    t_ptr<t_bsurf> res = sds.ToBSplineSurface();
 
-    //m_surfaces.push_back( sds.ToBSplineSurface() );
+    //for ( const auto& row : sds.bzPatches )
+    //  for ( const auto& bz : row )
+    //    m_surfaces.push_back(bz);
+
+    //for ( const auto& row : sds.splRows )
+    //  m_surfaces.push_back(row);
+
+    m_surfaces.push_back(res);
   }
 
   FILE.close();

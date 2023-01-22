@@ -220,6 +220,18 @@ public:
   mobiusGeom_EXPORT void
     ExchangeUV();
 
+  //! Concatenates the passed B-spline surface with this one if both patches
+  //! are already compatible, i.e., they have the same degree and monotonically
+  //! increasing knots. Concatenation is to be done in either U or V direction
+  //! depending on the passed Boolean flag.
+  //! \param[in] other the surface to concatenate with this one.
+  //! \param[in] isU   the Boolean flag indicating whether to concatenate
+  //!                  geometries in U or V direction.
+  //! \return false if concatenation is not done, i.e., surfaces are not compatible.
+  mobiusGeom_EXPORT bool
+    ConcatenateCompatible(const t_ptr<geom_BSplineSurface>& other,
+                          const bool                        isU);
+
 public:
 
   //! Accessor for the collection of poles. The collection of poles is

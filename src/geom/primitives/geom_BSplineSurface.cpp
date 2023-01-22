@@ -1208,6 +1208,97 @@ void mobius::geom_BSplineSurface::ExchangeUV()
 
 //-----------------------------------------------------------------------------
 
+bool mobius::geom_BSplineSurface::ConcatenateCompatible(const t_ptr<geom_BSplineSurface>& other,
+                                                        const bool                        isU)
+{
+  if ( m_iDegU != other->m_iDegU )
+    return false;
+
+  if ( m_iDegV != other->m_iDegV )
+    return false;
+
+  if ( isU && ( m_U.back() > other->m_U.front() ) )
+    return false;
+
+  if ( !isU && ( m_V.back() > other->m_V.front() ) )
+    return false;
+
+  if ( isU )
+  {
+    const std::vector<t_xyz>& P = m_poles.back();
+    const std::vector<t_xyz>& Q = other->m_poles.front();
+
+    if ( P.size() != Q.size() )
+      return false;
+
+    const size_t n = P.size();
+    //
+    for ( size_t j = 0; j < n; ++j )
+    {
+      if ( (P[j] - Q[j]).Modulus() > core_Precision::Resolution3D() )
+        return false;
+    }
+
+    // Remove last clamp of knots.
+    m_U.resize(m_U.size() - m_iDegU - 1);
+
+    // Add knots from the next segment.
+    for ( int j = 1; j < other->m_U.size(); ++j )
+      m_U.push_back(other->m_U[j]);
+
+    // Add poles.
+    for ( size_t i = 1; i < other->m_poles.size(); ++i )
+    {
+      m_poles.push_back(other->m_poles[i]);
+    }
+  }
+  else
+  {
+    // The first pole of the next segment should be equal to the last
+    // pole of the previous segment.
+
+    std::vector<t_xyz> P;
+    std::vector<t_xyz> Q;
+
+    for ( size_t j = 0; j < m_poles.size(); ++j )
+      P.push_back( m_poles[j].back() );
+
+    for ( size_t j = 0; j < other->m_poles.size(); ++j )
+      Q.push_back( other->m_poles[j].front() );
+
+    if ( P.size() != Q.size() )
+      return false;
+
+    const size_t n = P.size();
+    //
+    for ( size_t j = 0; j < n; ++j )
+    {
+      if ( (P[j] - Q[j]).Modulus() > core_Precision::Resolution3D() )
+        return false;
+    }
+
+    // Remove last clamp of knots.
+    m_V.resize(m_V.size() - m_iDegV - 1);
+
+    // Add knots from the next segment.
+    for ( int j = 1; j < other->m_V.size(); ++j )
+      m_V.push_back(other->m_V[j]);
+
+    // Add poles.
+    for ( size_t j = 0; j < m_poles.size(); ++j )
+    {
+      for ( size_t i = 1; i < other->m_poles[j].size(); ++i )
+      {
+        m_poles[j].push_back(other->m_poles[j][i]);
+      }
+    }
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 void mobius::geom_BSplineSurface::init(const std::vector< std::vector<t_xyz> >& Poles,
                                        const std::vector<double>&               U,
                                        const std::vector<double>&               V,
