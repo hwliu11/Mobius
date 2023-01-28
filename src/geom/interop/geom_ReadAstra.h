@@ -33,7 +33,7 @@
 
 // Geom includes
 #include <mobius/geom_BSplineCurve.h>
-#include <mobius/geom_BSplineSurface.h>
+#include <mobius/geom_Surface.h>
 
 // Core includes
 #include <mobius/core_IAlgorithm.h>
@@ -64,7 +64,7 @@ public:
   }
 
   //! \return the imported surface.
-  const std::vector< t_ptr<t_bsurf> >& GetResultSurfaces() const
+  const std::vector< t_ptr<t_surf> >& GetResultSurfaces() const
   {
     return m_surfaces;
   }
@@ -80,7 +80,7 @@ public:
 protected:
 
   std::vector< t_ptr<t_bcurve> > m_curves;   //!< The imported b-spline curves.
-  std::vector< t_ptr<t_bsurf> >  m_surfaces; //!< The imported b-spline surfaces.
+  std::vector< t_ptr<t_surf> >   m_surfaces; //!< The imported b-spline surfaces.
 
 };
 

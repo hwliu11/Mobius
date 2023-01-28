@@ -129,3 +129,23 @@ mobius::t_ptr<mobius::t_mesh>
   //
   return converter.GetMobiusTriangulation();
 }
+
+//-----------------------------------------------------------------------------
+
+Handle(Geom_SurfaceOfRevolution)
+  mobius::cascade::GetOpenCascadeRevolSurf(const t_ptr<t_surfRevol>& surface)
+{
+  // Convert the meridian curve.
+  Handle(Geom_BSplineCurve)
+    occC = GetOpenCascadeBCurve( t_ptr<t_bcurve>::DownCast( surface->GetMeridian() ) );
+
+  // Convert the axis.
+  const t_axis& ax = surface->GetAxis();
+  gp_Ax1        occAx( GetOpenCascadePnt( ax.GetPosition() ),
+                       GetOpenCascadeXYZ( ax.GetDirection() ) );
+
+  Handle(Geom_SurfaceOfRevolution)
+    res = new Geom_SurfaceOfRevolution(occC, occAx);
+
+  return res;
+}

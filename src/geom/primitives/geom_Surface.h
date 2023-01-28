@@ -79,6 +79,9 @@ public:
 
 };
 
+//! Convenience shortcut.
+typedef geom_Surface t_surf;
+
 }
 
 #endif

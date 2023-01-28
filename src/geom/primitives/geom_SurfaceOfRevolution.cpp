@@ -34,10 +34,12 @@
 // Standard includes
 #include <math.h>
 
+using namespace mobius;
+
 //-----------------------------------------------------------------------------
 
-mobius::geom_SurfaceOfRevolution::geom_SurfaceOfRevolution(const t_ptr<t_curve>& curve,
-                                                           const t_axis&         axis)
+geom_SurfaceOfRevolution::geom_SurfaceOfRevolution(const t_ptr<t_curve>& curve,
+                                                   const t_axis&         axis)
 : geom_Surface (),
   m_c          (curve),
   m_ax         (axis)
@@ -46,14 +48,14 @@ mobius::geom_SurfaceOfRevolution::geom_SurfaceOfRevolution(const t_ptr<t_curve>&
 
 //-----------------------------------------------------------------------------
 
-mobius::geom_SurfaceOfRevolution::~geom_SurfaceOfRevolution()
+geom_SurfaceOfRevolution::~geom_SurfaceOfRevolution()
 {}
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_SurfaceOfRevolution::GetBounds(double& xMin, double& xMax,
-                                                 double& yMin, double& yMax,
-                                                 double& zMin, double& zMax) const
+void geom_SurfaceOfRevolution::GetBounds(double& xMin, double& xMax,
+                                         double& yMin, double& yMax,
+                                         double& zMin, double& zMax) const
 {
   // TODO: NYI
 
@@ -72,37 +74,37 @@ void mobius::geom_SurfaceOfRevolution::GetBounds(double& xMin, double& xMax,
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_SurfaceOfRevolution::GetMinParameter_U() const
+double geom_SurfaceOfRevolution::GetMinParameter_U() const
 {
   return 0.;
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_SurfaceOfRevolution::GetMaxParameter_U() const
+double geom_SurfaceOfRevolution::GetMaxParameter_U() const
 {
   return 2*M_PI;
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_SurfaceOfRevolution::GetMinParameter_V() const
+double geom_SurfaceOfRevolution::GetMinParameter_V() const
 {
   return m_c->GetMinParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-double mobius::geom_SurfaceOfRevolution::GetMaxParameter_V() const
+double geom_SurfaceOfRevolution::GetMaxParameter_V() const
 {
   return m_c->GetMaxParameter();
 }
 
 //-----------------------------------------------------------------------------
 
-void mobius::geom_SurfaceOfRevolution::Eval(const double u,
-                                            const double v,
-                                            t_xyz&       S) const
+void geom_SurfaceOfRevolution::Eval(const double u,
+                                    const double v,
+                                    t_xyz&       S) const
 {
   t_xyz P;
   m_c->Eval(v, P);
@@ -113,4 +115,20 @@ void mobius::geom_SurfaceOfRevolution::Eval(const double u,
 
   P.Transform(mx);
   S = P;
+}
+
+//-----------------------------------------------------------------------------
+
+const t_ptr<t_curve>&
+  geom_SurfaceOfRevolution::GetMeridian() const
+{
+  return m_c;
+}
+
+//-----------------------------------------------------------------------------
+
+const t_axis&
+  geom_SurfaceOfRevolution::GetAxis() const
+{
+  return m_ax;
 }

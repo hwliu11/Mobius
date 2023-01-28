@@ -51,6 +51,7 @@
 #include <mobius/geom_BSplineCurve.h>
 #include <mobius/geom_BSplineSurface.h>
 #include <mobius/geom_PlaneSurface.h>
+#include <mobius/geom_SurfaceOfRevolution.h>
 
 // Poly includes
 #include <mobius/poly_Mesh.h>
@@ -59,6 +60,7 @@
 #include <Geom_BSplineCurve.hxx>
 #include <Geom_BSplineSurface.hxx>
 #include <Geom_Plane.hxx>
+#include <Geom_SurfaceOfRevolution.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Vec.hxx>
 #include <Poly_Triangulation.hxx>
@@ -199,6 +201,12 @@ namespace mobius
     //! \return Mobius mesh.
     mobiusCascade_EXPORT static t_ptr<t_mesh>
       GetMobiusMesh(const Handle(Poly_Triangulation)& tris);
+
+    //! Converts Mobius surface of revolution to OpenCascade counterpart.
+    //! \param[in] surface Mobius surface to convert.
+    //! \return OpenCascade surface.
+    mobiusCascade_EXPORT static Handle(Geom_SurfaceOfRevolution)
+      GetOpenCascadeRevolSurf(const t_ptr<t_surfRevol>& surface);
 
   };
 }

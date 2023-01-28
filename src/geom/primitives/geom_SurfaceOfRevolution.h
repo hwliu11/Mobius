@@ -105,6 +105,16 @@ public:
          const double v,
          core_XYZ&    S) const override;
 
+public:
+
+  //! \return the meridian curve.
+  mobiusGeom_EXPORT const t_ptr<t_curve>&
+    GetMeridian() const;
+
+  //! \return the turning axis.
+  mobiusGeom_EXPORT const t_axis&
+    GetAxis() const;
+
 private:
 
   t_ptr<t_curve> m_c;  //!< Generatrix curve.

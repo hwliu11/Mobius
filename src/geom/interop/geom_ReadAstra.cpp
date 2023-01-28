@@ -31,24 +31,40 @@
 // Own include
 #include <mobius/geom_ReadAstra.h>
 
+// Core includes
+#include <mobius/core_Axis.h>
+
+// Geom includes
+#include <mobius/geom_BSplineSurface.h>
+#include <mobius/geom_SurfaceOfRevolution.h>
+
 // Standard includes
 #include <fstream>
 #include <iterator>
+#include <unordered_map>
 
 using namespace mobius;
 
 //-----------------------------------------------------------------------------
 
-#define Astra_ArrayHeaderSize 7
-#define Astra_CurvePointSize  7
-#define Astra_SurfPointSize   14
+#define Astra_ArrayHeaderSize      7
+#define Astra_SplineCurvePointSize 7
+#define Astra_SplineSurfPointSize  14
+#define Astra_RevolSurfPointSize   8
+#define Astra_Ref                  "**"
 
 namespace {
+
+  //! Base class for all geometric entities.
+  struct t_entity
+  {
+    std::string name; //!< Unicode name of the geometric entity.
+  };
 
   //-----------------------------------------------------------------------------
 
   //! Curve DTO.
-  struct t_curveData
+  struct t_curveData : public t_entity
   {
     //! Curve point.
     struct t_pt
@@ -58,7 +74,6 @@ namespace {
       t_pt() : u(0.) {}
     };
 
-    std::string       name; //!< Curve name.
     int               npts; //!< Number of points.
     std::vector<t_pt> pts;  //!< Curve points.
 
@@ -134,8 +149,8 @@ namespace {
 
   //-----------------------------------------------------------------------------
 
-  //! Surface DTO.
-  struct t_surfData
+  //! Spline surface DTO.
+  struct t_splineSurfData : public t_entity
   {
     //! Surface point.
     struct t_pt
@@ -146,7 +161,7 @@ namespace {
     };
 
     //! Ctor.
-    t_surfData() : nptsU(0), nptsV(0), ptSerial(0) {}
+    t_splineSurfData() : nptsU(0), nptsV(0), ptSerial(0) {}
 
     //! Adds a surface point from the passed tokens.
     void AddPoint(const std::vector<std::string>& tokens)
@@ -264,7 +279,6 @@ namespace {
       return res;
     }
 
-    std::string                                  name;      //!< Surface name.
     int                                          nptsU;     //!< Number of points in the U direction.
     int                                          nptsV;     //!< Number of points in the V direction.
     std::vector< std::vector<t_pt> >             pts;       //!< Surface points in a grid.
@@ -273,6 +287,17 @@ namespace {
     std::vector< t_ptr<t_bsurf> >                splRows;   //!< Spline rows after concatenation along U.
   };
 
+  //-----------------------------------------------------------------------------
+
+  //! Surface of revolution DTO.
+  struct t_revolSurfData : public t_entity
+  {
+    t_axis      axis;      //!< Turning axis.
+    std::string curveName; //!< Unicode name of the meridian curve.
+  };
+
+  //-----------------------------------------------------------------------------
+
   //! Checks if the passed line tokens represent a curve.
   bool IsCurve(const std::vector<std::string>& tokens,
                t_curveData&                    data)
@@ -280,7 +305,7 @@ namespace {
     if ( tokens.size() != Astra_ArrayHeaderSize )
       return false;
 
-    if ( tokens[1] != core::str::to_string<int>(Astra_CurvePointSize) )
+    if ( tokens[1] != core::str::to_string<int>(Astra_SplineCurvePointSize) )
       return false;
 
     data = t_curveData();
@@ -289,18 +314,20 @@ namespace {
     return true;
   }
 
-  //! Checks if the passed line tokens represent a surface.
-  bool IsSurface(const std::vector<std::string>& tokens,
-                 t_surfData&                     data)
+  //-----------------------------------------------------------------------------
+
+  //! Checks if the passed line tokens represent a spline surface.
+  bool IsSplineSurface(const std::vector<std::string>& tokens,
+                       t_splineSurfData&               data)
   {
     if ( tokens.size() != Astra_ArrayHeaderSize )
       return false;
 
     // <name> _14_ 2 61 42 0 0
-    if ( tokens[1] != core::str::to_string<int>(Astra_SurfPointSize) )
+    if ( tokens[1] != core::str::to_string<int>(Astra_SplineSurfPointSize) )
       return false;
 
-    data = t_surfData();
+    data = t_splineSurfData();
     data.name  = tokens[0];                         // _<name>_ 14  2   61  42 0 0
     data.nptsU = core::str::extract_int(tokens[2]); //  <name>  14 _2_  61  42 0 0
     data.nptsV = core::str::extract_int(tokens[3]); //  <name>  14  2  _61_ 42 0 0
@@ -311,6 +338,25 @@ namespace {
       data.pts.push_back({});
       data.pts.back().resize(data.nptsV);
     }
+
+    return true;
+  }
+
+  //-----------------------------------------------------------------------------
+
+  //! Checks if the passed line tokens represent a surface of revolution.
+  bool IsSurfaceOfRevolution(const std::vector<std::string>& tokens,
+                             t_revolSurfData&                data)
+  {
+    if ( tokens.size() != Astra_ArrayHeaderSize )
+      return false;
+
+    // <name> _8_ 1 1 41 0 0
+    if ( tokens[1] != core::str::to_string<int>(Astra_RevolSurfPointSize) )
+      return false;
+
+    data = t_revolSurfData();
+    data.name = tokens[0]; // _<name>_ 8 1 1 41 0 0
 
     return true;
   }
@@ -336,14 +382,17 @@ bool geom_ReadAstra::Perform(const std::string& filename)
   {
     Mode_Scan = 1,
     Mode_Curve,
-    Mode_Surface
+    Mode_SplineSurface,
+    Mode_SurfaceOfRevolution
   };
 
-  std::vector<t_curveData> curveDs;
-  std::vector<t_surfData>  surfDs;
+  std::vector<t_curveData>      curveDs;
+  std::vector<t_splineSurfData> splSurfDs;
+  std::vector<t_revolSurfData>  revSurfDs;
   //
-  t_curveData* pCurrentCurve = nullptr;
-  t_surfData*  pCurrentSurf  = nullptr;
+  t_curveData*      pCurrentCurve   = nullptr;
+  t_splineSurfData* pCurrentSplSurf = nullptr;
+  t_revolSurfData*  pCurrentRevSurf = nullptr;
 
   // Loop over the file.
   Mode mode = Mode_Scan;
@@ -363,13 +412,18 @@ bool geom_ReadAstra::Perform(const std::string& filename)
     if ( !tokens.size() )
       continue;
 
+    /* ==============
+     *  Read headers.
+     * ============== */
+
     // Check if it's a curve or a surface.
-    t_curveData curveData;
-    t_surfData  surfData;
+    t_curveData      curveData;
+    t_splineSurfData splSurfData;
+    t_revolSurfData  revSurfData;
     //
     if ( ::IsCurve(tokens, curveData) )
     {
-      m_progress.SendLogMessage(MobiusInfo(Normal) << "Next curve is '%1' with %2 points."
+      m_progress.SendLogMessage(MobiusInfo(Normal) << "Next spline curve is '%1' with %2 points."
                                                    << curveData.name << curveData.npts);
 
       mode = Mode_Curve;
@@ -378,19 +432,34 @@ bool geom_ReadAstra::Perform(const std::string& filename)
       continue;
     }
     //
-    else if ( ::IsSurface(tokens, surfData) )
+    else if ( ::IsSplineSurface(tokens, splSurfData) )
     {
-      m_progress.SendLogMessage(MobiusInfo(Normal) << "Next surface is '%1' with %2 U points "
+      m_progress.SendLogMessage(MobiusInfo(Normal) << "Next spline surface is '%1' with %2 U points "
                                                       "and %3 V points."
-                                                   << surfData.name
-                                                   << surfData.nptsU
-                                                   << surfData.nptsV);
+                                                   << splSurfData.name
+                                                   << splSurfData.nptsU
+                                                   << splSurfData.nptsV);
 
-      mode = Mode_Surface;
-      surfDs.push_back(surfData);
-      pCurrentSurf = &surfDs.back();
+      mode = Mode_SplineSurface;
+      splSurfDs.push_back(splSurfData);
+      pCurrentSplSurf = &splSurfDs.back();
       continue;
     }
+    //
+    else if ( ::IsSurfaceOfRevolution(tokens, revSurfData) )
+    {
+      m_progress.SendLogMessage(MobiusInfo(Normal) << "Next surface of revolution is '%1'."
+                                                   << revSurfData.name);
+
+      mode = Mode_SurfaceOfRevolution;
+      revSurfDs.push_back(revSurfData);
+      pCurrentRevSurf = &revSurfDs.back();
+      continue;
+    }
+
+    /* =====================
+     *  Read geometric data.
+     * ===================== */
 
     if ( mode == Mode_Curve )
     {
@@ -399,12 +468,76 @@ bool geom_ReadAstra::Perform(const std::string& filename)
       else
         mode = Mode_Scan;
     }
-    else if ( mode == Mode_Surface )
+    //
+    else if ( mode == Mode_SplineSurface )
     {
-      if ( pCurrentSurf->pts.size() < pCurrentSurf->nptsU*pCurrentSurf->nptsV )
-        pCurrentSurf->AddPoint(tokens);
+      if ( pCurrentSplSurf->pts.size() < pCurrentSplSurf->nptsU*pCurrentSplSurf->nptsV )
+        pCurrentSplSurf->AddPoint(tokens);
       else
         mode = Mode_Scan;
+    }
+    //
+    else if ( mode == Mode_SurfaceOfRevolution )
+    {
+      if ( pCurrentRevSurf->curveName.empty() )
+      {
+        std::vector<std::string> curveNameChunks;
+        core::str::split(tokens[0], Astra_Ref, curveNameChunks);
+        //
+        if ( curveNameChunks.size() == 2 )
+        {
+          pCurrentRevSurf->curveName = curveNameChunks[1];
+        }
+        else
+        {
+          m_progress.SendLogMessage(MobiusErr(Normal) << "Unexpected format of surface of revolution: "
+                                                         "99**<curveName> is expected as the first string.");
+          return false;
+        }
+
+        m_progress.SendLogMessage(MobiusInfo(Normal) << "Meridian curve name is '%1'."
+                                                     << pCurrentRevSurf->curveName);
+
+        // The following chunks contain the coordinates of the origin point for the
+        // turning axis.
+
+        /*
+           PST     8    1    1   41    0    0
+       >>> 99**st  0.0000000E+00 0.0000000E+00 0.0000000E+00
+                   0.0000000E+00 0.0000000E+00 0.1000000E+01
+         */
+
+        if ( tokens.size() != 4 )
+        {
+          m_progress.SendLogMessage(MobiusErr(Normal) << "Unexpected format of surface of revolution: "
+                                                         "not enough strings representing the origin point.");
+          return false;
+        }
+
+        const double Ox = std::stod(tokens[1]);
+        const double Oy = std::stod(tokens[2]);
+        const double Oz = std::stod(tokens[3]);
+        //
+        pCurrentRevSurf->axis.SetPosition( t_xyz(Ox, Oy, Oz) );
+      }
+      else // curve name is already set
+      {
+        if ( tokens.size() != 3 )
+        {
+          m_progress.SendLogMessage(MobiusErr(Normal) << "Unexpected format of surface of revolution: "
+                                                         "not enough strings representing the axis direction.");
+          return false;
+        }
+
+        const double Dx = std::stod(tokens[0]);
+        const double Dy = std::stod(tokens[1]);
+        const double Dz = std::stod(tokens[2]);
+        //
+        pCurrentRevSurf->axis.SetDirection( t_xyz(Dx, Dy, Dz) );
+
+        // Done with the definition.
+        mode = Mode_Scan;
+      }
     }
   } // Until EOF.
 
@@ -412,16 +545,24 @@ bool geom_ReadAstra::Perform(const std::string& filename)
    *  Stage 2: construct geometric primitives.
    * ========================================= */
 
+  std::unordered_map<std::string, t_ptr<core_OBJECT>> ENTITIES;
+
   // Make curves.
   for ( auto& cds : curveDs )
   {
     m_curves.push_back( cds.ToBSplineCurve() );
+
+    // Register entity with the name.
+    ENTITIES.insert({cds.name, m_curves.back()});
   }
 
-  // Make surface.
-  for ( auto& sds : surfDs )
+  // Make spline surfaces.
+  for ( auto& sds : splSurfDs )
   {
     t_ptr<t_bsurf> res = sds.ToBSplineSurface();
+
+    // Register entity with the name.
+    ENTITIES.insert({sds.name, res});
 
     //for ( const auto& row : sds.bzPatches )
     //  for ( const auto& bz : row )
@@ -431,6 +572,46 @@ bool geom_ReadAstra::Perform(const std::string& filename)
     //  m_surfaces.push_back(row);
 
     m_surfaces.push_back(res);
+  }
+
+  // Make surfaces of revolution.
+  for ( auto& rev : revSurfDs )
+  {
+    // Get reference to the meridian curve.
+    const auto curveRef = ENTITIES.find(rev.curveName);
+    //
+    if ( curveRef == ENTITIES.end() )
+    {
+      m_progress.SendLogMessage(MobiusErr(Normal) << "The meridian curve '%1' does not seem to exist."
+                                                  << rev.curveName);
+      return false;
+    }
+
+    // Get the meridian curve.
+    t_ptr<t_curve> C = t_ptr<t_curve>::DownCast(curveRef->second);
+    //
+    if ( C.IsNull() )
+    {
+      m_progress.SendLogMessage(MobiusErr(Normal) << "The meridian curve '%1' is null."
+                                                  << rev.curveName);
+      return false;
+    }
+
+    // Check the axis of revolution.
+    if ( rev.axis.GetDirection().Modulus() < core_Precision::Resolution3D() )
+    {
+      m_progress.SendLogMessage(MobiusErr(Normal) << "The axis of revolution is degenerated for the surface '%1'."
+                                                  << rev.name);
+      return false;
+    }
+
+    // Build the surface of revolution.
+    t_ptr<t_surfRevol> res = new t_surfRevol(C, rev.axis);
+
+    m_surfaces.push_back(res);
+
+    // Register entity with the name.
+    ENTITIES.insert({rev.name, res});
   }
 
   FILE.close();
