@@ -83,6 +83,15 @@ public:
   mobiusCore_EXPORT virtual void
     Dump(std::ostream* out) const;
 
+  mobiusCore_EXPORT const std::string&
+    GetName() const;
+
+  mobiusCore_EXPORT void
+    SetName(const std::string& name);
+
+  mobiusCore_EXPORT bool
+    HasName() const;
+
 private:
 
 #if defined(WIN32) || defined(_WIN32)
@@ -90,6 +99,8 @@ private:
 #else
   int m_iRefCount;
 #endif
+
+  std::string m_name; //!< Optional name.
 
 };
 

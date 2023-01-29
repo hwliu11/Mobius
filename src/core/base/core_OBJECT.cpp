@@ -31,22 +31,24 @@
 // Own include
 #include <mobius/core_OBJECT.h>
 
+using namespace mobius;
+
 //-----------------------------------------------------------------------------
 
 //! Default constructor.
-mobius::core_OBJECT::core_OBJECT() : m_iRefCount(0)
+core_OBJECT::core_OBJECT() : m_iRefCount(0)
 {}
 
 //-----------------------------------------------------------------------------
 
 //! Destructor.
-mobius::core_OBJECT::~core_OBJECT()
+core_OBJECT::~core_OBJECT()
 {}
 
 //-----------------------------------------------------------------------------
 
 //! Increments reference counter.
-void mobius::core_OBJECT::IncRef()
+void core_OBJECT::IncRef()
 {
 #if defined(WIN32) || defined(_WIN32)
   InterlockedIncrement(&m_iRefCount);
@@ -58,11 +60,11 @@ void mobius::core_OBJECT::IncRef()
 //-----------------------------------------------------------------------------
 
 //! Decrements reference counter.
-void mobius::core_OBJECT::DecRef()
+void core_OBJECT::DecRef()
 {
 #if defined(WIN32) || defined(_WIN32)
-  LONG aRefCount = (LONG) m_iRefCount;
-  m_iRefCount = (int) InterlockedDecrement(&aRefCount);
+  LONG RefCount = (LONG) m_iRefCount;
+  m_iRefCount = (int) InterlockedDecrement(&RefCount);
 #else
   __sync_fetch_and_sub(&m_iRefCount, 1);
 #endif
@@ -72,7 +74,7 @@ void mobius::core_OBJECT::DecRef()
 
 //! Returns the current number of references to the object.
 //! \return number of references.
-int mobius::core_OBJECT::NbRefs() const
+int core_OBJECT::NbRefs() const
 {
   return m_iRefCount;
 }
@@ -81,7 +83,28 @@ int mobius::core_OBJECT::NbRefs() const
 
 //! Dumps this object to the passed string stream.
 //! \param stream [in/out] target stream.
-void mobius::core_OBJECT::Dump(std::ostream* out) const
+void core_OBJECT::Dump(std::ostream* out) const
 {
   *out << "core_OBJECT";
+}
+
+//-----------------------------------------------------------------------------
+
+const std::string& core_OBJECT::GetName() const
+{
+  return m_name;
+}
+
+//-----------------------------------------------------------------------------
+
+void core_OBJECT::SetName(const std::string& name)
+{
+  m_name = name;
+}
+
+//-----------------------------------------------------------------------------
+
+bool core_OBJECT::HasName() const
+{
+  return !m_name.empty();
 }

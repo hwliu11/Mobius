@@ -551,6 +551,7 @@ bool geom_ReadAstra::Perform(const std::string& filename)
   for ( auto& cds : curveDs )
   {
     m_curves.push_back( cds.ToBSplineCurve() );
+    m_curves.back()->SetName(cds.name);
 
     // Register entity with the name.
     ENTITIES.insert({cds.name, m_curves.back()});
@@ -560,6 +561,7 @@ bool geom_ReadAstra::Perform(const std::string& filename)
   for ( auto& sds : splSurfDs )
   {
     t_ptr<t_bsurf> res = sds.ToBSplineSurface();
+    res->SetName(sds.name);
 
     // Register entity with the name.
     ENTITIES.insert({sds.name, res});
@@ -607,6 +609,7 @@ bool geom_ReadAstra::Perform(const std::string& filename)
 
     // Build the surface of revolution.
     t_ptr<t_surfRevol> res = new t_surfRevol(C, rev.axis);
+    res->SetName(rev.name);
 
     m_surfaces.push_back(res);
 
