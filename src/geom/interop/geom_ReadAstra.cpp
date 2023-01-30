@@ -206,24 +206,24 @@ namespace {
 
           t_xyz P00 = this->pts[i][j].P;
 
-          t_xyz P10 = P00 + (1/3)*(umax-umin)*this->pts[i][j].Pu;
-          t_xyz P01 = P00 + (1/3)*(vmax-vmin)*this->pts[i][j].Pv;
-          t_xyz P11 = P10 + P01 - P00 + (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i][j].Puv;
+          t_xyz P10 = P00 + (1./3.)*(umax-umin)*this->pts[i][j].Pu;
+          t_xyz P01 = P00 + (1./3.)*(vmax-vmin)*this->pts[i][j].Pv;
+          t_xyz P11 = P10 + P01 - P00 + (1./9.)*(umax-umin)*(vmax-vmin)*this->pts[i][j].Puv;
 
           t_xyz P30 = this->pts[i+1][j].P;
-          t_xyz P20 = P30 - (1/3)*(umax-umin)*this->pts[i+1][j].Pu;
-          t_xyz P31 = P30 + (1/3)*(vmax-vmin)*this->pts[i+1][j].Pv;
-          t_xyz P21 = P20 + P31 - P30 - (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i+1][j].Puv;
+          t_xyz P20 = P30 - (1./3.)*(umax-umin)*this->pts[i+1][j].Pu;
+          t_xyz P31 = P30 + (1./3.)*(vmax-vmin)*this->pts[i+1][j].Pv;
+          t_xyz P21 = P20 + P31 - P30 - (1./9.)*(umax-umin)*(vmax-vmin)*this->pts[i+1][j].Puv;
 
           t_xyz P03 = this->pts[i][j+1].P;
-          t_xyz P13 = P03 + (1/3)*(umax-umin)*this->pts[i][j+1].Pu;
-          t_xyz P02 = P03 - (1/3)*(vmax-vmin)*this->pts[i][j+1].Pv;
-          t_xyz P12 = P13 + P02 - P03 - (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i][j+1].Puv;
+          t_xyz P13 = P03 + (1./3.)*(umax-umin)*this->pts[i][j+1].Pu;
+          t_xyz P02 = P03 - (1./3.)*(vmax-vmin)*this->pts[i][j+1].Pv;
+          t_xyz P12 = P13 + P02 - P03 - (1./9.)*(umax-umin)*(vmax-vmin)*this->pts[i][j+1].Puv;
 
           t_xyz P33 = this->pts[i+1][j+1].P;
-          t_xyz P23 = P33 - (1/3)*(umax-umin)*this->pts[i+1][j+1].Pu;
-          t_xyz P32 = P33 - (1/3)*(vmax-vmin)*this->pts[i+1][j+1].Pv;
-          t_xyz P22 = P23 + P32 - P33 + (1/9)*(umax-umin)*(vmax-vmin)*this->pts[i+1][j+1].Puv;
+          t_xyz P23 = P33 - (1./3.)*(umax-umin)*this->pts[i+1][j+1].Pu;
+          t_xyz P32 = P33 - (1./3.)*(vmax-vmin)*this->pts[i+1][j+1].Pv;
+          t_xyz P22 = P23 + P32 - P33 + (1./9.)*(umax-umin)*(vmax-vmin)*this->pts[i+1][j+1].Puv;
 
             /*{P00, P10, P20, P30},
               {P01, P11, P21, P31},
@@ -566,9 +566,9 @@ bool geom_ReadAstra::Perform(const std::string& filename)
     // Register entity with the name.
     ENTITIES.insert({sds.name, res});
 
-    //for ( const auto& row : sds.bzPatches )
-    //  for ( const auto& bz : row )
-    //    m_surfaces.push_back(bz);
+    /*for ( const auto& row : sds.bzPatches )
+      for ( const auto& bz : row )
+        m_surfaces.push_back(bz);*/
 
     //for ( const auto& row : sds.splRows )
     //  m_surfaces.push_back(row);
