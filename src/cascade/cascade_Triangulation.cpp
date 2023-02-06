@@ -150,28 +150,25 @@ void mobius::cascade_Triangulation::convertToOpenCascade()
 
 void mobius::cascade_Triangulation::convertToMobius()
 {
-  const TColgp_Array1OfPnt&    occtNodes     = m_occtMesh->Nodes();
-  const Poly_Array1OfTriangle& occtTriangles = m_occtMesh->Triangles();
-
   // Construct Mobius mesh.
   m_mobiusMesh = new poly_Mesh;
 
   // Populate Mobius nodes.
-  for ( int i = 1; i <= occtNodes.Length(); ++i )
+  for ( int i = 1; i <= m_occtMesh->NbNodes(); ++i )
   {
-    const double x = occtNodes(i).X();
-    const double y = occtNodes(i).Y();
-    const double z = occtNodes(i).Z();
+    const double x = m_occtMesh->Node(i).X();
+    const double y = m_occtMesh->Node(i).Y();
+    const double z = m_occtMesh->Node(i).Z();
 
     // Add vertex.
     m_mobiusMesh->AddVertex(x, y, z);
   }
 
   // Populate Mobius triangles.
-  for ( int i = 1; i <= occtTriangles.Length(); ++i )
+  for ( int i = 1; i <= m_occtMesh->NbTriangles(); ++i )
   {
     int occtN1, occtN2, occtN3;
-    occtTriangles(i).Get(occtN1, occtN2, occtN3);
+    m_occtMesh->Triangle(i).Get(occtN1, occtN2, occtN3);
 
     // Add triangle.
     poly_VertexHandle vh0(occtN1-1);
