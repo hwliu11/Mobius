@@ -44,3 +44,7 @@ Makefile*
 /test/*.brep
 
 .vscode/settings.json
+
+build-occt-760/
+
+install-occt-760/
