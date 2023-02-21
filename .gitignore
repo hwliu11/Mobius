@@ -48,3 +48,7 @@ Makefile*
 build-occt-760/
 
 install-occt-760/
+
+build_occt760/
+
+install-occt760/
