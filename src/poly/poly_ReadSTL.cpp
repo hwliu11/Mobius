@@ -186,7 +186,7 @@ bool mobius::poly_ReadSTL::Perform(const std::string& filename)
   }
 
   // Create mesh data structure.
-  m_mesh = new poly_Mesh;
+  m_mesh = new t_mesh;
 
   // Prepare buffer.
   std::istream buffer(&fileBuff);

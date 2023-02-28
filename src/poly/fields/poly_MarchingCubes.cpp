@@ -335,13 +335,13 @@ const int a2iTriangleConnectionTable[256][16] =
 
 //-----------------------------------------------------------------------------
 
-mobius::t_ptr<mobius::poly_Mesh>
+mobius::t_ptr<mobius::t_mesh>
   mobius::poly_MarchingCubes::PolygonizeVoxel(const t_xyz&                P0,
                                               const t_xyz&                P7,
                                               const t_ptr<poly_RealFunc>& func,
                                               const double                isoValue)
 {
-  t_ptr<poly_Mesh> result = new poly_Mesh;
+  t_ptr<t_mesh> result = new t_mesh;
 
   t_xyz P1( P7.X(), P0.Y(), P0.Z() );
   t_xyz P2( P0.X(), P7.Y(), P0.Z() );

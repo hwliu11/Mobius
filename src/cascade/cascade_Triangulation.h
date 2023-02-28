@@ -53,7 +53,7 @@ class cascade_Triangulation
 public:
 
   mobiusCascade_EXPORT
-    cascade_Triangulation(const t_ptr<poly_Mesh>& mobiusMesh);
+    cascade_Triangulation(const t_ptr<t_mesh>& mobiusMesh);
 
   mobiusCascade_EXPORT
     cascade_Triangulation(const Handle(Poly_Triangulation)& occtMesh);
@@ -68,7 +68,7 @@ public:
 
 public:
 
-  mobiusCascade_EXPORT const t_ptr<poly_Mesh>&
+  mobiusCascade_EXPORT const t_ptr<t_mesh>&
     GetMobiusTriangulation() const;
 
   mobiusCascade_EXPORT const Handle(Poly_Triangulation)&
@@ -88,7 +88,7 @@ protected:
 private:
 
   //! Mobius data structure.
-  t_ptr<poly_Mesh> m_mobiusMesh;
+  t_ptr<t_mesh> m_mobiusMesh;
 
   //! OCCT data structure.
   Handle(Poly_Triangulation) m_occtMesh;

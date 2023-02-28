@@ -87,7 +87,7 @@ public:
   //!
   //! \param[in] mesh the mesh to analyze.
   mobiusPoly_EXPORT
-    poly_Jacobian(const t_ptr<poly_Mesh>& mesh);
+    poly_Jacobian(const t_ptr<t_mesh>& mesh);
 
 public:
 
@@ -128,18 +128,18 @@ public:
   //!
   //! \return true in case of success, false -- otherwise.
   mobiusPoly_EXPORT bool
-    Compute(const poly_Triangle& elem,
-            const int            zeroBasedNodeId,
-            t_uv&                p0,
-            t_uv&                p1,
-            t_uv&                p2,
-            double               J[][2],
-            double&              J_det,
-            double&              J_det_normalized) const;
+    Compute(const poly_Triangle<>& elem,
+            const int              zeroBasedNodeId,
+            t_uv&                  p0,
+            t_uv&                  p1,
+            t_uv&                  p2,
+            double                 J[][2],
+            double&                J_det,
+            double&                J_det_normalized) const;
 
 protected:
 
-  t_ptr<poly_Mesh> m_mesh; //!< Mesh to analyze.
+  t_ptr<t_mesh> m_mesh; //!< Mesh to analyze.
 
 };
 

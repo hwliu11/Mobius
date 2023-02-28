@@ -117,7 +117,7 @@ bool poly_Jacobian::Compute(const t_xyz& P0,
 
 //-----------------------------------------------------------------------------
 
-poly_Jacobian::poly_Jacobian(const t_ptr<poly_Mesh>& mesh)
+poly_Jacobian::poly_Jacobian(const t_ptr<t_mesh>& mesh)
 {
   m_mesh = mesh;
 }
@@ -137,7 +137,7 @@ bool poly_Jacobian::Compute(const poly_TriangleHandle ht,
     return false;
 
   // Get element.
-  poly_Triangle elem;
+  poly_Triangle<> elem;
   m_mesh->GetTriangle(ht, elem);
 
   // Compute for element.
@@ -146,14 +146,14 @@ bool poly_Jacobian::Compute(const poly_TriangleHandle ht,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Jacobian::Compute(const poly_Triangle& elem,
-                            const int            zeroBasedNodeId,
-                            t_uv&                p0,
-                            t_uv&                p1,
-                            t_uv&                p2,
-                            double               J[][2],
-                            double&              J_det,
-                            double&              J_det_normalized) const
+bool poly_Jacobian::Compute(const poly_Triangle<>& elem,
+                            const int              zeroBasedNodeId,
+                            t_uv&                  p0,
+                            t_uv&                  p1,
+                            t_uv&                  p2,
+                            double                 J[][2],
+                            double&                J_det,
+                            double&                J_det_normalized) const
 {
   // Get nodes.
   poly_VertexHandle n0, n1, n2;

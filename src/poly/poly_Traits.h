@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 18 September 2018
+// Created on: 28 February 2023
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2023-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,48 +28,21 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
+#ifndef poly_Traits_HeaderFile
+#define poly_Traits_HeaderFile
+
 // Poly includes
-#include <mobius/poly_Triangle.h>
+#include <mobius/poly.h>
 
-//-----------------------------------------------------------------------------
+namespace mobius {
 
-mobius::poly_Triangle::poly_Triangle()
+//! \ingroup MOBIUS_POLY
+//!
+//! Base traits.
+struct poly_Traits
 {
-  hVertices[0] = hVertices[1] = hVertices[2] = poly_VertexHandle();
-  hEdges[0]    = hEdges[1]    = hEdges[2]    = poly_EdgeHandle();
-  m_iFlags     = Flag_None;
-  m_iFaceRef   = Mobius_InvalidHandleIndex;
+};
+
 }
 
-//-----------------------------------------------------------------------------
-
-mobius::poly_Triangle::poly_Triangle(const poly_VertexHandle hv0,
-                                     const poly_VertexHandle hv1,
-                                     const poly_VertexHandle hv2)
-{
-  hVertices[0] = hv0;
-  hVertices[1] = hv1;
-  hVertices[2] = hv2;
-  m_iFlags     = Flag_None;
-  m_iFaceRef   = Mobius_InvalidHandleIndex;
-
-  // Edges are empty.
-  hEdges[0] = hEdges[1] = hEdges[2] = poly_EdgeHandle();
-}
-
-//-----------------------------------------------------------------------------
-
-mobius::poly_Triangle::poly_Triangle(const poly_VertexHandle hv0,
-                                     const poly_VertexHandle hv1,
-                                     const poly_VertexHandle hv2,
-                                     const int               ref)
-{
-  hVertices[0] = hv0;
-  hVertices[1] = hv1;
-  hVertices[2] = hv2;
-  m_iFlags     = Flag_None;
-  m_iFaceRef   = ref;
-
-  // Edges are empty.
-  hEdges[0] = hEdges[1] = hEdges[2] = poly_EdgeHandle();
-}
+#endif

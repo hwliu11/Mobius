@@ -55,6 +55,7 @@ class geom_PlaneSurface;
 //! Data structure representing surface triangulation.
 //!
 //! \sa mobius::poly_ReadSTL
+template <typename ElemTraits = poly_Traits>
 class poly_Mesh : public core_IAlgorithm
 {
 public:
@@ -73,9 +74,10 @@ public:
 public:
 
   //! Default ctor with optional diagnostic tools.
-  mobiusPoly_EXPORT
-    poly_Mesh(core_ProgressEntry progress = nullptr,
-              core_PlotterEntry  plotter  = nullptr);
+  poly_Mesh(core_ProgressEntry progress = nullptr,
+            core_PlotterEntry  plotter  = nullptr)
+  : core_IAlgorithm(progress, plotter)
+  {}
 
 public:
 
@@ -649,8 +651,8 @@ public:
   //! \param[in]  h        handle of a triangle to access.
   //! \param[out] triangle triangle.
   //! \return false if there is no such triangle.
-  bool GetTriangle(const poly_TriangleHandle h,
-                   poly_Triangle&            triangle) const
+  bool GetTriangle(const poly_TriangleHandle  h,
+                   poly_Triangle<ElemTraits>& triangle) const
   {
     const int idx = h.GetIdx();
     if ( idx < 0 || idx > int( m_triangles.size() ) ) return false;
@@ -663,7 +665,7 @@ public:
   //! You have to be sure that such a triangle exists.
   //! \param[in] h handle of a triangle to access.
   //! \return non-const reference that you can use to edit.
-  poly_Triangle& ChangeTriangle(const poly_TriangleHandle h)
+  poly_Triangle<ElemTraits>& ChangeTriangle(const poly_TriangleHandle h)
   {
     return m_triangles[h.iIdx];
   }
@@ -769,7 +771,7 @@ public:
                                   const poly_VertexHandle hV1,
                                   const poly_VertexHandle hV2)
   {
-    m_triangles.push_back( poly_Triangle(hV0, hV1, hV2) );
+    m_triangles.push_back( poly_Triangle<ElemTraits>(hV0, hV1, hV2) );
     poly_TriangleHandle hTriangle( int( m_triangles.size() ) - 1 );
 
     // Add back references to the vertices.
@@ -791,7 +793,7 @@ public:
                                   const poly_VertexHandle hV2,
                                   const int               ref)
   {
-    m_triangles.push_back( poly_Triangle(hV0, hV1, hV2, ref) );
+    m_triangles.push_back( poly_Triangle<ElemTraits>(hV0, hV1, hV2, ref) );
     poly_TriangleHandle hTriangle( int( m_triangles.size() ) - 1 );
 
     // Add back references to the vertices.
@@ -880,12 +882,12 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    BaseIterator(const t_ptr<poly_Mesh>& mesh) : m_mesh(mesh), m_pos(0) {}
+    BaseIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : m_mesh(mesh), m_pos(0) {}
 
   protected:
 
-    t_ptr<poly_Mesh> m_mesh; //!< Mesh to iterate.
-    size_t           m_pos;  //!< Current position.
+    t_ptr<poly_Mesh<ElemTraits>> m_mesh; //!< Mesh to iterate.
+    size_t                       m_pos;  //!< Current position.
 
   };
 
@@ -895,7 +897,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    VertexIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    VertexIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -911,7 +913,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    EdgeIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    EdgeIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -927,7 +929,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    TriangleIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    TriangleIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -943,7 +945,7 @@ public:
   public:
 
     //! Ctor accepting mesh.
-    QuadIterator(const t_ptr<poly_Mesh>& mesh) : BaseIterator(mesh) {}
+    QuadIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
 
   public:
 
@@ -961,24 +963,23 @@ protected:
                const poly_TriangleHandle htOld,
                const poly_TriangleHandle htNew);
 
-private:
-
   //! Internal method to compute intertia props from a volumetric element
   //! enclosed by a surface mesh.
-  bool computePyramidProps(const poly_VertexHandle& hv0,
-                           const poly_VertexHandle& hv1,
-                           const poly_VertexHandle& hv2,
-                           const core_XYZ&          apex,
-                           double                   gProps[10],
-                           const int                nbPnts,
-                           const double*            pnts) const;
+  mobiusPoly_EXPORT bool
+    computePyramidProps(const poly_VertexHandle& hv0,
+                        const poly_VertexHandle& hv1,
+                        const poly_VertexHandle& hv2,
+                        const core_XYZ&          apex,
+                        double                   gProps[10],
+                        const int                nbPnts,
+                        const double*            pnts) const;
 
 protected:
 
-  std::vector<poly_Vertex>   m_vertices;  //!< List of vertices.
-  std::vector<poly_Edge>     m_edges;     //!< List of edges.
-  std::vector<poly_Triangle> m_triangles; //!< List of triangles.
-  std::vector<poly_Quad>     m_quads;     //!< List of quads.
+  std::vector<poly_Vertex>               m_vertices;  //!< List of vertices.
+  std::vector<poly_Edge>                 m_edges;     //!< List of edges.
+  std::vector<poly_Triangle<ElemTraits>> m_triangles; //!< List of triangles.
+  std::vector<poly_Quad>                 m_quads;     //!< List of quads.
 
   //! Edges-to-triangles map.
   std::unordered_map< poly_EdgeHandle, std::vector<poly_TriangleHandle> > m_links;
@@ -988,8 +989,8 @@ protected:
 
 };
 
-//! Convenience shortcuts.
-typedef poly_Mesh t_mesh;
+//! Convenience shortcut for mesh with default traits.
+typedef poly_Mesh<> t_mesh;
 
 }
 

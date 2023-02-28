@@ -16,6 +16,7 @@ set (H_FILES
   poly_ReadPLY.h
   poly_ReadSTL.h
   poly_SurfAdapter.h
+  poly_Traits.h
   poly_Triangle.h
   poly_Vertex.h
 )
@@ -27,7 +28,6 @@ set (CPP_FILES
   poly_ReadOBJ.cpp
   poly_ReadPLY.cpp
   poly_ReadSTL.cpp
-  poly_Triangle.cpp
   poly_Vertex.cpp
 )
 

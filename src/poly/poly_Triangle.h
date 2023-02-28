@@ -34,6 +34,7 @@
 // Poly includes
 #include <mobius/poly_Flag.h>
 #include <mobius/poly_Handles.h>
+#include <mobius/poly_Traits.h>
 
 // Core includes
 #include <mobius/core_XYZ.h>
@@ -43,23 +44,38 @@ namespace mobius {
 //! \ingroup MOBIUS_POLY
 //!
 //! Triangle element.
+template <typename Traits = poly_Traits>
 class poly_Triangle
 {
 public:
 
   //! Default ctor.
-  mobiusPoly_EXPORT
-    poly_Triangle();
+  poly_Triangle()
+  {
+    hVertices[0] = hVertices[1] = hVertices[2] = poly_VertexHandle();
+    hEdges[0]    = hEdges[1]    = hEdges[2]    = poly_EdgeHandle();
+    m_iFlags     = Flag_None;
+    m_iFaceRef   = Mobius_InvalidHandleIndex;
+  }
 
   //! Ctor accepting the nodes of the triangle. The nodes should be enumerated in
   //! ccw order looking from the outside of the surrounded solid.
   //! \param[in] hv0 first vertex of the triangle.
   //! \param[in] hv1 second vertex of the triangle.
   //! \param[in] hv2 third vertex of the triangle.
-  mobiusPoly_EXPORT
-    poly_Triangle(const poly_VertexHandle hv0,
-                  const poly_VertexHandle hv1,
-                  const poly_VertexHandle hv2);
+  poly_Triangle(const poly_VertexHandle hv0,
+                const poly_VertexHandle hv1,
+                const poly_VertexHandle hv2)
+  {
+    hVertices[0] = hv0;
+    hVertices[1] = hv1;
+    hVertices[2] = hv2;
+    m_iFlags     = Flag_None;
+    m_iFaceRef   = Mobius_InvalidHandleIndex;
+
+    // Edges are empty.
+    hEdges[0] = hEdges[1] = hEdges[2] = poly_EdgeHandle();
+  }
 
   //! Ctor accepting the nodes of the triangle and the back reference to a CAD face.
   //! The nodes should be enumerated in ccw order looking from the outside of the
@@ -68,11 +84,20 @@ public:
   //! \param[in] hv1 second vertex of the triangle.
   //! \param[in] hv2 third vertex of the triangle.
   //! \param[in] ref back reference to set.
-  mobiusPoly_EXPORT
-    poly_Triangle(const poly_VertexHandle hv0,
-                  const poly_VertexHandle hv1,
-                  const poly_VertexHandle hv2,
-                  const int               ref);
+  poly_Triangle(const poly_VertexHandle hv0,
+                const poly_VertexHandle hv1,
+                const poly_VertexHandle hv2,
+                const int               ref)
+  {
+    hVertices[0] = hv0;
+    hVertices[1] = hv1;
+    hVertices[2] = hv2;
+    m_iFlags     = Flag_None;
+    m_iFaceRef   = ref;
+
+    // Edges are empty.
+    hEdges[0] = hEdges[1] = hEdges[2] = poly_EdgeHandle();
+  }
 
 public:
 
@@ -129,12 +154,16 @@ public:
 public:
 
   poly_VertexHandle hVertices[3]; //!< Handles to the vertices.
-  poly_EdgeHandle   hEdges[3];    //!< Handkes to the edges.
+  poly_EdgeHandle   hEdges[3];    //!< Handles to the edges.
 
 protected:
 
   int m_iFlags;   //!< Flags.
   int m_iFaceRef; //!< Back reference to the CAD face.
+
+public:
+
+  Traits traits; //!< Traits for customization.
 
 };
 

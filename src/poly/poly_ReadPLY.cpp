@@ -48,7 +48,7 @@ bool mobius::poly_ReadPLY::Perform(const std::string& filename)
   }
 
   // Create container for mesh.
-  m_mesh = new poly_Mesh;
+  m_mesh = new t_mesh;
 
   // Working variables.
   int nVertices = 0, nFaces = 0;

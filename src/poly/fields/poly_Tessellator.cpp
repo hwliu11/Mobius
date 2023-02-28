@@ -48,7 +48,7 @@ mobius::poly_Tessellator::~poly_Tessellator()
 bool mobius::poly_Tessellator::Perform(const double isoValue)
 {
   // Construct the resulting data structure.
-  m_result = new poly_Mesh;
+  m_result = new t_mesh;
 
   // Perform tessellation.
   return this->perform(isoValue);

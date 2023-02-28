@@ -48,6 +48,9 @@ using namespace mobius;
 #include <mobius/ElSLib.hxx>
 #include <mobius/gp_Ax3.hxx>
 
+// Instantiate for allowed traits.
+template class poly_Mesh<>;
+
 //-----------------------------------------------------------------------------
 
 namespace
@@ -103,17 +106,11 @@ protected:
 
 //-----------------------------------------------------------------------------
 
-poly_Mesh::poly_Mesh(core_ProgressEntry progress,
-                     core_PlotterEntry  plotter)
-: core_IAlgorithm(progress, plotter)
-{}
-
-//-----------------------------------------------------------------------------
-
-t_ptr<poly_Mesh>
-  poly_Mesh::ExtractRegion(const std::unordered_set<int>& tids) const
+template <typename ElemTraits>
+t_ptr<poly_Mesh<ElemTraits>>
+  poly_Mesh<ElemTraits>::ExtractRegion(const std::unordered_set<int>& tids) const
 {
-  t_ptr<poly_Mesh> region = new poly_Mesh;
+  t_ptr<poly_Mesh<ElemTraits>> region = new poly_Mesh;
 
   // keep matching of original vertex handles and their copies 
   // to avoid vertex handles duplication in the region
@@ -124,7 +121,7 @@ t_ptr<poly_Mesh>
     if ( tids.find(tit.Current().iIdx) == tids.end() )
       continue;
 
-    poly_Triangle t;
+    poly_Triangle<ElemTraits> t;
     this->GetTriangle(tit.Current(), t);
 
     poly_VertexHandle hv0;
@@ -195,11 +192,13 @@ t_ptr<poly_Mesh>
 }
 
 //-----------------------------------------------------------------------------
-void poly_Mesh::Merge(const t_ptr<poly_Mesh>& other)
+
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::Merge(const t_ptr<poly_Mesh<ElemTraits>>& other)
 {
   for (poly_Mesh::TriangleIterator tit(other); tit.More(); tit.Next())
   {
-    poly_Triangle t;
+    poly_Triangle<ElemTraits> t;
     other->GetTriangle(tit.Current(), t);
 
     poly_VertexHandle hv0;
@@ -223,16 +222,18 @@ void poly_Mesh::Merge(const t_ptr<poly_Mesh>& other)
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::SetSurfAdapter(const t_ptr<poly_SurfAdapter>& adt)
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::SetSurfAdapter(const t_ptr<poly_SurfAdapter>& adt)
 {
   m_surfAdt = adt;
 }
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::AreSelfIntersecting(const int             tag,
-                                    const poly_EdgeHandle eh0,
-                                    const poly_EdgeHandle eh1) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::AreSelfIntersecting(const int             tag,
+                                                const poly_EdgeHandle eh0,
+                                                const poly_EdgeHandle eh1) const
 {
   if ( m_surfAdt.IsNull() )
     return false; // The check is only possible with a CAD link.
@@ -274,9 +275,10 @@ bool poly_Mesh::AreSelfIntersecting(const int             tag,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::AreSelfIntersecting(const int                           tag,
-                                    const std::vector<poly_EdgeHandle>& ehs0,
-                                    const std::vector<poly_EdgeHandle>& ehs1) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::AreSelfIntersecting(const int                           tag,
+                                                const std::vector<poly_EdgeHandle>& ehs0,
+                                                const std::vector<poly_EdgeHandle>& ehs1) const
 {
   bool hasInters = false;
   for ( const auto he0 : ehs0 )
@@ -299,7 +301,8 @@ bool poly_Mesh::AreSelfIntersecting(const int                           tag,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::AreSelfIntersecting(const std::unordered_set<int>& domain) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::AreSelfIntersecting(const std::unordered_set<int>& domain) const
 {
   for ( auto tag : domain )
   {
@@ -315,7 +318,8 @@ bool poly_Mesh::AreSelfIntersecting(const std::unordered_set<int>& domain) const
 
 //-----------------------------------------------------------------------------
 
-t_ptr<poly_Mesh> poly_Mesh::DeepCopy() const
+template <typename ElemTraits>
+t_ptr<poly_Mesh<ElemTraits>> poly_Mesh<ElemTraits>::DeepCopy() const
 {
   t_ptr<poly_Mesh> copy = new poly_Mesh;
   //
@@ -331,9 +335,10 @@ t_ptr<poly_Mesh> poly_Mesh::DeepCopy() const
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::GetBounds(double& xMin, double& xMax,
-                          double& yMin, double& yMax,
-                          double& zMin, double& zMax) const
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::GetBounds(double& xMin, double& xMax,
+                                      double& yMin, double& yMax,
+                                      double& zMin, double& zMax) const
 {
   double x_min = DBL_MAX, x_max = -DBL_MAX;
   double y_min = DBL_MAX, y_max = -DBL_MAX;
@@ -371,7 +376,8 @@ void poly_Mesh::GetBounds(double& xMin, double& xMax,
 
 //-----------------------------------------------------------------------------
 
-core_XYZ poly_Mesh::ComputeCenter() const
+template <typename ElemTraits>
+core_XYZ poly_Mesh<ElemTraits>::ComputeCenter() const
 {
   core_XYZ center;
   t_xyz    vertex;
@@ -394,7 +400,8 @@ core_XYZ poly_Mesh::ComputeCenter() const
 
 //-----------------------------------------------------------------------------
 
-double poly_Mesh::ComputeArea()
+template <typename ElemTraits>
+double poly_Mesh<ElemTraits>::ComputeArea()
 {
   double area = 0.;
 
@@ -408,11 +415,12 @@ double poly_Mesh::ComputeArea()
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::ComputeProps(const PropsComputationDensity density,
-                             double&                       volume,
-                             core_XYZ&                     firstAxisOfInertia,
-                             core_XYZ&                     secondAxisOfInertia,
-                             core_XYZ&                     thirdAxisOfInertia) const
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::ComputeProps(const PropsComputationDensity density,
+                                         double&                       volume,
+                                         core_XYZ&                     firstAxisOfInertia,
+                                         core_XYZ&                     secondAxisOfInertia,
+                                         core_XYZ&                     thirdAxisOfInertia) const
 {
   // Gauss points for barycentric coordinates
   static Standard_Real pntWg[] =
@@ -438,7 +446,7 @@ void poly_Mesh::ComputeProps(const PropsComputationDensity density,
 
   for ( TriangleIterator trIt(this); trIt.More(); trIt.Next() )
   {
-    poly_Triangle triangle;
+    poly_Triangle<ElemTraits> triangle;
     this->GetTriangle(trIt.Current(), triangle);
 
     poly_VertexHandle hv0, hv1, hv2;
@@ -458,13 +466,14 @@ void poly_Mesh::ComputeProps(const PropsComputationDensity density,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
-                                 poly_TriangleHandle&      t0,
-                                 poly_TriangleHandle&      t1,
-                                 poly_TriangleHandle&      t2)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::RefineByMidpoint(const poly_TriangleHandle ht,
+                                             poly_TriangleHandle&      t0,
+                                             poly_TriangleHandle&      t1,
+                                             poly_TriangleHandle&      t2)
 {
   // Get the triangle to split.
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   if ( !this->GetTriangle(ht, t) || t.IsDeleted() )
     return false;
 
@@ -496,9 +505,11 @@ bool poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht,
 
   return true;
 }
+
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::RefineByMidpoint(const poly_TriangleHandle ht)
 {
   poly_TriangleHandle hrt[3];
   return this->RefineByMidpoint(ht, hrt[0], hrt[1], hrt[2]);
@@ -506,11 +517,12 @@ bool poly_Mesh::RefineByMidpoint(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::RefineByMidedges(const poly_TriangleHandle         ht,
-                                 std::vector<poly_TriangleHandle>& hts)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::RefineByMidedges(const poly_TriangleHandle         ht,
+                                             std::vector<poly_TriangleHandle>& hts)
 {
   // Get the triangle to refine.
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   if ( !this->GetTriangle(ht, t) )
     return false;
   //
@@ -601,7 +613,7 @@ bool poly_Mesh::RefineByMidedges(const poly_TriangleHandle         ht,
       continue;
 
     // Get triangle to split.
-    poly_Triangle nextTri;
+    poly_Triangle<ElemTraits> nextTri;
     if ( !this->GetTriangle(toSplit.first, nextTri) )
       continue;
 
@@ -696,7 +708,8 @@ bool poly_Mesh::RefineByMidedges(const poly_TriangleHandle         ht,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::RefineByMidedges(const poly_TriangleHandle ht)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::RefineByMidedges(const poly_TriangleHandle ht)
 {
   std::vector<poly_TriangleHandle> hts;
   return this->RefineByMidedges(ht, hts);
@@ -704,15 +717,16 @@ bool poly_Mesh::RefineByMidedges(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 poly_VertexHandle
-  poly_Mesh::GetOppositeVertex(const poly_TriangleHandle ht,
-                               const poly_EdgeHandle     he) const
+  poly_Mesh<ElemTraits>::GetOppositeVertex(const poly_TriangleHandle ht,
+                                           const poly_EdgeHandle     he) const
 {
   poly_Edge edge;
   if ( !this->GetEdge(he, edge) )
     return poly_VertexHandle();
 
-  poly_Triangle nbrTri;
+  poly_Triangle<ElemTraits> nbrTri;
   if ( !this->GetTriangle(ht, nbrTri) )
     return poly_VertexHandle();
 
@@ -732,11 +746,12 @@ poly_VertexHandle
 
 //-----------------------------------------------------------------------------
 
-bool 
-  poly_Mesh::ComputeCenter(const poly_VertexHandle hv0,
-                           const poly_VertexHandle hv1,
-                           const poly_VertexHandle hv2,
-                           t_xyz&                  center) const
+template <typename ElemTraits>
+bool
+  poly_Mesh<ElemTraits>::ComputeCenter(const poly_VertexHandle hv0,
+                                       const poly_VertexHandle hv1,
+                                       const poly_VertexHandle hv2,
+                                       t_xyz&                  center) const
 {
   t_xyz tv[3];
   //
@@ -751,11 +766,12 @@ bool
 
 //-----------------------------------------------------------------------------
 
-bool 
-  poly_Mesh::ComputeNormal(const poly_VertexHandle hv0,
-                           const poly_VertexHandle hv1,
-                           const poly_VertexHandle hv2,
-                           t_xyz&                  norm) const
+template <typename ElemTraits>
+bool
+  poly_Mesh<ElemTraits>::ComputeNormal(const poly_VertexHandle hv0,
+                                       const poly_VertexHandle hv1,
+                                       const poly_VertexHandle hv2,
+                                       t_xyz&                  norm) const
 {
   t_xyz tv[3];
   //
@@ -774,12 +790,13 @@ bool
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 bool
-  poly_Mesh::ComputeNormal(const poly_TriangleHandle ht,
-                           t_xyz&                    norm) const
+  poly_Mesh<ElemTraits>::ComputeNormal(const poly_TriangleHandle ht,
+                                       t_xyz&                    norm) const
 {
   // Get triangle by its handle.
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   if ( !this->GetTriangle(ht, t) )
     return false;
 
@@ -794,10 +811,11 @@ bool
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 double
-  poly_Mesh::ComputeArea(const poly_VertexHandle hv0,
-                         const poly_VertexHandle hv1,
-                         const poly_VertexHandle hv2) const
+  poly_Mesh<ElemTraits>::ComputeArea(const poly_VertexHandle hv0,
+                                     const poly_VertexHandle hv1,
+                                     const poly_VertexHandle hv2) const
 {
 
   t_xyz tv[3];
@@ -812,11 +830,12 @@ double
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 double
-  poly_Mesh::ComputeArea(const poly_TriangleHandle ht) const
+  poly_Mesh<ElemTraits>::ComputeArea(const poly_TriangleHandle ht) const
 {
   // Get triangle by its handle.
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   if ( !this->GetTriangle(ht, t) )
     return false;
 
@@ -830,7 +849,8 @@ double
 
 //-----------------------------------------------------------------------------
 
-double poly_Mesh::ComputeScaledJacobian(const poly_TriangleHandle ht) const
+template <typename ElemTraits>
+double poly_Mesh<ElemTraits>::ComputeScaledJacobian(const poly_TriangleHandle ht) const
 {
   poly_Jacobian calc(this);
 
@@ -852,10 +872,11 @@ double poly_Mesh::ComputeScaledJacobian(const poly_TriangleHandle ht) const
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 double
-  poly_Mesh::ComputeScaledJacobian(const t_xyz& v0,
-                                   const t_xyz& v1,
-                                   const t_xyz& v2) const
+  poly_Mesh<ElemTraits>::ComputeScaledJacobian(const t_xyz& v0,
+                                               const t_xyz& v1,
+                                               const t_xyz& v2) const
 {
   double res = DBL_MAX;
   for ( int k = 0; k < 3; ++k )
@@ -875,11 +896,12 @@ double
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 double
-  poly_Mesh::ComputeMaxLen(const poly_TriangleHandle ht) const
+  poly_Mesh<ElemTraits>::ComputeMaxLen(const poly_TriangleHandle ht) const
 {
   // Get triangle by its handle.
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   if ( !this->GetTriangle(ht, t) )
     return false;
 
@@ -901,10 +923,11 @@ double
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::IsDegenerated(const t_xyz& v0,
-                              const t_xyz& v1,
-                              const t_xyz& v2,
-                              const double prec) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::IsDegenerated(const t_xyz& v0,
+                                          const t_xyz& v1,
+                                          const t_xyz& v2,
+                                          const double prec) const
 {
   t_xyz tv[3] = {v0, v1, v2};
 
@@ -956,11 +979,12 @@ bool poly_Mesh::IsDegenerated(const t_xyz& v0,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::IsDegenerated(const poly_TriangleHandle ht,
-                              const double              prec) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::IsDegenerated(const poly_TriangleHandle ht,
+                                          const double              prec) const
 {
   // Get triangle by its handle.
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   if ( !this->GetTriangle(ht, t) )
     return false;
 
@@ -978,10 +1002,11 @@ bool poly_Mesh::IsDegenerated(const poly_TriangleHandle ht,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::Subdivide(const poly_TriangleHandle ht)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::Subdivide(const poly_TriangleHandle ht)
 {
   // Get triangle by its handle.
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   if ( !this->GetTriangle(ht, t) )
     return false;
 
@@ -1022,7 +1047,8 @@ bool poly_Mesh::Subdivide(const poly_TriangleHandle ht)
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::ComputeEdges()
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::ComputeEdges()
 {
   // Clean up any existing links.
   this->ClearEdges();
@@ -1040,8 +1066,8 @@ void poly_Mesh::ComputeEdges()
   // Cache new links.
   for ( TriangleIterator tit(this); tit.More(); tit.Next() )
   {
-    poly_TriangleHandle th = tit.Current();
-    poly_Triangle       t;
+    poly_TriangleHandle       th = tit.Current();
+    poly_Triangle<ElemTraits> t;
 
     this->GetTriangle(th, t);
     //
@@ -1104,7 +1130,8 @@ void poly_Mesh::ComputeEdges()
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::ClearEdges()
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::ClearEdges()
 {
   m_links.clear();
   m_edges.clear();
@@ -1112,7 +1139,8 @@ void poly_Mesh::ClearEdges()
 
 //-----------------------------------------------------------------------------
 
-int poly_Mesh::CountTriangles(const poly_EdgeHandle he) const
+template <typename ElemTraits>
+int poly_Mesh<ElemTraits>::CountTriangles(const poly_EdgeHandle he) const
 {
   auto linkIt = m_links.find(he);
   if ( linkIt == m_links.end() )
@@ -1123,8 +1151,9 @@ int poly_Mesh::CountTriangles(const poly_EdgeHandle he) const
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
-                             std::vector<poly_TriangleHandle>& hts) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::GetTriangles(const poly_EdgeHandle             he,
+                                         std::vector<poly_TriangleHandle>& hts) const
 {
   auto linkIt = m_links.find(he);
   if ( linkIt == m_links.end() )
@@ -1136,8 +1165,9 @@ bool poly_Mesh::GetTriangles(const poly_EdgeHandle             he,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::GetTriangles(const poly_EdgeHandle                    he,
-                             std::unordered_set<poly_TriangleHandle>& hts) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::GetTriangles(const poly_EdgeHandle                    he,
+                                         std::unordered_set<poly_TriangleHandle>& hts) const
 {
   auto linkIt = m_links.find(he);
   if ( linkIt == m_links.end() )
@@ -1151,8 +1181,9 @@ bool poly_Mesh::GetTriangles(const poly_EdgeHandle                    he,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht,
-                                    std::vector<poly_TriangleHandle>& hts) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::FindAdjacentByEdges(const poly_TriangleHandle         ht,
+                                                std::vector<poly_TriangleHandle>& hts) const
 {
   std::unordered_set<poly_TriangleHandle> tset;
   bool res = FindAdjacentByEdges(ht, tset);
@@ -1165,10 +1196,12 @@ bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle         ht,
 }
 
 //-----------------------------------------------------------------------------
-bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle                ht,
-                                    std::unordered_set<poly_TriangleHandle>& hts) const
+
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::FindAdjacentByEdges(const poly_TriangleHandle                ht,
+                                                std::unordered_set<poly_TriangleHandle>& hts) const
 {
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   this->GetTriangle(ht, t);
 
   poly_VertexHandle hv[3];
@@ -1206,9 +1239,10 @@ bool poly_Mesh::FindAdjacentByEdges(const poly_TriangleHandle                ht,
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::FindAdjacent(const poly_VertexHandle                  hv,
-                             std::unordered_set<poly_TriangleHandle>& hts,
-                             const std::unordered_set<int>&           domain) const
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::FindAdjacent(const poly_VertexHandle                  hv,
+                                         std::unordered_set<poly_TriangleHandle>& hts,
+                                         const std::unordered_set<int>&           domain) const
 {
   const std::unordered_set<poly_TriangleHandle>&
     vertexTris = m_vertices[hv.iIdx].GetTriangleRefs();
@@ -1224,8 +1258,9 @@ void poly_Mesh::FindAdjacent(const poly_VertexHandle                  hv,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::FindAdjacent(const poly_EdgeHandle             he,
-                             std::vector<poly_TriangleHandle>& hts) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::FindAdjacent(const poly_EdgeHandle             he,
+                                         std::vector<poly_TriangleHandle>& hts) const
 {
   if ( !he.IsValid() )
     return false;
@@ -1241,11 +1276,12 @@ bool poly_Mesh::FindAdjacent(const poly_EdgeHandle             he,
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
-                             std::unordered_set<poly_VertexHandle>& hvs,
-                             bool&                                  isBoundary,
-                             std::unordered_set<int>&               faceRefs,
-                             const std::unordered_set<int>&         domain) const
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::FindAdjacent(const poly_VertexHandle                hv,
+                                         std::unordered_set<poly_VertexHandle>& hvs,
+                                         bool&                                  isBoundary,
+                                         std::unordered_set<int>&               faceRefs,
+                                         const std::unordered_set<int>&         domain) const
 {
   isBoundary = false;
 
@@ -1262,7 +1298,7 @@ void poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
   // Add the neighbor triangles' vertices to the result.
   for ( const auto& th : ths )
   {
-    poly_Triangle t;
+    poly_Triangle<ElemTraits> t;
     this->GetTriangle(th, t);
 
     if ( t.IsDeleted() )
@@ -1317,10 +1353,11 @@ void poly_Mesh::FindAdjacent(const poly_VertexHandle                hv,
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle                ht,
-                                       std::unordered_set<poly_TriangleHandle>& hts) const
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::FindAdjacentByVertices(const poly_TriangleHandle                ht,
+                                                   std::unordered_set<poly_TriangleHandle>& hts) const
 {
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   this->GetTriangle(ht, t);
 
   this->FindAdjacent(t.hVertices[0], hts);
@@ -1330,19 +1367,20 @@ void poly_Mesh::FindAdjacentByVertices(const poly_TriangleHandle                
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
-                        const double          normDevRad,
-                        const double          poly_NotUsed(planeDevRad),
-                        const bool            checkJacobian,
-                        const bool            checkWing,
-                        poly_TriangleHandle&  ht0,
-                        poly_TriangleHandle&  ht1,
-                        poly_VertexHandle&    a,
-                        poly_VertexHandle&    b,
-                        poly_VertexHandle&    x,
-                        poly_VertexHandle&    y,
-                        t_xyz&                norm0,
-                        t_xyz&                norm1) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::CanFlip(const poly_EdgeHandle he,
+                                    const double          normDevRad,
+                                    const double          poly_NotUsed(planeDevRad),
+                                    const bool            checkJacobian,
+                                    const bool            checkWing,
+                                    poly_TriangleHandle&  ht0,
+                                    poly_TriangleHandle&  ht1,
+                                    poly_VertexHandle&    a,
+                                    poly_VertexHandle&    b,
+                                    poly_VertexHandle&    x,
+                                    poly_VertexHandle&    y,
+                                    t_xyz&                norm0,
+                                    t_xyz&                norm1) const
 {
   /*          a
                o
@@ -1378,7 +1416,7 @@ bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
   ht0 = hts[0];
   ht1 = hts[1];
 
-  poly_Triangle t[2];
+  poly_Triangle<ElemTraits> t[2];
   this->GetTriangle(ht0, t[0]);
   this->GetTriangle(ht1, t[1]);
   //
@@ -1472,11 +1510,12 @@ bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
-                        const double          normDevRad,
-                        const double          planeDevRad,
-                        const bool            checkJacobian,
-                        const bool            checkWing) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::CanFlip(const poly_EdgeHandle he,
+                                    const double          normDevRad,
+                                    const double          planeDevRad,
+                                    const bool            checkJacobian,
+                                    const bool            checkWing) const
 {
   poly_TriangleHandle hts[2];
   poly_VertexHandle   a, b, x, y;
@@ -1488,11 +1527,12 @@ bool poly_Mesh::CanFlip(const poly_EdgeHandle he,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::FlipEdge(const poly_EdgeHandle he,
-                         const double          normDevRad,
-                         const double          planeDevRad,
-                         const bool            checkJacobian,
-                         const bool            checkWing)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::FlipEdge(const poly_EdgeHandle he,
+                                     const double          normDevRad,
+                                     const double          planeDevRad,
+                                     const bool            checkJacobian,
+                                     const bool            checkWing)
 {
   poly_VertexHandle   a, b, x, y;
   poly_TriangleHandle hts[2];
@@ -1503,7 +1543,7 @@ bool poly_Mesh::FlipEdge(const poly_EdgeHandle he,
     return false;
 
   // Get triangles to rotate.
-  poly_Triangle ts[2];
+  poly_Triangle<ElemTraits> ts[2];
   this->GetTriangle(hts[0], ts[0]);
   this->GetTriangle(hts[1], ts[1]);
 
@@ -1546,8 +1586,9 @@ bool poly_Mesh::FlipEdge(const poly_EdgeHandle he,
 
 //-----------------------------------------------------------------------------
 
-int poly_Mesh::FlipEdges(const double normDevRad,
-                         const double planeDevRad)
+template <typename ElemTraits>
+int poly_Mesh<ElemTraits>::FlipEdges(const double normDevRad,
+                                     const double planeDevRad)
 {
   int nbFlips = 0;
 
@@ -1567,7 +1608,8 @@ int poly_Mesh::FlipEdges(const double normDevRad,
 
 //-----------------------------------------------------------------------------
 
-poly_EdgeHandle poly_Mesh::FindEdge(const poly_Edge& e) const
+template <typename ElemTraits>
+poly_EdgeHandle poly_Mesh<ElemTraits>::FindEdge(const poly_Edge& e) const
 {
   for ( size_t eidx = 0; eidx < m_edges.size(); ++eidx )
   {
@@ -1580,20 +1622,22 @@ poly_EdgeHandle poly_Mesh::FindEdge(const poly_Edge& e) const
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 poly_EdgeHandle
-  poly_Mesh::FindEdge(const poly_VertexHandle& hv0,
-                      const poly_VertexHandle& hv1) const
+  poly_Mesh<ElemTraits>::FindEdge(const poly_VertexHandle& hv0,
+                                  const poly_VertexHandle& hv1) const
 {
   return this->FindEdge( poly_Edge(hv0, hv1) );
 }
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 poly_EdgeHandle
-  poly_Mesh::FindEdge(const poly_TriangleHandle ht0,
-                      const poly_TriangleHandle ht1) const
+  poly_Mesh<ElemTraits>::FindEdge(const poly_TriangleHandle ht0,
+                                  const poly_TriangleHandle ht1) const
 {
-  poly_Triangle t0, t1;
+  poly_Triangle<ElemTraits> t0, t1;
   //
   if ( !this->GetTriangle(ht0, t0) )
     return poly_EdgeHandle();
@@ -1619,12 +1663,13 @@ poly_EdgeHandle
 
 //-----------------------------------------------------------------------------
 
+template <typename ElemTraits>
 poly_VertexHandle
-  poly_Mesh::FindVertex(const poly_TriangleHandle ht,
-                        const poly_EdgeHandle     he,
-                        int&                      vidx) const
+  poly_Mesh<ElemTraits>::FindVertex(const poly_TriangleHandle ht,
+                                    const poly_EdgeHandle     he,
+                                    int&                      vidx) const
 {
-  poly_Triangle t;
+  poly_Triangle<ElemTraits> t;
   //
   if ( !this->GetTriangle(ht, t) )
     return poly_VertexHandle();
@@ -1647,8 +1692,9 @@ poly_VertexHandle
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
-                                  std::vector<poly_TriangleHandle>& bndTris) const
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
+                                              std::vector<poly_TriangleHandle>& bndTris) const
 {
   // Extract edges from the computed links.
   for ( const auto& linkIt : m_links )
@@ -1678,9 +1724,10 @@ void poly_Mesh::FindBoundaryEdges(std::vector<poly_EdgeHandle>&     bndEdges,
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::FindDomainEdges(const int                     domainId,
-                                std::vector<poly_EdgeHandle>& innerEdges,
-                                std::vector<poly_EdgeHandle>& bndEdges) const
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::FindDomainEdges(const int                     domainId,
+                                            std::vector<poly_EdgeHandle>& innerEdges,
+                                            std::vector<poly_EdgeHandle>& bndEdges) const
 {
   // Extract edges from the computed links.
   for ( const auto& linkIt : m_links )
@@ -1709,11 +1756,12 @@ void poly_Mesh::FindDomainEdges(const int                     domainId,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
-                             const bool                     checkBorderOn,
-                             const bool                     checkDegenOn,
-                             const double                   prec,
-                             const std::unordered_set<int>& domain)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::CollapseEdge(const poly_EdgeHandle          he,
+                                         const bool                     checkBorderOn,
+                                         const bool                     checkDegenOn,
+                                         const double                   prec,
+                                         const std::unordered_set<int>& domain)
 {
   // Get triangles to remove.
   std::unordered_set<poly_TriangleHandle> hts2Remove;
@@ -1756,7 +1804,7 @@ bool poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
         if ( hts2Remove.find(th2Check) != hts2Remove.end() )
           continue;
 
-        poly_Triangle t2Check;
+        poly_Triangle<ElemTraits> t2Check;
         this->GetTriangle(th2Check, t2Check);
 
         if ( t2Check.IsDeleted() )
@@ -1809,7 +1857,7 @@ bool poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
       // Check neighbor triangles.
       for ( const auto& th2Check : ths2Check )
       {
-        poly_Triangle t2Check;
+        poly_Triangle<ElemTraits> t2Check;
         this->GetTriangle(th2Check, t2Check);
 
         if ( t2Check.IsDeleted() )
@@ -1853,7 +1901,7 @@ bool poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
     this->FindAdjacentByVertices(ht2Remove, ths2Edit);
 
     // Current triangle to remove.
-    poly_Triangle t2Remove;
+    poly_Triangle<ElemTraits> t2Remove;
     this->GetTriangle(ht2Remove, t2Remove);
 
     // Get the vertex to survive (the one opposite to the collapsed edge).
@@ -1869,7 +1917,7 @@ bool poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
       if ( hts2Remove.find(th2Edit) != hts2Remove.end() )
         continue;
 
-      poly_Triangle& t2Edit = this->ChangeTriangle(th2Edit);
+      poly_Triangle<ElemTraits>& t2Edit = this->ChangeTriangle(th2Edit);
 
       // Find a vertex `c` shared by a triangle to edit and the edge
       // being collapsed. That is basically the vertex where the
@@ -1937,7 +1985,8 @@ bool poly_Mesh::CollapseEdge(const poly_EdgeHandle          he,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::SplitEdge(const poly_EdgeHandle he)
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::SplitEdge(const poly_EdgeHandle he)
 {
   // Get the edge to split.
   poly_Edge e;
@@ -1994,7 +2043,7 @@ bool poly_Mesh::SplitEdge(const poly_EdgeHandle he)
       continue;
 
     // Get triangle.
-    poly_Triangle t;
+    poly_Triangle<ElemTraits> t;
    //
     if ( !this->GetTriangle(ht, t) || t.IsDeleted() )
       continue;
@@ -2092,9 +2141,10 @@ bool poly_Mesh::SplitEdge(const poly_EdgeHandle he)
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::Smooth(const int  iter,
-                       const int  tag,
-                       const bool checkInter)
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::Smooth(const int  iter,
+                                   const int  tag,
+                                   const bool checkInter)
 {
   std::unordered_set<int> domain = {tag};
 
@@ -2172,9 +2222,10 @@ void poly_Mesh::Smooth(const int  iter,
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::Smooth(const int                      iter,
-                       const std::unordered_set<int>& domain,
-                       const bool                     checkInter)
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::Smooth(const int                      iter,
+                                   const std::unordered_set<int>& domain,
+                                   const bool                     checkInter)
 {
   for ( auto tag : domain )
     this->Smooth(iter, tag, checkInter);
@@ -2182,9 +2233,10 @@ void poly_Mesh::Smooth(const int                      iter,
 
 //-----------------------------------------------------------------------------
 
-void poly_Mesh::updateLink(const poly_EdgeHandle     he,
-                           const poly_TriangleHandle htOld,
-                           const poly_TriangleHandle htNew)
+template <typename ElemTraits>
+void poly_Mesh<ElemTraits>::updateLink(const poly_EdgeHandle     he,
+                                       const poly_TriangleHandle htOld,
+                                       const poly_TriangleHandle htNew)
 {
   auto link = m_links.find(he);
   //
@@ -2206,13 +2258,14 @@ void poly_Mesh::updateLink(const poly_EdgeHandle     he,
 
 //-----------------------------------------------------------------------------
 
-bool poly_Mesh::computePyramidProps(const poly_VertexHandle& hv0,
-                                    const poly_VertexHandle& hv1,
-                                    const poly_VertexHandle& hv2,
-                                    const core_XYZ&          apex,
-                                    double                   gProps[10],
-                                    const int                nbPnts,
-                                    const double*            pnts) const
+template <typename ElemTraits>
+bool poly_Mesh<ElemTraits>::computePyramidProps(const poly_VertexHandle& hv0,
+                                                const poly_VertexHandle& hv1,
+                                                const poly_VertexHandle& hv2,
+                                                const core_XYZ&          apex,
+                                                double                   gProps[10],
+                                                const int                nbPnts,
+                                                const double*            pnts) const
 {
   // Compute triangle area
   double area = this->ComputeArea(hv0, hv1, hv2);

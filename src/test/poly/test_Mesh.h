@@ -91,18 +91,19 @@ public:
               << &findAdjacent02
               << &refineByMidedges01
               << &refineByMidedges02
+              << &testElemTraits
     ; // Put semicolon here for convenient adding new functions above ;)
   }
 
 private:
 
-  static bool verifyMeshContents(const t_ptr<poly_Mesh>& mesh,
-                                 const int               refNumVertices,
-                                 const int               refNumEdges,
-                                 const int               refNumTriangles,
-                                 const int               refNumQuads);
+  static bool verifyMeshContents(const t_ptr<t_mesh>& mesh,
+                                 const int            refNumVertices,
+                                 const int            refNumEdges,
+                                 const int            refNumTriangles,
+                                 const int            refNumQuads);
 
-  static t_ptr<poly_Mesh>
+  static t_ptr<t_mesh>
     readSTL(const char* filenameShort);
 
   static outcome testReadSTL(const int   funcID,
@@ -146,6 +147,7 @@ private:
   static outcome findAdjacent02     (const int funcID);
   static outcome refineByMidedges01 (const int funcID);
   static outcome refineByMidedges02 (const int funcID);
+  static outcome testElemTraits     (const int funcID);
 
 };
 

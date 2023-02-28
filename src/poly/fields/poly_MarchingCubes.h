@@ -73,7 +73,7 @@ public:
   //! \param[in] func     implicit function to evaluate.
   //! \param[in] isoValue function level to polygonize at.
   //! \return piece of mesh.
-  mobiusPoly_EXPORT static t_ptr<mobius::poly_Mesh>
+  mobiusPoly_EXPORT static t_ptr<t_mesh>
     PolygonizeVoxel(const t_xyz&                P0,
                     const t_xyz&                P7,
                     const t_ptr<poly_RealFunc>& func,

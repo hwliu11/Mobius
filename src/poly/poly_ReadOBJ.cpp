@@ -47,7 +47,7 @@ bool mobius::poly_ReadOBJ::Perform(const std::string& filename)
   }
 
   // Create container for mesh.
-  m_mesh = new poly_Mesh;
+  m_mesh = new t_mesh;
 
   // Loop over the file.
   while ( !FILE.eof() )

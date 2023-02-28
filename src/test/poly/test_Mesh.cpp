@@ -54,13 +54,15 @@
 #define filename_mesh_010 "mesh/mesh_006.stl"
 #define filename_mesh_011 "mesh/grabcad_obj1.obj"
 
+using namespace mobius;
+
 //-----------------------------------------------------------------------------
 
-bool mobius::test_Mesh::verifyMeshContents(const t_ptr<poly_Mesh>& mesh,
-                                           const int               refNumVertices,
-                                           const int               refNumEdges,
-                                           const int               refNumTriangles,
-                                           const int               refNumQuads)
+bool test_Mesh::verifyMeshContents(const t_ptr<t_mesh>& mesh,
+                                   const int            refNumVertices,
+                                   const int            refNumEdges,
+                                   const int            refNumTriangles,
+                                   const int            refNumQuads)
 {
   // Get the actual summary.
   const int numVertices  = mesh->GetNumVertices();
@@ -105,8 +107,8 @@ bool mobius::test_Mesh::verifyMeshContents(const t_ptr<poly_Mesh>& mesh,
 
 //-----------------------------------------------------------------------------
 
-mobius::t_ptr<mobius::poly_Mesh>
-  mobius::test_Mesh::readSTL(const char* filenameShort)
+t_ptr<t_mesh>
+  test_Mesh::readSTL(const char* filenameShort)
 {
   // Access common facilities.
   t_ptr<test_CommonFacilities> cf = test_CommonFacilities::Instance();
@@ -132,16 +134,16 @@ mobius::t_ptr<mobius::poly_Mesh>
 //-----------------------------------------------------------------------------
 
 //! Common function to test STL reader.
-mobius::outcome
-  mobius::test_Mesh::testReadSTL(const int   funcID,
-                                 const char* filenameShort,
-                                 const int   refNumVertices,
-                                 const int   refNumEdges,
-                                 const int   refNumTriangles)
+outcome
+  test_Mesh::testReadSTL(const int   funcID,
+                         const char* filenameShort,
+                         const int   refNumVertices,
+                         const int   refNumEdges,
+                         const int   refNumTriangles)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = readSTL(filenameShort);
+  t_ptr<t_mesh> mesh = readSTL(filenameShort);
   //
   if ( mesh.IsNull() )
     return res.failure();
@@ -159,13 +161,13 @@ mobius::outcome
 //-----------------------------------------------------------------------------
 
 //! Common function to test PLY reader.
-mobius::outcome
-  mobius::test_Mesh::testReadPLY(const int   funcID,
-                                 const char* filenameShort,
-                                 const int   refNumVertices,
-                                 const int   refNumEdges,
-                                 const int   refNumTriangles,
-                                 const int   refNumQuads)
+outcome
+  test_Mesh::testReadPLY(const int   funcID,
+                         const char* filenameShort,
+                         const int   refNumVertices,
+                         const int   refNumEdges,
+                         const int   refNumTriangles,
+                         const int   refNumQuads)
 {
   outcome res( DescriptionFn(), funcID );
 
@@ -200,13 +202,13 @@ mobius::outcome
 //-----------------------------------------------------------------------------
 
 //! Common function to test OBJ reader.
-mobius::outcome
-  mobius::test_Mesh::testReadOBJ(const int   funcID,
-                                 const char* filenameShort,
-                                 const int   refNumVertices,
-                                 const int   refNumEdges,
-                                 const int   refNumTriangles,
-                                 const int   refNumQuads)
+outcome
+  test_Mesh::testReadOBJ(const int   funcID,
+                         const char* filenameShort,
+                         const int   refNumVertices,
+                         const int   refNumEdges,
+                         const int   refNumTriangles,
+                         const int   refNumQuads)
 {
   outcome res( DescriptionFn(), funcID );
 
@@ -243,12 +245,12 @@ mobius::outcome
 //! Test scenario 001.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testCreateVertex(const int funcID)
+outcome
+  test_Mesh::testCreateVertex(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices and validate the returned handles.
   poly_VertexHandle hv0 = mesh->AddVertex();
@@ -287,8 +289,8 @@ mobius::outcome
 //! Test scenario for reading STL.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testReadSTL01(const int funcID)
+outcome
+  test_Mesh::testReadSTL01(const int funcID)
 {
   return testReadSTL(funcID,
                      filename_mesh_001,
@@ -300,8 +302,8 @@ mobius::outcome
 //! Test scenario for reading STL.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testReadSTL02(const int funcID)
+outcome
+  test_Mesh::testReadSTL02(const int funcID)
 {
   return testReadSTL(funcID,
                      filename_mesh_002,
@@ -313,8 +315,8 @@ mobius::outcome
 //! Test scenario for reading STL.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testReadSTL03(const int funcID)
+outcome
+  test_Mesh::testReadSTL03(const int funcID)
 {
   return testReadSTL(funcID,
                      filename_mesh_003,
@@ -326,8 +328,8 @@ mobius::outcome
 //! Test scenario for reading STL.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testReadSTL04(const int funcID)
+outcome
+  test_Mesh::testReadSTL04(const int funcID)
 {
   return testReadSTL(funcID,
                      filename_mesh_004,
@@ -339,8 +341,8 @@ mobius::outcome
 //! Test scenario for reading PLY.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testReadPLY01(const int funcID)
+outcome
+  test_Mesh::testReadPLY01(const int funcID)
 {
   return testReadPLY(funcID,
                      filename_mesh_005,
@@ -352,8 +354,8 @@ mobius::outcome
 //! Test scenario for reading PLY.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testReadPLY02(const int funcID)
+outcome
+  test_Mesh::testReadPLY02(const int funcID)
 {
   return testReadPLY(funcID,
                      filename_mesh_006,
@@ -365,8 +367,8 @@ mobius::outcome
 //! Test scenario for reading OBJ.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::testReadOBJ01(const int funcID)
+outcome
+  test_Mesh::testReadOBJ01(const int funcID)
 {
   return testReadOBJ(funcID,
                      filename_mesh_011,
@@ -378,12 +380,12 @@ mobius::outcome
 //! Tests midpoint refinement.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::refineByMidpoint(const int funcID)
+outcome
+  test_Mesh::refineByMidpoint(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices.
   poly_VertexHandle hv0 = mesh->AddVertex(0., 0., 0.);
@@ -412,7 +414,7 @@ mobius::outcome
   }
 
   // Verify the "is deleted" flag.
-  poly_Triangle t;
+  poly_Triangle<> t;
   if ( !mesh->GetTriangle(ht, t) )
   {
     return res.failure();
@@ -431,12 +433,12 @@ mobius::outcome
 //! Tests the computation of links.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::computeLinks(const int funcID)
+outcome
+  test_Mesh::computeLinks(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices.
   poly_VertexHandle hv0 = mesh->AddVertex(0., 0., 0.);
@@ -457,7 +459,7 @@ mobius::outcome
 
   // Get triangles.
   std::vector<size_t> valences = {1, 2, 1, 1, 1};
-  for ( poly_Mesh::EdgeIterator eit(mesh); eit.More(); eit.Next() )
+  for ( t_mesh::EdgeIterator eit(mesh); eit.More(); eit.Next() )
   {
     const poly_EdgeHandle eh = eit.Current();
 
@@ -477,12 +479,12 @@ mobius::outcome
 //! Tests edge flipping.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::flipEdges01(const int funcID)
+outcome
+  test_Mesh::flipEdges01(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices.
   poly_VertexHandle hv_a = mesh->AddVertex(0., 0., 0.);
@@ -517,12 +519,12 @@ mobius::outcome
 //! Tests edge flipping.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::flipEdges02(const int funcID)
+outcome
+  test_Mesh::flipEdges02(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices.
   poly_VertexHandle hv_a = mesh->AddVertex(-1.0, -1.0, 0.0);
@@ -554,12 +556,12 @@ mobius::outcome
 //! Tests edge flipping.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::flipEdges03(const int funcID)
+outcome
+  test_Mesh::flipEdges03(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices so that two triangles lie on the same straight line.
   poly_VertexHandle hv_a = mesh->AddVertex(-1.0, 0.0, 0.0);
@@ -591,12 +593,12 @@ mobius::outcome
 //! Tests edge flipping.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::flipEdges04(const int funcID)
+outcome
+  test_Mesh::flipEdges04(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_007);
+  t_ptr<t_mesh> mesh = readSTL(filename_mesh_007);
   //
   if ( mesh.IsNull() )
     return res.failure();
@@ -616,12 +618,12 @@ mobius::outcome
 //! Tests edge flipping.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::flipEdges05(const int funcID)
+outcome
+  test_Mesh::flipEdges05(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_008);
+  t_ptr<t_mesh> mesh = readSTL(filename_mesh_008);
   //
   if ( mesh.IsNull() )
     return res.failure();
@@ -631,7 +633,7 @@ mobius::outcome
   mesh->ComputeEdges();
   mesh->FlipEdges();
 
-  for ( poly_Mesh::TriangleIterator tit(mesh); tit.More(); tit.Next() )
+  for ( t_mesh::TriangleIterator tit(mesh); tit.More(); tit.Next() )
   {
     t_xyz currNorm;
     mesh->ComputeNormal(tit.Current(), currNorm);
@@ -643,7 +645,7 @@ mobius::outcome
   mesh->ComputeEdges();
   mesh->FlipEdges();
 
-  for ( poly_Mesh::TriangleIterator tit(mesh); tit.More(); tit.Next() )
+  for ( t_mesh::TriangleIterator tit(mesh); tit.More(); tit.Next() )
   {
     t_xyz currNorm;
     mesh->ComputeNormal(tit.Current(), currNorm);
@@ -660,12 +662,12 @@ mobius::outcome
 //! Tests finding adjacent triangles.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::findAdjacent01(const int funcID)
+outcome
+  test_Mesh::findAdjacent01(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_009);
+  t_ptr<t_mesh> mesh = readSTL(filename_mesh_009);
   //
   if ( mesh.IsNull() )
     return res.failure();
@@ -687,12 +689,12 @@ mobius::outcome
 //! Tests finding adjacent triangles.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::findAdjacent02(const int funcID)
+outcome
+  test_Mesh::findAdjacent02(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices so that two triangles lie on the same straight line.
   poly_VertexHandle hv_a = mesh->AddVertex(-1.0, 0.0, 0.0);
@@ -720,12 +722,12 @@ mobius::outcome
 //! Tests midedge refinement.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::refineByMidedges01(const int funcID)
+outcome
+  test_Mesh::refineByMidedges01(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = new poly_Mesh;
+  t_ptr<t_mesh> mesh = new t_mesh;
 
   // Add vertices.
   poly_VertexHandle hv0 = mesh->AddVertex(0., 0., 0.);
@@ -763,7 +765,7 @@ mobius::outcome
   }
 
   // Verify the "is deleted" flag.
-  poly_Triangle t;
+  poly_Triangle<> t;
   if ( !mesh->GetTriangle(ht, t) )
   {
     return res.failure();
@@ -782,12 +784,12 @@ mobius::outcome
 //! Tests midedge refinement.
 //! \param[in] funcID ID of the Test Function.
 //! \return true in case of success, false -- otherwise.
-mobius::outcome
-  mobius::test_Mesh::refineByMidedges02(const int funcID)
+outcome
+  test_Mesh::refineByMidedges02(const int funcID)
 {
   outcome res( DescriptionFn(), funcID );
 
-  t_ptr<poly_Mesh> mesh = readSTL(filename_mesh_010);
+  t_ptr<t_mesh> mesh = readSTL(filename_mesh_010);
   //
   if ( mesh.IsNull() )
     return res.failure();
@@ -800,7 +802,7 @@ mobius::outcome
   for ( int idx = 0; idx < numTris; ++idx )
   {
     poly_TriangleHandle th(idx);
-    poly_Triangle       t;
+    poly_Triangle<>     t;
 
     // Get the next triangle to process.
     mesh->GetTriangle(th, t);
@@ -832,6 +834,51 @@ mobius::outcome
   {
     return res.failure();
   }
+
+  return res.success();
+}
+
+//-----------------------------------------------------------------------------
+
+//! Tests custom traits.
+outcome test_Mesh::testElemTraits(const int funcID)
+{
+  outcome res( DescriptionFn(), funcID );
+
+  struct MyTrait
+  {
+    double scalar;
+    MyTrait() : scalar(111.) {}
+  };
+
+  t_ptr< poly_Mesh<MyTrait> > mesh = new poly_Mesh<MyTrait>;
+
+  // Add vertices.
+  poly_VertexHandle vh0 = mesh->AddVertex(0., 0., 0.);
+  poly_VertexHandle vh1 = mesh->AddVertex(1., 0., 0.);
+  poly_VertexHandle vh2 = mesh->AddVertex(0., 1., 0.);
+
+  // Add triangle.
+  poly_TriangleHandle th = mesh->AddTriangle(vh0, vh1, vh2);
+
+  // Access triangle.
+  poly_Triangle<MyTrait> t;
+  //
+  if ( !mesh->GetTriangle(th, t) )
+    return res.failure();
+
+  if ( t.traits.scalar != 111. )
+    return res.failure();
+
+  // Change scalar.
+  mesh->ChangeTriangle(th).traits.scalar = 222.;
+
+  // Access triangle.
+  if ( !mesh->GetTriangle(th, t) )
+    return res.failure();
+
+  if ( t.traits.scalar != 222. )
+    return res.failure();
 
   return res.success();
 }

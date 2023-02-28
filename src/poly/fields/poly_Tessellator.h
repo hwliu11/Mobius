@@ -72,7 +72,7 @@ public:
 public:
 
   //! \return constructed mesh.
-  const t_ptr<poly_Mesh>& GetResult() const
+  const t_ptr<t_mesh>& GetResult() const
   {
     return m_result;
   }
@@ -122,7 +122,7 @@ protected:
 
 protected:
 
-  t_ptr<poly_Mesh> m_result; //!< Reconstructed mesh.
+  t_ptr<t_mesh> m_result; //!< Reconstructed mesh.
 
 };
 

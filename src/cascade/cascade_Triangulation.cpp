@@ -37,7 +37,7 @@
 
 //-----------------------------------------------------------------------------
 
-mobius::cascade_Triangulation::cascade_Triangulation(const t_ptr<poly_Mesh>& mobiusMesh)
+mobius::cascade_Triangulation::cascade_Triangulation(const t_ptr<t_mesh>& mobiusMesh)
 {
   m_mobiusMesh = mobiusMesh;
   m_bIsDone    = false;
@@ -68,7 +68,7 @@ void mobius::cascade_Triangulation::DirectConvert()
 
 //-----------------------------------------------------------------------------
 
-const mobius::t_ptr<mobius::poly_Mesh>&
+const mobius::t_ptr<mobius::t_mesh>&
   mobius::cascade_Triangulation::GetMobiusTriangulation() const
 {
   return m_mobiusMesh;
@@ -101,7 +101,7 @@ void mobius::cascade_Triangulation::convertToOpenCascade()
   NCollection_DataMap<int, int> nodes;
 
   // Populate array of nodes.
-  for ( poly_Mesh::VertexIterator vit(m_mobiusMesh); vit.More(); vit.Next() )
+  for ( t_mesh::VertexIterator vit(m_mobiusMesh); vit.More(); vit.Next() )
   {
     // Get vertex of Mobius.
     poly_Vertex v;
@@ -117,10 +117,10 @@ void mobius::cascade_Triangulation::convertToOpenCascade()
   }
 
   // Populate array of triangles.
-  for ( poly_Mesh::TriangleIterator tit(m_mobiusMesh); tit.More(); tit.Next() )
+  for ( t_mesh::TriangleIterator tit(m_mobiusMesh); tit.More(); tit.Next() )
   {
     // Get triangle of Mobius.
-    poly_Triangle t;
+    poly_Triangle<> t;
     poly_TriangleHandle th = tit.Current();
     //
     m_mobiusMesh->GetTriangle(th, t);
@@ -151,7 +151,7 @@ void mobius::cascade_Triangulation::convertToOpenCascade()
 void mobius::cascade_Triangulation::convertToMobius()
 {
   // Construct Mobius mesh.
-  m_mobiusMesh = new poly_Mesh;
+  m_mobiusMesh = new t_mesh;
 
   // Populate Mobius nodes.
   for ( int i = 1; i <= m_occtMesh->NbNodes(); ++i )
