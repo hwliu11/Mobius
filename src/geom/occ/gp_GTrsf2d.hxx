@@ -20,6 +20,9 @@
 #include <mobius/gp_TrsfForm.hxx>
 #include <mobius/gp_XY.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Trsf2d;
 class gp_Mat2d;
 
@@ -233,98 +236,7 @@ private:
 
 };
 
-#include <mobius/gp_Trsf2d.hxx>
-
-//=======================================================================
-//function : SetTrsf2d
-// purpose :
-//=======================================================================
-inline void gp_GTrsf2d::SetTrsf2d (const gp_Trsf2d& theT)
-{
-  shape = theT.shape;
-  matrix = theT.matrix;
-  loc = theT.loc;
-  scale = theT.scale;
 }
-
-//=======================================================================
-//function : gp_GTrsf2d
-// purpose :
-//=======================================================================
-inline gp_GTrsf2d::gp_GTrsf2d (const gp_Trsf2d& theT)
-{
-  shape = theT.shape;
-  matrix = theT.matrix;
-  loc = theT.loc;
-  scale = theT.scale;
-}
-
-//=======================================================================
-//function : SetValue
-// purpose :
-//=======================================================================
-inline void gp_GTrsf2d::SetValue (const int theRow,
-                                  const int theCol,
-                                  const double theValue)
-{
-  if (theCol == 3)
-  {
-    loc.SetCoord (theRow, theValue);
-  }
-  else
-  {
-    matrix.SetValue (theRow, theCol, theValue);
-  }
-  shape = gp_Other;
-}
-
-//=======================================================================
-//function : Value
-// purpose :
-//=======================================================================
-inline double gp_GTrsf2d::Value (const int theRow,
-                                        const int theCol) const
-{
-  if (theCol == 3)
-  {
-    return loc.Coord (theRow);
-  }
-  if (shape == gp_Other)
-  {
-    return matrix.Value (theRow, theCol);
-  }
-  return scale * matrix.Value (theRow, theCol);
-}
-
-//=======================================================================
-//function : Transforms
-// purpose :
-//=======================================================================
-inline void gp_GTrsf2d::Transforms (gp_XY& theCoord) const
-{
-  theCoord.Multiply (matrix);
-  if (!(shape == gp_Other) && !(scale == 1.0))
-  {
-    theCoord.Multiply (scale);
-  }
-  theCoord.Add (loc);
-}
-
-//=======================================================================
-//function : Transforms
-// purpose :
-//=======================================================================
-inline void gp_GTrsf2d::Transforms (double& theX,
-                                    double& theY) const
-{
-  gp_XY aDoublet(theX, theY);
-  aDoublet.Multiply (matrix);
-  if (!(shape == gp_Other) && !(scale == 1.0))
-  {
-    aDoublet.Multiply (scale);
-  }
-  aDoublet.Add (loc);
-  aDoublet.Coord (theX, theY);
 }
 
 #endif // _gp_GTrsf2d_HeaderFile

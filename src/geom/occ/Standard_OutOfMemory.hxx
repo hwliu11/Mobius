@@ -22,6 +22,9 @@
 #include <mobius/Standard_SStream.hxx>
 #include <mobius/Standard_ProgramError.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_OutOfMemory;
 DEFINE_STANDARD_HANDLE(Standard_OutOfMemory, Standard_ProgramError)
 
@@ -79,5 +82,8 @@ public:
 protected:
   char myBuffer[1024];
 };
+
+}
+}
 
 #endif // _Standard_OutOfMemory_HeaderFile

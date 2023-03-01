@@ -19,13 +19,15 @@
 
 #include <mobius/occMathDefs.hxx>
 
-class gp_Dir2d;
+namespace mobius {
+namespace occ {
+
 class gp_Pnt2d;
 class gp_Ax2d;
 class gp_Trsf2d;
 
 //! Defines a non-persistent vector in 2D space.
-class gp_Vec2d 
+class gp_Vec2d
 {
 public:
 
@@ -47,7 +49,7 @@ public:
 
   //! Creates a vector from two points. The length of the vector
   //! is the distance between theP1 and theP2
-  gp_Vec2d (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2);
+  mobiusGeom_EXPORT gp_Vec2d (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2);
 
   //! Changes the coordinate of range theIndex
   //! theIndex = 1 => X is modified
@@ -97,21 +99,21 @@ public:
   //! theOther.Magnitude() <= Resolution from gp.
   bool IsNormal (const gp_Vec2d& theOther, const double theAngularTolerance) const
   {
-    const double anAng = Abs (M_PI_2 - Abs (Angle (theOther)));
+    const double anAng = std::fabs(M_PI_2 - std::fabs(Angle (theOther)));
     return !(anAng > theAngularTolerance);
   }
 
   //! Returns True if PI - Abs(<me>.Angle(theOther)) <= theAngularTolerance
   //! Raises VectorWithNullMagnitude if <me>.Magnitude() <= Resolution or
   //! theOther.Magnitude() <= Resolution from gp.
-  bool IsOpposite (const gp_Vec2d& theOther, const double theAngularTolerance) const;
+  mobiusGeom_EXPORT bool IsOpposite (const gp_Vec2d& theOther, const double theAngularTolerance) const;
 
   //! Returns true if Abs(Angle(<me>, theOther)) <= theAngularTolerance or
   //! PI - Abs(Angle(<me>, theOther)) <= theAngularTolerance
   //! Two vectors with opposite directions are considered as parallel.
   //! Raises VectorWithNullMagnitude if <me>.Magnitude() <= Resolution or
   //! theOther.Magnitude() <= Resolution from gp
-  bool IsParallel (const gp_Vec2d& theOther, const double theAngularTolerance) const;
+  mobiusGeom_EXPORT bool IsParallel (const gp_Vec2d& theOther, const double theAngularTolerance) const;
 
   //! Computes the angular value between <me> and <theOther>
   //! returns the angle value between -PI and PI in radian.
@@ -327,87 +329,7 @@ private:
 
 };
 
-#include <mobius/gp_Dir2d.hxx>
-#include <mobius/gp_Trsf2d.hxx>
-#include <mobius/gp_Pnt2d.hxx>
-
-//=======================================================================
-//function :  gp_Vec2d
-// purpose :
-//=======================================================================
-inline gp_Vec2d::gp_Vec2d (const gp_Dir2d& theV)
-{
-  coord = theV.XY();
 }
-
-//=======================================================================
-//function :  gp_Vec2d
-// purpose :
-//=======================================================================
-inline gp_Vec2d::gp_Vec2d (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)
-{
-  coord = theP2.XY().Subtracted (theP1.XY());
-}
-
-//=======================================================================
-//function :  IsOpposite
-// purpose :
-//=======================================================================
-inline bool gp_Vec2d::IsOpposite (const gp_Vec2d& theOther, const double theAngularTolerance) const
-{
-  double anAng = Angle (theOther);
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  return M_PI - anAng <= theAngularTolerance;
-}
-
-//=======================================================================
-//function :  IsParallel
-// purpose :
-//=======================================================================
-inline bool gp_Vec2d::IsParallel (const gp_Vec2d& theOther, const double theAngularTolerance) const
-{
-  double anAng = Angle (theOther);
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  return anAng <= theAngularTolerance || M_PI - anAng <= theAngularTolerance;
-}
-
-//=======================================================================
-//function :  Normalized
-// purpose :
-//=======================================================================
-inline gp_Vec2d gp_Vec2d::Normalized() const
-{
-  double aD = coord.Modulus();
-  gp_Vec2d aV = *this;
-  aV.coord.Divide (aD);
-  return aV;
-}
-
-//=======================================================================
-//function :  Rotate
-// purpose :
-//=======================================================================
-inline void gp_Vec2d::Rotate (const double theAng)
-{
-  gp_Trsf2d aT;
-  aT.SetRotation (gp_Pnt2d(0.0, 0.0), theAng);
-  coord.Multiply (aT.VectorialPart());
-}
-
-//=======================================================================
-//function :  operator*
-// purpose :
-//=======================================================================
-inline gp_Vec2d operator* (const double theScalar,
-                           const gp_Vec2d& theV)
-{
-  return theV.Multiplied (theScalar);
 }
 
 #endif // _gp_Vec2d_HeaderFile

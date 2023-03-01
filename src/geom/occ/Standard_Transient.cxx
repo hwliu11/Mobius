@@ -18,6 +18,8 @@
 #include <mobius/Standard_CString.hxx>
 #include <mobius/Standard_ProgramError.hxx>
 
+using namespace mobius::occ;
+
 void Standard_Transient::Delete() const
 { 
   delete this;

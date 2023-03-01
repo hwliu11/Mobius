@@ -17,8 +17,10 @@
 #include <mobius/gp_GTrsf2d.hxx>
 #include <mobius/gp_Trsf2d.hxx>
 #include <mobius/gp_XY.hxx>
+#include <mobius/Standard_Real.hxx>
+#include <mobius/occMathDefs.hxx>
 
-using namespace mobius;
+using namespace mobius::occ;
 
 // =======================================================================
 // function : gp_Mat2d

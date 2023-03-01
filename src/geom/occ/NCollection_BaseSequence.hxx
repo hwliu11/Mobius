@@ -20,6 +20,9 @@
 #include <mobius/NCollection_BaseAllocator.hxx>
 #include <mobius/NCollection_DefineAlloc.hxx>
 
+namespace mobius {
+namespace occ {
+
 // **************************************** Class SeqNode ********************
 
 class NCollection_SeqNode 
@@ -164,5 +167,8 @@ public:
 
   friend class Iterator;
 };
+
+}
+}
 
 #endif

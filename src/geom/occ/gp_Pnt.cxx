@@ -26,6 +26,79 @@
 #include <mobius/gp_Vec.hxx>
 #include <mobius/gp_XYZ.hxx>
 
+using namespace mobius::occ;
+
+//=======================================================================
+//function : Distance
+// purpose :
+//=======================================================================
+inline double gp_Pnt::Distance (const gp_Pnt& theOther) const
+{
+  double aD=0,aDD;
+  const gp_XYZ& aXYZ = theOther.coord;
+  aDD = coord.X(); aDD -= aXYZ.X(); aDD *= aDD; aD += aDD;
+  aDD = coord.Y(); aDD -= aXYZ.Y(); aDD *= aDD; aD += aDD;
+  aDD = coord.Z(); aDD -= aXYZ.Z(); aDD *= aDD; aD += aDD;
+  return sqrt (aD);
+}
+
+//=======================================================================
+//function : SquareDistance
+// purpose :
+//=======================================================================
+inline double gp_Pnt::SquareDistance (const gp_Pnt& theOther) const
+{
+  double aD=0, aDD;
+  const gp_XYZ& XYZ = theOther.coord;
+  aDD = coord.X(); aDD -= XYZ.X(); aDD *= aDD; aD += aDD;
+  aDD = coord.Y(); aDD -= XYZ.Y(); aDD *= aDD; aD += aDD;
+  aDD = coord.Z(); aDD -= XYZ.Z(); aDD *= aDD; aD += aDD;
+  return aD;
+}
+
+//=======================================================================
+//function : Rotate
+// purpose :
+//=======================================================================
+inline void gp_Pnt::Rotate (const gp_Ax1& theA1, const double theAng)
+{
+  gp_Trsf aT;
+  aT.SetRotation (theA1, theAng);
+  aT.Transforms (coord);
+}
+
+//=======================================================================
+//function : Scale
+// purpose :
+//=======================================================================
+inline void gp_Pnt::Scale (const gp_Pnt& theP, const double theS)
+{
+  gp_XYZ aXYZ = theP.coord;
+  aXYZ.Multiply (1.0 - theS);
+  coord.Multiply (theS);
+  coord.Add (aXYZ);
+}
+
+//=======================================================================
+//function : Translate
+// purpose :
+//=======================================================================
+inline void gp_Pnt::Translate(const gp_Vec& theV)
+{
+  coord.Add (theV.XYZ());
+}
+
+//=======================================================================
+//function : Translated
+// purpose :
+//=======================================================================
+inline gp_Pnt gp_Pnt::Translated (const gp_Vec& theV) const
+{
+  gp_Pnt aP = *this;
+  aP.coord.Add (theV.XYZ());
+  return aP;
+}
+
 void gp_Pnt::Transform (const gp_Trsf& T)
 {
   if (T.Form() == gp_Identity) { }

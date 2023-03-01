@@ -19,9 +19,12 @@
 
 #include <mobius/Intf_SeqOfSectionPoint.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Describes   a  zone  of  tangence  between  polygons  or
 //! polyhedra as a sequence of points of intersection.
-class Intf_TangentZone 
+class Intf_TangentZone
 {
 public:
 
@@ -131,6 +134,9 @@ inline void Intf_TangentZone::ParamOnSecond(double& paraMin,
 {
   paraMin = ParamOnSecondMin;
   paraMax = ParamOnSecondMax;
+}
+
+}
 }
 
 #endif // _Intf_TangentZone_HeaderFile

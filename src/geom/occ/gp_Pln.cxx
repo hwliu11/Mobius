@@ -31,6 +31,8 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
 gp_Pln::gp_Pln (const gp_Pnt& P,
 		const gp_Dir& V)
 {

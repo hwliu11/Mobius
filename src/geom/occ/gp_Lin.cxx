@@ -24,6 +24,28 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
+gp_Lin gp_Lin::Translated(const gp_Pnt& P1,
+                          const gp_Pnt& P2) const
+{
+  gp_Lin L = *this;
+  L.pos.Translate(gp_Vec(P1, P2));
+
+  return L;
+}
+
+//! Computes the square distance between <me> and the point P.
+Standard_Real gp_Lin::SquareDistance(const gp_Pnt& P) const
+{
+  const gp_Pnt& Loc = pos.Location();
+  gp_Vec V(P.X() - Loc.X(),
+    P.Y() - Loc.Y(),
+    P.Z() - Loc.Z());
+  V.Cross(pos.Direction());
+  return V.SquareMagnitude();
+}
+
 Standard_Real gp_Lin::Distance (const gp_Lin& Other) const
 {
   if (pos.IsParallel (Other.pos, gp::Resolution())) { 

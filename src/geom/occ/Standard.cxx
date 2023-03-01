@@ -46,6 +46,8 @@
 #define OCCT_MMGT_OPT_DEFAULT 0
 #endif
 
+  using namespace mobius::occ;
+
 //=======================================================================
 //class    : Standard_MMgrFactory 
 //purpose  : Container for pointer to memory manager;

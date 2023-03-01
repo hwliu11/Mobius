@@ -19,6 +19,9 @@
 #include <mobius/gp_Mat2d.hxx>
 #include <mobius/gp_XY.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_GTrsf2d;
 class gp_Trsf;
 class gp_Pnt2d;
@@ -48,15 +51,15 @@ class gp_Trsf2d
 public:
 
   //! Returns identity transformation.
-  gp_Trsf2d();
+  mobiusGeom_EXPORT gp_Trsf2d();
 
   //! Creates a 2d transformation in the XY plane from a
   //! 3d transformation .
-  gp_Trsf2d (const gp_Trsf& theT);
+  mobiusGeom_EXPORT gp_Trsf2d (const gp_Trsf& theT);
 
   //! Changes the transformation into a symmetrical transformation.
   //! theP is the center of the symmetry.
-  void SetMirror (const gp_Pnt2d& theP);
+  mobiusGeom_EXPORT void SetMirror (const gp_Pnt2d& theP);
 
   //! Changes the transformation into a symmetrical transformation.
   //! theA is the center of the axial symmetry.
@@ -65,11 +68,11 @@ public:
   //! Changes the transformation into a rotation.
   //! theP is the rotation's center and theAng is the angular value of the
   //! rotation in radian.
-  void SetRotation (const gp_Pnt2d& theP, const double theAng);
+  mobiusGeom_EXPORT void SetRotation (const gp_Pnt2d& theP, const double theAng);
 
   //! Changes the transformation into a scale.
   //! theP is the center of the scale and theS is the scaling value.
-  void SetScale (const gp_Pnt2d& theP, const double theS);
+  mobiusGeom_EXPORT void SetScale (const gp_Pnt2d& theP, const double theS);
 
   //! Changes a transformation allowing passage from the coordinate
   //! system "theFromSystem1" to the coordinate system "theToSystem2".
@@ -83,11 +86,11 @@ public:
 
   //! Changes the transformation into a translation.
   //! theV is the vector of the translation.
-  void SetTranslation (const gp_Vec2d& theV);
+  mobiusGeom_EXPORT void SetTranslation (const gp_Vec2d& theV);
 
   //! Makes the transformation into a translation from
   //! the point theP1 to the point theP2.
-  void SetTranslation (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2);
+  mobiusGeom_EXPORT void SetTranslation (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2);
 
   //! Replaces the translation vector with theV.
   mobiusGeom_EXPORT void SetTranslationPart (const gp_Vec2d& theV);
@@ -128,7 +131,7 @@ public:
   //! Returns the coefficients of the transformation's matrix.
   //! It is a 2 rows * 3 columns matrix.
   //! Raises OutOfRange if theRow < 1 or theRow > 2 or theCol < 1 or theCol > 3
-  double Value (const int theRow, const int theCol) const;
+  mobiusGeom_EXPORT double Value (const int theRow, const int theCol) const;
 
   mobiusGeom_EXPORT void Invert();
 
@@ -178,10 +181,10 @@ public:
     return aT;
   }
 
-  void Transforms (double& theX, double& theY) const;
+  mobiusGeom_EXPORT void Transforms (double& theX, double& theY) const;
 
   //! Transforms  a doublet XY with a Trsf2d
-  void Transforms (gp_XY& theCoord) const;
+  mobiusGeom_EXPORT void Transforms (gp_XY& theCoord) const;
 
   //! Sets the coefficients  of the transformation. The
   //! transformation  of the  point  x,y is  the point
@@ -211,147 +214,7 @@ private:
 
 };
 
-#include <mobius/gp_Trsf.hxx>
-#include <mobius/gp_Pnt2d.hxx>
-
-//=======================================================================
-//function : gp_Trsf2d
-// purpose :
-//=======================================================================
-inline gp_Trsf2d::gp_Trsf2d()
-{
-  shape = gp_Identity;
-  scale = 1.0;
-  matrix.SetIdentity();
-  loc.SetCoord (0.0, 0.0);
 }
-
-//=======================================================================
-//function : gp_Trsf2d
-// purpose :
-//=======================================================================
-inline gp_Trsf2d::gp_Trsf2d (const gp_Trsf& theT)
-: scale (theT.ScaleFactor()),
-  shape (theT.Form()),
-  loc (theT.TranslationPart().X(), theT.TranslationPart().Y())
-{
-  const gp_Mat& M = theT.HVectorialPart();
-  matrix(1,1) = M(1,1);
-  matrix(1,2) = M(1,2);
-  matrix(2,1) = M(2,1);
-  matrix(2,2) = M(2,2);
-}
-
-//=======================================================================
-//function : SetRotation
-// purpose :
-//=======================================================================
-inline void gp_Trsf2d::SetRotation (const gp_Pnt2d& theP,
-                                    const double theAng)
-{
-  shape = gp_Rotation;
-  scale = 1.0;
-  loc = theP.XY ();
-  loc.Reverse ();
-  matrix.SetRotation (theAng);
-  loc.Multiply (matrix);
-  loc.Add (theP.XY());
-}
-
-//=======================================================================
-//function : SetMirror
-// purpose :
-//=======================================================================
-inline void gp_Trsf2d::SetMirror (const gp_Pnt2d& theP)
-{
-  shape = gp_PntMirror;
-  scale = -1.0;
-  matrix.SetIdentity();
-  loc = theP.XY();
-  loc.Multiply (2.0);
-}
-
-//=======================================================================
-//function : SetScale
-// purpose :
-//=======================================================================
-inline void gp_Trsf2d::SetScale (const gp_Pnt2d& theP, const double theS)
-{
-  shape = gp_Scale;
-  scale = theS;
-  matrix.SetIdentity();
-  loc = theP.XY();
-  loc.Multiply (1.0 - theS);
-}
-
-//=======================================================================
-//function : SetTranslation
-// purpose :
-//=======================================================================
-inline void gp_Trsf2d::SetTranslation (const gp_Vec2d& theV)
-{
-  shape = gp_Translation;
-  scale = 1.0;
-  matrix.SetIdentity();
-  loc = theV.XY();
-}
-
-//=======================================================================
-//function : SetTranslation
-// purpose :
-//=======================================================================
-inline void gp_Trsf2d::SetTranslation (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)
-{
-  shape = gp_Translation;
-  scale = 1.0;
-  matrix.SetIdentity();
-  loc = (theP2.XY()).Subtracted (theP1.XY());
-}
-
-//=======================================================================
-//function : Value
-// purpose :
-//=======================================================================
-inline double gp_Trsf2d::Value (const int theRow, const int theCol) const
-{
-  if (theCol < 3)
-  {
-    return scale * matrix.Value (theRow, theCol);
-  }
-  else
-  {
-    return loc.Coord (theRow);
-  }
-}
-
-//=======================================================================
-//function : Transforms
-// purpose :
-//=======================================================================
-inline void gp_Trsf2d::Transforms (double& theX, double& theY) const
-{
-  gp_XY aDoublet(theX, theY);
-  aDoublet.Multiply (matrix);
-  if (scale != 1.0)
-  {
-    aDoublet.Multiply (scale);
-  }
-  aDoublet.Add (loc);
-  aDoublet.Coord (theX, theY);
-}
-
-//=======================================================================
-//function : Transforms
-// purpose :
-//=======================================================================
-inline void gp_Trsf2d::Transforms (gp_XY& theCoord) const
-{
-  theCoord.Multiply (matrix);
-  if (scale != 1.0)
-  {
-    theCoord.Multiply (scale);
-  }
-  theCoord.Add (loc);
 }
 
 #endif // _gp_Trsf2d_HeaderFile

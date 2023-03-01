@@ -28,6 +28,8 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
 bool gp_Ax1::IsCoaxial
 (const gp_Ax1& Other, 
  const double AngularTolerance,

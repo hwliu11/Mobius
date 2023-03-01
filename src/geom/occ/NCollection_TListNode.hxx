@@ -18,6 +18,9 @@
 
 #include <mobius/NCollection_ListNode.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
  * Purpose:     Abstract list node class. Used by BaseList
  * Remark:      Internal class
@@ -48,5 +51,8 @@ template <class TheItemType> class NCollection_TListNode
   TheItemType    myValue; //!< The item stored in the node
   
 };
+
+}
+}
 
 #endif

@@ -15,6 +15,8 @@
 #include <mobius/Standard_MMgrRoot.hxx>
 #include <stdlib.h>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : ~Standard_MMgrRoot
 //purpose  : 

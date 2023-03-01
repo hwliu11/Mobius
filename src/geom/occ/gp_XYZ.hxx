@@ -20,6 +20,9 @@
 #include <mobius/gp.hxx>
 #include <mobius/gp_Mat.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! This class describes a cartesian coordinate entity in
 //! 3D space {X,Y,Z}. This entity is used for algebraic
 //! calculation.
@@ -515,6 +518,9 @@ inline gp_XYZ operator* (const gp_Mat& theMatrix, const gp_XYZ& theCoord1)
 inline gp_XYZ operator* (const double theScalar, const gp_XYZ& theCoord1)
 {
   return theCoord1.Multiplied (theScalar);
+}
+
+}
 }
 
 #endif // _gp_XYZ_HeaderFile

@@ -16,6 +16,9 @@
 
 #include <mobius/gp_Quaternion.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Class perform linear interpolation (approximate rotation interpolation),
 //! result quaternion nonunit, its length lay between. sqrt(2)/2  and 1.0
 class gp_QuaternionNLerp
@@ -79,5 +82,8 @@ private:
   gp_Quaternion myQEnd;
 
 };
+
+}
+}
 
 #endif //_gp_QuaternionNLerp_HeaderFile

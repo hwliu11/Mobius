@@ -17,7 +17,13 @@
 #ifndef _Standard_PErrorHandler_HeaderFile
 #define _Standard_PErrorHandler_HeaderFile
 
+namespace mobius {
+namespace occ {
+
 class Standard_ErrorHandler;
 typedef Standard_ErrorHandler* Standard_PErrorHandler;
+
+}
+}
 
 #endif // _Standard_PErrorHandler_HeaderFile

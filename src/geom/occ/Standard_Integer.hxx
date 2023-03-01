@@ -19,8 +19,8 @@
 #include <mobius/Standard_TypeDef.hxx>
 #include <mobius/Standard_Values.hxx>
 
-namespace mobius
-{
+namespace mobius {
+namespace occ {
 
 // ===============
 // Inline methods
@@ -138,7 +138,7 @@ inline Standard_Boolean IsEqual (const int theOne,
 //! @return a hash value computed for the given unsigned integer, in range [1, theUpperBound]
 inline int HashCode (const unsigned int theValue, const int theUpperBound)
 {
-  return mobius::HashCode (static_cast<int> (theValue), theUpperBound);
+  return mobius::occ::HashCode (static_cast<int> (theValue), theUpperBound);
 }
 
 //! Computes a hash code for the given value of the "long long int" type, in range [1, theUpperBound]
@@ -177,6 +177,7 @@ inline Standard_Boolean IsEqual (const Standard_Utf32Char theOne,
   return theOne == theTwo;
 }
 
+}
 }
 
 #endif

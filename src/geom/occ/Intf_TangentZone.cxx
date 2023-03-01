@@ -17,7 +17,10 @@
 #include <mobius/Intf_SectionPoint.hxx>
 #include <mobius/Intf_TangentZone.hxx>
 
-#define  DEBUG_TANGENTZONE 0 
+using namespace mobius::occ;
+
+#define  DEBUG_TANGENTZONE 0
+
 //=======================================================================
 //function : Intf_TangentZone
 //purpose  : Constructor of an empty tangent zone.

@@ -36,6 +36,9 @@
 
 #include <mobius/Standard_PrimitiveTypes.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! The Precision package offers a set of functions defining precision criteria
 //! for use in conventional situations when comparing two numbers.
 //! Generalities
@@ -346,5 +349,8 @@ public:
   static double Infinite() { return 2.e+100; }
 
 };
+
+}
+}
 
 #endif

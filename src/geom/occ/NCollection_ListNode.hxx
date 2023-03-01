@@ -19,6 +19,9 @@
 #include <mobius/NCollection_BaseAllocator.hxx>
 #include <mobius/NCollection_DefineAlloc.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
  * Purpose:     This class is used to  represent a node  in the BaseList and
  *              BaseMap. 
@@ -51,5 +54,8 @@ public:
  private:
   NCollection_ListNode * myNext; //!< Pointer to the next node
 };
+
+}
+}
 
 #endif

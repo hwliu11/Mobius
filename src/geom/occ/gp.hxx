@@ -23,6 +23,9 @@
 // Core includes
 #include <mobius/core_Precision.h>
 
+namespace mobius {
+namespace occ {
+
 class gp_Pnt;
 class gp_Dir;
 class gp_Ax1;
@@ -112,5 +115,8 @@ public:
   mobiusGeom_EXPORT static const gp_Ax2d& OY2d();
 
 };
+
+}
+}
 
 #endif // _gp_HeaderFile

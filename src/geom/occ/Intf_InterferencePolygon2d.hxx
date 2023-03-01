@@ -19,10 +19,12 @@
 
 #include <mobius/Intf_Interference.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_OutOfRange;
 class Intf_Polygon2d;
 class gp_Pnt2d;
-
 
 //! Computes the  interference between two  polygons or
 //! the    self intersection of    a  polygon  in  two
@@ -68,5 +70,8 @@ private:
   int nbso;
 
 };
+
+}
+}
 
 #endif // _Intf_InterferencePolygon2d_HeaderFile

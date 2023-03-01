@@ -19,6 +19,10 @@
 
 #include <mobius/Standard_Integer.hxx>
 #include <mobius/Standard_Real.hxx>
+
+namespace mobius {
+namespace occ {
+
 class gp_Pnt;
 class gp_Pln;
 class gp_Cone;
@@ -297,5 +301,8 @@ public:
   //! compute the V Isoparametric gp_Circ of the torus.
   mobiusGeom_EXPORT static gp_Circ TorusVIso (const gp_Ax3& Pos, const Standard_Real MajorRadius, const Standard_Real MinorRadius, const Standard_Real V);
 };
+
+}
+}
 
 #endif // _ElSLib_HeaderFile

@@ -25,6 +25,88 @@
 #include <mobius/gp_Trsf2d.hxx>
 #include <mobius/gp_XY.hxx>
 
+using namespace mobius::occ;
+
+//=======================================================================
+//function :  gp_Vec2d
+// purpose :
+//=======================================================================
+inline gp_Vec2d::gp_Vec2d (const gp_Dir2d& theV)
+{
+  coord = theV.XY();
+}
+
+//=======================================================================
+//function :  gp_Vec2d
+// purpose :
+//=======================================================================
+inline gp_Vec2d::gp_Vec2d (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)
+{
+  coord = theP2.XY().Subtracted (theP1.XY());
+}
+
+//=======================================================================
+//function :  IsOpposite
+// purpose :
+//=======================================================================
+inline bool gp_Vec2d::IsOpposite (const gp_Vec2d& theOther, const double theAngularTolerance) const
+{
+  double anAng = Angle (theOther);
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  return M_PI - anAng <= theAngularTolerance;
+}
+
+//=======================================================================
+//function :  IsParallel
+// purpose :
+//=======================================================================
+inline bool gp_Vec2d::IsParallel (const gp_Vec2d& theOther, const double theAngularTolerance) const
+{
+  double anAng = Angle (theOther);
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  return anAng <= theAngularTolerance || M_PI - anAng <= theAngularTolerance;
+}
+
+//=======================================================================
+//function :  Normalized
+// purpose :
+//=======================================================================
+inline gp_Vec2d gp_Vec2d::Normalized() const
+{
+  double aD = coord.Modulus();
+  gp_Vec2d aV = *this;
+  aV.coord.Divide (aD);
+  return aV;
+}
+
+//=======================================================================
+//function :  Rotate
+// purpose :
+//=======================================================================
+inline void gp_Vec2d::Rotate (const double theAng)
+{
+  gp_Trsf2d aT;
+  aT.SetRotation (gp_Pnt2d(0.0, 0.0), theAng);
+  coord.Multiply (aT.VectorialPart());
+}
+
+//=======================================================================
+//function :  operator*
+// purpose :
+//=======================================================================
+inline gp_Vec2d operator* (const double theScalar,
+                           const gp_Vec2d& theV)
+{
+  return theV.Multiplied (theScalar);
+}
+
+
 bool gp_Vec2d::IsEqual
 (const gp_Vec2d& Other, 
  const double LinearTolerance,

@@ -27,6 +27,8 @@ using namespace tbb;
 #define scalable_free free
 #endif
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : Standard_MMgrTBBalloc
 //purpose  : 

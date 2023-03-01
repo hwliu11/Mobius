@@ -19,6 +19,9 @@
 #include <mobius/Standard_Assert.hxx>
 #include <iterator>
 
+namespace mobius {
+namespace occ {
+
 //! Helper class that allows to use NCollection iterators as STL iterators.
 //! NCollection iterator can be extended to STL iterator of any category by
 //! adding necessary methods: STL forward iterator requires IsEqual method,
@@ -214,5 +217,8 @@ private:
   //! NCollection iterator
   BaseIterator myIterator;
 };
+
+}
+}
 
 #endif // NCollection_StlIterator_HeaderFile

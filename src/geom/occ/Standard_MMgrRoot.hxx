@@ -18,6 +18,9 @@
 
 #include <mobius/Standard_TypeDef.hxx>
 
+namespace mobius {
+namespace occ {
+
 /** 
 * Root class for Open CASCADE mmemory managers.
 * Defines only abstract interface functions.
@@ -60,5 +63,8 @@ class Standard_MMgrRoot
   //! Default implementation does nothing and returns 0.
   mobiusGeom_EXPORT virtual Standard_Integer Purge(Standard_Boolean isDestroyed=Standard_False);
 };
+
+}
+}
 
 #endif

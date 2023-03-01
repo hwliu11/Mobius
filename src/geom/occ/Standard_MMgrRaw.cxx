@@ -17,6 +17,8 @@
 #include <mobius/Standard_OutOfMemory.hxx>
 #include <stdlib.h>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : Standard_MMgrRaw
 //purpose  : 

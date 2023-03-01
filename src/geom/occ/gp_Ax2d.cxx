@@ -24,6 +24,16 @@
 #include <mobius/gp_Vec2d.hxx>
 #include <mobius/gp_XY.hxx>
 
+using namespace mobius::occ;
+
+//! Translates an axis placement from the point theP1 to the point theP2.
+gp_Ax2d gp_Ax2d::Translated (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) const
+{
+  gp_Ax2d anA = *this;
+  (anA.loc).Translate (gp_Vec2d (theP1, theP2));
+  return anA;
+}
+
 bool gp_Ax2d::IsCoaxial (const gp_Ax2d& Other, 
 				     const double AngularTolerance,
 				     const double LinearTolerance) const

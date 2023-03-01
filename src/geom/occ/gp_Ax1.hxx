@@ -18,6 +18,9 @@
 #include <mobius/gp_Pnt.hxx>
 #include <mobius/gp_Dir.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Ax2;
 class gp_Trsf;
 class gp_Vec;
@@ -226,5 +229,8 @@ private:
   gp_Dir vdir;
 
 };
+
+}
+}
 
 #endif // _gp_Ax1_HeaderFile

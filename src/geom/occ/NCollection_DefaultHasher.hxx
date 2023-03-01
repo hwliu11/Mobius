@@ -18,6 +18,9 @@
 #include <mobius/Standard_Integer.hxx>
 #include <mobius/Standard_Boolean.hxx>
 
+namespace mobius {
+namespace occ {
+
 //=======================================================================
 //function : HashCode_Proxy
 //purpose  : Function is required to call the global function HashCode.
@@ -84,5 +87,8 @@ public:
     return IsEqual_Proxy(theKey1, theKey2);
   }
 };
+
+}
+}
 
 #endif

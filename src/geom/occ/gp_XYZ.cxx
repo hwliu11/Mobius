@@ -16,6 +16,8 @@
 
 #include <mobius/gp_Mat.hxx>
 
+using namespace mobius::occ;
+
 bool gp_XYZ::IsEqual(const gp_XYZ& Other,
                      const double Tolerance) const
 {

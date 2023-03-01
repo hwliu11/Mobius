@@ -16,8 +16,9 @@
 #define _gp_Sphere_HeaderFile
 
 #include <mobius/gp_Ax3.hxx>
-#include <mobius/Standard_Real.hxx>
-#include <mobius/Standard_Boolean.hxx>
+
+namespace mobius {
+namespace occ {
 
 class gp_Pnt;
 class gp_Ax1;
@@ -175,5 +176,8 @@ private:
   Standard_Real radius;
 
 };
+
+}
+}
 
 #endif // _gp_Sphere_HeaderFile

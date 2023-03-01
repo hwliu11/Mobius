@@ -24,6 +24,9 @@
 #include <mobius/Intf_SeqOfTangentZone.hxx>
 #include <mobius/Intf_TangentZone.hxx>
 #include <mobius/NCollection_List.hxx>
+#include <mobius/occMathDefs.hxx>
+
+using namespace mobius::occ;
 
 // Angular precision (sinus) below that value two right segments
 // are considered as having a potential zone of tangency.

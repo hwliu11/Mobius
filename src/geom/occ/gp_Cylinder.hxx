@@ -16,8 +16,10 @@
 #define _gp_Cylinder_HeaderFile
 
 #include <mobius/gp_Ax3.hxx>
-#include <mobius/Standard_Real.hxx>
-#include <mobius/Standard_Boolean.hxx>
+
+namespace mobius {
+namespace occ {
+
 class gp_Ax1;
 class gp_Pnt;
 class gp_Ax2;
@@ -168,5 +170,8 @@ private:
   gp_Ax3 pos;
   Standard_Real radius;
 };
+
+}
+}
 
 #endif // _gp_Cylinder_HeaderFile

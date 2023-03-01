@@ -16,8 +16,9 @@
 #define _gp_Lin_HeaderFile
 
 #include <mobius/gp_Ax1.hxx>
-#include <mobius/Standard_Real.hxx>
-#include <mobius/Standard_Boolean.hxx>
+
+namespace mobius {
+namespace occ {
 
 class gp_Pnt;
 class gp_Dir;
@@ -138,15 +139,7 @@ public:
   }
 
   //! Computes the square distance between <me> and the point P.
-  Standard_Real SquareDistance(const gp_Pnt& P) const
-  {
-    const gp_Pnt& Loc = pos.Location();
-    gp_Vec V(P.X() - Loc.X(),
-      P.Y() - Loc.Y(),
-      P.Z() - Loc.Z());
-    V.Cross(pos.Direction());
-    return V.SquareMagnitude();
-  }
+  mobiusGeom_EXPORT Standard_Real SquareDistance(const gp_Pnt& P) const;
 
   //! Computes the square distance between two lines.
   Standard_Real SquareDistance(const gp_Lin& Other) const
@@ -239,20 +232,14 @@ public:
   }
 
   //! Translates a line from the point P1 to the point P2.
-  gp_Lin Translated(const gp_Pnt& P1,
-                    const gp_Pnt& P2) const
-  {
-    gp_Lin L = *this;
-    L.pos.Translate(gp_Vec(P1, P2));
-
-    return L;
-  }
+  mobiusGeom_EXPORT gp_Lin Translated(const gp_Pnt& P1,
+                            const gp_Pnt& P2) const;
 
   //! Computes the distance between two lines.
   mobiusGeom_EXPORT Standard_Real Distance (const gp_Lin& Other) const;
-  
+
   mobiusGeom_EXPORT void Mirror (const gp_Pnt& P);
-  
+
   //! Performs the symmetrical transformation of a line
   //! with respect to the point P which is the center of
   //! the symmetry.
@@ -277,5 +264,8 @@ private:
 
   gp_Ax1 pos;
 };
+
+}
+}
 
 #endif // _gp_Lin_HeaderFile

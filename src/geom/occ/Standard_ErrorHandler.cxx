@@ -27,6 +27,8 @@
 #include <windows.h>
 #endif
 
+using namespace mobius::occ;
+
 // ===========================================================================
 // The class "Standard_ErrorHandler" variables
 // ===========================================================================

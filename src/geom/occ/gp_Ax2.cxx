@@ -28,6 +28,8 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
 gp_Ax2::gp_Ax2 (const gp_Pnt& P, const gp_Dir& V) :
 axis(P,V)
 {

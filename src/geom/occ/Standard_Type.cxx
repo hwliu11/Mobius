@@ -19,6 +19,8 @@
 
 #include <mobius/NCollection_DataMap.hxx>
 
+using namespace mobius::occ;
+
 IMPLEMENT_STANDARD_RTTIEXT(Standard_Type,Standard_Transient)
 
 //============================================================================
@@ -80,7 +82,7 @@ namespace {
     //! @return a computed hash code, in the range [1, theUpperBound]
     static int HashCode (const Standard_CString& theKey, const int theUpperBound)
     {
-      return ::HashCode (theKey, theUpperBound);
+      return mobius::occ::HashCode (theKey, theUpperBound);
     }
     static bool IsEqual (const Standard_CString& theKey1, const Standard_CString& theKey2)
     {
@@ -100,7 +102,7 @@ namespace {
   }
 
   // To initialize theRegistry map as soon as possible to be destroyed the latest
-  Handle(Standard_Type) theType = STANDARD_TYPE(Standard_Transient);
+  Handle(Standard_Type) theType = STANDARD_TYPE(mobius::occ::Standard_Transient);
 }
 
 Standard_Type* Standard_Type::Register (const char* theSystemName, const char* theName,

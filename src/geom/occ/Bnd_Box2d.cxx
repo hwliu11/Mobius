@@ -20,6 +20,9 @@
 #include <mobius/gp.hxx>
 #include <mobius/gp_Dir2d.hxx>
 #include <mobius/gp_Trsf2d.hxx>
+#include <mobius/Standard_Real.hxx>
+
+using namespace mobius::occ;
 
 //-- #include <Precision.hxx> Precision::Infinite() -> 1e+100
 //=======================================================================

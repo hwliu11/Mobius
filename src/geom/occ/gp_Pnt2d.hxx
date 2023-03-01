@@ -17,6 +17,9 @@
 
 #include <mobius/gp_XY.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_OutOfRange;
 class gp_XY;
 class gp_Ax2d;
@@ -93,10 +96,10 @@ public:
   }
 
   //! Computes the distance between two points.
-  double Distance (const gp_Pnt2d& theOther) const;
+  mobiusGeom_EXPORT double Distance (const gp_Pnt2d& theOther) const;
 
   //! Computes the square distance between two points.
-  double SquareDistance (const gp_Pnt2d& theOther) const;
+  mobiusGeom_EXPORT double SquareDistance (const gp_Pnt2d& theOther) const;
 
   //! Performs the symmetrical transformation of a point
   //! with respect to the point theP which is the center of
@@ -113,7 +116,7 @@ public:
 
   //! Rotates a point. theA1 is the axis of the rotation.
   //! Ang is the angular value of the rotation in radians.
-  void Rotate (const gp_Pnt2d& theP, const double theAng);
+  mobiusGeom_EXPORT void Rotate (const gp_Pnt2d& theP, const double theAng);
 
   mobiusCore_NODISCARD gp_Pnt2d Rotated (const gp_Pnt2d& theP, const double theAng) const
   {
@@ -123,7 +126,7 @@ public:
   }
 
   //! Scales a point. theS is the scaling value.
-  void Scale (const gp_Pnt2d& theP, const double theS);
+  mobiusGeom_EXPORT void Scale (const gp_Pnt2d& theP, const double theS);
 
   mobiusCore_NODISCARD gp_Pnt2d Scaled (const gp_Pnt2d& theP, const double theS) const
   {
@@ -144,9 +147,9 @@ public:
 
   //! Translates a point in the direction of the vector theV.
   //! The magnitude of the translation is the vector's magnitude.
-  void Translate (const gp_Vec2d& theV);
+  mobiusGeom_EXPORT void Translate (const gp_Vec2d& theV);
 
-  mobiusCore_NODISCARD gp_Pnt2d Translated (const gp_Vec2d& theV) const;
+  mobiusGeom_EXPORT mobiusCore_NODISCARD gp_Pnt2d Translated (const gp_Vec2d& theV) const;
 
   //! Translates a point from the point theP1 to the point theP2.
   void Translate (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)
@@ -168,75 +171,7 @@ private:
 
 };
 
-#include <mobius/gp_Vec2d.hxx>
-#include <mobius/gp_Ax2d.hxx>
-#include <mobius/gp_Trsf2d.hxx>
-
-//=======================================================================
-//function : Distance
-// purpose :
-//=======================================================================
-inline double gp_Pnt2d::Distance (const gp_Pnt2d& theOther) const
-{
-  const gp_XY& aXY = theOther.coord;
-  double aX = coord.X() - aXY.X();
-  double aY = coord.Y() - aXY.Y();
-  return sqrt (aX * aX + aY * aY);
 }
-
-//=======================================================================
-//function : SquareDistance
-// purpose :
-//=======================================================================
-inline double gp_Pnt2d::SquareDistance (const gp_Pnt2d& theOther) const
-{
-  const gp_XY& aXY = theOther.coord;
-  double aX = coord.X() - aXY.X();
-  double aY = coord.Y() - aXY.Y();
-  return (aX * aX + aY * aY);
-}
-
-//=======================================================================
-//function : Rotate
-// purpose :
-//=======================================================================
-inline void gp_Pnt2d::Rotate (const gp_Pnt2d& theP, const double theAng)
-{
-  gp_Trsf2d aT;
-  aT.SetRotation (theP, theAng);
-  aT.Transforms (coord);
-}
-
-//=======================================================================
-//function : Scale
-// purpose :
-//=======================================================================
-inline void gp_Pnt2d::Scale (const gp_Pnt2d& theP, const double theS)
-{
-  gp_XY aXY = theP.coord;
-  aXY.Multiply (1.0 - theS);
-  coord.Multiply (theS);
-  coord.Add (aXY);
-}
-
-//=======================================================================
-//function : Translate
-// purpose :
-//=======================================================================
-inline void gp_Pnt2d::Translate(const gp_Vec2d& theV)
-{
-  coord.Add (theV.XY());
-}
-
-//=======================================================================
-//function : Translated
-// purpose :
-//=======================================================================
-inline gp_Pnt2d gp_Pnt2d::Translated (const gp_Vec2d& theV) const
-{
-  gp_Pnt2d aP = *this;
-  aP.coord.Add (theV.XY());
-  return aP;
 }
 
 #endif // _gp_Pnt2d_HeaderFile

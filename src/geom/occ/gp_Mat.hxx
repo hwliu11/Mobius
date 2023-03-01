@@ -17,6 +17,9 @@
 
 #include <mobius/gp.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_XYZ;
 class gp_Trsf;
 class gp_GTrsf;
@@ -543,6 +546,9 @@ inline gp_Mat operator* (const double theScalar,
                          const gp_Mat& theMat3D)
 {
   return theMat3D.Multiplied (theScalar);
+}
+
+}
 }
 
 #endif // _gp_Mat_HeaderFile

@@ -23,6 +23,8 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : gp_Ax3
 //purpose  : 

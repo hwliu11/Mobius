@@ -22,6 +22,210 @@
 #include <mobius/gp_Vec.hxx>
 #include <mobius/gp_XYZ.hxx>
 
+using namespace mobius::occ;
+
+// =======================================================================
+// function : gp_Dir
+// purpose  :
+// =======================================================================
+gp_Dir::gp_Dir(const gp_Vec& theV)
+{
+  const gp_XYZ& aXYZ = theV.XYZ();
+  double aX = aXYZ.X();
+  double aY = aXYZ.Y();
+  double aZ = aXYZ.Z();
+  double aD = sqrt (aX * aX + aY * aY + aZ * aZ);
+  coord.SetX (aX / aD);
+  coord.SetY (aY / aD);
+  coord.SetZ (aZ / aD);
+}
+
+// =======================================================================
+// function : gp_Dir
+// purpose  :
+// =======================================================================
+gp_Dir::gp_Dir (const gp_XYZ& theXYZ)
+{
+  double aX = theXYZ.X();
+  double aY = theXYZ.Y();
+  double aZ = theXYZ.Z();
+  double aD = sqrt (aX * aX + aY * aY + aZ * aZ);
+  coord.SetX (aX / aD);
+  coord.SetY (aY / aD);
+  coord.SetZ (aZ / aD);
+}
+
+// =======================================================================
+// function : gp_Dir
+// purpose  :
+// =======================================================================
+gp_Dir::gp_Dir (const double theXv,
+                       const double theYv,
+                       const double theZv)
+{
+  double aD = sqrt (theXv * theXv + theYv * theYv + theZv * theZv);
+  coord.SetX (theXv / aD);
+  coord.SetY (theYv / aD);
+  coord.SetZ (theZv / aD);
+}
+
+// =======================================================================
+// function : SetCoord
+// purpose  :
+// =======================================================================
+void gp_Dir::SetCoord (const int theIndex,
+                              const double theXi)
+{
+  double aX = coord.X();
+  double aY = coord.Y();
+  double aZ = coord.Z();
+  if (theIndex == 1)
+  {
+    aX = theXi;
+  }
+  else if (theIndex == 2)
+  {
+    aY = theXi;
+  }
+  else
+  {
+    aZ = theXi;
+  }
+  double aD = sqrt (aX * aX + aY * aY + aZ * aZ);
+  coord.SetX (aX / aD);
+  coord.SetY (aY / aD);
+  coord.SetZ (aZ / aD);
+}
+
+// =======================================================================
+// function : SetCoord
+// purpose  :
+// =======================================================================
+void gp_Dir::SetCoord (const double theXv,
+                              const double theYv,
+                              const double theZv) {
+  double aD = sqrt (theXv * theXv + theYv * theYv + theZv * theZv);
+  coord.SetX (theXv / aD);
+  coord.SetY (theYv / aD);
+  coord.SetZ (theZv / aD);
+}
+
+// =======================================================================
+// function : SetX
+// purpose  :
+// =======================================================================
+void gp_Dir::SetX (const double theX)
+{
+  double anY = coord.Y();
+  double aZ = coord.Z();
+  double aD = sqrt (theX * theX + anY * anY + aZ * aZ);
+  coord.SetX (theX / aD);
+  coord.SetY (anY / aD);
+  coord.SetZ (aZ / aD);
+}
+
+// =======================================================================
+// function : SetY
+// purpose  :
+// =======================================================================
+void gp_Dir::SetY (const double theY)
+{
+  double aZ = coord.Z();
+  double aX = coord.X();
+  double aD = sqrt (aX * aX + theY * theY + aZ * aZ);
+  coord.SetX (aX / aD);
+  coord.SetY (theY / aD);
+  coord.SetZ (aZ / aD);
+}
+
+// =======================================================================
+// function : SetZ
+// purpose  :
+// =======================================================================
+void gp_Dir::SetZ (const double theZ)
+{
+  double aX = coord.X();
+  double anY = coord.Y();
+  double aD = sqrt (aX * aX + anY * anY + theZ * theZ);
+  coord.SetX (aX / aD);
+  coord.SetY (anY / aD);
+  coord.SetZ (theZ / aD);
+}
+
+// =======================================================================
+// function : SetXYZ
+// purpose  :
+// =======================================================================
+void gp_Dir::SetXYZ (const gp_XYZ& theXYZ)
+{
+  double aX = theXYZ.X();
+  double anY = theXYZ.Y();
+  double aZ = theXYZ.Z();
+  double aD = sqrt(aX * aX + anY * anY + aZ * aZ);
+  coord.SetX (aX / aD);
+  coord.SetY (anY / aD);
+  coord.SetZ (aZ / aD);
+}
+
+// =======================================================================
+// function : Cross
+// purpose  :
+// =======================================================================
+void gp_Dir::Cross(const gp_Dir& theRight)
+{
+  coord.Cross (theRight.coord);
+  double aD = coord.Modulus();
+  coord.Divide (aD);
+}
+
+// =======================================================================
+// function : Crossed
+// purpose  :
+// =======================================================================
+gp_Dir gp_Dir::Crossed (const gp_Dir& theRight) const
+{
+  gp_Dir aV = *this;
+  aV.coord.Cross (theRight.coord);
+  double aD = aV.coord.Modulus();
+  aV.coord.Divide (aD);
+  return aV;
+}
+
+// =======================================================================
+// function : CrossCross
+// purpose  :
+// =======================================================================
+void gp_Dir::CrossCross (const gp_Dir& theV1, const gp_Dir& theV2)
+{
+  coord.CrossCross (theV1.coord, theV2.coord);
+  double aD = coord.Modulus();
+  coord.Divide (aD);
+}
+
+// =======================================================================
+// function : CrossCrossed
+// purpose  :
+// =======================================================================
+gp_Dir gp_Dir::CrossCrossed (const gp_Dir& theV1, const gp_Dir& theV2) const
+{
+  gp_Dir aV = *this;
+  (aV.coord).CrossCross (theV1.coord, theV2.coord);
+  double aD = aV.coord.Modulus();
+  aV.coord.Divide (aD);
+  return aV;
+}
+
+// =======================================================================
+// function : Rotate
+// purpose  :
+// =======================================================================
+void gp_Dir::Rotate(const gp_Ax1& theA1, const double theAng)
+{
+  gp_Trsf aT;
+  aT.SetRotation (theA1, theAng);
+  coord.Multiply (aT.HVectorialPart());
+}
+
 double gp_Dir::Angle (const gp_Dir& Other) const
 {
   //    Commentaires :

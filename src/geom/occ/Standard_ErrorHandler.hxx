@@ -67,6 +67,9 @@
 
 #endif
 
+namespace mobius {
+namespace occ {
+
 class Standard_Failure;
 
 //! Class implementing mechanics of conversion of signals to exceptions.
@@ -215,5 +218,8 @@ inline void Standard_ErrorHandler::Callback::UnregisterCallback ()
 
 // Definition of the old name "Standard_ErrorHandlerCallback" was kept for compatibility
 typedef Standard_ErrorHandler::Callback Standard_ErrorHandlerCallback;
+
+}
+}
 
 #endif // _Standard_ErrorHandler_HeaderFile

@@ -22,7 +22,7 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_XYZ.hxx>
 
-using namespace mobius;
+using namespace mobius::occ;
 
 void gp_GTrsf::SetTranslationPart (const gp_XYZ& Coord)
 {

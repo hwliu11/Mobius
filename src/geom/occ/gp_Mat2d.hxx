@@ -17,6 +17,9 @@
 
 #include <mobius/gp.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Trsf2d;
 class gp_GTrsf2d;
 class gp_XY;
@@ -427,6 +430,9 @@ inline gp_Mat2d gp_Mat2d::Transposed() const
 inline gp_Mat2d operator* (const double theScalar, const gp_Mat2d& theMat2D)
 {
   return theMat2D.Multiplied (theScalar);
+}
+
+}
 }
 
 #endif // _gp_Mat2d_HeaderFile

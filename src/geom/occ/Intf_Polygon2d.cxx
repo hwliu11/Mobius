@@ -15,6 +15,8 @@
 
 #include <mobius/Intf_Polygon2d.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : Closed
 //purpose  : 

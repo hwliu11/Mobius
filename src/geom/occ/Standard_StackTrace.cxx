@@ -32,6 +32,8 @@
 
 #include <dbghelp.h>
 
+using namespace mobius::occ;
+
 //! This is a wrapper of DbgHelp library loaded dynamically.
 //! DbgHelp is coming with Windows SDK, so that technically it is always available.
 //! However, it's usage requires extra steps:

@@ -20,6 +20,9 @@
 #include <mobius/gp_Lin2d.hxx>
 #include <mobius/gp_Pnt2d.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Dir2d;
 class gp_Trsf2d;
 
@@ -232,5 +235,8 @@ private:
   int Flags;
 
 };
+
+}
+}
 
 #endif // _Bnd_Box2d_HeaderFile

@@ -33,13 +33,113 @@
 #include <mobius/gp_Vec.hxx>
 #include <mobius/gp_XYZ.hxx>
 
-using namespace mobius;
+using namespace mobius::occ;
+
+
+//=======================================================================
+//function : gp_Trsf
+// purpose :
+//=======================================================================
+inline gp_Trsf::gp_Trsf ()
+: scale (1.0),
+  shape (gp_Identity),
+  matrix (1, 0, 0, 0, 1, 0, 0, 0, 1),
+  loc (0.0, 0.0, 0.0)
+{}
+
+//=======================================================================
+//function : SetMirror
+// purpose :
+//=======================================================================
+inline void gp_Trsf::SetMirror (const gp_Pnt& theP)
+{
+  shape = gp_PntMirror;
+  scale = -1.0;
+  loc = theP.XYZ();
+  matrix.SetIdentity();
+  loc.Multiply (2.0);
+}
+
+//=======================================================================
+//function : SetTranslation
+// purpose :
+//=======================================================================
+inline void gp_Trsf::SetTranslation (const gp_Vec& theV) 
+{
+  shape = gp_Translation;
+  scale = 1.;
+  matrix.SetIdentity();
+  loc = theV.XYZ();
+}
+
+//=======================================================================
+//function : SetTranslation
+// purpose :
+//=======================================================================
+inline void gp_Trsf::SetTranslation (const gp_Pnt& theP1,
+                                     const gp_Pnt& theP2) 
+{
+  shape = gp_Translation;
+  scale = 1.0;
+  matrix.SetIdentity();
+  loc = (theP2.XYZ()).Subtracted (theP1.XYZ());
+}
+
+//=======================================================================
+//function : Value
+// purpose :
+//=======================================================================
+inline double gp_Trsf::Value (const int theRow, const int theCol) const
+{
+  if (theCol < 4)
+  {
+    return scale * matrix.Value (theRow, theCol);
+  }
+  else
+  {
+    return loc.Coord (theRow);
+  }
+}
+
+//=======================================================================
+//function : Transforms
+// purpose :
+//=======================================================================
+inline void gp_Trsf::Transforms (double& theX,
+                                 double& theY,
+                                 double& theZ) const 
+{
+  gp_XYZ aTriplet (theX, theY, theZ);
+  aTriplet.Multiply (matrix);
+  if (scale != 1.0)
+  {
+    aTriplet.Multiply (scale);
+  }
+  aTriplet.Add (loc);
+  theX = aTriplet.X();
+  theY = aTriplet.Y();
+  theZ = aTriplet.Z();
+}
+
+//=======================================================================
+//function : Transforms
+// purpose :
+//=======================================================================
+inline void gp_Trsf::Transforms (gp_XYZ& theCoord) const
+{
+  theCoord.Multiply (matrix);
+  if (scale != 1.0)
+  {
+    theCoord.Multiply (scale);
+  }
+  theCoord.Add (loc);
+}
 
 //=======================================================================
 //function : gp_Trsf
 //purpose  : Constructor from 2d
 //=======================================================================
-gp_Trsf::gp_Trsf (const gp_Trsf2d& T) : 
+gp_Trsf::gp_Trsf (const gp_Trsf2d& T) :
 scale(T.ScaleFactor()),
 shape(T.Form()),
 loc(T.TranslationPart().X(),T.TranslationPart().Y(), 0.0)

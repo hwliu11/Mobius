@@ -18,6 +18,9 @@
 
 #include <mobius/Standard_MMgrRoot.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
 * Implementation of raw OCC memory manager which uses standard C
 * functions: malloc (or calloc), free and realloc 
@@ -45,5 +48,8 @@ class Standard_MMgrRaw : public Standard_MMgrRoot
  protected:
   Standard_Boolean myClear; //! Option to nullify allocated memory
 };
+
+}
+}
 
 #endif

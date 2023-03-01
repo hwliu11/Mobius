@@ -21,6 +21,8 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
 void gp_Torus::Mirror (const gp_Pnt& P)
 { pos.Mirror (P); }
 

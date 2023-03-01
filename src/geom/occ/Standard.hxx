@@ -23,6 +23,9 @@
 #include <mobius/Standard_Size.hxx>
 #include <mobius/Standard_Integer.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_ErrorHandler;
 class Standard_Persistent;
 class Standard_Transient;
@@ -108,6 +111,9 @@ public:
                                                       const int theNbTopSkip = 0);
 
 };
+
+}
+}
 
 // include definition of handle to make it always visible
 // (put at the and of the file due to cyclic dependency between headers)

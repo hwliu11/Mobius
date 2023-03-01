@@ -18,6 +18,9 @@
 
 #include <mobius/Standard_Integer.hxx>
 
+namespace mobius {
+namespace occ {
+
 // msv 26.05.2009: add HashCode and IsEqual functions
 
 //! Computes a hash code for the given value of the Standard_Size type, in the range [1, theUpperBound]
@@ -49,6 +52,9 @@ inline Standard_Boolean IsEqual(const Standard_Size One,
                                 const Standard_Size Two)
 {
   return One == Two;
+}
+
+}
 }
 
 #endif

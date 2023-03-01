@@ -22,6 +22,9 @@
 #include <mobius/Standard_SStream.hxx>
 #include <mobius/Standard_DomainError.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_RangeError;
 DEFINE_STANDARD_HANDLE(Standard_RangeError, Standard_DomainError)
 
@@ -42,5 +45,8 @@ DEFINE_STANDARD_HANDLE(Standard_RangeError, Standard_DomainError)
 #endif
 
 DEFINE_STANDARD_EXCEPTION(Standard_RangeError, Standard_DomainError)
+
+}
+}
 
 #endif // _Standard_RangeError_HeaderFile

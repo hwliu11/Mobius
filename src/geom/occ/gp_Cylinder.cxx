@@ -25,6 +25,8 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
 void gp_Cylinder::Coefficients
 (Standard_Real& A1, Standard_Real& A2, Standard_Real& A3, 
  Standard_Real& B1, Standard_Real& B2, Standard_Real& B3, 

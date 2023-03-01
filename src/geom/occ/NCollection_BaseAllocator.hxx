@@ -31,6 +31,8 @@
 #include <mobius/Standard_Type.hxx>
 #include <mobius/NCollection_TypeDef.hxx>
 
+namespace mobius {
+namespace occ {
 
 /**
 * Purpose:     Basic class for memory allocation wizards.
@@ -82,5 +84,8 @@ class NCollection_BaseAllocator : public Standard_Transient
 };
 
 DEFINE_STANDARD_HANDLE(NCollection_BaseAllocator,Standard_Transient)
+
+}
+}
 
 #endif

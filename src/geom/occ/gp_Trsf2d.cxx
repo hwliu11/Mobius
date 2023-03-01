@@ -27,7 +27,147 @@
 #include <mobius/gp_Vec2d.hxx>
 #include <mobius/gp_XY.hxx>
 
-using namespace mobius;
+using namespace mobius::occ;
+
+//=======================================================================
+//function : gp_Trsf2d
+// purpose :
+//=======================================================================
+inline gp_Trsf2d::gp_Trsf2d()
+{
+  shape = gp_Identity;
+  scale = 1.0;
+  matrix.SetIdentity();
+  loc.SetCoord (0.0, 0.0);
+}
+
+//=======================================================================
+//function : gp_Trsf2d
+// purpose :
+//=======================================================================
+inline gp_Trsf2d::gp_Trsf2d (const gp_Trsf& theT)
+: scale (theT.ScaleFactor()),
+  shape (theT.Form()),
+  loc (theT.TranslationPart().X(), theT.TranslationPart().Y())
+{
+  const gp_Mat& M = theT.HVectorialPart();
+  matrix(1,1) = M(1,1);
+  matrix(1,2) = M(1,2);
+  matrix(2,1) = M(2,1);
+  matrix(2,2) = M(2,2);
+}
+
+//=======================================================================
+//function : SetRotation
+// purpose :
+//=======================================================================
+inline void gp_Trsf2d::SetRotation (const gp_Pnt2d& theP,
+                                    const double theAng)
+{
+  shape = gp_Rotation;
+  scale = 1.0;
+  loc = theP.XY ();
+  loc.Reverse ();
+  matrix.SetRotation (theAng);
+  loc.Multiply (matrix);
+  loc.Add (theP.XY());
+}
+
+//=======================================================================
+//function : SetMirror
+// purpose :
+//=======================================================================
+inline void gp_Trsf2d::SetMirror (const gp_Pnt2d& theP)
+{
+  shape = gp_PntMirror;
+  scale = -1.0;
+  matrix.SetIdentity();
+  loc = theP.XY();
+  loc.Multiply (2.0);
+}
+
+//=======================================================================
+//function : SetScale
+// purpose :
+//=======================================================================
+inline void gp_Trsf2d::SetScale (const gp_Pnt2d& theP, const double theS)
+{
+  shape = gp_Scale;
+  scale = theS;
+  matrix.SetIdentity();
+  loc = theP.XY();
+  loc.Multiply (1.0 - theS);
+}
+
+//=======================================================================
+//function : SetTranslation
+// purpose :
+//=======================================================================
+inline void gp_Trsf2d::SetTranslation (const gp_Vec2d& theV)
+{
+  shape = gp_Translation;
+  scale = 1.0;
+  matrix.SetIdentity();
+  loc = theV.XY();
+}
+
+//=======================================================================
+//function : SetTranslation
+// purpose :
+//=======================================================================
+inline void gp_Trsf2d::SetTranslation (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)
+{
+  shape = gp_Translation;
+  scale = 1.0;
+  matrix.SetIdentity();
+  loc = (theP2.XY()).Subtracted (theP1.XY());
+}
+
+//=======================================================================
+//function : Value
+// purpose :
+//=======================================================================
+inline double gp_Trsf2d::Value (const int theRow, const int theCol) const
+{
+  if (theCol < 3)
+  {
+    return scale * matrix.Value (theRow, theCol);
+  }
+  else
+  {
+    return loc.Coord (theRow);
+  }
+}
+
+//=======================================================================
+//function : Transforms
+// purpose :
+//=======================================================================
+inline void gp_Trsf2d::Transforms (double& theX, double& theY) const
+{
+  gp_XY aDoublet(theX, theY);
+  aDoublet.Multiply (matrix);
+  if (scale != 1.0)
+  {
+    aDoublet.Multiply (scale);
+  }
+  aDoublet.Add (loc);
+  aDoublet.Coord (theX, theY);
+}
+
+//=======================================================================
+//function : Transforms
+// purpose :
+//=======================================================================
+inline void gp_Trsf2d::Transforms (gp_XY& theCoord) const
+{
+  theCoord.Multiply (matrix);
+  if (scale != 1.0)
+  {
+    theCoord.Multiply (scale);
+  }
+  theCoord.Add (loc);
+}
 
 void gp_Trsf2d::SetMirror (const gp_Ax2d& A)
 {

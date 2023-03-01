@@ -16,6 +16,9 @@
 
 #include <mobius/gp_Quaternion.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Perform Spherical Linear Interpolation of the quaternions,
 //! return unit length quaternion.
 class gp_QuaternionSLerp
@@ -88,5 +91,8 @@ private:
   double myOmega;
 
 };
+
+}
+}
 
 #endif //_gp_QuaternionSLerp_HeaderFile

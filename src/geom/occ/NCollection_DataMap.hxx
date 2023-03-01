@@ -22,6 +22,9 @@
 #include <mobius/NCollection_DefaultHasher.hxx>
 #include <mobius/Standard_NoSuchObject.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
 * Purpose:     The DataMap is a Map to store keys with associated
 *              Items. See Map  from NCollection for  a discussion
@@ -398,6 +401,9 @@ public:
   }
 
 };
+
+}
+}
 
 #endif
 

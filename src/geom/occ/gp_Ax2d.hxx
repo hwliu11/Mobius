@@ -18,6 +18,9 @@
 #include <mobius/gp_Pnt2d.hxx>
 #include <mobius/gp_Dir2d.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Trsf2d;
 class gp_Vec2d;
 
@@ -39,11 +42,9 @@ class gp_Vec2d;
 //! -   to define geometric transformations (axis of
 //! symmetry, axis of rotation, and so on).
 //! Note: to define a left-handed 2D coordinate system, use gp_Ax22d.
-class gp_Ax2d 
+class gp_Ax2d
 {
 public:
-
-  
 
   //! Creates an axis object representing X axis of the reference co-ordinate system.
   gp_Ax2d() : loc(0.,0.)
@@ -188,12 +189,7 @@ public:
   void Translate (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) { loc.Translate (theP1, theP2); }
 
   //! Translates an axis placement from the point theP1 to the point theP2.
-  mobiusCore_NODISCARD gp_Ax2d Translated (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) const
-  {
-    gp_Ax2d anA = *this;
-    (anA.loc).Translate (gp_Vec2d (theP1, theP2));
-    return anA;
-  }
+  mobiusCore_NODISCARD gp_Ax2d Translated (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) const;
 
   //! Dumps the content of me into the stream
   mobiusGeom_EXPORT void DumpJson (std::ostream& theOStream, int theDepth = -1) const;
@@ -204,5 +200,8 @@ private:
   gp_Dir2d vdir;
 
 };
+
+}
+}
 
 #endif // _gp_Ax2d_HeaderFile

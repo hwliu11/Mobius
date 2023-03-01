@@ -29,6 +29,9 @@
   #include <time.h>
 #endif
 
+namespace mobius {
+namespace occ {
+
 /** 
   * @brief Mutex: a class to synchronize access to shared data. 
   *
@@ -181,6 +184,9 @@ inline void Standard_Mutex::Unlock ()
 #else
   pthread_mutex_unlock (&myMutex);
 #endif
+}
+
+}
 }
 
 #endif /* _Standard_Mutex_HeaderFile */

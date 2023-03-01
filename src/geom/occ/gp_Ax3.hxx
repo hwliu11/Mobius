@@ -23,6 +23,9 @@
 #include <mobius/gp_Pnt.hxx>
 #include <mobius/gp_Vec.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Trsf;
 
 //! Describes a coordinate system in 3D space. Unlike a
@@ -453,6 +456,9 @@ inline bool gp_Ax3::IsCoplanar (const gp_Ax1& theA1,
   }
   return (aD1 <= theLinearTolerance && aD2 <= theLinearTolerance &&
           axis.IsNormal (theA1, theAngularTolerance));
+}
+
+}
 }
 
 #endif // _gp_Ax3_HeaderFile

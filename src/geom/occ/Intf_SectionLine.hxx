@@ -19,6 +19,9 @@
 
 #include <mobius/Intf_SeqOfSectionPoint.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Describe    a  polyline  of   intersection  between two
 //! polyhedra as a sequence of points of intersection.
 class Intf_SectionLine
@@ -95,6 +98,9 @@ private:
 inline int Intf_SectionLine::NumberOfPoints() const
 {
   return myPoints.Length();
+}
+
+}
 }
 
 #endif // _Intf_SectionLine_HeaderFile

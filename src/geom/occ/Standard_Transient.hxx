@@ -19,6 +19,9 @@
 #include <mobius/Standard_DefineAlloc.hxx>
 #include <mobius/Standard_PrimitiveTypes.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_Type;
 
 namespace opencascade {
@@ -113,12 +116,15 @@ private:
 //! @param theUpperBound the upper bound of the range a computing hash code must be within
 //! @return a computed hash code, in the range [1, theUpperBound]
 inline int HashCode (const Standard_Transient* const theTransientObject,
-                                  const int          theUpperBound)
+                      const int                      theUpperBound)
 {
-  return ::HashCode (static_cast<const void*> (theTransientObject), theUpperBound);
+  return mobius::occ::HashCode (static_cast<const void*> (theTransientObject), theUpperBound);
 }
 
 //! Definition of Handle_Standard_Transient as typedef for compatibility
 typedef opencascade::handle<Standard_Transient> Handle_Standard_Transient;
+
+}
+}
 
 #endif 

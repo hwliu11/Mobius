@@ -12,14 +12,17 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
-#ifndef _double_HeaderFile
-#define _double_HeaderFile
+#ifndef _Standard_Real_HeaderFile
+#define _Standard_Real_HeaderFile
 
 #include <cmath>
 #include <float.h>
 #include <mobius/Standard_Values.hxx>
 #include <mobius/Standard_math.hxx>
 #include <mobius/Standard_TypeDef.hxx>
+
+namespace mobius {
+namespace occ {
 
 // ===============================================
 // Methods from Standard_Entity class which are redefined:  
@@ -317,5 +320,8 @@ inline double     Tan (const double Value)
 //-------------------------------------------------------------------
 inline double     Tanh (const double Value) 
 { return tanh(Value); }
+
+}
+}
 
 #endif

@@ -22,6 +22,9 @@
 #include <mobius/Standard_SStream.hxx>
 #include <mobius/Standard_RangeError.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_NullValue;
 DEFINE_STANDARD_HANDLE(Standard_NullValue, Standard_RangeError)
 
@@ -33,5 +36,8 @@ DEFINE_STANDARD_HANDLE(Standard_NullValue, Standard_RangeError)
 #endif
 
 DEFINE_STANDARD_EXCEPTION(Standard_NullValue, Standard_RangeError)
+
+}
+}
 
 #endif // _Standard_NullValue_HeaderFile

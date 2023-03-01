@@ -16,9 +16,11 @@
 #define _gp_Pln_HeaderFile
 
 #include <mobius/gp_Ax3.hxx>
-#include <mobius/Standard_Real.hxx>
-#include <mobius/Standard_Boolean.hxx>
 #include <mobius/gp_Ax1.hxx>
+
+namespace mobius {
+namespace occ {
+
 class Standard_ConstructionError;
 class gp_Ax3;
 class gp_Pnt;
@@ -28,7 +30,6 @@ class gp_Lin;
 class gp_Ax2;
 class gp_Trsf;
 class gp_Vec;
-
 
 //! Describes a plane.
 //! A plane is positioned in space with a coordinate system
@@ -228,5 +229,7 @@ private:
   gp_Ax3 pos;
 };
 
+}
+}
 
 #endif // _gp_Pln_HeaderFile

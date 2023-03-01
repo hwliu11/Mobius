@@ -18,6 +18,9 @@
 #include <mobius/gp_Ax1.hxx>
 #include <mobius/gp_Dir.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_ConstructionError;
 class gp_Pnt;
 class gp_Trsf;
@@ -461,6 +464,9 @@ inline bool gp_Ax2::IsCoplanar (const gp_Ax1& theA,
   }
   return D1 <= theLinearTolerance
       && axis.IsNormal (theA, theAngularTolerance);
+}
+
+}
 }
 
 #endif // _gp_Ax2_HeaderFile

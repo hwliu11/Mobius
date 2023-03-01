@@ -18,6 +18,10 @@
 #include <mobius/gp_Ax2.hxx>
 #include <mobius/Standard_Real.hxx>
 #include <mobius/Standard_Boolean.hxx>
+
+namespace mobius {
+namespace occ {
+
 class gp_Ax1;
 class gp_Pnt;
 class gp_Trsf;
@@ -151,15 +155,7 @@ public:
   }
 
   //! Computes the square distance between <me> and the point P.
-  Standard_Real SquareDistance(const gp_Pnt& P) const
-  {
-    gp_Vec V(Location(), P);
-    Standard_Real x = V.Dot(pos.XDirection());
-    Standard_Real y = V.Dot(pos.YDirection());
-    Standard_Real z = V.Dot(pos.Direction());
-    Standard_Real t = sqrt(x * x + y * y) - radius;
-    return (t * t + z * z);
-  }
+  mobiusGeom_EXPORT Standard_Real SquareDistance(const gp_Pnt& P) const;
 
   //! Returns True if the point P is on the circumference.
   //! The distance between <me> and <P> must be lower or
@@ -282,5 +278,8 @@ private:
   gp_Ax2 pos;
   Standard_Real radius;
 };
+
+}
+}
 
 #endif // _gp_Circ_HeaderFile

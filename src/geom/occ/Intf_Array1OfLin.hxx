@@ -20,9 +20,14 @@
 #include <mobius/gp_Lin.hxx>
 #include <mobius/NCollection_Array1.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Describes  a set of Straight Lines  to  intersect with the Polyhedron.
 
 typedef NCollection_Array1<gp_Lin> Intf_Array1OfLin;
 
+}
+}
 
 #endif

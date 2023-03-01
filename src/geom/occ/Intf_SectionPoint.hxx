@@ -20,9 +20,11 @@
 #include <mobius/gp_Pnt.hxx>
 #include <mobius/Intf_PIType.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Pnt;
 class gp_Pnt2d;
-
 
 //! Describes an intersection  point between  polygons  and
 //! polyhedra.
@@ -131,6 +133,9 @@ inline bool Intf_SectionPoint::IsEqual
           DimenTool==Other.DimenTool &&
           IndexT1==Other.IndexT1 &&
           IndexT2==Other.IndexT2);
+}
+
+}
 }
 
 #endif // _Intf_SectionPoint_HeaderFile

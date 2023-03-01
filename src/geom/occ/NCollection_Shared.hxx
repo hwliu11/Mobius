@@ -18,6 +18,9 @@
 
 #include <mobius/NCollection_DefineAlloc.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Template defining a class derived from the specified base class and 
 //! Standard_Transient, and supporting OCCT RTTI.
 //!
@@ -68,5 +71,8 @@ public:
   {}
 */
 };
+
+}
+}
 
 #endif

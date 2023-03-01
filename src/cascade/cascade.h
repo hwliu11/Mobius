@@ -43,6 +43,9 @@
 
 #define cascade_NotUsed(x) x
 
+// Cascade includes
+#include <mobius/cascade_Triangulation.h>
+
 // Core includes
 #include <mobius/core_Ptr.h>
 #include <mobius/core_XYZ.h>
@@ -193,14 +196,30 @@ namespace mobius
     //! Converts Mobius mesh to OpenCascade triangulation.
     //! \param[in] mesh Mobius mesh to convert.
     //! \return OpenCascade mesh.
-    mobiusCascade_EXPORT static Handle(Poly_Triangulation)
-      GetOpenCascadeMesh(const t_ptr<t_mesh>& mesh);
+    template <typename Traits = poly_Traits>
+    static Handle(Poly_Triangulation)
+      GetOpenCascadeMesh(const t_ptr< poly_Mesh<Traits> >& mesh)
+    {
+      // Convert to OpenCascade's mesh.
+      cascade_Triangulation<Traits> converter(mesh);
+      converter.DirectConvert();
+      //
+      return converter.GetOpenCascadeTriangulation();
+    }
 
     //! Converts OpenCascade triangulation to Mobius mesh.
     //! \param[in] tris OpenCascade triangulation to convert.
     //! \return Mobius mesh.
-    mobiusCascade_EXPORT static t_ptr<t_mesh>
-      GetMobiusMesh(const Handle(Poly_Triangulation)& tris);
+    template <typename Traits = poly_Traits>
+    static t_ptr< poly_Mesh<Traits> >
+      GetMobiusMesh(const Handle(Poly_Triangulation)& tris)
+    {
+      // Convert to Mobius' mesh.
+      cascade_Triangulation<Traits> converter(tris);
+      converter.DirectConvert();
+      //
+      return converter.GetMobiusTriangulation();
+    }
 
     //! Converts Mobius surface of revolution to OpenCascade counterpart.
     //! \param[in] surface Mobius surface to convert.

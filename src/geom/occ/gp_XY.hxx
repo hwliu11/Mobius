@@ -18,6 +18,9 @@
 #include <mobius/gp.hxx>
 #include <mobius/gp_Mat2d.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! This class describes a cartesian coordinate entity in 2D
 //! space {X,Y}. This class is non persistent. This entity used
 //! for algebraic calculation.
@@ -374,6 +377,9 @@ inline gp_XY operator* (const double theScalar,
                         const gp_XY&        theCoord1)
 {
   return theCoord1.Multiplied (theScalar);
+}
+
+}
 }
 
 #endif // _gp_XY_HeaderFile

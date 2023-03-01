@@ -28,6 +28,9 @@
 #include <mobius/NCollection_DefineAlloc.hxx>
 #include <mobius/NCollection_ListNode.hxx>
 
+namespace mobius {
+namespace occ {
+
 typedef void (* NCollection_DelListNode) 
      (NCollection_ListNode*, Handle(NCollection_BaseAllocator)& theAl);
 
@@ -211,5 +214,8 @@ public:
   // ------------ FRIEND CLASSES ------------
   friend class Iterator;
 };
+
+}
+}
 
 #endif

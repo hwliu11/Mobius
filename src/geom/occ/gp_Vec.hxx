@@ -16,7 +16,14 @@
 #define _gp_Vec_HeaderFile
 
 #include <mobius/gp_XYZ.hxx>
+#include <mobius/gp.hxx>
+#include <mobius/gp_Dir.hxx>
+#include <mobius/gp_Pnt.hxx>
+#include <mobius/gp_Trsf.hxx>
 #include <mobius/occMathDefs.hxx>
+
+namespace mobius {
+namespace occ {
 
 class gp_Dir;
 class gp_Pnt;
@@ -25,7 +32,7 @@ class gp_Ax2;
 class gp_Trsf;
 
 //! Defines a non-persistent vector in 3D space.
-class gp_Vec 
+class gp_Vec
 {
 public:
 
@@ -33,7 +40,7 @@ public:
   gp_Vec() {}
 
   //! Creates a unitary vector from a direction theV.
-  gp_Vec (const gp_Dir& theV);
+  mobiusGeom_EXPORT gp_Vec (const gp_Dir& theV);
 
   //! Creates a vector with a triplet of coordinates.
   gp_Vec (const gp_XYZ& theCoord)
@@ -47,7 +54,7 @@ public:
 
   //! Creates a vector from two points. The length of the vector
   //! is the distance between theP1 and theP2
-  gp_Vec (const gp_Pnt& theP1, const gp_Pnt& theP2);
+  mobiusGeom_EXPORT gp_Vec (const gp_Pnt& theP1, const gp_Pnt& theP2);
 
   //! Changes the coordinate of range theIndex
   //! theIndex = 1 => X is modified
@@ -113,7 +120,7 @@ public:
   //! Returns True if abs(<me>.Angle(theOther) - PI/2.) <= theAngularTolerance
   //! Raises VectorWithNullMagnitude if <me>.Magnitude() <= Resolution or
   //! theOther.Magnitude() <= Resolution from gp
-  bool IsNormal (const gp_Vec& theOther, const double theAngularTolerance) const;
+  mobiusGeom_EXPORT bool IsNormal (const gp_Vec& theOther, const double theAngularTolerance) const;
 
   //! Returns True if PI - <me>.Angle(theOther) <= theAngularTolerance
   //! Raises VectorWithNullMagnitude if <me>.Magnitude() <= Resolution or
@@ -141,7 +148,7 @@ public:
   //! Raises VectorWithNullMagnitude if <me>.Magnitude() <= Resolution from gp or
   //! theOther.Magnitude() <= Resolution because the angular value is
   //! indefinite if one of the vectors has a null magnitude.
-  double Angle (const gp_Vec& theOther) const;
+  mobiusGeom_EXPORT double Angle (const gp_Vec& theOther) const;
 
   //! Computes the angle, in radians, between this vector and
   //! vector theOther. The result is a value between -Pi and Pi.
@@ -157,7 +164,7 @@ public:
   //! Standard_DomainError if this vector, the vector theOther,
   //! and the vector theVRef are coplanar, unless this vector and
   //! the vector theOther are parallel.
-  double AngleWithRef (const gp_Vec& theOther, const gp_Vec& theVRef) const;
+  mobiusGeom_EXPORT double AngleWithRef (const gp_Vec& theOther, const gp_Vec& theVRef) const;
 
   //! Computes the magnitude of this vector.
   double Magnitude() const { return coord.Modulus(); }
@@ -292,7 +299,7 @@ public:
   //! normalizes a vector
   //! Raises an exception if the magnitude of the vector is
   //! lower or equal to Resolution from gp.
-  mobiusCore_NODISCARD gp_Vec Normalized() const;
+  mobiusGeom_EXPORT mobiusCore_NODISCARD gp_Vec Normalized() const;
 
   //! Reverses the direction of a vector
   void Reverse() { coord.Reverse(); }
@@ -374,7 +381,7 @@ public:
   //! the plane of the symmetry : (Location, XDirection, YDirection).
   mobiusCore_NODISCARD mobiusGeom_EXPORT gp_Vec Mirrored (const gp_Ax2& theA2) const;
 
-  void Rotate (const gp_Ax1& theA1, const double theAng);
+  mobiusGeom_EXPORT void Rotate (const gp_Ax1& theA1, const double theAng);
 
   //! Rotates a vector. theA1 is the axis of the rotation.
   //! theAng is the angular value of the rotation in radians.
@@ -415,92 +422,7 @@ private:
 
 };
 
-
-#include <mobius/gp.hxx>
-#include <mobius/gp_Dir.hxx>
-#include <mobius/gp_Pnt.hxx>
-#include <mobius/gp_Trsf.hxx>
-
-//=======================================================================
-//function :  gp_Vec
-// purpose :
-//=======================================================================
-inline gp_Vec::gp_Vec (const gp_Dir& theV)
-{
-  coord = theV.XYZ();
 }
-
-//=======================================================================
-//function :  gp_Vec
-// purpose :
-//=======================================================================
-inline gp_Vec::gp_Vec (const gp_Pnt& theP1, const gp_Pnt& theP2)
-{
-  coord = theP2.XYZ().Subtracted (theP1.XYZ());
-}
-
-//=======================================================================
-//function :  IsNormal
-// purpose :
-//=======================================================================
-inline bool gp_Vec::IsNormal (const gp_Vec& theOther, const double theAngularTolerance) const
-{
-  double anAng = M_PI / 2.0 - Angle (theOther);
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  return  anAng <= theAngularTolerance;
-}
-
-//=======================================================================
-//function :  Angle
-// purpose :
-//=======================================================================
-inline double gp_Vec::Angle (const gp_Vec& theOther) const
-{
-  return (gp_Dir (coord)).Angle (theOther);
-}
-
-//=======================================================================
-//function :  AngleWithRef
-// purpose :
-//=======================================================================
-inline double gp_Vec::AngleWithRef (const gp_Vec& theOther, const gp_Vec& theVRef) const
-{
-  return (gp_Dir (coord)).AngleWithRef (theOther, theVRef);
-}
-
-//=======================================================================
-//function :  Normalized
-// purpose :
-//=======================================================================
-inline gp_Vec gp_Vec::Normalized() const
-{
-  double aD = coord.Modulus();
-  gp_Vec aV = *this;
-  aV.coord.Divide (aD);
-  return aV;
-}
-
-//=======================================================================
-//function :  Rotate
-// purpose :
-//=======================================================================
-inline void gp_Vec::Rotate (const gp_Ax1& theA1, const double theAng)
-{
-  gp_Trsf aT;
-  aT.SetRotation (theA1, theAng);
-  coord.Multiply (aT.VectorialPart());
-}
-
-//=======================================================================
-//function :  operator*
-// purpose :
-//=======================================================================
-inline gp_Vec operator* (const double theScalar, const gp_Vec& theV)
-{
-  return theV.Multiplied(theScalar);
 }
 
 #endif // _gp_Vec_HeaderFile

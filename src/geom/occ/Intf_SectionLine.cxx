@@ -18,6 +18,8 @@
 #include <mobius/Intf_SectionLine.hxx>
 #include <mobius/Intf_SectionPoint.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : Intf_SectionLine
 //purpose  : Construct

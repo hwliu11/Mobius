@@ -38,6 +38,9 @@
 
 #include <mobius/Standard_Integer.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Returns bounded hash code for the null-terminated string, in the range [1, theUpperBound]
 //! @param theString the null-terminated string which hash code is to be computed
 //! @param theUpperBound the upper bound of the range a computing hash code must be within
@@ -61,7 +64,7 @@ inline Standard_Integer HashCode (const Standard_CString theString,
                                   const Standard_Integer theUpperBound)
 {
 //  return (Abs( HashCodes( Value , Len ) ) % Upper ) + 1 ;
-  return mobius::HashCode (HashCodes (theString, theLength), theUpperBound);
+  return mobius::occ::HashCode (HashCodes (theString, theLength), theUpperBound);
 }
 
 //! Returns Standard_True if two strings are equal
@@ -103,5 +106,8 @@ mobiusGeom_EXPORT int Vsprintf (char* theBuffer, const char* theFormat, va_list 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+}
+}
 
 #endif

@@ -16,8 +16,10 @@
 #define _gp_Torus_HeaderFile
 
 #include <mobius/gp_Ax3.hxx>
-#include <mobius/Standard_Real.hxx>
-#include <mobius/Standard_Boolean.hxx>
+
+namespace mobius {
+namespace occ {
+
 class gp_Ax1;
 class gp_Pnt;
 class gp_Ax2;
@@ -189,5 +191,8 @@ private:
   Standard_Real majorRadius;
   Standard_Real minorRadius;
 };
+
+}
+}
 
 #endif // _gp_Torus_HeaderFile

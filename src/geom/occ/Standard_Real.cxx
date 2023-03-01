@@ -12,6 +12,8 @@
 // Alternatively, this file may be used under the terms of Open CASCADE
 // commercial license or contractual agreement.
 
+#include <mobius/Standard_Real.hxx>
+
 #include <math.h>
 #include <mobius/Standard_RangeError.hxx>
 #include <mobius/Standard_Real.hxx>
@@ -20,13 +22,15 @@
 #include <mobius/Standard_NumericError.hxx>
 #include <mobius/occMathDefs.hxx>
 
+using namespace mobius::occ;
+
 static const double ACosLimit = 1. + Epsilon(1.);
 
 //============================================================================
 // function : HashCode
 // purpose  :
 //============================================================================
-int HashCode (const double theReal, const int theUpperBound)
+int mobius::occ::HashCode (const double theReal, const int theUpperBound)
 {
   if (theUpperBound < 1)
   {
@@ -47,7 +51,7 @@ int HashCode (const double theReal, const int theUpperBound)
 //-------------------------------------------------------------------
 // ACos : Returns the value of the arc cosine of a real
 //-------------------------------------------------------------------
-double ACos (const double Value) 
+double mobius::occ::ACos (const double Value) 
 { 
   if ((Value < -ACosLimit) || (Value > ACosLimit)){
     throw std::runtime_error("range error");
@@ -78,7 +82,7 @@ inline double apx_for_ACosApprox (const double x)
     0.015098965761299077 * x))))) / sqrt(2*x);
 }
 
-double ACosApprox (const double Value)
+double mobius::occ::ACosApprox (const double Value)
 {
   double XX;
   if (Value < 0.) {
@@ -105,7 +109,7 @@ double ACosApprox (const double Value)
 //-------------------------------------------------------------------
 // ASin : Returns the value of the arc sine of a real
 //-------------------------------------------------------------------
-double ASin (const double Value) 
+double mobius::occ::ASin (const double Value) 
 { 
   if ((Value < -ACosLimit) || (Value > ACosLimit)){
     throw Standard_RangeError();
@@ -124,7 +128,7 @@ double ASin (const double Value)
 //-------------------------------------------------------------------
 // ATan2 : Returns the arc tangent of a real divide by an another real
 //-------------------------------------------------------------------
-double ATan2 (const double Value, const double Other) 
+double mobius::occ::ATan2 (const double Value, const double Other) 
 { 
   if ( Value == 0. && Other == 0. ){
     throw Standard_NullValue();
@@ -135,7 +139,7 @@ double ATan2 (const double Value, const double Other)
 //-------------------------------------------------------------------
 // Sign : Returns |a| if B >= 0; -|a| if b < 0.
 //-------------------------------------------------------------------
-double Sign(const double a, const double b)
+double mobius::occ::Sign(const double a, const double b)
 {
   if (b >= 0.0) {
     return Abs(a);
@@ -199,7 +203,7 @@ static int HardwareLowBitsOfDouble()
 static int HighBitsOfDouble = HardwareHighBitsOfDouble();
 static int LowBitsOfDouble = HardwareLowBitsOfDouble();
 
-double NextAfter(const double x, const double y)
+double mobius::occ::NextAfter(const double x, const double y)
 {
   RealMap res;
 
@@ -251,7 +255,7 @@ double NextAfter(const double x, const double y)
 //-------------------------------------------------------------------
 // ATanh : Returns the value of the hyperbolic arc tangent of a real
 //-------------------------------------------------------------------
-double     ATanh(const double Value) 
+double     mobius::occ::ATanh(const double Value) 
 { 
   if ( (Value <= -1.) || (Value >= 1.) ){
 #ifdef OCCT_DEBUG
@@ -269,7 +273,7 @@ double     ATanh(const double Value)
 //-------------------------------------------------------------------
 // ACosh : Returns the hyperbolic Arc cosine of a real
 //-------------------------------------------------------------------
-double     ACosh (const double Value) 
+double     mobius::occ::ACosh (const double Value) 
 { 
   if ( Value < 1. ){
 #ifdef OCCT_DEBUG
@@ -287,7 +291,7 @@ double     ACosh (const double Value)
 //-------------------------------------------------------------------
 // Cosh : Returns the hyperbolic cosine of a real
 //-------------------------------------------------------------------
-double     Cosh (const double Value) 
+double     mobius::occ::Cosh (const double Value) 
 { 
   if ( Abs(Value) > 0.71047586007394394e+03 ){
 #ifdef OCCT_DEBUG
@@ -301,7 +305,7 @@ double     Cosh (const double Value)
 //-------------------------------------------------------------------
 // Sinh : Returns the hyperbolicsine of a real
 //-------------------------------------------------------------------
-double     Sinh (const double Value) 
+double     mobius::occ::Sinh (const double Value) 
 { 
   if ( Abs(Value) > 0.71047586007394394e+03 ){
 #ifdef OCCT_DEBUG
@@ -315,7 +319,7 @@ double     Sinh (const double Value)
 //-------------------------------------------------------------------
 // Log : Returns the naturaOPl logarithm of a real
 //-------------------------------------------------------------------
-double     Log (const double Value) 
+double     mobius::occ::Log (const double Value) 
 {   if ( Value <= 0. ){
 #ifdef OCCT_DEBUG
     std::cout << "Illegal argument in Log" << std::endl ;
@@ -327,7 +331,7 @@ double     Log (const double Value)
 //-------------------------------------------------------------------
 // Sqrt : Returns the square root of a real
 //-------------------------------------------------------------------
-double     Sqrt (const double Value) 
+double     mobius::occ::Sqrt (const double Value) 
 { 
   if (  Value < 0. ){
 #ifdef OCCT_DEBUG

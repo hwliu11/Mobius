@@ -20,7 +20,12 @@
 #include <mobius/Intf_TangentZone.hxx>
 #include <mobius/NCollection_Sequence.hxx>
 
+namespace mobius {
+namespace occ {
+
 typedef NCollection_Sequence<Intf_TangentZone> Intf_SeqOfTangentZone;
 
+}
+}
 
 #endif

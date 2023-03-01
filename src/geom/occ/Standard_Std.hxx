@@ -20,6 +20,10 @@
 #include <type_traits>
 
 
+namespace mobius {
+namespace occ {
+
+
 //! Namespace opencascade is intended for low-level template classes and functions
 namespace opencascade
 {
@@ -102,5 +106,8 @@ namespace opencascade
   };
 
 } // namespace opencascade
+
+}
+}
 
 #endif

@@ -17,6 +17,8 @@
 #include <mobius/Standard_NullValue.hxx>
 #include <mobius/Standard_Stream.hxx>
 
+using namespace mobius::occ;
+
 //============================================================================
 // function : HashCode
 // purpose  :

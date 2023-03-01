@@ -26,11 +26,13 @@
 #include <string.h>
 #include <stdarg.h>
 
+using namespace mobius::occ;
+
 //============================================================================
 // function : HashCode
 // purpose  :
 //============================================================================
-Standard_Integer HashCode (const Standard_CString theString, const Standard_Integer theUpperBound)
+Standard_Integer mobius::occ::HashCode (const Standard_CString theString, const Standard_Integer theUpperBound)
 {
   const Standard_Integer aLength = static_cast<Standard_Integer> (strlen (theString));
 
@@ -41,7 +43,7 @@ Standard_Integer HashCode (const Standard_CString theString, const Standard_Inte
 // function : HashCodes
 // purpose  :
 //============================================================================
-Standard_Integer HashCodes (const Standard_CString theString, const Standard_Integer theLength)
+Standard_Integer mobius::occ::HashCodes (const Standard_CString theString, const Standard_Integer theLength)
 {
   // compute DJB2 hash of a string
   unsigned int              hash = 0;
@@ -91,19 +93,17 @@ Standard_Integer HashCodes (const Standard_CString theString, const Standard_Int
   #define vfprintf_l(theFile,   theLocale, theFormat, theArgPtr) vfprintf(theFile,   theFormat, theArgPtr)
 #endif
 
-/*
-double Strtod (const char* theStr, char** theNextPtr)
+double mobius::occ::Strtod (const char* theStr, char** theNextPtr)
 {
   return strtod_l (theStr, theNextPtr, Standard_CLocaleSentry::GetCLocale());
 }
-*/
 
-double Atof (const char* theStr)
+double mobius::occ::Atof (const char* theStr)
 {
   return Strtod (theStr, NULL);
 }
 
-int Printf  (const Standard_CString theFormat, ...)
+int mobius::occ::Printf  (const Standard_CString theFormat, ...)
 {
   SAVE_TL();
   va_list argp;
@@ -113,7 +113,7 @@ int Printf  (const Standard_CString theFormat, ...)
   return result;
 }
 
-int Fprintf (FILE* theFile, const char* theFormat, ...)
+int mobius::occ::Fprintf (FILE* theFile, const char* theFormat, ...)
 {
   SAVE_TL();
   va_list argp;
@@ -123,7 +123,7 @@ int Fprintf (FILE* theFile, const char* theFormat, ...)
   return result;
 }
 
-int Sprintf (char* theBuffer, const char* theFormat, ...)
+int mobius::occ::Sprintf (char* theBuffer, const char* theFormat, ...)
 {
   SAVE_TL();
   va_list argp;
@@ -133,7 +133,7 @@ int Sprintf (char* theBuffer, const char* theFormat, ...)
   return result;
 }
 
-int Vsprintf (char* theBuffer, const char* theFormat, va_list theArgList)
+int mobius::occ::Vsprintf (char* theBuffer, const char* theFormat, va_list theArgList)
 {
   SAVE_TL();
   return vsprintf_l(theBuffer, Standard_CLocaleSentry::GetCLocale(), theFormat, theArgList);

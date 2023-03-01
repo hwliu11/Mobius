@@ -880,5 +880,7 @@ outcome test_Mesh::testElemTraits(const int funcID)
   if ( t.traits.scalar != 222. )
     return res.failure();
 
+  t_ptr<t_mesh> copy = mesh->DeepCopyWithoutTraits();
+
   return res.success();
 }

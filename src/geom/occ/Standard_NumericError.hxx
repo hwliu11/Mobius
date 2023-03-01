@@ -22,6 +22,9 @@
 #include <mobius/Standard_SStream.hxx>
 #include <mobius/Standard_Failure.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_NumericError;
 DEFINE_STANDARD_HANDLE(Standard_NumericError, Standard_Failure)
 
@@ -33,5 +36,8 @@ DEFINE_STANDARD_HANDLE(Standard_NumericError, Standard_Failure)
 #endif
 
 DEFINE_STANDARD_EXCEPTION(Standard_NumericError, Standard_Failure)
+
+}
+}
 
 #endif // _Standard_NumericError_HeaderFile

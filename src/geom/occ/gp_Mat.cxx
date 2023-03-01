@@ -18,7 +18,7 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_XYZ.hxx>
 
-using namespace mobius;
+using namespace mobius::occ;
 
 // =======================================================================
 // function : gp_Mat

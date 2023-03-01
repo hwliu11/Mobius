@@ -19,6 +19,8 @@
 
 #include <mobius/Standard_NoSuchObject.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : PClear
 //purpose  : Deletes all nodes from the list

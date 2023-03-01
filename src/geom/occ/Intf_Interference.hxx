@@ -24,6 +24,9 @@
 #include <mobius/Intf_SeqOfSectionLine.hxx>
 #include <mobius/Intf_SeqOfTangentZone.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_OutOfRange;
 class Intf_SectionPoint;
 class Intf_SectionLine;
@@ -171,6 +174,9 @@ inline const Intf_TangentZone& Intf_Interference::ZoneValue (const int Index) co
 inline double Intf_Interference::GetTolerance () const
 {
   return Tolerance;
+}
+
+}
 }
 
 #endif // _Intf_Interference_HeaderFile

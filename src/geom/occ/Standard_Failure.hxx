@@ -24,6 +24,9 @@
 #include <mobius/Standard_OStream.hxx>
 #include <mobius/Standard_SStream.hxx>
 
+namespace mobius {
+namespace occ {
+
 DEFINE_STANDARD_HANDLE(Standard_Failure, Standard_Transient)
 
 //! Forms the root of the entire exception hierarchy.
@@ -174,6 +177,9 @@ inline Standard_OStream& operator<< (Standard_OStream& theStream,
 {
   theFailure.Print (theStream);
   return theStream;
+}
+
+}
 }
 
 #endif // _Standard_Failure_HeaderFile

@@ -20,6 +20,9 @@
 
 #include <mobius/Standard_NoSuchObject.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_Mutex;
 
 /**
@@ -130,5 +133,8 @@ class NCollection_IncAllocator : public NCollection_BaseAllocator
 
 // Definition of HANDLE object using Standard_DefineHandle.hxx
 DEFINE_STANDARD_HANDLE (NCollection_IncAllocator, NCollection_BaseAllocator)
+
+}
+}
 
 #endif

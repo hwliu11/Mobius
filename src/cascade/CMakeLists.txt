@@ -16,7 +16,6 @@ set (CPP_FILES
   cascade_BSplineCurve.cpp
   cascade_BSplineSurface.cpp
   cascade_MultResolver.cpp
-  cascade_Triangulation.cpp
 )
 
 #------------------------------------------------------------------------------

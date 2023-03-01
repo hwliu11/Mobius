@@ -19,6 +19,9 @@
 #include <mobius/gp_Mat.hxx>
 #include <mobius/gp_XYZ.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Pnt;
 class gp_Trsf2d;
 class gp_Ax1;
@@ -56,7 +59,7 @@ class gp_Trsf
 public:
 
   //! Returns the identity transformation.
-  gp_Trsf();
+  mobiusGeom_EXPORT gp_Trsf();
 
   //! Creates  a 3D transformation from the 2D transformation theT.
   //! The resulting transformation has a homogeneous
@@ -169,11 +172,11 @@ public:
 
   //! Changes the transformation into a translation.
   //! theV is the vector of the translation.
-  void SetTranslation (const gp_Vec& theV);
+  mobiusGeom_EXPORT void SetTranslation (const gp_Vec& theV);
 
   //! Makes the transformation into a translation where the translation vector
   //! is the vector (theP1, theP2) defined from point theP1 to point theP2.
-  void SetTranslation (const gp_Pnt& theP1, const gp_Pnt& theP2);
+  mobiusGeom_EXPORT void SetTranslation (const gp_Pnt& theP1, const gp_Pnt& theP2);
 
   //! Replaces the translation vector with the vector theV.
   mobiusGeom_EXPORT void SetTranslationPart (const gp_Vec& theV);
@@ -241,7 +244,7 @@ public:
   //! It is a 3 rows * 4 columns matrix.
   //! This coefficient includes the scale factor.
   //! Raises OutOfRanged if theRow < 1 or theRow > 3 or theCol < 1 or theCol > 4
-  double Value (const int theRow, const int theCol) const;
+  mobiusGeom_EXPORT double Value (const int theRow, const int theCol) const;
 
   mobiusGeom_EXPORT void Invert();
 
@@ -302,10 +305,10 @@ public:
     return aT;
   }
 
-  void Transforms (double& theX, double& theY, double& theZ) const;
+  mobiusGeom_EXPORT void Transforms (double& theX, double& theY, double& theZ) const;
 
   //! Transformation of a triplet XYZ with a Trsf
-  void Transforms (gp_XYZ& theCoord) const;
+  mobiusGeom_EXPORT void Transforms (gp_XYZ& theCoord) const;
 
 
 friend class gp_GTrsf;
@@ -324,107 +327,7 @@ private:
 
 };
 
-#include <mobius/gp_Trsf2d.hxx>
-#include <mobius/gp_Vec.hxx>
-#include <mobius/gp_Pnt.hxx>
-
-//=======================================================================
-//function : gp_Trsf
-// purpose :
-//=======================================================================
-inline gp_Trsf::gp_Trsf ()
-: scale (1.0),
-  shape (gp_Identity),
-  matrix (1, 0, 0, 0, 1, 0, 0, 0, 1),
-  loc (0.0, 0.0, 0.0)
-{}
-
-//=======================================================================
-//function : SetMirror
-// purpose :
-//=======================================================================
-inline void gp_Trsf::SetMirror (const gp_Pnt& theP)
-{
-  shape = gp_PntMirror;
-  scale = -1.0;
-  loc = theP.XYZ();
-  matrix.SetIdentity();
-  loc.Multiply (2.0);
 }
-
-//=======================================================================
-//function : SetTranslation
-// purpose :
-//=======================================================================
-inline void gp_Trsf::SetTranslation (const gp_Vec& theV) 
-{
-  shape = gp_Translation;
-  scale = 1.;
-  matrix.SetIdentity();
-  loc = theV.XYZ();
-}
-
-//=======================================================================
-//function : SetTranslation
-// purpose :
-//=======================================================================
-inline void gp_Trsf::SetTranslation (const gp_Pnt& theP1,
-                                     const gp_Pnt& theP2) 
-{
-  shape = gp_Translation;
-  scale = 1.0;
-  matrix.SetIdentity();
-  loc = (theP2.XYZ()).Subtracted (theP1.XYZ());
-}
-
-//=======================================================================
-//function : Value
-// purpose :
-//=======================================================================
-inline double gp_Trsf::Value (const int theRow, const int theCol) const
-{
-  if (theCol < 4)
-  {
-    return scale * matrix.Value (theRow, theCol);
-  }
-  else
-  {
-    return loc.Coord (theRow);
-  }
-}
-
-//=======================================================================
-//function : Transforms
-// purpose :
-//=======================================================================
-inline void gp_Trsf::Transforms (double& theX,
-                                 double& theY,
-                                 double& theZ) const 
-{
-  gp_XYZ aTriplet (theX, theY, theZ);
-  aTriplet.Multiply (matrix);
-  if (scale != 1.0)
-  {
-    aTriplet.Multiply (scale);
-  }
-  aTriplet.Add (loc);
-  theX = aTriplet.X();
-  theY = aTriplet.Y();
-  theZ = aTriplet.Z();
-}
-
-//=======================================================================
-//function : Transforms
-// purpose :
-//=======================================================================
-inline void gp_Trsf::Transforms (gp_XYZ& theCoord) const
-{
-  theCoord.Multiply (matrix);
-  if (scale != 1.0)
-  {
-    theCoord.Multiply (scale);
-  }
-  theCoord.Add (loc);
 }
 
 #endif // _gp_Trsf_HeaderFile

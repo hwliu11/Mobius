@@ -37,6 +37,8 @@
 #include <mobius/gp_Vec.hxx>
 #include <mobius/gp_XYZ.hxx>
 
+using namespace mobius::occ;
+
 static Standard_Real PIPI = M_PI + M_PI;
 
 gp_Pnt ElSLib::PlaneValue (const Standard_Real U,
@@ -1548,7 +1550,7 @@ gp_Circ  ElSLib::SphereUIso(const gp_Ax3& Pos,
   gp_Vec dx = Pos.XDirection();
   gp_Vec dy = Pos.YDirection();
   gp_Dir dz = Pos.Direction ();
-  gp_Dir cx = cos(U) * dx + sin(U) * dy;
+  gp_Dir cx = dx*cos(U) + dy*sin(U);
   gp_Ax2 axes(Pos.Location(),
 	      cx.Crossed(dz),
 	      cx);
@@ -1569,7 +1571,7 @@ gp_Circ  ElSLib::TorusUIso(const gp_Ax3& Pos,
   gp_Vec dx = Pos.XDirection();
   gp_Vec dy = Pos.YDirection();
   gp_Dir dz = Pos.Direction ();
-  gp_Dir cx = cos(U) * dx + sin(U) * dy;
+  gp_Dir cx = dx*cos(U) + dy*sin(U);
   gp_Ax2 axes(Pos.Location(),
 	      cx.Crossed(dz),
 	      cx);

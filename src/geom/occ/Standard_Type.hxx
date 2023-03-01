@@ -21,6 +21,9 @@
 
 #include <typeinfo>
 
+namespace mobius {
+namespace occ {
+
 // Auxiliary tools to check at compile time that class declared as base in 
 // DEFINE_STANDARD_RTTI* macro is actually a base class.
 #if ! defined(OCCT_CHECK_BASE_CLASS)
@@ -288,5 +291,8 @@ inline std::ostream& operator << (std::ostream& theStream, const Handle(Standard
 
 //! Definition of Handle_Standard_Type as typedef for compatibility
 DEFINE_STANDARD_HANDLE(Standard_Type,Standard_Transient)
+
+}
+}
 
 #endif // _Standard_Type_HeaderFile

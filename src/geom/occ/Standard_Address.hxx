@@ -17,7 +17,8 @@
 
 #include <mobius/Standard_Integer.hxx>
 
-using namespace mobius;
+namespace mobius {
+namespace occ {
 
 //! Returns a hash code of the given memory pointer
 //! @param thePointer the memory pointer which hash code it to be computed
@@ -45,5 +46,8 @@ inline int HashCode (const void* const thePointer, const int theUpperBound)
 inline Standard_Boolean IsEqual(const Standard_Address One
 			       ,const Standard_Address Two)
 { return One == Two; }
+
+}
+}
 
 #endif

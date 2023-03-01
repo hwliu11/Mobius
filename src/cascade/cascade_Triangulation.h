@@ -41,54 +41,159 @@
 #include <mobius/poly_Mesh.h>
 
 // OCCT includes
+#include <NCollection_DataMap.hxx>
+#include <Poly_CoherentTriangulation.hxx>
 #include <Poly_Triangulation.hxx>
+
 
 namespace mobius {
 
 //! \ingroup MOBIUS_CASCADE
 //!
 //! Bridge for conversions between Mobius and OCCT triangulations.
+template <typename Traits = poly_Traits>
 class cascade_Triangulation
 {
 public:
 
-  mobiusCascade_EXPORT
-    cascade_Triangulation(const t_ptr<t_mesh>& mobiusMesh);
+  //! Ctor.
+  cascade_Triangulation(const t_ptr< poly_Mesh<Traits> >& mobiusMesh)
+  {
+    m_mobiusMesh = mobiusMesh;
+    m_bIsDone    = false;
+  }
 
-  mobiusCascade_EXPORT
-    cascade_Triangulation(const Handle(Poly_Triangulation)& occtMesh);
+  //! Ctor.
+  cascade_Triangulation(const Handle(Poly_Triangulation)& occtMesh)
+  {
+    m_occtMesh = occtMesh;
+    m_bIsDone  = false;
+  }
 
-  mobiusCascade_EXPORT
-    ~cascade_Triangulation();
+  //! Dtor.
+  ~cascade_Triangulation() = default;
 
 public:
 
-  mobiusCascade_EXPORT void
-    DirectConvert();
+  void DirectConvert()
+  {
+    if ( !m_mobiusMesh.IsNull() )
+      this->convertToOpenCascade();
+    else if ( !m_occtMesh.IsNull() )
+      this->convertToMobius();
+  }
 
 public:
 
-  mobiusCascade_EXPORT const t_ptr<t_mesh>&
-    GetMobiusTriangulation() const;
+  const t_ptr< poly_Mesh<Traits> >& GetMobiusTriangulation() const
+  {
+    return m_mobiusMesh;
+  }
 
-  mobiusCascade_EXPORT const Handle(Poly_Triangulation)&
-    GetOpenCascadeTriangulation() const;
+  const Handle(Poly_Triangulation)& GetOpenCascadeTriangulation() const
+  {
+    return m_occtMesh;
+  }
 
-  mobiusCascade_EXPORT bool
-    IsDone() const;
+  bool IsDone() const
+  {
+    return m_bIsDone;
+  }
 
 protected:
 
-  mobiusCascade_EXPORT void
-    convertToOpenCascade();
+  void convertToOpenCascade()
+  {
+    if ( !m_mobiusMesh->GetNumVertices() || !m_mobiusMesh->GetNumTriangles() )
+      return;
 
-  mobiusCascade_EXPORT void
-    convertToMobius();
+    Handle(Poly_CoherentTriangulation) cohTris = new Poly_CoherentTriangulation;
+
+    NCollection_DataMap<int, int> nodes;
+
+    // Populate array of nodes.
+    for ( poly_Mesh<Traits>::VertexIterator vit(m_mobiusMesh); vit.More(); vit.Next() )
+    {
+      // Get vertex of Mobius.
+      poly_Vertex v;
+      poly_VertexHandle hv = vit.Current();
+      //
+      m_mobiusMesh->GetVertex(hv, v);
+
+      // Add node of OpenCascade.
+      const int occNodeId = cohTris->SetNode( gp_XYZ( v.X(), v.Y(), v.Z() ) );
+
+      // Register node mapping.
+      nodes.Bind( hv.GetIdx(), occNodeId );
+    }
+
+    // Populate array of triangles.
+    for ( poly_Mesh<Traits>::TriangleIterator tit(m_mobiusMesh); tit.More(); tit.Next() )
+    {
+      // Get triangle of Mobius.
+      poly_Triangle<Traits> t;
+      poly_TriangleHandle th = tit.Current();
+      //
+      m_mobiusMesh->GetTriangle(th, t);
+
+      // Skip dead triangles.
+      if ( t.IsDeleted() )
+        continue;
+
+      // Get vertices.
+      poly_VertexHandle vh0, vh1, vh2;
+      t.GetVertices(vh0, vh1, vh2);
+
+      // Add triangle of OpenCascade.
+      cohTris->AddTriangle( nodes( vh0.GetIdx() ),
+                            nodes( vh1.GetIdx() ),
+                            nodes( vh2.GetIdx() ) );
+    }
+
+    // Construct triangulation.
+    m_occtMesh = cohTris->GetTriangulation();
+
+    // Set done.
+    m_bIsDone = true;
+  }
+
+  void convertToMobius()
+  {
+    // Construct Mobius mesh.
+    m_mobiusMesh = new poly_Mesh<Traits>;
+
+    // Populate Mobius nodes.
+    for ( int i = 1; i <= m_occtMesh->NbNodes(); ++i )
+    {
+      const double x = m_occtMesh->Node(i).X();
+      const double y = m_occtMesh->Node(i).Y();
+      const double z = m_occtMesh->Node(i).Z();
+
+      // Add vertex.
+      m_mobiusMesh->AddVertex(x, y, z);
+    }
+
+    // Populate Mobius triangles.
+    for ( int i = 1; i <= m_occtMesh->NbTriangles(); ++i )
+    {
+      int occtN1, occtN2, occtN3;
+      m_occtMesh->Triangle(i).Get(occtN1, occtN2, occtN3);
+
+      // Add triangle.
+      poly_VertexHandle vh0(occtN1-1);
+      poly_VertexHandle vh1(occtN2-1);
+      poly_VertexHandle vh2(occtN3-1);
+      //
+      m_mobiusMesh->AddTriangle(vh0, vh1, vh2);
+    }
+
+    m_bIsDone = true;
+  }
 
 private:
 
   //! Mobius data structure.
-  t_ptr<t_mesh> m_mobiusMesh;
+  t_ptr< poly_Mesh<Traits> > m_mobiusMesh;
 
   //! OCCT data structure.
   Handle(Poly_Triangulation) m_occtMesh;

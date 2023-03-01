@@ -18,6 +18,9 @@
 
 #include <mobius/Bnd_Box2d.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Bnd_Box2d;
 class gp_Pnt2d;
 
@@ -52,6 +55,9 @@ public:
 inline const Bnd_Box2d& Intf_Polygon2d::Bounding () const
 {
   return myBox;
+}
+
+}
 }
 
 #endif // _Intf_Polygon2d_HeaderFile

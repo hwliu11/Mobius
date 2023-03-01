@@ -22,6 +22,8 @@
 #include <fstream>
 #include <iomanip>
 
+using namespace mobius::occ;
+
 
 IMPLEMENT_STANDARD_RTTIEXT(NCollection_IncAllocator,NCollection_BaseAllocator)
 

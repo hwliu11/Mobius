@@ -54,8 +54,8 @@ public:
   {
     hVertices[0] = hVertices[1] = hVertices[2] = poly_VertexHandle();
     hEdges[0]    = hEdges[1]    = hEdges[2]    = poly_EdgeHandle();
-    m_iFlags     = Flag_None;
-    m_iFaceRef   = Mobius_InvalidHandleIndex;
+    iFlags       = Flag_None;
+    iFaceRef     = Mobius_InvalidHandleIndex;
   }
 
   //! Ctor accepting the nodes of the triangle. The nodes should be enumerated in
@@ -70,8 +70,8 @@ public:
     hVertices[0] = hv0;
     hVertices[1] = hv1;
     hVertices[2] = hv2;
-    m_iFlags     = Flag_None;
-    m_iFaceRef   = Mobius_InvalidHandleIndex;
+    iFlags       = Flag_None;
+    iFaceRef     = Mobius_InvalidHandleIndex;
 
     // Edges are empty.
     hEdges[0] = hEdges[1] = hEdges[2] = poly_EdgeHandle();
@@ -92,14 +92,30 @@ public:
     hVertices[0] = hv0;
     hVertices[1] = hv1;
     hVertices[2] = hv2;
-    m_iFlags     = Flag_None;
-    m_iFaceRef   = ref;
+    iFlags       = Flag_None;
+    iFaceRef     = ref;
 
     // Edges are empty.
     hEdges[0] = hEdges[1] = hEdges[2] = poly_EdgeHandle();
   }
 
 public:
+
+  //! Makes a copy of this triangle without traits.
+  poly_Triangle<> CopyWithoutTraits() const
+  {
+    poly_Triangle<> res;
+
+    for ( size_t i = 0; i < 3; ++i )
+      res.hEdges[i] = this->hEdges[i];
+
+    for ( size_t i = 0; i < 3; ++i )
+      res.hVertices[i] = this->hVertices[i];
+
+    res.iFaceRef = this->iFaceRef;
+    res.iFlags   = this->iFlags;
+    return res;
+  }
 
   //! Returns vertex handles defining the triangle.
   //! \param[out] hv0 1-st vertex.
@@ -118,52 +134,46 @@ public:
   //! \param[in] faceRef the face reference to set.
   void SetFaceRef(const int faceRef)
   {
-    m_iFaceRef = faceRef;
+    iFaceRef = faceRef;
   }
 
   //! \returns the back reference to a CAD face (if any).
   int GetFaceRef() const
   {
-    return m_iFaceRef;
+    return iFaceRef;
   }
 
   //! \return the associated flags.
   int GetFlags() const
   {
-    return m_iFlags;
+    return iFlags;
   }
 
   //! \return non-const reference to the attributes.
   int& ChangeFlags()
   {
-    return m_iFlags;
+    return iFlags;
   }
 
   //! Flags this triangle as deleted.
   void SetDeleted()
   {
-    m_iFlags |= Flag_Deleted;
+    iFlags |= Flag_Deleted;
   }
 
   //! \return true if this triangle is marked as deleted.
   bool IsDeleted() const
   {
-    return (m_iFlags & Flag_Deleted) > 0;
+    return (iFlags & Flag_Deleted) > 0;
   }
 
 public:
 
   poly_VertexHandle hVertices[3]; //!< Handles to the vertices.
   poly_EdgeHandle   hEdges[3];    //!< Handles to the edges.
-
-protected:
-
-  int m_iFlags;   //!< Flags.
-  int m_iFaceRef; //!< Back reference to the CAD face.
-
-public:
-
-  Traits traits; //!< Traits for customization.
+  int               iFlags;       //!< Flags.
+  int               iFaceRef;     //!< Back reference to the CAD face.
+  Traits            traits;       //!< Traits for customization.
 
 };
 

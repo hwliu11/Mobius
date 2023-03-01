@@ -22,8 +22,8 @@
 #include <mobius/gp_TrsfForm.hxx>
 #include <mobius/gp_XYZ.hxx>
 
-class gp_Trsf;
-class gp_Mat;
+namespace mobius {
+namespace occ {
 
 // Avoid possible conflict with SetForm macro defined by windows.h
 #ifdef SetForm
@@ -402,6 +402,9 @@ inline gp_Trsf gp_GTrsf::Trsf() const
   aT.matrix = matrix;
   aT.loc = loc;
   return aT;
+}
+
+}
 }
 
 #endif // _gp_GTrsf_HeaderFile

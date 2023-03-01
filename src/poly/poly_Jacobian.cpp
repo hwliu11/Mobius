@@ -31,11 +31,6 @@
 // Own include
 #include <mobius/poly_Jacobian.h>
 
-#undef COUT_DEBUG
-#if defined COUT_DEBUG
-  #pragma message("===== warning: COUT_DEBUG is enabled")
-#endif
-
 using namespace mobius;
 
 //-----------------------------------------------------------------------------
@@ -113,58 +108,4 @@ bool poly_Jacobian::Compute(const t_xyz& P0,
   J_det_normalized = 2*J_det/( Lmax_mod*std::sqrt(3) );
 
   return true;
-}
-
-//-----------------------------------------------------------------------------
-
-poly_Jacobian::poly_Jacobian(const t_ptr<t_mesh>& mesh)
-{
-  m_mesh = mesh;
-}
-
-//-----------------------------------------------------------------------------
-
-bool poly_Jacobian::Compute(const poly_TriangleHandle ht,
-                            const int                 zeroBasedNodeId,
-                            t_uv&                     p0,
-                            t_uv&                     p1,
-                            t_uv&                     p2,
-                            double                    J[][2],
-                            double&                   J_det,
-                            double&                   J_det_normalized) const
-{
-  if ( !ht.IsValid() )
-    return false;
-
-  // Get element.
-  poly_Triangle<> elem;
-  m_mesh->GetTriangle(ht, elem);
-
-  // Compute for element.
-  return this->Compute(elem, zeroBasedNodeId, p0, p1, p2, J, J_det, J_det_normalized);
-}
-
-//-----------------------------------------------------------------------------
-
-bool poly_Jacobian::Compute(const poly_Triangle<>& elem,
-                            const int              zeroBasedNodeId,
-                            t_uv&                  p0,
-                            t_uv&                  p1,
-                            t_uv&                  p2,
-                            double                 J[][2],
-                            double&                J_det,
-                            double&                J_det_normalized) const
-{
-  // Get nodes.
-  poly_VertexHandle n0, n1, n2;
-  elem.GetVertices(n0, n1, n2);
-  //
-  t_xyz P0, P1, P2;
-  //
-  m_mesh->GetVertex(n0, P0);
-  m_mesh->GetVertex(n1, P1);
-  m_mesh->GetVertex(n2, P2);
-
-  return Compute(P0, P1, P2, zeroBasedNodeId,
-                 p0, p1, p2, J, J_det, J_det_normalized);
 }

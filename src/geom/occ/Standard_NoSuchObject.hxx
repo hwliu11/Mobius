@@ -22,6 +22,9 @@
 #include <mobius/Standard_SStream.hxx>
 #include <mobius/Standard_DomainError.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_NoSuchObject;
 DEFINE_STANDARD_HANDLE(Standard_NoSuchObject, Standard_DomainError)
 
@@ -33,5 +36,8 @@ DEFINE_STANDARD_HANDLE(Standard_NoSuchObject, Standard_DomainError)
 #endif
 
 DEFINE_STANDARD_EXCEPTION(Standard_NoSuchObject, Standard_DomainError)
+
+}
+}
 
 #endif // _Standard_NoSuchObject_HeaderFile

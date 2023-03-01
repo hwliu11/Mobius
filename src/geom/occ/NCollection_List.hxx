@@ -19,6 +19,9 @@
 #include <mobius/NCollection_TListIterator.hxx>
 #include <mobius/NCollection_StlIterator.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
  * Purpose:      Simple list to link  items together keeping the first 
  *               and the last one.
@@ -326,5 +329,8 @@ public:
     }
   }
 };
+
+}
+}
 
 #endif

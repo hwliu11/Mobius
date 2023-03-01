@@ -20,6 +20,18 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_Vec.hxx>
 
+using namespace mobius::occ;
+
+Standard_Real gp_Circ::SquareDistance(const gp_Pnt& P) const
+{
+  gp_Vec V(Location(), P);
+  Standard_Real x = V.Dot(pos.XDirection());
+  Standard_Real y = V.Dot(pos.YDirection());
+  Standard_Real z = V.Dot(pos.Direction());
+  Standard_Real t = sqrt(x * x + y * y) - radius;
+  return (t * t + z * z);
+}
+
 void gp_Circ::Mirror (const gp_Pnt& P)
 { pos.Mirror(P); }
 

@@ -19,6 +19,8 @@
 
 #include <mobius/Standard_OutOfRange.hxx>
 
+using namespace mobius::occ;
+
 // The array of prime numbers used as consecutive steps for
 // size of array of buckets in the map.
 // The prime numbers are used for array size with the hope that this will 

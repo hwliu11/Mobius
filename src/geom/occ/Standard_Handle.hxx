@@ -19,6 +19,9 @@
 #include <mobius/Standard_Stream.hxx>
 #include <mobius/Standard_Transient.hxx>
 
+namespace mobius {
+namespace occ {
+
 class Standard_Transient;
 
 //! Namespace opencascade is intended for low-level template classes and functions
@@ -183,7 +186,7 @@ namespace opencascade {
 
     //! Down casting operator from handle to base type
     template <class T2>
-    static typename opencascade::std::enable_if<is_base_but_not_same<T2, T>::value, handle>::type
+    static typename mobius::occ::opencascade::std::enable_if<is_base_but_not_same<T2, T>::value, handle>::type
       DownCast (const handle<T2>& theObject)
     {
       return handle (dynamic_cast<T*>(const_cast<T2*>(theObject.get())));
@@ -191,7 +194,7 @@ namespace opencascade {
 
     //! Down casting operator from pointer to base type
     template <class T2>
-    static typename opencascade::std::enable_if<is_base_but_not_same<T2, T>::value, handle>::type 
+    static typename mobius::occ::opencascade::std::enable_if<is_base_but_not_same<T2, T>::value, handle>::type 
       DownCast (const T2* thePtr)
     {
       return handle (dynamic_cast<T*>(const_cast<T2*>(thePtr)));
@@ -437,5 +440,8 @@ public: \
 
 #define DEFINE_STANDARD_HANDLE(C1,C2) DEFINE_STANDARD_HANDLECLASS(C1,C2,Standard_Transient)
 #define DEFINE_STANDARD_PHANDLE(C1,C2) DEFINE_STANDARD_HANDLECLASS(C1,C2,Standard_Persistent)
+
+}
+}
 
 #endif 

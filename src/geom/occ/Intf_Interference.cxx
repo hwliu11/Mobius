@@ -24,6 +24,8 @@
 #include <mobius/Intf_SectionPoint.hxx>
 #include <mobius/Intf_TangentZone.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : Intf_Interference
 //purpose  : Initialize for a deferred interference.

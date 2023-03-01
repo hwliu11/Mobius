@@ -22,6 +22,8 @@
 #include <mobius/gp_Vec.hxx>
 #include <mobius/gp_Mat.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : IsEqual
 //purpose  : 

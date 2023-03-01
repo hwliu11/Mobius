@@ -32,10 +32,12 @@
 #define poly_Jacobian_h
 
 // poly includes
-#include <mobius/poly_Mesh.h>
+#include <mobius/poly.h>
 
 // core includes
+#include <mobius/core_Ptr.h>
 #include <mobius/core_UV.h>
+#include <mobius/core_XYZ.h>
 
 namespace mobius {
 
@@ -51,9 +53,8 @@ namespace mobius {
 //! To calculate the quality metric of a triangle in 3D, the triangle is rigidly transformed
 //! so that all the nodes lie in a 2D plane. This transformation does not change the quality
 //! metric, as the determinant and the condition number of the Jacobian are orientation invariant.
-class poly_Jacobian
+namespace poly_Jacobian
 {
-public:
 
   //! Computes scaled Jacobian
   //! \param[in]  P0               the 0-th vertex coordinates.
@@ -69,7 +70,7 @@ public:
   //! \param[out] J_det_normalized the normalized determinant.
   //!
   //! \return true in case of success, false -- otherwise.
-  mobiusPoly_EXPORT static bool
+  mobiusPoly_EXPORT bool
     Compute(const t_xyz& P0,
             const t_xyz& P1,
             const t_xyz& P2,
@@ -81,67 +82,7 @@ public:
             double&      J_det,
             double&      J_det_normalized);
 
-public:
-
-  //! Ctor accepting mesh and diagnostic tools.
-  //!
-  //! \param[in] mesh the mesh to analyze.
-  mobiusPoly_EXPORT
-    poly_Jacobian(const t_ptr<t_mesh>& mesh);
-
-public:
-
-  //! Calculates Jacobian for the triangle with the given handle.
-  //!
-  //! \param[in]  ht               the handle of the mesh element to check.
-  //! \param[in]  zeroBasedNodeId  the 0-based ID of the node where to compute the
-  //!                              Jacobian matrix.
-  //! \param[out] p0               the P0 mapped to 2D.
-  //! \param[out] p1               the P1 mapped to 2D.
-  //! \param[out] p2               the P2 mapped to 2D.
-  //! \param[out] J                the resulting Jacobian matrix 2x2.
-  //! \param[out] J_det            the determinant of the Jacobian matrix.
-  //! \param[out] J_det_normalized the normalized determinant.
-  //!
-  //! \return true in case of success, false -- otherwise.
-  mobiusPoly_EXPORT bool
-    Compute(const poly_TriangleHandle ht,
-            const int                 zeroBasedNodeId,
-            t_uv&                     p0,
-            t_uv&                     p1,
-            t_uv&                     p2,
-            double                    J[][2],
-            double&                   J_det,
-            double&                   J_det_normalized) const;
-
-  //! Calculates Jacobian for the given triangle.
-  //!
-  //! \param[in]  elem             the mesh element to check.
-  //! \param[in]  zeroBasedNodeId  the 0-based ID of the node where to compute the
-  //!                              Jacobian matrix.
-  //! \param[out] p0               the P0 mapped to 2D.
-  //! \param[out] p1               the P1 mapped to 2D.
-  //! \param[out] p2               the P2 mapped to 2D.
-  //! \param[out] J                the resulting Jacobian matrix 2x2.
-  //! \param[out] J_det            the determinant of the Jacobian matrix.
-  //! \param[out] J_det_normalized the normalized determinant.
-  //!
-  //! \return true in case of success, false -- otherwise.
-  mobiusPoly_EXPORT bool
-    Compute(const poly_Triangle<>& elem,
-            const int              zeroBasedNodeId,
-            t_uv&                  p0,
-            t_uv&                  p1,
-            t_uv&                  p2,
-            double                 J[][2],
-            double&                J_det,
-            double&                J_det_normalized) const;
-
-protected:
-
-  t_ptr<t_mesh> m_mesh; //!< Mesh to analyze.
-
-};
+}
 
 }
 

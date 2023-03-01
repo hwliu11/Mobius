@@ -19,6 +19,9 @@
 #include <mobius/NCollection_BaseList.hxx>
 #include <mobius/NCollection_TListNode.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
  * Purpose:     This Iterator class iterates on BaseList of TListNode and is 
  *              instantiated in List/Set/Queue/Stack
@@ -56,5 +59,8 @@ template <class TheItemType> class NCollection_TListIterator
   TheItemType& ChangeValue (void) const
   { return ((NCollection_TListNode<TheItemType> *)myCurrent)->ChangeValue(); }
 };
+
+}
+}
 
 #endif

@@ -16,7 +16,13 @@
 #define _gp_Pnt_HeaderFile
 
 #include <mobius/geom.h>
+
 #include <mobius/gp_XYZ.hxx>
+#include <mobius/gp_Trsf.hxx>
+#include <mobius/gp_XYZ.hxx>
+
+namespace mobius {
+namespace occ {
 
 class gp_XYZ;
 class Standard_OutOfRange;
@@ -121,10 +127,10 @@ public:
   }
 
   //! Computes the distance between two points.
-  double Distance (const gp_Pnt& theOther) const;
+  mobiusGeom_EXPORT double Distance (const gp_Pnt& theOther) const;
 
   //! Computes the square distance between two points.
-  double SquareDistance (const gp_Pnt& theOther) const;
+  mobiusGeom_EXPORT double SquareDistance (const gp_Pnt& theOther) const;
 
   //! Performs the symmetrical transformation of a point
   //! with respect to the point theP which is the center of
@@ -149,7 +155,7 @@ public:
   //! theAng is the angular value of the rotation in radians.
   mobiusCore_NODISCARD mobiusGeom_EXPORT gp_Pnt Mirrored (const gp_Ax2& theA2) const;
 
-  void Rotate (const gp_Ax1& theA1, const double theAng);
+  mobiusGeom_EXPORT void Rotate (const gp_Ax1& theA1, const double theAng);
 
   mobiusCore_NODISCARD gp_Pnt Rotated (const gp_Ax1& theA1, const double theAng) const
   {
@@ -159,7 +165,7 @@ public:
   }
 
   //! Scales a point. theS is the scaling value.
-  void Scale (const gp_Pnt& theP, const double theS);
+  mobiusGeom_EXPORT void Scale (const gp_Pnt& theP, const double theS);
 
   mobiusCore_NODISCARD gp_Pnt Scaled (const gp_Pnt& theP, const double theS) const
   {
@@ -180,9 +186,9 @@ public:
 
   //! Translates a point in the direction of the vector theV.
   //! The magnitude of the translation is the vector's magnitude.
-  void Translate (const gp_Vec& theV);
+  mobiusGeom_EXPORT void Translate (const gp_Vec& theV);
 
-  mobiusCore_NODISCARD gp_Pnt Translated (const gp_Vec& theV) const;
+  mobiusGeom_EXPORT mobiusCore_NODISCARD gp_Pnt Translated (const gp_Vec& theV) const;
 
   //! Translates a point from the point theP1 to the point theP2.
   void Translate (const gp_Pnt& theP1, const gp_Pnt& theP2)
@@ -204,79 +210,7 @@ private:
 
 };
 
-#include <mobius/gp_Trsf.hxx>
-#include <mobius/gp_Vec.hxx>
-#include <mobius/gp_XYZ.hxx>
-
-//=======================================================================
-//function : Distance
-// purpose :
-//=======================================================================
-inline double gp_Pnt::Distance (const gp_Pnt& theOther) const
-{
-  double aD=0,aDD;
-  const gp_XYZ& aXYZ = theOther.coord;
-  aDD = coord.X(); aDD -= aXYZ.X(); aDD *= aDD; aD += aDD;
-  aDD = coord.Y(); aDD -= aXYZ.Y(); aDD *= aDD; aD += aDD;
-  aDD = coord.Z(); aDD -= aXYZ.Z(); aDD *= aDD; aD += aDD;
-  return sqrt (aD);
 }
-
-//=======================================================================
-//function : SquareDistance
-// purpose :
-//=======================================================================
-inline double gp_Pnt::SquareDistance (const gp_Pnt& theOther) const
-{
-  double aD=0, aDD;
-  const gp_XYZ& XYZ = theOther.coord;
-  aDD = coord.X(); aDD -= XYZ.X(); aDD *= aDD; aD += aDD;
-  aDD = coord.Y(); aDD -= XYZ.Y(); aDD *= aDD; aD += aDD;
-  aDD = coord.Z(); aDD -= XYZ.Z(); aDD *= aDD; aD += aDD;
-  return aD;
-}
-
-//=======================================================================
-//function : Rotate
-// purpose :
-//=======================================================================
-inline void gp_Pnt::Rotate (const gp_Ax1& theA1, const double theAng)
-{
-  gp_Trsf aT;
-  aT.SetRotation (theA1, theAng);
-  aT.Transforms (coord);
-}
-
-//=======================================================================
-//function : Scale
-// purpose :
-//=======================================================================
-inline void gp_Pnt::Scale (const gp_Pnt& theP, const double theS)
-{
-  gp_XYZ aXYZ = theP.coord;
-  aXYZ.Multiply (1.0 - theS);
-  coord.Multiply (theS);
-  coord.Add (aXYZ);
-}
-
-//=======================================================================
-//function : Translate
-// purpose :
-//=======================================================================
-inline void gp_Pnt::Translate(const gp_Vec& theV)
-{
-  coord.Add (theV.XYZ());
-}
-
-//=======================================================================
-//function : Translated
-// purpose :
-//=======================================================================
-inline gp_Pnt gp_Pnt::Translated (const gp_Vec& theV) const
-{
-  gp_Pnt aP = *this;
-  aP.coord.Add (theV.XYZ());
-  return aP;
 }
 
 #endif // _gp_Pnt_HeaderFile

@@ -21,6 +21,9 @@
 #include <mobius/Standard_Values.hxx>
 #include <mobius/Standard_TypeDef.hxx>
 
+namespace mobius {
+namespace occ {
+
          //  *********************************** //
          //       Class methods                  //
          //                                      //
@@ -151,6 +154,9 @@ mobiusGeom_EXPORT int HashCode (Standard_ShortReal theShortReal, int theUpperBou
 inline Standard_Boolean  IsEqual (const Standard_ShortReal Value1, 
 				  const Standard_ShortReal Value2) 
 { return Abs((Value1 - Value2)) < ShortRealSmall(); }
+
+}
+}
 
 #endif
 

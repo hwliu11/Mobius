@@ -21,6 +21,8 @@
 #include <mobius/gp_Pnt.hxx>
 #include <mobius/gp_XYZ.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : PlaneEquation
 //purpose  : 

@@ -28,6 +28,9 @@
 #include <string.h>
 #include <cctype>
 
+namespace mobius {
+namespace occ {
+
 // ------------------------------------------------------------------
 // IsEqual : Returns Standard_True if two characters have the same value
 // ------------------------------------------------------------------
@@ -129,5 +132,8 @@ inline Standard_Character LowerCase(const Standard_Character me)
 // ==================================================================
 inline Standard_Character UpperCase(const Standard_Character me) 
 { return (Standard_Character)(unsigned char)std::toupper((unsigned char)me); }
+
+}
+}
 
 #endif

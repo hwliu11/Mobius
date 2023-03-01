@@ -22,6 +22,8 @@
 #include <mobius/gp_Pnt.hxx>
 #include <mobius/gp_Pnt2d.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : Origin
 //purpose  : 

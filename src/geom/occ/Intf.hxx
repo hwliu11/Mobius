@@ -19,6 +19,9 @@
 
 #include <mobius/geom.h>
 
+namespace mobius {
+namespace occ {
+
 class gp_Pnt;
 class gp_XYZ;
 class Intf_Polygon2d;
@@ -58,5 +61,8 @@ friend class Intf_Interference;
 friend class Intf_InterferencePolygon2d;
 
 };
+
+}
+}
 
 #endif // _Intf_HeaderFile

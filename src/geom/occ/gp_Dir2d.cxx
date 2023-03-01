@@ -21,6 +21,194 @@
 #include <mobius/gp_Vec2d.hxx>
 #include <mobius/gp_XY.hxx>
 
+using namespace mobius::occ;
+
+// =======================================================================
+// function : gp_Dir2d
+// purpose  :
+// =======================================================================
+inline gp_Dir2d::gp_Dir2d (const gp_Vec2d& theV)
+{
+  const gp_XY& aXY = theV.XY();
+  double aX = aXY.X();
+  double anY = aXY.Y();
+  double aD = sqrt (aX * aX + anY * anY);
+  coord.SetX (aX / aD);
+  coord.SetY (anY / aD);
+}
+
+// =======================================================================
+// function : gp_Dir2d
+// purpose  :
+// =======================================================================
+inline gp_Dir2d::gp_Dir2d (const gp_XY& theXY)
+{
+  double aX = theXY.X();
+  double anY = theXY.Y();
+  double aD = sqrt (aX * aX + anY * anY);
+  coord.SetX (aX / aD);
+  coord.SetY (anY / aD);
+}
+
+// =======================================================================
+// function : gp_Dir2d
+// purpose  :
+// =======================================================================
+inline gp_Dir2d::gp_Dir2d (const double theXv,
+                           const double theYv)
+{
+  double aD = sqrt (theXv * theXv + theYv * theYv);
+  coord.SetX (theXv / aD);
+  coord.SetY (theYv / aD);
+}
+
+// =======================================================================
+// function : SetCoord
+// purpose  :
+// =======================================================================
+inline void gp_Dir2d::SetCoord (const int theIndex,
+                                const double theXi)
+{
+  double aX = coord.X();
+  double anY = coord.Y();
+  if (theIndex == 1)
+  {
+    aX = theXi;
+  }
+  else
+  {
+    anY = theXi;
+  }
+  double aD = sqrt (aX * aX + anY * anY);
+  coord.SetX (aX / aD);
+  coord.SetY (anY / aD);
+}
+
+// =======================================================================
+// function : SetCoord
+// purpose  :
+// =======================================================================
+inline void gp_Dir2d::SetCoord (const double theXv,
+                                const double theYv)
+{
+  double aD = sqrt (theXv * theXv + theYv * theYv);
+  coord.SetX (theXv / aD);
+  coord.SetY (theYv / aD);
+}
+
+// =======================================================================
+// function : SetX
+// purpose  :
+// =======================================================================
+inline void gp_Dir2d::SetX (const double theX)
+{
+  double anY = coord.Y();
+  double aD = sqrt (theX * theX + anY * anY);
+  coord.SetX (theX / aD);
+  coord.SetY (anY / aD);
+}
+
+// =======================================================================
+// function : SetY
+// purpose  :
+// =======================================================================
+inline void gp_Dir2d::SetY (const double theY)
+{
+  double aX = coord.X();
+  double aD = sqrt (aX * aX + theY * theY);
+  coord.SetX (aX / aD);
+  coord.SetY (theY / aD);
+}
+
+// =======================================================================
+// function : SetXY
+// purpose  :
+// =======================================================================
+inline void gp_Dir2d::SetXY (const gp_XY& theXY)
+{
+  double aX = theXY.X();
+  double anY = theXY.Y();
+  double aD = sqrt (aX * aX + anY * anY);
+  coord.SetX (aX / aD);
+  coord.SetY (anY / aD);
+}
+
+// =======================================================================
+// function : IsEqual
+// purpose  :
+// =======================================================================
+inline bool gp_Dir2d::IsEqual (const gp_Dir2d& theOther,
+                                           const double theAngularTolerance) const
+{
+  double anAng = Angle (theOther);
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  return anAng <= theAngularTolerance;
+}
+
+// =======================================================================
+// function : IsNormal
+// purpose  :
+// =======================================================================
+inline bool gp_Dir2d::IsNormal (const gp_Dir2d& theOther,
+                                            const double theAngularTolerance) const
+{
+  double anAng = Angle (theOther);
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  anAng = M_PI / 2.0 - anAng;
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  return anAng <= theAngularTolerance;
+}
+
+// =======================================================================
+// function : IsOpposite
+// purpose  :
+// =======================================================================
+inline bool gp_Dir2d::IsOpposite (const gp_Dir2d& theOther,
+                                              const double theAngularTolerance) const
+{ 
+  double anAng = Angle (theOther);
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  return M_PI - anAng <= theAngularTolerance;
+}
+
+// =======================================================================
+// function : IsParallel
+// purpose  :
+// =======================================================================
+inline bool gp_Dir2d::IsParallel (const gp_Dir2d& theOther,
+                                              const double theAngularTolerance) const
+{
+  double anAng = Angle (theOther);
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  return anAng <= theAngularTolerance || M_PI - anAng <= theAngularTolerance;
+}
+
+// =======================================================================
+// function : Rotate
+// purpose  :
+// =======================================================================
+inline void gp_Dir2d::Rotate (const double theAng)
+{
+  gp_Trsf2d aT;
+  aT.SetRotation (gp_Pnt2d (0.0, 0.0), theAng);
+  coord.Multiply (aT.HVectorialPart());
+}
+
 double gp_Dir2d::Angle (const gp_Dir2d& Other) const
 {
   //    Commentaires :

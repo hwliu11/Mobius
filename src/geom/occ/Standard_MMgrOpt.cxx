@@ -137,6 +137,8 @@ extern "C" int getpagesize() ;
 #define GET_USER(block)    (((Standard_Size*)(block)) + BLOCK_SHIFT)
 #define GET_BLOCK(storage) (((Standard_Size*)(storage))-BLOCK_SHIFT)
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : Standard_MMgr
 //purpose  : 

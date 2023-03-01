@@ -19,6 +19,9 @@
 #include <mobius/gp_Mat.hxx>
 #include <mobius/gp_Vec.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Enumerates all 24 possible variants of generalized
 //! Euler angles, defining general 3d rotation by three
 //! rotations around main axes of coordinate system,
@@ -405,10 +408,13 @@ inline void gp_Quaternion::Add (const gp_Quaternion& theQ)
 //=======================================================================
 inline void gp_Quaternion::Subtract (const gp_Quaternion& theQ)
 {
-  x -= theQ.x; 
-  y -= theQ.y; 
-  z -= theQ.z; 
+  x -= theQ.x;
+  y -= theQ.y;
+  z -= theQ.z;
   w -= theQ.w;
+}
+
+}
 }
 
 #endif // _gp_Quaternion_HeaderFile

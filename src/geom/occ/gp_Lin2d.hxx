@@ -17,6 +17,9 @@
 
 #include <mobius/gp_Ax2d.hxx>
 
+namespace mobius {
+namespace occ {
+
 //! Describes a line in 2D space.
 //! A line is positioned in the plane with an axis (a gp_Ax2d
 //! object) which gives the line its origin and unit vector. A
@@ -35,7 +38,7 @@
 //! Geom2d_Line which provides additional functions for
 //! constructing lines and works, in particular, with the
 //! parametric equations of lines
-class gp_Lin2d 
+class gp_Lin2d
 {
 public:
 
@@ -195,12 +198,7 @@ public:
   void Translate (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) { pos.Translate (theP1, theP2); }
 
   //! Translates a line from the point theP1 to the point theP2.
-  mobiusCore_NODISCARD gp_Lin2d Translated (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) const
-  {
-    gp_Lin2d aL = *this;
-    aL.pos.Translate (gp_Vec2d (theP1, theP2));
-    return aL;
-  }
+  mobiusCore_NODISCARD gp_Lin2d Translated (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) const;
 
 private:
 
@@ -262,6 +260,9 @@ inline double gp_Lin2d::SquareDistance (const gp_Lin2d& theOther) const
     aD = theOther.SquareDistance (pos.Location());
   }
   return aD;
+}
+
+}
 }
 
 #endif // _gp_Lin2d_HeaderFile

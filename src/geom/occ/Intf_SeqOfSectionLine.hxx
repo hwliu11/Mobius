@@ -20,7 +20,12 @@
 #include <mobius/Intf_SectionLine.hxx>
 #include <mobius/NCollection_Sequence.hxx>
 
+namespace mobius {
+namespace occ {
+
 typedef NCollection_Sequence<Intf_SectionLine> Intf_SeqOfSectionLine;
 
+}
+}
 
 #endif

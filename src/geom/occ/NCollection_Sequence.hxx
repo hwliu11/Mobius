@@ -21,6 +21,9 @@
 #include <mobius/Standard_OutOfRange.hxx>
 #include <mobius/Standard_NoSuchObject.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
  * Purpose:     Definition of a sequence of elements indexed by
  *              an Integer in range of 1..n
@@ -395,5 +398,8 @@ public:
   }
 
 };
+
+}
+}
 
 #endif

@@ -22,6 +22,9 @@
 #include <mobius/NCollection_StlIterator.hxx>
 #include <mobius/NCollection_DefaultHasher.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
  * Purpose:     Single hashed Map. This  Map is used  to store and
  *              retrieve keys in linear time.
@@ -591,5 +594,8 @@ public:
 
   //!@}
 };
+
+}
+}
 
 #endif

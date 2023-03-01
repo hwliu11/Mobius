@@ -17,6 +17,9 @@
 
 #include <mobius/gp_XY.hxx>
 
+namespace mobius {
+namespace occ {
+
 class gp_Vec2d;
 class gp_XY;
 class gp_Ax2d;
@@ -33,13 +36,13 @@ public:
   {}
 
   //! Normalizes the vector theV and creates a Direction. Raises ConstructionError if theV.Magnitude() <= Resolution from gp.
-  gp_Dir2d (const gp_Vec2d& theV);
+  mobiusGeom_EXPORT gp_Dir2d (const gp_Vec2d& theV);
 
   //! Creates a Direction from a doublet of coordinates. Raises ConstructionError if theCoord.Modulus() <= Resolution from gp.
-  gp_Dir2d (const gp_XY& theCoord);
+  mobiusGeom_EXPORT gp_Dir2d (const gp_XY& theCoord);
 
   //! Creates a Direction with its 2 cartesian coordinates. Raises ConstructionError if Sqrt(theXv*theXv + theYv*theYv) <= Resolution from gp.
-  gp_Dir2d (const double theXv, const double theYv);
+  mobiusGeom_EXPORT gp_Dir2d (const double theXv, const double theYv);
 
   //! For this unit vector, assigns:
   //! the value theXi to:
@@ -57,7 +60,7 @@ public:
   //! value theXi and the other coordinate of this vector that
   //! was not directly modified.
   //! Raises OutOfRange if theIndex != {1, 2}.
-  void SetCoord (const int theIndex, const double theXi);
+  mobiusGeom_EXPORT void SetCoord (const int theIndex, const double theXi);
 
   //! For this unit vector, assigns:
   //! -   the values theXv and theYv to its two coordinates,
@@ -73,7 +76,7 @@ public:
   //! value Xi and the other coordinate of this vector that
   //! was not directly modified.
   //! Raises OutOfRange if theIndex != {1, 2}.
-  void SetCoord (const double theXv, const double theYv);
+  mobiusGeom_EXPORT void SetCoord (const double theXv, const double theYv);
 
   //! Assigns the given value to the X coordinate of this unit   vector,
   //! and then normalizes it.
@@ -87,7 +90,7 @@ public:
   //! -   the modulus of the number pair formed from the new
   //! X or Y coordinate and the other coordinate of this
   //! vector that was not directly modified.
-  void SetX (const double theX);
+  mobiusGeom_EXPORT void SetX (const double theX);
 
   //! Assigns  the given value to the Y coordinate of this unit   vector,
   //! and then normalizes it.
@@ -101,7 +104,7 @@ public:
   //! -   the modulus of the number pair formed from the new
   //! X or Y coordinate and the other coordinate of this
   //! vector that was not directly modified.
-  void SetY (const double theY);
+  mobiusGeom_EXPORT void SetY (const double theY);
 
   //! Assigns:
   //! -   the two coordinates of theCoord to this unit vector,
@@ -116,7 +119,7 @@ public:
   //! -   the modulus of the number pair formed from the new
   //! X or Y coordinate and the other coordinate of this
   //! vector that was not directly modified.
-  void SetXY (const gp_XY& theCoord);
+  mobiusGeom_EXPORT void SetXY (const gp_XY& theCoord);
 
   //! For this unit vector returns the coordinate of range theIndex :
   //! theIndex = 1 => X is returned
@@ -142,23 +145,23 @@ public:
   //! Returns True if the two vectors have the same direction
   //! i.e. the angle between this unit vector and the
   //! unit vector theOther is less than or equal to theAngularTolerance.
-  bool IsEqual (const gp_Dir2d& theOther, const double theAngularTolerance) const;
+  mobiusGeom_EXPORT bool IsEqual (const gp_Dir2d& theOther, const double theAngularTolerance) const;
 
   //! Returns True if the angle between this unit vector and the
   //! unit vector theOther is equal to Pi/2 or -Pi/2 (normal)
   //! i.e. Abs(Abs(<me>.Angle(theOther)) - PI/2.) <= theAngularTolerance
-  bool IsNormal (const gp_Dir2d& theOther, const double theAngularTolerance) const;
+  mobiusGeom_EXPORT bool IsNormal (const gp_Dir2d& theOther, const double theAngularTolerance) const;
 
   //! Returns True if the angle between this unit vector and the
   //! unit vector theOther is equal to Pi or -Pi (opposite).
   //! i.e.  PI - Abs(<me>.Angle(theOther)) <= theAngularTolerance
-  bool IsOpposite (const gp_Dir2d& theOther, const double theAngularTolerance) const;
+  mobiusGeom_EXPORT bool IsOpposite (const gp_Dir2d& theOther, const double theAngularTolerance) const;
 
   //! returns true if the angle between this unit vector and unit
   //! vector theOther is equal to 0, Pi or -Pi.
   //! i.e.  Abs(Angle(<me>, theOther)) <= theAngularTolerance or
   //! PI - Abs(Angle(<me>, theOther)) <= theAngularTolerance
-  bool IsParallel (const gp_Dir2d& theOther, const double theAngularTolerance) const;
+  mobiusGeom_EXPORT bool IsParallel (const gp_Dir2d& theOther, const double theAngularTolerance) const;
 
   //! Computes the angular value in radians between <me> and
   //! <theOther>. Returns the angle in the range [-PI, PI].
@@ -200,7 +203,7 @@ public:
   //! of the symmetry.
   mobiusCore_NODISCARD mobiusGeom_EXPORT gp_Dir2d Mirrored (const gp_Ax2d& theA) const;
 
-  void Rotate (const double Ang);
+  mobiusGeom_EXPORT void Rotate (const double Ang);
 
   //! Rotates a direction.  theAng is the angular value of
   //! the rotation in radians.
@@ -233,193 +236,8 @@ private:
 
 };
 
-#include <mobius/gp_Ax2d.hxx>
-#include <mobius/gp_Trsf2d.hxx>
 
-// =======================================================================
-// function : gp_Dir2d
-// purpose  :
-// =======================================================================
-inline gp_Dir2d::gp_Dir2d (const gp_Vec2d& theV)
-{
-  const gp_XY& aXY = theV.XY();
-  double aX = aXY.X();
-  double anY = aXY.Y();
-  double aD = sqrt (aX * aX + anY * anY);
-  coord.SetX (aX / aD);
-  coord.SetY (anY / aD);
 }
-
-// =======================================================================
-// function : gp_Dir2d
-// purpose  :
-// =======================================================================
-inline gp_Dir2d::gp_Dir2d (const gp_XY& theXY)
-{
-  double aX = theXY.X();
-  double anY = theXY.Y();
-  double aD = sqrt (aX * aX + anY * anY);
-  coord.SetX (aX / aD);
-  coord.SetY (anY / aD);
-}
-
-// =======================================================================
-// function : gp_Dir2d
-// purpose  :
-// =======================================================================
-inline gp_Dir2d::gp_Dir2d (const double theXv,
-                           const double theYv)
-{
-  double aD = sqrt (theXv * theXv + theYv * theYv);
-  coord.SetX (theXv / aD);
-  coord.SetY (theYv / aD);
-}
-
-// =======================================================================
-// function : SetCoord
-// purpose  :
-// =======================================================================
-inline void gp_Dir2d::SetCoord (const int theIndex,
-                                const double theXi)
-{
-  double aX = coord.X();
-  double anY = coord.Y();
-  if (theIndex == 1)
-  {
-    aX = theXi;
-  }
-  else
-  {
-    anY = theXi;
-  }
-  double aD = sqrt (aX * aX + anY * anY);
-  coord.SetX (aX / aD);
-  coord.SetY (anY / aD);
-}
-
-// =======================================================================
-// function : SetCoord
-// purpose  :
-// =======================================================================
-inline void gp_Dir2d::SetCoord (const double theXv,
-                                const double theYv)
-{
-  double aD = sqrt (theXv * theXv + theYv * theYv);
-  coord.SetX (theXv / aD);
-  coord.SetY (theYv / aD);
-}
-
-// =======================================================================
-// function : SetX
-// purpose  :
-// =======================================================================
-inline void gp_Dir2d::SetX (const double theX)
-{
-  double anY = coord.Y();
-  double aD = sqrt (theX * theX + anY * anY);
-  coord.SetX (theX / aD);
-  coord.SetY (anY / aD);
-}
-
-// =======================================================================
-// function : SetY
-// purpose  :
-// =======================================================================
-inline void gp_Dir2d::SetY (const double theY)
-{
-  double aX = coord.X();
-  double aD = sqrt (aX * aX + theY * theY);
-  coord.SetX (aX / aD);
-  coord.SetY (theY / aD);
-}
-
-// =======================================================================
-// function : SetXY
-// purpose  :
-// =======================================================================
-inline void gp_Dir2d::SetXY (const gp_XY& theXY)
-{
-  double aX = theXY.X();
-  double anY = theXY.Y();
-  double aD = sqrt (aX * aX + anY * anY);
-  coord.SetX (aX / aD);
-  coord.SetY (anY / aD);
-}
-
-// =======================================================================
-// function : IsEqual
-// purpose  :
-// =======================================================================
-inline bool gp_Dir2d::IsEqual (const gp_Dir2d& theOther,
-                                           const double theAngularTolerance) const
-{
-  double anAng = Angle (theOther);
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  return anAng <= theAngularTolerance;
-}
-
-// =======================================================================
-// function : IsNormal
-// purpose  :
-// =======================================================================
-inline bool gp_Dir2d::IsNormal (const gp_Dir2d& theOther,
-                                            const double theAngularTolerance) const
-{
-  double anAng = Angle (theOther);
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  anAng = M_PI / 2.0 - anAng;
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  return anAng <= theAngularTolerance;
-}
-
-// =======================================================================
-// function : IsOpposite
-// purpose  :
-// =======================================================================
-inline bool gp_Dir2d::IsOpposite (const gp_Dir2d& theOther,
-                                              const double theAngularTolerance) const
-{ 
-  double anAng = Angle (theOther);
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  return M_PI - anAng <= theAngularTolerance;
-}
-
-// =======================================================================
-// function : IsParallel
-// purpose  :
-// =======================================================================
-inline bool gp_Dir2d::IsParallel (const gp_Dir2d& theOther,
-                                              const double theAngularTolerance) const
-{
-  double anAng = Angle (theOther);
-  if (anAng < 0)
-  {
-    anAng = -anAng;
-  }
-  return anAng <= theAngularTolerance || M_PI - anAng <= theAngularTolerance;
-}
-
-// =======================================================================
-// function : Rotate
-// purpose  :
-// =======================================================================
-inline void gp_Dir2d::Rotate (const double theAng)
-{
-  gp_Trsf2d aT;
-  aT.SetRotation (gp_Pnt2d (0.0, 0.0), theAng);
-  coord.Multiply (aT.HVectorialPart());
 }
 
 #endif // _gp_Dir2d_HeaderFile

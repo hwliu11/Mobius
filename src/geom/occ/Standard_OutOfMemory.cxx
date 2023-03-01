@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <stdlib.h>
 
+using namespace mobius::occ;
+
 IMPLEMENT_STANDARD_RTTIEXT(Standard_OutOfMemory,Standard_ProgramError)
 
 //=======================================================================

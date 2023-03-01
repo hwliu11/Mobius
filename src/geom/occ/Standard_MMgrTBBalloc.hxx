@@ -18,6 +18,9 @@
 
 #include <mobius/Standard_MMgrRoot.hxx>
 
+namespace mobius {
+namespace occ {
+
 //!
 //! Implementation of OCC memory manager which uses Intel TBB
 //! scalable allocator.
@@ -46,5 +49,8 @@ class Standard_MMgrTBBalloc : public Standard_MMgrRoot
  protected:
   Standard_Boolean myClear; //! Option to nullify allocated memory
 };
+
+}
+}
 
 #endif

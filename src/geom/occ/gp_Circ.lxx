@@ -17,6 +17,8 @@
 #include <gp_Ax1.hxx>
 #include <gp_Ax2.hxx>
 
+using namespace mobius::occ;
+
 inline gp_Circ::gp_Circ () : radius(RealLast())
 {  }
 

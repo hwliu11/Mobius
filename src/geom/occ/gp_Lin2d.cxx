@@ -26,6 +26,15 @@
 #include <mobius/gp_Trsf2d.hxx>
 #include <mobius/gp_Vec2d.hxx>
 
+using namespace mobius::occ;
+
+gp_Lin2d gp_Lin2d::Translated(const gp_Pnt2d& theP1, const gp_Pnt2d& theP2) const
+{
+  gp_Lin2d aL = *this;
+  aL.pos.Translate (gp_Vec2d (theP1, theP2));
+  return aL;
+}
+
 //=======================================================================
 //function : gp_Lin2d
 //purpose  : 

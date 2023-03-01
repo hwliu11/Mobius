@@ -21,6 +21,8 @@
 
 #include <string.h>
 
+using namespace mobius::occ;
+
 IMPLEMENT_STANDARD_RTTIEXT(Standard_Failure,Standard_Transient)
 
 namespace

@@ -20,6 +20,8 @@
 #include <mobius/Standard_OutOfRange.hxx>
 #include <mobius/Standard_DomainError.hxx>
 
+using namespace mobius::occ;
+
 //=======================================================================
 //function : ClearSeq
 //purpose  : removes all items from the current sequence

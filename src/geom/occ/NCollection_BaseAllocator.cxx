@@ -23,6 +23,8 @@
 #include <fstream>
 #include <iomanip>
 
+using namespace mobius::occ;
+
 
 IMPLEMENT_STANDARD_RTTIEXT(NCollection_BaseAllocator,Standard_Transient)
 

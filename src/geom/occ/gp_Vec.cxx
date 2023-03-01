@@ -28,6 +28,90 @@
 #include <mobius/gp_Trsf.hxx>
 #include <mobius/gp_XYZ.hxx>
 
+using namespace mobius::occ;
+
+//=======================================================================
+//function :  gp_Vec
+// purpose :
+//=======================================================================
+inline gp_Vec::gp_Vec (const gp_Dir& theV)
+{
+  coord = theV.XYZ();
+}
+
+//=======================================================================
+//function :  gp_Vec
+// purpose :
+//=======================================================================
+inline gp_Vec::gp_Vec (const gp_Pnt& theP1, const gp_Pnt& theP2)
+{
+  coord = theP2.XYZ().Subtracted (theP1.XYZ());
+}
+
+//=======================================================================
+//function :  IsNormal
+// purpose :
+//=======================================================================
+inline bool gp_Vec::IsNormal (const gp_Vec& theOther, const double theAngularTolerance) const
+{
+  double anAng = M_PI / 2.0 - Angle (theOther);
+  if (anAng < 0)
+  {
+    anAng = -anAng;
+  }
+  return  anAng <= theAngularTolerance;
+}
+
+//=======================================================================
+//function :  Angle
+// purpose :
+//=======================================================================
+inline double gp_Vec::Angle (const gp_Vec& theOther) const
+{
+  return (gp_Dir (coord)).Angle (theOther);
+}
+
+//=======================================================================
+//function :  AngleWithRef
+// purpose :
+//=======================================================================
+inline double gp_Vec::AngleWithRef (const gp_Vec& theOther, const gp_Vec& theVRef) const
+{
+  return (gp_Dir (coord)).AngleWithRef (theOther, theVRef);
+}
+
+//=======================================================================
+//function :  Normalized
+// purpose :
+//=======================================================================
+inline gp_Vec gp_Vec::Normalized() const
+{
+  double aD = coord.Modulus();
+  gp_Vec aV = *this;
+  aV.coord.Divide (aD);
+  return aV;
+}
+
+//=======================================================================
+//function :  Rotate
+// purpose :
+//=======================================================================
+inline void gp_Vec::Rotate (const gp_Ax1& theA1, const double theAng)
+{
+  gp_Trsf aT;
+  aT.SetRotation (theA1, theAng);
+  coord.Multiply (aT.VectorialPart());
+}
+
+//=======================================================================
+//function :  operator*
+// purpose :
+//=======================================================================
+inline gp_Vec operator* (const double theScalar, const gp_Vec& theV)
+{
+  return theV.Multiplied(theScalar);
+}
+
 bool gp_Vec::IsEqual
 (const gp_Vec& Other, 
  const double LinearTolerance,

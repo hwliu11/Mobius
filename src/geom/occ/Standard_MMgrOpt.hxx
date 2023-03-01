@@ -19,6 +19,9 @@
 #include <mobius/Standard_MMgrRoot.hxx>
 #include <mobius/Standard_Mutex.hxx>
 
+namespace mobius {
+namespace occ {
+
 /**
 * @brief Open CASCADE memory manager optimized for speed.
 *
@@ -143,5 +146,8 @@ protected:
   Standard_Mutex   myMutex;         //!< Mutex to protect free lists data
   Standard_Mutex   myMutexPools;    //!< Mutex to protect small block pools data
 };
+
+}
+}
 
 #endif

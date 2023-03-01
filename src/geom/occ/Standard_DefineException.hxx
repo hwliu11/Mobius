@@ -26,6 +26,9 @@
     DEFINE_STANDARD_HANDLE(C1,C2) before it.
 */
 
+namespace mobius {
+namespace occ {
+
 #define DEFINE_STANDARD_EXCEPTION(C1,C2) \
  \
 class C1 : public C2 { \
@@ -50,5 +53,8 @@ public: \
 
 //! Obsolete macro, kept for compatibility with old code
 #define IMPLEMENT_STANDARD_EXCEPTION(C1) 
+
+}
+}
 
 #endif

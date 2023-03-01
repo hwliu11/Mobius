@@ -23,6 +23,76 @@
 #include <mobius/gp_Vec2d.hxx>
 #include <mobius/gp_XY.hxx>
 
+using namespace mobius::occ;
+
+//=======================================================================
+//function : Distance
+// purpose :
+//=======================================================================
+inline double gp_Pnt2d::Distance (const gp_Pnt2d& theOther) const
+{
+  const gp_XY& aXY = theOther.coord;
+  double aX = coord.X() - aXY.X();
+  double aY = coord.Y() - aXY.Y();
+  return sqrt (aX * aX + aY * aY);
+}
+
+//=======================================================================
+//function : SquareDistance
+// purpose :
+//=======================================================================
+inline double gp_Pnt2d::SquareDistance (const gp_Pnt2d& theOther) const
+{
+  const gp_XY& aXY = theOther.coord;
+  double aX = coord.X() - aXY.X();
+  double aY = coord.Y() - aXY.Y();
+  return (aX * aX + aY * aY);
+}
+
+//=======================================================================
+//function : Rotate
+// purpose :
+//=======================================================================
+inline void gp_Pnt2d::Rotate (const gp_Pnt2d& theP, const double theAng)
+{
+  gp_Trsf2d aT;
+  aT.SetRotation (theP, theAng);
+  aT.Transforms (coord);
+}
+
+//=======================================================================
+//function : Scale
+// purpose :
+//=======================================================================
+inline void gp_Pnt2d::Scale (const gp_Pnt2d& theP, const double theS)
+{
+  gp_XY aXY = theP.coord;
+  aXY.Multiply (1.0 - theS);
+  coord.Multiply (theS);
+  coord.Add (aXY);
+}
+
+//=======================================================================
+//function : Translate
+// purpose :
+//=======================================================================
+inline void gp_Pnt2d::Translate(const gp_Vec2d& theV)
+{
+  coord.Add (theV.XY());
+}
+
+//=======================================================================
+//function : Translated
+// purpose :
+//=======================================================================
+inline gp_Pnt2d gp_Pnt2d::Translated (const gp_Vec2d& theV) const
+{
+  gp_Pnt2d aP = *this;
+  aP.coord.Add (theV.XY());
+  return aP;
+}
+
+
 void gp_Pnt2d::Transform (const gp_Trsf2d& T)
 {
   if (T.Form () == gp_Identity) { }

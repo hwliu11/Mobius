@@ -19,6 +19,8 @@
 #include <mobius/gp_Pnt2d.hxx>
 #include <mobius/Intf_SectionPoint.hxx>
 
+using namespace mobius::occ;
+
 #define DEBUG_INTFSECTIONPOINT 0
 
 

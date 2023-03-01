@@ -17,6 +17,8 @@
 
 #include <errno.h>
 
+using namespace mobius::occ;
+
 //=============================================
 // Standard_Mutex::Standard_Mutex
 //=============================================
