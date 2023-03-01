@@ -34,7 +34,6 @@
 // Poly includes
 #include <mobius/poly_Edge.h>
 #include <mobius/poly_Jacobian.h>
-#include <mobius/core_Precision.h>
 #include <mobius/poly_Quad.h>
 #include <mobius/poly_SurfAdapter.h>
 #include <mobius/poly_Triangle.h>
@@ -42,6 +41,7 @@
 
 // Core includes
 #include <mobius/core_IAlgorithm.h>
+#include <mobius/core_Precision.h>
 
 // Geom includes
 #include <mobius/geom_PlaneSurface.h>
@@ -54,6 +54,57 @@
 namespace mobius {
 
 class geom_PlaneSurface;
+
+//! \ingroup MOBIUS_POLY
+//!
+//! Utilities.
+namespace poly_MeshUtils
+{
+  //! Computes center for the passed triple of vertices.
+  //! \param[in]  v0     the first vertex.
+  //! \param[in]  v1     the second vertex.
+  //! \param[in]  v2     the third vertex.
+  //! \param[out] center the computed center point.
+  mobiusPoly_EXPORT void
+    ComputeCenter(const t_xyz& v0,
+                  const t_xyz& v1,
+                  const t_xyz& v2,
+                  t_xyz&       center);
+
+  //! Computes normal vector for the passed triple of vertices.
+  //! \param[in]  v0  the first vertex.
+  //! \param[in]  v1  the second vertex.
+  //! \param[in]  v2  the third vertex.
+  //! \param[out] norm the computed normal vector.
+  //! \return true if the normal vector was computed successfully,
+  //!         false -- otherwise.
+  mobiusPoly_EXPORT bool
+    ComputeNormal(const t_xyz& v0,
+                  const t_xyz& v1,
+                  const t_xyz& v2,
+                  t_xyz&       norm);
+
+  //! Computes area for the passed triangle nodes.
+  //! \param[in] hv0 the first vertex.
+  //! \param[in] hv1 the second vertex.
+  //! \param[in] hv2 the third vertex.
+  //! \return the computed area.
+  mobiusPoly_EXPORT double
+    ComputeArea(const t_xyz& v0,
+                const t_xyz& v1,
+                const t_xyz& v2);
+
+  //! Auxiliary method to compute intertia props from a volumetric element
+  //! enclosed by a surface mesh.
+  mobiusPoly_EXPORT bool
+    ComputePyramidProps(const t_xyz&    v0,
+                        const t_xyz&    v1,
+                        const t_xyz&    v2,
+                        const core_XYZ& apex,
+                        double          gProps[10],
+                        const int       nbPnts,
+                        const double*   pnts);
+}
 
 //! \ingroup MOBIUS_POLY
 //!
@@ -357,9 +408,9 @@ public:
   }
 
   //! Computes area for the passed triangle.
-  //! \param[in]  hv0  the first vertex handle.
-  //! \param[in]  hv1  the second vertex handle.
-  //! \param[in]  hv2  the third vertex handle.
+  //! \param[in] hv0 the first vertex handle.
+  //! \param[in] hv1 the second vertex handle.
+  //! \param[in] hv2 the third vertex handle.
   //! \return the computed area.
   double
     ComputeArea(const poly_VertexHandle hv0,
@@ -372,8 +423,7 @@ public:
     this->GetVertex(hv2, tv[2]);
 
     // Compute area.
-    const double area = 0.5 * ((tv[1] - tv[0]) ^ (tv[2] - tv[0])).Modulus();
-    return area;
+    return poly_MeshUtils::ComputeArea(tv[0], tv[1], tv[2]);
   }
 
   //! Computes area for the passed triangle.
@@ -453,7 +503,12 @@ public:
       poly_VertexHandle hv0, hv1, hv2;
       triangle.GetVertices(hv0, hv1, hv2);
 
-      this->computePyramidProps(hv0, hv1, hv2, polyCenter, gProps, nbPoints, gaussPnts);
+      t_xyz tv[3];
+      this->GetVertex(hv0, tv[0]);
+      this->GetVertex(hv1, tv[1]);
+      this->GetVertex(hv2, tv[2]);
+
+      poly_MeshUtils::ComputePyramidProps(tv[0], tv[1], tv[2], polyCenter, gProps, nbPoints, gaussPnts);
     }
 
     // initialize output parameters
@@ -772,13 +827,7 @@ public:
     this->GetVertex(hv1, tv[1]);
     this->GetVertex(hv2, tv[2]);
 
-    // Compute norm.
-    norm = (tv[1] - tv[0])^(tv[2] - tv[0]);
-    //
-    if ( norm.Modulus() > core_Precision::Resolution3D() )
-      norm.Normalize();
-
-    return true;
+    return poly_MeshUtils::ComputeNormal(tv[0], tv[1], tv[2], norm);
   }
 
   //! Computes center for the passed triple of vertices.
@@ -786,9 +835,7 @@ public:
   //! \param[in]  hv1    the second vertex handle.
   //! \param[in]  hv2    the third vertex handle.
   //! \param[out] center the computed center point.
-  //! \return true if the center point was computed successfully,
-  //!         false -- otherwise.
-  bool
+  void
     ComputeCenter(const poly_VertexHandle hv0,
                   const poly_VertexHandle hv1,
                   const poly_VertexHandle hv2,
@@ -800,9 +847,7 @@ public:
     this->GetVertex(hv1, tv[1]);
     this->GetVertex(hv2, tv[2]);
 
-    center = (tv[0] + tv[1] + tv[2]) / 3;
-
-    return true;
+    poly_MeshUtils::ComputeCenter(tv[0], tv[1], tv[2], center);
   }
 
   //! Computes normal vector for the triangle in question.
@@ -2719,91 +2764,6 @@ protected:
     }
     //
     __links[he] = newTuple;
-  }
-
-  //! Internal method to compute intertia props from a volumetric element
-  //! enclosed by a surface mesh.
-  bool
-    computePyramidProps(const poly_VertexHandle& hv0,
-                        const poly_VertexHandle& hv1,
-                        const poly_VertexHandle& hv2,
-                        const core_XYZ&          apex,
-                        double                   gProps[10],
-                        const int                nbPnts,
-                        const double*            pnts) const
-  {
-    // Compute triangle area
-    double area = this->ComputeArea(hv0, hv1, hv2);
-    if ( area <= 0. )
-      return false;
-
-    // Define plane and coordinates of triangle nodes on plane
-    t_xyz triNorm;
-    this->ComputeNormal(hv0, hv1, hv2, triNorm);
-
-    t_xyz triCenter;
-    this->ComputeCenter(hv0, hv1, hv2, triCenter);
-
-    occ::gp_Dir triNormDir(triNorm.X(), triNorm.Y(), triNorm.Z());
-    occ::gp_Ax3 posPln(occ::gp_Pnt(triCenter.X(), triCenter.Y(), triCenter.Z()), triNormDir);
-
-    //Coordinates of nodes on plane
-    t_xyz tv[3];
-    //
-    this->GetVertex(hv0, tv[0]);
-    this->GetVertex(hv1, tv[1]);
-    this->GetVertex(hv2, tv[2]);
-
-    double x1, y1, x2, y2, x3, y3;
-    //
-    occ::ElSLib::PlaneParameters(posPln, occ::gp_Pnt(tv[0].X(), tv[0].Y(), tv[0].Z()), x1, y1);
-    occ::ElSLib::PlaneParameters(posPln, occ::gp_Pnt(tv[1].X(), tv[1].Y(), tv[1].Z()), x2, y2);
-    occ::ElSLib::PlaneParameters(posPln, occ::gp_Pnt(tv[2].X(), tv[2].Y(), tv[2].Z()), x3, y3);
-    //
-    const double det = 2. * area;
-    //
-    double l1, l2; //barycentriche coordinates
-    double x, y, z;
-    double w; //weigh
-    //
-    for ( int i = 0; i < nbPnts; ++i )
-    {
-      int index = 3 * i;
-      l1 = pnts[index];
-      l2 = pnts[index + 1];
-      w  = pnts[index + 2];
-      w  *= det;
-      x  = l1 * (x1 - x3) + l2 * (x2 - x3) + x3;
-      y  = l1 * (y1 - y3) + l2 * (y2 - y3) + y3;
-      occ::gp_Pnt aP = occ::ElSLib::PlaneValue(x, y, posPln);
-
-      x = aP.X() - apex.X();
-      y = aP.Y() - apex.Y();
-      z = aP.Z() - apex.Z();
-      //
-      double xn = triNormDir.X() * w;
-      double yn = triNormDir.Y() * w;
-      double zn = triNormDir.Z() * w;
-      double dv = x * xn + y * yn + z * zn;
-      //
-      gProps[0] += dv / 3.0;       // Volume
-      //    
-      gProps[1] += 0.25 * x * dv;  // Ix
-      gProps[2] += 0.25 * y * dv;  // Iy
-      gProps[3] += 0.25 * z * dv;  // Iz
-      dv *= 0.2;
-      gProps[7] -= x * y * dv;     // Ixy
-      gProps[8] -= x * z * dv;     // Ixz
-      gProps[9] -= y * z * dv;     // Iyz
-      x *= x;
-      y *= y;
-      z *= z;
-      gProps[4] += (y + z) * dv;   // Ixx
-      gProps[5] += (x + z) * dv;   // Iyy
-      gProps[6] += (x + y) * dv;   // Izz
-    }
-
-    return true;
   }
 
 public:

@@ -95,6 +95,122 @@ protected:
 
 //-----------------------------------------------------------------------------
 
+void poly_MeshUtils::ComputeCenter(const t_xyz& v0,
+                                   const t_xyz& v1,
+                                   const t_xyz& v2,
+                                   t_xyz&       center)
+{
+  center = (v0 + v1 + v2) / 3;
+}
+
+//-----------------------------------------------------------------------------
+
+bool poly_MeshUtils::ComputeNormal(const t_xyz& v0,
+                                   const t_xyz& v1,
+                                   const t_xyz& v2,
+                                   t_xyz&       norm)
+{
+  // Compute norm.
+  norm = (v1 - v0)^(v2 - v0);
+  //
+  if ( norm.Modulus() > core_Precision::Resolution3D() )
+    norm.Normalize();
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
+double poly_MeshUtils::ComputeArea(const t_xyz& v0,
+                                   const t_xyz& v1,
+                                   const t_xyz& v2)
+{
+  // Compute area.
+  const double area = 0.5 * ((v1 - v0) ^ (v2 - v0)).Modulus();
+  return area;
+}
+
+//-----------------------------------------------------------------------------
+
+bool poly_MeshUtils::ComputePyramidProps(const t_xyz&    v0,
+                                         const t_xyz&    v1,
+                                         const t_xyz&    v2,
+                                         const core_XYZ& apex,
+                                         double          gProps[10],
+                                         const int       nbPnts,
+                                         const double*   pnts)
+{
+  // Compute triangle area
+  double area = ComputeArea(v0, v1, v2);
+  //
+  if ( area <= core_Precision::Resolution3D() )
+    return false;
+
+  // Define plane and coordinates of triangle nodes on plane
+  t_xyz triNorm;
+  ComputeNormal(v0, v1, v2, triNorm);
+
+  t_xyz triCenter;
+  ComputeCenter(v0, v1, v2, triCenter);
+
+  occ::gp_Dir triNormDir(triNorm.X(), triNorm.Y(), triNorm.Z());
+  occ::gp_Ax3 posPln(occ::gp_Pnt(triCenter.X(), triCenter.Y(), triCenter.Z()), triNormDir);
+
+  // Coordinates of nodes on plane
+  double x1, y1, x2, y2, x3, y3;
+  //
+  occ::ElSLib::PlaneParameters(posPln, occ::gp_Pnt( v0.X(), v0.Y(), v0.Z() ), x1, y1);
+  occ::ElSLib::PlaneParameters(posPln, occ::gp_Pnt( v1.X(), v1.Y(), v1.Z() ), x2, y2);
+  occ::ElSLib::PlaneParameters(posPln, occ::gp_Pnt( v2.X(), v2.Y(), v2.Z() ), x3, y3);
+  //
+  const double det = 2. * area;
+  //
+  double l1, l2; //barycentriche coordinates
+  double x, y, z;
+  double w; //weigh
+  //
+  for ( int i = 0; i < nbPnts; ++i )
+  {
+    int index = 3 * i;
+    l1 = pnts[index];
+    l2 = pnts[index + 1];
+    w  = pnts[index + 2];
+    w  *= det;
+    x  = l1 * (x1 - x3) + l2 * (x2 - x3) + x3;
+    y  = l1 * (y1 - y3) + l2 * (y2 - y3) + y3;
+    occ::gp_Pnt aP = occ::ElSLib::PlaneValue(x, y, posPln);
+
+    x = aP.X() - apex.X();
+    y = aP.Y() - apex.Y();
+    z = aP.Z() - apex.Z();
+    //
+    double xn = triNormDir.X() * w;
+    double yn = triNormDir.Y() * w;
+    double zn = triNormDir.Z() * w;
+    double dv = x * xn + y * yn + z * zn;
+    //
+    gProps[0] += dv / 3.0;       // Volume
+    //    
+    gProps[1] += 0.25 * x * dv;  // Ix
+    gProps[2] += 0.25 * y * dv;  // Iy
+    gProps[3] += 0.25 * z * dv;  // Iz
+    dv *= 0.2;
+    gProps[7] -= x * y * dv;     // Ixy
+    gProps[8] -= x * z * dv;     // Ixz
+    gProps[9] -= y * z * dv;     // Iyz
+    x *= x;
+    y *= y;
+    z *= z;
+    gProps[4] += (y + z) * dv;   // Ixx
+    gProps[5] += (x + z) * dv;   // Iyy
+    gProps[6] += (x + y) * dv;   // Izz
+  }
+
+  return true;
+}
+
+//-----------------------------------------------------------------------------
+
 template <typename ElemTraits>
 bool poly_Mesh<ElemTraits>::AreSelfIntersecting(const int             tag,
                                                 const poly_EdgeHandle eh0,
