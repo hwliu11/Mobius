@@ -58,14 +58,16 @@ class geom_PlaneSurface;
 //! \ingroup MOBIUS_POLY
 //!
 //! Utilities.
-namespace poly_MeshUtils
+class poly_MeshUtils
 {
+public:
+
   //! Computes center for the passed triple of vertices.
   //! \param[in]  v0     the first vertex.
   //! \param[in]  v1     the second vertex.
   //! \param[in]  v2     the third vertex.
   //! \param[out] center the computed center point.
-  mobiusPoly_EXPORT void
+  mobiusPoly_EXPORT static void
     ComputeCenter(const t_xyz& v0,
                   const t_xyz& v1,
                   const t_xyz& v2,
@@ -78,7 +80,7 @@ namespace poly_MeshUtils
   //! \param[out] norm the computed normal vector.
   //! \return true if the normal vector was computed successfully,
   //!         false -- otherwise.
-  mobiusPoly_EXPORT bool
+  mobiusPoly_EXPORT static bool
     ComputeNormal(const t_xyz& v0,
                   const t_xyz& v1,
                   const t_xyz& v2,
@@ -89,14 +91,14 @@ namespace poly_MeshUtils
   //! \param[in] hv1 the second vertex.
   //! \param[in] hv2 the third vertex.
   //! \return the computed area.
-  mobiusPoly_EXPORT double
+  mobiusPoly_EXPORT static double
     ComputeArea(const t_xyz& v0,
                 const t_xyz& v1,
                 const t_xyz& v2);
 
   //! Auxiliary method to compute intertia props from a volumetric element
   //! enclosed by a surface mesh.
-  mobiusPoly_EXPORT bool
+  mobiusPoly_EXPORT static bool
     ComputePyramidProps(const t_xyz&    v0,
                         const t_xyz&    v1,
                         const t_xyz&    v2,
@@ -104,7 +106,14 @@ namespace poly_MeshUtils
                         double          gProps[10],
                         const int       nbPnts,
                         const double*   pnts);
-}
+
+private:
+
+  poly_MeshUtils() = delete;
+  poly_MeshUtils(const poly_MeshUtils&) = delete;
+  void operator=(const poly_MeshUtils&) = delete;
+
+};
 
 //! \ingroup MOBIUS_POLY
 //!
@@ -185,7 +194,7 @@ public:
   t_ptr< poly_Mesh<ElemTraits> >
     ExtractRegion(const std::unordered_set<int>& tids) const
   {
-    t_ptr< poly_Mesh<ElemTraits> > region = new poly_Mesh;
+    t_ptr< poly_Mesh<ElemTraits> > region = new poly_Mesh<ElemTraits>;
 
     // keep matching of original vertex handles and their copies 
     // to avoid vertex handles duplication in the region
@@ -208,7 +217,7 @@ public:
       //
       // First vertex handle
       auto vhpair = ovh2rvh.find(hv0);
-      if (vhpair != ovh2rvh.cend())
+      if ( vhpair != ovh2rvh.cend() )
       {
         // reuse the existing copy of the original vertex handle
         hv0 = (*vhpair).second;
@@ -226,7 +235,7 @@ public:
 
       // Second vertex handle
       vhpair = ovh2rvh.find(hv1);
-      if (vhpair != ovh2rvh.cend())
+      if ( vhpair != ovh2rvh.cend() )
       {
         // reuse the existing copy of the original vertex handle
         hv1 = (*vhpair).second;
@@ -244,7 +253,7 @@ public:
 
       // Third vertex handle
       vhpair = ovh2rvh.find(hv2);
-      if (vhpair != ovh2rvh.cend())
+      if ( vhpair != ovh2rvh.cend() )
       {
         // reuse the existing copy of the original vertex handle
         hv2 = (*vhpair).second;
@@ -260,7 +269,10 @@ public:
         hv2 = _hv;
       }
 
-      region->AddTriangle(hv0, hv1, hv2, t.GetFaceRef());
+      poly_TriangleHandle newTh = region->AddTriangle( hv0, hv1, hv2, t.GetFaceRef() );
+
+      // Copy traits.
+      region->ChangeTriangle(newTh).traits = t.traits;
     }
 
     return region;
@@ -290,7 +302,10 @@ public:
       other->GetVertex(hv2, v);
       hv2 = this->AddVertex(v);
 
-      this->AddTriangle(hv0, hv1, hv2);
+     poly_TriangleHandle newTh = this->AddTriangle(hv0, hv1, hv2);
+
+     // Copy traits.
+     this->ChangeTriangle(newTh).traits = t.traits;
     }
   }
 

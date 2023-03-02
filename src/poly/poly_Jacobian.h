@@ -53,8 +53,9 @@ namespace mobius {
 //! To calculate the quality metric of a triangle in 3D, the triangle is rigidly transformed
 //! so that all the nodes lie in a 2D plane. This transformation does not change the quality
 //! metric, as the determinant and the condition number of the Jacobian are orientation invariant.
-namespace poly_Jacobian
+class poly_Jacobian
 {
+public:
 
   //! Computes scaled Jacobian
   //! \param[in]  P0               the 0-th vertex coordinates.
@@ -70,7 +71,7 @@ namespace poly_Jacobian
   //! \param[out] J_det_normalized the normalized determinant.
   //!
   //! \return true in case of success, false -- otherwise.
-  mobiusPoly_EXPORT bool
+  mobiusPoly_EXPORT static bool
     Compute(const t_xyz& P0,
             const t_xyz& P1,
             const t_xyz& P2,
@@ -82,7 +83,13 @@ namespace poly_Jacobian
             double&      J_det,
             double&      J_det_normalized);
 
-}
+private:
+
+  poly_Jacobian() = delete;
+  poly_Jacobian(const poly_Jacobian&) = delete;
+  void operator=(const poly_Jacobian&) = delete;
+
+};
 
 }
 
