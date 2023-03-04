@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.0.0 FATAL_ERROR)
 
 # Project name
-project (Mobius CXX)
+project (Mobius-OX CXX)
 
 # Install dir
 set (INSTALL_DIR "" CACHE PATH "Where to install" )
