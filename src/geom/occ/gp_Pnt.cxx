@@ -32,7 +32,7 @@ using namespace mobius::occ;
 //function : Distance
 // purpose :
 //=======================================================================
-inline double gp_Pnt::Distance (const gp_Pnt& theOther) const
+double gp_Pnt::Distance (const gp_Pnt& theOther) const
 {
   double aD=0,aDD;
   const gp_XYZ& aXYZ = theOther.coord;
@@ -46,7 +46,7 @@ inline double gp_Pnt::Distance (const gp_Pnt& theOther) const
 //function : SquareDistance
 // purpose :
 //=======================================================================
-inline double gp_Pnt::SquareDistance (const gp_Pnt& theOther) const
+double gp_Pnt::SquareDistance (const gp_Pnt& theOther) const
 {
   double aD=0, aDD;
   const gp_XYZ& XYZ = theOther.coord;
@@ -60,7 +60,7 @@ inline double gp_Pnt::SquareDistance (const gp_Pnt& theOther) const
 //function : Rotate
 // purpose :
 //=======================================================================
-inline void gp_Pnt::Rotate (const gp_Ax1& theA1, const double theAng)
+void gp_Pnt::Rotate (const gp_Ax1& theA1, const double theAng)
 {
   gp_Trsf aT;
   aT.SetRotation (theA1, theAng);
@@ -71,7 +71,7 @@ inline void gp_Pnt::Rotate (const gp_Ax1& theA1, const double theAng)
 //function : Scale
 // purpose :
 //=======================================================================
-inline void gp_Pnt::Scale (const gp_Pnt& theP, const double theS)
+void gp_Pnt::Scale (const gp_Pnt& theP, const double theS)
 {
   gp_XYZ aXYZ = theP.coord;
   aXYZ.Multiply (1.0 - theS);
@@ -83,7 +83,7 @@ inline void gp_Pnt::Scale (const gp_Pnt& theP, const double theS)
 //function : Translate
 // purpose :
 //=======================================================================
-inline void gp_Pnt::Translate(const gp_Vec& theV)
+void gp_Pnt::Translate(const gp_Vec& theV)
 {
   coord.Add (theV.XYZ());
 }
@@ -92,7 +92,7 @@ inline void gp_Pnt::Translate(const gp_Vec& theV)
 //function : Translated
 // purpose :
 //=======================================================================
-inline gp_Pnt gp_Pnt::Translated (const gp_Vec& theV) const
+gp_Pnt gp_Pnt::Translated (const gp_Vec& theV) const
 {
   gp_Pnt aP = *this;
   aP.coord.Add (theV.XYZ());

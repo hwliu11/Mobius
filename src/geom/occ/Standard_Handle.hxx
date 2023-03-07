@@ -416,7 +416,7 @@ namespace opencascade {
 template <class TheTransientType>
 int HashCode (const Handle (TheTransientType) & theHandle, const int theUpperBound)
 {
-  return ::HashCode (theHandle.get(), theUpperBound);
+  return mobius::occ::HashCode (theHandle.get(), theUpperBound);
 }
 
 //! For compatibility with previous versions of OCCT, define Handle_Class alias for opencascade::handle<Class>.

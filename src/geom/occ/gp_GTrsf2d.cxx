@@ -27,7 +27,7 @@ using namespace mobius::occ;
 //function : SetTrsf2d
 // purpose :
 //=======================================================================
-inline void gp_GTrsf2d::SetTrsf2d (const gp_Trsf2d& theT)
+void gp_GTrsf2d::SetTrsf2d (const gp_Trsf2d& theT)
 {
   shape = theT.shape;
   matrix = theT.matrix;
@@ -39,7 +39,7 @@ inline void gp_GTrsf2d::SetTrsf2d (const gp_Trsf2d& theT)
 //function : gp_GTrsf2d
 // purpose :
 //=======================================================================
-inline gp_GTrsf2d::gp_GTrsf2d (const gp_Trsf2d& theT)
+gp_GTrsf2d::gp_GTrsf2d (const gp_Trsf2d& theT)
 {
   shape = theT.shape;
   matrix = theT.matrix;
@@ -51,9 +51,9 @@ inline gp_GTrsf2d::gp_GTrsf2d (const gp_Trsf2d& theT)
 //function : SetValue
 // purpose :
 //=======================================================================
-inline void gp_GTrsf2d::SetValue (const int theRow,
-                                  const int theCol,
-                                  const double theValue)
+void gp_GTrsf2d::SetValue (const int theRow,
+                           const int theCol,
+                           const double theValue)
 {
   if (theCol == 3)
   {
@@ -70,8 +70,8 @@ inline void gp_GTrsf2d::SetValue (const int theRow,
 //function : Value
 // purpose :
 //=======================================================================
-inline double gp_GTrsf2d::Value (const int theRow,
-                                        const int theCol) const
+double gp_GTrsf2d::Value (const int theRow,
+                          const int theCol) const
 {
   if (theCol == 3)
   {
@@ -88,7 +88,7 @@ inline double gp_GTrsf2d::Value (const int theRow,
 //function : Transforms
 // purpose :
 //=======================================================================
-inline void gp_GTrsf2d::Transforms (gp_XY& theCoord) const
+void gp_GTrsf2d::Transforms (gp_XY& theCoord) const
 {
   theCoord.Multiply (matrix);
   if (!(shape == gp_Other) && !(scale == 1.0))
@@ -102,8 +102,8 @@ inline void gp_GTrsf2d::Transforms (gp_XY& theCoord) const
 //function : Transforms
 // purpose :
 //=======================================================================
-inline void gp_GTrsf2d::Transforms (double& theX,
-                                    double& theY) const
+void gp_GTrsf2d::Transforms (double& theX,
+                             double& theY) const
 {
   gp_XY aDoublet(theX, theY);
   aDoublet.Multiply (matrix);

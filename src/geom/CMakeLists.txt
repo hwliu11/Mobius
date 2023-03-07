@@ -354,7 +354,6 @@ set (occ_CPP_FILES
   occ/Standard_MMgrTBBalloc.cxx
   occ/Standard_Real.cxx
   occ/Standard_ShortReal.cxx
-  occ/Standard_StackTrace.cxx
   occ/Standard_Strtod.cxx
   occ/Standard_Transient.cxx
   occ/Standard_Type.cxx

@@ -33,7 +33,7 @@ using namespace mobius::occ;
 //function : gp_Trsf2d
 // purpose :
 //=======================================================================
-inline gp_Trsf2d::gp_Trsf2d()
+gp_Trsf2d::gp_Trsf2d()
 {
   shape = gp_Identity;
   scale = 1.0;
@@ -45,7 +45,7 @@ inline gp_Trsf2d::gp_Trsf2d()
 //function : gp_Trsf2d
 // purpose :
 //=======================================================================
-inline gp_Trsf2d::gp_Trsf2d (const gp_Trsf& theT)
+gp_Trsf2d::gp_Trsf2d (const gp_Trsf& theT)
 : scale (theT.ScaleFactor()),
   shape (theT.Form()),
   loc (theT.TranslationPart().X(), theT.TranslationPart().Y())
@@ -61,8 +61,8 @@ inline gp_Trsf2d::gp_Trsf2d (const gp_Trsf& theT)
 //function : SetRotation
 // purpose :
 //=======================================================================
-inline void gp_Trsf2d::SetRotation (const gp_Pnt2d& theP,
-                                    const double theAng)
+void gp_Trsf2d::SetRotation(const gp_Pnt2d& theP,
+                            const double theAng)
 {
   shape = gp_Rotation;
   scale = 1.0;
@@ -77,7 +77,7 @@ inline void gp_Trsf2d::SetRotation (const gp_Pnt2d& theP,
 //function : SetMirror
 // purpose :
 //=======================================================================
-inline void gp_Trsf2d::SetMirror (const gp_Pnt2d& theP)
+void gp_Trsf2d::SetMirror (const gp_Pnt2d& theP)
 {
   shape = gp_PntMirror;
   scale = -1.0;
@@ -90,7 +90,7 @@ inline void gp_Trsf2d::SetMirror (const gp_Pnt2d& theP)
 //function : SetScale
 // purpose :
 //=======================================================================
-inline void gp_Trsf2d::SetScale (const gp_Pnt2d& theP, const double theS)
+void gp_Trsf2d::SetScale (const gp_Pnt2d& theP, const double theS)
 {
   shape = gp_Scale;
   scale = theS;
@@ -103,7 +103,7 @@ inline void gp_Trsf2d::SetScale (const gp_Pnt2d& theP, const double theS)
 //function : SetTranslation
 // purpose :
 //=======================================================================
-inline void gp_Trsf2d::SetTranslation (const gp_Vec2d& theV)
+void gp_Trsf2d::SetTranslation (const gp_Vec2d& theV)
 {
   shape = gp_Translation;
   scale = 1.0;
@@ -115,7 +115,7 @@ inline void gp_Trsf2d::SetTranslation (const gp_Vec2d& theV)
 //function : SetTranslation
 // purpose :
 //=======================================================================
-inline void gp_Trsf2d::SetTranslation (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)
+void gp_Trsf2d::SetTranslation (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)
 {
   shape = gp_Translation;
   scale = 1.0;
@@ -127,7 +127,7 @@ inline void gp_Trsf2d::SetTranslation (const gp_Pnt2d& theP1, const gp_Pnt2d& th
 //function : Value
 // purpose :
 //=======================================================================
-inline double gp_Trsf2d::Value (const int theRow, const int theCol) const
+double gp_Trsf2d::Value (const int theRow, const int theCol) const
 {
   if (theCol < 3)
   {
@@ -143,7 +143,7 @@ inline double gp_Trsf2d::Value (const int theRow, const int theCol) const
 //function : Transforms
 // purpose :
 //=======================================================================
-inline void gp_Trsf2d::Transforms (double& theX, double& theY) const
+void gp_Trsf2d::Transforms (double& theX, double& theY) const
 {
   gp_XY aDoublet(theX, theY);
   aDoublet.Multiply (matrix);
@@ -159,7 +159,7 @@ inline void gp_Trsf2d::Transforms (double& theX, double& theY) const
 //function : Transforms
 // purpose :
 //=======================================================================
-inline void gp_Trsf2d::Transforms (gp_XY& theCoord) const
+void gp_Trsf2d::Transforms (gp_XY& theCoord) const
 {
   theCoord.Multiply (matrix);
   if (scale != 1.0)

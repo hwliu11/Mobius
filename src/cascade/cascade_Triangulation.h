@@ -112,7 +112,7 @@ protected:
     NCollection_DataMap<int, int> nodes;
 
     // Populate array of nodes.
-    for ( poly_Mesh<Traits>::VertexIterator vit(m_mobiusMesh); vit.More(); vit.Next() )
+    for ( typename poly_Mesh<Traits>::VertexIterator vit(m_mobiusMesh); vit.More(); vit.Next() )
     {
       // Get vertex of Mobius.
       poly_Vertex v;
@@ -128,7 +128,7 @@ protected:
     }
 
     // Populate array of triangles.
-    for ( poly_Mesh<Traits>::TriangleIterator tit(m_mobiusMesh); tit.More(); tit.Next() )
+    for ( typename poly_Mesh<Traits>::TriangleIterator tit(m_mobiusMesh); tit.More(); tit.Next() )
     {
       // Get triangle of Mobius.
       poly_Triangle<Traits> t;

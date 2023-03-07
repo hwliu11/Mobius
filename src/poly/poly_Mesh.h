@@ -489,7 +489,7 @@ public:
                  core_XYZ&                     thirdAxisOfInertia) const
   {
     // Gauss points for barycentric coordinates
-    static Standard_Real pntWg[] =
+    static double pntWg[] =
     {
       1. / 3., 1. / 3., 1. / 2., /* 1-point-based  */
       1. / 6., 1. / 6., 1. / 6., /* 3-points-based */
@@ -2676,28 +2676,13 @@ public:
 
 public:
 
-  //! Base class for all iterators.
-  class BaseIterator
-  {
-  public:
-
-    //! Ctor accepting mesh.
-    BaseIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : m_mesh(mesh), m_pos(0) {}
-
-  protected:
-
-    t_ptr<poly_Mesh<ElemTraits>> m_mesh; //!< Mesh to iterate.
-    size_t                       m_pos;  //!< Current position.
-
-  };
-
   //! Iterator for vertices.
-  class VertexIterator : public BaseIterator
+  class VertexIterator
   {
   public:
 
     //! Ctor accepting mesh.
-    VertexIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
+    VertexIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : m_mesh(mesh), m_pos(0) {}
 
   public:
 
@@ -2705,15 +2690,19 @@ public:
     void Next() { m_pos++; }
     poly_VertexHandle Current() const { return poly_VertexHandle( int(m_pos) ); }
 
+  private:
+
+    t_ptr<poly_Mesh<ElemTraits>> m_mesh; //!< Mesh to iterate.
+    size_t                       m_pos;  //!< Current position.
   };
 
   //! Iterator for edges.
-  class EdgeIterator : public BaseIterator
+  class EdgeIterator
   {
   public:
 
     //! Ctor accepting mesh.
-    EdgeIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
+    EdgeIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : m_mesh(mesh), m_pos(0) {}
 
   public:
 
@@ -2721,15 +2710,19 @@ public:
     void Next() { m_pos++; }
     poly_EdgeHandle Current() const { return poly_EdgeHandle( int(m_pos) ); }
 
+  private:
+
+    t_ptr<poly_Mesh<ElemTraits>> m_mesh; //!< Mesh to iterate.
+    size_t                       m_pos;  //!< Current position.
   };
 
   //! Iterator for triangles.
-  class TriangleIterator : public BaseIterator
+  class TriangleIterator
   {
   public:
 
     //! Ctor accepting mesh.
-    TriangleIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
+    TriangleIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : m_mesh(mesh), m_pos(0) {}
 
   public:
 
@@ -2737,15 +2730,19 @@ public:
     void Next() { m_pos++; }
     poly_TriangleHandle Current() const { return poly_TriangleHandle( int(m_pos) ); }
 
+  private:
+
+    t_ptr<poly_Mesh<ElemTraits>> m_mesh; //!< Mesh to iterate.
+    size_t                       m_pos;  //!< Current position.
   };
 
   //! Iterator for quads.
-  class QuadIterator : public BaseIterator
+  class QuadIterator
   {
   public:
 
     //! Ctor accepting mesh.
-    QuadIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : BaseIterator(mesh) {}
+    QuadIterator(const t_ptr<poly_Mesh<ElemTraits>>& mesh) : m_mesh(mesh), m_pos(0) {}
 
   public:
 
@@ -2753,6 +2750,10 @@ public:
     void Next() { m_pos++; }
     poly_QuadHandle Current() const { return poly_QuadHandle( int(m_pos) ); }
 
+  private:
+
+    t_ptr<poly_Mesh<ElemTraits>> m_mesh; //!< Mesh to iterate.
+    size_t                       m_pos;  //!< Current position.
   };
 
 protected:

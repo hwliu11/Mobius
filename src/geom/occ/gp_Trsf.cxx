@@ -35,12 +35,11 @@
 
 using namespace mobius::occ;
 
-
 //=======================================================================
 //function : gp_Trsf
 // purpose :
 //=======================================================================
-inline gp_Trsf::gp_Trsf ()
+gp_Trsf::gp_Trsf ()
 : scale (1.0),
   shape (gp_Identity),
   matrix (1, 0, 0, 0, 1, 0, 0, 0, 1),
@@ -51,7 +50,7 @@ inline gp_Trsf::gp_Trsf ()
 //function : SetMirror
 // purpose :
 //=======================================================================
-inline void gp_Trsf::SetMirror (const gp_Pnt& theP)
+void gp_Trsf::SetMirror (const gp_Pnt& theP)
 {
   shape = gp_PntMirror;
   scale = -1.0;
@@ -64,7 +63,7 @@ inline void gp_Trsf::SetMirror (const gp_Pnt& theP)
 //function : SetTranslation
 // purpose :
 //=======================================================================
-inline void gp_Trsf::SetTranslation (const gp_Vec& theV) 
+void gp_Trsf::SetTranslation (const gp_Vec& theV) 
 {
   shape = gp_Translation;
   scale = 1.;
@@ -76,8 +75,8 @@ inline void gp_Trsf::SetTranslation (const gp_Vec& theV)
 //function : SetTranslation
 // purpose :
 //=======================================================================
-inline void gp_Trsf::SetTranslation (const gp_Pnt& theP1,
-                                     const gp_Pnt& theP2) 
+void gp_Trsf::SetTranslation (const gp_Pnt& theP1,
+                              const gp_Pnt& theP2) 
 {
   shape = gp_Translation;
   scale = 1.0;
@@ -89,7 +88,7 @@ inline void gp_Trsf::SetTranslation (const gp_Pnt& theP1,
 //function : Value
 // purpose :
 //=======================================================================
-inline double gp_Trsf::Value (const int theRow, const int theCol) const
+double gp_Trsf::Value (const int theRow, const int theCol) const
 {
   if (theCol < 4)
   {
@@ -105,9 +104,9 @@ inline double gp_Trsf::Value (const int theRow, const int theCol) const
 //function : Transforms
 // purpose :
 //=======================================================================
-inline void gp_Trsf::Transforms (double& theX,
-                                 double& theY,
-                                 double& theZ) const 
+void gp_Trsf::Transforms (double& theX,
+                          double& theY,
+                          double& theZ) const 
 {
   gp_XYZ aTriplet (theX, theY, theZ);
   aTriplet.Multiply (matrix);
@@ -125,7 +124,7 @@ inline void gp_Trsf::Transforms (double& theX,
 //function : Transforms
 // purpose :
 //=======================================================================
-inline void gp_Trsf::Transforms (gp_XYZ& theCoord) const
+void gp_Trsf::Transforms (gp_XYZ& theCoord) const
 {
   theCoord.Multiply (matrix);
   if (scale != 1.0)

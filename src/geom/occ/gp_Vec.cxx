@@ -34,7 +34,7 @@ using namespace mobius::occ;
 //function :  gp_Vec
 // purpose :
 //=======================================================================
-inline gp_Vec::gp_Vec (const gp_Dir& theV)
+gp_Vec::gp_Vec (const gp_Dir& theV)
 {
   coord = theV.XYZ();
 }
@@ -43,7 +43,7 @@ inline gp_Vec::gp_Vec (const gp_Dir& theV)
 //function :  gp_Vec
 // purpose :
 //=======================================================================
-inline gp_Vec::gp_Vec (const gp_Pnt& theP1, const gp_Pnt& theP2)
+gp_Vec::gp_Vec (const gp_Pnt& theP1, const gp_Pnt& theP2)
 {
   coord = theP2.XYZ().Subtracted (theP1.XYZ());
 }
@@ -52,7 +52,7 @@ inline gp_Vec::gp_Vec (const gp_Pnt& theP1, const gp_Pnt& theP2)
 //function :  IsNormal
 // purpose :
 //=======================================================================
-inline bool gp_Vec::IsNormal (const gp_Vec& theOther, const double theAngularTolerance) const
+bool gp_Vec::IsNormal (const gp_Vec& theOther, const double theAngularTolerance) const
 {
   double anAng = M_PI / 2.0 - Angle (theOther);
   if (anAng < 0)
@@ -66,7 +66,7 @@ inline bool gp_Vec::IsNormal (const gp_Vec& theOther, const double theAngularTol
 //function :  Angle
 // purpose :
 //=======================================================================
-inline double gp_Vec::Angle (const gp_Vec& theOther) const
+double gp_Vec::Angle (const gp_Vec& theOther) const
 {
   return (gp_Dir (coord)).Angle (theOther);
 }
@@ -75,7 +75,7 @@ inline double gp_Vec::Angle (const gp_Vec& theOther) const
 //function :  AngleWithRef
 // purpose :
 //=======================================================================
-inline double gp_Vec::AngleWithRef (const gp_Vec& theOther, const gp_Vec& theVRef) const
+double gp_Vec::AngleWithRef (const gp_Vec& theOther, const gp_Vec& theVRef) const
 {
   return (gp_Dir (coord)).AngleWithRef (theOther, theVRef);
 }
@@ -84,7 +84,7 @@ inline double gp_Vec::AngleWithRef (const gp_Vec& theOther, const gp_Vec& theVRe
 //function :  Normalized
 // purpose :
 //=======================================================================
-inline gp_Vec gp_Vec::Normalized() const
+gp_Vec gp_Vec::Normalized() const
 {
   double aD = coord.Modulus();
   gp_Vec aV = *this;
@@ -96,7 +96,7 @@ inline gp_Vec gp_Vec::Normalized() const
 //function :  Rotate
 // purpose :
 //=======================================================================
-inline void gp_Vec::Rotate (const gp_Ax1& theA1, const double theAng)
+void gp_Vec::Rotate (const gp_Ax1& theA1, const double theAng)
 {
   gp_Trsf aT;
   aT.SetRotation (theA1, theAng);
@@ -107,7 +107,7 @@ inline void gp_Vec::Rotate (const gp_Ax1& theA1, const double theAng)
 //function :  operator*
 // purpose :
 //=======================================================================
-inline gp_Vec operator* (const double theScalar, const gp_Vec& theV)
+gp_Vec operator* (const double theScalar, const gp_Vec& theV)
 {
   return theV.Multiplied(theScalar);
 }
@@ -128,7 +128,7 @@ bool gp_Vec::IsEqual
     if (val < 0) val = - val;
     return val <= LinearTolerance && Angle(Other) <= AngularTolerance;
   }
-}    
+}
 
 void gp_Vec::Mirror (const gp_Vec& V)
 {

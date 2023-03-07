@@ -91,20 +91,6 @@ Standard_Failure::Standard_Failure()
 : myMessage (NULL),
   myStackTrace (NULL)
 {
-  const Standard_Integer aStackLength = Standard_Failure_DefaultStackTraceLength;
-  if (aStackLength > 0)
-  {
-    int aStackBufLen = Max (aStackLength * 200, 2048);
-    char* aStackBuffer = (char* )alloca (aStackBufLen);
-    if (aStackBuffer != NULL)
-    {
-      memset (aStackBuffer, 0, aStackBufLen);
-      if (Standard::StackTrace (aStackBuffer, aStackBufLen, aStackLength, NULL, 1))
-      {
-        myStackTrace = StringRef::allocate_message (aStackBuffer);
-      }
-    }
-  }
 }
 
 // =======================================================================
@@ -116,18 +102,6 @@ Standard_Failure::Standard_Failure (const Standard_CString theDesc)
   myStackTrace (NULL)
 {
   myMessage = StringRef::allocate_message (theDesc);
-  const Standard_Integer aStackLength = Standard_Failure_DefaultStackTraceLength;
-  if (aStackLength > 0)
-  {
-    int aStackBufLen = Max (aStackLength * 200, 2048);
-    char* aStackBuffer = (char* )alloca (aStackBufLen);
-    if (aStackBuffer != NULL)
-    {
-      memset (aStackBuffer, 0, aStackBufLen);
-      Standard::StackTrace (aStackBuffer, aStackBufLen, aStackLength, NULL, 1);
-      myStackTrace = StringRef::allocate_message (aStackBuffer);
-    }
-  }
 }
 
 // =======================================================================
