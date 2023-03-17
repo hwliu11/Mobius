@@ -28,6 +28,7 @@ set (base_H_FILES
   base/core_OBJECT.h
   base/core_OPERATOR.h
   base/core_Optional.h
+  base/core_PackedMapOfInteger.h
   base/core_Precision.h
   base/core_Ptr.h
   base/core_TrivariateFunc.h
@@ -41,6 +42,7 @@ set (base_CPP_FILES
   base/core_Integral.cpp
   base/core_OBJECT.cpp
   base/core_OPERATOR.cpp
+  base/core_PackedMapOfInteger.cpp
   base/core_Precision.cpp
   base/core_Ptr.cpp
 )

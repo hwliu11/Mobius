@@ -48,8 +48,10 @@
 
 // Standard includes
 #include <math.h>
+#include <stack>
 #include <unordered_map>
 #include <unordered_set>
+#include <map>
 
 namespace mobius {
 
@@ -302,10 +304,55 @@ public:
       other->GetVertex(hv2, v);
       hv2 = this->AddVertex(v);
 
-     poly_TriangleHandle newTh = this->AddTriangle(hv0, hv1, hv2);
+      poly_TriangleHandle newTh = this->AddTriangle(hv0, hv1, hv2);
 
-     // Copy traits.
-     this->ChangeTriangle(newTh).traits = t.traits;
+      // Copy traits.
+      this->ChangeTriangle(newTh).traits = t.traits;
+    }
+  }
+
+  //! Grows a mesh region by connectivity starting from the passed
+  //! triangle handle `th`.
+  //! \param[in]  th     the seed triangle handle.
+  //! \param[out] region the collected region.
+  void GrowRegion(const poly_TriangleHandle                th,
+                  std::unordered_set<poly_TriangleHandle>& region)
+  {
+    // Fill adjacency matrix.
+    std::map< poly_TriangleHandle, std::unordered_set<poly_TriangleHandle> > adj;
+    //
+    for ( TriangleIterator tit(this); tit.More(); tit.Next() )
+    {
+      std::unordered_set<poly_TriangleHandle> adjacent;
+      this->FindAdjacentByVertices(tit.Current(), adjacent);
+
+      adj.insert({tit.Current(), adjacent});
+    }
+
+    // Iterate over the adjacency matrix starting from the passed
+    // triangle `th` and add all visited triangle indices to the region.
+    // We use a pre-computed adjacency matrix as it is a little bit faster
+    // than querying triangle adjacency information as long as we go.
+    std::unordered_set<poly_TriangleHandle> processedRows;
+    std::stack<poly_TriangleHandle> stack;
+    stack.push(th);
+    //
+    while ( !stack.empty() )
+    {
+      const auto& next = stack.top();
+      stack.pop();
+
+      processedRows.insert(next);
+
+      const auto& row = adj.find(next);
+
+      for ( const auto& curr : row->second )
+      {
+        region.insert(curr);
+
+        if ( processed.find(curr) == processed.end() )
+          stack.push(curr);
+      }
     }
   }
 
@@ -1278,6 +1325,9 @@ public:
     FindAdjacentByEdges(const poly_TriangleHandle                ht,
                         std::unordered_set<poly_TriangleHandle>& hts) const
   {
+    // TODO: this method uses linear search for edges.
+    // DO NOT USE THIS METHOD!!!
+
     poly_Triangle<ElemTraits> t;
     this->GetTriangle(ht, t);
 
