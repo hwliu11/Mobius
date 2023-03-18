@@ -137,6 +137,9 @@ public:
     ThreePoints
   };
 
+  //! Adjacency matrix for triangles.
+  typedef std::map< poly_TriangleHandle, std::unordered_set<poly_TriangleHandle> > t_adjacencyMx;
+
 // Construction & destruction:
 public:
 
@@ -314,21 +317,12 @@ public:
   //! Grows a mesh region by connectivity starting from the passed
   //! triangle handle `th`.
   //! \param[in]  th     the seed triangle handle.
+  //! \param[in]  mx     the precomputed adjacency matrix.
   //! \param[out] region the collected region.
   void GrowRegion(const poly_TriangleHandle                th,
+                  const t_adjacencyMx&                     mx,
                   std::unordered_set<poly_TriangleHandle>& region)
   {
-    // Fill adjacency matrix.
-    std::map< poly_TriangleHandle, std::unordered_set<poly_TriangleHandle> > adj;
-    //
-    for ( TriangleIterator tit(this); tit.More(); tit.Next() )
-    {
-      std::unordered_set<poly_TriangleHandle> adjacent;
-      this->FindAdjacentByVertices(tit.Current(), adjacent);
-
-      adj.insert({tit.Current(), adjacent});
-    }
-
     // Iterate over the adjacency matrix starting from the passed
     // triangle `th` and add all visited triangle indices to the region.
     // We use a pre-computed adjacency matrix as it is a little bit faster
@@ -344,7 +338,7 @@ public:
 
       processedRows.insert(next);
 
-      const auto& row = adj.find(next);
+      const auto& row = mx.find(next);
 
       for ( const auto& curr : row->second )
       {
@@ -353,6 +347,65 @@ public:
         if ( processedRows.find(curr) == processedRows.end() )
           stack.push(curr);
       }
+    }
+  }
+
+  //! Grows a mesh region by connectivity starting from the passed
+  //! triangle handle `th`.
+  //! \param[in]  th     the seed triangle handle.
+  //! \param[out] region the collected region.
+  void GrowRegion(const poly_TriangleHandle                th,
+                  std::unordered_set<poly_TriangleHandle>& region)
+  {
+    // Fill adjacency matrix.
+    t_adjacencyMx adj;
+    //
+    for ( TriangleIterator tit(this); tit.More(); tit.Next() )
+    {
+      std::unordered_set<poly_TriangleHandle> adjacent;
+      this->FindAdjacentByVertices(tit.Current(), adjacent);
+
+      adj.insert({tit.Current(), adjacent});
+    }
+
+    GrowRegion(th, adj, region);
+  }
+
+  //! Computes connected components for the mesh.
+  //! \param[out] ccomps the computed connected components as
+  //!                    a vector of regions.
+  void ComputeCComponents(std::vector< std::unordered_set<poly_TriangleHandle> >& ccomps)
+  {
+    // Fill adjacency matrix.
+    t_adjacencyMx adj;
+    //
+    for ( TriangleIterator tit(this); tit.More(); tit.Next() )
+    {
+      std::unordered_set<poly_TriangleHandle> adjacent;
+      this->FindAdjacentByVertices(tit.Current(), adjacent);
+
+      adj.insert({tit.Current(), adjacent});
+    }
+
+    // Grow regions.
+    std::unordered_set<poly_TriangleHandle> processed;
+    //
+    for ( const auto& tuple : adj )
+    {
+      const poly_TriangleHandle curr = tuple.first;
+
+      // Check if already processed.
+      if ( processed.find(curr) != processed.end() )
+        continue;
+
+      std::unordered_set<poly_TriangleHandle> nextRegion;
+      GrowRegion(curr, adj, nextRegion);
+
+      // Add to processed.
+      processed.insert( nextRegion.begin(), nextRegion.end() );
+
+      // Add to result.
+      ccomps.push_back(nextRegion);
     }
   }
 
