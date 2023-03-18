@@ -350,7 +350,7 @@ public:
       {
         region.insert(curr);
 
-        if ( processed.find(curr) == processed.end() )
+        if ( processedRows.find(curr) == processedRows.end() )
           stack.push(curr);
       }
     }
