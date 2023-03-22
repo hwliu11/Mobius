@@ -31,6 +31,10 @@
 // Own include
 #include <mobius/core_PackedMapOfInteger.h>
 
+// Standard includes.
+#include <cmath>
+#include <float.h>
+
 using namespace mobius;
 
 //-----------------------------------------------------------------------------

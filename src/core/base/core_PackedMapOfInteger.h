@@ -34,6 +34,9 @@
 // Core includes.
 #include <mobius/core.h>
 
+// Math includes
+#include <climits>
+
 namespace mobius {
 
 //! \ingroup MOBIUS_CORE
