@@ -32,6 +32,7 @@
 #include <mobius/core_PackedMapOfInteger.h>
 
 // Standard includes.
+#include <cstring>
 #include <cmath>
 #include <float.h>
 
