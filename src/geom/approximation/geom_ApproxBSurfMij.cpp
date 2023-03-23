@@ -46,6 +46,10 @@ mobius::geom_ApproxBSurfMij::geom_ApproxBSurfMij(const int                      
 
 double mobius::geom_ApproxBSurfMij::Eval()
 {
+  /*static int callcount = 0;
+    callcount++;
+    std::cout << "callcount of mobius::geom_ApproxBSurfMij::Eval() = " << callcount;*/
+
   // Sum products of N_i N_j for each data point.
   double res = 0.;
   for ( size_t k = 0; k < m_UVs.size(); ++k )
@@ -54,6 +58,8 @@ double mobius::geom_ApproxBSurfMij::Eval()
     //
     res += NiNj;
   }
+
+  //std::cout << " --> " << res << std::endl;
 
   return res;
 }
