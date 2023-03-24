@@ -85,6 +85,8 @@ mobius::geom_ApproxBSurf::geom_ApproxBSurf(const t_ptr<t_pcloud>& points,
 
 bool mobius::geom_ApproxBSurf::Perform(const double lambda)
 {
+  m_progress.Init();
+
   /* ===================
    *  Preparation stage
    * =================== */
@@ -174,6 +176,8 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   std::cout << "Computing matrix M..." << std::endl;
 #endif
 
+  m_progress.Init(nPoles);
+
   // Initialize matrix of left-hand-side coefficients.
   int r = 0;
   Eigen::MatrixXd eigen_M1_mx(dim, dim);
@@ -192,14 +196,24 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
     }
     r++;
 
+    m_progress.StepProgress(1);
+
+    if ( m_progress.IsCancelling() )
+      return false;
+
 #if defined COUT_DEBUG
     std::cout << "M " << r << " done" << std::endl;
 #endif
   }
+  //
+  m_progress.StepProgress(1);
 
   Eigen::MatrixXd eigen_M_mx(dim, dim);
   //
   eigen_M_mx = eigen_M1_mx;
+
+  if ( m_progress.IsCancelling() )
+    return false;
 
   // Add fairing terms.
   if ( lambda > 0 )
@@ -230,6 +244,9 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
     // Sum two matrices.
     eigen_M_mx += eigen_M2_mx;
   }
+
+  if ( m_progress.IsCancelling() )
+    return false;
 
   std::cout << "\t>>> det(M) = " << eigen_M_mx.determinant() << std::endl;
 
@@ -265,6 +282,9 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   /* ==============================================
    *  Solve linear system and construct the result
    * ============================================== */
+
+  if ( m_progress.IsCancelling() )
+    return false;
 
   // Solve.
   Eigen::ColPivHouseholderQR<Eigen::MatrixXd> QR(eigen_M_mx);
