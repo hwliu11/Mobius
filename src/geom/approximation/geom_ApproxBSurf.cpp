@@ -176,7 +176,7 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
   std::cout << "Computing matrix M..." << std::endl;
 #endif
 
-  m_progress.Init(nPoles);
+  m_progress.Init(nPoles + (lambda > 0) ? nPoles : 0);
 
   // Initialize matrix of left-hand-side coefficients.
   int r = 0;
@@ -205,7 +205,6 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
     std::cout << "M " << r << " done" << std::endl;
 #endif
   }
-  //
   m_progress.StepProgress(1);
 
   Eigen::MatrixXd eigen_M_mx(dim, dim);
@@ -235,6 +234,8 @@ bool mobius::geom_ApproxBSurf::Perform(const double lambda)
         c++;
       }
       r++;
+
+      m_progress.StepProgress(1);
 
 #if defined COUT_DEBUG
       std::cout << "A " << r << " done" << std::endl;

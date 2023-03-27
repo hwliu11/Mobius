@@ -48,9 +48,6 @@ include (${CMAKE_SOURCE_DIR}/cmake/mobius_OCCT.cmake)
 # Doxygen for documentation
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_Doxygen.cmake)
 
-# Mathjax for documentation
-include (${CMAKE_SOURCE_DIR}/cmake/mobius_Mathjax.cmake)
-
 # Graphviz for documentation
 include (${CMAKE_SOURCE_DIR}/cmake/mobius_Graphviz.cmake)
 
@@ -149,16 +146,10 @@ endif()
 #-------------------------------------------------------------------------------
 
 if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}")
-  message(STATUS "... Collect dependencies for docapi")
-  file(GLOB_RECURSE dep_sources "*.h" "*.cpp")
-  set (DOXYGEN_STATIC "${CMAKE_SOURCE_DIR}/doc/static")
+  # Path to the logo, which is used by all types of documentation.
+  set (DOXYGEN_LOGO "${CMAKE_SOURCE_DIR}/doc/imgs/prototype-logo.svg")
 
-  if (EXISTS "${MATHJAX_EXE}")
-    set (DOXYGEN_USE_MATHJAX "YES")
-    set (DOXYGEN_MATHJAX "${MATHJAX_DIR}")
-  else()
-    set (DOXYGEN_USE_MATHJAX "NO")
-  endif()
+  set (DOXYGEN_STATIC "${CMAKE_SOURCE_DIR}/doc/static")
 
   set (USE_GRAPHVIZ ON CACHE BOOL "Using of Graphviz for diagrams in documentation")
   if (EXISTS "${GRAPHVIZ_EXE}" AND USE_GRAPHVIZ)
@@ -168,9 +159,6 @@ if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}
   endif()
 
   add_subdirectory(${CMAKE_SOURCE_DIR}/doc/docapi)
-  add_subdirectory(${CMAKE_SOURCE_DIR}/doc/docalgo)
-
-  add_dependencies(docalgo docapi)
 endif()
 
 #-------------------------------------------------------------------------------
@@ -210,8 +198,7 @@ if (GENERATE_DOC AND NOT "${DOXYGEN_EXE}" STREQUAL "" AND EXISTS "${DOXYGEN_EXE}
   string(TIMESTAMP VERSION_WITH_TIMESTAMP "%d%m%y")
   set (VERSION_WITH_TIMESTAMP "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_WITH_TIMESTAMP}")
 
-  set_property(TARGET docalgo PROPERTY FOLDER Documentation)
-  set_property(TARGET docapi  PROPERTY FOLDER Documentation)
+  set_property(TARGET docapi PROPERTY FOLDER Documentation)
 endif()
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
