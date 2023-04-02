@@ -302,6 +302,15 @@ double mobius::geom_BSplineCurve::GetMaxParameter() const
 
 //-----------------------------------------------------------------------------
 
+//! Returns middle parameter.
+//! \return middle parameter.
+double mobius::geom_BSplineCurve::GetMiddleParameter() const
+{
+  return ( this->GetMinParameter() + this->GetMaxParameter() )*0.5;
+}
+
+//-----------------------------------------------------------------------------
+
 //! Evaluates B-spline curve for the given parameter.
 //! This algorithm is essentially the algorithm A3.1 from The NURBS Book.
 //!

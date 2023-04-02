@@ -52,7 +52,9 @@
 
 mobius::geom_SkinSurface::geom_SkinSurface(core_ProgressEntry progress,
                                            core_PlotterEntry  plotter)
-: core_OPERATOR(progress, plotter)
+: core_OPERATOR (progress, plotter),
+  m_iDeg_V      (1),
+  m_bUnify      (false)
 {
   m_errCode = ErrCode_NotInitialized;
 }
@@ -197,11 +199,20 @@ bool mobius::geom_SkinSurface::BuildIsosU()
 
   // Allocate arrays for reper parameters.
   double* params_V = m_alloc.Allocate(K + 1, true);
-  if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
+  /*if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
+  {
+    m_errCode = ErrCode_CannotSelectParameters;
+    return false;
+  }*/
+  if ( bspl_ParamsChordLength::Calculate_V(Q, params_V) != bspl_ParamsChordLength::ErrCode_NoError )
   {
     m_errCode = ErrCode_CannotSelectParameters;
     return false;
   }
+
+  // Store the computed parameters.
+  for ( int l = 0; l < K + 1; ++l )
+    m_params.push_back(params_V[l]);
 
   /* ---------------------------
    *  Choose knots by averaging

@@ -102,6 +102,9 @@ public:
   mobiusGeom_EXPORT virtual double
     GetMaxParameter() const override;
 
+  mobiusGeom_EXPORT virtual double
+    GetMiddleParameter() const;
+
   mobiusGeom_EXPORT virtual void
     Eval(const double u,
          t_xyz&       P) const override;

@@ -169,6 +169,18 @@ public:
     return m_surface;
   }
 
+  //! \return the computed knots.
+  const std::vector<double>& GetResultKnots() const
+  {
+    return m_V;
+  }
+
+  //! \return the computed parameters.
+  const std::vector<double>& GetResultParams() const
+  {
+    return m_params;
+  }
+
 public:
 
   //! Intermediate interpolants.
@@ -181,6 +193,7 @@ private:
   std::vector<t_xyz>             m_D1lead;  //!< Leading tangency constraints.
   std::vector<t_xyz>             m_D1tail;  //!< Trailing tangency constraints.
   std::vector<double>            m_V;       //!< Knot vector in V direction.
+  std::vector<double>            m_params;  //!< Computed parameters.
   int                            m_iDeg_V;  //!< V-degree of interpolant surface.
   bool                           m_bUnify;  //!< Indicates whether to unify curves.
   ErrCode                        m_errCode; //!< Error code.

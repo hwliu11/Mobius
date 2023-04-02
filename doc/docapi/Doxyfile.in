@@ -93,6 +93,8 @@ GENERATE_RTF = NO
 # Search engine
 #---------------------------------------------------------------------------
 SEARCHENGINE = YES
+SERVER_BASED_SEARCH = YES
+EXTERNAL_SEARCH = NO
 
 #---------------------------------------------------------------------------
 # TAG files
