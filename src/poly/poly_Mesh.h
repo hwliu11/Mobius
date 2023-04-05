@@ -190,6 +190,15 @@ public:
     return copy;
   }
 
+  //! Scales this mesh by multiplying the coordinates of all nodes by the provided
+  //! scale factor.
+  //! \param[in] scaleCoeff the scale factor.
+  void Scale(const double scaleCoeff)
+  {
+    for ( auto& v : __vertices )
+      v.ChangeCoords() *= scaleCoeff;
+  }
+
   //! Extracts a mesh region for the given triangle IDs `tids`.
   //! Use this method to get a submesh of the existing mesh. The
   //! constructed submesh is a deep copy.

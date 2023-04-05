@@ -169,6 +169,27 @@ public:
     return m_surface;
   }
 
+  //! Forces the algorithm to use the passed parameters instead of recomputing them.
+  //! \param[in] params the parameters to set.
+  void ForceParameters(const std::vector<double>& params)
+  {
+    m_params = params;
+  }
+
+  //! Forces the algorithm to use the passed knots instead of recomputing them.
+  //! \param[in] params the parameters to set.
+  void ForceKnots(const std::vector<double>& knots)
+  {
+    m_V = knots;
+  }
+
+  //! Specifies whether to use chord-length parameterization along V. Alternatively,
+  //! it is the centripetal parameterization.
+  void SetUseChordLength(const bool on)
+  {
+    m_bChord = on;
+  }
+
   //! \return the computed knots.
   const std::vector<double>& GetResultKnots() const
   {
@@ -198,6 +219,7 @@ private:
   bool                           m_bUnify;  //!< Indicates whether to unify curves.
   ErrCode                        m_errCode; //!< Error code.
   t_ptr<t_bsurf>                 m_surface; //!< Interpolant surface.
+  bool                           m_bChord;  //!< Whether to use chord-length parameterization.
 
 };
 

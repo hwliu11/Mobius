@@ -180,6 +180,10 @@ bool mobius::geom_InterpolateMultiCurve::Perform()
     unifiedParams[k] /= numSections;
   }
 
+  // Store the computed parameters.
+  for ( int k = 0; k < common_n + 1; ++k )
+    m_params.push_back(unifiedParams[k]);
+
   // Average knots.
   double* unifiedKnots = Alloc.Allocate(common_m + 1, true);
   //
@@ -191,6 +195,10 @@ bool mobius::geom_InterpolateMultiCurve::Perform()
     }
     unifiedKnots[k] /= numSections;
   }
+
+  // Store the computed knots.
+  for ( int k = 0; k < common_m + 1; ++k )
+    m_knots.push_back(unifiedKnots[k]);
 
   /* ==========================================================
    *  Interpolate each curve passing the same parameters/knots

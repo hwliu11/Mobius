@@ -143,7 +143,6 @@ set (primitives_H_FILES
   primitives/geom_CoonsSurfaceLinear.h
   primitives/geom_Curve.h
   primitives/geom_Geometry.h
-  primitives/geom_GordonSurface.h
   primitives/geom_KleinBottle.h
   primitives/geom_KleinIsoCurve.h
   primitives/geom_Line.h
@@ -165,7 +164,6 @@ set (primitives_CPP_FILES
   primitives/geom_CoonsSurfaceLinear.cpp
   primitives/geom_Curve.cpp
   primitives/geom_Geometry.cpp
-  primitives/geom_GordonSurface.cpp
   primitives/geom_KleinBottle.cpp
   primitives/geom_KleinIsoCurve.cpp
   primitives/geom_Line.cpp

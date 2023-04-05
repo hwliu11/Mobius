@@ -90,6 +90,18 @@ public:
     return m_curves[idx];
   }
 
+  //! \return the computed knots.
+  const std::vector<double>& GetResultKnots() const
+  {
+    return m_knots;
+  }
+
+  //! \return the computed parameters.
+  const std::vector<double>& GetResultParams() const
+  {
+    return m_params;
+  }
+
   //! \return number of multi-point constraints.
   int GetNumRows() const
   {
@@ -103,6 +115,8 @@ private:
   bspl_ParamsSelection              m_paramsType; //!< Parameterization type.
   bspl_KnotsSelection               m_knotsType;  //!< Knots selection type.
   std::vector< t_ptr<t_bcurve> >    m_curves;     //!< Interpolant curves.
+  std::vector<double>               m_knots;      //!< Computed knot vector.
+  std::vector<double>               m_params;     //!< Computed parameters.
 
 };
 

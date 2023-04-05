@@ -54,7 +54,8 @@ mobius::geom_SkinSurface::geom_SkinSurface(core_ProgressEntry progress,
                                            core_PlotterEntry  plotter)
 : core_OPERATOR (progress, plotter),
   m_iDeg_V      (1),
-  m_bUnify      (false)
+  m_bUnify      (false),
+  m_bChord      (false)
 {
   m_errCode = ErrCode_NotInitialized;
 }
@@ -66,7 +67,8 @@ mobius::geom_SkinSurface::geom_SkinSurface(const std::vector< t_ptr<t_bcurve> >&
                                            const bool                            unifyCurves,
                                            core_ProgressEntry                    progress,
                                            core_PlotterEntry                     plotter)
-: core_OPERATOR(progress, plotter)
+: core_OPERATOR (progress, plotter),
+  m_bChord      (false)
 {
   this->Init(curves, deg_V, unifyCurves);
 }
@@ -199,20 +201,40 @@ bool mobius::geom_SkinSurface::BuildIsosU()
 
   // Allocate arrays for reper parameters.
   double* params_V = m_alloc.Allocate(K + 1, true);
-  /*if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
-  {
-    m_errCode = ErrCode_CannotSelectParameters;
-    return false;
-  }*/
-  if ( bspl_ParamsChordLength::Calculate_V(Q, params_V) != bspl_ParamsChordLength::ErrCode_NoError )
-  {
-    m_errCode = ErrCode_CannotSelectParameters;
-    return false;
-  }
 
-  // Store the computed parameters.
-  for ( int l = 0; l < K + 1; ++l )
-    m_params.push_back(params_V[l]);
+  if ( m_params.empty() )
+  {
+    if ( m_bChord )
+    {
+      /* Chord-length */
+
+      if ( bspl_ParamsChordLength::Calculate_V(Q, params_V) != bspl_ParamsChordLength::ErrCode_NoError )
+      {
+        m_errCode = ErrCode_CannotSelectParameters;
+        return false;
+      }
+    }
+    else
+    {
+      /* Centripetal */
+
+      if ( bspl_ParamsCentripetal::Calculate_V(Q, params_V) != bspl_ParamsCentripetal::ErrCode_NoError )
+      {
+        m_errCode = ErrCode_CannotSelectParameters;
+        return false;
+      }
+    }
+
+    // Store the computed parameters.
+    for ( int l = 0; l < K + 1; ++l )
+      m_params.push_back(params_V[l]);
+  }
+  else
+  {
+    // Enforced parameters.
+    for ( int l = 0; l < K + 1; ++l )
+      params_V[l] = m_params[l];
+  }
 
   /* ---------------------------
    *  Choose knots by averaging
@@ -223,17 +245,20 @@ bool mobius::geom_SkinSurface::BuildIsosU()
   const int m = bspl::M(K, m_iDeg_V) + (isTangLead ? 1 : 0) + (isTangTail ? 1 : 0);
 
   // Choose knots.
-  m_V.resize(m + 1);
-  //
-  if ( bspl_KnotsAverage::Calculate(params_V, K, m_iDeg_V, m,
-                                    bspl_KnotsAverage::Recognize(isTangLead,
-                                                                 isTangTail,
-                                                                 false,
-                                                                 false),
-                                    &m_V[0]) != bspl_KnotsAverage::ErrCode_NoError )
+  if ( m_V.empty() )
   {
-    m_errCode = ErrCode_CannotSelectKnots;
-    return false;
+    m_V.resize(m + 1);
+    //
+    if ( bspl_KnotsAverage::Calculate(params_V, K, m_iDeg_V, m,
+                                      bspl_KnotsAverage::Recognize(isTangLead,
+                                                                   isTangTail,
+                                                                   false,
+                                                                   false),
+                                      &m_V[0]) != bspl_KnotsAverage::ErrCode_NoError )
+    {
+      m_errCode = ErrCode_CannotSelectKnots;
+      return false;
+    }
   }
 
   // Check if the resulting knot vector is clamped.
