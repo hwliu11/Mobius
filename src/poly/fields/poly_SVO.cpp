@@ -84,7 +84,7 @@ void mobius::poly_SVO::Summary::DumpJSON(std::ostream& oss) const
 
 bool mobius::poly_SVO::IsValidCornerId(const size_t id)
 {
-  return id >= 0 && id <= 7;
+  return id <= 7;
 }
 
 //-----------------------------------------------------------------------------
@@ -495,7 +495,7 @@ void mobius::poly_SVO::CollectSummary(const int sm,
   // Add to the summary.
   for ( auto d : depths )
   {
-    summary.AddCell( 1./((long long) (1) << d) ); // 64 bits at least.
+    summary.AddCell( 1./((double)((long long) (1) << d)) ); // 64 bits at least.
   }
 
   summary.membership = sm;

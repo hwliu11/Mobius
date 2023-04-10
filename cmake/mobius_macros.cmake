@@ -103,3 +103,73 @@ macro (MOBIUS_UNSET VARNAME)
     unset (${VARNAME} CACHE)
   endif()
 endmacro()
+
+#-------------------------------------------------------------------------------
+# Name:    MOBIUS_CONFIGURE_WARNING_LEVEL
+# Purpose: Configure warnings level
+#-------------------------------------------------------------------------------
+macro (MOBIUS_CONFIGURE_WARNING_LEVEL)
+  if (MSVC)
+    # define all warnings print.
+    add_definitions (/Wall)
+
+    # Specify floating-point behavior.
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:precise")
+
+    # enumerator '' in switch of enum '' is not explicitly handled by a case label
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4061\"")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4062\"")
+    # 'type cast': unsafe conversion from 'PROC' to 'PFNWGLCHOOSEPIXELFORMATARBPROC'
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4191\"")
+    # 'argument': conversion from 'const int' to 'const unsigned __int64', signed/unsigned mismatch
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4365\"")
+    # unreferenced inline function has been removed
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4514\"")
+    # constructor is not implicitly called
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4582\"")
+    # destructor is not implicitly called
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4583\"")
+    # copy constructor was implicitly defined as deleted
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4625\"")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4626\"")
+    # '_WIN32_WINNT_WIN10_RS5' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4668\"")
+    # '' function not inlined
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4710\"")
+    # function '' selected for automatic inline expansion
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4711\"")
+    # '4' bytes padding added after data member
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4820\"")
+    # 'getenv':      This function or variable may be unsafe. Consider using _dupenv_s instead.
+    # '_vsprintf_l': This function or variable may be unsafe. Consider using _vsprintf_s_l instead.
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"4996\"")
+
+
+    # move constructor was implicitly defined as deleted
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"5026\"")
+    # move assignment operator was implicitly defined as deleted
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"5027\"")
+    # 'CreateThread': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc.
+    # Undefined behavior may occur if this function throws an exception.
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"5039\"")
+    # Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"5045\"")
+    # a non-static data member with a volatile qualified type no longer implies
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"5220\"")
+    # '`anonymous-namespace'::__glDisableLighting': unreferenced function with internal linkage has been removed
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"5245\"")
+
+
+    # Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"26451\"")
+    # The enum type '' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd\"26812\"")
+
+  elseif (CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions (-Wall -Wno-unknown-pragmas)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+    add_definitions(-DUSE_GCC)
+  else()
+    message ("Unknown compiler")
+  endif()
+endmacro()

@@ -62,7 +62,7 @@ bool
     return false;
 
   // Check the expected number of segments.
-  if ( Qw.size() != numSegmentsRef )
+  if ( (int)Qw.size() != numSegmentsRef )
     return false;
 
   // Check the indices of the breakpoints.

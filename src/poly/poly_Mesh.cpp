@@ -40,7 +40,9 @@
 using namespace mobius;
 
 // Instantiate for allowed traits.
+#ifdef _WIN32
 template class poly_Mesh<>;
+#endif
 
 namespace
 {

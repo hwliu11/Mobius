@@ -147,8 +147,8 @@ void mobius::core_Chronometer::GetProcessCPU(double& theUserSeconds,
 #ifndef OCCT_UWP
   FILETIME ftStart, ftExit, ftKernel, ftUser;
   ::GetProcessTimes (GetCurrentProcess(), &ftStart, &ftExit, &ftKernel, &ftUser);
-  theUserSeconds   = 0.0000001 * EncodeFILETIME (&ftUser);
-  theSystemSeconds = 0.0000001 * EncodeFILETIME (&ftKernel);
+  theUserSeconds   = 0.0000001 * (double)EncodeFILETIME (&ftUser);
+  theSystemSeconds = 0.0000001 * (double)EncodeFILETIME (&ftKernel);
 #else
   theUserSeconds = 0.0;
   theSystemSeconds = 0.0;
@@ -163,8 +163,8 @@ void mobius::core_Chronometer::GetThreadCPU(double& theUserSeconds,
 #ifndef OCCT_UWP
   FILETIME ftStart, ftExit, ftKernel, ftUser;
   ::GetThreadTimes (GetCurrentThread(), &ftStart, &ftExit, &ftKernel, &ftUser);
-  theUserSeconds   = 0.0000001 * EncodeFILETIME (&ftUser);
-  theSystemSeconds = 0.0000001 * EncodeFILETIME (&ftKernel);
+  theUserSeconds   = 0.0000001 * (double)EncodeFILETIME (&ftUser);
+  theSystemSeconds = 0.0000001 * (double)EncodeFILETIME (&ftKernel);
 #else
   theUserSeconds = 0.0;
   theSystemSeconds = 0.0;

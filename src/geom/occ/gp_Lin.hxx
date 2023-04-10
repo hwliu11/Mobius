@@ -243,14 +243,14 @@ public:
   //! Performs the symmetrical transformation of a line
   //! with respect to the point P which is the center of
   //! the symmetry.
-  mobiusGeom_EXPORT Standard_NODISCARD gp_Lin Mirrored (const gp_Pnt& P) const;
+  Standard_NODISCARD mobiusGeom_EXPORT gp_Lin Mirrored (const gp_Pnt& P) const;
   
   mobiusGeom_EXPORT void Mirror (const gp_Ax1& A1);
   
   //! Performs the symmetrical transformation of a line
   //! with respect to an axis placement which is the axis
   //! of the symmetry.
-  mobiusGeom_EXPORT Standard_NODISCARD gp_Lin Mirrored (const gp_Ax1& A1) const;
+  Standard_NODISCARD mobiusGeom_EXPORT gp_Lin Mirrored (const gp_Ax1& A1) const;
   
   mobiusGeom_EXPORT void Mirror (const gp_Ax2& A2);
   
@@ -258,7 +258,7 @@ public:
   //! with respect to a plane. The axis placement  <A2>
   //! locates the plane of the symmetry :
   //! (Location, XDirection, YDirection).
-  mobiusGeom_EXPORT Standard_NODISCARD gp_Lin Mirrored (const gp_Ax2& A2) const;
+  Standard_NODISCARD mobiusGeom_EXPORT gp_Lin Mirrored (const gp_Ax2& A2) const;
 
 private:
 

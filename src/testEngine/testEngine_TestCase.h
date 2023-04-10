@@ -251,7 +251,7 @@ public:
     std::string arrStr("[");
     if ( vec.size() )
     {
-      for ( int i = 0; i < vec.size(); ++i )
+      for ( size_t i = 0; i < vec.size(); ++i )
       {
         arrStr += core::str::to_string(vec[i]);
         if ( i != (vec.size() - 1) )

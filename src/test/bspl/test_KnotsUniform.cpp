@@ -71,7 +71,7 @@ mobius::outcome
   const double tol = 1.0e-6;
 
   // Compare with tolerance.
-  for ( int k = 0; k < U_ref.size(); ++k )
+  for ( size_t k = 0; k < U_ref.size(); ++k )
     if ( fabs(U_ref[k] - U[k]) > tol )
       return res.failure();
 
@@ -115,7 +115,7 @@ mobius::outcome
   const double tol = 1.0e-6;
 
   // Compare with tolerance.
-  for ( int k = 0; k < U_ref.size(); ++k )
+  for ( size_t k = 0; k < U_ref.size(); ++k )
     if ( fabs(U_ref[k] - U[k]) > tol )
       return res.failure();
 
@@ -192,7 +192,7 @@ mobius::outcome
   const double tol = 1.0e-6;
 
   // Compare with tolerance.
-  for ( int k = 0; k < U_ref.size(); ++k )
+  for ( size_t k = 0; k < U_ref.size(); ++k )
     if ( fabs(U_ref[k] - U[k]) > tol )
       return res.failure();
 

@@ -71,8 +71,8 @@ private:
                MouseDraggedX(0),
                MouseDraggedY(0),
                IsLButtonClicked(false),
-               IsMButtonClicked(false),
                IsRButtonClicked(false),
+               IsMButtonClicked(false),
                IsCtrlPressed(false),
                IsPositiveRotoX(true),
                IsPositiveRotoY(true) {}

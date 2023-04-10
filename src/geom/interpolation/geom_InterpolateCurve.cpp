@@ -57,7 +57,15 @@
 
 mobius::geom_InterpolateCurve::geom_InterpolateCurve(core_ProgressEntry progress,
                                                      core_PlotterEntry  plotter)
-: core_OPERATOR(progress, plotter)
+: core_OPERATOR(progress, plotter),
+  m_iDeg(0),
+  m_errCode(ErrCode_NoError),
+  m_paramsType(ParamsSelection_Undefined),
+  m_pParams(nullptr),
+  m_iNumParams(0),
+  m_knotsType(KnotsSelection_Undefined),
+  m_pU(nullptr),
+  m_iNumKnots(0)
 {
   m_errCode = ErrCode_NotInitialized;
 }
@@ -434,8 +442,8 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<t_xyz>& points,
     else
       fn = dump_filename_Bz;
 
-    core_FileDumper FileDumper(fn);
-    FileDumper.Dump(b, dim, 1, "B");
+    core_FileDumper FileDumper_(fn);
+    FileDumper_.Dump(b, dim, 1, "B");
 //#endif
 
     SolveLinear(N_values, b, pXYZ[c], dim);

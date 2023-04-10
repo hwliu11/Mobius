@@ -299,7 +299,7 @@ public:
   //! normalizes a vector
   //! Raises an exception if the magnitude of the vector is
   //! lower or equal to Resolution from gp.
-  mobiusGeom_EXPORT mobiusCore_NODISCARD gp_Vec Normalized() const;
+  mobiusCore_NODISCARD mobiusGeom_EXPORT gp_Vec Normalized() const;
 
   //! Reverses the direction of a vector
   void Reverse() { coord.Reverse(); }

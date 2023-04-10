@@ -118,7 +118,7 @@ bool mobius::core_SolveCovarianceEigens::operator()(const std::vector<t_xyz>& pt
   {
     for ( int k = 0; k <= 2; ++k )
     {
-      C(j, k) /= nPts;
+      C(j, k) /= (double)nPts;
     }
   }
 

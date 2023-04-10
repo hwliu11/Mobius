@@ -126,21 +126,21 @@ public:
   //! Performs the symmetrical transformation of a sphere
   //! with respect to the point P which is the center of the
   //! symmetry.
-  mobiusGeom_EXPORT Standard_NODISCARD gp_Sphere Mirrored (const gp_Pnt& P) const;
+  Standard_NODISCARD mobiusGeom_EXPORT gp_Sphere Mirrored (const gp_Pnt& P) const;
   
   mobiusGeom_EXPORT void Mirror (const gp_Ax1& A1);
 
   //! Performs the symmetrical transformation of a sphere with
   //! respect to an axis placement which is the axis of the
   //! symmetry.
-  mobiusGeom_EXPORT Standard_NODISCARD gp_Sphere Mirrored (const gp_Ax1& A1) const;
+  Standard_NODISCARD mobiusGeom_EXPORT gp_Sphere Mirrored (const gp_Ax1& A1) const;
   
   mobiusGeom_EXPORT void Mirror (const gp_Ax2& A2);
   
   //! Performs the symmetrical transformation of a sphere with respect
   //! to a plane. The axis placement A2 locates the plane of the
   //! of the symmetry : (Location, XDirection, YDirection).
-  mobiusGeom_EXPORT Standard_NODISCARD gp_Sphere Mirrored (const gp_Ax2& A2) const;
+  Standard_NODISCARD mobiusGeom_EXPORT gp_Sphere Mirrored (const gp_Ax2& A2) const;
   
   void Rotate (const gp_Ax1& A1, const Standard_Real Ang);
   

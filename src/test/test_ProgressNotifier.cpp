@@ -232,14 +232,12 @@ std::string getString(const mobius::t_ptr<mobius::core_VarBase>& varBase)
 
 void mobius::test_ProgressNotifier::SendLogMessage(const std::string&       message,
                                                    const core_MsgSeverity   severity,
-                                                   const core_MsgPriority   priority,
+                                                   const core_MsgPriority   test_NotUsed(priority),
                                                    const core_MsgArguments& arguments)
 {
-  test_NotUsed(priority);
-
   std::string formatted = message;
 
-  for ( int i = 0; i < arguments.size(); ++i )
+  for ( int i = 0; i < (int)arguments.size(); ++i )
   {
     std::string iarg = "%";
     iarg += core::str::to_string<int>(i + 1);

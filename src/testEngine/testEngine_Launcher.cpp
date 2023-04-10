@@ -215,7 +215,7 @@ bool mobius::testEngine_Launcher::generateReport(std::ostream* out) const
     // Local statistics
     const int nTotal = CaseLauncher->NumberOfExecuted();
     const int nFailed = CaseLauncher->NumberOfFailed();
-    const double passedPercent = (double) (nTotal-nFailed)/nTotal*100.0;
+    const double passedPercent = 100.0 * ((double)nTotal-(double)nFailed)/nTotal;
 
     // Render header for Test Case
     Rdr->StartTableRow()

@@ -137,9 +137,9 @@ namespace BSplCurveProj
 
     return param;
   }
-};
+}
 
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -846,11 +846,11 @@ bool mobius::geom_BSplineCurve::ConcatenateCompatible(const t_ptr<t_bcurve>& oth
   m_U.resize(m_U.size() - m_iDeg - 1);
 
   // Add knots from the next segment.
-  for ( int j = 1; j < other->m_U.size(); ++j )
+  for ( size_t j = 1; j < other->m_U.size(); ++j )
     m_U.push_back(other->m_U[j]);
 
   // Add poles of the next segment skipping the first one.
-  for ( int j = 1; j < other->m_poles.size(); ++j )
+  for ( size_t j = 1; j < other->m_poles.size(); ++j )
     m_poles.push_back( other->m_poles[j] );
 
   return true;

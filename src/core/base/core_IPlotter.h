@@ -84,6 +84,9 @@ class core_IPlotter : public core_OBJECT
 // COMMON:
 public:
 
+  //! Destructor.
+  virtual ~core_IPlotter() {}
+
   virtual void
     ERASE_ALL() {}
 
@@ -252,6 +255,9 @@ public:
 class core_PlotterEntry
 {
 public:
+
+  //! Destructor.
+  virtual ~core_PlotterEntry() {}
 
   //! Default constructor.
   core_PlotterEntry() {}

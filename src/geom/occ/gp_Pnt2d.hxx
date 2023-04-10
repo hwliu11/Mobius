@@ -149,7 +149,7 @@ public:
   //! The magnitude of the translation is the vector's magnitude.
   mobiusGeom_EXPORT void Translate (const gp_Vec2d& theV);
 
-  mobiusGeom_EXPORT mobiusCore_NODISCARD gp_Pnt2d Translated (const gp_Vec2d& theV) const;
+  mobiusCore_NODISCARD mobiusGeom_EXPORT gp_Pnt2d Translated (const gp_Vec2d& theV) const;
 
   //! Translates a point from the point theP1 to the point theP2.
   void Translate (const gp_Pnt2d& theP1, const gp_Pnt2d& theP2)

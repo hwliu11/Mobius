@@ -29,6 +29,7 @@ template <class TheItemType> class NCollection_TListNode
   : public NCollection_ListNode
 {
  public:
+   NCollection_TListNode() : NCollection_ListNode() {}
   //! Constructor
   NCollection_TListNode (const TheItemType& theItem,
                          NCollection_ListNode* theNext=NULL) :

@@ -277,14 +277,14 @@ namespace mobius
         nz = (subID >> 2) & 1;
 
         // P0 of the new octant.
-        const t_xyz childP0( P0.X() + 0.5*diagVec.X()*nx,
-                             P0.Y() + 0.5*diagVec.Y()*ny,
-                             P0.Z() + 0.5*diagVec.Z()*nz );
+        const t_xyz childP0( P0.X() + 0.5*diagVec.X()*(double)nx,
+                             P0.Y() + 0.5*diagVec.Y()*(double)ny,
+                             P0.Z() + 0.5*diagVec.Z()*(double)nz );
 
         // P7 of the new octant.
-        const t_xyz childP7( P7.X() - 0.5*diagVec.X()*(1 - nx),
-                             P7.Y() - 0.5*diagVec.Y()*(1 - ny),
-                             P7.Z() - 0.5*diagVec.Z()*(1 - nz) );
+        const t_xyz childP7( P7.X() - 0.5*diagVec.X()*(1. - (double)nx),
+                             P7.Y() - 0.5*diagVec.Y()*(1. - (double)ny),
+                             P7.Z() - 0.5*diagVec.Z()*(1. - (double)nz) );
 
         // Store corners.
         pChild->SetCornerMin(childP0);

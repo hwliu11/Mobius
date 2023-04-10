@@ -48,9 +48,9 @@ mobius::visu_ActorLine::visu_ActorLine(const t_ptr<geom_Line>& Line,
                                        const double            uMax,
                                        const bool              doDrawExtremities)
 : visu_ActorInsensitive(),
+  m_line(Line),
   m_fUMin(uMin),
   m_fUMax(uMax),
-  m_line(Line),
   m_bDrawExtremities(doDrawExtremities)
 {
 }

@@ -101,7 +101,7 @@ void mobius::visu_ActorPolyLine::GL_Draw()
     glPointSize(5);
     glBegin(GL_POINTS);
     glColor3ub(QrRed.R, QrRed.G, QrRed.B);
-      for ( size_t k = 0; k < m_polyline->NumLinks(); ++k )
+      for ( size_t k = 0; k < (size_t)m_polyline->NumLinks(); ++k )
       {
         const t_ptr<geom_Link>& link = m_polyline->GetLink(k);
         glVertex3f( (GLfloat) link->P1().X(), (GLfloat) link->P1().Y(), (GLfloat) link->P1().Z() );

@@ -221,6 +221,8 @@ public:
   //! Default ctor.
   core_MsgStream()
   {
+    m_severity          = MsgSeverity_Information;
+    m_priority          = MsgPriority_Normal;
     m_bIsDummy          = true;
     m_bIsMsgInitialized = false;
   }
