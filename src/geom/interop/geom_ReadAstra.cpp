@@ -140,7 +140,7 @@ namespace {
       // Concatenate curves.
       t_ptr<t_bcurve> res = segments[0];
       //
-      for ( int i = 1; i < segments.size(); ++i )
+      for ( size_t i = 1; i < segments.size(); ++i )
         res->ConcatenateCompatible(segments[i]);
 
       return res;
@@ -258,7 +258,7 @@ namespace {
       const size_t nCols = bzPatches.size();
 
       // Concatenate patches along U direction.
-      for ( int i = 0; i < nCols; ++i )
+      for ( size_t i = 0; i < nCols; ++i )
       {
         t_ptr<t_bsurf> res = bzPatches[i][0];
         //
@@ -271,7 +271,7 @@ namespace {
       // Concatenate patches along V direction.
       t_ptr<t_bsurf> res = splRows[0];
       //
-      for ( int i = 1; i < nCols; ++i )
+      for ( size_t i = 1; i < nCols; ++i )
       {
         res->ConcatenateCompatible(splRows[i], false);
       }
@@ -333,7 +333,7 @@ namespace {
     data.nptsV = core::str::extract_int(tokens[3]); //  <name>  14  2  _61_ 42 0 0
 
     // Reserve space for the network of poles.
-    for ( size_t row = 0; row < data.nptsU; ++row )
+    for ( int row = 0; row < data.nptsU; ++row )
     {
       data.pts.push_back({});
       data.pts.back().resize(data.nptsV);
@@ -463,7 +463,7 @@ bool geom_ReadAstra::Perform(const std::string& filename)
 
     if ( mode == Mode_Curve )
     {
-      if ( pCurrentCurve->pts.size() < pCurrentCurve->npts )
+      if ( pCurrentCurve->pts.size() < (size_t) pCurrentCurve->npts )
         pCurrentCurve->AddPoint(tokens);
       else
         mode = Mode_Scan;
@@ -471,7 +471,7 @@ bool geom_ReadAstra::Perform(const std::string& filename)
     //
     else if ( mode == Mode_SplineSurface )
     {
-      if ( pCurrentSplSurf->pts.size() < pCurrentSplSurf->nptsU*pCurrentSplSurf->nptsV )
+      if ( pCurrentSplSurf->pts.size() < (size_t) pCurrentSplSurf->nptsU*pCurrentSplSurf->nptsV )
         pCurrentSplSurf->AddPoint(tokens);
       else
         mode = Mode_Scan;

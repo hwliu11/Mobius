@@ -40,7 +40,7 @@
 using namespace mobius;
 
 // Instantiate for allowed traits.
-template class poly_Mesh<>;
+template class mobius::poly_Mesh<>;
 
 namespace
 {
@@ -86,7 +86,7 @@ public:
   }
 
 protected:
- 
+
   occ::gp_Pnt2d m_pole0, m_pole1;
 
 };
@@ -190,7 +190,7 @@ bool poly_MeshUtils::ComputePyramidProps(const t_xyz&    v0,
     double dv = x * xn + y * yn + z * zn;
     //
     gProps[0] += dv / 3.0;       // Volume
-    //    
+    //
     gProps[1] += 0.25 * x * dv;  // Ix
     gProps[2] += 0.25 * y * dv;  // Iy
     gProps[3] += 0.25 * z * dv;  // Iz

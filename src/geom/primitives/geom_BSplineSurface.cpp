@@ -1243,7 +1243,7 @@ bool mobius::geom_BSplineSurface::ConcatenateCompatible(const t_ptr<geom_BSpline
     m_U.resize(m_U.size() - m_iDegU - 1);
 
     // Add knots from the next segment.
-    for ( int j = 1; j < other->m_U.size(); ++j )
+    for ( size_t j = 1; j < other->m_U.size(); ++j )
       m_U.push_back(other->m_U[j]);
 
     // Add poles.
@@ -1281,7 +1281,7 @@ bool mobius::geom_BSplineSurface::ConcatenateCompatible(const t_ptr<geom_BSpline
     m_V.resize(m_V.size() - m_iDegV - 1);
 
     // Add knots from the next segment.
-    for ( int j = 1; j < other->m_V.size(); ++j )
+    for ( size_t j = 1; j < other->m_V.size(); ++j )
       m_V.push_back(other->m_V[j]);
 
     // Add poles.
