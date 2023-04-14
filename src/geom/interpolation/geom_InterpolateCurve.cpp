@@ -57,7 +57,15 @@
 
 mobius::geom_InterpolateCurve::geom_InterpolateCurve(core_ProgressEntry progress,
                                                      core_PlotterEntry  plotter)
-: core_OPERATOR(progress, plotter)
+: core_OPERATOR (progress, plotter),
+  m_iDeg        (0),
+  m_errCode     (ErrCode_NoError),
+  m_paramsType  (ParamsSelection_Undefined),
+  m_pParams     (nullptr),
+  m_iNumParams  (0),
+  m_knotsType   (KnotsSelection_Undefined),
+  m_pU          (nullptr),
+  m_iNumKnots   (0)
 {
   m_errCode = ErrCode_NotInitialized;
 }

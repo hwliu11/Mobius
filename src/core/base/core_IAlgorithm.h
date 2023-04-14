@@ -98,7 +98,7 @@ protected:
 
 protected:
 
-  core_IAlgorithm() : core_OBJECT() {} //!< Default ctor.
+  core_IAlgorithm() : core_OBJECT(), m_iStatusCode(0)  {} //!< Default ctor.
 
 };
 

@@ -87,7 +87,7 @@ public:
 public:
 
   //! Default constructor.
-  core_VarInt() : core_VarBase()
+  core_VarInt() : core_VarBase(), Value(0)
   {}
 
   //! Constructor accepting variable value as an argument. The variable will
@@ -140,7 +140,7 @@ public:
 public:
 
   //! Default constructor.
-  core_VarReal() : core_VarBase()
+  core_VarReal() : core_VarBase(), Value(0.)
   {}
 
   //! Constructor accepting variable value as an argument. The variable will
@@ -246,7 +246,7 @@ public:
 public:
 
   //! Default constructor.
-  core_VarBool() : core_VarBase()
+  core_VarBool() : core_VarBase(), Value(false)
   {}
 
   //! Constructor accepting variable value as an argument. The variable will
