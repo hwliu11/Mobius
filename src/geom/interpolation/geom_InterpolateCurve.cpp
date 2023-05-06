@@ -45,13 +45,13 @@
 // Core includes
 #include <mobius/core_SolveLinearSystem.h>
 
-//#if defined Qr_DEBUG
+#if defined Qr_DEBUG
   #include <mobius/core_FileDumper.h>
   #define dump_filename_N  "C:/users/serge/desktop/N_interp_log.log"
   #define dump_filename_Bx "C:/users/serge/desktop/N_interp_log_Bx.log"
   #define dump_filename_By "C:/users/serge/desktop/N_interp_log_By.log"
   #define dump_filename_Bz "C:/users/serge/desktop/N_interp_log_Bz.log"
-//#endif
+#endif
 
 //-----------------------------------------------------------------------------
 
@@ -381,10 +381,10 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<t_xyz>& points,
     }
   }
 
-//#if defined Qr_DEBUG
+#if defined Qr_DEBUG
   core_FileDumper FileDumper(dump_filename_N);
   FileDumper.Dump(N_values, dim, dim, "N");
-//#endif
+#endif
 
   /* -----------------------------------------
    *  Solve linear system for each coordinate
@@ -433,7 +433,7 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<t_xyz>& points,
       }
     }
 
-//#if defined Qr_DEBUG
+#if defined Qr_DEBUG
     std::string fn;
     if ( c == 0 )
       fn = dump_filename_Bx;
@@ -444,7 +444,7 @@ bool mobius::geom_InterpolateCurve::Interp(const std::vector<t_xyz>& points,
 
     core_FileDumper FileDumper(fn);
     FileDumper.Dump(b, dim, 1, "B");
-//#endif
+#endif
 
     SolveLinear(N_values, b, pXYZ[c], dim);
   }
