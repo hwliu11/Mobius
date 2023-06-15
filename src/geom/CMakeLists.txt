@@ -68,9 +68,11 @@ set (clouds_CPP_FILES
 
 set (interop_H_FILES
   interop/geom_ReadAstra.h
+  interop/geom_SaveAstra.h
 )
 set (interop_CPP_FILES
   interop/geom_ReadAstra.cpp
+  interop/geom_SaveAstra.cpp
 )
 
 #------------------------------------------------------------------------------

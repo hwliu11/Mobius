@@ -110,6 +110,9 @@ bool mobius::bspl_InsKnot::operator()(const int                                n
                                       std::vector<double>&                     VQ,
                                       std::vector< std::vector<t_xyz> >&       Qw) const
 {
+
+  if ( r + s > p || r + s > q )
+    return false; // Resulting multiplicity should not be greater than degree.
   if ( dir == ParamDirection_Undefined )
     return false; // Contract check.
 
