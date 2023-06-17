@@ -227,6 +227,12 @@ namespace mobius
     mobiusCascade_EXPORT static Handle(Geom_SurfaceOfRevolution)
       GetOpenCascadeRevolSurf(const t_ptr<t_surfRevol>& surface);
 
+    //! Converts OpenCascade surface of revolution to the Mobius one.
+    //! \param[in] surface Mobius surface to convert.
+    //! \return Mobius surface.
+    mobiusCascade_EXPORT static t_ptr<t_surfRevol>
+      GetMobiusRevolSurf(const Handle(Geom_SurfaceOfRevolution)& surface);
+
   };
 }
 

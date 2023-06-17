@@ -34,26 +34,16 @@
 // Geom includes
 #include <mobius/geom_BSplineCurve.h>
 #include <mobius/geom_BSplineSurface.h>
-#include <mobius/geom_Surface.h>
+#include <mobius/geom_SurfaceOfRevolution.h>
 
 // Core includes
 #include <mobius/core_IAlgorithm.h>
-#include <map>
 
 namespace mobius {
 
-//! struct for surface of revolution information
-struct t_surfOfRev
-{
-  std::string name;      //! name of surface
-  std::string curveName; //! name of reference
-  t_xyz       location;  //! location of surface
-  t_xyz       direction; //! direction of surface
-};
-
 //! \ingroup MOBIUS_GEOM
 //!
-//! Utility to read ASTRA curves and surfaces.
+//! Utility to export ASTRA curves and surfaces.
 class geom_SaveAstra : public core_IAlgorithm
 {
 public:
@@ -69,16 +59,16 @@ public:
 public:
 
   //! Saves data to ASTRA file.
-  //! \param[in] filename  file where to save.
-  //! \param[in] curves    curves to save.
-  //! \param[in] surfaces  surfaces to save.
-  //! \param[in] surfOfRev surfaces of revolution to save.
+  //! \param[in] filename      the file where to save.
+  //! \param[in] bCurves       the B-spline curves to save.
+  //! \param[in] bSurfaces     the B-spline surfaces to save.
+  //! \param[in] revolSurfaces the surfaces of revolution to save.
   //! \return true in the case of success, false -- otherwise.
   mobiusGeom_EXPORT bool
-    Perform(const std::string&                  filename,
-            const std::vector<t_ptr<t_bcurve>>& curves,
-            const std::vector<t_ptr<t_bsurf>>&  surfaces,
-            const std::vector<t_surfOfRev>&     surfOfRev);
+    Perform(const std::string&                       filename,
+            const std::vector< t_ptr<t_bcurve> >&    bCurves,
+            const std::vector< t_ptr<t_bsurf> >&     bSurfaces,
+            const std::vector< t_ptr<t_surfRevol> >& revolSurfaces);
 
 };
 

@@ -46,83 +46,113 @@ using namespace mobius;
 
 //-----------------------------------------------------------------------------
 
-bool geom_SaveAstra::Perform(const std::string&                  filename,
-                             const std::vector<t_ptr<t_bcurve>>& curves,
-                             const std::vector<t_ptr<t_bsurf>>&  surfaces,
-                             const std::vector<t_surfOfRev>&     surfOfRev)
+bool geom_SaveAstra::Perform(const std::string&                       filename,
+                             const std::vector< t_ptr<t_bcurve> >&    bCurves,
+                             const std::vector< t_ptr<t_bsurf> >&     bSurfaces,
+                             const std::vector< t_ptr<t_surfRevol> >& revolSurfaces)
 {
+#if defined WIN32
   setlocale(LC_CTYPE, ".1251");
-  std::ofstream outfile;
-  outfile.open(filename, std::ofstream::trunc);
-  outfile.clear();
-  outfile.close();
-  outfile.open(filename, std::ios_base::app);
+#endif
+
+  std::ofstream outfile(filename);
   //
-  // Curves
-  std::vector<std::pair<std::string, std::vector<std::vector<double>>>> resCurves;
-  for (auto& curve : curves)
+  if ( !outfile.is_open() )
+    return false;
+
+  // Make sure that generatrix curves of all surfaces of revolution are also stored.
+  std::vector< t_ptr<t_bcurve> > allCurves = bCurves;
+  //
+  for ( const auto& revolSurf : revolSurfaces )
   {
-    auto name = curve->GetName();
-    auto knots = curve->GetKnots();
+    t_ptr<t_bcurve>
+      meridian = t_ptr<t_bcurve>::DownCast( revolSurf->GetMeridian() );
+
+    if ( meridian->GetName().empty() && !revolSurf->GetName().empty() )
+      meridian->SetName( revolSurf->GetName() + "c" );
+
+    allCurves.push_back(meridian);
+  }
+
+  // B-spline curves.
+  std::vector<std::pair<std::string, std::vector<std::vector<double>>>> resCurves;
+  //
+  for ( auto& curve : allCurves )
+  {
+    const std::string&         name  = curve->GetName();
+    const std::vector<double>& knots = curve->GetKnots();
+
     std::vector<std::vector<double>> pnts;
-    // clear knots from dublicates
+
+    // Clear knots from duplicates.
     double prev = 0.;
-    for (auto& knot : knots)
+    for ( const double knot : knots )
     {
-      mobius::t_xyz p;
-      curve->Eval(knot, p);
-      auto t = curve->D1(knot);
-      auto vec = std::vector<double>{p.X(), p.Y(), p.Z(), t.X(), t.Y(), t.Z(), knot};
-      if (!pnts.empty() && abs(prev - knot) < 0.0001)
+      t_xyz pt;
+      curve->Eval(knot, pt);
+      //
+      t_xyz dC = curve->D1(knot);
+      //
+      if ( !pnts.empty() && abs(prev - knot) < core_Precision::Resolution3D() )
         continue;
+
+      // Data to serialize.
+      std::vector<double> vec{ pt.X(), pt.Y(), pt.Z(), dC.X(), dC.Y(), dC.Z(), knot };
       pnts.push_back(vec);
+
       prev = knot;
     }
     //
     outfile << name << " " << 7 << " " << pnts.size() << " 1 30 0 0\n";
-    for (size_t i = 0; i < pnts.size(); ++i)
+    for ( size_t i = 0; i < pnts.size(); ++i )
     {
       outfile << pnts[i][0] << " " << pnts[i][1] << " " << pnts[i][2] << " "
               << pnts[i][3] << " " << pnts[i][4] << " " << pnts[i][5] << " " << pnts[i][6] << "\n";
     }
     resCurves.push_back({name, pnts});
   }
-  //
-  // Surface of revolution
-  for (auto& surf : surfOfRev)
+
+  // Surfaces of revolution.
+  for ( auto& surf : revolSurfaces )
   {
-    outfile << surf.name << ' ' << "8 1 1 41 0 0\n";
-    auto dir = surf.direction;
-    auto loc = surf.location;
-    outfile << "99**" << surf.curveName.substr(2) << ' ' << loc.X() << ' ' << loc.Y() << ' ' << loc.Z() << '\n'
-                               << ' ' << dir.X() << ' ' << dir.Y() << ' ' << dir.Z() << '\n';
+    const std::string& name      = surf->GetName();
+    const std::string& curveName = surf->GetMeridian()->GetName();
+    const t_axis&      ax        = surf->GetAxis();
+    const t_xyz&       dir       = ax.GetDirection();
+    const t_xyz&       loc       = ax.GetPosition();
+
+    outfile << name << ' ' << "8 1 1 41 0 0\n";
+    outfile << "99**" << curveName
+            << ' ' << loc.X() << ' ' << loc.Y() << ' ' << loc.Z() << '\n'
+            << ' ' << dir.X() << ' ' << dir.Y() << ' ' << dir.Z() << '\n';
   }
-  //
-  // Surfaces
+
+  // B-spline surfaces
   std::vector<std::pair<std::string, std::vector<std::vector<double>>>> resSurfaces;
-  for (auto& surface : surfaces)
+  for (auto& surf : bSurfaces)
   {
-    auto name = surface->GetName();
-    auto uKnots = surface->GetKnots_U();
-    auto vKnots = surface->GetKnots_V();
+    const std::string&         name   = surf->GetName();
+    const std::vector<double>& uKnots = surf->GetKnots_U();
+    const std::vector<double>& vKnots = surf->GetKnots_V();
+
     std::vector<std::vector<double>> pnts;
     // clear from duplicates
     double vPrev = 0.;
     int vKnotsNum = 0;
     int uKnotsNum = 0;
-    for (auto& vKnot : vKnots)
+    for ( const double vKnot : vKnots )
     {
-      if (!pnts.empty() && vPrev == vKnot)
+      if (!pnts.empty() && abs(vPrev - vKnot) < core_Precision::Resolution3D() )
         continue;
       double uPrev = 0.;
       uKnotsNum = 0;
       bool isFirst = true;
-      for (auto& uKnot : uKnots)
+      for ( const double uKnot : uKnots )
       {
         t_xyz p, dU, dV, d2U, d2V, d2UV;
-        surface->Eval_D2(uKnot, vKnot, p, dU, dV, d2U, d2V, d2UV);
+        surf->Eval_D2(uKnot, vKnot, p, dU, dV, d2U, d2V, d2UV);
         //
-        if (!isFirst && abs(uPrev - uKnot) < 0.0001)
+        if (!isFirst && abs(uPrev - uKnot) < core_Precision::Resolution3D() )
           continue;
         isFirst = false;
         pnts.push_back({p.X(), p.Y(), p.Z(), dU.X(), dU.Y(), dU.Z(), dV.X(), dV.Y(), dV.Z(), d2UV.X(), d2UV.Y(), d2UV.Z(), uKnot, vKnot});

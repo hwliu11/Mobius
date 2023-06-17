@@ -35,10 +35,15 @@
 #include <mobius/cascade_BSplineCurve.h>
 #include <mobius/cascade_BSplineSurface.h>
 
+// OpenCascade includes
+#include <GeomConvert.hxx>
+
+using namespace mobius;
+
 //-----------------------------------------------------------------------------
 
 Handle(Geom_BSplineCurve)
-  mobius::cascade::GetOpenCascadeBCurve(const t_ptr<t_bcurve>& curve)
+  cascade::GetOpenCascadeBCurve(const t_ptr<t_bcurve>& curve)
 {
   cascade_BSplineCurve tool(curve);
   tool.DirectConvert();
@@ -48,8 +53,8 @@ Handle(Geom_BSplineCurve)
 
 //-----------------------------------------------------------------------------
 
-mobius::t_ptr<mobius::t_bcurve>
-  mobius::cascade::GetMobiusBCurve(const Handle(Geom_BSplineCurve)& curve)
+t_ptr<t_bcurve>
+  cascade::GetMobiusBCurve(const Handle(Geom_BSplineCurve)& curve)
 {
   cascade_BSplineCurve tool(curve);
   tool.DirectConvert();
@@ -60,7 +65,7 @@ mobius::t_ptr<mobius::t_bcurve>
 //-----------------------------------------------------------------------------
 
 Handle(Geom_BSplineSurface)
-  mobius::cascade::GetOpenCascadeBSurface(const t_ptr<t_bsurf>& surface)
+  cascade::GetOpenCascadeBSurface(const t_ptr<t_bsurf>& surface)
 {
   cascade_BSplineSurface tool(surface);
   tool.DirectConvert();
@@ -70,8 +75,8 @@ Handle(Geom_BSplineSurface)
 
 //-----------------------------------------------------------------------------
 
-mobius::t_ptr<mobius::t_bsurf>
-  mobius::cascade::GetMobiusBSurface(const Handle(Geom_BSplineSurface)& surface)
+t_ptr<t_bsurf>
+  cascade::GetMobiusBSurface(const Handle(Geom_BSplineSurface)& surface)
 {
   cascade_BSplineSurface tool(surface);
   tool.DirectConvert();
@@ -82,7 +87,7 @@ mobius::t_ptr<mobius::t_bsurf>
 //-----------------------------------------------------------------------------
 
 Handle(Geom_Plane)
-  mobius::cascade::GetOpenCascadePlane(const t_ptr<t_plane>& surface)
+  cascade::GetOpenCascadePlane(const t_ptr<t_plane>& surface)
 {
   gp_Pnt O  = GetOpenCascadePnt( surface->GetOrigin() );
   gp_Vec Du = GetOpenCascadeVec( surface->GetD1() );
@@ -93,8 +98,8 @@ Handle(Geom_Plane)
 
 //-----------------------------------------------------------------------------
 
-mobius::t_ptr<mobius::t_plane>
-  mobius::cascade::GetMobiusPlane(const Handle(Geom_Plane)& surface)
+t_ptr<t_plane>
+  cascade::GetMobiusPlane(const Handle(Geom_Plane)& surface)
 {
   const gp_Ax3& ax3 = surface->Position();
   //
@@ -108,7 +113,7 @@ mobius::t_ptr<mobius::t_plane>
 //-----------------------------------------------------------------------------
 
 Handle(Geom_SurfaceOfRevolution)
-  mobius::cascade::GetOpenCascadeRevolSurf(const t_ptr<t_surfRevol>& surface)
+  cascade::GetOpenCascadeRevolSurf(const t_ptr<t_surfRevol>& surface)
 {
   // Convert the meridian curve.
   Handle(Geom_BSplineCurve)
@@ -123,4 +128,31 @@ Handle(Geom_SurfaceOfRevolution)
     res = new Geom_SurfaceOfRevolution(occC, occAx);
 
   return res;
+}
+
+//-----------------------------------------------------------------------------
+
+t_ptr<t_surfRevol>
+  cascade::GetMobiusRevolSurf(const Handle(Geom_SurfaceOfRevolution)& surface)
+{
+  // Check generatrix: it should be a spline.
+  Handle(Geom_BSplineCurve)
+    occGeneratrix = GeomConvert::CurveToBSplineCurve( surface->BasisCurve() );
+  //
+  if ( occGeneratrix.IsNull() )
+    return nullptr;
+
+  // Convert the generatrix curve.
+  t_ptr<t_bcurve> mbGeneratrix = GetMobiusBCurve(occGeneratrix);
+
+  // Convert axis.
+  t_xyz mbPos = GetMobiusPnt( surface->Axis().Location() );
+  t_xyz mbVec = GetMobiusVec( surface->Axis().Direction() );
+  //
+  t_axis mbAxis(mbPos, mbVec);
+
+  // Construct a surface of revolution.
+  t_ptr<t_surfRevol> result = new t_surfRevol(mbGeneratrix, mbAxis);
+
+  return result;
 }
