@@ -44,6 +44,48 @@
 
 using namespace mobius;
 
+void fixprint(char *s, const int len)
+{
+  if ( s[0] == '-' )
+  {
+    for ( int j = 2; j <= len; ++j  )
+      s[j-1] = s[j];
+
+    s[len] = '\0'; // Zero-trailing.
+  }
+}
+
+char* format_fortran_float(
+  char*    result,  // where to write the formatted number. Must have
+  unsigned width,   // room for width + 1 characters.
+  double   number
+  ) {
+
+   // 31.415926535 -> 0.314159E+02
+
+  // First, we'll learn the exponent and adjust the number to the range [0.0,1.0]
+  int exponent = 0;
+  for (; fabs(number) > 1.0; exponent++) number /= 10;
+  //for (; number < 0.0; exponent--) number *= 10;
+
+  // Next, we'll print the number as mantissa in [0,1] and exponent
+  //if ( number > 0 )
+    sprintf( result, "%.*fE%+03d", 7, number, exponent );
+  /*else
+   printf( result, "%.10e", (width - 4), number, exponent ); */
+
+  fixprint(result, width);
+
+  // Finally, we'll return the new string
+  return result;
+  }
+
+char* toString(const double val,
+               char* buf)
+{
+  return format_fortran_float( buf, 12, val );
+}
+
 //-----------------------------------------------------------------------------
 
 bool geom_SaveAstra::Perform(const std::string&                       filename,
@@ -59,6 +101,8 @@ bool geom_SaveAstra::Perform(const std::string&                       filename,
   //
   if ( !outfile.is_open() )
     return false;
+
+  //outfile << std::setw(13) << std::setprecision(7) << std::scientific;
 
   // Make sure that generatrix curves of all surfaces of revolution are also stored.
   std::vector< t_ptr<t_bcurve> > allCurves = bCurves;
@@ -106,8 +150,15 @@ bool geom_SaveAstra::Perform(const std::string&                       filename,
     outfile << name << " " << 7 << " " << pnts.size() << " 1 30 0 0\n";
     for ( size_t i = 0; i < pnts.size(); ++i )
     {
-      outfile << pnts[i][0] << " " << pnts[i][1] << " " << pnts[i][2] << " "
-              << pnts[i][3] << " " << pnts[i][4] << " " << pnts[i][5] << " " << pnts[i][6] << "\n";
+      for ( size_t k = 0; k < 7; ++k )
+      {
+        char buff[14];
+        outfile << toString(pnts[i][k], buff);
+        //
+        if ( k != 6 )
+          outfile << " ";
+      }
+      outfile << "\n";
     }
     resCurves.push_back({name, pnts});
   }
@@ -166,10 +217,15 @@ bool geom_SaveAstra::Perform(const std::string&                       filename,
     outfile << name << ' ' << "14" << ' ' << uKnotsNum << ' ' << vKnotsNum << " 42 0 0\n";
     for (size_t i = 0; i < pnts.size(); ++i)
     {
-      outfile << pnts[i][0] << " " << pnts[i][1] << " " << pnts[i][2] << " "
-              << pnts[i][3] << " " << pnts[i][4] << " " << pnts[i][5] << " " << pnts[i][6] << " "
-              << pnts[i][7] << " " << pnts[i][8] << " " << pnts[i][9] << " " << pnts[i][10] << " "
-              << pnts[i][11] << " " << pnts[i][12] << " " << pnts[i][13] << "\n";
+      for ( size_t k = 0; k < 14; ++k )
+      {
+        char buff[14];
+        outfile << toString(pnts[i][k], buff);
+        //
+        if ( k != 13 )
+          outfile << " ";
+      }
+      outfile << "\n";
     }
     resSurfaces.push_back({name, pnts});
   }
