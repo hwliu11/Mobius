@@ -44,48 +44,6 @@
 
 using namespace mobius;
 
-void fixprint(char *s, const int len)
-{
-  if ( s[0] == '-' )
-  {
-    for ( int j = 2; j <= len; ++j  )
-      s[j-1] = s[j];
-
-    s[len] = '\0'; // Zero-trailing.
-  }
-}
-
-char* format_fortran_float(
-  char*    result,  // where to write the formatted number. Must have
-  unsigned width,   // room for width + 1 characters.
-  double   number
-  ) {
-
-   // 31.415926535 -> 0.314159E+02
-
-  // First, we'll learn the exponent and adjust the number to the range [0.0,1.0]
-  int exponent = 0;
-  for (; fabs(number) > 1.0; exponent++) number /= 10;
-  //for (; number < 0.0; exponent--) number *= 10;
-
-  // Next, we'll print the number as mantissa in [0,1] and exponent
-  //if ( number > 0 )
-    sprintf( result, "%.*fE%+03d", 7, number, exponent );
-  /*else
-   printf( result, "%.10e", (width - 4), number, exponent ); */
-
-  fixprint(result, width);
-
-  // Finally, we'll return the new string
-  return result;
-  }
-
-char* toString(const double val,
-               char* buf)
-{
-  return format_fortran_float( buf, 12, val );
-}
-
 //-----------------------------------------------------------------------------
 
 bool geom_SaveAstra::Perform(const std::string&                       filename,
@@ -147,13 +105,21 @@ bool geom_SaveAstra::Perform(const std::string&                       filename,
       prev = knot;
     }
     //
-    outfile << name << " " << 7 << " " << pnts.size() << " 1 30 0 0\n";
+    outfile << core::str::fixedlen<std::string>(name,        4, true)
+            << core::str::fixedlen<int>        (7,           5, false)
+            << core::str::fixedlen<size_t>     (pnts.size(), 5, false)
+            << core::str::fixedlen<int>        (1,           5, false)
+            << core::str::fixedlen<int>        (30,          5, false)
+            << core::str::fixedlen<int>        (0,           5, false)
+            << core::str::fixedlen<int>        (0,           5, false)
+            << "\n";
+    //
     for ( size_t i = 0; i < pnts.size(); ++i )
     {
       for ( size_t k = 0; k < 7; ++k )
       {
-        char buff[14];
-        outfile << toString(pnts[i][k], buff);
+        char buff[FORTRAN_BUFSIZE];
+        outfile << core::str::fortranize(pnts[i][k], buff);
         //
         if ( k != 6 )
           outfile << " ";
@@ -172,10 +138,58 @@ bool geom_SaveAstra::Perform(const std::string&                       filename,
     const t_xyz&       dir       = ax.GetDirection();
     const t_xyz&       loc       = ax.GetPosition();
 
-    outfile << name << ' ' << "8 1 1 41 0 0\n";
-    outfile << "99**" << curveName
-            << ' ' << loc.X() << ' ' << loc.Y() << ' ' << loc.Z() << '\n'
-            << ' ' << dir.X() << ' ' << dir.Y() << ' ' << dir.Z() << '\n';
+    outfile << core::str::fixedlen<std::string>(name,      4, true)
+            << core::str::fixedlen<int>        (8,         5, false)
+            << core::str::fixedlen<int>        (1,         5, false)
+            << core::str::fixedlen<int>        (1,         5, false)
+            << core::str::fixedlen<int>        (41,        5, false)
+            << core::str::fixedlen<int>        (0,         5, false)
+            << core::str::fixedlen<int>        (0,         5, false)
+            << "\n";
+
+    outfile << "99**"
+            << core::str::fixedlen<std::string>(curveName, 4, true)
+            << "   ";
+
+    // location X
+    {
+      char buff[FORTRAN_BUFSIZE];
+      outfile << core::str::fortranize(loc.X(), buff) << " ";
+    }
+
+    // location Y
+    {
+      char buff[FORTRAN_BUFSIZE];
+      outfile << core::str::fortranize(loc.Y(), buff) << " ";
+    }
+
+    // location Z
+    {
+      char buff[FORTRAN_BUFSIZE];
+      outfile << core::str::fortranize(loc.Z(), buff) << " ";
+    }
+
+    // newline
+    outfile << "\n           ";
+
+    // direction X
+    {
+      char buff[FORTRAN_BUFSIZE];
+      outfile << core::str::fortranize(dir.X(), buff) << " ";
+    }
+
+    // direction Y
+    {
+      char buff[FORTRAN_BUFSIZE];
+      outfile << core::str::fortranize(dir.Y(), buff)<< " ";
+    }
+
+    // direction Z
+    {
+      char buff[FORTRAN_BUFSIZE];
+      outfile << core::str::fortranize(dir.Z(), buff);
+      outfile << "\n";
+    }
   }
 
   // B-spline surfaces
@@ -203,8 +217,9 @@ bool geom_SaveAstra::Perform(const std::string&                       filename,
         t_xyz p, dU, dV, d2U, d2V, d2UV;
         surf->Eval_D2(uKnot, vKnot, p, dU, dV, d2U, d2V, d2UV);
         //
-        if (!isFirst && abs(uPrev - uKnot) < core_Precision::Resolution3D() )
+        if ( !isFirst && abs(uPrev - uKnot) < core_Precision::Resolution3D() )
           continue;
+
         isFirst = false;
         pnts.push_back({p.X(), p.Y(), p.Z(), dU.X(), dU.Y(), dU.Z(), dV.X(), dV.Y(), dV.Z(), d2UV.X(), d2UV.Y(), d2UV.Z(), uKnot, vKnot});
         uPrev = uKnot;
@@ -214,13 +229,21 @@ bool geom_SaveAstra::Perform(const std::string&                       filename,
       vPrev = vKnot;
     }
     //
-    outfile << name << ' ' << "14" << ' ' << uKnotsNum << ' ' << vKnotsNum << " 42 0 0\n";
+    outfile << core::str::fixedlen<std::string>(name,      4, true)
+            << core::str::fixedlen<int>        (14,        5, false)
+            << core::str::fixedlen<int>        (uKnotsNum, 5, false)
+            << core::str::fixedlen<int>        (vKnotsNum, 5, false)
+            << core::str::fixedlen<int>        (42,        5, false)
+            << core::str::fixedlen<int>        (0,         5, false)
+            << core::str::fixedlen<int>        (0,         5, false)
+            << "\n";
+    //
     for (size_t i = 0; i < pnts.size(); ++i)
     {
       for ( size_t k = 0; k < 14; ++k )
       {
-        char buff[14];
-        outfile << toString(pnts[i][k], buff);
+        char buff[FORTRAN_BUFSIZE];
+        outfile << core::str::fortranize(pnts[i][k], buff);
         //
         if ( k != 13 )
           outfile << " ";

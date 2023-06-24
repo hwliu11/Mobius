@@ -35,6 +35,7 @@
 #include <mobius/test_ApproxSurf.h>
 #include <mobius/test_BSplineCurve.h>
 #include <mobius/test_BSplineSurface.h>
+#include <mobius/test_Core.h>
 #include <mobius/test_Decompose.h>
 #include <mobius/test_EffectiveN.h>
 #include <mobius/test_EffectiveNDers.h>
@@ -112,6 +113,7 @@ int main(int /*argc*/, char* /*argv[]*/)
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Decompose>          (cf->ProgressNotifier) );
 
   // Core group.
+  CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Core>               (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Integral>           (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_Quaternion>         (cf->ProgressNotifier) );
   CaseLaunchers.push_back( new testEngine_CaseLauncher<test_XYZ>                (cf->ProgressNotifier) );

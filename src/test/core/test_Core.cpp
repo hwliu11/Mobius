@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
-// Created on: 11 June 2013
+// Created on: 24 June 2023
 //-----------------------------------------------------------------------------
-// Copyright (c) 2013-present, Sergey Slyadnev
+// Copyright (c) 2023-present, Sergey Slyadnev
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,66 +28,37 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-#ifndef test_CaseIDs_HeaderFile
-#define test_CaseIDs_HeaderFile
+// Own include
+#include <mobius/test_Core.h>
 
-// Tests includes
-#include <mobius/test.h>
+//-----------------------------------------------------------------------------
 
-//! IDs for Test Cases.
-enum test_CaseID
+mobius::outcome
+  mobius::test_Core::fortranize(const int funcID)
 {
-  //---------------------------------------------------------------------------
-  // Core library
-  //---------------------------------------------------------------------------
+  outcome res( DescriptionFn(), funcID );
 
-  CaseID_Core_Integral,
-  CaseID_Core_Quaternion,
-  CaseID_Core_XYZ,
-  CaseID_Core_Core,
+  {
+    double val = 31.415926535;
+    std::string ref("0.3141593E+02");
 
-  //---------------------------------------------------------------------------
-  // BSpl library
-  //---------------------------------------------------------------------------
+    char buff[FORTRAN_BUFSIZE];
+    core::str::fortranize(val, buff);
 
-  CaseID_BSpl_EffectiveN,
-  CaseID_BSpl_EffectiveNDers,
-  CaseID_BSpl_FindSpan,
-  CaseID_BSpl_KnotMultiset,
-  CaseID_BSpl_KnotsAverage,
-  CaseID_BSpl_KnotsUniform,
-  CaseID_BSpl_N,
-  CaseID_BSpl_ParamsCentripetal,
-  CaseID_BSpl_ParamsChordLength,
-  CaseID_BSpl_ParamsUniform,
-  CaseID_BSpl_UnifyKnots,
-  CaseID_BSpl_InsKnot,
-  CaseID_BSpl_Decompose,
+    if ( ref != std::string(buff) )
+      return res.failure();
+  }
 
-  //---------------------------------------------------------------------------
-  // Geom library
-  //---------------------------------------------------------------------------
+  {
+    double val = -31.415926535;
+    std::string ref("-.3141593E+02");
 
-  CaseID_Geom_ApproxSurf,
-  CaseID_Geom_InterpolateCurve,
-  CaseID_Geom_Line3D,
-  CaseID_Geom_PointOnLine,
-  CaseID_Geom_PositionCloud,
-  CaseID_Geom_BSplineCurve,
-  CaseID_Geom_BSplineSurface,
-  CaseID_Geom_PlaneSurface,
-  CaseID_Geom_FairCurve,
-  CaseID_Geom_FairSurf,
-  CaseID_Geom_SkinSurface,
-  CaseID_Geom_MakeBicubicBSurf,
+    char buff[FORTRAN_BUFSIZE];
+    core::str::fortranize(val, buff);
 
-  //---------------------------------------------------------------------------
-  // Poly library
-  //---------------------------------------------------------------------------
+    if ( ref != std::string(buff) )
+      return res.failure();
+  }
 
-  CaseID_Poly_Mesh,
-  CaseID_Poly_SVO
-
-};
-
-#endif
+  return res.success();
+}

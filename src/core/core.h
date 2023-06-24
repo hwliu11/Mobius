@@ -59,6 +59,7 @@
 #define core_NotUsed(x)
 
 #define SLASH_STR "\\"
+#define FORTRAN_BUFSIZE 15
 
 #if defined _WIN32
   #if defined mobiusCore_EXPORTS
@@ -130,6 +131,31 @@ namespace core
   //! Functions for working with strings.
   namespace str
   {
+    template <typename T>
+    std::string fixedlen(const T    val,
+                         const int  len,
+                         const bool isLeft)
+    {
+      std::stringstream sstream;
+      sstream << std::setw(len);
+      //
+      if ( isLeft )
+        sstream << std::left;
+      //
+      sstream << val;
+      return sstream.str();
+    }
+
+    //! Formats the passed double value in fortran-like style.
+    //! E.g.:
+    //!
+    //!  31.415926535 -> 0.314159E+02
+    //! -31.415926535 -> -.314159E+02
+    mobiusCore_EXPORT char*
+      fortranize(const double val,
+                 char*        buff);
+
+    //! Returns a slashed copy of the passed string.
     mobiusCore_EXPORT std::string
       slashed(const std::string& strIN);
 

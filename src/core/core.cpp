@@ -33,6 +33,47 @@
 
 #define BUFSIZE 1000
 
+namespace
+{
+  void fixprint(char *s, const int len)
+  {
+    if ( s[0] == '-' )
+    {
+      for ( int j = 2; j < len; ++j  )
+        s[j-1] = s[j];
+
+      s[len-1] = '\0'; // Zero-trailing.
+    }
+  }
+
+  char* format_fortran_float(char*    result,
+                             unsigned width,
+                             double   number)
+  {
+    // 31.415926535 -> 0.314159E+02
+
+    // First, we'll extract the exponent and adjust the number to the range [0,1].
+    int exponent = 0;
+    for (; fabs(number) > 1.0; exponent++) number /= 10;
+    //for (; number < 0.0; exponent--) number *= 10;
+
+    // Next, we'll print the number as mantissa in [0,1] and exponent.
+    sprintf( result, "%.*fE%+03d", 7, number, exponent );
+
+    // Get rid of leading "0" mantissa for negative numbers.
+    fixprint(result, width);
+
+    // Finally, return the new string.
+    return result;
+  }
+
+  char* toString(const double val,
+                 char* buf)
+  {
+    return format_fortran_float( buf, FORTRAN_BUFSIZE, val );
+  }
+}
+
 //-----------------------------------------------------------------------------
 
 //! Returns value of MOBIUS_TEST_DATA environment variable. This variable is used to
@@ -75,6 +116,14 @@ std::string
   mobius::core::env::GetVariable(const char* VarName)
 {
   return std::getenv(VarName);
+}
+
+//-----------------------------------------------------------------------------
+
+char* mobius::core::str::fortranize(const double val,
+                                    char*        buff)
+{
+  return format_fortran_float(buff, FORTRAN_BUFSIZE, val);
 }
 
 //-----------------------------------------------------------------------------
