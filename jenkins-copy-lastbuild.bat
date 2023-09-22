@@ -26,6 +26,10 @@ REM timestamp with time
 for /F "usebackq tokens=1,2,3 delims=: " %%i in (`time /T`) do set timestamp=%da_nospaces_noslashes%-T%%i%%j
 echo timestamp=%timestamp%
 
+REM clean up directory
+del /S /Q %JENKINS_LAST_BUILD_DIR%\*
+rmdir /S /Q %JENKINS_LAST_BUILD_DIR%\
+
 set "TEAMDIR=%JENKINS_LAST_BUILD_DIR%\%timestamp%"
 if not exist %TEAMDIR% md %TEAMDIR%
 xcopy /Y cmake-install-dir %TEAMDIR% /s /e
