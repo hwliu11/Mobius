@@ -41,6 +41,7 @@ namespace mobius {
 //! Base traits.
 struct poly_Traits
 {
+  bool isFP = false;
 };
 
 }
