@@ -47,6 +47,7 @@
 #include <mobius/geom_PlaneSurface.h>
 
 // Standard includes
+#include <algorithm>
 #include <math.h>
 #include <stack>
 #include <unordered_map>

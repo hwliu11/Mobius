@@ -31,6 +31,9 @@
 // Own include
 #include <mobius/poly_Jacobian.h>
 
+// STL includes
+#include <algorithm>
+
 using namespace mobius;
 
 //-----------------------------------------------------------------------------
